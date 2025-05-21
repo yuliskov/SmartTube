@@ -45,7 +45,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
             return super.add(listener);
         }
     };
+    private WeakReference<Video> mVideo;
     private Video mPendingVideo;
+    private boolean mIsSwitchFromEmbed;
     // Fix for using destroyed view
     private WeakReference<PlaybackView> mPlayer = new WeakReference<>(null);
 
@@ -96,18 +98,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         return mPendingVideo != null;
     }
 
-    public void openVideo(Video video) {
-        if (video == null) {
-            return;
-        }
-
-        if (getView() == null) {
-            mPendingVideo = video;
-        } else {
-            onNewVideo(video);
-        }
-
-        getViewManager().startView(PlaybackView.class);
+    public void openVideo(String videoId) {
+        openVideo(videoId, false, -1);
     }
 
     /**
@@ -124,30 +116,33 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         openVideo(video);
     }
 
-    public void openVideo(String videoId) {
-        openVideo(videoId, false, -1);
-    }
-
-    ///**
-    // * Opens video item from browser, search or channel views<br/>
-    // * Also prepares and start the playback view.
-    // */
-    //public void openVideo(Video item) {
-    //    if (item == null) {
-    //        return;
-    //    }
-    //
-    //    mMainController.openVideo(item);
-    //
-    //    mViewManager.startView(PlaybackView.class);
-    //}
-
-    public Video getVideo() {
-        if (getView() == null) {
-            return null;
+    public void openVideo(Video video) {
+        if (video == null) {
+            return;
         }
 
-        return getView().getVideo();
+        if (getView() == null) {
+            mPendingVideo = video;
+        } else if (getView().isEmbed()) { // switching from the embed player to the fullscreen one
+            mIsSwitchFromEmbed = true;
+            // The embed player doesn't disposed properly
+            // NOTE: don't release after init check because this depends on timings
+            onEngineReleased();
+            setView(null);
+            onNewVideo(video);
+        } else {
+            onNewVideo(video);
+        }
+
+        getViewManager().startView(PlaybackView.class);
+    }
+
+    public Video getVideo() {
+        return mVideo != null ? mVideo.get() : null;
+    }
+
+    public boolean isSwitchFromEmbed() {
+        return mIsSwitchFromEmbed;
     }
 
     public boolean isRunningInBackground() {
@@ -215,6 +210,11 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     public void setView(PlaybackView view) {
         super.setView(view);
         mPlayer = new WeakReference<>(view);
+
+        if (view != null && view.getVideo() != null) {
+            // Just in case switching between embed and fullscreen players
+            mVideo = new WeakReference<>(view.getVideo());
+        }
     }
 
     public PlaybackView getPlayer() {
@@ -241,6 +241,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     @Override
     public void onNewVideo(Video video) {
         process(listener -> listener.onNewVideo(video));
+        mVideo = new WeakReference<>(video);
     }
 
     @Override
@@ -308,6 +309,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         getTickleManager().addListener(this);
 
         process(PlayerEventListener::onEngineInitialized);
+
+        mIsSwitchFromEmbed = false;
     }
 
     @Override

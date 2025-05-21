@@ -30,7 +30,6 @@ public class VideoStateController extends BasePlayerController {
     private static final long EMBED_THRESHOLD_MS = 30_000;
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
     private boolean mIsPlayEnabled;
-    private Video mVideo = new Video();
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIncognito;
@@ -44,7 +43,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onNewVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
-        if (getPlayer() != null) {
+        if (getPlayer() != null && getPlayer().containsMedia()) {
             if (!item.equals(getVideo())) { // a video might be opened twice (when remote connection enabled). Fix for that.
                 // Reset auto-save history timer
                 mTickleLeft = 0;
@@ -52,8 +51,6 @@ public class VideoStateController extends BasePlayerController {
                 // In case video opened from phone and other stuff.
                 removeFromHistoryIfNeeded();
                 saveState();
-            } else if (isEmbedPlayer()) { // switching from embed to normal player
-                savePosition();
             }
         }
 
@@ -133,8 +130,12 @@ public class VideoStateController extends BasePlayerController {
         // Save previous state
         if (getPlayer().containsMedia()) {
             setPlayEnabled(getPlayer().getPlayWhenReady());
-            saveState();
-            persistState();
+            if (isSwitchFromEmbed()) {
+                savePosition();
+            } else {
+                saveState();
+                persistState();
+            }
         }
     }
 
@@ -174,7 +175,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onVideoLoaded(Video item) {
         // Actual video that match currently loaded one.
-        mVideo = item;
+        //mVideo = item;
 
         // Restore formats again.
         // Maybe this could help with Shield format problem.
@@ -320,7 +321,8 @@ public class VideoStateController extends BasePlayerController {
         State state = getStateService().getByVideoId(item.videoId);
 
         // Reset position of music videos
-        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS && !getPlayerTweaksData().isRememberPositionOfShortVideosEnabled();
+        boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS
+                && !getPlayerTweaksData().isRememberPositionOfShortVideosEnabled() && !isSwitchFromEmbed();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
         boolean isLive = item.isLive;
 
@@ -397,6 +399,8 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        //Log.d(TAG, "Saving state of %s %s", getVideo().title, getPlayer().getPositionMs());
+
         savePosition();
         updateHistory();
         syncWithPlaylists();
@@ -421,7 +425,7 @@ public class VideoStateController extends BasePlayerController {
         getStateService().persistState();
     }
 
-    private void savePosition() {
+    public void savePosition() {
         Video video = getVideo();
 
         if (video == null || getPlayer() == null || !getPlayer().containsMedia()) {
@@ -587,13 +591,6 @@ public class VideoStateController extends BasePlayerController {
                 screensaverManager.disableChecked();
             }
         }
-    }
-
-    /**
-     * Actual video that match currently loaded one.
-     */
-    private Video getVideo() {
-        return mVideo;
     }
 
     private boolean isMusicVideo() {

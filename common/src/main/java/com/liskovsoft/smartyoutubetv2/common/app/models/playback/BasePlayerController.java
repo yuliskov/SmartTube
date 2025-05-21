@@ -51,6 +51,11 @@ public abstract class BasePlayerController implements PlayerEventListener {
         return mMainController != null ? mMainController.getPlayer() : null;
     }
 
+    @Nullable
+    public Video getVideo() {
+        return mMainController != null ? mMainController.getVideo() : null;
+    }
+
     protected void setAltContext(Context context) {
         mContext = context;
     }
@@ -390,5 +395,9 @@ public abstract class BasePlayerController implements PlayerEventListener {
 
     protected boolean isEmbedPlayer() {
         return getPlayer() != null && getPlayer().isEmbed();
+    }
+
+    protected boolean isSwitchFromEmbed() {
+        return mMainController != null && mMainController.isSwitchFromEmbed();
     }
 }

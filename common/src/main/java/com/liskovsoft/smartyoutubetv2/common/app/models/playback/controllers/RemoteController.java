@@ -35,7 +35,6 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
     private Disposable mPostVolumeAction;
-    private Video mVideo;
     private boolean mConnected;
     private long mNewVideoPositionMs;
     private Disposable mActionDown;
@@ -83,9 +82,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         }
 
         postStartPlaying(item, getPlayer().getPlayWhenReady());
-        mVideo = item;
         if (mConnected) {
-            mRemoteControlData.setLastVideo(mVideo);
+            mRemoteControlData.setLastVideo(item);
         }
     }
 
@@ -124,7 +122,6 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     public void onFinish() {
         // User action detected. Hide remote playlist.
         mConnected = false;
-        mVideo = null;
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
@@ -326,7 +323,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     getPlayer().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
                 } else {
-                    openNewVideo(mVideo);
+                    openNewVideo(getVideo());
                 }
                 break;
             case Command.TYPE_PLAY:
@@ -337,7 +334,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     postPlay(true);
                 } else {
                     // Already connected
-                    openNewVideo(mVideo != null ? mVideo : mRemoteControlData.getLastVideo());
+                    openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());
                 }
                 break;
             case Command.TYPE_PAUSE:
@@ -348,7 +345,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     postPlay(false);
                 } else {
                     // Already connected
-                    openNewVideo(mVideo != null ? mVideo : mRemoteControlData.getLastVideo());
+                    openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());
                 }
                 break;
             case Command.TYPE_NEXT:
@@ -356,7 +353,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     movePlayerToForeground();
                     getController(VideoLoaderController.class).loadNext();
                 } else {
-                    openNewVideo(mVideo);
+                    openNewVideo(getVideo());
                 }
                 break;
             case Command.TYPE_PREVIOUS:
@@ -365,7 +362,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     // Switch immediately. Skip position reset logic.
                     getController(VideoLoaderController.class).loadPrevious();
                 } else {
-                    openNewVideo(mVideo);
+                    openNewVideo(getVideo());
                 }
                 break;
             case Command.TYPE_GET_STATE:
@@ -486,15 +483,15 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void openNewVideo(Video newVideo) {
-        if (Video.equals(mVideo, newVideo) && getViewManager().isPlayerInForeground()) { // same video already playing
-            //mVideo.playlistId = newVideo.playlistId;
-            //mVideo.playlistIndex = newVideo.playlistIndex;
-            //mVideo.playlistParams = newVideo.playlistParams;
+        if (Video.equals(getVideo(), newVideo) && getViewManager().isPlayerInForeground()) { // same video already playing
+            //getVideo().playlistId = newVideo.playlistId;
+            //getVideo().playlistIndex = newVideo.playlistIndex;
+            //getVideo().playlistParams = newVideo.playlistParams;
             if (mNewVideoPositionMs > 0) {
                 getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
             }
-            postStartPlaying(mVideo, getPlayer().isPlaying());
+            postStartPlaying(getVideo(), getPlayer().isPlaying());
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             getPlaybackPresenter().openVideo(newVideo);

@@ -1145,6 +1145,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public Video getVideo() {
+        if (mExoPlayerController == null) {
+            return null;
+        }
+
         return mExoPlayerController.getVideo();
     }
 

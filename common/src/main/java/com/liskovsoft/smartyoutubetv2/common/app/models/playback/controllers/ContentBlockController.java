@@ -35,13 +35,13 @@ public class ContentBlockController extends BasePlayerController {
     private static final long POLL_INTERVAL_MS = 1_000;
     private static final int CONTENT_BLOCK_ID = 144;
     private MediaItemService mMediaItemService;
-    private Video mVideo;
     private List<SponsorSegment> mOriginalSegments;
     private List<SponsorSegment> mActiveSegments;
     private long mLastSkipPosMs;
     private boolean mSkipExclude;
     private Disposable mSegmentsAction;
     private Observable<List<SponsorSegment>> mCachedSegmentsAction;
+    private String mVideoId;
 
     public static class SegmentAction {
         public String segmentCategory;
@@ -158,12 +158,12 @@ public class ContentBlockController extends BasePlayerController {
             return;
         }
 
-        if (!item.equals(mVideo) || mCachedSegmentsAction == null) {
+        if (!Helpers.equals(mVideoId, item.videoId) || mCachedSegmentsAction == null) {
             // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
             // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
             mCachedSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, getContentBlockData().getEnabledCategories())
                     .cache();
-            mVideo = item;
+            mVideoId = item.videoId;
         }
 
         mSegmentsAction = mCachedSegmentsAction
@@ -207,7 +207,7 @@ public class ContentBlockController extends BasePlayerController {
     }
 
     private void skipSegment(long interval) {
-        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Video.equals(mVideo, getPlayer().getVideo())) {
+        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Helpers.equals(mVideoId, getVideo())) {
             disposeActions();
             return;
         }
