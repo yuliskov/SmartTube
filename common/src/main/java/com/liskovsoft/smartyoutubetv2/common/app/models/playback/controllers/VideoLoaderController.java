@@ -147,7 +147,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
         
-        loadVideo(Helpers.firstNonNull(mPendingVideo, getPlayer().getVideo(), getVideo()));
+        loadVideo(Helpers.firstNonNull(mPendingVideo, getVideo()));
         getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
         mSleepTimerStartMs = System.currentTimeMillis();
         mPendingVideo = null;

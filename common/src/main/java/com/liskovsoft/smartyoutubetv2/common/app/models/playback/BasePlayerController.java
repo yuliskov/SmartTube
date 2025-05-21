@@ -396,8 +396,4 @@ public abstract class BasePlayerController implements PlayerEventListener {
     protected boolean isEmbedPlayer() {
         return getPlayer() != null && getPlayer().isEmbed();
     }
-
-    protected boolean isSwitchFromEmbed() {
-        return mMainController != null && mMainController.isSwitchFromEmbed();
-    }
 }

@@ -64,9 +64,11 @@ public class VideoStateController extends BasePlayerController {
 
         enableIncognitoIfNeeded(item);
 
-        // Don't do reset on videoLoaded state because this will influences minimized music videos.
-        resetPositionIfNeeded(item);
-        resetGlobalSpeedIfNeeded();
+        if (!item.equals(getVideo())) { // skip switch from the embed to the fullscreen one
+            // Don't do reset on videoLoaded state because this will influences minimized music videos.
+            resetPositionIfNeeded(item);
+            resetGlobalSpeedIfNeeded();
+        }
     }
 
     @Override
@@ -130,12 +132,8 @@ public class VideoStateController extends BasePlayerController {
         // Save previous state
         if (getPlayer().containsMedia()) {
             setPlayEnabled(getPlayer().getPlayWhenReady());
-            if (isSwitchFromEmbed()) {
-                savePosition();
-            } else {
-                saveState();
-                persistState();
-            }
+            saveState();
+            persistState();
         }
     }
 
@@ -322,7 +320,7 @@ public class VideoStateController extends BasePlayerController {
 
         // Reset position of music videos
         boolean isShort = state != null && state.durationMs < MUSIC_VIDEO_MAX_DURATION_MS
-                && !getPlayerTweaksData().isRememberPositionOfShortVideosEnabled() && !isSwitchFromEmbed();
+                && !getPlayerTweaksData().isRememberPositionOfShortVideosEnabled();
         boolean isVideoEnded = state != null && state.durationMs - state.positionMs < 3_000;
         boolean isLive = item.isLive;
 

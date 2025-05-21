@@ -207,7 +207,7 @@ public class ContentBlockController extends BasePlayerController {
     }
 
     private void skipSegment(long interval) {
-        if (mActiveSegments == null || mActiveSegments.isEmpty() || !Helpers.equals(mVideoId, getVideo())) {
+        if (mActiveSegments == null || mActiveSegments.isEmpty() || getVideo() == null || !Helpers.equals(mVideoId, getVideo().videoId)) {
             disposeActions();
             return;
         }

@@ -47,7 +47,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     };
     private WeakReference<Video> mVideo;
     private Video mPendingVideo;
-    private boolean mIsSwitchFromEmbed;
     // Fix for using destroyed view
     private WeakReference<PlaybackView> mPlayer = new WeakReference<>(null);
 
@@ -124,10 +123,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         if (getView() == null) {
             mPendingVideo = video;
         } else if (getView().isEmbed()) { // switching from the embed player to the fullscreen one
-            mIsSwitchFromEmbed = true;
             // The embed player doesn't disposed properly
             // NOTE: don't release after init check because this depends on timings
-            onEngineReleased();
+            //onEngineReleased();
+            getController(VideoStateController.class).savePosition();
             setView(null);
             onNewVideo(video);
         } else {
@@ -139,10 +138,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     public Video getVideo() {
         return mVideo != null ? mVideo.get() : null;
-    }
-
-    public boolean isSwitchFromEmbed() {
-        return mIsSwitchFromEmbed;
     }
 
     public boolean isRunningInBackground() {
@@ -309,8 +304,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         getTickleManager().addListener(this);
 
         process(PlayerEventListener::onEngineInitialized);
-
-        mIsSwitchFromEmbed = false;
     }
 
     @Override
