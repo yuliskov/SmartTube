@@ -122,9 +122,26 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
             addSearchHeader();
+            freeze1(true);
             updateGroup1(group);
+            freeze1(false);
         } else if (group.getPosition() == 1) {
+            int action = group.getAction();
+
+            // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+            if (action == VideoGroup.ACTION_SYNC && getBrowseGrid2() != null && getBrowseGrid2().isComputingLayout()) {
+                return;
+            }
+
+            // Smooth remove animation
+            if (action == VideoGroup.ACTION_REMOVE) {
+                updateGroup2(group);
+                return;
+            }
+
+            freeze2(true);
             updateGroup2(group);
+            freeze2(false);
         }
     }
 
@@ -240,11 +257,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return;
         }
 
-        freeze1(true);
-
         mGridAdapter1.add(group);
-
-        freeze1(false);
 
         restorePosition1();
     }
@@ -271,11 +284,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return;
         }
 
-        freeze2(true);
-
         mGridAdapter2.add(group);
-
-        freeze2(false);
 
         // TODO: Do we need to restore position on second group?
         //restorePosition2();

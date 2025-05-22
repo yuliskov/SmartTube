@@ -204,6 +204,14 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
+        int action = group.getAction();
+
+        // Smooth remove animation
+        if (action == VideoGroup.ACTION_REMOVE) {
+            updateInt(group);
+            return;
+        }
+
         freeze(true);
 
         updateInt(group);

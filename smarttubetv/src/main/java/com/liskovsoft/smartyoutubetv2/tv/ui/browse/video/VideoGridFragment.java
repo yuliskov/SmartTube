@@ -141,7 +141,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
         int action = group.getAction();
 
         // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-        if (action == VideoGroup.ACTION_SYNC && getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
+        if ((action == VideoGroup.ACTION_SYNC || action == VideoGroup.ACTION_REPLACE) && getBrowseGrid() != null && getBrowseGrid().isComputingLayout()) {
             return;
         }
 

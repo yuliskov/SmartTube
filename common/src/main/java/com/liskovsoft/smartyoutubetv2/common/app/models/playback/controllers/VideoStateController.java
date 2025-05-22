@@ -162,6 +162,10 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onEngineError(int type, int rendererIndex, Throwable error) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         // Oops. Error happens while playing (network lost etc).
         if (getPlayer().getPositionMs() > 1_000) {
             saveState();
