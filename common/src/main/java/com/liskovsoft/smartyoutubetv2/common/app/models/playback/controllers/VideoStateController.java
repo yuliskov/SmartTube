@@ -409,6 +409,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreState() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         restorePosition();
         restorePendingPosition();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
