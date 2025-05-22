@@ -125,6 +125,10 @@ public class SuggestionsController extends BasePlayerController {
 
     @Override
     public void onSeekEnd() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayer().isControlsShown()) {
             focusCurrentChapter();
         } else {

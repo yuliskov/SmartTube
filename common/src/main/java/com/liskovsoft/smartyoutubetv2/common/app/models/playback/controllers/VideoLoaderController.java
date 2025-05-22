@@ -168,6 +168,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onVideoLoaded(Video video) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mLastErrorType = -1;
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
     }
