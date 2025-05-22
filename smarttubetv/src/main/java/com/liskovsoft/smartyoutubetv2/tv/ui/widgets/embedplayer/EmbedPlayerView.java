@@ -44,8 +44,9 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private PlayerController mExoPlayerController;
     private PlaybackPresenter mPlaybackPresenter;
     private Video mVideo;
-    private boolean mMute;
+    private boolean mIsMute;
     private final Runnable mShowView = this::showView;
+    private final Runnable mStopPlayback = this::finish;
     private int mQuality;
 
     public EmbedPlayerView(Context context) {
@@ -451,7 +452,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setVolume(float volume) {
-        if (!mMute && mExoPlayerController != null) {
+        if (!mIsMute && mExoPlayerController != null) {
             mExoPlayerController.setVolume(volume);
         }
     }
@@ -538,7 +539,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         mExoPlayerController.selectFormat(mQuality == QUALITY_LOW ? FormatItem.VIDEO_SUB_SD_AVC_30 : FormatItem.VIDEO_SD_AVC_30);
         // Don't use subs! Not efficient. High cpu load. Cause input lags.
         mExoPlayerController.selectFormat(FormatItem.SUBTITLE_NONE);
-        if (mMute) {
+        if (mIsMute) {
             mExoPlayerController.setVolume(0);
         }
 
@@ -554,6 +555,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private void destroyPlayerObjects() {
         if (isEngineInitialized()) {
             Utils.removeCallbacks(mShowView);
+            Utils.removeCallbacks(mStopPlayback);
             // Don't replace main player!
             if (mPlaybackPresenter.getView() == null || mPlaybackPresenter.getView() == this) {
                 mPlaybackPresenter.onEngineReleased();
@@ -590,13 +592,16 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private void onVideoLoaded() {
         // Fix the screen becomes black for a moment
         Utils.postDelayed(mShowView, 1_000);
+        if (mIsMute) { // Save bandwidth if the previews are muted
+            Utils.postDelayed(mStopPlayback, 5 * 60 * 1_000);
+        }
     }
 
     public void setMute(boolean mute) {
-        mMute = mute;
+        mIsMute = mute;
 
         if (mExoPlayerController != null) {
-            mExoPlayerController.setVolume(0);
+            mExoPlayerController.setVolume(mute ? 0 : 1f);
         }
     }
 }

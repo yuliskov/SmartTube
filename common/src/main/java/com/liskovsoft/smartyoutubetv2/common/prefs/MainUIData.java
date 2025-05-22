@@ -409,7 +409,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
-        mCardPreviewType = Helpers.parseInt(split, 21, VERSION.SDK_INT > 19 ? CARD_PREVIEW_FULL : CARD_PREVIEW_DISABLED);
+        mCardPreviewType = Helpers.parseInt(split, 21, VERSION.SDK_INT > 19 ? CARD_PREVIEW_MUTED : CARD_PREVIEW_DISABLED);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
