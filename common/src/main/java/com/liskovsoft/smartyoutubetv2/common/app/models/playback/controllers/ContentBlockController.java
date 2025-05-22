@@ -97,6 +97,10 @@ public class ContentBlockController extends BasePlayerController {
     public void onVideoLoaded(Video item) {
         disposeActions();
 
+        if (getPlayer() == null) {
+            return;
+        }
+
         boolean enabled = getContentBlockData().isSponsorBlockEnabled() && checkVideo(item) && !isChannelExcluded(item.channelId);
         getPlayer().setButtonState(R.id.action_content_block, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
