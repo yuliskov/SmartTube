@@ -697,4 +697,7 @@
   <string name="player_audio_focus">Lấy nét âm thanh (tạm dừng nếu trình phát khác đã phát hiện)</string>
   <string name="oculus_quest_fix">Sửa Oculus Quest</string>
   <string name="playback_buffering_fix">Sửa bộ đệm phát lại</string>
+  <string name="search_exit_shortcut">Thoát khỏi tìm kiếm</string>
+  <string name="card_preview_muted">Video không có âm thanh</string>
+  <string name="card_preview_full">Video có âm thanh</string>
 </resources>
