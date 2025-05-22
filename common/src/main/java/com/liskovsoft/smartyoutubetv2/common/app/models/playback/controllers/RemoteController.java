@@ -76,6 +76,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     @Override
     public void onVideoLoaded(Video item) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (mNewVideoPositionMs > 0) {
             getPlayer().setPositionMs(mNewVideoPositionMs);
             mNewVideoPositionMs = 0;
