@@ -98,7 +98,7 @@
   <string name="select_account_on_boot">Seleccioneu a l\'arrencada</string>
   <string name="player_other">Misc</string>
   <string name="player_full_date">Data precisa a la descripció</string>
-  <string name="open_channel">Canal obert</string>
+  <string name="open_channel">Obrir Canal</string>
   <string name="open_playlist">Obre la llista de reproducció</string>
   <string name="not_interested">No m\'interesa</string>
   <string name="you_wont_see_this_video">El vídeo s\'ha suprimit dels recomanats</string>
@@ -292,7 +292,7 @@
   <string name="action_playlist_add">Afegir a la llista de reproducció</string>
   <string name="action_video_stats">Estadístiques de vídeo</string>
   <string name="action_subscribe">Subscriu-te</string>
-  <string name="action_channel">Canal obert</string>
+  <string name="action_channel">Obrir canal</string>
   <string name="action_pip">PIP</string>
   <string name="action_video_info">Descripció del vídeo</string>
   <string name="action_screen_off">Pantalla apagada</string>
