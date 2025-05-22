@@ -272,6 +272,10 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onSeekEnd() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().updateEndingTime();
     }
 
