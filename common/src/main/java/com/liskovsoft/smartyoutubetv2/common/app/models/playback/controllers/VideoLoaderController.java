@@ -269,6 +269,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void checkSleepTimer() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
