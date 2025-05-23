@@ -2398,7 +2398,13 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
         mFlag = (mFlag & ~PF_STAGE_MASK) | PF_STAGE_SCROLL;
         int result;
         if (mOrientation == HORIZONTAL) {
-            result = scrollDirectionPrimary(dx);
+            // MOD: Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference
+            try {
+                result = scrollDirectionPrimary(dx);
+            } catch (NullPointerException e) {
+                result = 0;
+                e.printStackTrace();
+            }
         } else {
             result = scrollDirectionSecondary(dx);
         }

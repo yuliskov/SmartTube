@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.embedplayer;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SeekParameters;
@@ -499,7 +499,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         openVideo(Video.from(videoId));
     }
 
-    public void openVideo(@NonNull Video video) {
+    public void openVideo(@Nullable Video video) {
+        if (video == null) {
+            return;
+        }
+
         if (mPlaybackPresenter == null) {
             mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         }

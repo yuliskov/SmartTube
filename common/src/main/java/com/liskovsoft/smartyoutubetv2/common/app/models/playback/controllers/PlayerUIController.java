@@ -791,6 +791,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applyScreenOff(int buttonState) {
+        if (getPlayer() == null || getActivity() == null) {
+            return;
+        }
+
         if (getPlayerTweaksData().getScreenOffTimeoutSec() == 0) {
             boolean isPartialDimming = getPlayerTweaksData().getScreenOffDimmingPercents() < 100;
             getPlayerTweaksData().enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);

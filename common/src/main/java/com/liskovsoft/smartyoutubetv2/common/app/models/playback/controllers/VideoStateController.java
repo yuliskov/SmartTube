@@ -486,7 +486,7 @@ public class VideoStateController extends BasePlayerController {
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
-            setPositionMs(state.positionMs);
+            getPlayer().setPositionMs(state.positionMs);
         }
 
         if (!mIsPlayBlocked) {
@@ -608,12 +608,12 @@ public class VideoStateController extends BasePlayerController {
         return item.belongsToMusic();
     }
 
-    private void setPositionMs(long positionMs) {
-        boolean samePositions = Math.abs(positionMs - getPlayer().getPositionMs()) < BEGIN_THRESHOLD_MS;
-        if (!samePositions) {
-            getPlayer().setPositionMs(positionMs);
-        }
-    }
+    //private void setPositionMs(long positionMs) {
+    //    boolean samePositions = Math.abs(positionMs - getPlayer().getPositionMs()) < BEGIN_THRESHOLD_MS;
+    //    if (!samePositions) {
+    //        getPlayer().setPositionMs(positionMs);
+    //    }
+    //}
 
     private boolean isStateOutdated(State state, Video item) {
         if (state == null) {
