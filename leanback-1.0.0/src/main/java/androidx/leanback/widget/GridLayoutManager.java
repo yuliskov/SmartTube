@@ -2231,7 +2231,13 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                 }
                 // append items for mExtraLayoutSpaceInPreLayout
                 appendVisibleItems();
-                prependVisibleItems();
+                // MOD: fix RecycleView crash on Amazon
+                try {
+                    prependVisibleItems();
+                } catch (IndexOutOfBoundsException e) {
+                    // IndexOutOfBoundsException: Invalid item position -1(-1). Item count:12 androidx.leanback.widget.VerticalGridView
+                    e.printStackTrace();
+                }
             }
             mFlag &= ~PF_STAGE_MASK;
             leaveContext();
@@ -2398,7 +2404,7 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
         mFlag = (mFlag & ~PF_STAGE_MASK) | PF_STAGE_SCROLL;
         int result;
         if (mOrientation == HORIZONTAL) {
-            // MOD: fix RecycleView crash on some devices
+            // MOD: fix RecycleView crash on Ugoos
             try {
                 result = scrollDirectionPrimary(dx);
             } catch (NullPointerException e) {
