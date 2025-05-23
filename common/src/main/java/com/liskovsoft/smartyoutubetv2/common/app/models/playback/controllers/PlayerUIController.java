@@ -813,7 +813,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void prepareScreenOff() {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || getActivity() == null) {
             return;
         }
 

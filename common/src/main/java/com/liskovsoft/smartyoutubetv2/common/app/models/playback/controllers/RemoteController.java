@@ -110,7 +110,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 postPlay(false);
                 break;
             case PlayerConstants.PLAYBACK_MODE_ONE:
-                postStartPlaying(getPlayer().getVideo(), true);
+                postStartPlaying(getVideo(), true);
                 break;
         }
     }
@@ -310,7 +310,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                  break;
             case Command.TYPE_UPDATE_PLAYLIST:
                 if (getPlayer() != null && mConnected) {
-                    Video video = getPlayer().getVideo();
+                    Video video = getVideo();
                     // Ensure that remote playlist already playing
                     if (video != null && video.remotePlaylistId != null) {
                         video.remotePlaylistId = command.getPlaylistId();
@@ -372,7 +372,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             case Command.TYPE_GET_STATE:
                 if (getPlayer() != null) {
                     getViewManager().moveAppToForeground();
-                    postStartPlaying(getPlayer().getVideo(), getPlayer().isPlaying());
+                    postStartPlaying(getVideo(), getPlayer().isPlaying());
                 } else {
                     postStartPlaying(null, false);
                 }

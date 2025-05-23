@@ -58,7 +58,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private final Runnable mLoadNext = this::loadNext;
     private final Runnable mMetadataSync = () -> {
         if (getPlayer() != null) {
-            waitMetadataSync(getPlayer().getVideo(), false);
+            waitMetadataSync(getVideo(), false);
         }
     };
     private final Runnable mRestartEngine = () -> {
@@ -213,10 +213,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         //getVideo() = null; // in case next video is the same as previous
 
         if (next != null) {
-            forceSectionPlaylistIfNeeded(getPlayer().getVideo(), next);
+            forceSectionPlaylistIfNeeded(getVideo(), next);
             openVideoInt(next);
         } else {
-            waitMetadataSync(getPlayer().getVideo(), true);
+            waitMetadataSync(getVideo(), true);
         }
 
         if (getPlayerTweaksData().isPlayerUiOnNextEnabled()) {
@@ -284,7 +284,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
      * Force load and play!
      */
     private void loadVideo(Video item) {
-        if (item != null) {
+        if (getPlayer() != null && item != null) {
             mPlaylist.setCurrent(item);
             getPlayer().setVideo(item);
             getPlayer().resetPlayerState();
@@ -678,9 +678,9 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void applyPlaybackMode(int playbackMode) {
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
-        if (isActionsRunning() || video == null) {
+        if (video == null || isActionsRunning()) {
             return;
         }
 
@@ -759,7 +759,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     }
 
     private void restartPlaylist() {
-        Video currentVideo = getPlayer().getVideo();
+        Video currentVideo = getVideo();
         VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
 
         if (group != null && !group.isEmpty()) {
@@ -952,7 +952,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private int getPlaybackMode() {
         int playbackMode = getPlayerData().getPlaybackMode();
 
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
         if (video != null && video.finishOnEnded) {
             playbackMode = PlayerConstants.PLAYBACK_MODE_CLOSE;
         } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
