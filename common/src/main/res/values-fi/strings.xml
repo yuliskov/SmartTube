@@ -692,4 +692,10 @@
   <string name="player_audio_focus">Äänen tarkennus (tauko, jos muita soittimia havaitaan)</string>
   <string name="paid_content_notification">Maksullista sisältöä koskeva ilmoitus</string>
   <string name="you_liked">Peukkua ylös</string>
+  <string name="card_preview">Korttien esikatselu</string>
+  <string name="card_preview_full">Videon esikatselu äänellä</string>
+  <string name="card_preview_muted">Videon esikatselu ilman ääntä</string>
+  <string name="oculus_quest_fix">Oculus Questin korjaus</string>
+  <string name="playback_buffering_fix">Toiston puskuroinnin korjaaminen</string>
+  <string name="premium_users_only">Vain Youtube Premium-käyttäjille. Korjaa epätäydellinen videoformaattiluettelo</string>
 </resources>
