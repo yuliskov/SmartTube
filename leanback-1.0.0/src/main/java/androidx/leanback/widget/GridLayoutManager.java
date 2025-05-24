@@ -2229,10 +2229,10 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                 if (maxChangeEdge > minChangedEdge) {
                     mExtraLayoutSpaceInPreLayout = maxChangeEdge - minChangedEdge;
                 }
-                // append items for mExtraLayoutSpaceInPreLayout
-                appendVisibleItems();
                 // MOD: fix RecycleView crash on Amazon
                 try {
+                    // append items for mExtraLayoutSpaceInPreLayout
+                    appendVisibleItems();
                     prependVisibleItems();
                 } catch (IndexOutOfBoundsException e) {
                     // IndexOutOfBoundsException: Invalid item position -1(-1). Item count:12 androidx.leanback.widget.VerticalGridView
@@ -2308,8 +2308,14 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             oldFirstVisible = mGrid.getFirstVisibleIndex();
             oldLastVisible = mGrid.getLastVisibleIndex();
             focusToViewInLayout(hadFocus, scrollToFocus, -deltaPrimary, -deltaSecondary);
-            appendVisibleItems();
-            prependVisibleItems();
+            // MOD: fix RecycleView crash on Droidlogic
+            try {
+                appendVisibleItems();
+                prependVisibleItems();
+            } catch (NullPointerException e) {
+                // NullPointerException: Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()'
+                e.printStackTrace();
+            }
             // b/67370222: do not removeInvisibleViewsAtFront/End() in the loop, otherwise
             // loop may bounce between scroll forward and scroll backward forever. Example:
             // Assuming there are 19 items, child#18 and child#19 are both in RV, we are
