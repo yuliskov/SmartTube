@@ -401,15 +401,16 @@ public class VideoStateController extends BasePlayerController {
 
     public void saveState() {
         // Skip mini player, but don't save for the previews (mute enabled)
-        if (isMutedEmbed() || isBeginEmbed()) {
+        if (isMutedEmbed()) {
             return;
         }
 
-        //Log.d(TAG, "Saving state of %s %s", getVideo().title, getPlayer().getPositionMs());
-
         savePosition();
-        updateHistory();
-        syncWithPlaylists();
+
+        if (!isBeginEmbed()) {
+            updateHistory();
+            syncWithPlaylists();
+        }
     }
 
     private void restoreState() {
@@ -435,7 +436,7 @@ public class VideoStateController extends BasePlayerController {
         getStateService().persistState();
     }
 
-    public void savePosition() {
+    private void savePosition() {
         Video video = getVideo();
 
         if (video == null || getPlayer() == null || !getPlayer().containsMedia()) {

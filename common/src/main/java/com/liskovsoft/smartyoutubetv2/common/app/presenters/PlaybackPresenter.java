@@ -126,7 +126,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
             // The embed player doesn't disposed properly
             // NOTE: don't release after init check because this depends on timings
             //onEngineReleased();
-            getController(VideoStateController.class).savePosition();
+            getController(VideoStateController.class).saveState();
             setView(null);
             onNewVideo(video);
         } else {

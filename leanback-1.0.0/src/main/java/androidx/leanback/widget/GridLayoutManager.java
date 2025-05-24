@@ -2280,8 +2280,9 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             // MOD: fix RecycleView crash on Ugoos
             try {
                 fastRelayout();
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | IllegalStateException e) {
                 // IllegalArgumentException: Called attach on a child which is not detached: ViewHolder{434061b0 position=10 id=-1, oldPos=-1, pLpos:-1 no parent}
+                // IllegalStateException: Layout state should be one of 100 but it is 10
                 e.printStackTrace();
             }
         } else {
@@ -2338,8 +2339,13 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             //   5  (back to 1 and loop forever)
         } while (mGrid.getFirstVisibleIndex() != oldFirstVisible
                 || mGrid.getLastVisibleIndex() != oldLastVisible);
-        removeInvisibleViewsAtFront();
-        removeInvisibleViewsAtEnd();
+        try {
+            removeInvisibleViewsAtFront();
+            removeInvisibleViewsAtEnd();
+        } catch (NullPointerException e) {
+            // NullPointerException: Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference
+            e.printStackTrace();
+        }
 
         if (state.willRunPredictiveAnimations()) {
             fillScrapViewsInPostLayout();
