@@ -2277,7 +2277,13 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             mFlag |= PF_FAST_RELAYOUT;
             // If grid view is empty, we will start from mFocusPosition
             mGrid.setStart(mFocusPosition);
-            fastRelayout();
+            // MOD: fix RecycleView crash on Ugoos
+            try {
+                fastRelayout();
+            } catch (IllegalArgumentException e) {
+                // IllegalArgumentException: Called attach on a child which is not detached: ViewHolder{434061b0 position=10 id=-1, oldPos=-1, pLpos:-1 no parent}
+                e.printStackTrace();
+            }
         } else {
             mFlag &= ~PF_FAST_RELAYOUT;
             // layoutInit() has detached all views, so start from scratch
@@ -2436,7 +2442,14 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
         saveContext(recycler, state);
         int result;
         if (mOrientation == VERTICAL) {
-            result = scrollDirectionPrimary(dy);
+            // MOD: fix RecycleView crash on Eltex (Android 9)
+            try {
+                result = scrollDirectionPrimary(dy);
+            } catch (NullPointerException e) {
+                // Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference
+                e.printStackTrace();
+                result = 0;
+            }
         } else {
             result = scrollDirectionSecondary(dy);
         }
