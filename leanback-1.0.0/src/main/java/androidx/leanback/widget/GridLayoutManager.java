@@ -2234,8 +2234,9 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                     // append items for mExtraLayoutSpaceInPreLayout
                     appendVisibleItems();
                     prependVisibleItems();
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException | NullPointerException e) {
                     // IndexOutOfBoundsException: Invalid item position -1(-1). Item count:12 androidx.leanback.widget.VerticalGridView
+                    // NullPointerException: Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()'
                     e.printStackTrace();
                 }
             }

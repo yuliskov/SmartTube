@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Collections;
 import java.util.List;
@@ -86,6 +87,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsDeviceSpecificBackupEnabled;
     private boolean mIsAutoBackupEnabled;
     private List<Video> mOldPinnedItems;
+    private final Runnable mPersistStateInt = this::persistStateInt;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -761,6 +763,10 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     private void persistState() {
+        Utils.postDelayed(mPersistStateInt, 10_000);
+    }
+
+    private void persistStateInt() {
         // Zero index is skipped. Selected sections were there.
         mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, null, null, mAppExitShortcut, mIsReturnToLauncherEnabled,
                 mBackgroundShortcut, mOldPinnedItems, mIsHideShortsFromSubscriptionsEnabled,

@@ -150,8 +150,9 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        saveState(); // start watching?
-        persistState(); // restore on crash???
+        // NOTE: needed for the restore after oom crash?
+        //saveState(); // start watching?
+        //persistState(); // restore on crash???
 
         // Channel info should be loaded at this point
         restoreSubtitleFormat();

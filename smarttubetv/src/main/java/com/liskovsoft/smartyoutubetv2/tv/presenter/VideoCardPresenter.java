@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -137,6 +138,11 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
 
         cardView.setMainImageDimensions(mWidth, mHeight);
+
+        if (context instanceof Activity && ((Activity) context).isDestroyed()) {
+            // Glide.with(context): IllegalArgumentException: You cannot start a load for a destroyed activity
+            return;
+        }
 
         Glide.with(context)
                 //.asBitmap() // disable animation (webp, gif)

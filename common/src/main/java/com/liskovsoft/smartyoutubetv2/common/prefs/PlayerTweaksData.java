@@ -101,6 +101,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsPersistentAntiBotFixEnabled;
     private boolean mIsAudioFocusEnabled;
+    private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -672,6 +673,10 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     private void persistData() {
+        Utils.postDelayed(mPersistDataInt, 10_000);
+    }
+
+    private void persistDataInt() {
         mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeData(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,

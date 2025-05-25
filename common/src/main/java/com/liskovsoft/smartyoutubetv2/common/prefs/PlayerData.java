@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private float mPitch;
     private long mAfrSwitchTimeMs;
     private List<String> mLastAudioLanguages;
+    private final Runnable mPersistStateInt = this::persistStateInt;
 
     private static class SpeedItem {
         public String channelId;
@@ -854,6 +856,11 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     }
 
     private void persistState() {
+        onDataChange();
+        Utils.postDelayed(mPersistStateInt, 10_000);
+    }
+
+    private void persistStateInt() {
         mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeData(mOKButtonBehavior, mUiHideTimeoutSec, null,
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
@@ -868,7 +875,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
 
-        onDataChange();
+        //onDataChange();
     }
 
     @Override

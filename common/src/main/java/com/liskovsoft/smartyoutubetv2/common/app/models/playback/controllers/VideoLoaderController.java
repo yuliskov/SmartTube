@@ -273,7 +273,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return;
         }
 
-        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
+        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);
@@ -533,17 +533,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             restartEngine = false;
             resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError) {
-            //if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOWEST) {
-            //    getPlayerTweaksData().enableSectionPlaylist(false);
-            //} else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW) {
-            //    getPlayerData().setVideoBufferType(PlayerData.BUFFER_LOWEST);
-            //} else {
-            //    getPlayerData().setVideoBufferType(PlayerData.BUFFER_LOW);
-            //}
-
             if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_MEDIUM || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 getPlayerTweaksData().enableSectionPlaylist(false);
-                //getPlayerTweaksData().enableHighBitrateFormats(false);
                 restartEngine = false;
             } else {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
@@ -685,7 +676,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         // Stop the playback if the user is browsing options or reading comments
-        if (getAppDialogPresenter().isDialogShown() && !getAppDialogPresenter().isOverlay()) {
+        if (getAppDialogPresenter().isDialogShown() && !getAppDialogPresenter().isOverlay() && playbackMode != PlayerConstants.PLAYBACK_MODE_ONE) {
             getAppDialogPresenter().setOnFinish(mOnApplyPlaybackMode);
             return;
         }
