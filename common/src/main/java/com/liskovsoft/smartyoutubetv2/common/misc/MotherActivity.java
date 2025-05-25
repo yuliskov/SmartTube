@@ -113,7 +113,7 @@ public class MotherActivity extends FragmentActivity {
 
         try {
             return super.dispatchTouchEvent(event);
-        } catch (NullPointerException | SecurityException | IllegalStateException e) {
+        } catch (NullPointerException | SecurityException | IllegalStateException | ArrayIndexOutOfBoundsException e) {
             // Attempt to invoke interface method 'boolean android.app.trust.ITrustManager.isDeviceLocked(int)' on a null object reference
             // Permission Denial: starting Intent
             // IllegalStateException: exitFreeformMode: You can only go fullscreen from freeform.

@@ -20,6 +20,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -660,7 +661,13 @@ public class FragmentActivity extends ComponentActivity implements
                 checkForValidRequestCode(requestCode);
             }
         }
-        super.startActivityForResult(intent, requestCode);
+        // MOD: swallow activity not found in Editor
+        try {
+            super.startActivityForResult(intent, requestCode);
+        } catch (ActivityNotFoundException e) {
+            // ActivityNotFoundException: No Activity found to handle Intent { act=com.android.settings.USER_DICTIONARY_INSERT flg=0x10000000 (has extras) }
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
