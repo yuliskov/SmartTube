@@ -794,6 +794,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         loadRandomNext();
+        // The title already synced witch metadata at this point
         checkSleepTimer();
     }
 
