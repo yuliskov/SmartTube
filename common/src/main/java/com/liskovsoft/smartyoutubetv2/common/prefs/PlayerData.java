@@ -759,7 +759,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow_semi_transparent, R.color.yellow, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow_black, R.color.yellow, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
 
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (VERSION.SDK_INT >= 19) {
             mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_system));
         }
     }
