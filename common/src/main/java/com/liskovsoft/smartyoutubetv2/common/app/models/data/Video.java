@@ -673,12 +673,13 @@ public final class Video {
         return getGroup() != null && getGroup().getSection() != null;
     }
 
-    public void sync(Video video) {
-        if (video == null) {
-            return;
+    public boolean sync(Video video) {
+        if (video == null || Math.abs(percentWatched - video.percentWatched) < 10) {
+            return false;
         }
 
         percentWatched = video.percentWatched;
+        return true;
     }
 
     public void sync(MediaItemMetadata metadata) {
