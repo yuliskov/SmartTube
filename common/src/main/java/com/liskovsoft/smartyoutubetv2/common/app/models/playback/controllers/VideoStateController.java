@@ -408,7 +408,7 @@ public class VideoStateController extends BasePlayerController {
 
         savePosition();
 
-        if (!isBeginEmbed()) {
+        if (!isBegin()) {
             updateHistory();
             syncWithPlaylists();
         }
@@ -430,7 +430,7 @@ public class VideoStateController extends BasePlayerController {
 
     private void persistState() {
         // Skip mini player, but don't save for the previews (mute enabled)
-        if (isMutedEmbed() || isBeginEmbed()) {
+        if (isMutedEmbed() || isBegin()) {
             return;
         }
 
@@ -681,5 +681,9 @@ public class VideoStateController extends BasePlayerController {
 
     private boolean isBeginEmbed() {
         return isEmbedPlayer() && System.currentTimeMillis() - mNewVideoTimeMs <= EMBED_THRESHOLD_MS;
+    }
+
+    private boolean isBegin() {
+        return System.currentTimeMillis() - mNewVideoTimeMs <= EMBED_THRESHOLD_MS;
     }
 }

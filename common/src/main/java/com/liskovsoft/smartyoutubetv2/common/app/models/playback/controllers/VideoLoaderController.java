@@ -44,7 +44,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     private static final long BUFFERING_WINDOW_MS = 60_000;
     private static final long BUFFERING_RECURRENCE_COUNT = (long) (BUFFERING_WINDOW_MS * 0.5 / BUFFERING_THRESHOLD_MS);
     private final Playlist mPlaylist;
-    private final UniqueRandom mRandom;
     private Video mPendingVideo;
     private int mLastErrorType = -1;
     private SuggestionsController mSuggestionsController;
@@ -84,7 +83,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     public VideoLoaderController() {
         mPlaylist = Playlist.instance();
-        mRandom = new UniqueRandom();
     }
 
     @Override
@@ -832,7 +830,10 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             Video video = new Video();
             video.playlistId = getVideo().playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
-            video.playlistIndex = mRandom.getPlaylistIndex(getVideo().getPlaylistId(),
+            //video.playlistIndex = mRandom.getPlaylistIndex(getVideo().getPlaylistId(),
+            //        getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
+
+            video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().getPositionInsideGroup(),
                     getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
 
             MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
