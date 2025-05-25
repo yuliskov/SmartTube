@@ -700,4 +700,5 @@
   <string name="search_exit_shortcut">Thoát khỏi tìm kiếm</string>
   <string name="card_preview_muted">Video không có âm thanh</string>
   <string name="card_preview_full">Video có âm thanh</string>
+  <string name="card_preview">Xem trước thẻ</string>
 </resources>
