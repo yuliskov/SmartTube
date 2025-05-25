@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedDispatcher;
@@ -667,6 +668,7 @@ public class FragmentActivity extends ComponentActivity implements
         } catch (ActivityNotFoundException e) {
             // ActivityNotFoundException: No Activity found to handle Intent { act=com.android.settings.USER_DICTIONARY_INSERT flg=0x10000000 (has extras) }
             Log.e(TAG, e.getMessage());
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

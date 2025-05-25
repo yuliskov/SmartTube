@@ -70,7 +70,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     private final Runnable mRebootApp = () -> {
         Video video = getVideo();
-        if (video != null && video.hasVideo()) {
+        if (getPlayer() != null && video != null && video.hasVideo()) {
             Utils.restartTheApp(getContext(), video.videoId);
         }
     };
