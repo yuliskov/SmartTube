@@ -210,9 +210,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             for (int i = 0; i < mVideoItems.size(); i++) {
                 Video origin = mVideoItems.get(i);
                 if (origin.equals(video)) {
-                    if (origin.sync(video)) {
-                        notifyItemRangeChanged(i, 1);
-                    }
+                    origin.sync(video);
+                    notifyItemRangeChanged(i, 1);
                 }
             }
         }
