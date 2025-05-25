@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provide
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,6 +108,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsChannelSearchBarEnabled;
     private boolean mIsPinnedChannelRowsEnabled;
     private int mCardPreviewType;
+    private final Runnable mPersistStateInt = this::persistStateInt;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -409,7 +411,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelsFilterEnabled = Helpers.parseBoolean(split, 18, true);
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
-        mCardPreviewType = Helpers.parseInt(split, 21, VERSION.SDK_INT > 19 ? CARD_PREVIEW_MUTED : CARD_PREVIEW_DISABLED);
+        mCardPreviewType = Helpers.parseInt(split, 21, VERSION.SDK_INT > 22 ? CARD_PREVIEW_MUTED : CARD_PREVIEW_DISABLED);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -425,8 +427,13 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         
         updateDefaultValues();
     }
-    
+
     private void persistState() {
+        onDataChange();
+        Utils.postDelayed(mPersistStateInt, 10_000);
+    }
+    
+    private void persistStateInt() {
         mPrefs.setProfileData(MAIN_UI_DATA, Helpers.mergeData(null,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
@@ -434,7 +441,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType));
 
-        onDataChange();
+        //onDataChange();
     }
 
     public static class ColorScheme {
