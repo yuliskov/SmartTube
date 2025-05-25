@@ -172,7 +172,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         mLastErrorType = -1;
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
-        checkSleepTimer();
     }
 
     @Override
@@ -781,10 +780,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return false;
         }
 
-        //if (getPlayerData().isLegacyCodecsForced()) {
-        //    return false;
-        //}
-
         return true;
     }
 
@@ -793,20 +788,22 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             return false;
         }
 
-        //if (getPlayerData().isLegacyCodecsForced()) {
-        //    return false;
-        //}
-
         return true;
     }
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         loadRandomNext();
+        checkSleepTimer();
     }
 
     @Override
     public void onPlay() {
+        Utils.removeCallbacks(mOnLongBuffering);
+    }
+
+    @Override
+    public void onPause() {
         Utils.removeCallbacks(mOnLongBuffering);
     }
 

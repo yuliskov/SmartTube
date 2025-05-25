@@ -192,10 +192,13 @@ public class ComplexImageView extends RelativeLayout {
             Utils.removeCallbacks(mCreateAndStartPlayer);
 
             if (mPreviewPlayer != null) {
-                mPreviewContainer.removeView(mPreviewPlayer);
+                EmbedPlayerView epv = mPreviewPlayer;
                 mPreviewContainer.setVisibility(View.GONE);
-                mPreviewPlayer.finish();
                 mPreviewPlayer = null;
+                Utils.postDelayed(() -> {
+                    mPreviewContainer.removeView(epv);
+                    epv.finish();
+                }, 100);
             }
         }
     }
