@@ -172,6 +172,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         mLastErrorType = -1;
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
+        checkSleepTimer();
     }
 
     @Override
@@ -261,17 +262,12 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         return false;
     }
 
-    @Override
-    public void onTickle() {
-        checkSleepTimer();
-    }
-
     private void checkSleepTimer() {
         if (getPlayer() == null) {
             return;
         }
 
-        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
+        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);
