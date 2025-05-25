@@ -880,6 +880,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     @Override
     public void onProfileChanged() {
+        Utils.removeCallbacks(mPersistStateInt);
+
         // reset on profile change
         mSpeeds.clear();
 

@@ -787,6 +787,7 @@ public class GeneralData implements ProfileChangeListener {
 
     @Override
     public void onProfileChanged() {
+        Utils.removeCallbacks(mPersistStateInt);
         restoreState();
     }
 }

@@ -709,6 +709,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     @Override
     public void onProfileChanged() {
+        Utils.removeCallbacks(mPersistDataInt);
         restoreData();
     }
 }
