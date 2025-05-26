@@ -477,7 +477,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         String message = error.getMessage();
         String className = error.getClass().getSimpleName();
-        String fullMsg = String.format("loadFormatInfo error: %s: %s", className, message);
+        String fullMsg = String.format("loadFormatInfo error: %s: %s", className, message + "\n" + Utils.getTopStackTraceElement(error));
         Log.e(TAG, fullMsg);
 
         if (!Helpers.containsAny(message, "fromNullable result is null")) {

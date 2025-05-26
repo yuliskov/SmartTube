@@ -1058,4 +1058,13 @@ public class Utils {
     public static boolean isEnoughRam(Context context) {
         return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_500_000_000; // 1.5 GB
     }
+
+    public static String getTopStackTraceElement(Throwable throwable) {
+        StackTraceElement[] elements = throwable.getStackTrace();
+        if (elements.length > 0) {
+            return elements[0].toString();
+        } else {
+            return "No stack trace available";
+        }
+    }
 }
