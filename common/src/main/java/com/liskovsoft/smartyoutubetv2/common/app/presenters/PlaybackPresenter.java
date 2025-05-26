@@ -125,9 +125,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         } else if (getView().isEmbed()) { // switching from the embed player to the fullscreen one
             // The embed player doesn't disposed properly
             // NOTE: don't release after init check because this depends on timings
-            //onEngineReleased();
-            getController(VideoStateController.class).saveState();
+            getView().finishReally();
             setView(null);
+            getController(VideoStateController.class).saveState();
             onNewVideo(video);
         } else {
             onNewVideo(video);

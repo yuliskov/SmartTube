@@ -102,6 +102,20 @@ public class ComplexImageCardView extends ImageCardView {
         enableVideoPreview(selected);
     }
 
+    @Override
+    public boolean performClick() {
+        enableVideoPreview(false);
+
+        return super.performClick();
+    }
+
+    @Override
+    public boolean performLongClick() {
+        enableVideoPreview(false);
+
+        return super.performLongClick();
+    }
+
     private void enableVideoPreview(boolean selected) {
         if (selected) {
             mComplexImageView.startPlayback();
