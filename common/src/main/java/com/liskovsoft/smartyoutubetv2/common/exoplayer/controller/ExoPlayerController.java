@@ -492,6 +492,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         try {
             mPlayer.removeListener(this);
             mPlayer.stop(true); // Cause input lags due to high cpu load?
+            mPlayer.clearVideoSurface();
             mPlayer.release();
             mPlayer = null;
         } catch (ArrayIndexOutOfBoundsException e) { // thrown on stop()

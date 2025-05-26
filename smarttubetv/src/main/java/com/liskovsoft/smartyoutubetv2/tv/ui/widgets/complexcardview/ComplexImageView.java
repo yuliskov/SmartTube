@@ -82,6 +82,13 @@ public class ComplexImageView extends RelativeLayout {
         }
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        stopPlayback();
+    }
+
     /**
      * Sets the badge text.
      */
