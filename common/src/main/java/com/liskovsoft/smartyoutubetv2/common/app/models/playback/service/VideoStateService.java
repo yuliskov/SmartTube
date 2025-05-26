@@ -102,7 +102,12 @@ public class VideoStateService implements ProfileChangeListener {
     }
 
     private void persistStateInt() {
-        mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
+        if (mIsHistoryBroken) {
+            mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
+        } else {
+            // Eliminate additional string creation with the merge
+            mPrefs.setStateUpdaterData(getStateData());
+        }
     }
 
     public void persistState() {
