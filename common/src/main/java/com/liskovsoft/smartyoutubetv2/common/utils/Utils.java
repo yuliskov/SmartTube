@@ -1059,12 +1059,18 @@ public class Utils {
         return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_500_000_000; // 1.5 GB
     }
 
-    public static String getTopStackTraceElement(Throwable throwable) {
+    public static String getStackTraceAsString(Throwable throwable) {
+        StringBuilder result = new StringBuilder();
+        result.append(throwable.getMessage()).append("\n");
         StackTraceElement[] elements = throwable.getStackTrace();
         if (elements.length > 0) {
-            return elements[0].toString();
+            StackTraceElement topElement = elements[0];
+            result.append(topElement.getMethodName());
+            result.append("(").append(topElement.getFileName()).append(":").append(topElement.getLineNumber()).append(")");
         } else {
-            return "No stack trace available";
+            result.append("No stack trace available");
         }
+
+        return result.toString();
     }
 }
