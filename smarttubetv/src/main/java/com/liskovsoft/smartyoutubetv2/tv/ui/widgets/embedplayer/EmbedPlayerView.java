@@ -570,7 +570,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             mPlayer = null;
             setPlayer(null);
             hideView();
-            if (mVideo != null) {
+            if (mVideo != null && !mIsMute) {
                 BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
                 if (presenter != null) {
                     presenter.syncItem(mVideo);

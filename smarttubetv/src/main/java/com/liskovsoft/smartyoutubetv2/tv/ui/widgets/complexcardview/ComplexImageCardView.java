@@ -104,14 +104,14 @@ public class ComplexImageCardView extends ImageCardView {
 
     @Override
     public boolean performClick() {
-        enableVideoPreview(false);
+        mComplexImageView.stopPlayback(true);
 
         return super.performClick();
     }
 
     @Override
     public boolean performLongClick() {
-        enableVideoPreview(false);
+        mComplexImageView.stopPlayback(true);
 
         return super.performLongClick();
     }

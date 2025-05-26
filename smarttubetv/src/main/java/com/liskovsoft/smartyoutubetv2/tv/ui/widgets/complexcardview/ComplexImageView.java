@@ -183,6 +183,10 @@ public class ComplexImageView extends RelativeLayout {
     }
 
     public void stopPlayback() {
+        stopPlayback(false);
+    }
+
+    public void stopPlayback(boolean stopImmediately) {
         if (getVideo() == null) {
             return;
         }
@@ -199,13 +203,18 @@ public class ComplexImageView extends RelativeLayout {
             Utils.removeCallbacks(mCreateAndStartPlayer);
 
             if (mPreviewPlayer != null) {
-                EmbedPlayerView epv = mPreviewPlayer;
                 mPreviewContainer.setVisibility(View.GONE);
+                if (stopImmediately) {
+                    mPreviewPlayer.finish();
+                    mPreviewContainer.removeView(mPreviewPlayer);
+                } else {
+                    EmbedPlayerView epv = mPreviewPlayer;
+                    Utils.postDelayed(() -> {
+                        epv.finish();
+                        mPreviewContainer.removeView(epv);
+                    }, 100);
+                }
                 mPreviewPlayer = null;
-                Utils.postDelayed(() -> {
-                    mPreviewContainer.removeView(epv);
-                    epv.finish();
-                }, 100);
             }
         }
     }
