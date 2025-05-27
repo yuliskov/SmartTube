@@ -521,7 +521,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         // Fullscreen playback is running. Skipping
         PlaybackView view = mPlaybackPresenter.getView();
         if (view == null || view instanceof EmbedPlayerView || !PlaybackPresenter.instance(getContext()).isEngineInitialized()) {
-            mVideo = video;
             initPlayer();
             createPlayerObjects();
             mPlaybackPresenter.onNewVideo(video);
@@ -597,11 +596,15 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             mPlayer = null;
             setPlayer(null);
             hideView();
-            if (!mIsMute && isPositionChanged()) {
-                BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
-                if (presenter != null) {
-                    presenter.syncItem(mVideo);
-                }
+            syncPositionIfNeeded();
+        }
+    }
+
+    private void syncPositionIfNeeded() {
+        if (!mIsMute && isPositionChanged()) {
+            BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
+            if (presenter != null) {
+                presenter.syncItem(mVideo);
             }
         }
     }
@@ -611,6 +614,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     private void onVideoLoaded() {
+        syncPositionIfNeeded();
         // Fix the screen becomes black for a moment
         Utils.postDelayed(mShowView, 1_000);
         if (mIsMute) { // Save bandwidth if the previews are muted
