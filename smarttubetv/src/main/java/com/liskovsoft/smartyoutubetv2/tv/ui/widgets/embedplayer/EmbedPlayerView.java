@@ -491,6 +491,15 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            finish();
+        } finally {
+            super.finalize();
+        }
+    }
+
     public void setQuality(int quality) {
         mQuality = quality;
     }
@@ -512,9 +521,9 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         PlaybackView view = mPlaybackPresenter.getView();
         if (view == null || view instanceof EmbedPlayerView || !PlaybackPresenter.instance(getContext()).isEngineInitialized()) {
             mVideo = video;
-            mPlaybackPresenter.onNewVideo(video);
             initPlayer();
             createPlayerObjects();
+            mPlaybackPresenter.onNewVideo(video);
         }
     }
 
@@ -580,7 +589,8 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     private void initPlayer() {
-        if (mExoPlayerController != null) {
+        if (isEngineInitialized()) {
+            mPlaybackPresenter.setView(this);
             return;
         }
         
