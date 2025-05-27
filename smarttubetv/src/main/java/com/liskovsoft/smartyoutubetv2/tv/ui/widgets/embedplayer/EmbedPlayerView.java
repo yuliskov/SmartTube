@@ -48,6 +48,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     private final Runnable mShowView = this::showView;
     private final Runnable mStopPlayback = this::finish;
     private int mQuality;
+    private float mPercentWatched;
 
     public EmbedPlayerView(Context context) {
         super(context);
@@ -524,11 +525,28 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             initPlayer();
             createPlayerObjects();
             mPlaybackPresenter.onNewVideo(video);
+            mPercentWatched = video.percentWatched;
         }
+    }
+
+    private void initPlayer() {
+        if (isEngineInitialized()) {
+            mPlaybackPresenter.setView(this);
+            return;
+        }
+
+        mPlayerInitializer = new ExoPlayerInitializer(getContext());
+        mPlaybackPresenter.setView(this);
+        mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
+        mExoPlayerController.setOnVideoLoaded(this::onVideoLoaded);
+        mPlaybackPresenter.onViewInitialized(); // init all controllers
+
+        setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM); // Fix unfilled borders
     }
 
     private void createPlayerObjects() {
         if (isEngineInitialized()) {
+            setPlayer(mPlayer);
             return;
         }
 
@@ -548,7 +566,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         }
 
         mExoPlayerController.setPlayer(mPlayer);
-        mExoPlayerController.setVideo(mVideo);
+        //mExoPlayerController.setVideo(mVideo);
         mExoPlayerController.selectFormat(mQuality == QUALITY_LOW ? FormatItem.VIDEO_SUB_SD_AVC_30 : FormatItem.VIDEO_SD_AVC_30);
         // Don't use subs! Not efficient. High cpu load. Cause input lags.
         mExoPlayerController.selectFormat(FormatItem.SUBTITLE_NONE);
@@ -579,7 +597,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             mPlayer = null;
             setPlayer(null);
             hideView();
-            if (mVideo != null && !mIsMute) {
+            if (!mIsMute && isPositionChanged()) {
                 BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
                 if (presenter != null) {
                     presenter.syncItem(mVideo);
@@ -588,19 +606,8 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
         }
     }
 
-    private void initPlayer() {
-        if (isEngineInitialized()) {
-            mPlaybackPresenter.setView(this);
-            return;
-        }
-        
-        mPlayerInitializer = new ExoPlayerInitializer(getContext());
-        mPlaybackPresenter.setView(this);
-        mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
-        mExoPlayerController.setOnVideoLoaded(this::onVideoLoaded);
-        mPlaybackPresenter.onViewInitialized(); // init all controllers
-
-        setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM); // Fix unfilled borders
+    private boolean isPositionChanged() {
+        return mVideo != null && Math.abs(mPercentWatched - mVideo.percentWatched) > 20;
     }
 
     private void onVideoLoaded() {
