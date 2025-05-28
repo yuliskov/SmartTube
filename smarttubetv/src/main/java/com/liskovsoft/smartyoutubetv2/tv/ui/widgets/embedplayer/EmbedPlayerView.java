@@ -614,7 +614,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     private void onVideoLoaded() {
-        syncPositionIfNeeded();
         // Fix the screen becomes black for a moment
         Utils.postDelayed(mShowView, 1_000);
         if (mIsMute) { // Save bandwidth if the previews are muted

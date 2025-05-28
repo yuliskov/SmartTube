@@ -172,6 +172,8 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         mLastErrorType = -1;
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
+        // Can't set title at this point
+        checkSleepTimer();
     }
 
     @Override
@@ -794,8 +796,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         loadRandomNext();
-        // The title already synced witch metadata at this point
-        checkSleepTimer();
     }
 
     @Override
