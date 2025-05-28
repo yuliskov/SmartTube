@@ -879,7 +879,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applySoundOffButtonState() {
-        if (getPlayer().getAudioFormat() != null) {
+        if (getPlayer() != null && getPlayer().getAudioFormat() != null) {
             getPlayer().setButtonState(R.id.action_sound_off,
                     (getPlayer().getAudioFormat().isDefault() || getPlayerData().getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
