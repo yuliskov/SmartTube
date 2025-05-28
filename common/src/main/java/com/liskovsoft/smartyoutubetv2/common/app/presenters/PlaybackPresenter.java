@@ -209,7 +209,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
         // Fix playing the previous video when switching between embed and fullscreen players.
         // E.g. when the user pressed back on the Channel content screen
-        if (view != null && view.getVideo() != null && System.currentTimeMillis() - mNewVideoStartedTimeMs > 3_000) {
+        if (view != null && view.getVideo() != null && isNewVideoExpired()) {
             mVideo = new WeakReference<>(view.getVideo());
         }
     }
@@ -267,6 +267,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     private void process(Processor<PlayerEventListener> processor) {
         Utils.process(mEventListeners, processor);
+    }
+
+    private boolean isNewVideoExpired() {
+        return System.currentTimeMillis() - mNewVideoStartedTimeMs > 3_000;
     }
 
     // End Helpers
