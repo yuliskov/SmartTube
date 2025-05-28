@@ -111,8 +111,8 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.option_disabled, MainUIData.CARD_PREVIEW_DISABLED},
-                {R.string.card_preview_muted, MainUIData.CARD_PREVIEW_MUTED},
-                {R.string.card_preview_full, MainUIData.CARD_PREVIEW_FULL}}) {
+                {R.string.card_preview_full, MainUIData.CARD_PREVIEW_FULL},
+                {R.string.card_preview_muted, MainUIData.CARD_PREVIEW_MUTED}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mMainUIData.setCardPreviewType(pair[1]);
             }, mMainUIData.getCardPreviewType() == pair[1]));
