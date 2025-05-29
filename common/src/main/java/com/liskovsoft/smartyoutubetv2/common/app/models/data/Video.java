@@ -852,7 +852,7 @@ public final class Video {
 
     public long getPositionMs() {
         long positionMs = getPositionFromStartPosition();
-        return positionMs != 0 ? positionMs : getPositionFromPercentWatched();
+        return positionMs > 0 ? positionMs : getPositionFromPercentWatched();
     }
 
     private long getPositionFromPercentWatched() {
