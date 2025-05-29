@@ -212,7 +212,7 @@ public class ComplexImageView extends RelativeLayout {
                     Utils.postDelayed(() -> {
                         epv.finish();
                         mPreviewContainer.removeView(epv);
-                    }, 300);
+                    }, 500);
                 }
                 mPreviewPlayer = null;
             }
