@@ -2282,9 +2282,10 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             // MOD: fix RecycleView crash on Ugoos
             try {
                 fastRelayout();
-            } catch (IllegalArgumentException | IllegalStateException e) {
+            } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
                 // IllegalArgumentException: Called attach on a child which is not detached: ViewHolder{434061b0 position=10 id=-1, oldPos=-1, pLpos:-1 no parent}
                 // IllegalStateException: Layout state should be one of 100 but it is 10
+                // NullPointerException: Attempt to read from field 'int androidx.recyclerview.widget.ViewInfoStore$InfoRecord.flags' on a null object reference
                 e.printStackTrace();
             }
         } else {

@@ -123,7 +123,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         int begin = mVideoItems.size();
 
         if (mVideoGroups.contains(group)) {
-            mVideoItems.addAll(group.getVideos().subList(begin, group.getVideos().size()));
+            int end = group.getVideos().size();
+            if (begin > end) {
+                mVideoItems.addAll(group.getVideos());
+            } else {
+                mVideoItems.addAll(group.getVideos().subList(begin, end));
+            }
         } else {
             mVideoItems.addAll(group.getVideos());
             mVideoGroups.add(group);
