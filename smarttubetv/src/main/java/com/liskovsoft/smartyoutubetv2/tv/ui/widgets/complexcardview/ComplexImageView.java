@@ -209,6 +209,7 @@ public class ComplexImageView extends RelativeLayout {
                     mPreviewContainer.removeView(mPreviewPlayer);
                 } else {
                     EmbedPlayerView epv = mPreviewPlayer;
+                    epv.setMute(true);
                     Utils.postDelayed(() -> {
                         epv.finish();
                         mPreviewContainer.removeView(epv);
