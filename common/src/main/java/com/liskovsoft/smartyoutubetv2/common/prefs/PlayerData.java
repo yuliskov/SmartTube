@@ -99,6 +99,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private long mAfrSwitchTimeMs;
     private List<String> mLastAudioLanguages;
     private final Runnable mPersistStateInt = this::persistStateInt;
+    private boolean mIsLegacyCodecsForced;
 
     private static class SpeedItem {
         public String channelId;
@@ -282,12 +283,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     }
 
     public boolean isLegacyCodecsForced() {
-        return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_URL) && !MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_DASH);
+        return mIsLegacyCodecsForced;
     }
 
-    public void forceLegacyCodecs(boolean enable) {
-        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_URL, enable);
-        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_DASH, !enable);
+    public void forceLegacyCodecs(boolean forced) {
+        mIsLegacyCodecsForced = forced;
+        persistState();
     }
 
     public boolean isAfrEnabled() {
@@ -803,7 +804,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mIsAllSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         // repeat mode was here
         // didn't remember what was there
-        // mIsLegacyCodecsForced
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
@@ -867,7 +868,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mVideoFormat, mAudioFormat, mSubtitleFormat,
                 mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
-                null, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,

@@ -793,7 +793,13 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applyScreenOff(int buttonState) {
-        if (getPlayer() == null || getActivity() == null) {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        ScreensaverManager manager = getScreensaverManager();
+
+        if (manager == null) {
             return;
         }
 
@@ -801,7 +807,6 @@ public class PlayerUIController extends BasePlayerController {
             boolean isPartialDimming = getPlayerTweaksData().getScreenOffDimmingPercents() < 100;
             getPlayerTweaksData().enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
             if (buttonState == PlayerUI.BUTTON_OFF) {
-                ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
                 manager.doScreenOff();
                 manager.setBlocked(isPartialDimming);
                 getPlayer().setButtonState(R.id.action_screen_off, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
@@ -819,11 +824,15 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void prepareScreenOff() {
-        if (getPlayer() == null || getActivity() == null) {
+        if (getPlayer() == null) {
             return;
         }
 
-        ScreensaverManager manager = ((MotherActivity) getActivity()).getScreensaverManager();
+        ScreensaverManager manager = getScreensaverManager();
+
+        if (manager == null) {
+            return;
+        }
 
         manager.setBlocked(false);
         manager.disable();

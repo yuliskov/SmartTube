@@ -18,6 +18,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -572,8 +573,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
             }
 
-            // Fix muted audio on stream with higher bitrate than the target
-            if (result instanceof AudioTrack && result.isEmpty() && tmpResult != null) {
+            // Fix muted audio/video on stream with higher bitrate than the target
+            if ((result instanceof AudioTrack || result instanceof VideoTrack) && result.isEmpty() && tmpResult != null) {
                 result = tmpResult;
             }
         }

@@ -594,14 +594,16 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void showHideScreensaver(boolean show) {
-        if (getActivity() instanceof MotherActivity) {
-            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
+        ScreensaverManager screensaverManager = getScreensaverManager();
 
-            if (show) {
-                screensaverManager.enableChecked();
-            } else {
-                screensaverManager.disableChecked();
-            }
+        if (screensaverManager == null) {
+            return;
+        }
+
+        if (show) {
+            screensaverManager.enableChecked();
+        } else {
+            screensaverManager.disableChecked();
         }
     }
 

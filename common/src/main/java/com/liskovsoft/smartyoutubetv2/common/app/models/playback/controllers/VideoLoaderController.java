@@ -272,6 +272,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);
+            Helpers.enableScreensaver(getActivity());
         }
     }
 
@@ -369,7 +370,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             } else { // 18+ video
                 scheduleNextVideoTimer(5_000);
             }
-        } else if (formatInfo.containsDashVideoFormats() && acceptDashVideoFormats(formatInfo)) {
+        } else if (acceptDashVideo(formatInfo)) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -383,7 +384,7 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
                             },
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
-        } else if (formatInfo.isLive() && formatInfo.containsDashUrl() && acceptDashUrl(formatInfo)) {
+        } else if (acceptDashLive(formatInfo)) {
             Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getPlayer().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
@@ -766,7 +767,15 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
     }
 
-    private boolean acceptDashVideoFormats(MediaItemFormatInfo formatInfo) {
+    private boolean acceptDashVideo(MediaItemFormatInfo formatInfo) {
+        if ((getPlayerData().isLegacyCodecsForced() || isEmbedPlayer()) && formatInfo.containsUrlFormats()) {
+            return false;
+        }
+
+        if ((getPlayerTweaksData().isHlsStreamsForced() || isEmbedPlayer()) && formatInfo.isLive() && formatInfo.containsHlsUrl()) {
+            return false;
+        }
+
         // Not enough info for full length live streams
         if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
             return false;
@@ -774,23 +783,23 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
         // Live dash url doesn't work with None buffer
         //if (formatInfo.isLive() && (getPlayerTweaksData().isDashUrlStreamsForced() || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_NONE)) {
-        if (formatInfo.isLive() && getPlayerTweaksData().isDashUrlStreamsForced()) {
+        if (formatInfo.isLive() && getPlayerTweaksData().isDashUrlStreamsForced() && formatInfo.containsDashUrl()) {
             return false;
         }
 
-        if (formatInfo.isLive() && getPlayerTweaksData().isHlsStreamsForced()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean acceptDashUrl(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isLive() && getPlayerTweaksData().isHlsStreamsForced() && formatInfo.containsHlsUrl()) {
             return false;
         }
 
-        return true;
+        return formatInfo.containsDashVideoFormats();
+    }
+
+    private boolean acceptDashLive(MediaItemFormatInfo formatInfo) {
+        if ((getPlayerTweaksData().isHlsStreamsForced() || isEmbedPlayer()) && formatInfo.isLive() && formatInfo.containsHlsUrl()) {
+            return false;
+        }
+
+        return formatInfo.isLive() && formatInfo.containsDashUrl();
     }
 
     @Override
