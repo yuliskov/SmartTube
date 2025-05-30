@@ -452,7 +452,8 @@ public class VideoStateController extends BasePlayerController {
         long positionMs = getPlayer().getPositionMs();
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        if (isPositionActual) { // partially viewed
+        boolean isLiveBroken = video.isLive && durationMs <= 30_000; // the live without a history
+        if (isPositionActual && !isLiveBroken) { // partially viewed
             State state = new State(video, positionMs, durationMs, getPlayer().getSpeed());
             getStateService().save(state);
             // Sync video. You could safely use it later to restore state.
