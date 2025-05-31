@@ -10,7 +10,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -154,13 +154,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         if (item.mediaItem == null) {
-            item.mediaItem = SampleMediaItem.from(item);
+            item.mediaItem = SimpleMediaItem.from(item);
         }
 
         disposeActions();
 
         return item.hasNestedItems() || item.isChannel() ?
-               getContentService().getGroupObserve(item.mediaItem != null ? item.mediaItem : SampleMediaItem.from(item)) :
+               getContentService().getGroupObserve(item.mediaItem != null ? item.mediaItem : SimpleMediaItem.from(item)) :
                item.hasReloadPageKey() ?
                getContentService().getGroupObserve(item.getReloadPageKey()) :
                getMediaItemService().getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)

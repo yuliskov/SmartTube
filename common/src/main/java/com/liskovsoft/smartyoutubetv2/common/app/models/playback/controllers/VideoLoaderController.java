@@ -14,7 +14,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.SampleMediaItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -24,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -37,7 +36,7 @@ import io.reactivex.disposables.Disposable;
 import java.util.Collections;
 import java.util.List;
 
-public class VideoLoaderController extends BasePlayerController implements OnDataChange {
+public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
     private static final long BUFFERING_THRESHOLD_MS = 5_000;
@@ -65,7 +64,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
-    private final Runnable mLoadRandomNext = this::loadRandomNext;
     private final Runnable mOnLongBuffering = this::updateBufferingCountIfNeeded;
 
     private final Runnable mRebootApp = () -> {
@@ -87,7 +85,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
 
     @Override
     public void onInit() {
-        getPlayerData().setOnChange(this);
         mSuggestionsController = getController(SuggestionsController.class);
         mSleepTimerStartMs = System.currentTimeMillis();
     }
@@ -817,11 +814,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         Utils.removeCallbacks(mOnLongBuffering);
     }
 
-    @Override
-    public void onDataChange() {
-        Utils.postDelayed(mLoadRandomNext, 3_000);
-    }
-
     private void loadRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
@@ -830,28 +822,34 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
         }
 
         if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-            Video video = new Video();
-            video.playlistId = getVideo().playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
 
-            video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().getPositionInsideGroup(),
-                    getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
+            if (topRow != null) {
+                int currentIdx = topRow.indexOf(getVideo());
+                int randomIndex = UniqueRandom.getRandomIndex(currentIdx, topRow.getSize());
 
-            MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
-                if (randomMetadata.getNextVideo() == null) {
-                    return;
+                if (randomIndex != -1) {
+                    Video nextVideo = topRow.get(randomIndex);
+                    getVideo().nextMediaItem = SimpleMediaItem.from(nextVideo);
+                    getPlayer().setNextTitle(nextVideo);
                 }
+            }
 
-                if (getVideo().nextMediaItemBackup == null) {
-                    getVideo().nextMediaItemBackup = getVideo().nextMediaItem;
-                }
-
-                getVideo().nextMediaItem = SampleMediaItem.from(randomMetadata);
-                getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
-            });
-        } else if (getVideo().nextMediaItemBackup != null) {
-            getVideo().nextMediaItem = getVideo().nextMediaItemBackup;
-            getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
+            //Video video = new Video();
+            //video.playlistId = getVideo().playlistId;
+            //VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
+            //
+            //video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().getPositionInsideGroup(),
+            //        getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
+            //
+            //MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
+            //    if (randomMetadata.getNextVideo() == null) {
+            //        return;
+            //    }
+            //
+            //    getVideo().nextMediaItem = SimpleMediaItem.from(randomMetadata);
+            //    getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
+            //});
         }
     }
 

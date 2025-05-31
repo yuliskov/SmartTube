@@ -65,7 +65,6 @@ public final class Video {
     public int startTimeSeconds;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
-    public MediaItem nextMediaItemBackup;
     public PlaylistInfo playlistInfo;
     public boolean hasNewContent;
     public boolean isLive;
@@ -870,7 +869,7 @@ public final class Video {
     }
 
     public MediaItem toMediaItem() {
-        return SampleMediaItem.from(this);
+        return SimpleMediaItem.from(this);
     }
 
     public void sync(VideoStateService.State state) {

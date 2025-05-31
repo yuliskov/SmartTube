@@ -7,10 +7,10 @@ public class UniqueRandom {
 
     public static int getRandomIndex(int currentIdx, int playlistSize) {
         if (playlistSize <= 1) {
-            return 0;
+            return -1;
         }
 
-        int randomIndex = 0;
+        int randomIndex = -1;
 
         for (int i = 0; i < RANDOM_FAIL_REPEAT_TIMES; i++) {
             randomIndex = Helpers.getRandomIndex(playlistSize);
