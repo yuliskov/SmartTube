@@ -19,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -30,7 +30,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
-    private final DeArrowProcessor mDeArrowProcessor;
+    private final BrowseProcessorManager mBrowseProcessor;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
@@ -38,7 +38,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
     }
 
     public static ChannelUploadsPresenter instance(Context context) {
@@ -170,6 +170,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
         MediaServiceManager.instance().disposeActions();
+        mBrowseProcessor.dispose();
     }
 
     private void continueGroup(VideoGroup group) {
@@ -206,7 +207,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                         continueMediaGroup -> {
                             VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
                             getView().update(newGroup);
-                            mDeArrowProcessor.process(newGroup);
+                            mBrowseProcessor.process(newGroup);
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -265,7 +266,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         getView().update(group);
-        mDeArrowProcessor.process(group);
+        mBrowseProcessor.process(group);
 
         // Hide loading as long as first group received
         if (!group.isEmpty()) {

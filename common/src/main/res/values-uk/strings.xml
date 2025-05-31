@@ -691,4 +691,5 @@
     <string name="card_preview_muted">Відео без звуку</string>
     <string name="card_preview_full">Відео зі звуком</string>
     <string name="card_preview">Попередній перегляд картки</string>
+    <string name="card_unlocalized_titles">Не перекладати назви відео</string>
 </resources>

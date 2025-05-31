@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.os.Build.VERSION;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -109,6 +108,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private boolean mIsPinnedChannelRowsEnabled;
     private int mCardPreviewType;
     private final Runnable mPersistStateInt = this::persistStateInt;
+    private boolean mIsUnlocalizedTitlesEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -340,6 +340,15 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
+    public boolean isUnlocalizedTitlesEnabled() {
+        return mIsUnlocalizedTitlesEnabled;
+    }
+
+    public void enableUnlocalizedTitles(boolean enabled) {
+        mIsUnlocalizedTitlesEnabled = enabled;
+        persistState();
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -412,6 +421,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
+        mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
 
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
             if (!mMenuItemsOrdered.contains(menuItem)) {
@@ -439,7 +449,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
-                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType));
+                mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType,
+                mIsUnlocalizedTitlesEnabled));
 
         //onDataChange();
     }

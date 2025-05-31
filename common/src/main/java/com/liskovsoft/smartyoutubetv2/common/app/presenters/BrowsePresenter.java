@@ -62,7 +62,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
-    private final BrowseProcessorManager mBrowseProcessorManager;
+    private final BrowseProcessorManager mBrowseProcessor;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
     private BrowseSection mCurrentSection;
@@ -83,7 +83,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
         
-        mBrowseProcessorManager = new BrowseProcessorManager(getContext(), this::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 
         initSections();
@@ -682,7 +682,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
-                                mBrowseProcessorManager.process(videoGroup);
+                                mBrowseProcessor.process(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -732,7 +732,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
                             appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
-                            mBrowseProcessorManager.process(videoGroup);
+                            mBrowseProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
                         },
@@ -785,7 +785,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueGroup);
                             getView().updateSection(videoGroup);
-                            mBrowseProcessorManager.process(videoGroup);
+                            mBrowseProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup, showLoading);
                         },
@@ -844,6 +844,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         RxHelper.disposeActions(mActions);
         Utils.removeCallbacks(mRefreshSection);
         mLastUpdateTimeMs = -1;
+        mBrowseProcessor.dispose();
     }
 
     private void updateChannelUploadsMultiGrid(Video item) {

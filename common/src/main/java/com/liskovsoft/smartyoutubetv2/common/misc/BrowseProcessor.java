@@ -8,4 +8,5 @@ public interface BrowseProcessor {
         void onItemReady(Video video);
     }
     void process(VideoGroup videoGroup);
+    void dispose();
 }

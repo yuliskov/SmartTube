@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import io.reactivex.Observable;
@@ -30,7 +30,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static final String TAG = ChannelPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelPresenter sInstance;
-    private final DeArrowProcessor mDeArrowProcessor;
+    private final BrowseProcessorManager mBrowseProcessor;
     private String mChannelId;
     private final List<List<MediaGroup>> mPendingGroups = new ArrayList<>();
     private Disposable mUpdateAction;
@@ -48,7 +48,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public ChannelPresenter(Context context) {
         super(context);
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -185,6 +185,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
         getServiceManager().disposeActions();
         mSortIdx = 0;
+        mBrowseProcessor.dispose();
     }
 
     private void updateRows(Observable<List<MediaGroup>> group) {
@@ -228,7 +229,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
             VideoGroup group = VideoGroup.from(mediaGroup);
             getView().update(group);
-            mDeArrowProcessor.process(group);
+            mBrowseProcessor.process(group);
         }
 
         getView().showProgressBar(false);
@@ -262,7 +263,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         continueMediaGroup -> {
                             VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
                             getView().update(newGroup);
-                            mDeArrowProcessor.process(newGroup);
+                            mBrowseProcessor.process(newGroup);
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());

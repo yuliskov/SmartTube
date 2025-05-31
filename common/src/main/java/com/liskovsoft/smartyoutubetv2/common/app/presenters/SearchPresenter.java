@@ -19,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -32,7 +32,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final DeArrowProcessor mDeArrowProcessor;
+    private final BrowseProcessorManager mBrowseProcessor;
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
@@ -46,7 +46,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     private SearchPresenter(Context context) {
         super(context);
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), this::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
     }
 
     public static SearchPresenter instance(Context context) {
@@ -186,7 +186,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                                 VideoGroup group = VideoGroup.from(mediaGroup);
                                 startPlayFirstVideo(group);
                                 getView().updateSearch(group);
-                                mDeArrowProcessor.process(group);
+                                mBrowseProcessor.process(group);
                             }
                         },
                         error -> {
@@ -225,7 +225,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         continueMediaGroup -> {
                             VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
                             getView().updateSearch(newGroup);
-                            mDeArrowProcessor.process(newGroup);
+                            mBrowseProcessor.process(newGroup);
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -309,6 +309,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         if (getSearchData().isSearchHistoryDisabled()) {
             MediaServiceManager.instance().clearSearchHistory();
         }
+        mBrowseProcessor.dispose();
     }
 
     private void showSettingsDialog() {

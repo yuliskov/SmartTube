@@ -12,12 +12,20 @@ public class BrowseProcessorManager implements BrowseProcessor {
     public BrowseProcessorManager(Context context, OnItemReady onItemReady) {
         mProcessors = new ArrayList<>();
         mProcessors.add(new DeArrowProcessor(context, onItemReady));
+        mProcessors.add(new UnlocalizedTitleProcessor(context, onItemReady));
     }
 
     @Override
     public void process(VideoGroup videoGroup) {
         for (BrowseProcessor processor : mProcessors) {
             processor.process(videoGroup);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        for (BrowseProcessor processor : mProcessors) {
+            processor.dispose();
         }
     }
 }

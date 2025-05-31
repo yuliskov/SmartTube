@@ -25,7 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegme
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.DeArrowProcessor;
+import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.UniqueRandom;
@@ -42,7 +42,7 @@ public class SuggestionsController extends BasePlayerController {
     private final List<Disposable> mActions = new ArrayList<>();
     private MediaItemService mMediaItemService;
     private ContentService mContentService;
-    private DeArrowProcessor mDeArrowProcessor;
+    private BrowseProcessorManager mBrowseProcessor;
     private Video mNextSectionVideo;
     private int mFocusCount;
     private int mNextRetryCount;
@@ -61,7 +61,7 @@ public class SuggestionsController extends BasePlayerController {
 
     @Override
     public void onInit() {
-        mDeArrowProcessor = new DeArrowProcessor(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
         mContentService = YouTubeServiceManager.instance().getContentService();
     }
@@ -193,7 +193,7 @@ public class SuggestionsController extends BasePlayerController {
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueMediaGroup);
                             getPlayer().updateSuggestions(videoGroup);
-                            mDeArrowProcessor.process(videoGroup);
+                            mBrowseProcessor.process(videoGroup);
 
                             mergeUserAndRemoteQueue(videoGroup);
 
@@ -398,7 +398,7 @@ public class SuggestionsController extends BasePlayerController {
                 //}
 
                 getPlayer().updateSuggestions(videoGroup);
-                mDeArrowProcessor.process(videoGroup);
+                mBrowseProcessor.process(videoGroup);
 
                 if (groupIndex == 0) {
                     focusAndContinueIfNeeded(videoGroup);
@@ -798,6 +798,9 @@ public class SuggestionsController extends BasePlayerController {
         RxHelper.disposeActions(mActions);
         mChapters = null;
         mNextSectionVideo = null;
+        if (mBrowseProcessor != null) {
+            mBrowseProcessor.dispose();
+        }
     }
 
     private void appendDislikes(Video video) {

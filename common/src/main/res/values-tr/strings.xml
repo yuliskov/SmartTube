@@ -702,4 +702,5 @@
     <string name="card_preview_muted">Sessiz video</string>
     <string name="card_preview_full">Sesli video</string>
     <string name="card_preview">Kart önizlemesi</string>
+    <string name="card_unlocalized_titles">Yerelleştirilmemiş video başlıkları</string>
 </resources>
