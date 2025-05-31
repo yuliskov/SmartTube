@@ -833,8 +833,6 @@ public class VideoLoaderController extends BasePlayerController implements OnDat
             Video video = new Video();
             video.playlistId = getVideo().playlistId;
             VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
-            //video.playlistIndex = mRandom.getPlaylistIndex(getVideo().getPlaylistId(),
-            //        getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
 
             video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().getPositionInsideGroup(),
                     getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
