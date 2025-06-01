@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController;
@@ -211,6 +212,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         // E.g. when the user pressed back on the Channel content screen
         if (view != null && view.getVideo() != null && isNewVideoExpired()) {
             mVideo = new WeakReference<>(view.getVideo());
+            Playlist.instance().add(view.getVideo()); // don't show queue
         }
     }
 
