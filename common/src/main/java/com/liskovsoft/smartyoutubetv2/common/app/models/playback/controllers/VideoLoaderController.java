@@ -822,34 +822,18 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-            VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
+            Video video = new Video();
+            video.playlistId = getVideo().playlistId;
+            video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().playlistInfo.getCurrentIndex(), getVideo().playlistInfo.getSize());
 
-            if (topRow != null) {
-                int currentIdx = topRow.indexOf(getVideo());
-                int randomIndex = UniqueRandom.getRandomIndex(currentIdx, topRow.getSize());
-
-                if (randomIndex != -1) {
-                    Video nextVideo = topRow.get(randomIndex);
-                    getVideo().nextMediaItem = SimpleMediaItem.from(nextVideo);
-                    getPlayer().setNextTitle(nextVideo);
+            MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
+                if (randomMetadata.getNextVideo() == null) {
+                    return;
                 }
-            }
 
-            //Video video = new Video();
-            //video.playlistId = getVideo().playlistId;
-            //VideoGroup topRow = getPlayer().getSuggestionsByIndex(0);
-            //
-            //video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().getPositionInsideGroup(),
-            //        getVideo().playlistInfo.getSize() != -1 ? getVideo().playlistInfo.getSize() : topRow != null ? topRow.getVideos().size() : -1);
-            //
-            //MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
-            //    if (randomMetadata.getNextVideo() == null) {
-            //        return;
-            //    }
-            //
-            //    getVideo().nextMediaItem = SimpleMediaItem.from(randomMetadata);
-            //    getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
-            //});
+                getVideo().nextMediaItem = SimpleMediaItem.from(randomMetadata);
+                getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
+            });
         }
     }
 
