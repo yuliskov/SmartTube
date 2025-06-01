@@ -703,4 +703,5 @@
     <string name="card_preview_muted">Video ohne Ton</string>
     <string name="card_preview_full">Video mit Ton</string>
     <string name="card_preview">Karten-Vorschau</string>
+    <string name="card_unlocalized_titles">Videotitel nicht übersetzen</string>
 </resources>
