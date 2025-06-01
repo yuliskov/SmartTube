@@ -698,4 +698,5 @@
   <string name="oculus_quest_fix">Oculus Questin korjaus</string>
   <string name="playback_buffering_fix">Toiston puskuroinnin korjaaminen</string>
   <string name="premium_users_only">Vain Youtube Premium-käyttäjille. Korjaa epätäydellinen videoformaattiluettelo</string>
+  <string name="card_unlocalized_titles">Älä suomenna videoiden otsikoita</string>
 </resources>
