@@ -273,6 +273,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     public boolean supportsDisplayModeChangeComplex() {
+        if (mContext == null) {
+            return false;
+        }
+
         if (mModeLength == -1) {
             Mode[] supportedModes = null;
 
