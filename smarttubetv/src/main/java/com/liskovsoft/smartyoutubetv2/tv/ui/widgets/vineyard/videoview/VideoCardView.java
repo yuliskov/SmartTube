@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.BaseCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.NetworkUtil;
@@ -64,6 +65,13 @@ public class VideoCardView extends BaseCardView {
         setFocusable(true);
         setFocusableInTouchMode(true);
 
+        // Apply the new rounded background to the entire card
+        setBackground(ContextCompat.getDrawable(getContext(), R.drawable.card_background_rounded_youtube));
+        // Ensure the card type allows the background to be visible (not just image only)
+        // BaseCardView.CARD_TYPE_MAIN_ONLY might be suitable if it's just an image and info
+        // or let the existing logic determine the card type and hope the background applies broadly.
+        // For now, let's assume the default card type or existing logic is fine.
+
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.lb_video_card_view, this);
         mPreviewCard = view.findViewById(R.id.layout_preview_card);
@@ -101,10 +109,10 @@ public class VideoCardView extends BaseCardView {
         // 'infoAreaBackground' attribute, we have to make sure to support it.
         // If the user has set a specific value here, it will differ from null.
         // In this case, we do want to override the value set in the style.
-        Drawable background = cardAttrs.getDrawable(R.styleable.lbImageCardView_infoAreaBackground);
-        if (null != background) {
-            setInfoAreaBackground(background);
-        }
+        //Drawable background = cardAttrs.getDrawable(R.styleable.lbImageCardView_infoAreaBackground);
+        //if (null != background) {
+        //    setInfoAreaBackground(background); // Commenting this out to ensure our main card background is prominent
+        //}
 
         cardAttrs.recycle();
     }

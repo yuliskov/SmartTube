@@ -6,7 +6,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center_vertical|end"
-              android:orientation="horizontal">
+              android:orientation="horizontal"
+              android:layout_marginEnd="16dp">
     <!-- Global clock -->
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -52,13 +53,14 @@
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
             android:adjustViewBounds="true"
             android:src="@null"
-            android:visibility="gone"
+            android:visibility="visible"
             style="?attr/browseTitleIconStyle"/>
 
         <TextView
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/lb_browse_title_height"
+            android:visibility="gone"
             style="?attr/browseTitleTextStyle"/>
     </FrameLayout>
 </LinearLayout>

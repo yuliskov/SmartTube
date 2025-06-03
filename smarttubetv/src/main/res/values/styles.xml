@@ -27,11 +27,11 @@
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
-        <item name="shelfBackground">@color/shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
-        <item name="cardSelectedBackground">@color/card_selected_background_white</item>
+        <item name="shelfBackground">@color/youtube_background_dark</item>
+        <item name="cardDefaultBackground">@color/youtube_surface_dark</item>
+        <item name="cardSelectedBackground">@color/youtube_red</item>
         <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/youtube_red</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
         <!-- Disable activity transition animations -->
@@ -45,18 +45,19 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
-        <item name="android:windowBackground">@color/shelf_background_dark</item>
-        <item name="brandColor">@color/fastlane_background_dark</item>
-        <item name="brandAccentColor">@color/fastlane_background</item>
-        <item name="shelfBackground">@color/shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
-        <item name="cardSelectedBackground">@color/card_selected_background_white</item>
+        <item name="android:windowBackground">@color/youtube_background_dark</item>
+        <item name="brandColor">@color/youtube_surface_dark</item>
+        <item name="brandAccentColor">@color/youtube_red</item>
+        <item name="shelfBackground">@color/youtube_background_dark</item>
+        <item name="cardDefaultBackground">@color/youtube_surface_dark</item>
+        <item name="cardSelectedBackground">@color/youtube_red</item>
         <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
         <item name="appLogo">@mipmap/app_logo</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/youtube_red</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
         <item name="headersVerticalGridStyle">@style/BrowseHeaderStyle</item>
+        <item name="browseTitleViewStyle">@style/App.Widget.Leanback.TitleView.LessEndPadding</item>
         <!-- Disable activity transition animations -->
         <item name="android:windowAnimationStyle">@null</item>
         <!-- Make activity fullscreen -->
@@ -68,8 +69,8 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
-        <item name="android:windowBackground">@color/shelf_background_dark</item>
-        <item name="shelfBackground">@color/shelf_background_dark</item>
+        <item name="android:windowBackground">@color/youtube_background_dark</item>
+        <item name="shelfBackground">@color/youtube_background_dark</item>
         <!-- Disable activity transition animations -->
         <item name="android:windowAnimationStyle">@null</item>
         <!-- Make activity fullscreen -->
@@ -84,8 +85,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <!-- AppDialogFragment background dimming -->
         <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
-        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/youtube_red</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/youtube_surface_dark</item>
         <!-- Disable activity transition animations -->
         <item name="android:windowAnimationStyle">@null</item>
         <!-- Make activity fullscreen -->
@@ -96,6 +97,13 @@
     <!-- Give ability to override style for different api -->
     <style name="App.Theme.Leanback.Preferences" parent="App.Theme.Leanback.Preferences.Base" />
     <!-- End Color scheme: Teal (Default) -->
+
+    <!-- Custom TitleView style with less end padding -->
+    <style name="App.Widget.Leanback.TitleView.LessEndPadding" parent="Widget.Leanback.TitleView">
+        <item name="android:paddingEnd">16dp</item>
+        <!-- Optionally, adjust start padding if it feels unbalanced -->
+        <!-- <item name="android:paddingStart">16dp</item> -->
+    </style>
 
     <!--  Color scheme: Dark Grey  -->
     <style name="App.Theme.DarkGrey.Player" parent="App.Theme.Leanback.Player">

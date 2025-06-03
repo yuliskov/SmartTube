@@ -211,17 +211,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         Drawable bridgeIcon = Utils.getDrawable(getActivity(), SplashPresenter.instance(getActivity()).getBridgePackageName(), "app_icon");
 
-        // Top right corner logo
+        // Top right corner logo - Restoring programmatic setting of the logo.
         setBadgeDrawable(bridgeIcon != null ? bridgeIcon : appLogoRes > 0 ? ContextCompat.getDrawable(getActivity(), appLogoRes) : null);
 
-        // This title replaces badge in case one is null
+        // This title replaces badge in case one is null - Keep commented as we want logo, not title text.
         //setTitle(getString(R.string.browse_title));
 
         // Set fastLane (or headers) background color
         setBrandColor(ContextCompat.getColor(getActivity(), brandColorRes));
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
+        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             private final Map<Integer, Presenter> mPresenterMap = new HashMap<>();

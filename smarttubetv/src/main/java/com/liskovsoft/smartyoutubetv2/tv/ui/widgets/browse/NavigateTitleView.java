@@ -150,6 +150,18 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mBrandingVisibility = (flags & BRANDING_VIEW_VISIBLE) == BRANDING_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
+        // Ensure our YouTube logo in title_badge respects mBrandingVisibility
+        // and title_text remains hidden.
+        View titleBadge = findViewById(R.id.title_badge); // Use View type for findViewById
+        if (titleBadge != null) {
+            titleBadge.setVisibility(mBrandingVisibility);
+        }
+
+        View titleText = findViewById(R.id.title_text); // Use View type for findViewById
+        if (titleText != null) {
+            titleText.setVisibility(View.GONE);
+        }
+
         if (mIsSearchOrbEnabled) {
             mSearchOrbView.setVisibility(View.GONE);
         }

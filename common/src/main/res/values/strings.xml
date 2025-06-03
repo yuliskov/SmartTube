@@ -704,4 +704,9 @@
     <string name="card_preview_full">Video with sound</string>
     <string name="card_preview">Card preview</string>
     <string name="card_unlocalized_titles">Unlocalized video titles</string>
+    <string name="channel_unsubscribed_desc">Channel unsubscribed</string>
+    <string name="channel_subscribed_desc">Channel subscribed</string>
+    <string name="header_library">Library</string>
+    <string name="video_speed_very_slow">Very slow</string>
+    <string name="video_speed_slow">Slow</string>
 </resources>
