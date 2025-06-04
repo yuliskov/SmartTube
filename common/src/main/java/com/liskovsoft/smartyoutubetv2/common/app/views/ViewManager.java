@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -47,6 +48,7 @@ public class ViewManager {
     private boolean mIsPlayerOnlyModeEnabled;
     private long mPendingActivityMs;
     private Class<?> mPendingActivityClass;
+    private WeakHashSet<Runnable> mOnFinish;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -328,6 +330,7 @@ public class ViewManager {
                 BrowsePresenter.unhold();
                 AppUpdatePresenter.unhold();
                 MotherActivity.invalidate();
+                runOnFinish();
                 mIsMoveToBackEnabled = false;
             }, 1_000);
         }
@@ -486,5 +489,21 @@ public class ViewManager {
         }
 
         return null;
+    }
+
+    public void addOnFinish(Runnable onFinish) {
+        if (mOnFinish == null) {
+            mOnFinish = new WeakHashSet<>();
+        }
+
+        mOnFinish.add(onFinish);
+    }
+
+    private void runOnFinish() {
+        if (mOnFinish == null) {
+            return;
+        }
+
+        mOnFinish.forEach(Runnable::run);
     }
 }
