@@ -584,7 +584,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // Hide unknown errors on all devices
-        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
+        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED && !(error instanceof OutOfMemoryError)) {
             MessageHelpers.showLongMessage(getContext(), resultMsg);
         }
 
