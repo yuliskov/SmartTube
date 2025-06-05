@@ -130,6 +130,11 @@ android {
             // matchingFallbacks = ['lite']
             applicationId "com.amazon.firetv.youtube"
         }
+        staptoide {
+            // matchingFallbacks = ['lite']
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
+        }
     }
 
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk

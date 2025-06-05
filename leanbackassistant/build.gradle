@@ -33,6 +33,7 @@ android {
         stbeta {}
         ststable {}
         storig {}
+        staptoide {}
     }
 }
 

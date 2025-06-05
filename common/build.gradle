@@ -47,6 +47,7 @@ android {
         stredboxtv {}
         stsibsetru {}
         stamazon {}
+        staptoide {}
     }
 }
 
@@ -101,6 +102,7 @@ dependencies {
     stbetaImplementation project(':leanbackassistant')
     ststableImplementation project(':leanbackassistant')
     storigImplementation project(':leanbackassistant')
+    staptoideImplementation project(':leanbackassistant')
 
     stbetaImplementation project(':appupdatechecker2')
     ststableImplementation project(':appupdatechecker2')
@@ -109,4 +111,5 @@ dependencies {
     stredboxtvImplementation project(':appupdatechecker2')
     stsibsetruImplementation project(':appupdatechecker2')
     stamazonImplementation project(':appupdatechecker2')
+    staptoideImplementation project(':appupdatechecker2')
 }
