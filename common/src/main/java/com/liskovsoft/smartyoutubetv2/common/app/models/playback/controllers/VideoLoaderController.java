@@ -525,8 +525,11 @@ public class VideoLoaderController extends BasePlayerController {
             // No internet connection or WRONG DATE on the device
             restartEngine = false;
             resultMsg = shortErrorMsg;
-        } else if (error instanceof OutOfMemoryError) {
-            if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_MEDIUM || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW) {
+        } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
+            if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
+                // OkHttp has memory leak problems
+                enableFasterDataSource();
+            } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_MEDIUM || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW) {
                 getPlayerTweaksData().enableSectionPlaylist(false);
                 restartEngine = false;
             } else {
@@ -584,7 +587,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // Hide unknown errors on all devices
-        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED && !(error instanceof OutOfMemoryError)) {
+        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
             MessageHelpers.showLongMessage(getContext(), resultMsg);
         }
 
