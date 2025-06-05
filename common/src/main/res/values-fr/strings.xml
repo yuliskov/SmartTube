@@ -609,7 +609,7 @@
   <string name="hide_upcoming_channel">Masquer les nouvelles de la chaîne</string>
   <string name="hide_upcoming_home">Masquer les nouvelles depuis la page d’accueil</string>
   <string name="hide_shorts_from_trending">Masquer les shorts des tendances</string>
-  <string name="play_next">Lire suivant</string>
+  <string name="play_next">Lire ensuite</string>
   <string name="hide_watched_from_subscriptions">Masquer les vidéos regardées des abonnements</string>
   <string name="hide_unwanted_content">Masquer le contenu indésirable</string>
   <string name="hide_watched_from_home">Masquer les vidéos regardées depuis l\'accueil</string>
@@ -699,4 +699,8 @@
   <string name="playback_buffering_fix">Correction de la mise en mémoire tampon</string>
   <string name="premium_users_only">Réservé aux utilisateurs Premium. Correction de la liste incomplète des formats vidéo.</string>
   <string name="oculus_quest_fix">Correction pour Oculus Quest</string>
+  <string name="card_preview_muted">Vidéo sans son</string>
+  <string name="card_preview_full">Vidéo avec son</string>
+  <string name="card_preview">Aperçus des tuiles</string>
+  <string name="card_unlocalized_titles">Titres originals des tuiles</string>
 </resources>
