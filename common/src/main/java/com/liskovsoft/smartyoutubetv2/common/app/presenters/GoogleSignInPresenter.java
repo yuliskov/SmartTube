@@ -63,7 +63,9 @@ public class GoogleSignInPresenter extends SignInPresenter {
                         code -> getView().showCode(code.getSignInCode(), code.getSignInUrl()),
                         error -> {
                             Log.e(TAG, "Sign in error: %s", error.getMessage());
-                            getView().showCode(error.getMessage(), "");
+                            if (getView() != null) {
+                                getView().showCode(error.getMessage(), "");
+                            }
                         },
                         () -> {
                             // Success

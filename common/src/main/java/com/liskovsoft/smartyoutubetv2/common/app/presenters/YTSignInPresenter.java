@@ -67,7 +67,9 @@ public class YTSignInPresenter extends SignInPresenter {
                         userCode -> getView().showCode(userCode, SIGN_IN_URL),
                         error -> {
                             Log.e(TAG, "Sign in error: %s", error.getMessage());
-                            getView().showCode(error.getMessage(), "");
+                            if (getView() != null) {
+                                getView().showCode(error.getMessage(), "");
+                            }
                         },
                         () -> {
                             // Success
