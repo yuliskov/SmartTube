@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
 
 public class SubtitleTrack extends MediaTrack {
     private static final Pattern AUTO_PATTERN = Pattern.compile(" \\(.*\\)$"); // May have mismatches e.g. 'English (United Kingdom)'
-    private static final Pattern TRIM_PATTERN = Pattern.compile(" - .*");
+    private static final Pattern TRIM_PATTERN1 = Pattern.compile(" \\(.*\\) - .*");
+    private static final Pattern TRIM_PATTERN2 = Pattern.compile(" - .*");
     private static final Pattern MARKER_PATTERN = Pattern.compile(".$");
 
     public SubtitleTrack(int rendererIndex) {
@@ -82,7 +83,7 @@ public class SubtitleTrack extends MediaTrack {
             return null;
         }
 
-        return trimMarker(Helpers.replace(language, TRIM_PATTERN, "")); // english - us bla -> english
+        return trimMarker(Helpers.replace(Helpers.replace(language, TRIM_PATTERN1, ""), TRIM_PATTERN2, "")); // english - us bla -> english
     }
 
     public static String trimIfAuto(String language) {
