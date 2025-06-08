@@ -272,7 +272,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     private boolean isNewVideoExpired() {
-        return System.currentTimeMillis() - mNewVideoStartedTimeMs > 1_000;
+        return System.currentTimeMillis() - mNewVideoStartedTimeMs > 500;
     }
 
     // End Helpers
