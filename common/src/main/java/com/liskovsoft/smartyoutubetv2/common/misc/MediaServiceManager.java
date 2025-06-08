@@ -465,7 +465,7 @@ public class MediaServiceManager implements OnAccountChange {
      * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
      */
     public static void chooseChannelPresenter(Context context, Video item) {
-        if (item.hasVideo()) { // regular channel
+        if (item.hasVideo() || item.belongsToChannelUploads()) { // regular channel
             ChannelPresenter.instance(context).openChannel(item);
             return;
         }
