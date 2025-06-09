@@ -33,7 +33,7 @@
   <string name="auto_frame_rate_desc">Essa opção remove atrasos nas cenas quando a câmera movimenta muito rápido, Ex: Streaming de esportes</string>
   <string name="sony_frame_drop_fix">Correção de queda de quadros #1</string>
   <string name="sony_frame_drop_fix_desc">Corrige travamentos em TVs Sony e alguns outros dispositivos. Observação: possíveis problemas com a sincronização de áudio.</string>
-  <string name="auto_frame_rate_pause">Taxa de quadros automática (pausar ao trocar)</string>
+  <string name="auto_frame_rate_pause">Taxa de Quadros Automática (pausar ao trocar)</string>
   <string name="auto_frame_rate_applying">Aplicando taxa de quadros automática %sx%s\@%s</string>
   <string name="category_background_playback">Reprodução em segundo plano</string>
   <string name="not_implemented">Não implementado</string>
@@ -153,7 +153,7 @@
   <string name="msg_press_again_to_exit">Pressione novamente para sair</string>
   <string name="app_double_back_exit">Toque duplo no botão \"Voltar\"</string>
   <string name="app_single_back_exit">Toque único no botão \"Voltar\"</string>
-  <string name="player_exit_shortcut">efetua a saída do reprodutor (player) de vídeos</string>
+  <string name="player_exit_shortcut">Sair do reprodutor de vídeos</string>
   <string name="cant_delete_empty_playlist">Não é possível excluir uma lista de reprodução (playlist) vazia</string>
   <string name="action_video_zoom">Zoom do vídeo</string>
   <string name="video_zoom">Zoom do vídeo</string>
@@ -173,7 +173,7 @@
   <string name="card_title_lines_num">Número de linhas dos títulos das miniaturas</string>
   <string name="card_auto_scrolled_title">Rolagem automática de títulos</string>
   <string name="subscribe_to_channel">Inscrever-se no canal</string>
-  <string name="wait_data_loading">Carregando dados...</string>
+  <string name="wait_data_loading">Por favor, aguarde enquanto os dados são carregados...</string>
   <string name="audio_shift">Sincronização de áudio</string>
   <string name="player_remember_speed">Lembrar velocidade</string>
   <string name="mark_channel_as_watched">Marcar como assistido</string>
@@ -208,7 +208,7 @@
   <string name="player_remember_speed_none">Nunca</string>
   <string name="player_remember_speed_all">A mesma velocidade em todos os vídeos</string>
   <string name="player_remember_speed_each">Uma velocidade para cada vídeo</string>
-  <string name="msg_player_error_source">Não foi possível baixar o vídeo</string>
+  <string name="msg_player_error_source">Não é possível baixar o vídeo</string>
   <string name="msg_player_error_renderer">Algo no vídeo selecionado não é suportado.\nTente selecionar outro.\nSe isso não ajuda tente reiniciar o seu dispositivo.</string>
   <string name="msg_player_error_unexpected">Erro de decodificação de vídeo desconhecido</string>
   <string name="video_aspect">Proporção da tela</string>
@@ -424,8 +424,8 @@
   <string name="action_subscribe_off">Desabilitar inscrições</string>
   <string name="playback_controls_repeat_list">Repetir lista</string>
   <string name="playback_controls_repeat_pause">Repetir pausa</string>
-  <string name="badge_live">Ao vivo</string>
-  <string name="badge_new_content">Novo Conteúdo</string>
+  <string name="badge_live">AO VIVO</string>
+  <string name="badge_new_content">CONTEÚDO NOVO</string>
   <string name="player_disable_suggestions">Desabilitar sugestões</string>
   <string name="skip_24_rate">Pular formatos de 24fps (correção real do modo cinema\?)</string>
   <string name="add_device_view_description">Para vincular o dispositivo, insira esse código no aplicativo do YouTube do seu telefone (Configurações &gt; Assistir na TV).\nObservação: funciona apenas com o teclado Gboard.</string>
@@ -484,10 +484,10 @@
   <string name="content_block_alt_server">Usar servidor alternativo</string>
   <string name="content_block_confirm_skip">Confirmar ao pular</string>
   <string name="content_block_categories">Pular segmentos</string>
-  <string name="content_block_interaction">Lembrete de interação (de inscreva-se)</string>
+  <string name="content_block_interaction">Lembrete de interação (inscrição)</string>
   <string name="content_block_notification_type">Tipo de notificação</string>
   <string name="content_block_notify_none">Sem notificação</string>
-  <string name="content_block_notify_toast">Notificação na tela</string>
+  <string name="content_block_notify_toast">Notificação toast</string>
   <string name="content_block_notify_dialog">Diálogo de confirmação</string>
   <string name="content_block_alt_server_desc">Ative essa opção se o SponsorBlock não estiver funcionando por diferentes motivos.</string>
   <string name="about_sponsorblock">Sobre Sponsorblock</string>
@@ -688,9 +688,20 @@
   <string name="place_comments_left">Mover os comentários para a esquerda</string>
   <string name="suggestions">Sugestões</string>
   <string name="import_subscriptions_group">Importar arquivo</string>
-  <string name="my_videos">Meus vídeos</string>  
-  <string name="player_audio_focus">Foco de áudio do player (pausar ao detectar outros reprodutores)</string>  
-  <string name="paid_content_notification">Notificações de conteúdo pago</string>  
+  <string name="my_videos">Meus vídeos</string>
+  <string name="player_audio_focus">Foco de áudio do player (pausar ao detectar outros reprodutores)</string>
+  <string name="paid_content_notification">Notificações de conteúdo pago</string>
   <string name="lb_playback_controls_closed_captioning_disable">Desabilitar legendas</string>
   <string name="lb_playback_controls_closed_captioning_enable">Habilitar legendas</string>
+  <string name="search_exit_shortcut">Sair da pesquisa</string>
+  <string name="context_menu_sorting">Ordenação do menu de contexto</string>
+  <string name="video_flip">Virar (espelhar)</string>
+  <string name="you_liked">Você gostou</string>
+  <string name="premium_users_only">Apenas para usuários Premium. Correção de lista de formatos de vídeo incompleta</string>
+  <string name="playback_buffering_fix">Correção de buffer de reprodução</string>
+  <string name="oculus_quest_fix">Correção de Oculus Quest</string>
+  <string name="card_preview_muted">Miniatura sem som</string>
+  <string name="card_preview_full">Miniatura com som</string>
+  <string name="card_preview">Miniatura de prévia</string>
+  <string name="card_unlocalized_titles">Não traduzir títulos dos vídeos</string>
 </resources>
