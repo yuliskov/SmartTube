@@ -425,9 +425,20 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
         mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
 
+        int idx = -1;
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
+            idx++;
             if (!mMenuItemsOrdered.contains(menuItem)) {
-                mMenuItemsOrdered.add(menuItem);
+                if (idx < mMenuItemsOrdered.size()) {
+                    mMenuItemsOrdered.add(idx, menuItem);
+                } else {
+                    mMenuItemsOrdered.add(menuItem);
+                }
+
+                boolean isEnabled = (MENU_ITEM_DEFAULT & menuItem) == menuItem;
+                if (isEnabled) {
+                    mMenuItems |= menuItem;
+                }
             }
         }
 
