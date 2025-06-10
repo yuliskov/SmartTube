@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -48,9 +47,8 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     @Override
     public void onAccountChanged(Account account) {
-        if (selectProfile(account)) {
-            onProfileChanged();
-        }
+        selectProfile(account);
+        onProfileChanged();
     }
 
     public static AppPrefs instance(Context context) {
@@ -161,19 +159,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return getString(LAST_PROFILE_NAME, null);
     }
 
-    private boolean selectProfile(Account account) {
-        String profileName = account != null && account.getName() != null ? account.getName().replace(" ", "_") : null;
-
-        if (profileName == null) {
-            profileName = ANONYMOUS_PROFILE_NAME;
-        }
-
-        if (Helpers.equals(profileName, getProfileName())) {
-            return false;
-        }
+    private void selectProfile(Account account) {
+        String profileName = account != null && account.getName() != null ? account.getName().replace(" ", "_") : ANONYMOUS_PROFILE_NAME;
 
         setProfileName(profileName);
-        return true;
     }
 
     private void onProfileChanged() {
