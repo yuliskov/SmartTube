@@ -1,4 +1,4 @@
-# SmartTube (previously SmartTubeNext)
+# SmartTube
   
 <!-- <img width="100" src="https://github.com/yuliskov/SmartTube/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/> -->
 
