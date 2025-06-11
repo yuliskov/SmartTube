@@ -1092,7 +1092,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         getView().showProgressBar(false);
 
-        if (getView().isEmpty()) {
+        if (getView().isEmpty() || error != null) {
             ErrorFragmentData errorFragmentData;
             if (error != null && !Helpers.containsAny(error.getMessage(), "fromNullable result is null")) {
                 errorFragmentData = new CategoryEmptyError(getContext(), error);

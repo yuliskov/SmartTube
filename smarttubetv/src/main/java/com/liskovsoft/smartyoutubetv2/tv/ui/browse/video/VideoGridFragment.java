@@ -233,7 +233,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
             return mPendingUpdates.isEmpty();
         }
 
-        return mGridAdapter.size() == 0;
+        return mGridAdapter.isEmpty();
     }
 
     protected boolean isShorts() {
