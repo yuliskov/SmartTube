@@ -4,6 +4,8 @@
 
 SmartTube is a free and open-source advanced media player for Android TVs and TV boxes. It allows you to play content from various public sources.
 
+![The app screenshot](./images/browse_subscriptions.png)
+
 ### ✅ Features
 - No ads  
 - SponsorBlock integration  
