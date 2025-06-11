@@ -523,11 +523,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            if (isFasterDataSourceEnabled() || getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-                restartEngine = false;
-            } else {
-                enableFasterDataSource();
-            }
+            restartEngine = false;
             resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
@@ -921,11 +917,11 @@ public class VideoLoaderController extends BasePlayerController {
      * Bad idea. Faster source is different among devices
      */
     private boolean isFasterDataSourceEnabled() {
-        if (getGeneralData().isProxyEnabled()) {
-            // Disable auto switch for proxies.
-            // Current source may have better compatibility with proxies than fastest one.
-            return true;
-        }
+        //if (getGeneralData().isProxyEnabled()) {
+        //    // Disable auto switch for proxies.
+        //    // Current source may have better compatibility with proxies than fastest one.
+        //    return true;
+        //}
 
         int fasterDataSource = getFasterDataSource();
         return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
