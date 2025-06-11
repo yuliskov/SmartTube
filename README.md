@@ -1,6 +1,7 @@
-# SmartTube
-  
-<!-- <img width="100" src="https://github.com/yuliskov/SmartTube/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/> -->
+<h1>
+  <img width="100" src="https://github.com/yuliskov/SmartTube/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo" style="vertical-align: middle; margin-right: 10px;"/>
+  SmartTube
+</h1>
 
 ![The app screenshot](./images/browse_home.png)
 
