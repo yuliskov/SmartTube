@@ -239,16 +239,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.premium_users_only),
-        //        option -> mMediaServiceData.enablePremiumFix(option.isSelected()),
-        //        mMediaServiceData.isPremiumFixEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.playback_buffering_fix),
-        //        option -> {
-        //            mPlayerTweaksData.enablePersistentAntiBotFix(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mPlayerTweaksData.isPersistentAntiBotFixEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
+                getContext().getString(R.string.disable_network_error_fixing_desc),
+                option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
+                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
 
         // Oculus Quest fix: back button not closing the activity
         options.add(UiOptionItem.from(getContext().getString(R.string.oculus_quest_fix),
@@ -257,11 +251,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 mPlayerTweaksData.isOculusQuestFixEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
-        //        getContext().getString(R.string.disable_network_error_fixing_desc),
-        //        option -> mPlayerTweaksData.disableNetworkErrorFixing(option.isSelected()),
-        //        mPlayerTweaksData.isNetworkErrorFixingDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
                 getContext().getString(R.string.prefer_ipv4_desc),

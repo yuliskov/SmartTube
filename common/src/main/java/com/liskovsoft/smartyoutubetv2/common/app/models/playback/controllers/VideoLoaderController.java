@@ -128,7 +128,7 @@ public class VideoLoaderController extends BasePlayerController {
         if ((!getVideo().isLive || getVideo().isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else {
+        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
@@ -523,7 +523,11 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (Helpers.startsWithAny(message, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            restartEngine = false;
+            if (isFasterDataSourceEnabled() || getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                restartEngine = false;
+            } else {
+                enableFasterDataSource();
+            }
             resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
@@ -893,8 +897,8 @@ public class VideoLoaderController extends BasePlayerController {
     private int getNextEngine() {
         int currentEngine = getPlayerTweaksData().getPlayerDataSource();
         Integer[] engineList = Utils.skipCronet() ?
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT } :
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT };
+                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
+                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
         return Helpers.getNextValue(currentEngine, engineList);
     }
 

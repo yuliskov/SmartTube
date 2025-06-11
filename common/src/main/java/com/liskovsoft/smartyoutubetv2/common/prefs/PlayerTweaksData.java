@@ -99,8 +99,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
-    private boolean mIsPersistentAntiBotFixEnabled;
     private boolean mIsAudioFocusEnabled;
+    private boolean mIsNetworkErrorFixingDisabled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -395,15 +395,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
-    public boolean isPersistentAntiBotFixEnabled() {
-        return mIsPersistentAntiBotFixEnabled;
-    }
-
-    public void enablePersistentAntiBotFix(boolean enable) {
-        mIsPersistentAntiBotFixEnabled = enable;
-        persistData();
-    }
-
     public void enableButtonLongClick(boolean enable) {
         mIsButtonLongClickEnabled = enable;
         persistData();
@@ -603,6 +594,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return GlobalPreferences.instance(mPrefs.getContext()).isIPv4DnsPreferred();
     }
 
+    public void disableNetworkErrorFixing(boolean disabled) {
+        mIsNetworkErrorFixingDisabled = disabled;
+        persistData();
+    }
+
+    public boolean isNetworkErrorFixingDisabled() {
+        return mIsNetworkErrorFixingDisabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -664,9 +664,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // mPlayerDataSource = Helpers.parseInt(split, 48, PLAYER_DATA_SOURCE_DEFAULT);
         mIsExtraLongSpeedListEnabled = Helpers.parseBoolean(split, 49, false);
         mIsQuickSkipVideosEnabled = Helpers.parseBoolean(split, 50, false);
-        //mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
+        mIsNetworkErrorFixingDisabled = Helpers.parseBoolean(split, 51, false);
         mIsCommentsPlacedLeft = Helpers.parseBoolean(split, 52, false);
-        mIsPersistentAntiBotFixEnabled = Helpers.parseBoolean(split, 53, false);
+        //mIsPersistentAntiBotFixEnabled = Helpers.parseBoolean(split, 53, false);
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
 
         updateDefaultValues();
@@ -689,8 +689,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsScreenOffTimeoutEnabled, mScreenOffTimeoutSec, mIsUIAnimationsEnabled, mIsLikesCounterEnabled, mIsChapterNotificationEnabled,
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSimplePlayerNavigationEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
-                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, null, mIsCommentsPlacedLeft,
-                mIsPersistentAntiBotFixEnabled, mIsAudioFocusEnabled
+                mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
+                null, mIsAudioFocusEnabled
                 ));
     }
 
