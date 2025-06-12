@@ -394,7 +394,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        VideoActionPresenter.instance(getContext()).apply(item);
+        // Check that channels new look enabled and we're on the first columnAdd commentMore actions
+        if (belongsToChannelUploadsMultiGrid(item)) {
+            if (getMainUIData().isUploadsAutoLoadEnabled()) {
+                VideoActionPresenter.instance(getContext()).apply(item);
+            } else {
+                updateChannelUploadsMultiGrid(item);
+            }
+        } else {
+            VideoActionPresenter.instance(getContext()).apply(item);
+        }
     }
 
     @Override
