@@ -49,6 +49,7 @@ public class VideoLoaderController extends BasePlayerController {
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
+    private boolean mShuffleDone;
     private final Runnable mReloadVideo = () -> {
         getController(VideoStateController.class).saveState();
         loadVideo(getVideo());
@@ -193,8 +194,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public void onFinish() {
-        // ???
-        //mPlaylist.clearPosition();
+        mShuffleDone = false;
     }
 
     public void loadPrevious() {
@@ -818,26 +818,14 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void loadRandomNext() {
-        MediaServiceManager.instance().disposeActions();
-
-        if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().playlistInfo == null) {
+        if (mShuffleDone || getPlayer() == null || getPlayerData() == null || getVideo() == null ||
+                getVideo().shuffleMediaItem == null || getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
             return;
         }
 
-        if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-            Video video = new Video();
-            video.playlistId = getVideo().playlistId;
-            video.playlistIndex = UniqueRandom.getRandomIndex(getVideo().playlistInfo.getCurrentIndex(), getVideo().playlistInfo.getSize());
+        mShuffleDone = true;
 
-            MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
-                if (randomMetadata.getNextVideo() == null) {
-                    return;
-                }
-
-                getVideo().nextMediaItem = SimpleMediaItem.from(randomMetadata);
-                getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
-            });
-        }
+        getController(SuggestionsController.class).loadSuggestions(Video.from(getVideo().shuffleMediaItem));
     }
 
     private void updateBufferingCountIfNeeded() {

@@ -296,6 +296,7 @@ public class Playlist {
             if (prevItem != null) {
                 prevItem.mediaItem = null;
                 prevItem.nextMediaItem = null;
+                prevItem.shuffleMediaItem = null;
             }
         }
     }
