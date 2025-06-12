@@ -69,6 +69,8 @@ android {
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
 
+        multiDexKeepFile file("multidex-keep.txt")
+
         // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
         // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
         splits {

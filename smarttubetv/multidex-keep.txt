@@ -1,0 +1,1 @@
+com/liskovsoft/leanbackassistant/channels/RunOnInstallReceiver.class
