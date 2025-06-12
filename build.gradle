@@ -54,6 +54,7 @@ allprojects {
         resolutionStrategy.force 'androidx.annotation:annotation:' + annotationXLibraryVersion
         // Downgrade Cronet version for cronet-okhttp
         resolutionStrategy.force 'org.chromium.net:cronet-api:' + cronetApiVersion
+        resolutionStrategy.force 'androidx.multidex:multidex:' + multiDexVersion
 
         // Replace with modded library (leanback-1.0.0)
         exclude group: 'androidx.leanback', module: 'leanback'
