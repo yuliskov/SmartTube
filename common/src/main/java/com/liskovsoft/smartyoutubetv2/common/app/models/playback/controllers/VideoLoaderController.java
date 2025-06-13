@@ -49,7 +49,6 @@ public class VideoLoaderController extends BasePlayerController {
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private boolean mShuffleDone;
     private final Runnable mReloadVideo = () -> {
         getController(VideoStateController.class).saveState();
         loadVideo(getVideo());
@@ -192,11 +191,6 @@ public class VideoLoaderController extends BasePlayerController {
         return true;
     }
 
-    @Override
-    public void onFinish() {
-        mShuffleDone = false;
-    }
-
     public void loadPrevious() {
         openVideoInt(mSuggestionsController.getPrevious());
 
@@ -210,6 +204,7 @@ public class VideoLoaderController extends BasePlayerController {
         //getVideo() = null; // in case next video is the same as previous
 
         if (next != null) {
+            next.isShuffled = getVideo().isShuffled;
             forceSectionPlaylistIfNeeded(getVideo(), next);
             openVideoInt(next);
         } else {
@@ -818,14 +813,14 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void loadRandomNext() {
-        if (mShuffleDone || getPlayer() == null || getPlayerData() == null || getVideo() == null ||
+        if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().isShuffled ||
                 getVideo().shuffleMediaItem == null || getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
             return;
         }
 
-        mShuffleDone = true;
-
-        getController(SuggestionsController.class).loadSuggestions(Video.from(getVideo().shuffleMediaItem));
+        getVideo().isShuffled = true;
+        getVideo().playlistParams = getVideo().shuffleMediaItem.getParams();
+        getController(SuggestionsController.class).loadSuggestions(getVideo());
     }
 
     private void updateBufferingCountIfNeeded() {

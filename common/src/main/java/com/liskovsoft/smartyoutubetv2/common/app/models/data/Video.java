@@ -94,6 +94,7 @@ public final class Video {
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
     public boolean forceSectionPlaylist;
+    public boolean isShuffled;
     private int startSegmentNum;
     private long liveDurationMs = -1;
     private long durationMs = -1;
