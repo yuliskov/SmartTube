@@ -1,1 +1,2 @@
 com/liskovsoft/leanbackassistant/channels/RunOnInstallReceiver.class
+androidx/core/view/ViewCompat.class
