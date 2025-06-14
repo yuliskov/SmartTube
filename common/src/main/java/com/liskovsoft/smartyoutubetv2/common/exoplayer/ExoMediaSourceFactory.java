@@ -240,7 +240,7 @@ public class ExoMediaSourceFactory {
                         (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
                         (int) OkHttpCommons.READ_TIMEOUT_MS,
                         true,
-                        buildDefaultHttpDataSourceFactory(bandwidthMeter));
+                        USER_AGENT);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }

@@ -1,0 +1,4 @@
+-keep class com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver { *; }
+-keep class androidx.core.view.ViewCompat { *; }
+-keep class androidx.work.impl.WorkManagerInitializer { *; }
+-keep class **$r8$backportedMethods$** { *; }
