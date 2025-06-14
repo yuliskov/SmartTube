@@ -510,16 +510,14 @@ public class VideoLoaderController extends BasePlayerController {
 
     private boolean applyEngineErrorAction(int type, int rendererIndex, Throwable error) {
         boolean restartEngine = true;
-        String message = error != null ? error.getMessage() : null;
+        boolean showMessage = true;
+        String errorContent = error != null ? error.getMessage() : null;
         String errorTitle = getErrorTitle(type, rendererIndex);
-        String shortErrorMsg = errorTitle + "\n" + message;
-        String fullErrorMsg = shortErrorMsg + "\n" + getContext().getString(R.string.applying_fix);
-        String resultMsg = fullErrorMsg;
+        String errorMessage = errorTitle + "\n" + errorContent;
 
-        if (Helpers.startsWithAny(message, "Unable to connect to")) {
+        if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
             restartEngine = false;
-            resultMsg = shortErrorMsg;
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
                 // OkHttp has memory leak problems
@@ -530,20 +528,21 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
-        } else if (Helpers.containsAny(message, "Exception in CronetUrlRequest")) {
+            showMessage = false; // save RAM?
+        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest")) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
             } else {
                 restartEngine = false;
             }
-        } else if (Helpers.startsWithAny(message, "Response code: 403", "Response code: 404", "Response code: 503")) {
+        } else if (Helpers.startsWithAny(errorContent, "Response code: 403", "Response code: 404", "Response code: 503")) {
             // "Response code: 403" (url deciphered incorrectly)
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
-        } else if (Helpers.startsWithAny(message, "Response code: 429", "Response code: 400")) {
+        } else if (Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 400")) {
             YouTubeServiceManager.instance().applyAntiBotFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
@@ -577,13 +576,13 @@ public class VideoLoaderController extends BasePlayerController {
             //getPlayerData().setFormat(getPlayerData().getDefaultAudioFormat());
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
-        } else {
-            resultMsg = shortErrorMsg;
+        } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
+            // Hide unknown errors on all devices
+            showMessage = false;
         }
 
-        // Hide unknown errors on all devices
-        if (type != PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            MessageHelpers.showLongMessage(getContext(), resultMsg);
+        if (showMessage) {
+            MessageHelpers.showLongMessage(getContext(), errorMessage);
         }
 
         return restartEngine;
