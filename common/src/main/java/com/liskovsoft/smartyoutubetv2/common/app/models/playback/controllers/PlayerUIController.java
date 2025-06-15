@@ -248,6 +248,10 @@ public class PlayerUIController extends BasePlayerController {
     public void onEngineInitialized() {
         mEngineReady = true;
 
+        if (isEmbedPlayer()) {
+            return;
+        }
+
         if (getAppDialogPresenter().isDialogShown()) {
             // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
             getPlayer().showOverlay(true);
