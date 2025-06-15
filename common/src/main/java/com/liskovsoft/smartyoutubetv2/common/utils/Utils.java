@@ -86,6 +86,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
+    private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";
     private static final String UPDATE_CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.UpdateChannelsReceiver";
     private static final String BOOTSTRAP_ACTIVITY_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity";
@@ -1090,5 +1091,22 @@ public class Utils {
         }
 
         return result.toString();
+    }
+
+    public static int getRandomIndex(int currentIdx, int playlistSize) {
+        if (playlistSize <= 1) {
+            return -1;
+        }
+
+        int randomIndex = -1;
+
+        for (int i = 0; i < RANDOM_FAIL_REPEAT_TIMES; i++) {
+            randomIndex = Helpers.getRandomIndex(playlistSize);
+            if (randomIndex != currentIdx) {
+                break;
+            }
+        }
+
+        return randomIndex;
     }
 }
