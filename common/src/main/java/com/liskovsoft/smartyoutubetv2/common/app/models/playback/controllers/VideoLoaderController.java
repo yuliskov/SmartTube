@@ -226,6 +226,11 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     @Override
+    public void onTickle() {
+        preloadNextVideoIfNeeded();
+    }
+
+    @Override
     public void onSuggestionItemClicked(Video item) {
         openVideoInt(item);
 
@@ -934,6 +939,16 @@ public class VideoLoaderController extends BasePlayerController {
             if (width > 0 && height > 0 && (getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT || isShorts)) {
                 getPlayer().setAspectRatio((float) width / height);
             }
+        }
+    }
+
+    private void preloadNextVideoIfNeeded() {
+        if (isEmbedPlayer() || getPlayer() == null || getVideo() == null || getVideo().isLive) {
+            return;
+        }
+
+        if (getPlayer().getDurationMs() - getPlayer().getPositionMs() < 50_000) {
+            MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
         }
     }
 }
