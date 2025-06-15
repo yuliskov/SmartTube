@@ -888,4 +888,30 @@ public final class Video {
                         (!isMix() && !belongsToSamePlaylistGroup())) && // skip hidden playlists (music videos usually)
                     (!isRemote || remotePlaylistId == null);
     }
+
+    public String createPlaylistTitle() {
+        if (!hasPlaylist()) {
+            return null;
+        }
+        
+        // Trying to properly format channel playlists, mixes etc
+        boolean isChannelPlaylistItem = getGroupTitle() != null && belongsToSameAuthorGroup() && belongsToSamePlaylistGroup();
+        boolean isUserPlaylistItem = getGroupTitle() != null && belongsToSamePlaylistGroup();
+        String title = isChannelPlaylistItem ? getAuthor() : isUserPlaylistItem ? null : getTitle();
+        String subtitle = isChannelPlaylistItem || isUserPlaylistItem || belongsToUserPlaylists() ? getGroupTitle() : getAuthor();
+        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
+    }
+
+    public String createChannelTitle() {
+        if (!hasReloadPageKey() && !hasChannel()) {
+            return null;
+        }
+        
+        // Trying to properly format channel playlists, mixes etc
+        boolean hasChannel = hasChannel() && !isChannel();
+        boolean isUserPlaylistItem = getGroupTitle() != null && belongsToSamePlaylistGroup();
+        String title = hasChannel ? getAuthor() : isUserPlaylistItem ? null : getTitle();
+        String subtitle = isUserPlaylistItem ? getGroupTitle() : hasChannel || isChannel() ? null : getAuthor();
+        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
+    }
 }
