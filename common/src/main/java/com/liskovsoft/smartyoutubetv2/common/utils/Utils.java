@@ -570,13 +570,31 @@ public class Utils {
 
     @SuppressWarnings("deprecation")
     public static boolean isServiceRunning(Context context, Class<? extends Service> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+        List<RunningServiceInfo> services = getRunningServices(context);
+
+        if (services == null) {
+            return false;
+        }
+
+        for (RunningServiceInfo service : services) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
         return false;
+    }
+
+    private static List<RunningServiceInfo> getRunningServices(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        try {
+            return manager.getRunningServices(Integer.MAX_VALUE);
+        } catch (NullPointerException e) {
+            // NullPointerException: Attempt to invoke interface method 'java.lang.Object android.os.Parcelable$Creator.createFromParcel(android.os.Parcel)' on a null object reference
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static void cancelNotification(Context context, int notificationId) {
