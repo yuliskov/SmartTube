@@ -69,6 +69,7 @@ android {
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
 
+        // Trying to fix VerifyError/ClassNotFoundException
         multiDexKeepProguard file("multidex-keep.pro")
 
         // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle

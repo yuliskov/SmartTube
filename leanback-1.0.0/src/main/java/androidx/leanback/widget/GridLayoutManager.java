@@ -2303,8 +2303,14 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             }
             mGrid.setStart(startFromPosition);
             if (endPos != NO_POSITION) {
-                while (appendOneColumnVisibleItems() && findViewByPosition(endPos) == null) {
-                    // continuously append items until endPos
+                // MOD: fix RecycleView crash on Asus tablet
+                try {
+                    while (appendOneColumnVisibleItems() && findViewByPosition(endPos) == null) {
+                        // continuously append items until endPos
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    // IndexOutOfBoundsException: Invalid item position 20(20). Item count:6 androidx.leanback.widget.VerticalGridView
+                    e.printStackTrace();
                 }
             }
         }

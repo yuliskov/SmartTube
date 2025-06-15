@@ -91,7 +91,7 @@ public class SidebarService implements ProfileChangeListener {
                 mPinnedItems.add(index, item);
             }
         } else {
-            Helpers.removeIf(mPinnedItems, item -> item.sectionId == sectionId);
+            Helpers.removeIf(mPinnedItems, item -> item == null || item.sectionId == sectionId);
         }
 
         persistState();
