@@ -531,7 +531,6 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             }
-            showMessage = false; // save RAM?
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest")) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
