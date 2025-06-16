@@ -390,15 +390,15 @@
   <string name="ambilight_ratio_fix">Poprawka Ambilight/Proporcje/Skalowanie/Zrzuty ekranu</string>
   <string name="force_legacy_codecs_desc">Znacząco poprawia wydajność na słabszych urządzeniach. Maksymalna rozdzielczość to 720p.</string>
   <string name="force_legacy_codecs">Wymuś starsze kodeki (720p)</string>
-  <string name="live_stream_fix_desc">Ostrzeżenie: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo na słabszych urządzeniach. Maksymalna rozdzielczość to 1080p.</string>
-  <string name="live_stream_fix_4k_desc">Ostrzeżenie: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo. Maksymalna rozdzielczość to 4K.</string>
+  <string name="live_stream_fix_desc">UWAGA: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo na słabszych urządzeniach. Maksymalna rozdzielczość to 1080p.</string>
+  <string name="live_stream_fix_4k_desc">UWAGA: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo. Maksymalna rozdzielczość to 4K.</string>
   <string name="live_stream_fix">Poprawka transmisji na żywo (1080p)</string>
   <string name="live_stream_fix_4k">Poprawka transmisji na żywo (4K)</string>
   <string name="playback_notifications_fix_desc">Ukrywa powiadomienia o zmianach utworu. Może być przydatny w przypadku oprogramowania opartego na AOSP (custom ROM).</string>
   <string name="playback_notifications_fix">Wyłącz powiadomienia o odtwarzaniu</string>
   <string name="amlogic_fix_desc">Poprawka dla gubienia klatek na urządzeniach opartych o chip Amlogic</string>
   <string name="amlogic_fix">Poprawka dla Amlogic 1080p\@60fps</string>
-  <string name="tunneled_video_playback_desc">UWAGA! Pauza może nie działać prawidłowo! Tunelowane odtwarzanie wideo zapewnia korzyści takie jak lepsza synchronizacja audio/wideo (AV sync) i płynniejsze odtwarzanie. Wymagany Android 5+.</string>
+  <string name="tunneled_video_playback_desc">UWAGA: pauza może nie działać prawidłowo! Tunelowane odtwarzanie wideo zapewnia korzyści takie jak lepsza synchronizacja audio/wideo (AV sync) i płynniejsze odtwarzanie. Wymagany Android 5+.</string>
   <string name="tunneled_video_playback">Tunelowane odtwarzanie wideo (Android 5+)</string>
   <string name="master_volume">Głośność główna</string>
   <string name="volume_limit">Limit głośności</string>
@@ -459,7 +459,7 @@
   <string name="starting_stream">Rozpoczynam transmisję…</string>
   <string name="action_playlist_remove">Usuń z listy odtwarzania</string>
   <string name="signin_view_title">Wczytuję kod użytkownika…</string>
-  <string name="signin_view_description">Aby się zalogować, wprowadź podany kod na stronie %s\nUWAGA. Działa tylko z przeglądarkami Firefox lub Chrome.</string>
+  <string name="signin_view_description">Aby się zalogować, wprowadź podany kod na stronie %s\nUWAGA: działa tylko z przeglądarkami Firefox lub Chrome.</string>
   <string name="signin_view_action_text">Gotowe</string>
   <string name="require_checked">Wymaga \"%s\"</string>
   <string name="msg_press_again_to_exit">Naciśnij ponownie, aby wyjść</string>
@@ -565,9 +565,9 @@
   <string name="enable_master_password">Włącz hasło główne</string>
   <string name="enter_master_password">Wpisz hasło główne</string>
   <string name="disable_stream_buffer">Wyłącz buforowanie dla transmisji</string>
-  <string name="disable_stream_buffer_desc">Poprawka dla problemu opóźniających się transmisji. Uwaga: może powodować przerywanie transmisji.</string>
+  <string name="disable_stream_buffer_desc">Poprawka dla problemu opóźniających się transmisji. UWAGA: może powodować przerywanie transmisji.</string>
   <string name="sony_frame_drop_fix">Poprawka dla gubienia klatek #1</string>
-  <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach Sony i niektórych innych urządzeniach. Uwaga: możliwe problemy z synchronizacją audio.</string>
+  <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach Sony i niektórych innych urządzeniach. UWAGA: możliwe problemy z synchronizacją audio.</string>
   <string name="audio_language">Język audio</string>
   <string name="old_home_look">Poprzedni wygląd sekcji Główna</string>
   <string name="old_channel_look">Poprzedni wygląd sekcji Kanały</string>
@@ -619,7 +619,7 @@
   <string name="protect_account_with_password">Ochrona konta hasłem</string>
   <string name="enter_account_password">Wprowadź hasło do konta</string>
   <string name="show_connect_messages">Pokaż komunikaty dot. połączenia</string>
-  <string name="prefer_avc_over_vp9_desc">OSTRZEŻENIE: co najwyżej 1080p</string>
+  <string name="prefer_avc_over_vp9_desc">UWAGA: co najwyżej 1080p</string>
   <string name="play_next">Odtwórz następnie</string>
   <string name="hide_watched_from_subscriptions">Ukryj obejrzane wideo w sekcji Subskrypcje</string>
   <string name="hide_watched_from_notifications">Ukryj obejrzane wideo w sekcji Powiadomienia</string>
@@ -701,4 +701,6 @@
   <string name="card_preview_muted">Wideo bez dźwięku</string>
   <string name="card_preview_full">Wideo z dźwiękiem</string>
   <string name="card_preview">Podgląd karty</string>
+  <string name="search_exit_shortcut">Zamykanie wyszukiwania</string>
+  <string name="card_unlocalized_titles">Oryginalne tytuły materiałów wideo</string>
 </resources>
