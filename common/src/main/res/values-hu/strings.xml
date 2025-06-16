@@ -318,7 +318,7 @@
   <string name="cancel_dialog">Mégsem</string>
   <string name="msg_player_error_source2">A videoforrás nem működik, vagy helytelen az idő.\nÁltalában az alkalmazással van a probléma.</string>
   <string name="hide_upcoming">Közelgő premierek elrejtése a Feliratkozások menüből</string>
-  <string name="search_background_playback">Írja be a PIP-t a kereséshez/csatorna megnyitásához</string>
+  <string name="search_background_playback">PIP lejátszás keresés/böngészés közben</string>
   <string name="trending_row_name">Felkapott</string>
   <string name="player_seek_type">Gyorstekerés viselkedése</string>
   <string name="player_seek_regular">Szabályos</string>
@@ -686,4 +686,22 @@
   <string name="video_buffer_size_highest">Legmagasabb</string>
   <string name="suggestions">Javaslatok</string>
   <string name="place_comments_left">Helyezze a megjegyzéseket balra</string>
+  <string name="search_exit_shortcut">Kilépés a keresésből</string>
+  <string name="context_menu_sorting">Helyi menü rendezése</string>
+  <string name="hide_shorts_from_search">Rövid klipek elrejtése a keresési eredményekből</string>
+  <string name="video_flip">Tükrözés</string>
+  <string name="import_subscriptions_group">Importálás</string>
+  <string name="lb_playback_controls_closed_captioning_disable">Feliratozás letiltása</string>
+  <string name="lb_playback_controls_closed_captioning_enable">Feliratozás engedélyezése</string>
+  <string name="my_videos">Saját videók</string>
+  <string name="player_audio_focus">Hangfókusz (szünet, ha más lejátszók észlelték)</string>
+  <string name="paid_content_notification">Fizetett tartalom értesítés</string>
+  <string name="you_liked">Kedvelt</string>
+  <string name="premium_users_only">Csak prémium felhasználók. Javítás a hiányos videó formátum listához</string>
+  <string name="playback_buffering_fix">Lejátszás pufferelés javítása</string>
+  <string name="card_preview_muted">Videó némítva</string>
+  <string name="card_preview_full">Videó hanggal</string>
+  <string name="card_preview">Előnézet</string>
+  <string name="card_unlocalized_titles">Nem lokalizált videócímek</string>
+  <string name="oculus_quest_fix">Oculus Quest javítása</string>
 </resources>
