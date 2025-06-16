@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter { *; }
 -keep class com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver { *; }
 -keep class androidx.core.view.ViewCompat { *; }
