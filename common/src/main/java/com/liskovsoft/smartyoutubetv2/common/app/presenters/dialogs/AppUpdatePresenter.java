@@ -79,7 +79,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
             if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
                 MessageHelpers.showMessage(getContext(), R.string.update_not_found);
             } else {
-                MessageHelpers.showMessage(getContext(), error.getMessage());
+                MessageHelpers.showMessage(getContext(), String.format("%s: %s", getContext().getString(R.string.update_error), error.getMessage()));
             }
         }
 
