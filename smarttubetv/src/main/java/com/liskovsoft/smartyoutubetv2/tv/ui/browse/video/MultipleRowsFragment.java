@@ -172,7 +172,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         int action = group.getAction();
 
         // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-        if (action == VideoGroup.ACTION_SYNC && getVerticalGridView() != null) {
+        if ((action == VideoGroup.ACTION_SYNC || action == VideoGroup.ACTION_REPLACE) && getVerticalGridView() != null) {
             int position = findPositionById(group.getId());
             if (position != -1) {
                 RecyclerView.ViewHolder viewHolder = getVerticalGridView().findViewHolderForAdapterPosition(position);

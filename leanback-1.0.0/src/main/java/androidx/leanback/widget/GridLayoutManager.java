@@ -2328,10 +2328,11 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             try {
                 appendVisibleItems();
                 prependVisibleItems();
-            } catch (IndexOutOfBoundsException | NullPointerException | IllegalArgumentException e) {
+            } catch (IndexOutOfBoundsException | NullPointerException | IllegalArgumentException | IllegalStateException e) {
                 // IndexOutOfBoundsException: Invalid item position -1(-1). Item count:12 androidx.leanback.widget.VerticalGridView
                 // NullPointerException: Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()'
                 // IllegalArgumentException: VideoCardPresenter$1 is not a direct child of HorizontalGridView
+                // IllegalStateException: Layout state should be one of 100 but it is 10
                 e.printStackTrace();
             }
             // b/67370222: do not removeInvisibleViewsAtFront/End() in the loop, otherwise

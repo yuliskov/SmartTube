@@ -263,6 +263,10 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onSpeedClicked(boolean enabled) {
+        if (getVideo() == null) {
+            return;
+        }
+
         float lastSpeed = getPlayerData().getSpeed(getVideo().channelId);
         if (Helpers.floatEquals(lastSpeed, 1.0f)) {
             lastSpeed = getPlayerData().getLastSpeed();
