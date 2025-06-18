@@ -354,10 +354,10 @@ public class VideoLoaderController extends BasePlayerController {
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
 
-            if (formatInfo.isHistoryBroken()) { // bot check error or the video is hidden
+            if (formatInfo.isBotCheckError()) {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
                 scheduleRebootAppTimer(5_000);
-            } else { // 18+ video
+            } else { // 18+ video or the video is hidden/removed
                 scheduleNextVideoTimer(5_000);
             }
         } else if (acceptDashVideo(formatInfo)) {
@@ -858,7 +858,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        // Force to all subsequent videos in section playlist row
+        // Force to all subsequent videos in section playlist row (e.g. on Home)
         if (previous.isSectionPlaylistEnabled(getContext())) {
             previous.forceSectionPlaylist = false;
             next.forceSectionPlaylist = true;
