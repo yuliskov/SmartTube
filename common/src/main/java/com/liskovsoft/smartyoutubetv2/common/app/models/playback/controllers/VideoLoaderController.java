@@ -795,7 +795,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        loadRandomNext();
+        //loadRandomNext();
     }
 
     @Override
