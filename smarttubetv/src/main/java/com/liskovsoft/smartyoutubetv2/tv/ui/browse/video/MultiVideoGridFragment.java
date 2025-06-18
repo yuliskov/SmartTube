@@ -129,7 +129,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             int action = group.getAction();
 
             // Attempt to fix: IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
-            if (action == VideoGroup.ACTION_SYNC && getBrowseGrid2() != null && getBrowseGrid2().isComputingLayout()) {
+            if ((action == VideoGroup.ACTION_SYNC || action == VideoGroup.ACTION_REPLACE) && getBrowseGrid2() != null && getBrowseGrid2().isComputingLayout()) {
                 return;
             }
 
