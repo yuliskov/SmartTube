@@ -531,12 +531,8 @@ public class SuggestionsController extends BasePlayerController {
 
     private void appendSectionPlaylistIfNeeded(Video video) {
         if (!video.isSectionPlaylistEnabled(getContext())) {
-            if (video.hasPlaylist() && getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-                findRandomSectionVideo(video);
-            } else {
-                // Important fix. Gives priority to playlist or suggestion.
-                mNextSectionVideo = null;
-            }
+            // Important fix. Gives priority to playlist or suggestion.
+            mNextSectionVideo = null;
             return;
         }
 
@@ -650,10 +646,6 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void findNextSectionVideoIfNeeded(Video video) {
-        //if (!video.isSectionPlaylistEnabled(getContext())) {
-        //    return;
-        //}
-
         if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
             findRandomSectionVideo(video);
         } else {
