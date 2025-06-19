@@ -258,7 +258,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
+        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 3 * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);
@@ -859,7 +859,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // Force to all subsequent videos in section playlist row (e.g. on Home)
-        if (previous.isSectionPlaylistEnabled(getContext())) {
+        if (previous.isSectionPlaylistEnabled(getContext()) && !previous.belongsToUserPlaylists()) {
             previous.forceSectionPlaylist = false;
             next.forceSectionPlaylist = true;
         }
