@@ -153,7 +153,7 @@
   <string name="msg_press_again_to_exit">Pressione novamente para sair</string>
   <string name="app_double_back_exit">Toque duplo no botão \"Voltar\"</string>
   <string name="app_single_back_exit">Toque único no botão \"Voltar\"</string>
-  <string name="player_exit_shortcut">Sair do reprodutor de vídeos</string>
+  <string name="player_exit_shortcut">Sair do reprodutor (player) de vídeos</string>
   <string name="cant_delete_empty_playlist">Não é possível excluir uma lista de reprodução (playlist) vazia</string>
   <string name="action_video_zoom">Zoom do vídeo</string>
   <string name="video_zoom">Zoom do vídeo</string>
@@ -670,7 +670,7 @@
   <string name="header_shorts">Shorts</string>
   <string name="long_press_for_options">mantenha pressionado para opções</string>
   <string name="hide_mixes">Ocultar Mixagens</string>
-  <string name="applying_fix">Não feche o Tocador. Aplicando as correções...</string>
+  <string name="applying_fix">Atenção: Não pressione voltar e/ou não feche o reprodutor (player) de vídeos enquanto são aplicadas as correções! Aplicando as correções...</string>
   <string name="video_disabled">Video Desabilitado</string>
   <string name="calm_msg">Nós estamos corrigindo as mudanças. Verifique atualizações de tempo em tempo.</string>
   <string name="not_supported_by_device">O dispositivo não suporta esse recurso</string>
@@ -699,7 +699,7 @@
   <string name="you_liked">Você gostou</string>
   <string name="premium_users_only">Apenas para usuários Premium. Correção de lista de formatos de vídeo incompleta</string>
   <string name="playback_buffering_fix">Correção de buffer de reprodução</string>
-  <string name="oculus_quest_fix">Correção de Oculus Quest</string>
+  <string name="oculus_quest_fix">Correção do Oculus Quest</string>
   <string name="card_preview_muted">Miniatura sem som</string>
   <string name="card_preview_full">Miniatura com som</string>
   <string name="card_preview">Miniatura de prévia</string>
