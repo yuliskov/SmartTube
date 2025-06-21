@@ -69,7 +69,7 @@ public class MotherActivity extends FragmentActivity {
         mIsOculusQuestFixEnabled = PlayerTweaksData.instance(this).isOculusQuestFixEnabled();
         mIsFullscreenModeEnabled = GeneralData.instance(this).isFullscreenModeEnabled();
 
-        //initDpi();
+        initDpi();
         initTheme();
 
         // Search Fullscreen routine inside onPause() method
@@ -262,12 +262,11 @@ public class MotherActivity extends FragmentActivity {
 
         // Fix sudden language change.
         // Could happen when screen goes off or after PIP mode.
-        //LocaleUpdater.applySavedLocale(this);
-        LocaleContextWrapper.applySavedLocale(this, LocaleUpdater.getSavedLocale(this), getDisplayMetrics(this));
+        LocaleUpdater.applySavedLocale(this);
 
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.
-        //initDpi();
+        initDpi();
     }
 
     private void applyFullscreenModeIfNeeded() {
