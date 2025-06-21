@@ -316,6 +316,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void resetButtonStates() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().setLikeButtonState(false);
         getPlayer().setDislikeButtonState(false);
         getPlayer().setChannelIcon(null);
@@ -613,7 +617,8 @@ public class PlayerUIController extends BasePlayerController {
             // 2) Enable "keep finished activities"
             // 3) Close the video when it fully finished and ready to skip to the next
             // Close future stream with single back click
-            if (getVideo() != null && getVideo().isUpcoming && !getPlayer().containsMedia()) {
+            if (getVideo() != null && getPlayer() != null &&
+                    getVideo().isUpcoming && getPlayer().isControlsShown()) {
                 getPlayer().finish();
             }
 
