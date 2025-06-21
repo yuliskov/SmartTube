@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -374,6 +375,11 @@ public class AppDialogUtil {
 
         for (int i = 0; i < lastLanguages.size(); i++) {
             String languageCode = lastLanguages.get(i);
+
+            if (TextUtils.isEmpty(languageCode)) { // original
+                continue;
+            }
+
             Locale locale = new Locale(languageCode);
 
             options.add(i, UiOptionItem.from(locale.getDisplayLanguage(),
