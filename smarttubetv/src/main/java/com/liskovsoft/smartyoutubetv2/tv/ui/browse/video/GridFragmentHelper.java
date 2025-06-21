@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GridFragmentHelper {
-    private static final Map<Integer, Pair<Integer, Integer>> sCardDimensPx = new HashMap<>();
-    private static final Map<Integer, Integer> sMaxColsNum = new HashMap<>();
+    private static final Map<Pair<Integer, Float>, Pair<Integer, Integer>> sCardDimensPx = new HashMap<>();
+    private static final Map<Pair<Integer, Float>, Integer> sMaxColsNum = new HashMap<>();
     private static final Runnable sInvalidate = GridFragmentHelper::invalidate;
 
     private static void invalidate() {
@@ -33,7 +33,8 @@ public class GridFragmentHelper {
      * Max number of cards that could fit horizontally
      */
     public static int getMaxColsNum(Context context, int cardWidthResId, float cardScale) {
-        Integer maxColsNum = sMaxColsNum.get(cardWidthResId);
+        Pair<Integer, Float> key = new Pair<>(cardWidthResId, cardScale);
+        Integer maxColsNum = sMaxColsNum.get(key);
 
         if (maxColsNum != null) {
             return maxColsNum;
@@ -43,7 +44,7 @@ public class GridFragmentHelper {
 
         maxColsNum = (int) getMaxColsNumFloat(context, cardWidthResId, cardScale);
 
-        sMaxColsNum.put(cardWidthResId, maxColsNum);
+        sMaxColsNum.put(key, maxColsNum);
 
         return maxColsNum;
     }
@@ -69,14 +70,15 @@ public class GridFragmentHelper {
     }
 
     public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale, boolean isSingleColumn) {
-        Pair<Integer, Integer> cardDimensPx = sCardDimensPx.get(cardWidthResId);
+        Pair<Integer, Float> key = new Pair<>(cardWidthResId, cardScale);
+        Pair<Integer, Integer> cardDimensPx = sCardDimensPx.get(key);
         if (cardDimensPx != null) {
             return cardDimensPx;
         }
 
         cardDimensPx = getCardDimensPxInt(context, cardWidthResId, cardHeightResId, cardScale, isSingleColumn);
 
-        sCardDimensPx.put(cardWidthResId, cardDimensPx);
+        sCardDimensPx.put(key, cardDimensPx);
 
         return cardDimensPx;
     }
