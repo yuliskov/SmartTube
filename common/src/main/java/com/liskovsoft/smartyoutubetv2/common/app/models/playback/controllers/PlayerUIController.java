@@ -100,7 +100,7 @@ public class PlayerUIController extends BasePlayerController {
     public void onNewVideo(Video item) {
         enableUiAutoHideTimeout();
 
-        if (item != null && getPlayer() != null && !item.equals(getPlayer().getVideo())) {
+        if (item != null && !item.equals(getVideo())) {
             mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
             resetButtonStates();
         }
@@ -230,10 +230,10 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onPlaylistAddClicked() {
         if (mPlaylistInfos == null) {
-            AppDialogUtil.showAddToPlaylistDialog(getContext(), getPlayer().getVideo(),
+            AppDialogUtil.showAddToPlaylistDialog(getContext(), getVideo(),
                     null);
         } else {
-            AppDialogUtil.showAddToPlaylistDialog(getContext(), getPlayer().getVideo(),
+            AppDialogUtil.showAddToPlaylistDialog(getContext(), getVideo(),
                     null, mPlaylistInfos, this::setPlaylistAddButtonState);
         }
     }
@@ -436,7 +436,7 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
 
         if (video == null) {
             return;
@@ -460,7 +460,7 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onShareLinkClicked() {
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
 
         if (video == null) {
             return;
@@ -469,11 +469,11 @@ public class PlayerUIController extends BasePlayerController {
         AppDialogPresenter dialogPresenter = getAppDialogPresenter();
 
         int positionSec = Utils.toSec(getPlayer().getPositionMs());
-        AppDialogUtil.appendShareLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
-        AppDialogUtil.appendShareQRLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
-        AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), dialogPresenter, getPlayer().getVideo(), positionSec);
+        AppDialogUtil.appendShareLinkDialogItem(getContext(), dialogPresenter, getVideo(), positionSec);
+        AppDialogUtil.appendShareQRLinkDialogItem(getContext(), dialogPresenter, getVideo(), positionSec);
+        AppDialogUtil.appendShareEmbedLinkDialogItem(getContext(), dialogPresenter, getVideo(), positionSec);
 
-        dialogPresenter.showDialog(getPlayer().getVideo().getTitle());
+        dialogPresenter.showDialog(getVideo().getTitle());
 
         //if (video.videoId != null) {
         //    Utils.displayShareVideoDialog(getActivity(), video.videoId, (int)(getController().getPositionMs() / 1_000));
@@ -591,7 +591,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void callMediaItemObservable(MediaItemObservable callable) {
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
 
         if (video == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
@@ -607,8 +607,13 @@ public class PlayerUIController extends BasePlayerController {
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
 
+            // Cause the background playback bugs if not to check for upcoming!!!
+            // To reproduce the bug:
+            // 1) Set bg black to "Only audio when pressing HOME"
+            // 2) Enable "keep finished activities"
+            // 3) Close the video when it fully finished and ready to skip to the next
             // Close future stream with single back click
-            if (!getPlayer().containsMedia()) {
+            if (getVideo() != null && getVideo().isUpcoming && !getPlayer().containsMedia()) {
                 getPlayer().finish();
             }
 
@@ -687,9 +692,9 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleLeftRightSkip(int keyCode) {
-        if (getPlayer().isOverlayShown() || getPlayer().getVideo() == null ||
-                (getPlayer().getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsEnabled() ||
-                (!getPlayer().getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosEnabled()))) {
+        if (getPlayer().isOverlayShown() || getVideo() == null ||
+                (getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsEnabled() ||
+                (!getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosEnabled()))) {
             return false;
         }
 
@@ -711,7 +716,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void setPlaylistAddButtonStateCached() {
-        String videoId = getPlayer().getVideo().videoId;
+        String videoId = getVideo().videoId;
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =
                 YouTubeServiceManager.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
@@ -793,7 +798,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private String getChannelId() {
-        return getPlayer().getVideo() != null ? getPlayer().getVideo().channelId : null;
+        return getVideo() != null ? getVideo().channelId : null;
     }
 
     private void applyScreenOff(int buttonState) {
@@ -861,7 +866,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onSubscribe(int buttonState) {
-        if (getPlayer().getVideo() == null) {
+        if (getVideo() == null) {
             return;
         }
 
@@ -876,7 +881,7 @@ public class PlayerUIController extends BasePlayerController {
             callMediaItemObservable(mMediaItemService::unsubscribeObserve);
         }
 
-        getPlayer().getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
+        getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
         getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
@@ -953,7 +958,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void showNotificationsDialog(int buttonState) {
-        if (getPlayer().getVideo() == null || getPlayer().getVideo().notificationStates == null) {
+        if (getVideo() == null || getVideo().notificationStates == null) {
             return;
         }
 
@@ -961,11 +966,11 @@ public class PlayerUIController extends BasePlayerController {
 
         List<OptionItem> items = new ArrayList<>();
 
-        for (NotificationState item : getPlayer().getVideo().notificationStates) {
+        for (NotificationState item : getVideo().notificationStates) {
             items.add(UiOptionItem.from(item.getTitle(), optionItem -> {
                 if (optionItem.isSelected()) {
                     MediaServiceManager.instance().setNotificationState(item, error -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()));
-                    getPlayer().getVideo().isSubscribed = true;
+                    getVideo().isSubscribed = true;
                     getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_ON);
                 }
             }, item.isSelected()));
@@ -1006,6 +1011,6 @@ public class PlayerUIController extends BasePlayerController {
 
     private void openChannel() {
         startTempBackgroundMode(ChannelPresenter.class);
-        ChannelPresenter.instance(getContext()).openChannel(getPlayer().getVideo());
+        ChannelPresenter.instance(getContext()).openChannel(getVideo());
     }
 }
