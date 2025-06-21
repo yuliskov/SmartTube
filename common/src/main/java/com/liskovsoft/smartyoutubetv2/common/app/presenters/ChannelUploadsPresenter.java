@@ -261,7 +261,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private void update(VideoGroup group) {
         disposeActions();
 
-        if (getView() == null) {
+        if (getView() == null || group == null) {
             return;
         }
 
