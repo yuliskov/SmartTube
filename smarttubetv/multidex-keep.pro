@@ -8,5 +8,6 @@
 -keep class kotlin.text.StringsKt__StringsJVMKt { *; }
 -keep class kotlin.ranges.RangesKt___RangesKt { *; }
 -keep class kotlin.jvm.functions.Function1 { *; }
+-keep class io.reactivex.schedulers.Schedulers { *; }
 #-keep class kotlin.collections.builders.* { *; }
 #-keep class androidx.room.** { *; }
