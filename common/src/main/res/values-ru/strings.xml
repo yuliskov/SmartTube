@@ -60,6 +60,7 @@
     <string name="dialog_remove_account">Выйти из аккаунта</string>
     <string name="dialog_add_account">Войти в аккаунт</string>
     <string name="default_lang">По умолчанию</string>
+    <string name="original_lang">Оригинальный</string>
     <string name="dialog_select_language">Язык</string>
     <string name="header_channels">Каналы</string>
     <string name="subtitle_default">Обычные</string>

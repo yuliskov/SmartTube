@@ -384,7 +384,7 @@ public class AppDialogUtil {
                     languageCode.equals(playerData.getAudioLanguage())));
         }
 
-        options.add(0, UiOptionItem.from(context.getString(R.string.default_lang),
+        options.add(0, UiOptionItem.from(context.getString(R.string.original_lang),
                 optionItem -> {
                     playerData.setAudioLanguage("");
                     onSetCallback.run();

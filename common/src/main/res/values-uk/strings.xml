@@ -61,6 +61,7 @@
     <string name="dialog_remove_account">Вийти з облікового запису</string>
     <string name="dialog_add_account">Увійти в обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
+    <string name="original_lang">Оригінальний</string>
     <string name="dialog_select_language">Мова</string>
     <string name="subtitle_default">Звичайні</string>
     <string name="subtitle_white_semi_transparent">Білі на напівпрозорому фоні</string>

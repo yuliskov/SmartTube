@@ -44,10 +44,6 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         String country = LocaleUtility.getCurrentLocale(getContext()).getCountry();
 
-        appendAutoUpdateSwitch(settingsPresenter);
-
-        appendOldUpdateNotificationSwitch(settingsPresenter);
-
         appendUpdateCheckButton(settingsPresenter);
 
         appendUpdateChangelogButton(settingsPresenter);
@@ -55,6 +51,10 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         appendUpdateSource(settingsPresenter);
 
         appendInstallBridge(settingsPresenter);
+
+        appendAutoUpdateSwitch(settingsPresenter);
+
+        appendOldUpdateNotificationSwitch(settingsPresenter);
 
         if (!Helpers.equalsAny(country, "RU", "UA")) {
             appendDonation(settingsPresenter);
