@@ -373,16 +373,16 @@ public class AppDialogUtil {
         // Alphabetical order
         Collections.sort(options, (o1, o2) -> ((String) o1.getTitle()).compareTo((String) o2.getTitle()));
 
-        for (int i = 0; i < lastLanguages.size(); i++) {
-            String languageCode = lastLanguages.get(i);
+        int idx = 0;
 
+        for (String languageCode : lastLanguages) {
             if (TextUtils.isEmpty(languageCode)) { // original
                 continue;
             }
 
             Locale locale = new Locale(languageCode);
 
-            options.add(i, UiOptionItem.from(locale.getDisplayLanguage(),
+            options.add(idx++, UiOptionItem.from(locale.getDisplayLanguage(),
                     optionItem -> {
                         playerData.setAudioLanguage(languageCode);
                         onSetCallback.run();
