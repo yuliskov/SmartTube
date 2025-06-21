@@ -238,7 +238,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         for (float scale : new float[] {0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f, 1.5f}) {
             options.add(UiOptionItem.from(String.format("%sx", scale),
-                    optionItem -> mMainUIData.setVideoGridScale(scale),
+                    optionItem -> {
+                        mMainUIData.setVideoGridScale(scale);
+                        mRestartApp = true;
+                    },
                     Helpers.floatEquals(scale, mMainUIData.getVideoGridScale())));
         }
 
