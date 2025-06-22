@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.util.Pair;
 
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
@@ -53,7 +54,10 @@ public class GridFragmentHelper {
 
         Resources res = context.getResources();
 
-        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+        // Fixes when metrics applied with a delay?
+        DisplayMetrics displayMetrics = MotherActivity.getCachedDisplayMetrics() != null ?
+                MotherActivity.getCachedDisplayMetrics() : res.getDisplayMetrics();
+
         // Take into the account screen orientation (e.g. when running on phone)
         int displayWidthPx = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
 
