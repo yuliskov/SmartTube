@@ -236,14 +236,19 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(getDisplayMetrics(this));
     }
 
-    private DisplayMetrics getDisplayMetrics() {
+    private static DisplayMetrics getDisplayMetrics(Context context) {
         // BUG: adapt to resolution change (e.g. on AFR)
         // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
         if (sCachedDisplayMetrics == null) {
+            WindowManager wm = getWindowManager(context);
+            if (wm == null) {
+                return null;
+            }
             // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
+            //getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float uiScale = MainUIData.instance(this).getUIScale();
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+            float uiScale = MainUIData.instance(context).getUIScale();
             // Take into the account screen orientation (e.g. when running on phone)
             int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
             float widthRatio = DEFAULT_WIDTH / widthPixels;
@@ -256,26 +261,13 @@ public class MotherActivity extends FragmentActivity {
         return sCachedDisplayMetrics;
     }
 
-    private static DisplayMetrics getDisplayMetrics(Context context) {
-        // BUG: adapt to resolution change (e.g. on AFR)
-        // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
-        if (sCachedDisplayMetrics == null) {
-            // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            // getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            DisplayMetrics sourceMetrics = context.getResources().getDisplayMetrics();
-            displayMetrics.setTo(sourceMetrics);
-            float uiScale = MainUIData.instance(context).getUIScale();
-            // Take into the account screen orientation (e.g. when running on phone)
-            int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
-            float widthRatio = DEFAULT_WIDTH / widthPixels;
-            float density = DEFAULT_DENSITY / widthRatio * uiScale;
-            displayMetrics.density = density;
-            displayMetrics.scaledDensity = density;
-            sCachedDisplayMetrics = displayMetrics;
+    private static WindowManager getWindowManager(Context context) {
+        try {
+            return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        } catch (IllegalStateException e) {
+            // IllegalStateException: System services not available to Activities before onCreate()
         }
-
-        return sCachedDisplayMetrics;
+        return null;
     }
 
     private void applyCustomConfig() {
