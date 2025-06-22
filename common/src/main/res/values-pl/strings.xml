@@ -463,7 +463,7 @@
   <string name="signin_view_action_text">Gotowe</string>
   <string name="require_checked">Wymaga \"%s\"</string>
   <string name="msg_press_again_to_exit">Naciśnij ponownie, aby wyjść</string>
-  <string name="player_remaining_time">Pozostały: %s</string>
+  <string name="player_remaining_time">Pozostało: %s</string>
   <string name="player_ending_time">Kończy się o %s</string>
   <string name="badge_new_content">NOWA TREŚĆ</string>
   <string name="badge_live">NA ŻYWO</string>
@@ -565,9 +565,9 @@
   <string name="enable_master_password">Włącz hasło główne</string>
   <string name="enter_master_password">Wpisz hasło główne</string>
   <string name="disable_stream_buffer">Wyłącz buforowanie dla transmisji</string>
-  <string name="disable_stream_buffer_desc">Poprawka dla problemu opóźniających się transmisji. UWAGA: może powodować przerywanie transmisji.</string>
+  <string name="disable_stream_buffer_desc">Poprawka problemu opóźniających się transmisji. UWAGA: może powodować przerywanie transmisji.</string>
   <string name="sony_frame_drop_fix">Poprawka dla gubienia klatek #1</string>
-  <string name="sony_frame_drop_fix_desc">Poprawka dla opóźnień na telewizorach Sony i niektórych innych urządzeniach. UWAGA: możliwe problemy z synchronizacją audio.</string>
+  <string name="sony_frame_drop_fix_desc">Poprawka opóźnień na telewizorach Sony i niektórych innych urządzeniach. UWAGA: możliwe problemy z synchronizacją audio.</string>
   <string name="audio_language">Język audio</string>
   <string name="old_home_look">Poprzedni wygląd sekcji Główna</string>
   <string name="old_channel_look">Poprzedni wygląd sekcji Kanały</string>
@@ -703,4 +703,6 @@
   <string name="card_preview">Podgląd karty</string>
   <string name="search_exit_shortcut">Zamykanie wyszukiwania</string>
   <string name="card_unlocalized_titles">Oryginalne tytuły materiałów wideo</string>
+  <string name="original_lang">Oryginalny</string>
+  <string name="video_flip">Odbicie lustrzane</string>
 </resources>
