@@ -236,14 +236,35 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(getDisplayMetrics(this));
     }
 
+    private DisplayMetrics getDisplayMetrics() {
+        // BUG: adapt to resolution change (e.g. on AFR)
+        // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
+        if (sCachedDisplayMetrics == null) {
+            // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float uiScale = MainUIData.instance(this).getUIScale();
+            // Take into the account screen orientation (e.g. when running on phone)
+            int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
+            float widthRatio = DEFAULT_WIDTH / widthPixels;
+            float density = DEFAULT_DENSITY / widthRatio * uiScale;
+            displayMetrics.density = density;
+            displayMetrics.scaledDensity = density;
+            sCachedDisplayMetrics = displayMetrics;
+        }
+
+        return sCachedDisplayMetrics;
+    }
+
     private static DisplayMetrics getDisplayMetrics(Context context) {
         // BUG: adapt to resolution change (e.g. on AFR)
         // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
         if (sCachedDisplayMetrics == null) {
             // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
             DisplayMetrics displayMetrics = new DisplayMetrics();
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            wm.getDefaultDisplay().getMetrics(displayMetrics);
+            // getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            DisplayMetrics sourceMetrics = context.getResources().getDisplayMetrics();
+            displayMetrics.setTo(sourceMetrics);
             float uiScale = MainUIData.instance(context).getUIScale();
             // Take into the account screen orientation (e.g. when running on phone)
             int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
