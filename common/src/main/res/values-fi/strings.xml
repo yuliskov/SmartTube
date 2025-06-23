@@ -600,7 +600,7 @@
   <string name="prefer_avc_over_vp9_desc">Huom. max 1080P</string>
   <string name="news_row_name">Uutiset</string>
   <string name="play_next">Toista seuraava</string>
-  <string name="hide_watched_from_subscriptions">Piilota katsotut tiöauksista</string>
+  <string name="hide_watched_from_subscriptions">Piilota katsotut tilauksista</string>
   <string name="hide_unwanted_content">Piilota ei-toivottu sisältö</string>
   <string name="hide_watched_from_home">Piilota katsotut videot pääsivulta</string>
   <string name="remote_control_permission">Taustakauko-ohjaus vaatii Overlay-luvan</string>
@@ -699,4 +699,8 @@
   <string name="playback_buffering_fix">Toiston puskuroinnin korjaaminen</string>
   <string name="premium_users_only">Vain Youtube Premium-käyttäjille. Korjaa epätäydellinen videoformaattiluettelo</string>
   <string name="card_unlocalized_titles">Älä suomenna videoiden otsikoita</string>
+  <string name="original_lang">Alkuperäinen</string>
+  <string name="search_exit_shortcut">Poistu hausta</string>
+  <string name="context_menu_sorting">Kontekstivalikon järjestely</string>
+  <string name="video_flip">Peilaa</string>
 </resources>
