@@ -61,6 +61,7 @@
     <string name="dialog_remove_account">Abmelden</string>
     <string name="dialog_add_account">Anmelden</string>
     <string name="default_lang">Standard</string>
+    <string name="original_lang">Original</string>
     <string name="dialog_select_language">Sprache</string>
     <string name="subtitle_default">Standard</string>
     <string name="subtitle_white_semi_transparent">Weiß auf halbtransparentem Hintergrund</string>
