@@ -701,4 +701,5 @@
   <string name="card_preview_muted">Video không có âm thanh</string>
   <string name="card_preview_full">Video có âm thanh</string>
   <string name="card_preview">Xem trước thẻ</string>
+  <string name="original_lang">Nguyên bản</string>
 </resources>
