@@ -6,7 +6,6 @@ import android.util.DisplayMetrics;
 import android.util.Pair;
 
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
@@ -15,7 +14,7 @@ import java.util.Map;
 
 public class GridFragmentHelper {
     private static final Map<Integer, Pair<Integer, Integer>> sCardDimensPx = new HashMap<>();
-    private static final Map<Integer, Integer> sMaxColsNum = new HashMap<>();
+    private static final Map<Integer, Float> sMaxColsNum = new HashMap<>();
     private static final Runnable sInvalidate = GridFragmentHelper::invalidate;
 
     private static void invalidate() {
@@ -34,7 +33,11 @@ public class GridFragmentHelper {
      * Max number of cards that could fit horizontally
      */
     public static int getMaxColsNum(Context context, int cardWidthResId, float cardScale) {
-        Integer maxColsNum = sMaxColsNum.get(cardWidthResId);
+        return (int) getMaxColsNumFloat(context, cardWidthResId, cardScale);
+    }
+
+    private static float getMaxColsNumFloat(Context context, int cardWidthResId, float cardScale) {
+        Float maxColsNum = sMaxColsNum.get(cardWidthResId);
 
         if (maxColsNum != null) {
             return maxColsNum;
@@ -42,21 +45,18 @@ public class GridFragmentHelper {
 
         ViewManager.instance(context).addOnFinish(sInvalidate);
 
-        maxColsNum = (int) getMaxColsNumFloat(context, cardWidthResId, cardScale);
+        maxColsNum = getMaxColsNumFloatInt(context, cardWidthResId, cardScale);
 
         sMaxColsNum.put(cardWidthResId, maxColsNum);
 
         return maxColsNum;
     }
 
-    private static float getMaxColsNumFloat(Context context, int cardWidthResId, float cardScale) {
+    private static float getMaxColsNumFloatInt(Context context, int cardWidthResId, float cardScale) {
         float uiScale = MainUIData.instance(context).getUIScale();
 
         Resources res = context.getResources();
-
-        // Fixes when metrics applied with a delay?
-        DisplayMetrics displayMetrics = MotherActivity.getCachedDisplayMetrics() != null ?
-                MotherActivity.getCachedDisplayMetrics() : res.getDisplayMetrics();
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
 
         // Take into the account screen orientation (e.g. when running on phone)
         int displayWidthPx = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);

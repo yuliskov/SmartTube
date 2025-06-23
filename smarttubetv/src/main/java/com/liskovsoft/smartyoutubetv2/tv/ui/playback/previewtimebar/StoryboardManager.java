@@ -58,7 +58,7 @@ public class StoryboardManager {
 
         RxHelper.disposeActions(mFormatAction);
 
-        if (video == null || video.isLive || video.isUpcoming) {
+        if (video == null || video.isUpcoming) {
             return;
         }
 
@@ -87,7 +87,7 @@ public class StoryboardManager {
 
         long frameDurationMS = getFrameDurationMsAlt();
 
-        if (frameDurationMS <= 1_000) {
+        if (frameDurationMS <= 100) {
             return;
         }
 
