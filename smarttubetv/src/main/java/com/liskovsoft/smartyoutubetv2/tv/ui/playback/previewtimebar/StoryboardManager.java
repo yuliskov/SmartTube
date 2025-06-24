@@ -109,7 +109,7 @@ public class StoryboardManager {
 
         Size groupSize = mStoryboard.getGroupSize();
 
-        return mStoryboard.getGroupDurationMS() / (groupSize.getRowCount() * groupSize.getColCount());
+        return mStoryboard.getGroupDurationMS() / ((long) groupSize.getRowCount() * groupSize.getColCount());
     }
 
     public long[] getSeekPositions() {
