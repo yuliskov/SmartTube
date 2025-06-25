@@ -110,7 +110,7 @@
   <string name="option_background_playback_behind">Reproducir de fondo</string>
   <string name="next_video_info_is_not_loaded_yet">A información do seguinte vídeo aínda non está cargada</string>
   <string name="card_multiline_title">Títulos multiliña</string>
-  <string name="cards_style">Estilo de tarxetas</string>
+  <string name="cards_style">Estilo das miniaturas</string>
   <string name="repeat_mode_all">Reproduce vídeos continuamente</string>
   <string name="repeat_mode_one">Repite o vídeo actual</string>
   <string name="repeat_mode_pause">Pausa a reprodución despois de cada vídeo</string>
@@ -129,7 +129,7 @@
   <string name="sorting_last_viewed">Derradeira visualización</string>
   <string name="player_pause_when_seek">Pausa ao buscar</string>
   <string name="playlists_style">Estilo de sección de listas de reprodución</string>
-  <string name="playlists_style_grid">Reixa</string>
+  <string name="playlists_style_grid">Grade</string>
   <string name="playlists_style_rows">Filas</string>
   <string name="player_show_clock">Amosa o reloxo na barra de controis</string>
   <string name="player_show_remaining_time">Amosa o tempo restante na barra de controis</string>
@@ -155,7 +155,7 @@
   <string name="player_seek_preview_carousel_slow">Carrusel (lento, por fotogramas clave)</string>
   <string name="player_seek_preview_carousel_fast">Carrusel (rápido, non precisa vista previa)</string>
   <string name="unsubscribe_from_channel">Cancelar a subscrición da canle</string>
-  <string name="card_title_lines_num">Título da tarxeta núm de liñas</string>
+  <string name="card_title_lines_num">Título da miniatura núm de liñas</string>
   <string name="card_auto_scrolled_title">Título recortado con desprazamento automático</string>
   <string name="share_link">Compartir ligazón</string>
   <string name="share_qr_link">Compartir ligazón (código QR)</string>
@@ -239,7 +239,7 @@
   <string name="dialog_select_country">País</string>
   <string name="settings_language_country">Lingua/País</string>
   <string name="share_embed_link">Compartir ligazón para inserir</string>
-  <string name="card_text_scroll_factor">velocidade de desprazamento do texto da tarxeta</string>
+  <string name="card_text_scroll_factor">velocidade de desprazamento do texto da miniatura</string>
   <string name="preferred_update_source">escolle a fonte de actualización</string>
   <string name="hide_shorts">Ocultar curtas das subscricións</string>
   <string name="hide_shorts_channel">Ocultar curtas dunha canle</string>
@@ -502,7 +502,7 @@
   <string name="chat_left">Esquerda</string>
   <string name="chat_right">Dereita</string>
   <string name="card_real_thumbnails">Substitúe as miniaturas por un fotograma do vídeo</string>
-  <string name="card_content">Onde coller as miniaturas das tarxetas</string>
+  <string name="card_content">Onde obter as miniaturas</string>
   <string name="thumb_quality_default">Por defecto</string>
   <string name="thumb_quality_start">Inicio do vídeo</string>
   <string name="thumb_quality_middle">Medio do vídeo</string>
@@ -557,7 +557,7 @@
   <string name="alt_app_icon">Icona da aplicación alternativa (necesita reiniciar)</string>
   <string name="network_stack">Prefire a pila de rede %s</string>
   <string name="player_network_stack">Motor de rede</string>
-  <string name="cronet_desc">Cronet é a pila de rede de Chromium. Cronet pode reducir a latencia e aumentar o rendemento da rede, o que pode axudar cos problemas de almacenamento na memoria intermedia.</string>
+  <string name="cronet_desc">Cronet é Conxunto de protocolos de rede de Chromium. Cronet pode reducir a latencia e aumentar o rendemento da rede, o que pode axudar cos problemas de almacenamento na memoria intermedia.</string>
   <string name="unlock_all_formats">Desbloquear todos os formatos de vídeo</string>
   <string name="unlock_all_formats_desc">Nalgúns dispositivos, o firmware indica incorrectamente que algúns formatos non son compatibles, aínda que o sexan.\n(por exemplo, os televisores intelixentes de 1080p adoitan indicar que 4k non son compatibles).</string>
   <string name="okhttp_desc">Este motor de rede é o máis lento pero ten unha boa estabilidade.</string>
@@ -638,7 +638,7 @@
   <string name="channel_filter_hint">Filtrar canles</string>
   <string name="player_loop_shorts">Repetir Curtos en bucle</string>
   <string name="player_quick_shorts_skip">Saltar curtos con botóns esquerdo/dereito</string>
-  <string name="player_quick_skip_videos">Omita vídeos normais cos botóns esquerda/dereita</string>
+  <string name="player_quick_skip_videos">Saltar vídeos normais cos botóns esquerda/dereita</string>
   <string name="channels_filter">Amosar o campo de filtro de canles dentro da sección de Canles</string>
   <string name="channel_search_bar">Barra de busca dentro da páxina da canle</string>
   <string name="header_sports">Deportes</string>
@@ -692,4 +692,17 @@
   <string name="lb_playback_controls_closed_captioning_disable">Desactivar os subtítulos</string>
   <string name="lb_playback_controls_closed_captioning_enable">Activar os subtítulos</string>
   <string name="my_videos">Os meus vídeos</string>
+  <string name="player_audio_focus">Foco de son (pausar se se detectan outros reprodutores)</string>
+  <string name="paid_content_notification">Notificación de contido de pago</string>
+  <string name="you_liked">Gustouche</string>
+  <string name="premium_users_only">Só para usuarios Premium. Corrección para lista de formatos de vídeo incompleta</string>
+  <string name="playback_buffering_fix">Corrección do búfer de reprodución</string>
+  <string name="oculus_quest_fix">Corrección para Oculus Quest</string>
+  <string name="card_preview_muted">Vídeo sen son</string>
+  <string name="card_preview_full">Vídeo con son</string>
+  <string name="card_preview">Previsualización das miniaturas</string>
+  <string name="card_unlocalized_titles">Títulos de vídeo sen traducir</string>
+  <string name="search_exit_shortcut">Saír da busca</string>
+  <string name="video_flip">Volteo (espello)</string>
+  <string name="original_lang">Orixinal</string>
 </resources>
