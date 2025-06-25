@@ -136,7 +136,8 @@ public class MotherActivity extends FragmentActivity {
 
         try {
             return super.dispatchKeyEvent(event);
-        } catch (IllegalArgumentException | IllegalStateException | SecurityException | UnavailableException e) {
+        } catch (NullPointerException | IllegalArgumentException | IllegalStateException | SecurityException | UnavailableException e) {
+            // NullPointerException: 'android.view.Window androidx.core.app.ComponentActivity.getWindow()' on a null object reference
             // IllegalArgumentException: View is not a direct child of HorizontalGridView
             // Fatal Exception: java.lang.IllegalStateException
             // android.permission.RECORD_AUDIO required for search (Android 5 mostly)
