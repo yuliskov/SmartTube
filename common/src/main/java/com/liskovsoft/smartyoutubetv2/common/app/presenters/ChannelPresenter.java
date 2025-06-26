@@ -356,15 +356,17 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                             //dialogPresenter.closeDialog();
                             Observable<MediaGroup> continuation = getContentService().continueGroupObserve(group);
                             Disposable result2 = continuation.subscribe(mediaGroup -> {
-                                if (getView() != null) {
-                                    VideoGroup replace = VideoGroup.from(mediaGroup);
-                                    replace.setId(144);
-                                    replace.setPosition(0);
-                                    replace.setAction(VideoGroup.ACTION_REPLACE);
-                                    getView().update(replace);
-                                    //getView().setPosition(1);
-                                    mSortIdx = tempIdx;
+                                if (getView() == null) {
+                                    return;
                                 }
+
+                                VideoGroup replace = VideoGroup.from(mediaGroup);
+                                replace.setId(144);
+                                replace.setPosition(0);
+                                replace.setAction(VideoGroup.ACTION_REPLACE);
+                                getView().update(replace);
+                                //getView().setPosition(1);
+                                mSortIdx = tempIdx;
                             });
                         }, mSortIdx == idx));
                         idx++;
@@ -379,6 +381,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         Observable<MediaGroup> search = getContentService().getChannelSearchObserve(getChannelId(), query);
         Disposable result = search.subscribe(
                 items -> {
+                    if (getView() == null) {
+                        return;
+                    }
+
                     VideoGroup update = VideoGroup.from(items);
 
                     if (update.isEmpty()) {
