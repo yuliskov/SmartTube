@@ -541,7 +541,8 @@ public class VideoLoaderController extends BasePlayerController {
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
         } else if (Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 400")) {
-            YouTubeServiceManager.instance().applyAntiBotFix();
+            //YouTubeServiceManager.instance().applyAntiBotFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
             // NOTE: Fixing too many requests or network issues
@@ -550,7 +551,8 @@ public class VideoLoaderController extends BasePlayerController {
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
-            YouTubeServiceManager.instance().applyAntiBotFix();
+            //YouTubeServiceManager.instance().applyAntiBotFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 500"
