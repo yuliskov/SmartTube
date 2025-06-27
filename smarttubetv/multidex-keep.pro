@@ -1,3 +1,5 @@
+-keep class com.google.gson.internal.bind.TypeAdapters$7 { *; }
+-keep class com.google.gson.internal.bind.TypeAdapters { *; }
 -keep class androidx.leanback.widget.ItemAlignmentFacet$ItemAlignmentDef { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory { *; }
