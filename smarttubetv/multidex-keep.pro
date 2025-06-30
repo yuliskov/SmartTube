@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController { *; }
 -keep class io.reactivex.internal.operators.observable.ObservableDelaySubscriptionOther { *; }
 -keep class com.google.gson.internal.bind.TypeAdapters$7 { *; }
 -keep class com.google.gson.internal.bind.TypeAdapters { *; }
