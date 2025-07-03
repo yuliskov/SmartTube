@@ -86,7 +86,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
         mActions = new ArrayList<>();
 
-        initSections();
+        initSectionMappings();
+        updateChannelSorting();
+        updatePlaylistsStyle();
+        initPinnedData();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -111,9 +114,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        updateChannelSorting();
-        updatePlaylistsStyle();
-        updateSections();
+        refreshSections();
 
         // Move default focus
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : mBootstrapSectionId);
@@ -166,7 +167,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
-    private void initSections() {
+    private void initSectionMappings() {
         initSectionMapping();
 
         initSectionCallbacks();
@@ -260,6 +261,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        initPinnedData();
+
+        refreshSections();
+    }
+
+    private void refreshSections() {
+        if (getView() == null) {
+            return;
+        }
+
+        // clean up (profile changed etc)
+        getView().removeAllSections();
+
         int bootSectionId = getSidebarService().getBootSectionId();
 
         // Empty Home on first run fix. Switch Trending temporarily.
@@ -267,13 +281,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             bootSectionId = MediaGroup.TYPE_TRENDING;
             //getSidebarService().enableSection(bootSectionId, true);
         }
-
-        // clean up (profile changed etc)
-        getView().removeAllSections();
-
-        initPinnedSections();
-        initPinnedCallbacks();
-        initPasswordSection();
 
         int index = 0;
 
@@ -299,6 +306,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         // Refresh and restore last focus
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
+    }
+
+    private void initPinnedData() {
+        initPinnedSections();
+        initPinnedCallbacks();
+        initPasswordSection();
     }
 
     private void sortSections() {
@@ -1060,6 +1073,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        initSectionMappings();
+        updateChannelSorting();
+        updatePlaylistsStyle();
         updateSections();
     }
 

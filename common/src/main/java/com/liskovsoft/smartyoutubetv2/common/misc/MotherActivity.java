@@ -174,7 +174,8 @@ public class MotherActivity extends FragmentActivity {
         Context contextWrapper = null;
 
         if (context != null) {
-            contextWrapper = LocaleContextWrapper.wrap(context, LocaleUpdater.getSavedLocale(context));
+            // NOTE: Use only cached metrics. Because metrics creation involves using WindowManager, which isn't available at this stage.
+            contextWrapper = LocaleContextWrapper.wrap(context, LocaleUpdater.getSavedLocale(context), sCachedDisplayMetrics);
         }
 
         super.attachBaseContext(contextWrapper);
@@ -212,14 +213,6 @@ public class MotherActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
 
         applyCustomConfig();
-
-        // Refresh metrics for new config (orientation, screen size, etc.)
-        //sCachedDisplayMetrics = null;
-        //
-        //DisplayMetrics updatedMetrics = getCustomDisplayMetrics(this);
-        //newConfig.densityDpi = (int)(updatedMetrics.density * 160);
-        //
-        //applyOverrideConfiguration(newConfig);
     }
 
     public ScreensaverManager getScreensaverManager() {
@@ -237,18 +230,13 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(getDisplayMetrics(this));
     }
 
-    private static DisplayMetrics getDisplayMetrics(Context context) {
+    private DisplayMetrics getDisplayMetrics(Context context) {
         // BUG: adapt to resolution change (e.g. on AFR)
         // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
         if (sCachedDisplayMetrics == null) {
-            WindowManager wm = getWindowManager(context);
-            if (wm == null) {
-                return null;
-            }
             // NOTE: Don't replace with getResources().getDisplayMetrics(). Shows wrong metrics here!
-            //getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             DisplayMetrics displayMetrics = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(displayMetrics);
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             float uiScale = MainUIData.instance(context).getUIScale();
             // Take into the account screen orientation (e.g. when running on phone)
             int widthPixels = Math.max(displayMetrics.widthPixels, displayMetrics.heightPixels);
@@ -260,15 +248,6 @@ public class MotherActivity extends FragmentActivity {
         }
 
         return sCachedDisplayMetrics;
-    }
-
-    private static WindowManager getWindowManager(Context context) {
-        try {
-            return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        } catch (IllegalStateException e) {
-            // IllegalStateException: System services not available to Activities before onCreate()
-        }
-        return null;
     }
 
     private void applyCustomConfig() {
