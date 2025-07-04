@@ -337,7 +337,7 @@ Yes... maybe.. Requirements:
 - it is an Android device
 - it has a large screen
 - it has a TV remote, controller, or keyboard
-  **Touch input and is not supported.** Mouse/touchpad scrolling neither. You cannot properly use SmartTube with only touch or mouse input.
+  **Touch input is not supported.** Mouse/touchpad scrolling neither. You cannot properly use SmartTube with only touch or mouse input.
 
 Some users reported great success (incl. on a [car entertainment system](https://t.me/SmartTubeEN/6060)). **Please share your success stories with us.**
 
