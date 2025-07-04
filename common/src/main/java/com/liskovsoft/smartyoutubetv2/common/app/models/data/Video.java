@@ -666,6 +666,10 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_NOTIFICATIONS);
     }
 
+    public boolean belongsToSuggestions() {
+        return belongsToGroup(MediaGroup.TYPE_SUGGESTIONS);
+    }
+
     private boolean belongsToGroup(int groupId) {
         return getGroup() != null && getGroup().getType() == groupId;
     }
@@ -883,7 +887,7 @@ public final class Video {
     }
 
     public boolean isSectionPlaylistEnabled(Context context) {
-        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null &&
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null && !belongsToSuggestions() &&
                 (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || forceSectionPlaylist ||
                         (!isMix() && !belongsToSamePlaylistGroup())) && // skip hidden playlists (music videos usually)
                     (!isRemote || remotePlaylistId == null);
