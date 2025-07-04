@@ -61,6 +61,7 @@
     <string name="dialog_remove_account">Odstrániť účet</string>
     <string name="dialog_add_account">Pridať účet</string>
     <string name="default_lang">Predvolené</string>
+    <string name="original_lang">Originálny</string>
     <string name="dialog_select_language">Jazyk</string>
     <string name="subtitle_default">Predvolené</string>
     <string name="subtitle_white_semi_transparent">Polopriehľadné pozadie</string>
@@ -140,6 +141,7 @@
     <string name="open_channel_uploads">Otvoriť videá v kanáli</string>
     <string name="app_exit_shortcut">Vypnúť aplikáciu</string>
     <string name="player_exit_shortcut">Vypnúť prehrávač</string>
+    <string name="search_exit_shortcut">Vypnúť vyhľadávanie</string>
     <string name="app_exit_none">Nevypínať</string>
     <string name="app_double_back_exit">2x tlačidlo Späť</string>
     <string name="app_single_back_exit">1x tlačidlo Späť</string>
@@ -600,7 +602,7 @@
     <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
     <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
     <string name="player_chapter_notification">Rýchlejšie presúvanie cez kapitoly pomocou notifikácií</string>
-    <string name="subtitle_remember">Zapamätať si povolené titulky pre každý kanál</string>
+    <string name="subtitle_remember">Povoliť titulky iba na aktuálnom kanáli</string>
     <string name="amazon_frame_drop_fix">Oprava výpadkov prehrávania #2</string>
     <string name="amazon_frame_drop_fix_desc">Určené pre zariadenia Amazon Stick. Môže fungovať aj na iných zariadeniach.</string>
     <string name="default_stack_desc">Predvolený sieťový mechanizmus. Tento mechanizmus môže mať v určitých situáciách lepšiu stabilitu.</string>
@@ -635,7 +637,7 @@
     <string name="play_next">Prehrať ďalšie</string>
     <string name="hide_watched_from_subscriptions">Skryť videné videá v Odberoch</string>
     <string name="hide_watched_from_notifications">Skryť videné videá v Notifikáciách</string>
-    <string name="hide_unwanted_content">Skryť nežiaduci obsah</string>
+    <string name="hide_unwanted_content">Skryť videá</string>
     <string name="hide_watched_from_home">Skryť videné videá v Domov</string>
     <string name="hide_watched_from_watch_later">Skryť videné videá zo zoznamu Pozrieť neskôr</string>
     <string name="remote_control_permission">Diaľkové ovládanie na pozadí vyžaduje povolenie na prekrytie cez okná</string>
@@ -677,7 +679,7 @@
     <string name="calm_msg">Pracujeme na oprave oproblému. Pravidelne kontrolujte aktualizácie.</string>
     <string name="without_picture">Bez obrazu</string>
     <string name="video_disabled">Video zakázané</string>
-    <string name="applying_fix">Nezatvárajte prehrávač. Aplikuje sa oprava...</string>
+    <string name="applying_fix">Nezatvárajte prehrávač. Aplikuje sa oprava…</string>
     <string name="hide_mixes">Skryť mixy</string>
     <string name="player_global_focus_desc">Táto funkcia ovplyvňuje, ktoré tlačidlo prehrávača bude aktívne pri prechádzaní medzi riadkami tlačidiel prehrávača</string>
     <string name="disable_network_error_fixing">Zakázať automatickú opravu chýb siete</string>
@@ -695,4 +697,12 @@
     <string name="my_videos">Moje videá</string>
     <string name="player_audio_focus">Zameranie zvuku (pozastaviť ak boli detekované iné prehrávače)</string>
     <string name="paid_content_notification">Upozornenie na platený obsah</string>
+    <string name="you_liked">páči sa ti</string>
+    <string name="premium_users_only">Iba pre prémium používateľov. Oprava neúplného zoznamu video formátov</string>
+    <string name="playback_buffering_fix">Oprava načítavania videa</string>
+    <string name="oculus_quest_fix">Oprava pre Oculus Quest</string>
+    <string name="card_preview_muted">Video bez zvuku</string>
+    <string name="card_preview_full">Video so zvukom</string>
+    <string name="card_preview">Náhľad karty</string>
+    <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
 </resources>
