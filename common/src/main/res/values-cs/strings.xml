@@ -61,6 +61,7 @@
     <string name="dialog_remove_account">Odstranit účet</string>
     <string name="dialog_add_account">Přidat účet</string>
     <string name="default_lang">Výchozí</string>
+    <string name="original_lang">Originál</string>
     <string name="dialog_select_language">Jazyk aplikace</string>
     <string name="subtitle_default">Výchozí</string>
     <string name="subtitle_white_semi_transparent">Poloprůhledné pozadí</string>
