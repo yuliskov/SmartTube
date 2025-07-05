@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyCharacterMap.UnavailableException;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -163,7 +163,11 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            super.finish();
+            if (VERSION.SDK_INT >= 21) {
+                super.finishAndRemoveTask();
+            } else {
+                super.finish();
+            }
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
