@@ -98,7 +98,7 @@ public class AppDialogActivity extends MotherActivity {
 
     @Override
     public void finish() {
-        super.finish();
+        super.finishReally();
 
         // NOTE: Fragment's onDestroy/onDestroyView are not reliable way to catch dialog finish
         Log.d(TAG, "Dialog finish");
