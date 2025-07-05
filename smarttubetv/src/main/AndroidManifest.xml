@@ -162,17 +162,7 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="unspecified"/>
 
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
-            android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:supportsPictureInPicture="true"
-            android:resizeableActivity="true"
-            android:screenOrientation="unspecified"
-            android:showWhenLocked="true"
-            android:theme="@style/App.Theme.Leanback.Player"/>
-
-        <!--
+        <!-- Remove to fix Sony wake up bug? android:turnScreenOn="true" -->
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
@@ -182,10 +172,7 @@
             android:resizeableActivity="true"
             android:screenOrientation="unspecified"
             android:showWhenLocked="true"
-            android:turnScreenOn="true"
             android:theme="@style/App.Theme.Leanback.Player"/>
-
-        -->
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity"
