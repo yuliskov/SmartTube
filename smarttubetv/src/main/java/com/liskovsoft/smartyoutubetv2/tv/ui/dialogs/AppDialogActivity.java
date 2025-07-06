@@ -98,13 +98,14 @@ public class AppDialogActivity extends MotherActivity {
 
     @Override
     public void finish() {
-        super.finishReally();
-
         // NOTE: Fragment's onDestroy/onDestroyView are not reliable way to catch dialog finish
         Log.d(TAG, "Dialog finish");
         if (mFragment != null) { // fragment isn't created yet (expandable = true)
             mFragment.onFinish();
         }
+
+        // Destroy dialog when BACK is pressed. NoHistory isn't reliable if combined with singleInstance
+        finishReally();
     }
 
     @Override
@@ -115,5 +116,8 @@ public class AppDialogActivity extends MotherActivity {
         if (ViewManager.instance(this).getTopView() == PlaybackView.class && PlaybackPresenter.instance(this).getContext() instanceof PlaybackActivity) {
             ((PlaybackActivity) PlaybackPresenter.instance(this).getContext()).onUserLeaveHint();
         }
+
+        // Destroy dialog when Home is pressed. NoHistory isn't reliable if combined with singleInstance
+        finishReally();
     }
 }
