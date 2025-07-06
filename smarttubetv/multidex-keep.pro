@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
 -keep class androidx.leanback.app.BrowseSupportFragment { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController { *; }
 -keep class io.reactivex.internal.operators.observable.ObservableDelaySubscriptionOther { *; }
