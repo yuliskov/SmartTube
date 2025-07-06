@@ -38,6 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -1125,6 +1126,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 errorFragmentData = new CategoryEmptyError(getContext(), null);
             } else {
                 errorFragmentData = new SignInError(getContext());
+            }
+
+            // TODO: should we find a better place e.g. RetrofitHelper
+            // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
+            if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
+                if (!PlayerTweaksData.instance(getContext()).isIPv4DnsPreferred()) {
+                    PlayerTweaksData.instance(getContext()).preferIPv4Dns(true);
+                    // Restart app to reinit okhttp internal objects
+                    Utils.restartTheApp(getContext());
+                }
             }
 
             getView().showError(errorFragmentData);

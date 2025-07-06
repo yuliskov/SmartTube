@@ -350,6 +350,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void appendSuggestions(Video video, MediaItemMetadata mediaItemMetadata) {
+        if (video == null || getPlayer() == null) {
+            return;
+        }
+
         if (!video.isRemote && getPlayer().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
             return;
@@ -391,10 +395,6 @@ public class SuggestionsController extends BasePlayerController {
                 if (Helpers.equals(videoGroup.getTitle(), " ")) {
                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
                 }
-
-                //if (groupIndex == 0) {
-                //    mergeRemoteAndUserQueueIfNeeded(video, videoGroup);
-                //}
 
                 getPlayer().updateSuggestions(videoGroup);
                 mBrowseProcessor.process(videoGroup);
