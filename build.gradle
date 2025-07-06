@@ -36,6 +36,7 @@ allprojects {
         // IntelliJ 'Read timed out' (error 403)
         // https://stackoverflow.com/questions/74258160/is-jcenter-down-permanently-31-oct
         //jcenter()
+        gradle.ext.customRepoBlock()
     }
     configurations.all {
         // WorkManager conflict resolution
