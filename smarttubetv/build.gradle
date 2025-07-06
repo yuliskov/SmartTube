@@ -241,3 +241,5 @@ dependencies {
 
     implementation 'net.gotev:speech:' + gotevSpeechVersion
 }
+
+apply from: 'custom-deps.gradle'
