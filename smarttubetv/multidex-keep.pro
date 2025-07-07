@@ -1,4 +1,11 @@
--keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
+#-keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
+    boolean containsMedia();
+    <init>(...);
+}
+-keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
+    void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
+}
 -keep class androidx.leanback.app.BrowseSupportFragment { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController { *; }
 -keep class io.reactivex.internal.operators.observable.ObservableDelaySubscriptionOther { *; }

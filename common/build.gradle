@@ -113,3 +113,5 @@ dependencies {
     stamazonImplementation project(':appupdatechecker2')
     staptoideImplementation project(':appupdatechecker2')
 }
+
+apply from: 'custom-deps.gradle'

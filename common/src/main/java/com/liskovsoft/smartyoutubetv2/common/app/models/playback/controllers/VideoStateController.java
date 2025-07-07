@@ -569,6 +569,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreVolume() {
+        if (getVideo() == null || getPlayer() == null) {
+            return;
+        }
+
         float newVolume = getPlayerData().getPlayerVolume();
 
         if (getPlayerTweaksData().isPlayerAutoVolumeEnabled()) {
@@ -587,6 +591,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restorePitch() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().setPitch(getPlayerData().getPitch());
     }
 
