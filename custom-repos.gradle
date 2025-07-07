@@ -1,3 +1,3 @@
-gradle.ext.customRepoBlock = {
-    
+ext.customRepoBlock = { repoHandler ->
+
 }
