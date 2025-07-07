@@ -136,7 +136,8 @@ android {
         staptoide {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.liskovsoft.videomanager"
+            //applicationId "com.liskovsoft.videomanager"
+            applicationId "com.teamsmart.videomanager.tv"
         }
     }
 
