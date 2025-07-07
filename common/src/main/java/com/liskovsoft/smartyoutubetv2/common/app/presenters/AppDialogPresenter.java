@@ -57,13 +57,19 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         super.onFinish();
         clear();
 
-        for (Runnable callback : mOnFinish) {
+        if (mOnFinish.isEmpty()) {
+            return;
+        }
+
+        // Copy-then-Clear approach to fix possible stackoverflow
+        List<Runnable> callbacks = new ArrayList<>(mOnFinish);
+        mOnFinish.clear();
+
+        for (Runnable callback : callbacks) {
             if (callback != null) {
                 callback.run();
             }
         }
-
-        mOnFinish.clear();
     }
 
     private void clear() {
