@@ -1,4 +1,4 @@
--keep class androidx.leanback.widget.ItemBridgeAdapter
+-keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
 #-keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
     boolean containsMedia();
