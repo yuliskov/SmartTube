@@ -1,3 +1,7 @@
+-keepclassmembers class android.view.View {
+    void setZ(float);
+    <init>(...);
+}
 -keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
 #-keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
