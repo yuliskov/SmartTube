@@ -693,4 +693,15 @@
   <string name="my_videos">Mis vídeos</string>
   <string name="player_audio_focus">Enfoque de audio (se pausa si detecta otros reproductores)</string>
   <string name="paid_content_notification">Notificación de contenido de pago</string>
+  <string name="you_liked">te gustó</string>
+  <string name="premium_users_only">Sólo usuarios Premium. Corrección para la lista incompleta de formatos de vídeo</string>
+  <string name="playback_buffering_fix">Corrección del buffer de reproducción</string>
+  <string name="oculus_quest_fix">Correción del Oculus Quest</string>
+  <string name="card_preview_muted">Vídeo sin sonido</string>
+  <string name="card_preview_full">Vídeo con sonido</string>
+  <string name="card_preview">Vista previa de la tarjeta</string>
+  <string name="card_unlocalized_titles">Títulos de vídeo sin traducir</string>
+  <string name="context_menu_sorting">Ordenar el menú contextual</string>
+  <string name="search_exit_shortcut">Salir del buscador</string>
+  <string name="original_lang">Original</string>
 </resources>
