@@ -13,7 +13,6 @@
     <item name="action_pip" type="id"/>
     <item name="action_info" type="id"/>
     <item name="action_share" type="id"/>
-    <item name="action_screen_off" type="id"/>
     <item name="action_sound_off" type="id"/>
     <item name="action_chat" type="id"/>
     <item name="action_playback_queue" type="id"/>
@@ -21,7 +20,7 @@
     <item name="action_content_block" type="id"/>
     <item name="action_rotate" type="id"/>
     <item name="action_flip" type="id"/>
-    <item name="action_screen_off_timeout" type="id"/>
+    <item name="action_screen_dimming" type="id"/>
     <item name="action_afr" type="id"/>
     <item name="channel_new_content" type="id"/>
     <item name="linkify_click_handler" type="id"/>

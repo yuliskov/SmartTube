@@ -660,7 +660,7 @@ public class AppDialogUtil {
                     playerTweaksData.getScreenOffDimmingPercents() == dimPercents));
         }
 
-        String title = context.getString(R.string.player_screen_off_dimming);
+        String title = context.getString(R.string.screen_dimming_amount);
 
         return OptionCategory.from(PLAYER_SCREEN_DIMMING_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
@@ -694,7 +694,7 @@ public class AppDialogUtil {
                     playerTweaksData.getScreenOffTimeoutSec() == timeoutSec));
         }
 
-        String title = context.getString(R.string.player_screen_off_timeout);
+        String title = context.getString(R.string.screen_dimming_timeout);
 
         return OptionCategory.from(PLAYER_SCREEN_TIMEOUT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }

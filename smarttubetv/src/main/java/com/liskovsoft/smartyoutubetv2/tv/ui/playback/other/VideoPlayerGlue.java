@@ -36,7 +36,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.FlipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RotateAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenOffTimeoutAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenDimmingAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SoundOffAction;
@@ -45,7 +45,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackModeAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenOffAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.TwoStateAction;
@@ -94,7 +93,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final SearchAction mSearchAction;
     private final VideoZoomAction mVideoZoomAction;
     private final PipAction mPipAction;
-    private final ScreenOffAction mScreenOffAction;
     private final PlaybackQueueAction mPlaybackQueueAction;
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
@@ -133,7 +131,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mSearchAction = new SearchAction(context);
         mVideoZoomAction = new VideoZoomAction(context);
         mPipAction = new PipAction(context);
-        mScreenOffAction = new ScreenOffAction(context);
         mPlaybackQueueAction = new PlaybackQueueAction(context);
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
@@ -142,8 +139,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new RotateAction(context));
         putAction(new FlipAction(context));
         putAction(new ContentBlockAction(context));
-        putAction(new ScreenOffAction(context));
-        putAction(new ScreenOffTimeoutAction(context));
+        putAction(new ScreenDimmingAction(context));
         putAction(new SubscribeAction(context));
         putAction(new SoundOffAction(context));
         putAction(new AFRAction(context));
@@ -179,11 +175,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PIP)) {
             adapter.add(mPipAction);
         }
-        //if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
-        //    adapter.add(mActions.get(R.id.action_screen_off));
-        //}
-        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF_TIMEOUT)) {
-            adapter.add(mActions.get(R.id.action_screen_off_timeout));
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_DIMMING)) {
+            adapter.add(mActions.get(R.id.action_screen_dimming));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CHAT)) {
             adapter.add(mActions.get(R.id.action_chat));

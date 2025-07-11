@@ -539,7 +539,7 @@ public class PlayerUIController extends BasePlayerController {
             onRotate();
         } else if (buttonId == R.id.action_flip) {
             onFlip();
-        } else if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
+        } else if (buttonId == R.id.action_screen_dimming) {
             prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
@@ -560,7 +560,7 @@ public class PlayerUIController extends BasePlayerController {
     public void onButtonLongClicked(int buttonId, int buttonState) {
         fitVideoIntoDialog();
 
-        if (buttonId == R.id.action_screen_off || buttonId == R.id.action_screen_off_timeout) {
+        if (buttonId == R.id.action_screen_dimming) {
             showScreenOffDialog();
         } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
             showNotificationsDialog(buttonState);
@@ -833,17 +833,19 @@ public class PlayerUIController extends BasePlayerController {
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 manager.doScreenOff();
                 manager.setBlocked(isPartialDimming);
-                getPlayer().setButtonState(R.id.action_screen_off, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-                getPlayer().setButtonState(R.id.action_screen_off_timeout, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                getPlayer().setButtonState(R.id.action_screen_dimming, isPartialDimming ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             }
         }
     }
 
     private void applyScreenOffTimeout(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayerTweaksData().getScreenOffTimeoutSec() > 0) {
             getPlayerTweaksData().enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
-            getPlayer().setButtonState(R.id.action_screen_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-            getPlayer().setButtonState(R.id.action_screen_off_timeout, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            getPlayer().setButtonState(R.id.action_screen_dimming, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
@@ -860,11 +862,14 @@ public class PlayerUIController extends BasePlayerController {
 
         manager.setBlocked(false);
         manager.disable();
-        getPlayer().setButtonState(R.id.action_screen_off, PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_screen_off_timeout, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_screen_dimming, PlayerUI.BUTTON_OFF);
     }
 
     private void onRotate() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         int oldRotation = getPlayerData().getRotationAngle();
         int rotation = oldRotation == 0 ? 90 : oldRotation == 90 ? 180 : oldRotation == 180 ? 270 : 0;
         getPlayer().setRotationAngle(rotation);
@@ -873,6 +878,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onFlip() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         boolean flipEnabled = getPlayerData().isVideoFlipEnabled();
         boolean newFlipEnabled = !flipEnabled;
         getPlayer().setVideoFlipEnabled(newFlipEnabled);
@@ -1009,7 +1018,7 @@ public class PlayerUIController extends BasePlayerController {
                 });
         settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);
         settingsPresenter.appendRadioCategory(category.title, category.options);
-        settingsPresenter.showDialog(getContext().getString(R.string.action_screen_off));
+        settingsPresenter.showDialog(getContext().getString(R.string.screen_dimming));
     }
 
     private void showSoundOffDialog() {

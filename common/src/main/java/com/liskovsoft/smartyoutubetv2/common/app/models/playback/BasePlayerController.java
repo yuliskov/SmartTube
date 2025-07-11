@@ -40,7 +40,8 @@ public abstract class BasePlayerController implements PlayerEventListener {
     private PlaybackPresenter mMainController;
     private Context mContext;
     private final Runnable mFitVideoStart = () -> {
-        if (getPlayer() == null) {
+        AppDialogPresenter settingsPresenter = getAppDialogPresenter();
+        if (getPlayer() == null || settingsPresenter.isOverlay()) {
             return;
         }
         // Skip vertical video
@@ -49,9 +50,11 @@ public abstract class BasePlayerController implements PlayerEventListener {
         if (!TrackSelectorUtil.isWideScreen(format)) {
             return;
         }
+        getPlayer().showControls(false);
+        // Dialog takes up 40% of the screen space
         float dialogWidth = 40 * getMainUIData().getUIScale();
         getPlayer().setZoomPercents((int)(100 - dialogWidth));
-        getPlayer().setVideoGravity(getPlayerTweaksData().isCommentsPlacedLeft() ?
+        getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
     };
     private final Runnable mFitVideoFinish = () -> {

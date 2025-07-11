@@ -92,6 +92,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @Override
     public void onViewInitialized() {
         getView().show(mBackupCategories, mBackupTitle, mBackupIsExpandable, mBackupIsTransparent, mBackupIsOverlay, mBackupId);
+        Utils.runMyCallbacks(mOnStart);
     }
 
     /**
@@ -129,7 +130,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         getViewManager().startView(AppDialogView.class, true);
 
         setupTimeout();
-        Utils.runMyCallbacks(mOnStart);
     }
 
     public void closeDialog() {
@@ -237,6 +237,16 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public boolean isOverlay() {
         return getView() != null && getView().isOverlay();
+    }
+
+    public boolean isComments() {
+        if (mBackupCategories == null || mBackupCategories.isEmpty()) {
+            return false;
+        }
+
+        OptionCategory optionCategory = mBackupCategories.get(0);
+
+        return optionCategory.type == OptionCategory.TYPE_COMMENTS;
     }
 
     /**
