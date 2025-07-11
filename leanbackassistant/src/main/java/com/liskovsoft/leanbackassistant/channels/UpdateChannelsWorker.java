@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build.VERSION;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * appear in the TV provider database, and that these and all other programs are synchronized with
  * TV provider database.
  */
+@RequiresApi(21)
 public class UpdateChannelsWorker extends Worker {
     private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
@@ -65,9 +67,11 @@ public class UpdateChannelsWorker extends Worker {
         Log.d(TAG, "Starting worker %s...", this);
 
         // Improve performance. Run task when the app paused.
-        if (!Helpers.isAppInForeground()) {
-            mTask.run();
-        }
+        //if (!Helpers.isAppInForeground()) {
+        //    mTask.run();
+        //}
+
+        mTask.run();
 
         return Result.success();
     }

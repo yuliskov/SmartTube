@@ -3,6 +3,8 @@ package com.liskovsoft.leanbackassistant.channels;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build.VERSION;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -23,6 +25,10 @@ public class UpdateChannelsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Synchronizing database");
+
+        if (VERSION.SDK_INT < 21) {
+            return;
+        }
 
         if (Helpers.isATVChannelsSupported(context) || Helpers.isATVRecommendationsSupported(context)) {
             UpdateChannelsWorker.schedule(context);

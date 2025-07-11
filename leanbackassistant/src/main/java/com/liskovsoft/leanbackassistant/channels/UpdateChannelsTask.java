@@ -1,6 +1,9 @@
 package com.liskovsoft.leanbackassistant.channels;
 
 import android.content.Context;
+
+import androidx.annotation.RequiresApi;
+
 import com.liskovsoft.leanbackassistant.media.ClipService;
 import com.liskovsoft.leanbackassistant.media.Playlist;
 import com.liskovsoft.leanbackassistant.recommendations.RecommendationsProvider;
@@ -8,6 +11,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
+@RequiresApi(21)
 public class UpdateChannelsTask {
     private static final String TAG = UpdateChannelsTask.class.getSimpleName();
     private final Context mContext;
@@ -30,13 +34,6 @@ public class UpdateChannelsTask {
     private void updateChannels() {
         if (Helpers.isATVChannelsSupported(mContext)) {
             try {
-                //if (Helpers.isGoogleTVLauncher(mContext)) {
-                //    updateOrPublishChannel(getSinglePreferredPlaylist());
-                //} else {
-                //    updateOrPublishChannel(mService.getSubscriptionsPlaylist());
-                //    updateOrPublishChannel(mService.getRecommendedPlaylist());
-                //    updateOrPublishChannel(mService.getHistoryPlaylist());
-                //}
                 updateOrPublishChannel(mService.getSubscriptionsPlaylist());
                 updateOrPublishChannel(mService.getRecommendedPlaylist());
                 updateOrPublishChannel(mService.getHistoryPlaylist());
@@ -85,22 +82,4 @@ public class UpdateChannelsTask {
         Log.d(TAG, "Syncing channel: " + playlist.getName());
         ChannelsProvider.createOrUpdateChannel(mContext, playlist);
     }
-
-    //private void updateOrPublishRecommendations(Playlist playlist) {
-    //    if (checkPlaylist(playlist)) {
-    //        Log.d(TAG, "Syncing recommended: " + playlist.getName());
-    //        RecommendationsProvider.createOrUpdateRecommendations(mContext, playlist);
-    //    }
-    //}
-    //
-    //private void updateOrPublishChannel(Playlist playlist) {
-    //    if (checkPlaylist(playlist)) {
-    //        Log.d(TAG, "Syncing channel: " + playlist.getName());
-    //        ChannelsProvider.createOrUpdateChannel(mContext, playlist);
-    //    }
-    //}
-
-    //private boolean checkPlaylist(Playlist playlist) {
-    //    return playlist != null && playlist.getClips() != null;
-    //}
 }

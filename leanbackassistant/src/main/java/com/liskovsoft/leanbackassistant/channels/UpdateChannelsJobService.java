@@ -1,6 +1,6 @@
 package com.liskovsoft.leanbackassistant.channels;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -9,6 +9,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
+
+import androidx.annotation.RequiresApi;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -22,7 +24,8 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
  * appear in the TV provider database, and that these and all other programs are synchronized with
  * TV provider database.
  */
-@TargetApi(21)
+@SuppressLint("SpecifyJobSchedulerIdRange")
+@RequiresApi(21)
 public class UpdateChannelsJobService extends JobService {
     private static final String TAG = UpdateChannelsJobService.class.getSimpleName();
     private static final int SYNC_JOB_ID = 1;

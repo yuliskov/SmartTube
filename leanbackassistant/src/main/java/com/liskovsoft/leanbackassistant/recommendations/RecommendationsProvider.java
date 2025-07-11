@@ -1,6 +1,5 @@
 package com.liskovsoft.leanbackassistant.recommendations;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
