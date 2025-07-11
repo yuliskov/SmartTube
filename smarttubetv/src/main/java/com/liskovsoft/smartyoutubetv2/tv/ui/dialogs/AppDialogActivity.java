@@ -117,7 +117,6 @@ public class AppDialogActivity extends MotherActivity {
             ((PlaybackActivity) PlaybackPresenter.instance(this).getContext()).onUserLeaveHint();
         }
 
-        // Destroy dialog when Home is pressed. NoHistory isn't reliable if combined with singleInstance
-        finishReally();
+        finish();
     }
 }

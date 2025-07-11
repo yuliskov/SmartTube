@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private static AppDialogPresenter sInstance;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
+    private final List<Runnable> mOnStart = new ArrayList<>();
     private final List<Runnable> mOnFinish = new ArrayList<>();
     private String mTitle;
     private long mTimeoutMs;
@@ -57,19 +59,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         super.onFinish();
         clear();
 
-        if (mOnFinish.isEmpty()) {
-            return;
-        }
-
-        // Copy-then-Clear approach to fix possible stackoverflow
-        List<Runnable> callbacks = new ArrayList<>(mOnFinish);
-        mOnFinish.clear();
-
-        for (Runnable callback : callbacks) {
-            if (callback != null) {
-                callback.run();
-            }
-        }
+        Utils.runMyCallbacks(mOnFinish);
     }
 
     private void clear() {
@@ -139,6 +129,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         getViewManager().startView(AppDialogView.class, true);
 
         setupTimeout();
+        Utils.runMyCallbacks(mOnStart);
     }
 
     public void closeDialog() {
@@ -221,10 +212,12 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mTimeoutMs = timeoutMs;
     }
 
+    public void setOnStart(Runnable onStart) {
+        Utils.addMyCallback(mOnStart, onStart);
+    }
+
     public void setOnFinish(Runnable onFinish) {
-        if (!mOnFinish.contains(onFinish)) {
-            mOnFinish.add(onFinish);
-        }
+        Utils.addMyCallback(mOnFinish, onFinish);
     }
 
     public void enableTransparent(boolean enable) {

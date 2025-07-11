@@ -493,6 +493,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void setVideoGravity(int gravity) {
+        
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         try {
             finish();

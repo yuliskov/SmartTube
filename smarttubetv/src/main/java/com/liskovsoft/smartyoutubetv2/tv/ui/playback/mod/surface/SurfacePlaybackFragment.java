@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /**
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
@@ -180,6 +181,10 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             backgroundView.setBackgroundResource(resId);
             mBackgroundResId = resId;
         }
+    }
+
+    protected void setGravity(int gravity) {
+        ViewUtil.setGravity(mVideoSurfaceRoot, gravity);
     }
 
     private float calculateAspectRatio() {

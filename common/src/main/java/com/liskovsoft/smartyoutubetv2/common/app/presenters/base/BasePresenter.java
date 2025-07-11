@@ -40,7 +40,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
-    private Runnable mOnDone;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -132,34 +131,17 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             getPlaybackPresenter().isRunningInBackground()) {
             getViewManager().startView(PlaybackView.class);
         }
-
-        onDone();
     }
 
-    public void setOnDone(Runnable onDone) {
-        mOnDone = onDone;
-    }
-
-    public Runnable getOnDone() {
-        return mOnDone;
-    }
-
-    private void onDone() {
-        if (mOnDone != null) {
-            mOnDone.run();
-            mOnDone = null;
-        }
-    }
-
-    public void removeItem(Video item) {
+    protected void removeItem(Video item) {
         removeItem(Collections.singletonList(item), VideoGroup.ACTION_REMOVE);
     }
 
-    public void removeItemAuthor(Video item) {
+    protected void removeItemAuthor(Video item) {
         removeItem(Collections.singletonList(item), VideoGroup.ACTION_REMOVE_AUTHOR);
     }
 
-    public void removeItem(List<Video> items, int action) {
+    private void removeItem(List<Video> items, int action) {
         if (items.isEmpty()) {
             return;
         }

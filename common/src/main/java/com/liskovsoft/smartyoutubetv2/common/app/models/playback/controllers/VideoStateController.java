@@ -263,6 +263,8 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onSpeedClicked(boolean enabled) {
+        fitVideoIntoDialog();
+
         if (getVideo() == null) {
             return;
         }
@@ -286,6 +288,8 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onSpeedLongClicked(boolean enabled) {
+        fitVideoIntoDialog();
+
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         // suppose live stream if buffering near the end

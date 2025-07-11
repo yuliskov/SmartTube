@@ -102,7 +102,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         //    mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
         //}, mUpdateChecker.isUpdateCheckEnabled()));
 
-        mSettingsPresenter.setOnDone(getOnDone());
+        //mSettingsPresenter.setOnFinish(getOnFinish());
         mSettingsPresenter.showDialog(String.format("%s %s", getContext().getString(R.string.app_name), versionName), AppUpdatePresenter::unhold);
     }
 

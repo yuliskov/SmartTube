@@ -234,4 +234,17 @@ public class ViewUtil {
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
         iconView.setColorFilter(filter);
     }
+
+    public static void setGravity(FrameLayout frameLayout, int gravity) {
+        if (frameLayout == null) {
+            return;
+        }
+
+        ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
+        if (lp instanceof FrameLayout.LayoutParams) {
+            FrameLayout.LayoutParams flp = (FrameLayout.LayoutParams) lp;
+            flp.gravity = gravity;
+            frameLayout.setLayoutParams(flp);
+        }
+    }
 }

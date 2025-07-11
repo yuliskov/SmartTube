@@ -38,6 +38,8 @@ public class HQDialogController extends BasePlayerController {
 
     @Override
     public void onHighQualityClicked() {
+        fitVideoIntoDialog();
+
         addQualityCategories();
         addAudioLanguage();
         addPresetsCategory();

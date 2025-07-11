@@ -1126,6 +1126,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         setFlipEnabled(enabled);
     }
 
+    @Override
+    public void setVideoGravity(int gravity) {
+        setGravity(gravity);
+    }
+
     // End Engine Events
 
     @Override

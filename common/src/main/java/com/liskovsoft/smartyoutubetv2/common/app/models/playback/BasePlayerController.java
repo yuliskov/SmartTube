@@ -2,9 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.Gravity;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.Format;
 import com.liskovsoft.mediaserviceinterfaces.CommentsService;
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
@@ -20,11 +22,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
@@ -35,6 +39,28 @@ import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 public abstract class BasePlayerController implements PlayerEventListener {
     private PlaybackPresenter mMainController;
     private Context mContext;
+    private final Runnable mFitVideoStart = () -> {
+        if (getPlayer() == null) {
+            return;
+        }
+        // Skip vertical video
+        FormatItem videoFormat = getPlayer().getVideoFormat();
+        Format format = videoFormat != null && videoFormat.getTrack() != null ? videoFormat.getTrack().format : null;
+        if (!TrackSelectorUtil.isWideScreen(format)) {
+            return;
+        }
+        float dialogWidth = 40 * getMainUIData().getUIScale();
+        getPlayer().setZoomPercents((int)(100 - dialogWidth));
+        getPlayer().setVideoGravity(getPlayerTweaksData().isCommentsPlacedLeft() ?
+                Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
+    };
+    private final Runnable mFitVideoFinish = () -> {
+        if (getPlayer() == null) {
+            return;
+        }
+        getPlayer().setZoomPercents(getPlayerData().getZoomPercents());
+        getPlayer().setVideoGravity(Gravity.CENTER);
+    };
 
     public void setMainController(PlaybackPresenter mainController) {
         mMainController = mainController;
@@ -355,6 +381,10 @@ public abstract class BasePlayerController implements PlayerEventListener {
         return SearchData.instance(getContext());
     }
 
+    protected MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
+    }
+
     protected MediaServiceManager getServiceManager() {
         return MediaServiceManager.instance();
     }
@@ -406,5 +436,17 @@ public abstract class BasePlayerController implements PlayerEventListener {
         }
 
         return null;
+    }
+
+    protected void fitVideoIntoDialog() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        AppDialogPresenter settingsPresenter = getAppDialogPresenter();
+
+        settingsPresenter.setOnStart(mFitVideoStart);
+
+        settingsPresenter.setOnFinish(mFitVideoFinish);
     }
 }

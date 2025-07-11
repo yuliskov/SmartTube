@@ -81,6 +81,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -1108,5 +1109,31 @@ public class Utils {
         }
 
         return randomIndex;
+    }
+
+    public static void addMyCallback(List<Runnable> myCallbacks, Runnable callback) {
+        if (myCallbacks == null || callback == null) {
+            return;
+        }
+
+        if (!myCallbacks.contains(callback)) {
+            myCallbacks.add(callback);
+        }
+    }
+
+    public static void runMyCallbacks(List<Runnable> myCallbacks) {
+        if (myCallbacks == null || myCallbacks.isEmpty()) {
+            return;
+        }
+
+        // Copy-then-Clear approach to fix possible stackoverflow
+        List<Runnable> callbacks = new ArrayList<>(myCallbacks);
+        myCallbacks.clear();
+
+        for (Runnable callback : callbacks) {
+            if (callback != null) {
+                callback.run();
+            }
+        }
     }
 }
