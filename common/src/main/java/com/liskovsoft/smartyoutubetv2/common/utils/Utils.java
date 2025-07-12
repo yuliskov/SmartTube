@@ -57,6 +57,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -1123,6 +1124,16 @@ public class Utils {
         }
     }
 
+    public static void addMyCallback(WeakHashSet<Runnable> myCallbacks, Runnable callback) {
+        if (myCallbacks == null || callback == null) {
+            return;
+        }
+
+        if (!myCallbacks.contains(callback)) {
+            myCallbacks.add(callback);
+        }
+    }
+
     public static void runMyCallbacks(List<Runnable> myCallbacks) {
         if (myCallbacks == null || myCallbacks.isEmpty()) {
             return;
@@ -1130,6 +1141,22 @@ public class Utils {
 
         // Copy-then-Clear approach to fix possible stackoverflow
         List<Runnable> callbacks = new ArrayList<>(myCallbacks);
+        myCallbacks.clear();
+
+        for (Runnable callback : callbacks) {
+            if (callback != null) {
+                callback.run();
+            }
+        }
+    }
+
+    public static void runMyCallbacks(WeakHashSet<Runnable> myCallbacks) {
+        if (myCallbacks == null || myCallbacks.isEmpty()) {
+            return;
+        }
+
+        // Copy-then-Clear approach to fix possible stackoverflow
+        List<Runnable> callbacks = myCallbacks.asList();
         myCallbacks.clear();
 
         for (Runnable callback : callbacks) {
