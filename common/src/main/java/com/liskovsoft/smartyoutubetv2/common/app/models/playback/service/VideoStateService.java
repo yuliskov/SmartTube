@@ -32,7 +32,7 @@ public class VideoStateService implements ProfileChangeListener {
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
         mStates = Helpers.createSafeLRUList(
-                Utils.isEnoughRam(mPrefs.getContext()) ? MAX_PERSISTENT_STATE_SIZE : MIN_PERSISTENT_STATE_SIZE);
+                Utils.isEnoughRam() ? MAX_PERSISTENT_STATE_SIZE : MIN_PERSISTENT_STATE_SIZE);
         restoreState();
     }
 

@@ -641,7 +641,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSonyFrameDropFixEnabled = Helpers.parseBoolean(split, 29, false);
         mIsBufferOnStreamsDisabled = Helpers.parseBoolean(split, 30, false);
         // Cause severe garbage collector stuttering
-        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Utils.isEnoughRam(mPrefs.getContext()));
+        mIsSectionPlaylistEnabled = Helpers.parseBoolean(split, 31, Utils.isEnoughRam());
         mIsScreenOffTimeoutEnabled = Helpers.parseBoolean(split, 32, false);
         mScreenOffTimeoutSec = Helpers.parseInt(split, 33, 0);
         mIsUIAnimationsEnabled = Helpers.parseBoolean(split, 34, false);

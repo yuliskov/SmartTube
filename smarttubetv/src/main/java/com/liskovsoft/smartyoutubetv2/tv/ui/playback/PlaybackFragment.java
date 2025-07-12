@@ -613,7 +613,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
 
-                focusPendingSuggestedItem();
+                focusPendingSuggestedItem(holder);
             }
 
             @Override
@@ -1515,10 +1515,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         mPendingFocus = video;
 
-        focusPendingSuggestedItem();
+        focusPendingSuggestedItem(null);
     }
 
-    public void focusPendingSuggestedItem() {
+    private void focusPendingSuggestedItem(ViewHolder holder) {
         if (mPendingFocus == null || mPendingFocus.getGroup() == null || mRowsSupportFragment == null) {
             return;
         }
@@ -1531,7 +1531,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         int rowIndex = getRowAdapterIndex(existingAdapter);
 
-        ViewHolder rowViewHolder = mRowsSupportFragment.getRowViewHolder(rowIndex);
+        ViewHolder rowViewHolder = holder != null ? holder : mRowsSupportFragment.getRowViewHolder(rowIndex);
 
         // Skip PlaybackRowPresenter.ViewHolder
         if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {

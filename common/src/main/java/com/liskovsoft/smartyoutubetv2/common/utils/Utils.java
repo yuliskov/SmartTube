@@ -1075,8 +1075,10 @@ public class Utils {
         return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
     }
 
-    public static boolean isEnoughRam(Context context) {
-        return VERSION.SDK_INT > 21 && Helpers.getDeviceRam(context) > 1_500_000_000; // 1.5 GB
+    public static boolean isEnoughRam() {
+        long maxMemory = Runtime.getRuntime().maxMemory();
+
+        return (int)(maxMemory / (1024 * 1024)) > 350; // more than 350MB available to the app
     }
 
     public static String getStackTraceAsString(Throwable throwable) {
