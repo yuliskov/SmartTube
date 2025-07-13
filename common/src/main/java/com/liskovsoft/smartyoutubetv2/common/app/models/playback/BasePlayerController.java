@@ -52,7 +52,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
         }
         getPlayer().showControls(false);
         // Dialog takes up 40% of the screen space
-        float dialogWidth = 40 * getMainUIData().getUIScale();
+        float dialogWidth = TrackSelectorUtil.is4to3Screen(format) ? 1 : 40 * getMainUIData().getUIScale();
         getPlayer().setZoomPercents((int)(100 - dialogWidth));
         getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);

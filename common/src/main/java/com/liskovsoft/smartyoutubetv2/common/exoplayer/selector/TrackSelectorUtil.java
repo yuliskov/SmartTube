@@ -265,6 +265,17 @@ public class TrackSelectorUtil {
         return format.width / (float) format.height > 1;
     }
 
+    public static boolean is4to3Screen(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        float ratio = format.width / (float) format.height;
+        float targetRatio = 4 / (float) 3;
+
+        return Math.abs(ratio - targetRatio) < 0.04;
+    }
+
     public static String getResolutionLabel(Format format) {
         Pair<String, String> labels = getResolutionPrefixAndHeight(format);
 

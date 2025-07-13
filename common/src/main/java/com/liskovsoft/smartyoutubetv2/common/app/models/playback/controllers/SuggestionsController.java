@@ -530,6 +530,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void appendSectionPlaylistIfNeeded(Video video) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (!video.isSectionPlaylistEnabled(getContext())) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextSectionVideo = null;
@@ -618,6 +622,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void focusAndContinueIfNeeded(VideoGroup group, Runnable onDone) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         Video video = getPlayer().getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
