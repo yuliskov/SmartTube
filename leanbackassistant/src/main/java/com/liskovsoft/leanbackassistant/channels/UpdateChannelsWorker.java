@@ -5,7 +5,10 @@ import android.os.Build.VERSION;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -30,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 public class UpdateChannelsWorker extends Worker {
     private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
     private static final String WORK_NAME = "Update channels";
+    private static final String ONE_TIME_WORK_NAME = "Update channels once";
+    private static final String WORK_NAME_KEY = "work_name";
     private static final long REPEAT_INTERVAL_MINUTES = 15; // 15 - minimal interval
     private final UpdateChannelsTask mTask;
 
@@ -44,10 +49,20 @@ public class UpdateChannelsWorker extends Worker {
             WorkManager workManager = WorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
+            // Called after 15 minutes
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
-                    ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
+                    //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
+                    ExistingPeriodicWorkPolicy.KEEP, // only enqueue if no work with this name exists
                     new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, REPEAT_INTERVAL_MINUTES, TimeUnit.MINUTES).addTag(WORK_NAME).build()
+            );
+
+            // Called immediately
+            workManager.enqueueUniqueWork(
+                    ONE_TIME_WORK_NAME,
+                    ExistingWorkPolicy.KEEP, // only enqueue if no work with this name exists
+                    new OneTimeWorkRequest.Builder(UpdateChannelsWorker.class)
+                            .setInputData(new Data.Builder().putString(WORK_NAME_KEY, ONE_TIME_WORK_NAME).build()).build()
             );
         }
     }
@@ -67,11 +82,9 @@ public class UpdateChannelsWorker extends Worker {
         Log.d(TAG, "Starting worker %s...", this);
 
         // Improve performance. Run task when the app paused.
-        //if (!Helpers.isAppInForeground()) {
-        //    mTask.run();
-        //}
-
-        mTask.run();
+        if (!Helpers.isAppInForeground() || Helpers.equals(getInputData().getString(WORK_NAME_KEY), ONE_TIME_WORK_NAME)) {
+            mTask.run();
+        }
 
         return Result.success();
     }

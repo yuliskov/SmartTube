@@ -49,11 +49,15 @@
 
         <!--    CHANNELS    -->
 
+        <!-- Old channel updater
+
         <service
             android:name=".channels.UpdateChannelsJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:enabled="true"
             android:exported="true"/>
+
+        -->
 
         <receiver
             android:name=".channels.UpdateChannelsReceiver"
