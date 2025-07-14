@@ -18,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -103,27 +105,39 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     private static class SpeedItem {
         public String channelId;
+        public String userId;
         public float speed;
 
-        public SpeedItem(String channelId, float speed) {
+        public SpeedItem(String channelId, String userId, float speed) {
             this.channelId = channelId;
+            this.userId = userId;
             this.speed = speed;
         }
 
         public static SpeedItem fromString(String specs) {
             String[] split = Helpers.splitObj(specs);
 
-            if (split == null || split.length != 2) {
-                return new SpeedItem(null, 1);
+            if (split == null || split.length < 2) {
+                return new SpeedItem(null, null, 1);
             }
 
-            return new SpeedItem(Helpers.parseStr(split[0]), Helpers.parseFloat(split[1]));
+            // Handle legacy format (channelId, speed) - 2 elements
+            if (split.length == 2) {
+                return new SpeedItem(Helpers.parseStr(split[0]), null, Helpers.parseFloat(split[1]));
+            }
+
+            // New format (channelId, userId, speed) - 3 elements
+            return new SpeedItem(Helpers.parseStr(split[0]), Helpers.parseStr(split[1]), Helpers.parseFloat(split[2]));
         }
 
         @NonNull
         @Override
         public String toString() {
-            return Helpers.mergeObj(channelId, speed);
+            return Helpers.mergeObj(channelId, userId, speed);
+        }
+
+        public String getKey() {
+            return channelId + "_" + (userId != null ? userId : "anonymous");
         }
     }
 
@@ -561,10 +575,13 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         }
 
         if (isSpeedPerChannelEnabled() && channelId != null) {
+            String userId = getCurrentUserId();
+            String key = channelId + "_" + userId;
+            
             if (Helpers.floatEquals(speed, 1.0f)) {
-                mSpeeds.remove(channelId);
+                mSpeeds.remove(key);
             } else {
-                mSpeeds.put(channelId, new SpeedItem(channelId, speed));
+                mSpeeds.put(key, new SpeedItem(channelId, userId, speed));
             }
         }
         setLastSpeed(speed);
@@ -580,7 +597,9 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         SpeedItem speed = null;
 
         if (isSpeedPerChannelEnabled() && channelId != null) {
-            speed = mSpeeds.get(channelId);
+            String userId = getCurrentUserId();
+            String key = channelId + "_" + userId;
+            speed = mSpeeds.get(key);
             mSpeed = 1.0f; // reset speed if the channel not found
         }
 
@@ -612,6 +631,11 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     public boolean isSpeedPerChannelEnabled() {
         return mIsSpeedPerChannelEnabled;
+    }
+
+    private String getCurrentUserId() {
+        Account account = MediaServiceManager.instance().getSelectedAccount();
+        return account != null ? account.getName() : "anonymous";
     }
 
     public int getAudioDelayMs() {
@@ -847,7 +871,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         if (speeds != null) {
             for (String speedSpec : speeds) {
                 SpeedItem item = SpeedItem.fromString(speedSpec);
-                mSpeeds.put(item.channelId, item);
+                mSpeeds.put(item.getKey(), item);
             }
         }
 
