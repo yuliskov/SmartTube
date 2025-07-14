@@ -265,7 +265,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 3 * 60 * 60 * 1_000) {
+        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);

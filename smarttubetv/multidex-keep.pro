@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keepclassmembers class android.view.View {
     void setZ(float);
     <init>(...);
