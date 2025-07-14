@@ -11,7 +11,8 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
+                // Applies the component for the release build variant.
+                //from components.release
                 groupId = _group
                 artifactId = _artifact
                 version = _version
