@@ -273,7 +273,7 @@ public class TrackSelectorUtil {
         float ratio = format.width / (float) format.height;
         float targetRatio = 4 / (float) 3;
 
-        return Math.abs(ratio - targetRatio) < 0.04;
+        return Math.abs(ratio - targetRatio) < 0.2;
     }
 
     public static String getResolutionLabel(Format format) {

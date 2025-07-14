@@ -416,7 +416,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (mPlayer != null && volume >= 0) {
             mPlayer.setVolume(Math.min(volume, 1f));
 
-            applyVolumeBoost(volume);
+            //applyVolumeBoost(volume);
         }
     }
 
