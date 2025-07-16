@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
@@ -67,18 +68,13 @@ public class ExoPlayerInitializer {
         // Fix still image while audio is playing (happens after format change or exit from sleep)
         //player.setPlayWhenReady(true);
 
+        applyPlaybackFixes(player);
+
+        setupAudioFocus(player);
+
         setupVolumeBoost(player);
 
         return player;
-    }
-
-    /**
-     * Manage audio focus. E.g. use Spotify when audio is disabled.
-     */
-    public static void enableAudioFocus(SimpleExoPlayer player, boolean enable) {
-        if (player != null) {
-            setAudioAttributes(player, getAudioAttributes(), enable);
-        }
     }
 
     private static AudioAttributes getAudioAttributes() {
@@ -90,14 +86,6 @@ public class ExoPlayerInitializer {
         }
 
         return sAudioAttributes;
-    }
-
-    private static void setAudioAttributes(SimpleExoPlayer player, AudioAttributes audioAttributes, boolean enable) {
-        try {
-            player.setAudioAttributes(audioAttributes, enable);
-        } catch (SecurityException e) { // uid 10390 not allowed to perform TAKE_AUDIO_FOCUS
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -159,6 +147,33 @@ public class ExoPlayerInitializer {
         if (volume > 1f && Build.VERSION.SDK_INT >= 19) {
             VolumeBooster mVolumeBooster = new VolumeBooster(true, volume);
             player.addAudioListener(mVolumeBooster);
+        }
+    }
+
+    /**
+     * Manage audio focus. E.g. use Spotify when audio is disabled.
+     */
+    private void setupAudioFocus(SimpleExoPlayer player) {
+        if (player != null && mPlayerTweaksData.isAudioFocusEnabled()) {
+            try {
+                player.setAudioAttributes(getAudioAttributes(), true);
+            } catch (SecurityException e) { // uid 10390 not allowed to perform TAKE_AUDIO_FOCUS
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void applyPlaybackFixes(SimpleExoPlayer player) {
+        // Try to fix decoder error on Nvidia Shield 2019.
+        // Init resources as early as possible.
+        //player.setForegroundMode(true);
+        // NOTE: Avoid using seekParameters. ContentBlock hangs because of constant skipping to the segment start.
+        // ContentBlock hangs on the last segment: https://www.youtube.com/watch?v=pYymRbfjKv8
+
+        // Fix seeking on TextureView (some devices only)
+        if (mPlayerTweaksData.isTextureViewEnabled()) {
+            // Also, live stream (dash) seeking fix
+            player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
         }
     }
 

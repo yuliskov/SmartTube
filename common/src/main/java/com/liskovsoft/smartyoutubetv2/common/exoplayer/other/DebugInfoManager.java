@@ -400,8 +400,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         String playerUrl = appInfo != null ? appInfo.getPlayerUrl() : null;
         if (playerUrl != null) {
             String playerVersion = UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player");
+            String shortPlayerUrl = playerVersion != null ? playerUrl.split(playerVersion)[1] : null;
             boolean isFailed = MediaServiceData.instance().getFailedAppInfo() != null;
             appendRow("Video info version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
+            appendRow("Video info url", isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl);
         }
     }
 

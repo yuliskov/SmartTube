@@ -138,7 +138,9 @@ public class SettingsGridFragment extends GridFragment implements SettingsSectio
                 }
 
                 // Close PIP inside Settings section
-                PlaybackPresenter.instance(getContext()).forceFinish();
+                //if (PlaybackPresenter.instance(getContext()).isInPipMode()) {
+                //    PlaybackPresenter.instance(getContext()).forceFinish();
+                //}
             } else {
                 Toast.makeText(getContext(), item.toString(), Toast.LENGTH_SHORT).show();
             }

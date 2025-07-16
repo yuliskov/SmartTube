@@ -444,23 +444,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
-        // Try to fix decoder error on Nvidia Shield 2019.
-        // Init resources as early as possible.
-        //mPlayer.setForegroundMode(true);
-        // NOTE: Avoid using seekParameters. ContentBlock hangs because of constant skipping to the segment start.
-        // ContentBlock hangs on the last segment: https://www.youtube.com/watch?v=pYymRbfjKv8
-
-        // Fix seeking on TextureView (some devices only)
-        if (PlayerTweaksData.instance(getContext()).isTextureViewEnabled()) {
-            // Also, live stream (dash) seeking fix
-            mPlayer.setSeekParameters(SeekParameters.CLOSEST_SYNC);
-        }
 
         mExoPlayerController.setPlayer(mPlayer);
-
-        if (PlayerTweaksData.instance(getContext()).isAudioFocusEnabled()) {
-            ExoPlayerInitializer.enableAudioFocus(mPlayer, true);
-        }
     }
 
     private void createPlayerGlue() {
