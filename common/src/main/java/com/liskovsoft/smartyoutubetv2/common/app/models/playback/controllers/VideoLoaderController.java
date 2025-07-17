@@ -127,7 +127,7 @@ public class VideoLoaderController extends BasePlayerController {
         if ((!getVideo().isLive || getVideo().isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+        } else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.applying_fix);
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
@@ -169,7 +169,7 @@ public class VideoLoaderController extends BasePlayerController {
         mLastErrorType = -1;
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
         // Can't set title at this point
-        checkSleepTimer();
+        //checkSleepTimer();
     }
 
     @Override
@@ -258,6 +258,11 @@ public class VideoLoaderController extends BasePlayerController {
         Utils.removeCallbacks(mRestartEngine);
 
         return false;
+    }
+
+    @Override
+    public void onTickle() {
+        checkSleepTimer();
     }
 
     private void checkSleepTimer() {
