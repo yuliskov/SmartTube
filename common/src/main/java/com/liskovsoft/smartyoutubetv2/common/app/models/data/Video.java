@@ -617,8 +617,15 @@ public final class Video {
 
         List<MediaItem> mediaItems = getGroup().getMediaGroup().getMediaItems();
 
-        MediaItem first = mediaItems.get(0);
-        MediaItem second = mediaItems.get(1);
+        // Some items may not have a playlistId (e.g. movies)
+        List<MediaItem> filtered = Helpers.filter(mediaItems, item -> item.getPlaylistId() != null || item.getParams() != null, 10);
+
+        if (filtered == null || filtered.size() < 2) {
+            return false;
+        }
+
+        MediaItem first = filtered.get(0);
+        MediaItem second = filtered.get(1);
 
         String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getParams();
         String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getParams();
