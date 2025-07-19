@@ -215,7 +215,7 @@
   <string name="msg_player_error_audio_renderer">Formati i TINGULLIT i zgjedhur nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke shtypur butonin HQ në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
   <string name="msg_player_error_subtitle_renderer">Formati i zgjedhur i TITRAVE nuk mbështetet nga programi.\nProvo të zgjidhësh një tjetër duke mbajtur shtypur butonin CC në luajtësin.\nNëse kjo nuk punon, provo të nisësh përsëri pajisjen.</string>
   <string name="msg_player_error_unexpected">Gabim i panjohur i deshifruesit të videos</string>
-  <string name="video_aspect">Përpjesëtimi</string>
+  <string name="video_aspect">Raporti i videos</string>
   <string name="player_tweaks">Rregullimet për zhvilluesit</string>
   <string name="header_uploads">Ngarkimet</string>
   <string name="player_show_global_clock">Shfaq gjithmonë orën në ekran</string>
@@ -386,8 +386,8 @@
   <string name="subtitle_scale">Madhësia e titrave</string>
   <string name="audio_sync_fix_desc">Një mënyrë tjetër për të sinkronizuar tingullin/videon. Ka dalë nga përdorimi, por, në disa raste, mund të ndihmojë.</string>
   <string name="audio_sync_fix">Rregullo sinkronizimin e tingullit</string>
-  <string name="ambilight_ratio_fix_desc">Rregullon ndriçimin \"absent bias\". Rregullon përpjesëtimin e gabuar të pamjes ose madhësinë e gabuar të videos. Rregullon pamjet bosh të ekranit. Kjo ndikon në performancë!</string>
-  <string name="ambilight_ratio_fix">Rregullo Ndriçimin e Ambientit/Përpjesëtimin/Madhësinë e videos/Pamjet e ekranit</string>
+  <string name="ambilight_ratio_fix_desc">Rregullon ndriçimin \"absent bias\". Rregullon raportin e gabuar të pamjes ose madhësinë e gabuar të videos. Rregullon pamjet bosh të ekranit. Kjo ndikon në performancë!</string>
+  <string name="ambilight_ratio_fix">Rregullo Ndriçimin e Ambientit/Raportin/Madhësinë e videos/Pamjet e ekranit</string>
   <string name="force_legacy_codecs_desc">Përmirëson ndjeshëm performancën në pajisjet e nivelit të ulët. Rezolucioni maksimal është 720p.</string>
   <string name="force_legacy_codecs">Detyro përdorimin e kodekëve të vjetër (720p)</string>
   <string name="live_stream_fix_desc">Kujdes, ky ndryshim çaktivizon kthimin prapa e transmetimeve. Përmirëson ndjeshëm performancën e transmetimit të drejtpërdrejtë në pajisjet e nivelit të ulët. Rezolucioni maksimal është 1080p.</string>
@@ -494,7 +494,7 @@
   <string name="real_channel_icon">Shfaq ikonën në butonin e kanalit</string>
   <string name="subtitle_yellow_semi_transparent">E verdhë në sfond gjysmë të tejdukshëm</string>
   <string name="subtitle_yellow_black">E verdhë në sfond të zi</string>
-  <string name="player_pixel_ratio">Përpjesëtimi i pikselëve</string>
+  <string name="player_pixel_ratio">Raporti i pikselëve</string>
   <string name="color_scheme_dark_grey_monochrome">Gri e errët (njëngjyrëshe)</string>
   <string name="disable_mic_permission">Të lutem çaktivizo qasjen në mikrofon për aplikacionin që njohja e zërit të punoi siç duhet.</string>
   <string name="repeat_mode_shuffle">Përziej çdo listë luajtjeje</string>
@@ -697,4 +697,12 @@
   <string name="you_liked">E pëlqeve</string>
   <string name="video_flip">Pasqyro</string>
   <string name="search_exit_shortcut">Dil nga kërkimi</string>
+  <string name="premium_users_only">Vetëm për përdorues Premium. Rregullim për listën e formateve të videove që ishte e paplotë</string>
+  <string name="playback_buffering_fix">Rregullim për ngecjet gjatë luajtjes</string>
+  <string name="oculus_quest_fix">Rregullim për Oculus Quest</string>
+  <string name="card_preview_muted">Video pa zë</string>
+  <string name="card_preview_full">Video me zë</string>
+  <string name="card_preview">Pamje paraprake të skedave</string>
+  <string name="card_unlocalized_titles">Tituj video të palokalizuar</string>
+  <string name="original_lang">Origjinale</string>
 </resources>
