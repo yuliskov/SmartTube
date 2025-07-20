@@ -247,8 +247,8 @@
     <string name="share_embed_link">Поделиться встраиваемой ссылкой</string>
     <string name="card_text_scroll_factor">Скорость прокрутки текста карточки</string>
     <string name="preferred_update_source">Выбрать источник обновлений</string>
-    <string name="hide_shorts">Скрывать короткие видео из Подписок</string>
-    <string name="hide_shorts_channel">Скрывать короткие видео на канале</string>
+    <string name="hide_shorts">Скрывать shorts из Подписок</string>
+    <string name="hide_shorts_channel">Скрывать shorts на канале</string>
     <string name="key_remapping">Переопределение клавиш</string>
     <string name="screen_dimming">Затемнение экрана</string>
     <string name="removed_from_playback_queue">Удалено из очереди воспроизведения</string>
@@ -347,12 +347,12 @@
     <string name="player_seek_regular">Обычное</string>
     <string name="player_seek_confirmation_pause">С подтверждением (пауза во время перемотки)</string>
     <string name="player_seek_confirmation_play">С подтверждением (играть во время перемотки)</string>
-    <string name="hide_shorts_from_home">Скрывать короткие видео с Главной</string>
+    <string name="hide_shorts_from_home">Скрывать shorts с Главной</string>
     <string name="finish_on_disconnect">Завершать приложение после отключения телефона/планшета</string>
     <string name="update_error">Ошибка обновления</string>
-    <string name="hide_shorts_from_search">Скрывать короткие видео из Поиска</string>
-    <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
-    <string name="hide_shorts_from_trending">Скрывать короткие видео из Трендов</string>
+    <string name="hide_shorts_from_search">Скрывать shorts из Поиска</string>
+    <string name="hide_shorts_from_history">Скрывать shorts из Истории</string>
+    <string name="hide_shorts_from_trending">Скрывать shorts из Трендов</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
     <string name="description_not_found">Описание не найдено</string>
     <string name="proxy_port_hint">Порт прокси</string>
@@ -578,7 +578,7 @@
     <string name="audio_language">Язык аудио</string>
     <string name="old_home_look">Старый вид Главного раздела</string>
     <string name="old_channel_look">Старый вид страницы Канала</string>
-    <string name="hide_shorts_everywhere">Скрывать короткие видео повсюду</string>
+    <string name="hide_shorts_everywhere">Скрывать shorts повсюду</string>
     <string name="update_found">Обновление</string>
     <string name="volume_boost_warning">Настройки привышающие лимит могу повредить динамики</string>
     <string name="play_video_incognito">Воспроизвести анонимно</string>
@@ -642,8 +642,8 @@
     <string name="nothing_found">Ничего не найдено</string>
     <string name="auto_frame_rate_desc">Эта опция устраняет дрожание в сценах, где камера движется быстро, например. спортивные трансляции</string>
     <string name="channel_filter_hint">Фильтровать каналы</string>
-    <string name="player_loop_shorts">Зацикливать короткие видео</string>
-    <string name="player_quick_shorts_skip">Переключать короткие видео кнопками лево/право</string>
+    <string name="player_loop_shorts">Зацикливать shorts</string>
+    <string name="player_quick_shorts_skip">Переключать shorts кнопками лево/право</string>
     <string name="player_quick_skip_videos">Переключать обычные видео кнопками лево/право</string>
     <string name="channels_filter">Показывать поле Фильтровать каналы в разделе Каналы</string>
     <string name="channel_search_bar">Панель поиска на странице канала</string>

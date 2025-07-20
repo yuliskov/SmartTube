@@ -955,6 +955,10 @@ public class VideoLoaderController extends BasePlayerController {
      * Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
      */
     private void applyAspectRatio(MediaItemFormatInfo formatInfo) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
         if (formatInfo.containsDashFormats()) {
             MediaFormat format = formatInfo.getDashFormats().get(0);
