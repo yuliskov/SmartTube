@@ -544,20 +544,20 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 restartEngine = false;
             }
-        } else if (Helpers.startsWithAny(errorContent, "Response code: 400", "Response code: 403", "Response code: 404", "Response code: 503")) {
-            // "Response code: 403" (url deciphered incorrectly)
+        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
+            // NOTE: Starts with any (url deciphered incorrectly)
+            // "Response code: 403" (poToken error)
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-            restartEngine = false;
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
+            // "Response code: 429" (subtitle error)
+            // "Response code: 500" (subtitle error)
+
             // NOTE: Fixing too many requests or network issues
             // NOTE: All these errors have unknown renderer (-1)
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-            // "Response code: 403" (url deciphered incorrectly)
             if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
             } else {
