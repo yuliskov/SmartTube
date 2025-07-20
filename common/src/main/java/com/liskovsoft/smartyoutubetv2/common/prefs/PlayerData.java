@@ -822,14 +822,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
         mLastSubtitleFormats = Helpers.parseList(split, 47, ExoFormatItem::from);
-        //mLastSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 47)), FormatItem.SUBTITLE_NONE);
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mRotationAngle = Helpers.parseInt(split, 49, 0);
         mZoomPercents = Helpers.parseInt(split, 50, -1);
         mPlaybackMode = Helpers.parseInt(split, 51, PlayerConstants.PLAYBACK_MODE_ALL);
         mAudioLanguage = Helpers.parseStr(split, 52, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
         mSubtitleLanguage = Helpers.parseStr(split, 53, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
-        //String enabledSubtitles = Helpers.parseStr(split, 54);
         mEnabledSubtitlesPerChannel = Helpers.parseStrList(split, 54);
         mIsSubtitlesPerChannelEnabled = Helpers.parseBoolean(split, 55, true);
         mIsSpeedPerChannelEnabled = Helpers.parseBoolean(split, 56, true);
@@ -870,8 +868,6 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle, mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
-
-        //onDataChange();
     }
 
     @Override

@@ -79,6 +79,8 @@ public class PlayerUIController extends BasePlayerController {
             enableUiAutoHideTimeout();
         }
     };
+    private final Runnable mSetSubtitleButtonState = this::setSubtitleButtonState;
+    private final Runnable mSetPlaylistAddButtonState = this::setPlaylistAddButtonState;
 
     public PlayerUIController() {
         mHandler = new Handler(Looper.getMainLooper());
@@ -180,6 +182,10 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onSubtitleLongClicked(boolean enabled) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         fitVideoIntoDialog();
 
         String subtitlesOrigCategoryTitle = getContext().getString(R.string.subtitle_category_title);
@@ -232,7 +238,7 @@ public class PlayerUIController extends BasePlayerController {
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getContext());
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
-        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, this::setSubtitleButtonState);
+        settingsPresenter.showDialog(subtitlesOrigCategoryTitle, mSetSubtitleButtonState);
     }
 
     @Override
@@ -244,7 +250,7 @@ public class PlayerUIController extends BasePlayerController {
                     null);
         } else {
             AppDialogUtil.showAddToPlaylistDialog(getContext(), getVideo(),
-                    null, mPlaylistInfos, this::setPlaylistAddButtonState);
+                    null, mPlaylistInfos, mSetPlaylistAddButtonState);
         }
     }
 
@@ -777,6 +783,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean isSubtitleSelected() {
+        if (getPlayer() == null) {
+            return false;
+        }
+
         List<FormatItem> subtitleFormats = getPlayer().getSubtitleFormats();
 
         if (subtitleFormats == null) {
@@ -959,7 +969,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void reorderSubtitles(List<FormatItem> subtitleFormats) {
-        if (subtitleFormats == null || subtitleFormats.isEmpty() || subtitleFormats.get(0).equals(getPlayerData().getLastSubtitleFormat())) {
+        if (subtitleFormats == null || subtitleFormats.isEmpty()) {
             return;
         }
 
