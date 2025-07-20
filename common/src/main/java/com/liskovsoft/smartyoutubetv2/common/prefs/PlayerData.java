@@ -423,11 +423,6 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
             mLastSubtitleFormats.remove(mSubtitleFormat);
             mLastSubtitleFormats.add(0, mSubtitleFormat);
         }
-
-        // Limit max size
-        //if (mLastSubtitleFormats.size() > 3) {
-        //    mLastSubtitleFormats.subList(3, mLastSubtitleFormats.size()).clear();
-        //}
     }
 
     public void enableSubtitlesPerChannel(String channelId) {

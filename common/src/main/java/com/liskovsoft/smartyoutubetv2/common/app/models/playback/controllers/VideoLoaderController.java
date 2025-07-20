@@ -559,7 +559,7 @@ public class VideoLoaderController extends BasePlayerController {
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
-                getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+                disableSubtitles();
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             }
@@ -567,7 +567,7 @@ public class VideoLoaderController extends BasePlayerController {
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
-            getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+            disableSubtitles();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
             getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
