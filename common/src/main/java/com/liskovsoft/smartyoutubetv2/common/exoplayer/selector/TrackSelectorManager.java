@@ -422,27 +422,15 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     public MediaTrack getVideoTrack() {
-        initRenderer(RENDERER_INDEX_VIDEO);
-
-        Renderer renderer = mRenderers[RENDERER_INDEX_VIDEO];
-
-        if (renderer == null) {
-            return null;
-        }
-
-        return renderer.selectedTrack;
+        return getTrack(RENDERER_INDEX_VIDEO);
     }
 
     public MediaTrack getAudioTrack() {
-        initRenderer(RENDERER_INDEX_AUDIO);
+        return getTrack(RENDERER_INDEX_AUDIO);
+    }
 
-        Renderer renderer = mRenderers[RENDERER_INDEX_AUDIO];
-
-        if (renderer == null) {
-            return null;
-        }
-
-        return renderer.selectedTrack;
+    public MediaTrack getSubtitleTrack() {
+        return getTrack(RENDERER_INDEX_SUBTITLE);
     }
 
     /**
@@ -853,5 +841,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             default:
                 return langCode;
         }
+    }
+
+    private MediaTrack getTrack(int rendererIndex) {
+        initRenderer(rendererIndex);
+
+        Renderer renderer = mRenderers[rendererIndex];
+
+        if (renderer == null) {
+            return null;
+        }
+
+        return renderer.selectedTrack;
     }
 }

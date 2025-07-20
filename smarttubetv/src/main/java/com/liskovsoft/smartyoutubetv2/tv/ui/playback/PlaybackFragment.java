@@ -1018,6 +1018,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public FormatItem getSubtitleFormat() {
+        return mExoPlayerController.getSubtitleFormat();
+    }
+
+    @Override
     public boolean isEngineInitialized() {
         return mPlayer != null;
     }

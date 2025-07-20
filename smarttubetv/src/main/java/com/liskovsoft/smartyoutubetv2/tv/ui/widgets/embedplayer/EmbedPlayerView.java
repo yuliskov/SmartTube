@@ -381,6 +381,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public FormatItem getSubtitleFormat() {
+        return mExoPlayerController.getSubtitleFormat();
+    }
+
+    @Override
     public boolean isEngineInitialized() {
         return mPlayer != null;
     }

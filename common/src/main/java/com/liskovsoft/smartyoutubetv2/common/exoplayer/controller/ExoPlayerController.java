@@ -269,6 +269,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public FormatItem getSubtitleFormat() {
+        return ExoFormatItem.from(mTrackSelectorManager.getSubtitleTrack());
+    }
+
+    @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 

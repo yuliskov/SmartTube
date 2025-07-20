@@ -544,15 +544,11 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 restartEngine = false;
             }
-        } else if (Helpers.startsWithAny(errorContent, "Response code: 403", "Response code: 404", "Response code: 503")) {
+        } else if (Helpers.startsWithAny(errorContent, "Response code: 400", "Response code: 403", "Response code: 404", "Response code: 503")) {
             // "Response code: 403" (url deciphered incorrectly)
             // "Response code: 404" (not sure whether below helps)
             // "Response code: 503" (not sure whether below helps)
             // "Response code: 400" (not sure whether below helps)
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-            restartEngine = false;
-        } else if (Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 400")) {
-            //YouTubeServiceManager.instance().applyAntiBotFix();
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
@@ -562,21 +558,18 @@ public class VideoLoaderController extends BasePlayerController {
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             // "Response code: 403" (url deciphered incorrectly)
-            //YouTubeServiceManager.instance().applyAntiBotFix();
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
+                getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+            } else {
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
+            }
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
-            // "Response code: 500"
-            if (getVideo() != null) {
-                getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
-                getPlayerData().setFormat(getPlayerData().getDefaultSubtitleFormat());
-            }
-            restartEngine = false; // ???
+            // "Response code: 429" (subtitle error)
+            // "Response code: 500" (subtitle error)
+            getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+            restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
-            //FormatItem videoFormat = getPlayerData().getFormat(FormatItem.TYPE_VIDEO);
-            //if (!videoFormat.isPreset()) {
-            //    getPlayerData().setFormat(getPlayerData().getDefaultVideoFormat());
-            //}
             getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
             if (getPlayerTweaksData().isSWDecoderForced()) {
                 getPlayerTweaksData().forceSWDecoder(false);
@@ -584,7 +577,6 @@ public class VideoLoaderController extends BasePlayerController {
                 restartEngine = false;
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
-            //getPlayerData().setFormat(getPlayerData().getDefaultAudioFormat());
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
@@ -670,6 +662,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void applyPlaybackMode(int playbackMode) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         Video video = getVideo();
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
         if (video == null || isActionsRunning()) {
@@ -939,12 +935,6 @@ public class VideoLoaderController extends BasePlayerController {
      * Bad idea. Faster source is different among devices
      */
     private boolean isFasterDataSourceEnabled() {
-        //if (getGeneralData().isProxyEnabled()) {
-        //    // Disable auto switch for proxies.
-        //    // Current source may have better compatibility with proxies than fastest one.
-        //    return true;
-        //}
-
         int fasterDataSource = getFasterDataSource();
         return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
     }
@@ -985,5 +975,12 @@ public class VideoLoaderController extends BasePlayerController {
         if (getPlayer().getDurationMs() - getPlayer().getPositionMs() < 50_000) {
             MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
         }
+    }
+
+    private void disableSubtitles() {
+        if (getVideo() != null) {
+            getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
+        }
+        getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
     }
 }

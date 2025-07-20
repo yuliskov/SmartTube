@@ -35,6 +35,7 @@ public interface PlayerController {
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
     FormatItem getAudioFormat();
+    FormatItem getSubtitleFormat();
     boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
