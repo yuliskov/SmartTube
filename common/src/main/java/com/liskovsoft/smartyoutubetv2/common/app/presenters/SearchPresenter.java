@@ -142,9 +142,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        loadSearchResultAlt(searchText);
+        loadSearchResult(searchText);
     }
-    
+
     private void loadSearchResult(String searchText) {
         Log.d(TAG, "Start search for '%s'", searchText);
 
@@ -156,28 +156,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         getView().clearSearch();
 
         mLoadAction = contentService.getSearchObserve(searchText,
-                mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
-                .subscribe(
-                        mediaGroup -> {
-                            Log.d(TAG, "Receiving results for '%s'", searchText);
-                            getView().updateSearch(VideoGroup.from(mediaGroup));
-                        },
-                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
-                        () -> getView().showProgressBar(false)
-                );
-    }
-
-    private void loadSearchResultAlt(String searchText) {
-        Log.d(TAG, "Start search for '%s'", searchText);
-
-        disposeActions();
-        getView().showProgressBar(true);
-
-        ContentService contentService = getContentService();
-
-        getView().clearSearch();
-
-        mLoadAction = contentService.getSearchAltObserve(searchText,
                 mUploadDateOptions | mDurationOptions | mTypeOptions | mFeatureOptions | mSortingOptions)
                 .subscribe(
                         mediaGroups -> {
@@ -450,7 +428,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         String searchText = getView().getSearchText();
 
         if (searchText != null && !searchText.isEmpty()) {
-            loadSearchResultAlt(searchText);
+            loadSearchResult(searchText);
         }
     }
 }

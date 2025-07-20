@@ -130,7 +130,8 @@ public class VideoContentProvider extends ContentProvider {
     private Cursor search(String query, int limit) {
         MatrixCursor matrixCursor = new MatrixCursor(queryProjection);
 
-        mSearch = YouTubeServiceManager.instance().getContentService().getSearch(query);
+        List<MediaGroup> searchRows = YouTubeServiceManager.instance().getContentService().getSearch(query);
+        mSearch = searchRows != null && !searchRows.isEmpty() ? searchRows.get(0) : null;
 
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
