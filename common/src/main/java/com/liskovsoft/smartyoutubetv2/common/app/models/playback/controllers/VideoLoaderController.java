@@ -558,8 +558,12 @@ public class VideoLoaderController extends BasePlayerController {
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-            if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) { // Response code: 429
-                disableSubtitles();
+            if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
+            } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
+                disableSubtitles(); // Response code: 429
+            } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
+                getPlayerTweaksData().enableHighBitrateFormats(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }

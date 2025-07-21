@@ -1519,9 +1519,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        int rowIndex = getRowAdapterIndex(existingAdapter);
+        ViewHolder rowViewHolder;
 
-        ViewHolder rowViewHolder = holder != null ? holder : mRowsSupportFragment.getRowViewHolder(rowIndex);
+        if (holder != null && holder.getRow() instanceof ListRow && ((ListRow) holder.getRow()).getAdapter() == existingAdapter) {
+            rowViewHolder = holder;
+        } else {
+            int rowIndex = getRowAdapterIndex(existingAdapter);
+            rowViewHolder = mRowsSupportFragment.getRowViewHolder(rowIndex);
+        }
 
         // Skip PlaybackRowPresenter.ViewHolder
         if (rowViewHolder instanceof ListRowPresenter.ViewHolder) {

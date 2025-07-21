@@ -1,3 +1,4 @@
+-keep class com.google.android.exoplayer2.util.Util { *; }
 -keep class com.bumptech.glide.request.RequestOptions { *; }
 -keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keepclassmembers class android.view.View {
