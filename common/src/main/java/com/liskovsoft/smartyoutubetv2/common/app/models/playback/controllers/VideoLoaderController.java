@@ -538,7 +538,7 @@ public class VideoLoaderController extends BasePlayerController {
                 getPlayerTweaksData().enableSectionPlaylist(false);
                 restartEngine = false;
             }
-        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest")) {
+        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest", "Response code: 503")) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
             } else {
