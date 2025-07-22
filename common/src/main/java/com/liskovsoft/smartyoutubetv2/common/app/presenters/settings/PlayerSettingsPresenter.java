@@ -495,6 +495,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.dont_resize_video_to_fit_dialog),
+                option -> mPlayerTweaksData.enableDontResizeVideoToFitDialog(option.isSelected()),
+                mPlayerTweaksData.isDontResizeVideoToFitDialogEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_audio_focus),
                 option -> mPlayerTweaksData.enableAudioFocus(option.isSelected()),
                 mPlayerTweaksData.isAudioFocusEnabled()));

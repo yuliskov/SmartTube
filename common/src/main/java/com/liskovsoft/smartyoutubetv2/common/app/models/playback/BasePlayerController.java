@@ -41,7 +41,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
     private Context mContext;
     private final Runnable mFitVideoStart = () -> {
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();
-        if (getPlayer() == null || settingsPresenter.isOverlay()) {
+        if (getPlayer() == null || settingsPresenter.isOverlay() || getPlayerTweaksData().isDontResizeVideoToFitDialogEnabled()) {
             return;
         }
         // Skip vertical video
@@ -59,7 +59,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
     };
     private final Runnable mFitVideoFinish = () -> {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || getPlayerTweaksData().isDontResizeVideoToFitDialogEnabled()) {
             return;
         }
         getPlayer().setZoomPercents(getPlayerData().getZoomPercents());

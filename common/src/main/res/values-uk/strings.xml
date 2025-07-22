@@ -693,4 +693,5 @@
     <string name="card_preview_full">Відео зі звуком</string>
     <string name="card_preview">Попередній перегляд картки</string>
     <string name="card_unlocalized_titles">Не перекладати назви відео</string>
+    <string name="dont_resize_video_to_fit_dialog">Не змінювати розмір відео відповідно до розміру діалогу</string>
 </resources>
