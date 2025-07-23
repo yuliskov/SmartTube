@@ -274,6 +274,11 @@ public final class SimpleMediaItem implements MediaItem {
     }
 
     @Override
+    public String getSearchQuery() {
+        return null;
+    }
+
+    @Override
     public void sync(MediaItemMetadata metadata) {
 
     }

@@ -1,10 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.content.Context;
+
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
@@ -38,8 +41,10 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             }
         } else if (item.isChapter) {
             PlaybackPresenter.instance(getContext()).setPosition(item.startTimeMs);
+        } else if (item.searchQuery != null ) {
+            SearchPresenter.instance(getContext()).onSearch(item.searchQuery);
         } else {
-            Log.e(TAG, "Video item doesn't contain needed data!");
+            MessageHelpers.showMessage(getContext(), "Video item doesn't contain needed data!");
         }
     }
 

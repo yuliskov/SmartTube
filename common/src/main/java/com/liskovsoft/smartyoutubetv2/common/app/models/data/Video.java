@@ -95,6 +95,7 @@ public final class Video {
     public boolean isLiveEnd;
     public boolean forceSectionPlaylist;
     public boolean isShuffled;
+    public String searchQuery;
     private int startSegmentNum;
     private long liveDurationMs = -1;
     private long durationMs = -1;
@@ -159,6 +160,7 @@ public final class Video {
         video.isMovie = item.isMovie();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.durationMs = item.getDurationMs();
+        video.searchQuery = item.getSearchQuery();
         video.mediaItem = item;
 
         return video;
@@ -436,7 +438,11 @@ public final class Video {
             split = Helpers.appendArray(split, new String[]{"-1"});
         }
 
-        if (split.length != 22) {
+        if (split.length == 22) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 23) {
             return null;
         }
 
@@ -464,6 +470,7 @@ public final class Video {
         result.badge = Helpers.parseStr(split[19]);
         result.isLive = Helpers.parseBoolean(split[20]);
         result.channelGroupId = Helpers.parseStr(split[21]);
+        result.searchQuery = Helpers.parseStr(split[22]);
 
         // Reset old type (int)
         if (Helpers.equals(result.channelGroupId, "-1")) {
@@ -473,19 +480,12 @@ public final class Video {
         return result;
     }
 
-    //@NonNull
-    //@Override
-    //public String toString() {
-    //    return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-    //            YouTubeMediaItem.serializeMediaItem(mediaItem), playlistParams, sectionId, getReloadPageKey(), itemType);
-    //}
-
     @NonNull
     @Override
     public String toString() {
         return Helpers.mergeObj(id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
                 null, playlistParams, sectionId, getReloadPageKey(), itemType, secondTitle, previewUrl, percentWatched,
-                metadataTitle, metadataSecondTitle, badge, isLive, channelGroupId);
+                metadataTitle, metadataSecondTitle, badge, isLive, channelGroupId, searchQuery);
     }
 
     public boolean hasVideo() {
@@ -563,7 +563,7 @@ public final class Video {
         }
 
         // NOTE: Movies labeled as "Free with Ads" not supported yet
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId) || isMovie;
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
     }
 
     public boolean belongsToUserPlaylists() {
