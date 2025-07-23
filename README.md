@@ -35,7 +35,7 @@ Give it a try!
 ![:white_check_mark: supported: all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat). :x: not supported: Smartphones, non-Android plattforms like Samsung Tizen, LG webOS, iOS, etc.
 ](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
 * **supported:** all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
-* **not supported:** Smartphones, non-Android plattforms like Samsung Tizen, LG webOS, iOS, etc.
+* **not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
 
 
 ## Installation
