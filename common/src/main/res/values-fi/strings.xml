@@ -668,10 +668,10 @@
   <string name="without_picture">Ilman kuvaa</string>
   <string name="video_disabled">Video poistettu käytöstä</string>
   <string name="applying_fix">Älä sulje soitinta. Korjausta tehdään juuri</string>
-  <string name="player_global_focus_desc">Tämä ominaisuus vaikuttaa siihen, mihin pelaajan painikkeeseen keskitytään, kun siirrytään soittimen painikerivien välillä</string>
+  <string name="player_global_focus_desc">Mitä nappia korostetaan kun liikutaan nappien välillä</string>
   <string name="hide_mixes">Piilota sekoitukset</string>
   <string name="disable_network_error_fixing">Poista automaattinen verkkovirheiden korjaus käytöstä</string>
-  <string name="disable_network_error_fixing_desc">Sinun on luultavasti otettava tämä vaihtoehto käyttöön, jos käytät VPN:ää.</string>
+  <string name="disable_network_error_fixing_desc">Kannattaa ehkä ottaa tämä vaihtoehto käyttöön, jos käytät VPN:ää.</string>
   <string name="video_buffer_size_lowest">Matalin</string>
   <string name="recommended">Suositeltu</string>
   <string name="add_to_subscriptions_group">Lisää/poista tilausryhmästä</string>
@@ -703,4 +703,5 @@
   <string name="search_exit_shortcut">Poistu hausta</string>
   <string name="context_menu_sorting">Kontekstivalikon järjestely</string>
   <string name="video_flip">Peilaa</string>
+  <string name="dont_resize_video_to_fit_dialog">Älä muuta videon kokoa kommentteja lukiessa</string>
 </resources>
