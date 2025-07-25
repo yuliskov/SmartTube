@@ -563,7 +563,8 @@ public final class Video {
         }
 
         // NOTE: Movies labeled as "Free with Ads" not supported yet
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
+        //return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
+        return isMovie;
     }
 
     public boolean belongsToUserPlaylists() {
