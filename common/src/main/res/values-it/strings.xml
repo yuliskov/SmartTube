@@ -61,6 +61,7 @@
     <string name="dialog_remove_account">Disconnessione</string>
     <string name="dialog_add_account">Registrazione</string>
     <string name="default_lang">Predefinita</string>
+    <string name="original_lang">Originale</string>
     <string name="dialog_select_language">Lingua</string>
     <string name="subtitle_default">Predefiniti</string>
     <string name="subtitle_white_semi_transparent">Bianco su sfondo semitrasparente</string>
@@ -703,4 +704,6 @@
     <string name="card_preview_muted">Video senza audio</string>
     <string name="card_preview_full">Video con audio</string>
     <string name="card_preview">Anteprima delle cartoline</string>
+    <string name="card_unlocalized_titles">Titoli video non localizzati</string>
+    <string name="dont_resize_video_to_fit_dialog">Non ridimensionare il video per adattarlo al dialogo</string>
 </resources>
