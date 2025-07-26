@@ -260,11 +260,6 @@ public class PlaybackActivity extends LeanbackActivity {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
         mPlaybackFragment.onPIPChanged(isInPictureInPictureMode);
-
-        //if (!isInPictureInPictureMode) {
-        //    // Disable collapse app to Home launcher
-        //    getViewManager().enableMoveToBack(false);
-        //}
     }
 
     /**

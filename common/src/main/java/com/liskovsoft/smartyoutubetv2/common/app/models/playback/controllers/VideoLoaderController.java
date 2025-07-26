@@ -103,7 +103,8 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         if (getPlayer() != null && getPlayer().isEngineInitialized()) { // player is initialized
-            if (isVideoChanged || !getPlayer().containsMedia()) {
+            // Fix improperly resized video after exit from PIP (Device Formuler Z8 Pro)
+            if (isVideoChanged || !getPlayer().containsMedia() || getPlayer().isInPIPMode()) {
                 loadVideo(item); // force play immediately
             } else {
                 loadSuggestions(item); // update suggestions only
