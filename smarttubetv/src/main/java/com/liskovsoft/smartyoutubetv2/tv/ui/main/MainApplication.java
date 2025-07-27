@@ -62,7 +62,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
         viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
         viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppDialogView.class, AppDialogActivity.class, PlaybackActivity.class);
+        viewManager.register(AppDialogView.class, AppDialogActivity.class, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);

@@ -306,7 +306,7 @@ public final class SeekBar extends View {
         //final int progressWidth = width - radius * 2;
 
         for (SeekBarSegment segment : segments) {
-            if (segment.endProgress < 0 || segment.startProgress < 0) {
+            if (segment.endProgress < 0 || segment.startProgress < 0 || segment.startProgress >= 1) {
                 continue;
             }
 
