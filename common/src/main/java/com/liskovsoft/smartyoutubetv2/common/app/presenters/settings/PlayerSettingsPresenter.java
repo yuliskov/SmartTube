@@ -73,7 +73,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui), () -> {
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_player), () -> {
             if (mRestartApp) {
                 mRestartApp = false;
                 MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);

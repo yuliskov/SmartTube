@@ -40,7 +40,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         mBackupDirs = new ArrayList<>();
         mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), BACKUP_DIR_NAME));
-        mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), BACKUP_DIR_NAME)); // isn't used at a moment
+        //mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), BACKUP_DIR_NAME)); // isn't used at a moment
         // Fallback dir: Stable (in case app installed from scratch)
         mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), BACKUP_DIR_NAME));
         // Fallback dir: Beta (in case app installed from scratch)
