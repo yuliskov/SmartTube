@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
 -keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
 -keep class com.google.android.exoplayer2.util.Util { *; }
 -keep class com.bumptech.glide.request.RequestOptions { *; }
