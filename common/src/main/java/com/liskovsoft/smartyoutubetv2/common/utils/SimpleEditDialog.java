@@ -45,6 +45,7 @@ public class SimpleEditDialog {
 
         editField.setText(defaultValue);
         editField.setHint(dialogTitle);
+        editField.setNextFocusDownId(android.R.id.button1); // OK button
 
         if (defaultValue != null) { // move cursor to the end
             editField.setSelection(defaultValue.length());
@@ -99,5 +100,7 @@ public class SimpleEditDialog {
         });
 
         configDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener((view) -> configDialog.dismiss());
+
+        //editField.setNextFocusDownId(configDialog.getButton(AlertDialog.BUTTON_POSITIVE).getId()); // OK button
     }
 }

@@ -427,6 +427,7 @@
     <string name="save_remove_playlist">Add/Remove playlist from Playlists section</string>
     <string name="save_playlist">Add playlist to Playlists section</string>
     <string name="remove_playlist">Remove playlist from Playlists section permanently</string>
+    <string name="remove_playlist_fmt">Remove %s permanently</string>
     <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Added to Playlists section</string>
     <string name="create_playlist">Create playlist</string>

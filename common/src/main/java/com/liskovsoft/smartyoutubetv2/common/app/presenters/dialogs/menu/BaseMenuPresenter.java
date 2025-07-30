@@ -199,10 +199,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(
                         getContext().getString(original.belongsToUserPlaylists()? R.string.remove_playlist : R.string.save_playlist),
                         optionItem -> {
-                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
-
-
                                 syncToggleSaveRemovePlaylist(original, null);
                             } else if (original.belongsToUserPlaylists()) {
                                 // NOTE: Can't get empty playlist id. Empty playlist doesn't contain videos.
@@ -271,7 +268,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
                 } else {
-                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.remove_playlist), () -> {
+                    AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.remove_playlist_fmt, video.title), () -> {
                         removePlaylist(video);
                         closeDialog();
                     });

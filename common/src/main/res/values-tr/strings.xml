@@ -427,6 +427,7 @@
     <string name="save_remove_playlist">Oynatma listesini Oynatma Listeleri bölümüne Ekle/Kaldır</string>
     <string name="save_playlist">Oynatma listesini Oynatma Listeleri bölümüne Ekle</string>
     <string name="remove_playlist">Oynatma listesini Oynatma Listeleri bölümünden kalıcı olarak kaldır</string>
+    <string name="remove_playlist_fmt">%s\'yi kalıcı olarak kaldır</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
@@ -485,7 +486,7 @@
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
     <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
-    <string name="suggestions">Önerileri</string>
+    <string name="suggestions">Öneriler</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sources">Kaynaklar</string>
     <string name="releases">Sürümler</string>

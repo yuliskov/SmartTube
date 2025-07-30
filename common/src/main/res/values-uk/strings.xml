@@ -423,6 +423,7 @@
     <string name="save_remove_playlist">Додати/Видалити плейлист з розділу Плейлисти</string>
     <string name="save_playlist">Додати плейлист до розділу Плейлисти</string>
     <string name="remove_playlist">Видалити плейлист з розділу Плейлисти назавжди</string>
+    <string name="remove_playlist_fmt">Видалити %s назавжди</string>
     <string name="removed_from_playlists">Видалено з розділу Плейлисти</string>
     <string name="saved_to_playlists">Додано у розділ Плейлисти</string>
     <string name="create_playlist">Створити плейлист</string>
@@ -477,7 +478,7 @@
     <string name="skip_24_rate">Пропускати 24fps формати (виправлення режиму real cinema?)</string>
     <string name="skip_shorts">Пропускати Shorts</string>
     <string name="player_disable_suggestions">Вимкнути рекомендації</string>
-    <string name="suggestions">Рекомендації</string>
+    <string name="suggestions">Пропозиції</string>
     <string name="feedback">Зворотній зв`язок</string>
     <string name="sources">Вихідний код</string>
     <string name="releases">Релізи</string>
