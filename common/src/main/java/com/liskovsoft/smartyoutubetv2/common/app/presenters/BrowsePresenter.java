@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -698,6 +699,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 }
 
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
+
+                                if (TextUtils.isEmpty(videoGroup.getTitle())) {
+                                    videoGroup.setTitle(getContext().getString(R.string.suggestions));
+                                }
 
                                 getView().updateSection(videoGroup);
                                 mBrowseProcessor.process(videoGroup);

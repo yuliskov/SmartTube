@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.core.content.ContextCompat;
@@ -392,7 +393,7 @@ public class SuggestionsController extends BasePlayerController {
             if (group != null && !group.isEmpty()) {
                 VideoGroup videoGroup = VideoGroup.from(group);
 
-                if (Helpers.equals(videoGroup.getTitle(), " ")) {
+                if (TextUtils.isEmpty(videoGroup.getTitle())) {
                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
                 }
 

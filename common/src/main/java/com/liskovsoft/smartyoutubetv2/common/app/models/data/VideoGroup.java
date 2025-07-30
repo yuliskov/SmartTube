@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import android.text.TextUtils;
+
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -98,7 +100,7 @@ public class VideoGroup {
         videoGroup.mTitle = mediaGroup != null && mediaGroup.getTitle() != null ?
                 mediaGroup.getTitle() : section != null ? section.getTitle() : null;
         // Fix duplicated rows e.g. Shorts
-        videoGroup.mId = videoGroup.mTitle != null ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
+        videoGroup.mId = !TextUtils.isEmpty(videoGroup.mTitle) ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -170,6 +172,10 @@ public class VideoGroup {
      */
     public void setTitle(String title) {
         mTitle = title;
+
+        if (!TextUtils.isEmpty(title) && (mId == 0 || mId == hashCode())) {
+            mId = title.hashCode();
+        }
     }
 
     public int getId() {
