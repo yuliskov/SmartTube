@@ -650,4 +650,6 @@
   <string name="pinned_channel_rows">将置顶频道显示为一行</string>
   <string name="prefer_ipv4">优先使用IPv4 DNS</string>
   <string name="prefer_ipv4_desc">可能修复应用程序无法使用的情况。\n注意：可能导致应用程序卡顿和闪退（尤其是在 Android 8 设备或 Dune HD 设备上）</string>
+  <string name="video_buffer_size_lowest">最低</string>
+  <string name="video_buffer_size_highest">最高</string>
 </resources>
