@@ -423,7 +423,7 @@
     <string name="save_remove_playlist">Добавить/Удалить плейлист из раздела Плейлисты</string>
     <string name="save_playlist">Добавить плейлист в раздел Плейлисты</string>
     <string name="remove_playlist">Удалить плейлист из раздела Плейлисты навсегда</string>
-    <string name="remove_playlist_fmt">Удалить %s навсегда</string>
+    <string name="remove_playlist_fmt">Удалить %s навсегда?</string>
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Добавлено в раздел Плейлисты</string>
     <string name="create_playlist">Создать плейлист</string>
