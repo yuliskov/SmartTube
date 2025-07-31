@@ -2309,8 +2309,9 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                     while (appendOneColumnVisibleItems() && findViewByPosition(endPos) == null) {
                         // continuously append items until endPos
                     }
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException | NullPointerException e) {
                     // IndexOutOfBoundsException: Invalid item position 20(20). Item count:6 androidx.leanback.widget.VerticalGridView
+                    // NullPointerException: Attempt to invoke virtual method 'android.content.res.StringBlock.get(int)' on a null object reference
                     e.printStackTrace();
                 }
             }
