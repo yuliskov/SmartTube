@@ -438,7 +438,7 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
                     optionItem -> {
                         playerData.setPlayerVolume(scale);
-                        playerTweaksData.enablePlayerAutoVolume(false);
+                        playerTweaksData.enablePlayerAutoVolume(scalePercent == 100);
 
                         if (scalePercent > 100) {
                             MessageHelpers.showLongMessage(context, R.string.volume_boost_warning);

@@ -1,3 +1,11 @@
+-keepclassmembers class androidx.room.RoomDatabase {
+    androidx.sqlite.db.SupportSQLiteDatabase mDatabase;
+    <init>(...);
+}
+-keepclassmembers class androidx.core.app.NotificationCompatBuilder {
+    java.util.List mActionExtrasList;
+    <init>(...);
+}
 -keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
 -keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
 -keep class com.google.android.exoplayer2.util.Util { *; }

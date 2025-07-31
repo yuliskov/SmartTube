@@ -58,6 +58,9 @@ public abstract class BasePlayerController implements PlayerEventListener {
         float multiplier = targetRatio / ratio;
         initialZoom *= multiplier;
         dialogWidth *= multiplier;
+        if (initialZoom > 300) {
+            return; // shorts overzoom fix
+        }
         getPlayer().setZoomPercents((int)(initialZoom - dialogWidth));
         getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
