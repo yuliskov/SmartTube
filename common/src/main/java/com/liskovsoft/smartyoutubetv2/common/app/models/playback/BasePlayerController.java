@@ -44,16 +44,20 @@ public abstract class BasePlayerController implements PlayerEventListener {
         if (getPlayer() == null || settingsPresenter.isOverlay() || getPlayerTweaksData().isDontResizeVideoToFitDialogEnabled()) {
             return;
         }
-        // Skip vertical video
         FormatItem videoFormat = getPlayer().getVideoFormat();
         Format format = videoFormat != null && videoFormat.getTrack() != null ? videoFormat.getTrack().format : null;
-        if (!TrackSelectorUtil.isWideScreen(format)) {
+        if (format == null) {
             return;
         }
         getPlayer().showControls(false);
         // Dialog takes up 37% of the screen space
         float dialogWidth = 37 * getMainUIData().getUIScale();
-        int initialZoom = TrackSelectorUtil.is4to3Screen(format) ? 123 : 100;
+        float initialZoom = 100;
+        float ratio = format.width / (float) format.height;
+        float targetRatio = 16/9f;
+        float multiplier = targetRatio / ratio;
+        initialZoom *= multiplier;
+        dialogWidth *= multiplier;
         getPlayer().setZoomPercents((int)(initialZoom - dialogWidth));
         getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
