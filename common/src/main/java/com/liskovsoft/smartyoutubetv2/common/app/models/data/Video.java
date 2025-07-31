@@ -673,6 +673,10 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_NOTIFICATIONS);
     }
 
+    public boolean belongsToPlaybackQueue() {
+        return belongsToGroup(MediaGroup.TYPE_PLAYBACK_QUEUE);
+    }
+
     public boolean belongsToSuggestions() {
         return belongsToGroup(MediaGroup.TYPE_SUGGESTIONS);
     }

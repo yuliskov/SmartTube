@@ -559,6 +559,8 @@ public class PlayerUIController extends BasePlayerController {
             applyRepeatMode(buttonState);
         } else if (buttonId == R.id.action_channel) {
             openChannel();
+        } else if (buttonId == R.id.action_playback_queue) {
+            AppDialogUtil.showPlaybackQueueDialog(getContext(), item -> getMainController().onNewVideo(item));
         }
     }
 

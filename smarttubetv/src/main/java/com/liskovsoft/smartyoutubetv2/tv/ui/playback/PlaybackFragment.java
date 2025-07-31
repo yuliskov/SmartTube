@@ -774,11 +774,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onPlaybackQueue() {
-            mPlaybackPresenter.onPlaybackQueueClicked();
-        }
-
-        @Override
         public void onAction(int actionId, int actionIndex) {
             mPlaybackPresenter.onButtonClicked(actionId, actionIndex);
         }

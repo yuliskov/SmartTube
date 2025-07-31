@@ -329,11 +329,6 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onPlaybackQueueClicked() {
-        // NOP
-    }
-
-    @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         // NOP
     }

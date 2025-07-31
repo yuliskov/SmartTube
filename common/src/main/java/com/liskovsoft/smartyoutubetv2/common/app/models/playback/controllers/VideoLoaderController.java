@@ -239,11 +239,6 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     @Override
-    public void onPlaybackQueueClicked() {
-        AppDialogUtil.showPlaybackQueueDialog(getContext(), this::openVideoInt);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode) {
         if (getPlayer() == null) {
             return false;

@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public class PlaybackQueueAction extends Action {
     public PlaybackQueueAction(Context context) {
         super(R.id.action_playback_queue);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_playlist);
+        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_queue);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(

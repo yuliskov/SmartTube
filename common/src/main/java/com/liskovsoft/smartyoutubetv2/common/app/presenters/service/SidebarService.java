@@ -242,14 +242,14 @@ public class SidebarService implements ProfileChangeListener {
         mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
         mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
         mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
+        mDefaultSections.put(R.string.playback_queue_category_title, MediaGroup.TYPE_PLAYBACK_QUEUE);
         mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
     }
 
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
             // Notifications is broken
-            enableSection(sectionId, sectionId != MediaGroup.TYPE_NOTIFICATIONS);
-            //enableSection(sectionId, true);
+            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[]{MediaGroup.TYPE_NOTIFICATIONS, MediaGroup.TYPE_PLAYBACK_QUEUE}));
         }
     }
 

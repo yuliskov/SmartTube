@@ -491,11 +491,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     @Override
-    public void onPlaybackQueueClicked() {
-        process(PlayerUiEventListener::onPlaybackQueueClicked);
-    }
-
-    @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         process(listener -> listener.onButtonClicked(buttonId, buttonState));
     }

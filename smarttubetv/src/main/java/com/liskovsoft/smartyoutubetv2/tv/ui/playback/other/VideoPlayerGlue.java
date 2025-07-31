@@ -93,7 +93,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final SearchAction mSearchAction;
     private final VideoZoomAction mVideoZoomAction;
     private final PipAction mPipAction;
-    private final PlaybackQueueAction mPlaybackQueueAction;
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
     private final SeekIntervalAction mSeekIntervalAction;
@@ -131,7 +130,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mSearchAction = new SearchAction(context);
         mVideoZoomAction = new VideoZoomAction(context);
         mPipAction = new PipAction(context);
-        mPlaybackQueueAction = new PlaybackQueueAction(context);
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
         mSeekIntervalAction = new SeekIntervalAction(context);
@@ -146,6 +144,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new PlaybackModeAction(context));
         putAction(new ChannelAction(context));
         putAction(new ChatAction(context));
+        putAction(new PlaybackQueueAction(context));
     }
 
     @Override
@@ -241,7 +240,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             adapter.add(mVideoInfoAction);
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)) {
-            adapter.add(mPlaybackQueueAction);
+            adapter.add(mActions.get(R.id.action_playback_queue));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_CONTENT_BLOCK)) {
             adapter.add(mActions.get(R.id.action_content_block));
@@ -465,9 +464,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             handled = true;
         } else if (action == mPipAction) {
             mActionListener.onPip();
-            handled = true;
-        } else if (action == mPlaybackQueueAction) {
-            mActionListener.onPlaybackQueue();
             handled = true;
         } else if (action == mVideoInfoAction) {
             mActionListener.onVideoInfo();
@@ -705,8 +701,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         void onVideoZoom();
 
         void onPip();
-
-        void onPlaybackQueue();
 
         void onAction(int actionId, int actionIndex);
 
