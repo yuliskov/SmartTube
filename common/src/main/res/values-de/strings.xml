@@ -427,6 +427,7 @@
     <string name="save_remove_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen/entfernen</string>
     <string name="save_playlist">Wiedergabeliste zur Wiedergabelisten-Kategorie hinzufügen</string>
     <string name="remove_playlist">Wiedergabeliste dauerhaft aus Wiedergabelisten-Kategorie entfernen</string>
+    <string name="remove_playlist_fmt">%s dauerhaft entfernen?</string>
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
