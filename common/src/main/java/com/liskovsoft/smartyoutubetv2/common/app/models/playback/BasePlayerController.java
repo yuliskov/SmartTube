@@ -53,16 +53,17 @@ public abstract class BasePlayerController implements PlayerEventListener {
         // Dialog takes up 37% of the screen space
         float dialogWidth = 37 * getMainUIData().getUIScale();
         float initialZoom = 100;
+        float totalZoom = initialZoom - dialogWidth;
         float ratio = format.width / (float) format.height;
         float targetRatio = 16/9f;
         float multiplier = targetRatio / ratio;
-        initialZoom *= multiplier;
-        dialogWidth *= multiplier;
-        int totalZoom = (int) (initialZoom - dialogWidth);
-        if (totalZoom > 180) {
+        if (multiplier > 1) { // skip cinema ratio
+            totalZoom *= multiplier;
+        }
+        if (totalZoom > 130) {
             return; // shorts overzoom fix
         }
-        getPlayer().setZoomPercents(totalZoom);
+        getPlayer().setZoomPercents((int) totalZoom);
         getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
     };
