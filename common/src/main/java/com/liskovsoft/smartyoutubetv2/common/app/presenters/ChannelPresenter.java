@@ -373,7 +373,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     }
                     dialogPresenter.appendRadioCategory(getContext().getString(R.string.search_sorting), options);
                     dialogPresenter.showDialog();
-                }
+                },
+                error -> Log.e(TAG, "onSearchSettingsClicked error: %s", error.getMessage())
         );
     }
 
@@ -397,7 +398,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     update.setAction(VideoGroup.ACTION_REPLACE);
                     getView().update(update);
                     getView().setPosition(1);
-                }
+                },
+                error -> Log.e(TAG, "onSearchSubmit error: %s", error.getMessage())
         );
 
         return true;
