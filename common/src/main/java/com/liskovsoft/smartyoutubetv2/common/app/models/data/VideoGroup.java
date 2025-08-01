@@ -38,24 +38,24 @@ public class VideoGroup {
     private MediaGroup mMediaGroup;
     private BrowseSection mSection;
     private int mPosition = -1;
-    private int mAction;
+    private int mAction = ACTION_APPEND;
     private int mType = -1;
     public boolean isQueue;
 
-    public static VideoGroup from(BrowseSection category) {
-        return from(null, category);
+    public static VideoGroup from(BrowseSection section) {
+        return from((MediaGroup) null, section);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
         return from(mediaGroup, (BrowseSection) null);
     }
 
-    public static VideoGroup from(BrowseSection category, int groupPosition) {
-        return from(null, category, groupPosition);
+    public static VideoGroup from(BrowseSection section, int groupPosition) {
+        return from((MediaGroup) null, section, groupPosition);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category) {
-        return from(mediaGroup, category, -1);
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection section) {
+        return from(mediaGroup, section, -1);
     }
 
     public static VideoGroup from(Video item) {
@@ -63,14 +63,18 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item, int groupPosition) {
-        return from(new ArrayList<>(Collections.singletonList(item)), groupPosition);
+        return from(new ArrayList<>(Collections.singletonList(item)), null, groupPosition);
     }
 
     public static VideoGroup from(List<Video> items) {
-        return from(items, extractGroupPosition(items));
+        return from(items, null);
     }
 
-    public static VideoGroup from(List<Video> items, int groupPosition) {
+    public static VideoGroup from(List<Video> items, BrowseSection section) {
+        return from(items, section, extractGroupPosition(items));
+    }
+
+    public static VideoGroup from(List<Video> items, BrowseSection section, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
         // Getting topmost element. Could help when syncing multi rows fragments.
         Video topItem = findTopmostItemWithGroup(items);
@@ -80,6 +84,7 @@ public class VideoGroup {
         }
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
+        videoGroup.mSection = section;
 
         for (Video item : items) {
             // Section as playlist fix. Don't change the root.

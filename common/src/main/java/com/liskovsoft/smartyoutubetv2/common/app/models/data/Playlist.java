@@ -67,7 +67,7 @@ public class Playlist {
             return;
         }
 
-        boolean isLastElement = mPlaylist.size() > 0 && video.equals(mPlaylist.get(mPlaylist.size() - 1));
+        boolean isLastElement = !mPlaylist.isEmpty() && video.equals(mPlaylist.get(mPlaylist.size() - 1));
 
         remove(video);
 

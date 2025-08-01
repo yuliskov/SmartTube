@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -13,6 +15,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -62,6 +65,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
+    private final Map<Integer, Callable<List<Video>>> mLocalGridMappings;
     private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
     private final BrowseProcessorManager mBrowseProcessor;
@@ -81,6 +85,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
+        mLocalGridMappings = new HashMap<>();
         mSectionsMapping = new HashMap<>();
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
@@ -172,9 +177,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void initSectionMappings() {
         initSectionMapping();
 
-        initSectionCallbacks();
+        initRowAndGridMapping();
 
-        initSettingsSubCategories();
+        initSettingsGridMapping();
+        initLocalGridMapping();
     }
 
     private void initSectionMapping() {
@@ -205,7 +211,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
-    private void initSectionCallbacks() {
+    private void initRowAndGridMapping() {
         mRowMapping.put(MediaGroup.TYPE_HOME, getContentService().getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_TRENDING, getContentService().getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, getContentService().getKidsHomeObserve());
@@ -222,7 +228,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, getContentService().getSubscribedChannelsByNewContentObserve());
         mGridMapping.put(MediaGroup.TYPE_NOTIFICATIONS, getNotificationsService().getNotificationItemsObserve());
         mGridMapping.put(MediaGroup.TYPE_MY_VIDEOS, getContentService().getMyVideosObserve());
-        mGridMapping.put(MediaGroup.TYPE_PLAYBACK_QUEUE, getNotificationsService().getNotificationItemsObserve());
     }
 
     private void initPinnedSections() {
@@ -256,8 +261,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
-    private void initSettingsSubCategories() {
+    private void initSettingsGridMapping() {
         mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(getContext()));
+    }
+
+    private void initLocalGridMapping() {
+        mLocalGridMappings.put(MediaGroup.TYPE_PLAYBACK_QUEUE, () -> Playlist.instance().getAll());
     }
 
     public void updateSections() {
@@ -620,8 +629,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (section.getType()) {
             case BrowseSection.TYPE_GRID:
             case BrowseSection.TYPE_SHORTS_GRID:
-                Observable<MediaGroup> group = mGridMapping.get(section.getId());
-                updateVideoGrid(section, group, section.isAuthOnly());
+                if (mGridMapping.containsKey(section.getId())) {
+                    Observable<MediaGroup> group = mGridMapping.get(section.getId());
+                    updateVideoGrid(section, group, section.isAuthOnly());
+                } else if (mLocalGridMappings.containsKey(section.getId())) {
+                    Callable<List<Video>> localVideos = mLocalGridMappings.get(section.getId());
+                    updateLocalGrid(section, localVideos);
+                }
                 break;
             case BrowseSection.TYPE_ROW:
                 Observable<List<MediaGroup>> groups = mRowMapping.get(section.getId());
@@ -645,6 +659,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void updateSettingsGrid(BrowseSection section, Callable<List<SettingsItem>> items) {
         getView().updateSection(SettingsGroup.from(Helpers.get(items), section));
+        getView().showProgressBar(false);
+    }
+
+    private void updateLocalGrid(BrowseSection section, Callable<List<Video>> items) {
+        VideoGroup videoGroup = VideoGroup.from(Helpers.get(items), section);
+        videoGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(videoGroup);
         getView().showProgressBar(false);
     }
 
@@ -784,6 +805,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        if (getCurrentSection() != null && mLocalGridMappings.containsKey(getCurrentSection().getId())) {
+            Log.d(TAG, "Local grid section doesn't assume a continuation...");
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         // Small amount of items == small load time. Loading bar are useless?
@@ -838,7 +864,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         } else if (getView() != null) {
             if (isHistorySection() && !VideoStateService.instance(getContext()).isEmpty()) {
                 getView().showProgressBar(false);
-                VideoGroup videoGroup = VideoGroup.from(null, getCurrentSection(), -1);
+                VideoGroup videoGroup = VideoGroup.from(getCurrentSection());
                 videoGroup.setType(MediaGroup.TYPE_HISTORY);
                 appendLocalHistory(videoGroup);
                 getView().updateSection(videoGroup);
@@ -888,6 +914,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return item.belongsToChannelUploads() && !item.hasVideo();
     }
 
+    @Nullable
     public BrowseSection getCurrentSection() {
         return mCurrentSection;
     }
