@@ -427,6 +427,7 @@
     <string name="save_remove_playlist">Přidat/Odebrat playlist ze sekce Playlisty</string>
     <string name="save_playlist">Přidat playlist do sekce Playlisty</string>
     <string name="remove_playlist">Odstranit playlist ze sekce Playlisty natrvalo</string>
+    <string name="remove_playlist_fmt">Trvale smazat %s ?</string>
     <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
     <string name="saved_to_playlists">Přidáno do sekce Playlisty</string>
     <string name="create_playlist">Vytvořit playlist</string>
@@ -703,6 +704,7 @@
     <string name="oculus_quest_fix">Oprava pro Oculus Quest</string>
     <string name="card_preview_muted">Video beze zvuku</string>
     <string name="card_preview_full">Video se zvukem</string>
-    <string name="card_preview">Náhled kary</string>
+    <string name="card_preview">Náhled karty</string>
     <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
+    <string name="dont_resize_video_to_fit_dialog">Neměnit velikost videa, aby se přizpůsobilo dialogu</string>
 </resources>
