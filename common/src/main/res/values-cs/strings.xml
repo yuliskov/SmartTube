@@ -704,7 +704,7 @@
     <string name="oculus_quest_fix">Oprava pro Oculus Quest</string>
     <string name="card_preview_muted">Video beze zvuku</string>
     <string name="card_preview_full">Video se zvukem</string>
-    <string name="card_preview">Náhled kary</string>
+    <string name="card_preview">Náhled karty</string>
     <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
     <string name="dont_resize_video_to_fit_dialog">Neměnit velikost videa, aby se přizpůsobilo dialogu</string>
 </resources>
