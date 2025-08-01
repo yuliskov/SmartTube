@@ -148,6 +148,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_SHORTS_HOME, option.isSelected()),
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_HOME)));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_duplicate_recommendations_home),
+                option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_DUPLICATE_RECOMMENDATIONS_HOME, option.isSelected()),
+                mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_DUPLICATE_RECOMMENDATIONS_HOME)));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_channel),
                 option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_SHORTS_CHANNEL, option.isSelected()),
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_CHANNEL)));
