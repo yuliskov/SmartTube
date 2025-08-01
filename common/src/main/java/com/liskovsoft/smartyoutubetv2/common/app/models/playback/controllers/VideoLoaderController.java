@@ -363,7 +363,7 @@ public class VideoLoaderController extends BasePlayerController {
             bgImageUrl = getVideo().getBackgroundUrl();
 
             if (formatInfo.isBotCheckError()) {
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                //YouTubeServiceManager.instance().applyNoPlaybackFix();
                 scheduleRebootAppTimer(5_000);
             } else { // 18+ video or the video is hidden/removed
                 scheduleNextVideoTimer(5_000);
