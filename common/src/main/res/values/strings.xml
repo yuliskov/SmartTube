@@ -641,6 +641,7 @@
     <string name="hide_unwanted_content">Hide videos</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
     <string name="hide_watched_from_watch_later">Hide watched videos from Watch later playlist</string>
+    <string name="hide_duplicate_recommendations_home">Hide duplicates across groups on Home</string>
     <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
     <string name="login_from_browser">Login from browser</string>
     <string name="disable_remote_history">Disable history when using remote control</string>

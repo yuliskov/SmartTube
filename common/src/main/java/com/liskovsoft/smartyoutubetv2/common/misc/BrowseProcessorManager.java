@@ -10,9 +10,19 @@ public class BrowseProcessorManager implements BrowseProcessor {
     private final ArrayList<BrowseProcessor> mProcessors;
 
     public BrowseProcessorManager(Context context, OnItemReady onItemReady) {
+        this(context, onItemReady, null);
+    }
+
+    public BrowseProcessorManager(Context context, OnItemReady onItemReady, DuplicateRecommendationsProcessor.OnContinuationNeeded continuationCallback) {
         mProcessors = new ArrayList<>();
         mProcessors.add(new DeArrowProcessor(context, onItemReady));
         mProcessors.add(new UnlocalizedTitleProcessor(context, onItemReady));
+        
+        if (continuationCallback != null) {
+            mProcessors.add(new DuplicateRecommendationsProcessor(context, onItemReady, continuationCallback));
+        } else {
+            mProcessors.add(new DuplicateRecommendationsProcessor(context, onItemReady));
+        }
     }
 
     @Override

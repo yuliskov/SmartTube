@@ -90,7 +90,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         MediaServiceManager.instance().addAccountListener(this);
         ScreenHelper.updateScreenInfo(context);
         
-        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem);
+        mBrowseProcessor = new BrowseProcessorManager(getContext(), this::syncItem, this::continueGroup);
         mActions = new ArrayList<>();
 
         initSectionMappings();
@@ -727,8 +727,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
                                 }
 
-                                getView().updateSection(videoGroup);
                                 mBrowseProcessor.process(videoGroup);
+                                getView().updateSection(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -777,8 +777,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
                             appendLocalHistory(videoGroup);
-                            getView().updateSection(videoGroup);
                             mBrowseProcessor.process(videoGroup);
+                            getView().updateSection(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
                         },
