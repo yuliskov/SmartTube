@@ -1,3 +1,5 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController
+-keep class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseSectionFragmentFactory
 -keepclassmembers class androidx.room.RoomDatabase {
     androidx.sqlite.db.SupportSQLiteDatabase mDatabase;
     <init>(...);
