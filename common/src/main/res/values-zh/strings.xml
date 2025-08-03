@@ -656,4 +656,9 @@
   <string name="import_subscriptions_group">汇入</string>
   <string name="you_liked">无画面</string>
   <string name="oculus_quest_fix">修正Oculus Quest</string>
+  <string name="unknown_source_error">位置来源错误</string>
+  <string name="unknown_renderer_error">位置渲染器错误</string>
+  <string name="without_picture">无话面</string>
+  <string name="playback_buffering_fix">播放缓冲修正</string>
+  <string name="auto_history">制动（使用账户设定)</string>
 </resources>
