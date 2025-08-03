@@ -62,7 +62,6 @@ dependencies {
     implementation project(':fragment-1.1.0')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
-    implementation project(':googleapi')
     implementation project(':filepicker-lib')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion

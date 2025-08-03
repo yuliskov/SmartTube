@@ -40,7 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErr
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.common.helpers.DefaultHeaders;
+import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
 
 import java.io.IOException;
 import java.io.InputStream;

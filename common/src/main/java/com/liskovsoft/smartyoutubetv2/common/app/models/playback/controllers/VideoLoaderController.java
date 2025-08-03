@@ -362,7 +362,7 @@ public class VideoLoaderController extends BasePlayerController {
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
 
-            if (formatInfo.isBotCheckError()) {
+            if (formatInfo.isBotCheckError() || Helpers.startsWith(formatInfo.getPlayabilityStatus(), "Sign in to confirm")) {
                 //YouTubeServiceManager.instance().applyNoPlaybackFix();
                 scheduleRebootAppTimer(5_000);
             } else { // 18+ video or the video is hidden/removed
