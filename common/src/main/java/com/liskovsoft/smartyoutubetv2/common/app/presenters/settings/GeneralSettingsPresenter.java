@@ -176,6 +176,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_UPCOMING_CHANNEL, option.isSelected()),
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_UPCOMING_CHANNEL)));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_duplicates),
+                option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_DUPLICATES, option.isSelected()),
+                mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_DUPLICATES)));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_duplicates_exclude_recommended),
+                option -> mMediaServiceData.hideContent(MediaServiceData.CONTENT_DUPLICATES_EXCLUDE_RECOMMENDED, option.isSelected()),
+                mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_DUPLICATES_EXCLUDE_RECOMMENDED)));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.hide_unwanted_content), options);
     }
 

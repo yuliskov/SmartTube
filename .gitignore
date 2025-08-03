@@ -70,3 +70,6 @@ tmp/
 fabric.properties
 *BAK.java
 hs_err_pid*.log
+
+# Exclude main CustomInit.java (allow local customizations)
+common/src/main/java/com/liskovsoft/smartyoutubetv2/common/utils/CustomInit.java
