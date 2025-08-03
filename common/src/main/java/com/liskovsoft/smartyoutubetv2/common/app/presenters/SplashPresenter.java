@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -25,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.CustomInit;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;

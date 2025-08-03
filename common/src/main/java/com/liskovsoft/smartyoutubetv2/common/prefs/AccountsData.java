@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;

@@ -9,7 +9,7 @@ import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService.OnAccountChange;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;

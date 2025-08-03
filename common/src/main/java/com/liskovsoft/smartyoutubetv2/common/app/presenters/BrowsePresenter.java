@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.ScreenHelper;

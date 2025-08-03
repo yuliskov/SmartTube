@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
