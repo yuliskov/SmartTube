@@ -1,7 +1,6 @@
 package com.liskovsoft.leanbackassistant.utils;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
@@ -64,12 +63,11 @@ public class AppUtil {
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setClassName(mContext.getPackageName(), mainActivityName);
-        //intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+        intent.putExtra(GlobalConstants.ATV_INTENT, true);
 
         return intent;
     }
 
-    @TargetApi(16)
     public PendingIntent createAppPendingIntent(String url) {
         Intent detailsIntent = createAppIntent(url);
 
