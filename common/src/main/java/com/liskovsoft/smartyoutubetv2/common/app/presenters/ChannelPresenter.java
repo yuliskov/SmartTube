@@ -166,7 +166,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public String getChannelId() {
-        return mChannel != null ? mChannel.channelId : mChannelId;
+        return mChannel != null && mChannel.channelId != null ? mChannel.channelId : mChannelId;
     }
 
     public void setChannelId(String channelId) {
