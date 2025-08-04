@@ -900,7 +900,7 @@ public class Utils {
     public static void restartTheApp(Context context) {
         try {
             Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
-            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            intent.putExtra(GlobalConstants.RESTART_INTENT, true);
             ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -915,7 +915,7 @@ public class Utils {
                     context,
                     Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME)
             );
-            intent.putExtra(GlobalConstants.INTERNAL_INTENT, true);
+            intent.putExtra(GlobalConstants.RESTART_INTENT, true);
             ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
