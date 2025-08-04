@@ -2467,9 +2467,10 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
             // MOD: fix RecycleView crash on Eltex (Android 9)
             try {
                 result = scrollDirectionPrimary(dy);
-            } catch (NullPointerException | IllegalArgumentException e) {
+            } catch (NullPointerException | IllegalArgumentException | IllegalStateException e) {
                 // Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference
                 // IllegalArgumentException: VideoCardPresenter$1 is not a direct child of androidx.leanback.widget.HorizontalGridView
+                // IllegalStateException: Layout state should be one of 100 but it is 10
                 e.printStackTrace();
                 result = 0;
             }

@@ -1,5 +1,13 @@
--keepnames class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController
--keepnames class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseSectionFragmentFactory
+-keepclassmembers class androidx.leanback.app.BaseRowSupportFragment {
+    androidx.leanback.widget.VerticalGridView getVerticalGridView();
+    <init>(...);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController {
+    <init>(...);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseSectionFragmentFactory {
+    <init>(...);
+}
 -keepclassmembers class androidx.room.RoomDatabase {
     androidx.sqlite.db.SupportSQLiteDatabase mDatabase;
     <init>(...);
@@ -18,7 +26,6 @@
     <init>(...);
 }
 -keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
-#-keep class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController { *; }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
     boolean containsMedia();
     <init>(...);
