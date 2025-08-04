@@ -579,7 +579,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     public void enableHighBitrateFormats(boolean enable) {
-        MediaServiceData.instance().enableFormat(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
+        MediaServiceData.instance().setFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
     }
 
     public boolean isHighBitrateFormatsEnabled() {

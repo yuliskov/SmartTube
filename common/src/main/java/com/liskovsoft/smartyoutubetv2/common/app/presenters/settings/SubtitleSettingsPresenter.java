@@ -8,7 +8,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 public class SubtitleSettingsPresenter extends BasePresenter<Void> {
@@ -82,7 +81,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMoreSubtitlesSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from("Unlock more subtitles",
-                option -> MediaServiceData.instance().unlockMoreSubtitles(option.isSelected()),
+                option -> MediaServiceData.instance().setMoreSubtitlesUnlocked(option.isSelected()),
                 MediaServiceData.instance().isMoreSubtitlesUnlocked()));
     }
 }
