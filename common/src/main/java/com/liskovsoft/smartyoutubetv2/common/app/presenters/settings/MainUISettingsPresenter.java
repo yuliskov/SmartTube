@@ -292,11 +292,11 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.isGlobalClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
-                option -> mPlayerData.enableGlobalClock(option.isSelected()),
+                option -> mPlayerData.setGlobalClockEnabled(option.isSelected()),
                 mPlayerData.isGlobalClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
-                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+                option -> mPlayerData.setGlobalEndingTimeEnabled(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),

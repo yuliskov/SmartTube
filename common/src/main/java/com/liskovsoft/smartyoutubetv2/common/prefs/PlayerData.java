@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -21,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +71,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private String mSubtitleLanguage;
     private boolean mIsAllSpeedEnabled;
     private int mPlaybackMode;
-    private boolean mIsSonyTimerFixEnabled;
+    private boolean mIsSleepTimerEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsSpeedPerVideoEnabled;
     private boolean mIsTimeCorrectionEnabled;
@@ -143,17 +141,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return sInstance;
     }
 
-    public void setOKButtonBehavior(int option) {
-        mOKButtonBehavior = option;
-        persistState();
-    }
-
     public int getOKButtonBehavior() {
         return mOKButtonBehavior;
     }
 
-    public void setUiHideTimeoutSec(int timeoutSec) {
-        mUiHideTimeoutSec = timeoutSec;
+    public void setOKButtonBehavior(int option) {
+        mOKButtonBehavior = option;
         persistState();
     }
 
@@ -161,8 +154,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mUiHideTimeoutSec;
     }
 
-    public void setSeekPreviewMode(int mode) {
-        mSeekPreviewMode = mode;
+    public void setUiHideTimeoutSec(int timeoutSec) {
+        mUiHideTimeoutSec = timeoutSec;
         persistState();
     }
 
@@ -170,8 +163,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mSeekPreviewMode;
     }
 
-    public void enableSeekConfirmPause(boolean enable) {
-        mIsSeekConfirmPauseEnabled = enable;
+    public void setSeekPreviewMode(int mode) {
+        mSeekPreviewMode = mode;
         persistState();
     }
 
@@ -179,8 +172,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsSeekConfirmPauseEnabled;
     }
 
-    public void enableSeekConfirmPlay(boolean enable) {
-        mIsSeekConfirmPlayEnabled = enable;
+    public void setSeekConfirmPauseEnabled(boolean enable) {
+        mIsSeekConfirmPauseEnabled = enable;
         persistState();
     }
 
@@ -188,11 +181,16 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsSeekConfirmPlayEnabled;
     }
 
+    public void setSeekConfirmPlayEnabled(boolean enable) {
+        mIsSeekConfirmPlayEnabled = enable;
+        persistState();
+    }
+
     public boolean isClockEnabled() {
         return mIsClockEnabled;
     }
 
-    public void enableClock(boolean enable) {
+    public void setClockEnabled(boolean enable) {
         mIsClockEnabled = enable;
         persistState();
     }
@@ -201,7 +199,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsGlobalClockEnabled;
     }
 
-    public void enableGlobalClock(boolean enable) {
+    public void setGlobalClockEnabled(boolean enable) {
         mIsGlobalClockEnabled = enable;
         persistState();
     }
@@ -210,7 +208,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsGlobalEndingTimeEnabled;
     }
 
-    public void enableGlobalEndingTime(boolean enable) {
+    public void setGlobalEndingTimeEnabled(boolean enable) {
         mIsGlobalEndingTimeEnabled = enable;
         persistState();
     }
@@ -219,7 +217,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsRemainingTimeEnabled;
     }
 
-    public void enableRemainingTime(boolean enable) {
+    public void setRemainingTimeEnabled(boolean enable) {
         mIsRemainingTimeEnabled = enable;
         persistState();
     }
@@ -228,7 +226,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsEndingTimeEnabled;
     }
 
-    public void enableEndingTime(boolean enable) {
+    public void setEndingTimeEnabled(boolean enable) {
         mIsEndingTimeEnabled = enable;
         persistState();
     }
@@ -237,7 +235,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsQualityInfoEnabled;
     }
 
-    public void enableQualityInfo(boolean enable) {
+    public void setQualityInfoEnabled(boolean enable) {
         mIsQualityInfoEnabled = enable;
         persistState();
     }
@@ -264,7 +262,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsAllSpeedEnabled;
     }
 
-    public void enableAllSpeed(boolean enable) {
+    public void setAllSpeedEnabled(boolean enable) {
         mIsAllSpeedEnabled = enable;
         mIsSpeedPerVideoEnabled = false;
         mIsSpeedPerChannelEnabled = false;
@@ -275,7 +273,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsSpeedPerVideoEnabled;
     }
 
-    public void enableSpeedPerVideo(boolean enable) {
+    public void setSpeedPerVideoEnabled(boolean enable) {
         mIsSpeedPerVideoEnabled = enable;
         mIsAllSpeedEnabled = false;
         mIsSpeedPerChannelEnabled = false;
@@ -286,7 +284,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsLegacyCodecsForced;
     }
 
-    public void forceLegacyCodecs(boolean forced) {
+    public void setLegacyCodecsForced(boolean forced) {
         mIsLegacyCodecsForced = forced;
         persistState();
     }
@@ -340,7 +338,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsTooltipsEnabled;
     }
 
-    public void enableTooltips(boolean enable) {
+    public void setTooltipsEnabled(boolean enable) {
         mIsTooltipsEnabled = enable;
         persistState();
     }
@@ -349,7 +347,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsNumberKeySeekEnabled;
     }
 
-    public void enableNumberKeySeek(boolean enable) {
+    public void setNumberKeySeekEnabled(boolean enable) {
         mIsNumberKeySeekEnabled = enable;
         persistState();
     }
@@ -443,13 +441,13 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mEnabledSubtitlesPerChannel.contains(channelId);
     }
 
-    public void enableSubtitlesPerChannel(boolean enable) {
-        mIsSubtitlesPerChannelEnabled = enable;
-        persistState();
-    }
-
     public boolean isSubtitlesPerChannelEnabled() {
         return mIsSubtitlesPerChannelEnabled;
+    }
+
+    public void setSubtitlesPerChannelEnabled(boolean enable) {
+        mIsSubtitlesPerChannelEnabled = enable;
+        persistState();
     }
 
     public void setVideoBufferType(int type) {
@@ -501,17 +499,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
-    public void setResizeMode(int mode) {
-        mResizeMode = mode;
-        persistState();
-    }
-
     public int getResizeMode() {
         return mResizeMode;
     }
 
-    public void setZoomPercents(int percents) {
-        mZoomPercents = percents;
+    public void setResizeMode(int mode) {
+        mResizeMode = mode;
         persistState();
     }
 
@@ -519,8 +512,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mZoomPercents;
     }
 
-    public void setAspectRatio(float ratio) {
-        mAspectRatio = ratio;
+    public void setZoomPercents(int percents) {
+        mZoomPercents = percents;
         persistState();
     }
 
@@ -528,8 +521,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mAspectRatio;
     }
 
-    public void setRotationAngle(int angle) {
-        mRotationAngle = angle;
+    public void setAspectRatio(float ratio) {
+        mAspectRatio = ratio;
         persistState();
     }
 
@@ -537,8 +530,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mRotationAngle;
     }
 
-    public void setVideoFlipEnabled(boolean enabled) {
-        mIsVideoFlipEnabled = enabled;
+    public void setRotationAngle(int angle) {
+        mRotationAngle = angle;
         persistState();
     }
 
@@ -546,8 +539,32 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsVideoFlipEnabled;
     }
 
+    public void setVideoFlipEnabled(boolean enabled) {
+        mIsVideoFlipEnabled = enabled;
+        persistState();
+    }
+
+    public float getSpeed() {
+        return getSpeed(null);
+    }
+
     public void setSpeed(float speed) {
         setSpeed(null, speed);
+    }
+
+    public float getSpeed(String channelId) {
+        SpeedItem speed = null;
+
+        if (isSpeedPerChannelEnabled() && channelId != null) {
+            speed = mSpeeds.get(channelId);
+            mSpeed = 1.0f; // reset speed if the channel not found
+        }
+
+        if (speed != null) {
+            mSpeed = speed.speed;
+        }
+
+        return mSpeed;
     }
 
     public void setSpeed(String channelId, float speed) {
@@ -567,23 +584,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
-    public float getSpeed() {
-        return getSpeed(null);
-    }
-
-    public float getSpeed(String channelId) {
-        SpeedItem speed = null;
-
-        if (isSpeedPerChannelEnabled() && channelId != null) {
-            speed = mSpeeds.get(channelId);
-            mSpeed = 1.0f; // reset speed if the channel not found
-        }
-
-        if (speed != null) {
-            mSpeed = speed.speed;
-        }
-
-        return mSpeed;
+    public float getLastSpeed() {
+        return mLastSpeed;
     }
 
     public void setLastSpeed(float speed) {
@@ -594,19 +596,15 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         }
     }
 
-    public float getLastSpeed() {
-        return mLastSpeed;
+    public boolean isSpeedPerChannelEnabled() {
+        return mIsSpeedPerChannelEnabled;
     }
 
-    public void enableSpeedPerChannel(boolean enable) {
+    public void setSpeedPerChannelEnabled(boolean enable) {
         mIsSpeedPerChannelEnabled = enable;
         mIsSpeedPerVideoEnabled = false;
         mIsAllSpeedEnabled = false;
         persistState();
-    }
-
-    public boolean isSpeedPerChannelEnabled() {
-        return mIsSpeedPerChannelEnabled;
     }
 
     public int getAudioDelayMs() {
@@ -655,17 +653,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
-    public void enableSonyTimerFix(boolean enable) {
-        mIsSonyTimerFixEnabled = enable;
-        persistState();
+    public boolean isSleepTimerEnabled() {
+        return mIsSleepTimerEnabled;
     }
 
-    public boolean isSonyTimerFixEnabled() {
-        return mIsSonyTimerFixEnabled;
-    }
-
-    public void enableTimeCorrection(boolean enable) {
-        mIsTimeCorrectionEnabled = enable;
+    public void setSleepTimerEnabled(boolean enable) {
+        mIsSleepTimerEnabled = enable;
         persistState();
     }
 
@@ -673,11 +666,16 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsTimeCorrectionEnabled;
     }
 
+    public void setTimeCorrectionEnabled(boolean enable) {
+        mIsTimeCorrectionEnabled = enable;
+        persistState();
+    }
+
     public boolean isSkip24RateEnabled() {
         return mIsSkip24RateEnabled;
     }
 
-    public void enableSkip24Rate(boolean enable) {
+    public void setSkip24RateEnabled(boolean enable) {
         mIsSkip24RateEnabled = enable;
         persistState();
     }
@@ -686,7 +684,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsSkipShortsEnabled;
     }
 
-    public void enableSkipShorts(boolean enable) {
+    public void setSkipShortsEnabled(boolean enable) {
         mIsSkipShortsEnabled = enable;
         persistState();
     }
@@ -695,7 +693,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mIsLiveChatEnabled;
     }
 
-    public void enableLiveChat(boolean enable) {
+    public void setLiveChatEnabled(boolean enable) {
         mIsLiveChatEnabled = enable;
         persistState();
     }
@@ -746,7 +744,6 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return mAfrSwitchTimeMs;
     }
 
-    @TargetApi(19)
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_transparent, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -800,7 +797,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         // repeat mode was here
         // didn't remember what was there
         mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
-        mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
+        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsSpeedPerVideoEnabled = Helpers.parseBoolean(split, 29, false);
@@ -861,7 +858,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mVideoFormat, mAudioFormat, mSubtitleFormat,
                 mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
-                mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
                 mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,

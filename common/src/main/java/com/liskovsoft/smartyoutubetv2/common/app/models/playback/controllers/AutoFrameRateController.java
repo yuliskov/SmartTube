@@ -298,11 +298,11 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
             onDoubleRefreshRateCallback.run();
         }, playerData.isDoubleRefreshRateEnabled());
         OptionItem skip24RateOption = UiOptionItem.from(skip24Rate, optionItem -> {
-            playerData.enableSkip24Rate(optionItem.isSelected());
+            playerData.setSkip24RateEnabled(optionItem.isSelected());
             onSkip24RateCallback.run();
         }, playerData.isSkip24RateEnabled());
         OptionItem skipShortsOption = UiOptionItem.from(skipShorts, optionItem -> {
-            playerData.enableSkipShorts(optionItem.isSelected());
+            playerData.setSkipShortsEnabled(optionItem.isSelected());
         }, playerData.isSkipShortsEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);

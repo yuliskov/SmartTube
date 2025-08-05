@@ -313,7 +313,7 @@ public class AppDialogUtil {
 
     private static void setFormat(FormatItem formatItem, PlayerData playerData, Runnable onFormatSelected) {
         if (playerData.isLegacyCodecsForced()) {
-            playerData.forceLegacyCodecs(false);
+            playerData.setLegacyCodecsForced(false);
         }
         playerData.setFormat(formatItem);
         onFormatSelected.run();
@@ -497,7 +497,7 @@ public class AppDialogUtil {
     public static OptionItem createSubtitleChannelOption(Context context) {
         PlayerData playerData = PlayerData.instance(context);
         return UiOptionItem.from(context.getString(R.string.subtitle_remember),
-                optionItem -> playerData.enableSubtitlesPerChannel(optionItem.isSelected()),
+                optionItem -> playerData.setSubtitlesPerChannelEnabled(optionItem.isSelected()),
                 playerData.isSubtitlesPerChannelEnabled()
         );
     }
@@ -760,22 +760,22 @@ public class AppDialogUtil {
 
         options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_none),
                 optionItem -> {
-                    playerData.enableAllSpeed(false);
-                    playerData.enableSpeedPerVideo(false);
-                    playerData.enableSpeedPerChannel(false);
+                    playerData.setAllSpeedEnabled(false);
+                    playerData.setSpeedPerVideoEnabled(false);
+                    playerData.setSpeedPerChannelEnabled(false);
                 },
                 !playerData.isAllSpeedEnabled() && !playerData.isSpeedPerVideoEnabled()));
 
         options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_all),
-                optionItem -> playerData.enableAllSpeed(true),
+                optionItem -> playerData.setAllSpeedEnabled(true),
                 playerData.isAllSpeedEnabled()));
 
         options.add(UiOptionItem.from(context.getString(R.string.player_remember_speed_each),
-                optionItem -> playerData.enableSpeedPerVideo(true),
+                optionItem -> playerData.setSpeedPerVideoEnabled(true),
                 playerData.isSpeedPerVideoEnabled()));
 
         options.add(UiOptionItem.from(context.getString(R.string.player_speed_per_channel),
-                option -> playerData.enableSpeedPerChannel(option.isSelected()),
+                option -> playerData.setSpeedPerChannelEnabled(option.isSelected()),
                 playerData.isSpeedPerChannelEnabled()));
 
         String title = context.getString(R.string.player_remember_speed);

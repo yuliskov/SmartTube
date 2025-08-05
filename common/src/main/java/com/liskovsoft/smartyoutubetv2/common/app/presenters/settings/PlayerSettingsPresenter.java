@@ -290,7 +290,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
                 getContext().getString(R.string.force_legacy_codecs_desc),
-                option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
+                option -> mPlayerData.setLegacyCodecsForced(option.isSelected()),
                 mPlayerData.isLegacyCodecsForced()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
@@ -411,22 +411,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_regular),
                 option -> {
-                    mPlayerData.enableSeekConfirmPause(false);
-                    mPlayerData.enableSeekConfirmPlay(false);
+                    mPlayerData.setSeekConfirmPauseEnabled(false);
+                    mPlayerData.setSeekConfirmPlayEnabled(false);
                 },
                 !mPlayerData.isSeekConfirmPauseEnabled() && !mPlayerData.isSeekConfirmPlayEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_pause),
                 option -> {
-                    mPlayerData.enableSeekConfirmPause(true);
-                    mPlayerData.enableSeekConfirmPlay(false);
+                    mPlayerData.setSeekConfirmPauseEnabled(true);
+                    mPlayerData.setSeekConfirmPlayEnabled(false);
                 },
                 mPlayerData.isSeekConfirmPauseEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_play),
                 option -> {
-                    mPlayerData.enableSeekConfirmPause(false);
-                    mPlayerData.enableSeekConfirmPlay(true);
+                    mPlayerData.setSeekConfirmPauseEnabled(false);
+                    mPlayerData.setSeekConfirmPlayEnabled(true);
                 },
                 mPlayerData.isSeekConfirmPlayEnabled()));
 
@@ -438,22 +438,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.option_disabled),
                 option -> {
-                    mPlayerData.enableRemainingTime(false);
-                    mPlayerData.enableEndingTime(false);
+                    mPlayerData.setRemainingTimeEnabled(false);
+                    mPlayerData.setEndingTimeEnabled(false);
                 },
                 !mPlayerData.isRemainingTimeEnabled() && !mPlayerData.isEndingTimeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
                 option -> {
-                    mPlayerData.enableRemainingTime(true);
-                    mPlayerData.enableEndingTime(false);
+                    mPlayerData.setRemainingTimeEnabled(true);
+                    mPlayerData.setEndingTimeEnabled(false);
                 },
                 mPlayerData.isRemainingTimeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_ending_time),
                 option -> {
-                    mPlayerData.enableEndingTime(true);
-                    mPlayerData.enableRemainingTime(false);
+                    mPlayerData.setEndingTimeEnabled(true);
+                    mPlayerData.setRemainingTimeEnabled(false);
                 },
                 mPlayerData.isEndingTimeEnabled()));
 
@@ -517,8 +517,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
                 //getContext().getString(R.string.sleep_timer_desc),
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
+                option -> mPlayerData.setSleepTimerEnabled(option.isSelected()),
+                mPlayerData.isSleepTimerEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
                 option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
@@ -545,7 +545,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isSuggestionsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
-                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
+                option -> mPlayerData.setNumberKeySeekEnabled(option.isSelected()),
                 mPlayerData.isNumberKeySeekEnabled()));
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
@@ -576,11 +576,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isSpeedButtonOldBehaviorEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
-                option -> mPlayerData.enableClock(option.isSelected()),
+                option -> mPlayerData.setClockEnabled(option.isSelected()),
                 mPlayerData.isClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
-                option -> mPlayerData.enableQualityInfo(option.isSelected()),
+                option -> mPlayerData.setQualityInfoEnabled(option.isSelected()),
                 mPlayerData.isQualityInfoEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info_bitrate),
@@ -605,7 +605,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isLikesCounterEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
-                option -> mPlayerData.enableTooltips(option.isSelected()),
+                option -> mPlayerData.setTooltipsEnabled(option.isSelected()),
                 mPlayerData.isTooltipsEnabled()));
 
         // See: Utils.updateTooltip

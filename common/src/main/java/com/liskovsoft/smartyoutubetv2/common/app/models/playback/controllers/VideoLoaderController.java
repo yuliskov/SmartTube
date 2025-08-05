@@ -26,7 +26,6 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
-import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
@@ -247,11 +246,11 @@ public class VideoLoaderController extends BasePlayerController {
         mSleepTimerStartMs = System.currentTimeMillis();
 
         // Remove error msg if needed
-        if (getPlayerData().isSonyTimerFixEnabled()) {
+        if (getPlayerData().isSleepTimerEnabled()) {
             getPlayer().setVideo(getVideo());
         }
 
-        Utils.removeCallbacks(mRestartEngine);
+        Utils.removeCallbacks(mRestartEngine, mRebootApp);
 
         return false;
     }
@@ -266,7 +265,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (getPlayerData().isSonyTimerFixEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
+        if (getPlayerData().isSleepTimerEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);

@@ -13,8 +13,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.disposables.Disposable;
 
@@ -161,7 +159,7 @@ public class ChatController extends BasePlayerController {
         } else {
             disposeActions();
         }
-        getPlayerData().enableLiveChat(enabled);
+        getPlayerData().setLiveChatEnabled(enabled);
 
         if (mLiveChatKey != null) {
             getPlayer().setButtonState(R.id.action_chat, enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
