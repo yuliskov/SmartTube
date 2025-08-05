@@ -667,4 +667,15 @@
   <string name="remember_position_pinned">记住定选播防裂表中最后观看的位置</string>
   <string name="hide_watched_from_watch_later">从「稍候观看」播放清单中隐藏一贯看的影片</string>
   <string name="player_quick_skip_videos">使用想做/享有按钮跳过一般应篇</string>
+  <string name="video_flip">翻转（镜像)</string>
+  <string name="player_extra_long_speed_list">超长速度列表</string>
+  <string name="long_press_for_settings">长安已取得设定</string>
+  <string name="long_press_for_options">长安已取得选项</string>
+  <string name="video_disabled">影片已停用</string>
+  <string name="hide_mixes">隐藏合计</string>
+  <string name="card_preview_muted">无声影片</string>
+  <string name="card_preview_full">有声影片</string>
+  <string name="card_preview">恰偏于兰</string>
+  <string name="paid_content_notification">付费内容通知</string>
+  <string name="local_backup">本季备份</string>
 </resources>
