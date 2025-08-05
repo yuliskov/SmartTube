@@ -48,8 +48,9 @@ public class VideoLoaderController extends BasePlayerController {
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Runnable mReloadVideo = () -> {
-        getController(VideoStateController.class).saveState();
-        loadVideo(getVideo());
+        //getController(VideoStateController.class).saveState();
+        //loadVideo(getVideo());
+        getMainController().onNewVideo(getVideo());
     };
     private final Runnable mLoadNext = this::loadNext;
     private final Runnable mMetadataSync = () -> {

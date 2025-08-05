@@ -117,7 +117,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
             // NOTE: don't release after init check because this depends on timings
             getView().finishReally();
             setView(null);
-            getController(VideoStateController.class).saveState();
+            //getController(VideoStateController.class).saveState();
         }
 
         onNewVideo(video);

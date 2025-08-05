@@ -44,14 +44,15 @@ public class VideoStateController extends BasePlayerController {
     public void onNewVideo(Video item) {
         // Ensure that we aren't running on presenter init stage
         if (getPlayer() != null && getPlayer().containsMedia()) {
-            if (!item.equals(getVideo())) { // a video might be opened twice (when remote connection enabled). Fix for that.
-                // Reset auto-save history timer
-                mTickleLeft = 0;
-                // Save state of the previous video.
-                // In case video opened from phone and other stuff.
-                removeFromHistoryIfNeeded();
-                saveState();
-            }
+            //if (!item.equals(getVideo())) { // a video might be opened twice (when remote connection enabled). Fix for that.
+
+            // NOTE: even for the same videos it's good to save state (switch from embed, video reload etc)
+            // Reset auto-save history timer
+            mTickleLeft = 0;
+            // Save state of the previous video.
+            // In case video opened from phone and other stuff.
+            removeFromHistoryIfNeeded();
+            saveState();
         }
 
         if (!item.equals(getVideo())) {
@@ -408,7 +409,7 @@ public class VideoStateController extends BasePlayerController {
         getPlayer().setFormat(result);
     }
 
-    public void saveState() {
+    private void saveState() {
         // Skip mini player, but don't save for the previews (mute enabled)
         if (isMutedEmbed()) {
             return;
