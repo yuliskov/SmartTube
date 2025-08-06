@@ -254,6 +254,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
+        // The view could be running in the background
+        getViewManager().startView(ChannelUploadsView.class);
+
         VideoGroup group = VideoGroup.from(mediaGroup);
         update(group);
     }
