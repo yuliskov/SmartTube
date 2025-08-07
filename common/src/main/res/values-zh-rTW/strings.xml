@@ -701,4 +701,5 @@
   <string name="without_picture">無畫面</string>
   <string name="you_liked">您喜歡</string>
   <string name="video_buffer_size_lowest">最低</string>
+  <string name="suggestions">建議</string>
 </resources>
