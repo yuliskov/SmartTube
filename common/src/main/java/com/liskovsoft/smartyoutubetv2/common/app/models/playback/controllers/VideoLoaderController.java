@@ -487,7 +487,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            YouTubeServiceManager.instance().applyPlaybackFix();
             reloadVideo();
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();
@@ -555,14 +555,14 @@ public class VideoLoaderController extends BasePlayerController {
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                YouTubeServiceManager.instance().applyPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
-                YouTubeServiceManager.instance().invalidateMediaItemCache();
+                YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().enableHighBitrateFormats(false); // Response code: 429
             } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
+                YouTubeServiceManager.instance().applyPlaybackFix(); // Response code: 403
             }
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
