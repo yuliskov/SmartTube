@@ -1,4 +1,14 @@
--keep class com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider { *; }
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.utils.Utils {
+    boolean isFormatSupported(com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack);
+}
+-keepclassmembers class com.google.android.exoplayer2.video.VideoRendererEventListener {
+    void onVideoDisabled(com.google.android.exoplayer2.decoder.DecoderCounters);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider {
+    <init>(...);
+    boolean mIgnoreEmptyQuery;
+    com.liskovsoft.mediaserviceinterfaces.ContentService mContentService;
+}
 -keepclassmembers class androidx.leanback.widget.GridLayoutManager {
     <init>(...);
 }
