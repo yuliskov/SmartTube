@@ -558,6 +558,7 @@ public class VideoLoaderController extends BasePlayerController {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
+                YouTubeServiceManager.instance().invalidateMediaItemCache();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().enableHighBitrateFormats(false); // Response code: 429
             } else {

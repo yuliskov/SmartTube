@@ -109,7 +109,7 @@ public class SubtitleManager implements TextOutput, OnDataChange {
                 result.add(new Cue(text)); // sub centered by default
 
                 String[] split = textStr.split("\n");
-                subsBuffer = split.length == 2 ? split[1] : textStr;
+                subsBuffer = split.length == 2 ? split[1] + "\n" : textStr;
             } else {
                 CharSequence text = subsBuffer != null ? textStr.replace(subsBuffer, "") : textStr;
                 result.add(new Cue(text)); // sub centered by default
