@@ -678,4 +678,19 @@
   <string name="card_preview">恰偏于兰</string>
   <string name="paid_content_notification">付费内容通知</string>
   <string name="local_backup">本季备份</string>
+  <string name="search_exit_shortcut">从搜寻中退出</string>
+  <string name="new_subscriptions_group">信群组</string>
+  <string name="rename_group">中心命名订阅群组</string>
+  <string name="screen_dimming_amount">荧幕掉按量</string>
+  <string name="screen_dimming_timeout">荧幕掉安于是</string>
+  <string name="lb_playback_controls_closed_captioning_disable">停用隐藏式字幕</string>
+  <string name="lb_playback_controls_closed_captioning_enable">启用隐藏式字幕</string>
+  <string name="my_videos">我的影片</string>
+  <string name="player_audio_focus">音讯焦点 (如果真测到其他播放器这暂停）</string>
+  <string name="card_unlocalized_titles">为本地画的影片标题</string>
+  <string name="disable_network_error_fixing_desc"></string>
+  <string name="applying_fix">请勿关闭播放器。正在套用修正...</string>
+  <string name="auto_backup">自动备份（每日一次）</string>
+  <string name="device_specific_backup">金杯粉刺装置</string>
+  <string name="suggestions">建议</string>
 </resources>
