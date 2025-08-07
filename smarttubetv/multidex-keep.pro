@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.leanback.widget.GridLayoutManager {
+    <init>(...);
+}
 -keepclassmembers class androidx.leanback.app.BaseRowSupportFragment {
     androidx.leanback.widget.VerticalGridView getVerticalGridView();
     <init>(...);
