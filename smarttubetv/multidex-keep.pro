@@ -1,3 +1,4 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider { *; }
 -keepclassmembers class androidx.leanback.widget.GridLayoutManager {
     <init>(...);
 }
