@@ -697,4 +697,14 @@
   <string name="player_audio_focus">오디오 포커스 (다른 플레이어가 감지되면 일시 중지)</string>
   <string name="paid_content_notification">유료 콘텐츠 알림</string>
   <string name="you_liked">좋아요</string>
+  <string name="original_lang">오리지널</string>
+  <string name="remove_playlist_fmt">%s을(를) 영구적으로 제거할까요\?</string>
+  <string name="premium_users_only">프리미엄 사용자만 해당합니다. 불완전한 비디오 형식 목록 수정</string>
+  <string name="playback_buffering_fix">재생 버퍼링 수정</string>
+  <string name="oculus_quest_fix">오큘러스 퀘스트 수정</string>
+  <string name="card_preview_muted">소리가 없는 영상</string>
+  <string name="card_preview_full">소리가 있는 영상</string>
+  <string name="card_preview">카드 미리보기</string>
+  <string name="card_unlocalized_titles">현지화되지 않은 비디오 제목</string>
+  <string name="dont_resize_video_to_fit_dialog">대화에 맞게 비디오 크기를 조정하지 않기</string>
 </resources>
