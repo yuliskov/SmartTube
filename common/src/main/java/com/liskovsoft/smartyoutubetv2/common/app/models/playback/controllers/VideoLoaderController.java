@@ -343,9 +343,9 @@ public class VideoLoaderController extends BasePlayerController {
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
         applyAspectRatio(formatInfo);
 
-        if (formatInfo.containsMedia()) {
-            getStateService().setHistoryBroken(formatInfo.isHistoryBroken());
-        }
+        //if (formatInfo.containsMedia()) {
+        //    getStateService().setHistoryBroken(formatInfo.isHistoryBroken());
+        //}
 
         if (formatInfo.getPaidContentText() != null && getContentBlockData().isPaidContentNotificationEnabled()) {
             MessageHelpers.showMessage(getContext(), formatInfo.getPaidContentText());
