@@ -63,7 +63,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
         if (totalZoom > 130) {
             return; // shorts overzoom fix
         }
-        getPlayer().setZoomPercents((int) totalZoom);
+        getPlayer().setZoomPercents(Math.round(totalZoom));
         getPlayer().setVideoGravity(settingsPresenter.isComments() && getPlayerTweaksData().isCommentsPlacedLeft() ?
                 Gravity.END | Gravity.CENTER_VERTICAL : Gravity.START | Gravity.CENTER_VERTICAL);
     };
