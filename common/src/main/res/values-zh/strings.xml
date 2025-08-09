@@ -693,4 +693,5 @@
   <string name="auto_backup">自动备份（每日一次）</string>
   <string name="device_specific_backup">金杯粉刺装置</string>
   <string name="suggestions">建议</string>
+  <string name="skip_shorts">跳过短视频</string>
 </resources>
