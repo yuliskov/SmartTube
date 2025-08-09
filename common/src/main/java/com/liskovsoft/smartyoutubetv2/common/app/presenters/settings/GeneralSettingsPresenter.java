@@ -321,11 +321,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip),
-                option -> mPlayerTweaksData.enableQuickSkipShorts(option.isSelected()),
+                option -> mPlayerTweaksData.setQuickSkipShortsEnabled(option.isSelected()),
                 mPlayerTweaksData.isQuickSkipShortsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos),
-                option -> mPlayerTweaksData.enableQuickSkipVideos(option.isSelected()),
+                option -> mPlayerTweaksData.setQuickSkipVideosEnabled(option.isSelected()),
                 mPlayerTweaksData.isQuickSkipVideosEnabled()));
 
         options.add(UiOptionItem.from("Play/Pause -> OK",
@@ -667,7 +667,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         // Remove all
         mMainUIData.disableTopButton(Integer.MAX_VALUE);
-        tweaksData.disablePlayerButton(Integer.MAX_VALUE);
+        tweaksData.setPlayerButtonDisabled(Integer.MAX_VALUE);
         mMainUIData.disableMenuItem(Integer.MAX_VALUE);
         BrowsePresenter.instance(getContext()).enableAllSections(false);
         searchData.disablePopularSearches(true);
@@ -675,7 +675,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         if (enable) {
             // apply child tweaks
             mMainUIData.enableTopButton(topButtons);
-            tweaksData.enablePlayerButton(playerButtons);
+            tweaksData.setPlayerButtonEnabled(playerButtons);
             mMainUIData.enableMenuItem(menuItems);
             mPlayerData.setPlaybackMode(PlayerConstants.PLAYBACK_MODE_LIST);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
@@ -685,10 +685,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         } else {
             // apply default tweaks
             mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
-            tweaksData.enablePlayerButton(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
+            tweaksData.setPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
             mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
             BrowsePresenter.instance(getContext()).enableAllSections(true);
-            tweaksData.disableSuggestions(false);
+            tweaksData.setSuggestionsDisabled(false);
             mPlayerData.setPlaybackMode(PlayerConstants.PLAYBACK_MODE_ALL);
             searchData.disablePopularSearches(false);
         }

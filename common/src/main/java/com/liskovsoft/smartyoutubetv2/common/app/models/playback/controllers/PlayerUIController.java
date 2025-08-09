@@ -841,7 +841,7 @@ public class PlayerUIController extends BasePlayerController {
 
         if (getPlayerTweaksData().getScreenOffTimeoutSec() == 0) {
             boolean isPartialDimming = getPlayerTweaksData().getScreenOffDimmingPercents() < 100;
-            getPlayerTweaksData().enableBootScreenOff(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
+            getPlayerTweaksData().setBootScreenOffEnabled(buttonState == PlayerUI.BUTTON_OFF && isPartialDimming);
             if (buttonState == PlayerUI.BUTTON_OFF) {
                 manager.doScreenOff();
                 manager.setBlocked(isPartialDimming);
@@ -856,7 +856,7 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         if (getPlayerTweaksData().getScreenOffTimeoutSec() > 0) {
-            getPlayerTweaksData().enableScreenOffTimeout(buttonState == PlayerUI.BUTTON_OFF);
+            getPlayerTweaksData().setScreenOffTimeoutEnabled(buttonState == PlayerUI.BUTTON_OFF);
             getPlayer().setButtonState(R.id.action_screen_dimming, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }

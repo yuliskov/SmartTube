@@ -527,7 +527,7 @@ public class VideoLoaderController extends BasePlayerController {
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             } else {
-                getPlayerTweaksData().enableSectionPlaylist(false);
+                getPlayerTweaksData().setSectionPlaylistEnabled(false);
                 restartEngine = false;
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest", "Response code: 503")) {
@@ -556,7 +556,7 @@ public class VideoLoaderController extends BasePlayerController {
                 disableSubtitles(); // Response code: 429
                 YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-                getPlayerTweaksData().enableHighBitrateFormats(false); // Response code: 429
+                getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyPlaybackFix(); // Response code: 403
             }
@@ -569,7 +569,7 @@ public class VideoLoaderController extends BasePlayerController {
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
             getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
             if (getPlayerTweaksData().isSWDecoderForced()) {
-                getPlayerTweaksData().forceSWDecoder(false);
+                getPlayerTweaksData().setSWDecoderForced(false);
             } else {
                 restartEngine = false;
             }

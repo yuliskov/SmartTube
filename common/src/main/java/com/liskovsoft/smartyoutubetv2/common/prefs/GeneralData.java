@@ -419,7 +419,7 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void enable24HourLocale(boolean enable) {
-        GlobalPreferences.sInstance.enable24HourLocale(enable);
+        GlobalPreferences.sInstance.set24HourLocaleEnabled(enable);
     }
 
     public void enableProxy(boolean enable) {

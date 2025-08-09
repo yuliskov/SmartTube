@@ -168,9 +168,9 @@ public class ChatController extends BasePlayerController {
 
     private void placeChatLeft(boolean left) {
         if (mLiveChatKey != null) {
-            getPlayerTweaksData().placeChatLeft(left);
+            getPlayerTweaksData().setChatPlacedLeft(left);
         } else {
-            getPlayerTweaksData().placeCommentsLeft(left);
+            getPlayerTweaksData().setCommentsPlacedLeft(left);
         }
     }
 

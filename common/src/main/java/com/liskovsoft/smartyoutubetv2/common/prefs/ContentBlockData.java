@@ -222,7 +222,7 @@ public class ContentBlockData {
     }
 
     public void enableAltServer(boolean enabled) {
-        GlobalPreferences.instance(mAppPrefs.getContext()).enableContentBlockAltServer(enabled);
+        GlobalPreferences.instance(mAppPrefs.getContext()).setContentBlockAltServerEnabled(enabled);
     }
 
     private void restoreState() {

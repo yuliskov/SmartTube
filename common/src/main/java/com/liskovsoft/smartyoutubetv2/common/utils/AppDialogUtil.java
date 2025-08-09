@@ -438,7 +438,7 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(String.format("%s%%", scalePercent),
                     optionItem -> {
                         playerData.setPlayerVolume(scale);
-                        playerTweaksData.enablePlayerAutoVolume(scalePercent == 100);
+                        playerTweaksData.setPlayerAutoVolumeEnabled(scalePercent == 100);
 
                         if (scalePercent > 100) {
                             MessageHelpers.showLongMessage(context, R.string.volume_boost_warning);
@@ -788,11 +788,11 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(context.getString(R.string.player_long_speed_list),
-                option -> playerTweaksData.enableLongSpeedList(option.isSelected()),
+                option -> playerTweaksData.setLongSpeedListEnabled(option.isSelected()),
                 playerTweaksData.isLongSpeedListEnabled()));
 
         options.add(UiOptionItem.from(context.getString(R.string.player_extra_long_speed_list),
-                option -> playerTweaksData.enableExtraLongSpeedList(option.isSelected()),
+                option -> playerTweaksData.setExtraLongSpeedListEnabled(option.isSelected()),
                 playerTweaksData.isExtraLongSpeedListEnabled()));
 
         String title = context.getString(R.string.player_other);

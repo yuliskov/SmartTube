@@ -117,17 +117,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return sInstance;
     }
 
-    public void enableAmlogicFix(boolean enable) {
-        mIsAmlogicFixEnabled = enable;
-        persistData();
-    }
-
     public boolean isAmlogicFixEnabled() {
         return mIsAmlogicFixEnabled;
     }
 
-    public void enableAmazonFrameDropFix(boolean enable) {
-        mIsAmazonFrameDropFixEnabled = enable;
+    public void setAmlogicFixEnabled(boolean enable) {
+        mIsAmlogicFixEnabled = enable;
         persistData();
     }
 
@@ -135,8 +130,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsAmazonFrameDropFixEnabled;
     }
 
-    public void enableSonyFrameDropFix(boolean enable) {
-        mIsSonyFrameDropFixEnabled = enable;
+    public void setAmazonFrameDropFixEnabled(boolean enable) {
+        mIsAmazonFrameDropFixEnabled = enable;
         persistData();
     }
 
@@ -144,8 +139,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSonyFrameDropFixEnabled;
     }
 
-    public void disableSnapToVsync(boolean disable) {
-        mIsSnapToVsyncDisabled = disable;
+    public void setSonyFrameDropFixEnabled(boolean enable) {
+        mIsSonyFrameDropFixEnabled = enable;
         persistData();
     }
 
@@ -153,8 +148,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSnapToVsyncDisabled;
     }
 
-    public void skipProfileLevelCheck(boolean enable) {
-        mIsProfileLevelCheckSkipped = enable;
+    public void setSnappingToVsyncDisabled(boolean disable) {
+        mIsSnapToVsyncDisabled = disable;
         persistData();
     }
 
@@ -162,8 +157,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsProfileLevelCheckSkipped;
     }
 
-    public void forceSWDecoder(boolean force) {
-        mIsSWDecoderForced = force;
+    public void setProfileLevelCheckSkipped(boolean enable) {
+        mIsProfileLevelCheckSkipped = enable;
         persistData();
     }
 
@@ -171,11 +166,16 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSWDecoderForced;
     }
 
+    public void setSWDecoderForced(boolean force) {
+        mIsSWDecoderForced = force;
+        persistData();
+    }
+
     public boolean isTextureViewEnabled() {
         return mIsTextureViewEnabled;
     }
 
-    public void enableTextureView(boolean enable) {
+    public void setTextureViewEnabled(boolean enable) {
         mIsTextureViewEnabled = enable;
         persistData();
     }
@@ -188,18 +188,18 @@ public class PlayerTweaksData implements ProfileChangeListener {
      * Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).<br/>
      * It's because there's no tweaks for modern devices.
      */
-    public void enableSetOutputSurfaceWorkaround(boolean enable) {
+    public void setSetOutputSurfaceWorkaroundEnabled(boolean enable) {
         mIsSetOutputSurfaceWorkaroundEnabled = enable;
-        persistData();
-    }
-
-    public void enableAudioSyncFix(boolean enable) {
-        mIsAudioSyncFixEnabled = enable;
         persistData();
     }
 
     public boolean isAudioSyncFixEnabled() {
         return mIsAudioSyncFixEnabled;
+    }
+
+    public void setAudioSyncFixEnabled(boolean enable) {
+        mIsAudioSyncFixEnabled = enable;
+        persistData();
     }
 
     /**
@@ -212,14 +212,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     /**
      * Fix crashes on chinese projectors
      */
-    public void enableKeepFinishedActivity(boolean enable) {
+    public void setKeepFinishedActivityEnabled(boolean enable) {
         mIsKeepFinishedActivityEnabled = enable;
-        persistData();
-    }
-
-    public void forceHlsStreams(boolean enable) {
-        mIsHlsStreamsForced = enable;
-        mIsDashUrlStreamsForced = false;
         persistData();
     }
 
@@ -227,9 +221,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsHlsStreamsForced;
     }
 
-    public void forceDashUrlStreams(boolean enable) {
-        mIsDashUrlStreamsForced = enable;
-        mIsHlsStreamsForced = false;
+    public void setHlsStreamsForced(boolean enable) {
+        mIsHlsStreamsForced = enable;
+        mIsDashUrlStreamsForced = false;
         persistData();
     }
 
@@ -237,8 +231,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsDashUrlStreamsForced;
     }
 
-    public void disablePlaybackNotifications(boolean disable) {
-        mIsPlaybackNotificationsDisabled = disable;
+    public void setDashUrlStreamsForced(boolean enable) {
+        mIsDashUrlStreamsForced = enable;
+        mIsHlsStreamsForced = false;
         persistData();
     }
 
@@ -246,17 +241,17 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsPlaybackNotificationsDisabled;
     }
 
+    public void setPlaybackNotificationsDisabled(boolean disable) {
+        mIsPlaybackNotificationsDisabled = disable;
+        persistData();
+    }
+
     public boolean isTunneledPlaybackEnabled() {
         return mIsTunneledPlaybackEnabled;
     }
 
-    public void enableTunneledPlayback(boolean enable) {
+    public void setTunneledPlaybackEnabled(boolean enable) {
         mIsTunneledPlaybackEnabled = enable;
-        persistData();
-    }
-
-    public void enableUnsafeAudioFormats(boolean enable) {
-        mIsUnsafeAudioFormatsEnabled = enable;
         persistData();
     }
 
@@ -264,13 +259,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsUnsafeAudioFormatsEnabled;
     }
 
-    public void enablePlayerButton(int playerButtons) {
-        mPlayerButtons |= playerButtons;
-        persistData();
-    }
-
-    public void disablePlayerButton(int playerButtons) {
-        mPlayerButtons &= ~playerButtons;
+    public void setUnsafeAudioFormatsEnabled(boolean enable) {
+        mIsUnsafeAudioFormatsEnabled = enable;
         persistData();
     }
 
@@ -278,8 +268,13 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return (mPlayerButtons & menuItems) == menuItems;
     }
 
-    public void setPlayerDataSource(int dataSource) {
-        mPlayerDataSource = dataSource;
+    public void setPlayerButtonEnabled(int playerButtons) {
+        mPlayerButtons |= playerButtons;
+        persistData();
+    }
+
+    public void setPlayerButtonDisabled(int playerButtons) {
+        mPlayerButtons &= ~playerButtons;
         persistData();
     }
 
@@ -287,8 +282,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mPlayerDataSource;
     }
 
-    public void enableNoFpsPresets(boolean enable) {
-        mIsNoFpsPresetsEnabled = enable;
+    public void setPlayerDataSource(int dataSource) {
+        mPlayerDataSource = dataSource;
         persistData();
     }
 
@@ -296,8 +291,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsNoFpsPresetsEnabled;
     }
 
-    public void preferAvcOverVp9(boolean prefer) {
-        mIsAvcOverVp9Preferred = prefer;
+    public void setNoFpsPresetsEnabled(boolean enable) {
+        mIsNoFpsPresetsEnabled = enable;
         persistData();
     }
 
@@ -305,8 +300,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsAvcOverVp9Preferred;
     }
 
-    public void enableRememberPositionOfShortVideos(boolean enable) {
-        mIsRememberPositionOfShortVideosEnabled = enable;
+    public void setAvcOverVp9Preferred(boolean prefer) {
+        mIsAvcOverVp9Preferred = prefer;
         persistData();
     }
 
@@ -314,8 +309,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsRememberPositionOfShortVideosEnabled;
     }
 
-    public void enableRememberPositionOfLiveVideos(boolean enable) {
-        mIsRememberPositionOfLiveVideosEnabled = enable;
+    public void setRememberPositionOfShortVideosEnabled(boolean enable) {
+        mIsRememberPositionOfShortVideosEnabled = enable;
         persistData();
     }
 
@@ -323,11 +318,16 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsRememberPositionOfLiveVideosEnabled;
     }
 
+    public void setRememberPositionOfLiveVideosEnabled(boolean enable) {
+        mIsRememberPositionOfLiveVideosEnabled = enable;
+        persistData();
+    }
+
     public boolean isSuggestionsDisabled() {
         return mIsSuggestionsDisabled;
     }
 
-    public void disableSuggestions(boolean disable) {
+    public void setSuggestionsDisabled(boolean disable) {
         mIsSuggestionsDisabled = disable;
         persistData();
     }
@@ -336,7 +336,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsChatPlacedLeft;
     }
 
-    public void placeChatLeft(boolean left) {
+    public void setChatPlacedLeft(boolean left) {
         mIsChatPlacedLeft = left;
         persistData();
     }
@@ -345,7 +345,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsCommentsPlacedLeft;
     }
 
-    public void placeCommentsLeft(boolean left) {
+    public void setCommentsPlacedLeft(boolean left) {
         mIsCommentsPlacedLeft = left;
         persistData();
     }
@@ -354,13 +354,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsRealChannelIconEnabled;
     }
 
-    public void enableRealChannelIcon(boolean enable) {
+    public void setRealChannelIconEnabled(boolean enable) {
         mIsRealChannelIconEnabled = enable;
-        persistData();
-    }
-
-    public void setPixelRatio(float pixelRatio) {
-        mPixelRatio = pixelRatio;
         persistData();
     }
 
@@ -368,11 +363,16 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mPixelRatio;
     }
 
+    public void setPixelRatio(float pixelRatio) {
+        mPixelRatio = pixelRatio;
+        persistData();
+    }
+
     public boolean isQualityInfoBitrateEnabled() {
         return mIsQualityInfoBitrateEnabled;
     }
 
-    public void enableQualityInfoBitrate(boolean enable) {
+    public void setQualityInfoBitrateEnabled(boolean enable) {
         mIsQualityInfoBitrateEnabled = enable;
         persistData();
     }
@@ -381,7 +381,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSpeedButtonOldBehaviorEnabled;
     }
 
-    public void enableSpeedButtonOldBehavior(boolean enable) {
+    public void setSpeedButtonOldBehaviorEnabled(boolean enable) {
         mIsSpeedButtonOldBehaviorEnabled = enable;
         persistData();
     }
@@ -390,13 +390,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsOculusQuestFixEnabled;
     }
 
-    public void enableOculusQuestFix(boolean enable) {
+    public void setOculusQuestFixEnabled(boolean enable) {
         mIsOculusQuestFixEnabled = enable;
-        persistData();
-    }
-
-    public void enableButtonLongClick(boolean enable) {
-        mIsButtonLongClickEnabled = enable;
         persistData();
     }
 
@@ -404,9 +399,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsButtonLongClickEnabled;
     }
 
-    public void enableLongSpeedList(boolean enable) {
-        mIsExtraLongSpeedListEnabled = false;
-        mIsLongSpeedListEnabled = enable;
+    public void setButtonLongClickEnabled(boolean enable) {
+        mIsButtonLongClickEnabled = enable;
         persistData();
     }
 
@@ -414,9 +408,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsLongSpeedListEnabled;
     }
 
-    public void enableExtraLongSpeedList(boolean enable) {
-        mIsLongSpeedListEnabled = false;
-        mIsExtraLongSpeedListEnabled = enable;
+    public void setLongSpeedListEnabled(boolean enable) {
+        mIsExtraLongSpeedListEnabled = false;
+        mIsLongSpeedListEnabled = enable;
         persistData();
     }
 
@@ -424,8 +418,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsExtraLongSpeedListEnabled;
     }
 
-    public void unlockAllFormats(boolean unlock) {
-        mUnlockAllFormats = unlock;
+    public void setExtraLongSpeedListEnabled(boolean enable) {
+        mIsLongSpeedListEnabled = false;
+        mIsExtraLongSpeedListEnabled = enable;
         persistData();
     }
 
@@ -433,8 +428,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mUnlockAllFormats;
     }
 
-    public void disableBufferOnStreams(boolean disable) {
-        mIsBufferOnStreamsDisabled = disable;
+    public void setAllFormatsUnlocked(boolean unlock) {
+        mUnlockAllFormats = unlock;
         persistData();
     }
 
@@ -442,8 +437,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsBufferOnStreamsDisabled;
     }
 
-    public void enableSectionPlaylist(boolean enable) {
-        mIsSectionPlaylistEnabled = enable;
+    public void setBufferOnStreamsDisabled(boolean disable) {
+        mIsBufferOnStreamsDisabled = disable;
         persistData();
     }
 
@@ -451,13 +446,22 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSectionPlaylistEnabled;
     }
 
-    public void enableScreenOffTimeout(boolean enable) {
-        mIsScreenOffTimeoutEnabled = enable;
+    public void setSectionPlaylistEnabled(boolean enable) {
+        mIsSectionPlaylistEnabled = enable;
         persistData();
     }
 
     public boolean isScreenOffTimeoutEnabled() {
         return mIsScreenOffTimeoutEnabled;
+    }
+
+    public void setScreenOffTimeoutEnabled(boolean enable) {
+        mIsScreenOffTimeoutEnabled = enable;
+        persistData();
+    }
+
+    public int getScreenOffTimeoutSec() {
+        return mScreenOffTimeoutSec;
     }
 
     public void setScreenOffTimeoutSec(int timeoutSec) {
@@ -466,8 +470,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
-    public int getScreenOffTimeoutSec() {
-        return mScreenOffTimeoutSec;
+    public int getScreenOffDimmingPercents() {
+        return mScreenOffDimmingPercents;
     }
 
     public void setScreenOffDimmingPercents(int percents) {
@@ -475,21 +479,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
-    public int getScreenOffDimmingPercents() {
-        return mScreenOffDimmingPercents;
-    }
-
-    public void enableBootScreenOff(boolean enable) {
-        mIsBootScreenOffEnabled = enable;
-        persistData();
-    }
-
     public boolean isBootScreenOffEnabled() {
         return mIsBootScreenOffEnabled && !isScreenOffTimeoutEnabled();
     }
 
-    public void enableUIAnimations(boolean enable) {
-        mIsUIAnimationsEnabled = enable;
+    public void setBootScreenOffEnabled(boolean enable) {
+        mIsBootScreenOffEnabled = enable;
         persistData();
     }
 
@@ -497,8 +492,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsUIAnimationsEnabled;
     }
 
-    public void enableLikesCounter(boolean enable) {
-        mIsLikesCounterEnabled = enable;
+    public void setUIAnimationsEnabled(boolean enable) {
+        mIsUIAnimationsEnabled = enable;
         persistData();
     }
 
@@ -506,8 +501,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsLikesCounterEnabled;
     }
 
-    public void enableChapterNotification(boolean enable) {
-        mIsChapterNotificationEnabled = enable;
+    public void setLikesCounterEnabled(boolean enable) {
+        mIsLikesCounterEnabled = enable;
         persistData();
     }
 
@@ -515,8 +510,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsChapterNotificationEnabled;
     }
 
-    public void enablePlayerUiOnNext(boolean enable) {
-        mIsPlayerUiOnNextEnabled = enable;
+    public void setChapterNotificationEnabled(boolean enable) {
+        mIsChapterNotificationEnabled = enable;
         persistData();
     }
 
@@ -524,8 +519,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsPlayerUiOnNextEnabled;
     }
 
-    public void enablePlayerAutoVolume(boolean enable) {
-        mIsPlayerAutoVolumeEnabled = enable;
+    public void setPlayerUiOnNextEnabled(boolean enable) {
+        mIsPlayerUiOnNextEnabled = enable;
         persistData();
     }
 
@@ -533,8 +528,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsPlayerAutoVolumeEnabled;
     }
 
-    public void enableAudioFocus(boolean enable) {
-        mIsAudioFocusEnabled = enable;
+    public void setPlayerAutoVolumeEnabled(boolean enable) {
+        mIsPlayerAutoVolumeEnabled = enable;
         persistData();
     }
 
@@ -542,8 +537,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsAudioFocusEnabled;
     }
 
-    public void enableSimplePlayerNavigation(boolean enable) {
-        mIsSimplePlayerNavigationEnabled = enable;
+    public void setAudioFocusEnabled(boolean enable) {
+        mIsAudioFocusEnabled = enable;
         persistData();
     }
 
@@ -551,8 +546,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsSimplePlayerNavigationEnabled;
     }
 
-    public void enableLoopShorts(boolean enable) {
-        mIsLoopShortsEnabled = enable;
+    public void setSimplePlayerNavigationEnabled(boolean enable) {
+        mIsSimplePlayerNavigationEnabled = enable;
         persistData();
     }
 
@@ -560,8 +555,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsLoopShortsEnabled;
     }
 
-    public void enableQuickSkipShorts(boolean enable) {
-        mIsQuickSkipShortsEnabled = enable;
+    public void setLoopShortsEnabled(boolean enable) {
+        mIsLoopShortsEnabled = enable;
         persistData();
     }
 
@@ -569,8 +564,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsQuickSkipShortsEnabled;
     }
 
-    public void enableQuickSkipVideos(boolean enable) {
-        mIsQuickSkipVideosEnabled = enable;
+    public void setQuickSkipShortsEnabled(boolean enable) {
+        mIsQuickSkipShortsEnabled = enable;
         persistData();
     }
 
@@ -578,38 +573,43 @@ public class PlayerTweaksData implements ProfileChangeListener {
         return mIsQuickSkipVideosEnabled;
     }
 
-    public void enableHighBitrateFormats(boolean enable) {
-        MediaServiceData.instance().setFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
+    public void setQuickSkipVideosEnabled(boolean enable) {
+        mIsQuickSkipVideosEnabled = enable;
+        persistData();
     }
 
     public boolean isHighBitrateFormatsEnabled() {
         return MediaServiceData.instance().isFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS);
     }
 
-    public void preferIPv4Dns(boolean prefer) {
-        GlobalPreferences.instance(mPrefs.getContext()).preferIPv4Dns(prefer);
+    public void setHighBitrateFormatsEnabled(boolean enable) {
+        MediaServiceData.instance().setFormatEnabled(MediaServiceData.FORMATS_EXTENDED_HLS, enable);
     }
 
     public boolean isIPv4DnsPreferred() {
         return GlobalPreferences.instance(mPrefs.getContext()).isIPv4DnsPreferred();
     }
 
-    public void disableNetworkErrorFixing(boolean disabled) {
-        mIsNetworkErrorFixingDisabled = disabled;
-        persistData();
+    public void setIPv4DnsPreferred(boolean prefer) {
+        GlobalPreferences.instance(mPrefs.getContext()).setIPv4DnsPreferred(prefer);
     }
 
     public boolean isNetworkErrorFixingDisabled() {
         return mIsNetworkErrorFixingDisabled;
     }
 
-    public void enableDontResizeVideoToFitDialog(boolean enable) {
-        mIsDontResizeVideoToFitDialogEnabled = enable;
+    public void setNetworkErrorFixingDisabled(boolean disabled) {
+        mIsNetworkErrorFixingDisabled = disabled;
         persistData();
     }
 
     public boolean isDontResizeVideoToFitDialogEnabled() {
         return mIsDontResizeVideoToFitDialogEnabled;
+    }
+
+    public void setDontResizeVideoToFitDialogEnabled(boolean enable) {
+        mIsDontResizeVideoToFitDialogEnabled = enable;
+        persistData();
     }
 
     private void restoreData() {
