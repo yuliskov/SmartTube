@@ -16,6 +16,7 @@ package com.liskovsoft.leanbackassistant.media;
 
 import androidx.tvprovider.media.tv.TvContractCompat;
 
+import com.liskovsoft.googlecommon.common.helpers.ServiceHelper;
 import com.liskovsoft.leanbackassistant.media.ClipService.GroupCallback;
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
@@ -220,7 +221,7 @@ public final class Playlist {
                         v.getDurationMs(),
                         v.getBackgroundImageUrl(),
                         v.getCardImageUrl(),
-                        v.getVideoUrl(),
+                        ServiceHelper.videoIdToFullUrl(v.getVideoId()),
                         null,
                         false,
                         v.isLive(),

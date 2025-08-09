@@ -15,7 +15,6 @@ public final class SimpleMediaItem implements MediaItem {
     private CharSequence mSecondTitle;
     private String mContentType;
     private int mType;
-    private String mVideoUrl;
     private String mBackgroundImageUrl;
     private String mAuthor;
     private int mPercentWatched;
@@ -57,7 +56,6 @@ public final class SimpleMediaItem implements MediaItem {
         mediaItem.mType = video.itemType;
         mediaItem.mVideoId = video.videoId;
         mediaItem.mChannelId = video.channelId;
-        mediaItem.mVideoUrl = video.videoUrl;
         mediaItem.mBackgroundImageUrl = video.bgImageUrl;
         mediaItem.mCardImageUrl = video.cardImageUrl;
         mediaItem.mAuthor = video.author;
@@ -169,11 +167,6 @@ public final class SimpleMediaItem implements MediaItem {
     }
 
     @Override
-    public String getVideoUrl() {
-        return mVideoUrl;
-    }
-
-    @Override
     public String getVideoId() {
         return mVideoId;
     }
@@ -226,11 +219,6 @@ public final class SimpleMediaItem implements MediaItem {
     @Override
     public String getChannelId() {
         return mChannelId;
-    }
-
-    @Override
-    public String getChannelUrl() {
-        return null;
     }
 
     @Override

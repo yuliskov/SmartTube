@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+
+import com.liskovsoft.googlecommon.common.helpers.ServiceHelper;
 import com.liskovsoft.leanbackassistant.utils.AppUtil;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -49,7 +51,7 @@ public class SearchableActivity extends Activity {
         MediaItem video = VideoContentProvider.findVideoWithId(id);
 
         if (video != null) {
-            return video.getVideoUrl() != null ? video.getVideoUrl() : video.getChannelUrl();
+            return video.getVideoId() != null ? ServiceHelper.videoIdToFullUrl(video.getVideoId()) : ServiceHelper.channelIdToFullUrl(video.getChannelId());
         }
 
         return null;
