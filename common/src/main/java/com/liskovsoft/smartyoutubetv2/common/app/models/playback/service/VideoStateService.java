@@ -98,16 +98,11 @@ public class VideoStateService implements ProfileChangeListener {
         String[] split = Helpers.splitData(data);
 
         setStateData(Helpers.parseStr(split, 0));
-        mIsHistoryBroken = Helpers.parseBoolean(split, 1);
     }
 
     private void persistStateInt() {
-        if (mIsHistoryBroken) {
-            mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
-        } else {
-            // Eliminate additional string creation with the merge
-            mPrefs.setStateUpdaterData(getStateData());
-        }
+        // Eliminate additional string creation with the merge
+        mPrefs.setStateUpdaterData(getStateData());
     }
 
     public void persistState() {

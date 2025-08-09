@@ -11,7 +11,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -51,7 +50,6 @@ public class VideoStateController extends BasePlayerController {
             mTickleLeft = 0;
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            removeFromHistoryIfNeeded();
             saveState();
         }
 
@@ -250,25 +248,22 @@ public class VideoStateController extends BasePlayerController {
         restoreFormats();
     }
 
-    //@Override
-    //public void onViewPaused() {
-    //    if (!AppDialogPresenter.instance(getContext()).isDialogShown()) {
-    //        persistState();
-    //    }
-    //}
-
     @Override
     public void onSpeedChanged(float speed) {
+        if (getVideo() == null) {
+            return;
+        }
+
         getPlayerData().setSpeed(getVideo().channelId, speed);
     }
 
     @Override
     public void onSpeedClicked(boolean enabled) {
-        fitVideoIntoDialog();
-
-        if (getVideo() == null) {
+        if (getPlayer() == null || getVideo() == null) {
             return;
         }
+
+        fitVideoIntoDialog();
 
         float lastSpeed = getPlayerData().getSpeed(getVideo().channelId);
         if (Helpers.floatEquals(lastSpeed, 1.0f)) {
@@ -297,9 +292,6 @@ public class VideoStateController extends BasePlayerController {
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         settingsPresenter.appendCategory(AppDialogUtil.createSpeedListCategory(getContext(), getPlayer()));
 
-        //settingsPresenter.appendCategory(AppDialogUtil.createRememberSpeedCategory(getContext(), getPlayerData()));
-        //settingsPresenter.appendCategory(AppDialogUtil.createSpeedMiscCategory(getContext(), getPlayerTweaksData()));
-
         settingsPresenter.showDialog(getContext().getString(R.string.video_speed), () -> {
             State state = getStateService().getByVideoId(getVideo() != null ? getVideo().videoId : null);
             if (state != null && getPlayerData().isSpeedPerVideoEnabled()) {
@@ -311,7 +303,6 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onFinish() {
         mIncognito = false;
-        removeFromHistoryIfNeeded();
     }
 
     private void clearStateOfNextVideo() {
@@ -512,7 +503,7 @@ public class VideoStateController extends BasePlayerController {
         if (video == null || (video.isShorts && getMediaServiceData().isContentHidden(MediaServiceData.CONTENT_SHORTS_HISTORY)) ||
                 mIncognito || getPlayer() == null || !getPlayer().containsMedia() ||
                 (video.isRemote && getRemoteControlData().isRemoteHistoryDisabled()) ||
-                getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED || getStateService().isHistoryBroken()) {
+                getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED) {
             return;
         }
 
@@ -525,6 +516,10 @@ public class VideoStateController extends BasePlayerController {
      * Restore position from description time code
      */
     private void restorePendingPosition() {
+        if (getPlayer() == null || getVideo() == null) {
+            return;
+        }
+
         Video item = getVideo();
 
         if (item.pendingPosMs > 0) {
@@ -534,7 +529,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreSpeedAndPositionIfNeeded() {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || getVideo() == null) {
             return;
         }
 
@@ -680,16 +675,6 @@ public class VideoStateController extends BasePlayerController {
 
     private long getLiveBuffer() {
         return getPlayerTweaksData().isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
-    }
-
-    private void removeFromHistoryIfNeeded() {
-        // Maintain history to keep video progress
-        if (getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED && getStateService().isHistoryBroken()) {
-            Video video = getVideo();
-            if (video != null) {
-                getStateService().removeByVideoId(video.videoId);
-            }
-        }
     }
 
     private boolean isMutedEmbed() {
