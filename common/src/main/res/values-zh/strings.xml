@@ -694,4 +694,12 @@
   <string name="device_specific_backup">金杯粉刺装置</string>
   <string name="suggestions">建议</string>
   <string name="skip_shorts">跳过短视频</string>
+  <string name="place_comments_left">讲评论放左测</string>
+  <string name="premium_users_only">仅限Premium会员。修正不完整的影片格式清单</string>
+  <string name="playlists_rows">将「播放清单」区段显示为列</string>
+  <string name="add_to_subscriptions_group">新增/从订阅群组中医出</string>
+  <string name="disable_network_error_fixing">停用自动网路错误修正</string>
+  <string name="player_global_focus_desc">此功能会影响在播放牵牛劣质见到兰是，那个播放牵牛回去的焦点</string>
+  <string name="repeat_mode_reverse_list">一项反顺序播放播放清单货品倒影篇</string>
+  <string name="calm_msg">我们正在解决问题。情不是检查更新</string>
 </resources>
