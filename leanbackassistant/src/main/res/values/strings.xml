@@ -3,10 +3,10 @@
     <string translatable="false" name="search_authority">com.liskovsoft.leanbackassistant</string>
 
     <string name="search_hint">Search for Videos</string>
-    <string name="search_label">SmartYouTubeTV</string>
-    <string name="settings_description">SmartYouTubeTV Videos</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube Videos</string>
     <string name="cant_play_video">Can\'t play this video</string>
-    <string name="subscriptions_playlist_name">Subscriptions</string>
-    <string name="history_playlist_name">History</string>
-    <string name="recommended_playlist_name">Recommended</string>
+    <string name="header_subscriptions">Subscriptions</string>
+    <string name="header_history">History</string>
+    <string name="recommended">Recommended</string>
 </resources>

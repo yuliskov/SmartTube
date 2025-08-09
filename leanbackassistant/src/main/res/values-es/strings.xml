@@ -1,5 +1,5 @@
 <resources>
-    <string name="subscriptions_playlist_name">Suscripciones</string>
-    <string name="history_playlist_name">Historial</string>
-    <string name="recommended_playlist_name">Recomendados</string>
+    <string name="header_subscriptions">Suscripciones</string>
+    <string name="header_history">Historial</string>
+    <string name="recommended">Recomendados</string>
 </resources>

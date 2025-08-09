@@ -678,7 +678,7 @@
     <string name="player_global_focus_desc">Эта функция влияет на то, какая кнопка проигрывателя получит фокус при навигации между рядами кнопок проигрывателя</string>
     <string name="disable_network_error_fixing">Отключить автоматическое исправление сетевых ошибок</string>
     <string name="disable_network_error_fixing_desc">Возможно, вам нужно включить эту опцию, если вы используете VPN</string>
-    <string name="recommended">Рекомендуемые видео</string>
+    <string name="recommended">Рекомендации</string>
     <string name="add_to_subscriptions_group">Добавить/удалить из группы подписок</string>
     <string name="new_subscriptions_group">Новая группа</string>
     <string name="rename_group">Переименовать группу подписок</string>

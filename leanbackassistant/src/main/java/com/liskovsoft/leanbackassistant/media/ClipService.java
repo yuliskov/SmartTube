@@ -38,7 +38,7 @@ public class ClipService {
 
     public Playlist getSubscriptionsPlaylist() {
         return createPlaylist(
-                R.string.subscriptions_playlist_name,
+                R.string.header_subscriptions,
                 SUBSCRIPTIONS_ID,
                 SUBS_CHANNEL_ID,
                 SUBS_PROGRAMS_IDS,
@@ -51,7 +51,7 @@ public class ClipService {
 
     public Playlist getHistoryPlaylist() {
         return createPlaylist(
-                R.string.history_playlist_name,
+                R.string.header_history,
                 HISTORY_ID,
                 HISTORY_CHANNEL_ID,
                 HISTORY_PROGRAMS_IDS,
@@ -63,7 +63,7 @@ public class ClipService {
 
     public Playlist getRecommendedPlaylist() {
         return createPlaylist(
-                R.string.recommended_playlist_name,
+                R.string.recommended,
                 RECOMMENDED_ID,
                 RECOMMENDED_CHANNEL_ID,
                 RECOMMENDED_PROGRAMS_IDS,
