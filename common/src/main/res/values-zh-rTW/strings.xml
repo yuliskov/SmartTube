@@ -702,4 +702,5 @@
   <string name="you_liked">您喜歡</string>
   <string name="video_buffer_size_lowest">最低</string>
   <string name="suggestions">建議</string>
+  <string name="place_comments_left">把評論放在左邊</string>
 </resources>
