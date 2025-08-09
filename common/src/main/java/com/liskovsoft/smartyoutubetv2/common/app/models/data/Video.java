@@ -98,7 +98,6 @@ public final class Video {
     private int startSegmentNum;
     private long liveDurationMs = -1;
     private long durationMs = -1;
-    private boolean isDeserialized;
     private WeakReference<VideoGroup> group; // Memory leak fix. Used to get next page when scrolling.
     public List<NotificationState> notificationStates;
 
@@ -467,7 +466,6 @@ public final class Video {
         result.isLive = Helpers.parseBoolean(split[20]);
         result.channelGroupId = Helpers.parseStr(split[21]);
         result.searchQuery = Helpers.parseStr(split[22]);
-        result.isDeserialized = true;
 
         // Reset old type (int)
         if (Helpers.equals(result.channelGroupId, "-1")) {
@@ -547,7 +545,8 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return !isDeserialized && !isLive && !isLiveEnd && Helpers.hasWords(badge) && (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
+        return mediaItem != null && !isLive && !isLiveEnd && Helpers.hasWords(badge) &&
+                (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
     public boolean isFullLive() {
