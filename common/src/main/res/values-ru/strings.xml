@@ -695,4 +695,5 @@
     <string name="card_preview">Предпросмотр карточки</string>
     <string name="card_unlocalized_titles">Не переводить названия видео</string>
     <string name="dont_resize_video_to_fit_dialog">Не изменять размер видео в соответствии с диалогом</string>
+    <string name="oculus_quest_fix">Исправлять Oculus Quest</string>
 </resources>
