@@ -1,3 +1,10 @@
+-keepclassmembers class okhttp3.OkHttpClient {
+    <init>(...);
+}
+-keepclassmembers class androidx.recyclerview.widget.RecyclerView {
+    <init>(...);
+    void setNestedScrollingEnabled(boolean);
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.utils.Utils {
     boolean isFormatSupported(com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack);
 }
