@@ -105,7 +105,7 @@ public class StreamReminderService implements TickleListener {
             } else {
                 ViewManager.instance(mContext).movePlayerToForeground();
                 PlaybackPresenter.instance(mContext).openVideo(video);
-                MessageHelpers.showLongMessage(mContext, video.title);
+                MessageHelpers.showLongMessage(mContext, R.string.starting_stream);
             }
 
             mGeneralData.removePendingStream(video);
