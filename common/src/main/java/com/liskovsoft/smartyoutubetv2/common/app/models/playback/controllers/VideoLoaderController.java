@@ -37,9 +37,9 @@ import java.util.List;
 public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
-    private static final long BUFFERING_THRESHOLD_MS = 5_000;
+    private static final long BUFFERING_THRESHOLD_MS = 3_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
-    private static final long BUFFERING_RECURRENCE_COUNT = (long) (BUFFERING_WINDOW_MS * 0.5 / BUFFERING_THRESHOLD_MS);
+    private static final long BUFFERING_RECURRENCE_COUNT = 5;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private int mLastErrorType = -1;
@@ -48,8 +48,6 @@ public class VideoLoaderController extends BasePlayerController {
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Runnable mReloadVideo = () -> {
-        //getController(VideoStateController.class).saveState();
-        //loadVideo(getVideo());
         getMainController().onNewVideo(getVideo());
     };
     private final Runnable mLoadNext = this::loadNext;
