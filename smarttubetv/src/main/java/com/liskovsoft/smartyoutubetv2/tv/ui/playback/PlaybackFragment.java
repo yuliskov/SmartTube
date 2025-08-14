@@ -41,6 +41,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -911,6 +912,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     // End Ui events
 
     // Begin Engine Events
+
+    @Override
+    public void openSabr(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.openSabr(formatInfo);
+    }
 
     @Override
     public void openDash(InputStream dashManifest) {

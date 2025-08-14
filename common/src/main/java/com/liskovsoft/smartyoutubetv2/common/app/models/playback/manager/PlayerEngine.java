@@ -1,11 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager;
 
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
 
 public interface PlayerEngine extends PlayerConstants {
+    void openSabr(MediaItemFormatInfo formatInfo);
     void openDash(InputStream dashManifest);
     void openDashUrl(String dashManifestUrl);
     void openHlsUrl(String hlsPlaylistUrl);

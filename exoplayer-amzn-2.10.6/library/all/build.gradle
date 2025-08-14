@@ -32,6 +32,7 @@ android {
 dependencies {
     api project(modulePrefix + 'library-core')
     api project(modulePrefix + 'library-dash')
+    api project(modulePrefix + 'library-sabr')
     api project(modulePrefix + 'library-hls')
     api project(modulePrefix + 'library-smoothstreaming')
     api project(modulePrefix + 'library-ui')

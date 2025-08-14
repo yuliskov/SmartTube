@@ -2,14 +2,15 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
 
 public interface PlayerController {
+    void openSabr(MediaItemFormatInfo formatInfo);
     void openDash(InputStream dashManifest);
     void openHlsUrl(String hlsPlaylistUrl);
     void openDashUrl(String dashManifestUrl);

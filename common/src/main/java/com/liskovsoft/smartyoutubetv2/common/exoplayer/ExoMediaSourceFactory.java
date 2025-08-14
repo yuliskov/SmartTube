@@ -21,6 +21,10 @@ import com.google.android.exoplayer2.source.dash.manifest.Period;
 import com.google.android.exoplayer2.source.dash.manifest.ProgramInformation;
 import com.google.android.exoplayer2.source.dash.manifest.UtcTimingElement;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.sabr.DefaultSabrChunkSource;
+import com.google.android.exoplayer2.source.sabr.SabrChunkSource;
+import com.google.android.exoplayer2.source.sabr.SabrMediaSource;
+import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -31,6 +35,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -65,6 +70,10 @@ public class ExoMediaSourceFactory {
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
+    }
+
+    public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
+        return buildSabrMediaSource(formatInfo);
     }
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
@@ -166,6 +175,20 @@ public class ExoMediaSourceFactory {
         }
     }
 
+    private MediaSource buildSabrMediaSource(MediaItemFormatInfo formatInfo) {
+        // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        SabrMediaSource sabrSource = new SabrMediaSource.Factory(
+                getSabrChunkSourceFactory(),
+                null
+        )
+                .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
+                .createMediaSource(getManifest(formatInfo));
+        if (mTrackErrorFixer != null) {
+            sabrSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
+        }
+        return sabrSource;
+    }
+
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
@@ -196,6 +219,11 @@ public class ExoMediaSourceFactory {
             dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
         return dashSource;
+    }
+
+    private SabrManifest getManifest(MediaItemFormatInfo formatInfo) {
+        // TODO: create sabr manifest
+        return null;
     }
 
     private DashManifest getManifest(Uri uri, InputStream mpdContent) {
@@ -306,6 +334,11 @@ public class ExoMediaSourceFactory {
     @NonNull
     private DefaultSsChunkSource.Factory getSsChunkSourceFactory() {
         return new DefaultSsChunkSource.Factory(getMediaDataSourceFactory());
+    }
+
+    @NonNull
+    private SabrChunkSource.Factory getSabrChunkSourceFactory() {
+        return new DefaultSabrChunkSource.Factory(getMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
     }
 
     @NonNull

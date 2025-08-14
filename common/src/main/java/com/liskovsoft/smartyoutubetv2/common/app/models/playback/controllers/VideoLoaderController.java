@@ -364,8 +364,8 @@ public class VideoLoaderController extends BasePlayerController {
             } else { // 18+ video or the video is hidden/removed
                 scheduleNextVideoTimer(5_000);
             }
-        } else if (acceptDashVideo(formatInfo)) {
-            Log.d(TAG, "Found regular video in dash format. Loading...");
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
+            Log.d(TAG, "Loading regular video in dash format...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribe(
@@ -378,14 +378,17 @@ public class VideoLoaderController extends BasePlayerController {
                             },
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
+            Log.d(TAG, "Loading video in sabr format...");
+            getPlayer().openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
-            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
+            Log.d(TAG, "Loading live video (current or past live stream) in dash format...");
             getPlayer().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
-            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
+            Log.d(TAG, "Loading live video (current or past live stream) in hls format...");
             getPlayer().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlFormats()) {
-            Log.d(TAG, "Found url list video. This is always LQ. Loading...");
+            Log.d(TAG, "Loading url list video. This is always LQ...");
             getPlayer().openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
@@ -759,7 +762,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
     }
 
-    private boolean acceptDashVideo(MediaItemFormatInfo formatInfo) {
+    private boolean acceptAdaptiveFormats(MediaItemFormatInfo formatInfo) {
         if (getPlayerData().isLegacyCodecsForced() && formatInfo.containsUrlFormats()) {
             return false;
         }
@@ -783,7 +786,7 @@ public class VideoLoaderController extends BasePlayerController {
             return false;
         }
 
-        return formatInfo.containsDashVideoFormats();
+        return true;
     }
 
     private boolean acceptDashLive(MediaItemFormatInfo formatInfo) {
@@ -958,7 +961,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
         if (formatInfo.containsDashFormats()) {
-            MediaFormat format = formatInfo.getDashFormats().get(0);
+            MediaFormat format = formatInfo.getAdaptiveFormats().get(0);
             int width = format.getWidth();
             int height = format.getHeight();
             boolean isShorts = width < height;

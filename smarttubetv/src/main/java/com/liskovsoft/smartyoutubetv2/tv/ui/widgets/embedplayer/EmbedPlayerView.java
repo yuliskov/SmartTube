@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
@@ -280,6 +281,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     @Override
     public boolean isEmbed() {
         return true;
+    }
+
+    @Override
+    public void openSabr(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.openSabr(formatInfo);
     }
 
     @Override
