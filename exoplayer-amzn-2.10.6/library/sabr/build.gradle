@@ -44,6 +44,7 @@ dependencies {
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     implementation 'androidx.annotation:annotation:1.1.0'
     testImplementation project(modulePrefix + 'testutils-robolectric')
+    testImplementation project(modulePrefix + 'library-sabr')
 }
 
 ext {

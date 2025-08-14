@@ -105,15 +105,15 @@ public class SubtitleManager implements TextOutput, OnDataChange {
             if (Helpers.endsWithAny(textStr, "\n", " ")) { // vtt subs format
                 subsBuffer = textStr;
             } else if (textStr.contains("\n")) { // ttml subs format
-                CharSequence text = subsBuffer != null ? textStr.replace(subsBuffer, "") : textStr;
+                CharSequence text = subsBuffer != null ? textStr.replace(subsBuffer, "").replace("\n", "") : textStr;
                 result.add(new Cue(text)); // sub centered by default
 
                 String[] split = textStr.split("\n");
-                subsBuffer = split.length == 2 ? split[1] + "\n" : textStr;
+                subsBuffer = split.length == 2 ? split[1] : textStr;
             } else {
                 CharSequence text = subsBuffer != null ? textStr.replace(subsBuffer, "") : textStr;
                 result.add(new Cue(text)); // sub centered by default
-                subsBuffer = null;
+                subsBuffer = text;
             }
         }
 
