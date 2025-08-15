@@ -40,7 +40,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class ExoPlayerController implements Player.EventListener, PlayerController {
+public class ExoPlayerController implements Player.EventListener {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final Context mContext;
     private final ExoMediaSourceFactory mMediaSourceFactory;
@@ -80,37 +80,31 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_SUBTITLE)));
     }
 
-    @Override
     public void openSabr(MediaItemFormatInfo formatInfo) {
         MediaSource mediaSource = mMediaSourceFactory.fromSabrFormatInfo(formatInfo);
         openMediaSource(mediaSource);
     }
 
-    @Override
     public void openDash(InputStream dashManifest) {
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         openMediaSource(mediaSource);
     }
 
-    @Override
     public void openDashUrl(String dashManifestUrl) {
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifestUrl(dashManifestUrl);
         openMediaSource(mediaSource);
     }
 
-    @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(mediaSource);
     }
 
-    @Override
     public void openUrlList(List<String> urlList) {
         MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
         openMediaSource(mediaSource);
     }
 
-    @Override
     public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
         MediaSource dashMediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
@@ -128,7 +122,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mPlayer.prepare(mediaSource);
     }
 
-    @Override
     public long getPositionMs() {
         if (mPlayer == null) {
             return -1;
@@ -141,7 +134,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
      * NOTE: Pos gathered from content block data may slightly exceed video duration
      * (e.g. 302200 when duration is 302000).
      */
-    @Override
     public void setPositionMs(long positionMs) {
         // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
         if (mPlayer != null && positionMs >= 0 && positionMs <= getDurationMs()) {
@@ -149,7 +141,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
     }
 
-    @Override
     public long getDurationMs() {
         if (mPlayer == null) {
             return -1;
@@ -159,14 +150,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         return duration != C.TIME_UNSET ? duration : -1;
     }
 
-    @Override
     public void setPlayWhenReady(boolean play) {
         if (mPlayer != null) {
             mPlayer.setPlayWhenReady(play);
         }
     }
 
-    @Override
     public boolean getPlayWhenReady() {
         if (mPlayer == null) {
             return false;
@@ -175,17 +164,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         return mPlayer.getPlayWhenReady();
     }
 
-    @Override
     public boolean isPlaying() {
         return ExoUtils.isPlaying(mPlayer);
     }
-
-    @Override
+    
     public boolean isLoading() {
         return ExoUtils.isLoading(mPlayer);
     }
-
-    @Override
+    
     public boolean containsMedia() {
         if (mPlayer == null) {
             return false;
@@ -193,8 +179,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         return mPlayer.getPlaybackState() != Player.STATE_IDLE;
     }
-
-    @Override
+    
     public void release() {
         mTrackSelectorManager.release();
         mMediaSourceFactory.release();
@@ -203,8 +188,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         // Don't destroy it (needed inside the bridge)!
         //mEventListener = null;
     }
-
-    @Override
+    
     public void setPlayer(SimpleExoPlayer player) {
         mPlayer = player;
         player.addListener(this);
@@ -214,13 +198,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     //public void setEventListener(PlayerEventListener eventListener) {
     //    mEventListener = eventListener;
     //}
-
-    @Override
+    
     public void setPlayerView(PlayerView playerView) {
         mPlayerView = playerView;
     }
-
-    @Override
+    
     public void setTrackSelector(DefaultTrackSelector trackSelector) {
         mTrackSelectorManager.setTrackSelector(trackSelector);
 
@@ -231,51 +213,42 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             }
         }
     }
-
-    @Override
+    
     public void setVideo(Video video) {
         mVideo = new WeakReference<>(video);
     }
-
-    @Override
+    
     public Video getVideo() {
         return mVideo != null ? mVideo.get() : null;
     }
-
-    @Override
+    
     public List<FormatItem> getVideoFormats() {
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTracks());
     }
-
-    @Override
+    
     public List<FormatItem> getAudioFormats() {
         return ExoFormatItem.from(mTrackSelectorManager.getAudioTracks());
     }
-
-    @Override
+    
     public List<FormatItem> getSubtitleFormats() {
         return ExoFormatItem.from(mTrackSelectorManager.getSubtitleTracks());
     }
-
-    @Override
+    
     public void selectFormat(FormatItem formatItem) {
         if (formatItem != null) {
             mEventListener.onTrackSelected(formatItem);
             mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(formatItem));
         }
     }
-
-    @Override
+    
     public FormatItem getVideoFormat() {
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
     }
-
-    @Override
+    
     public FormatItem getAudioFormat() {
         return ExoFormatItem.from(mTrackSelectorManager.getAudioTrack());
     }
-
-    @Override
+    
     public FormatItem getSubtitleFormat() {
         return ExoFormatItem.from(mTrackSelectorManager.getSubtitleTrack());
     }
@@ -386,8 +359,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onSeekProcessed() {
         mEventListener.onSeekEnd();
     }
-
-    @Override
+    
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
@@ -397,8 +369,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mEventListener.onSpeedChanged(speed);
         }
     }
-
-    @Override
+    
     public float getSpeed() {
         if (mPlayer != null) {
             return mPlayer.getPlaybackParameters().speed;
@@ -406,15 +377,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return -1;
         }
     }
-
-    @Override
+    
     public void setPitch(float pitch) {
         if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
         }
     }
-
-    @Override
+    
     public float getPitch() {
         if (mPlayer != null) {
             return mPlayer.getPlaybackParameters().pitch;
@@ -422,8 +391,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return -1;
         }
     }
-
-    @Override
+    
     public void setVolume(float volume) {
         if (mPlayer != null && volume >= 0) {
             mPlayer.setVolume(Math.min(volume, 1f));
@@ -431,8 +399,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             //applyVolumeBoost(volume);
         }
     }
-
-    @Override
+    
     public float getVolume() {
         if (mPlayer != null) {
             return mPlayer.getVolume();
@@ -446,14 +413,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
      * Also could help with memory leaks(??)<br/>
      * Without this also you'll have problems with track quality switching(??).
      */
-    @Override
     public void resetPlayerState() {
         if (containsMedia()) {
             mPlayer.stop(true);
         }
     }
-
-    @Override
+    
     public void setOnVideoLoaded(Runnable onVideoLoaded) {
         mOnVideoLoaded = onVideoLoaded;
     }

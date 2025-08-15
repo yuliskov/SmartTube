@@ -22,12 +22,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.InputStream;
@@ -42,7 +40,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     public static final int QUALITY_NORMAL = 1;
     private SimpleExoPlayer mPlayer;
     private ExoPlayerInitializer mPlayerInitializer;
-    private PlayerController mExoPlayerController;
+    private ExoPlayerController mExoPlayerController;
     private PlaybackPresenter mPlaybackPresenter;
     private Video mVideo;
     private boolean mIsMute;
