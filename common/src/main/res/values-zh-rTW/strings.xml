@@ -703,4 +703,8 @@
   <string name="video_buffer_size_lowest">最低</string>
   <string name="suggestions">建議</string>
   <string name="place_comments_left">把評論放在左邊</string>
+  <string name="unpin_group_from_sidebar">移除訂閱群組</string>
+  <string name="hide_shorts_from_search">在搜尋結果中隱藏 Shorts</string>
+  <string name="remove_playlist_fmt">永久移除 %s \?</string>
+  <string name="dont_resize_video_to_fit_dialog">選單跳出時不調整影片大小</string>
 </resources>
