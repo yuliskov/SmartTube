@@ -222,8 +222,7 @@ public class ExoMediaSourceFactory {
     }
 
     private SabrManifest getManifest(MediaItemFormatInfo formatInfo) {
-        // TODO: create sabr manifest
-        return null;
+        return new SabrManifest(formatInfo);
     }
 
     private DashManifest getManifest(Uri uri, InputStream mpdContent) {
