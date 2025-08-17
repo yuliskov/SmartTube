@@ -688,7 +688,7 @@
   <string name="my_videos">我的影片</string>
   <string name="player_audio_focus">音讯焦点 (如果真测到其他播放器这暂停）</string>
   <string name="card_unlocalized_titles">为本地画的影片标题</string>
-  <string name="disable_network_error_fixing_desc"></string>
+  <string name="disable_network_error_fixing_desc">如果您正在使用VPN，您可能需要启用此选项</string>
   <string name="applying_fix">请勿关闭播放器。正在套用修正...</string>
   <string name="auto_backup">自动备份（每日一次）</string>
   <string name="device_specific_backup">金杯粉刺装置</string>
