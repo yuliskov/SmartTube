@@ -46,7 +46,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
     public final long startMs;
 
-    public final List<Representation> representations;
+    public final List<Period> periods;
 
     public SabrManifest(
             long availabilityStartTimeMs,
@@ -55,15 +55,33 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             long timeShiftBufferDepthMs,
             long suggestedPresentationDelayMs,
             long publishTimeMs,
-            List<Representation> representations) {
+            List<Period> periods) {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
         this.timeShiftBufferDepthMs = timeShiftBufferDepthMs;
         this.suggestedPresentationDelayMs = suggestedPresentationDelayMs;
         this.publishTimeMs = publishTimeMs;
-        this.representations = representations;
+        this.periods = periods;
         startMs = 0;
+    }
+
+    public final int getPeriodCount() {
+        return periods.size();
+    }
+
+    public final Period getPeriod(int index) {
+        return periods.get(index);
+    }
+
+    public final long getPeriodDurationMs(int index) {
+        return index == periods.size() - 1
+                ? (durationMs == C.TIME_UNSET ? C.TIME_UNSET : (durationMs - periods.get(index).startMs))
+                : (periods.get(index + 1).startMs - periods.get(index).startMs);
+    }
+
+    public final long getPeriodDurationUs(int index) {
+        return C.msToUs(getPeriodDurationMs(index));
     }
 
     @Override

@@ -1,3 +1,22 @@
+-keepclassmembers class com.liskovsoft.mediaserviceinterfaces.ServiceManager {
+    <init>(...);
+    com.liskovsoft.mediaserviceinterfaces.MediaItemService getMediaItemService();
+}
+# IncompatibleClassChangeError: androidx.recyclerview.widget.RecyclerView$Recycler
+-keepclassmembers class androidx.recyclerview.widget.RecyclerView$Recycler {
+    <init>(...);
+}
+# NoSuchFieldError: Attempted read of 32-bit non-primitive on field 'int android.content.res.Configuration.mnc'
+-keepclassmembers class io.reactivex.disposables.CompositeDisposable {
+    <init>(...);
+}
+# NoSuchMethodError: android.graphics.Canvas.drawCircle
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar {
+    <init>(...);
+    void onDraw(android.graphics.Canvas);
+    int mKnobx;
+    android.graphics.Paint mKnobPaint;
+}
 -keepclassmembers class okhttp3.OkHttpClient {
     <init>(...);
 }
@@ -20,8 +39,9 @@
     <init>(...);
 }
 -keepclassmembers class androidx.leanback.app.BaseRowSupportFragment {
-    androidx.leanback.widget.VerticalGridView getVerticalGridView();
     <init>(...);
+    androidx.leanback.widget.VerticalGridView mVerticalGridView;
+    androidx.leanback.widget.VerticalGridView getVerticalGridView();
 }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController {
     <init>(...);
@@ -30,12 +50,12 @@
     <init>(...);
 }
 -keepclassmembers class androidx.room.RoomDatabase {
-    androidx.sqlite.db.SupportSQLiteDatabase mDatabase;
     <init>(...);
+    androidx.sqlite.db.SupportSQLiteDatabase mDatabase;
 }
 -keepclassmembers class androidx.core.app.NotificationCompatBuilder {
-    java.util.List mActionExtrasList;
     <init>(...);
+    java.util.List mActionExtrasList;
 }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
 -keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
@@ -43,13 +63,13 @@
 -keep class com.bumptech.glide.request.RequestOptions { *; }
 -keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keepclassmembers class android.view.View {
-    void setZ(float);
     <init>(...);
+    void setZ(float);
 }
 -keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
-    boolean containsMedia();
     <init>(...);
+    boolean containsMedia();
 }
 -keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);

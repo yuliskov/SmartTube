@@ -2,6 +2,7 @@ package com.google.android.exoplayer2.source.sabr;
 
 import android.net.Uri;
 import android.os.Handler;
+import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
 
@@ -27,18 +28,19 @@ import com.google.android.exoplayer2.util.Assertions;
 import java.io.IOException;
 
 public final class SabrMediaSource extends BaseMediaSource {
-    private final SabrManifest mManifest;
-    private final SabrChunkSource.Factory mChunkSourceFactory;
-    private final CompositeSequenceableLoaderFactory mCompositeSequenceableLoaderFactory;
-    private final LoadErrorHandlingPolicy mLoadErrorHandlingPolicy;
-    private @Nullable TransferListener mMediaTransferListener;
-    private final LoaderErrorThrower mManifestLoadErrorThrower;
-    private final PlayerEmsgCallback mPlayerEmsgCallback;
-    private Loader mLoader;
-    private IOException mManifestFatalError;
-    private final long mLivePresentationDelayMs;
-    @Nullable private final Object mTag;
-    private final int mFirstPeriodId = 0;
+    private final SabrManifest manifest;
+    private final SabrChunkSource.Factory chunkSourceFactory;
+    private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
+    private final LoadErrorHandlingPolicy loadErrorHandlingPolicy;
+    private @Nullable TransferListener mediaTransferListener;
+    private final LoaderErrorThrower manifestLoadErrorThrower;
+    private final PlayerEmsgCallback playerEmsgCallback;
+    private Loader loader;
+    private IOException manifestFatalError;
+    private final long livePresentationDelayMs;
+    private final SparseArray<SabrMediaPeriod> periodsById;
+    private final @Nullable Object tag;
+    private int firstPeriodId;
 
     /**
      * The default presentation delay for live streams. The presentation delay is the duration by
@@ -54,63 +56,79 @@ public final class SabrMediaSource extends BaseMediaSource {
             long livePresentationDelayMs,
             @Nullable Object tag
     ) {
-        mManifest = manifest;
-        mChunkSourceFactory = chunkSourceFactory;
-        mCompositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
-        mLoadErrorHandlingPolicy = loadErrorHandlingPolicy;
-        mLivePresentationDelayMs = livePresentationDelayMs;
-        mTag = tag;
-        mPlayerEmsgCallback = new DefaultPlayerEmsgCallback();
-        mManifestLoadErrorThrower = new ManifestLoadErrorThrower();
+        this.manifest = manifest;
+        this.chunkSourceFactory = chunkSourceFactory;
+        this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
+        this.loadErrorHandlingPolicy = loadErrorHandlingPolicy;
+        this.livePresentationDelayMs = livePresentationDelayMs;
+        this.tag = tag;
+        periodsById = new SparseArray<>();
+        playerEmsgCallback = new DefaultPlayerEmsgCallback();
+        manifestLoadErrorThrower = new ManifestLoadErrorThrower();
     }
 
     @Override
     protected void prepareSourceInternal(@Nullable TransferListener mediaTransferListener) {
-        
+        this.mediaTransferListener = mediaTransferListener;
+        processManifest();
     }
 
     @Override
     protected void releaseSourceInternal() {
-
+        if (loader != null) {
+            loader.release();
+            loader = null;
+        }
+        manifestFatalError = null;
+        firstPeriodId = 0;
+        periodsById.clear();
     }
 
     @Override
     public void maybeThrowSourceInfoRefreshError() throws IOException {
-
+        manifestLoadErrorThrower.maybeThrowError();
     }
 
     @Override
     public MediaPeriod createPeriod(MediaPeriodId periodId, Allocator allocator, long startPositionUs) {
-        int periodIndex = (Integer) periodId.periodUid - mFirstPeriodId;
+        int periodIndex = (Integer) periodId.periodUid - firstPeriodId;
         EventDispatcher periodEventDispatcher =
-                createEventDispatcher(periodId, mManifest.startMs);
-        return new SabrMediaPeriod(
-                mFirstPeriodId + periodIndex,
-                mManifest,
+                createEventDispatcher(periodId, manifest.getPeriod(periodIndex).startMs);
+        SabrMediaPeriod mediaPeriod = new SabrMediaPeriod(
+                firstPeriodId + periodIndex,
+                manifest,
                 periodIndex,
-                mChunkSourceFactory,
-                mMediaTransferListener,
-                mLoadErrorHandlingPolicy,
+                chunkSourceFactory,
+                mediaTransferListener,
+                loadErrorHandlingPolicy,
                 periodEventDispatcher,
-                mManifestLoadErrorThrower,
+                manifestLoadErrorThrower,
                 allocator,
-                mCompositeSequenceableLoaderFactory,
-                mPlayerEmsgCallback);
+                compositeSequenceableLoaderFactory,
+                playerEmsgCallback);
+        periodsById.put(mediaPeriod.id, mediaPeriod);
+        return mediaPeriod;
     }
 
     @Override
     public void releasePeriod(MediaPeriod mediaPeriod) {
+        SabrMediaPeriod sabrMediaPeriod = (SabrMediaPeriod) mediaPeriod;
+        sabrMediaPeriod.release();
+        periodsById.remove(sabrMediaPeriod.id);
+    }
 
+    private void processManifest() {
+        // TODO: process manifest
     }
 
     public static final class Factory implements AdsMediaSource.MediaSourceFactory {
-        private final SabrChunkSource.Factory mChunkSourceFactory;
-        @Nullable private final DataSource.Factory mManifestDataSourceFactory;
-        private final DefaultLoadErrorHandlingPolicy mLoadErrorHandlingPolicy;
-        private final DefaultCompositeSequenceableLoaderFactory mCompositeSequenceableLoaderFactory;
-        private final long mLivePresentationDelayMs;
-        private boolean mIsCreateCalled;
-        @Nullable private Object mTag;
+        private final SabrChunkSource.Factory chunkSourceFactory;
+        @Nullable private final DataSource.Factory manifestDataSourceFactory;
+        private final DefaultLoadErrorHandlingPolicy loadErrorHandlingPolicy;
+        private final DefaultCompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
+        private final long livePresentationDelayMs;
+        private boolean isCreateCalled;
+        @Nullable private Object tag;
 
         /**
          * Creates a new factory for {@link SabrMediaSource}s.
@@ -124,11 +142,11 @@ public final class SabrMediaSource extends BaseMediaSource {
         public Factory(
                 SabrChunkSource.Factory chunkSourceFactory,
                 @Nullable DataSource.Factory manifestDataSourceFactory) {
-            mChunkSourceFactory = chunkSourceFactory;
-            mManifestDataSourceFactory = manifestDataSourceFactory;
-            mLoadErrorHandlingPolicy = new DefaultLoadErrorHandlingPolicy();
-            mLivePresentationDelayMs = DEFAULT_LIVE_PRESENTATION_DELAY_MS;
-            mCompositeSequenceableLoaderFactory = new DefaultCompositeSequenceableLoaderFactory();
+            this.chunkSourceFactory = chunkSourceFactory;
+            this.manifestDataSourceFactory = manifestDataSourceFactory;
+            loadErrorHandlingPolicy = new DefaultLoadErrorHandlingPolicy();
+            livePresentationDelayMs = DEFAULT_LIVE_PRESENTATION_DELAY_MS;
+            compositeSequenceableLoaderFactory = new DefaultCompositeSequenceableLoaderFactory();
         }
 
         @Override
@@ -144,14 +162,14 @@ public final class SabrMediaSource extends BaseMediaSource {
          * @return The new {@link SabrMediaSource}.
          */
         public SabrMediaSource createMediaSource(SabrManifest manifest) {
-            mIsCreateCalled = true;
+            isCreateCalled = true;
             return new SabrMediaSource(
                     manifest,
-                    mChunkSourceFactory,
-                    mCompositeSequenceableLoaderFactory,
-                    mLoadErrorHandlingPolicy,
-                    mLivePresentationDelayMs,
-                    mTag
+                    chunkSourceFactory,
+                    compositeSequenceableLoaderFactory,
+                    loadErrorHandlingPolicy,
+                    livePresentationDelayMs,
+                    tag
             );
         }
 
@@ -164,7 +182,7 @@ public final class SabrMediaSource extends BaseMediaSource {
                 SabrManifest manifest,
                 @Nullable Handler eventHandler,
                 @Nullable MediaSourceEventListener eventListener) {
-            mIsCreateCalled = true;
+            isCreateCalled = true;
             SabrMediaSource mediaSource = createMediaSource(manifest);
             if (eventHandler != null && eventListener != null) {
                 mediaSource.addEventListener(eventHandler, eventListener);
@@ -221,8 +239,8 @@ public final class SabrMediaSource extends BaseMediaSource {
          * @throws IllegalStateException If one of the {@code create} methods has already been called.
          */
         public Factory setTag(Object tag) {
-            Assertions.checkState(!mIsCreateCalled);
-            mTag = tag;
+            Assertions.checkState(!isCreateCalled);
+            this.tag = tag;
             return this;
         }
     }
@@ -235,19 +253,19 @@ public final class SabrMediaSource extends BaseMediaSource {
 
         @Override
         public void maybeThrowError() throws IOException {
-            mLoader.maybeThrowError();
+            loader.maybeThrowError();
             maybeThrowManifestError();
         }
 
         @Override
         public void maybeThrowError(int minRetryCount) throws IOException {
-            mLoader.maybeThrowError(minRetryCount);
+            loader.maybeThrowError(minRetryCount);
             maybeThrowManifestError();
         }
 
         private void maybeThrowManifestError() throws IOException {
-            if (mManifestFatalError != null) {
-                throw mManifestFatalError;
+            if (manifestFatalError != null) {
+                throw manifestFatalError;
             }
         }
     }

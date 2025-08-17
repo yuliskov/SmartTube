@@ -1,9 +1,5 @@
 package com.google.android.exoplayer2.source.sabr;
 
-import android.os.Handler;
-import android.os.Message;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.Format;
@@ -16,7 +12,7 @@ import com.google.android.exoplayer2.util.ParsableByteArray;
 
 import java.io.IOException;
 
-public final class PlayerEmsgHandler implements Handler.Callback {
+public final class PlayerEmsgHandler {
     /** Callbacks for player emsg events encountered during DASH live stream. */
     public interface PlayerEmsgCallback {
 
@@ -34,6 +30,7 @@ public final class PlayerEmsgHandler implements Handler.Callback {
     private final Allocator allocator;
     private final PlayerEmsgCallback playerEmsgCallback;
     private SabrManifest manifest;
+    private boolean released;
 
     /**
      * @param manifest The initial manifest.
@@ -48,15 +45,14 @@ public final class PlayerEmsgHandler implements Handler.Callback {
         this.allocator = allocator;
     }
 
-
-    @Override
-    public boolean handleMessage(@NonNull Message msg) {
-        return false;
-    }
-
     /** Returns a {@link TrackOutput} that emsg messages could be written to. */
     public PlayerTrackEmsgHandler newPlayerTrackEmsgHandler() {
         return new PlayerTrackEmsgHandler(new SampleQueue(allocator));
+    }
+
+    /** Release this emsg handler. It should not be reused after this call. */
+    public void release() {
+        released = true;
     }
 
     /** Handles emsg messages for a specific track for the player. */

@@ -130,7 +130,7 @@ public class VideoLoaderController extends BasePlayerController {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
-            restartEngine();
+            rebootApp(); // without a reboot the app will keep buffering
         }
     }
 
@@ -407,7 +407,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void scheduleReloadVideoTimer(int delayMs) {
         if (getPlayer().isEngineInitialized()) {
-            Log.d(TAG, "Starting check for the future stream...");
+            Log.d(TAG, "Reloading the video...");
             getPlayer().showOverlay(true);
             Utils.postDelayed(mReloadVideo, delayMs);
         }
@@ -415,7 +415,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void scheduleNextVideoTimer(int delayMs) {
         if (getPlayer().isEngineInitialized()) {
-            Log.d(TAG, "Starting next video after delay...");
+            Log.d(TAG, "Starting the next video...");
             getPlayer().showOverlay(true);
             Utils.postDelayed(mLoadNext, delayMs);
         }
@@ -431,7 +431,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void scheduleRestartEngineTimer(int delayMs) {
         if (getPlayer() != null) {
-            Log.d(TAG, "Rebooting the app...");
+            Log.d(TAG, "Restarting the engine...");
             getPlayer().showOverlay(true);
             Utils.postDelayed(mRestartEngine, delayMs);
         }
@@ -531,7 +531,7 @@ public class VideoLoaderController extends BasePlayerController {
                 getPlayerTweaksData().setSectionPlaylistEnabled(false);
                 restartEngine = false;
             }
-        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest", "Response code: 503")) {
+        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest", "Response code: 503") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
             } else {
@@ -641,13 +641,15 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void restartEngine() {
-        // Give a time to user to do something
-        Utils.postDelayed(mRestartEngine, 1_000);
+        scheduleRestartEngineTimer(1_000);
     }
 
     private void reloadVideo() {
-        // Give a time to user to do something
-        Utils.postDelayed(mReloadVideo, 1_000);
+        scheduleReloadVideoTimer(1_000);
+    }
+
+    private void rebootApp() {
+        scheduleRebootAppTimer(1_000);
     }
 
     private List<String> applyFix(List<String> urlList) {

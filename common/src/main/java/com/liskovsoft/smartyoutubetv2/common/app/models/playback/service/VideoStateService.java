@@ -138,7 +138,7 @@ public class VideoStateService implements ProfileChangeListener {
                 return null;
             }
 
-            String[] split = Helpers.split(DELIM, spec);
+            String[] split = Helpers.split(spec, DELIM);
 
             String videoId = Helpers.parseStr(split, 0);
             long positionMs = Helpers.parseLong(split, 1);
@@ -189,7 +189,7 @@ public class VideoStateService implements ProfileChangeListener {
 
     private void setStateData(String data) {
         if (data != null) {
-            String[] split = Helpers.split(DELIM, data);
+            String[] split = Helpers.split(data, DELIM);
 
             for (String spec : split) {
                 State state = State.from(spec);

@@ -6,6 +6,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +31,7 @@ public class IntentExtractor {
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
     private static final String VND_SCHEME = "vnd.youtube"; // vnd.youtube://8kKDjRmHp0g
-    private static final Pattern timePattern = Pattern.compile("^(\\d+)([A-Za-z]{0,2})$");
+    private static final Pattern timePattern = Pattern.compile("(\\d+)([A-Za-z]{0,2})");
     private static final Pattern voiceQueryPattern = Pattern.compile(":\\{\"query\":\"([^\"]*)\"");
 
     public static String extractVideoId(Intent intent) {
@@ -231,7 +232,23 @@ public class IntentExtractor {
         UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
         String time = parser.get(VIDEO_TIME_KEY);
 
-        return parseTimeStr(time);
+        List<String> matches = Helpers.findAll(time, timePattern);
+
+        if (matches.isEmpty()) {
+            return -1;
+        }
+
+        long result = 0;
+
+        for (String match : matches) {
+            long parsed = parseTimeStr(match);
+            if (parsed == -1) {
+                return -1;
+            }
+            result += parsed;
+        }
+
+        return result;
     }
 
     public static String extractAccountName(Intent intent) {
