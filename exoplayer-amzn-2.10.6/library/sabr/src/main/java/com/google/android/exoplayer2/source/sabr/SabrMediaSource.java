@@ -83,7 +83,7 @@ public final class SabrMediaSource extends BaseMediaSource {
     public MediaPeriod createPeriod(MediaPeriodId periodId, Allocator allocator, long startPositionUs) {
         int periodIndex = (Integer) periodId.periodUid - mFirstPeriodId;
         EventDispatcher periodEventDispatcher =
-                createEventDispatcher(periodId, mManifest.getStartMs());
+                createEventDispatcher(periodId, mManifest.startMs);
         return new SabrMediaPeriod(
                 mFirstPeriodId + periodIndex,
                 mManifest,

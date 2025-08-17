@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.source.sabr.DefaultSabrChunkSource;
 import com.google.android.exoplayer2.source.sabr.SabrChunkSource;
 import com.google.android.exoplayer2.source.sabr.SabrMediaSource;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
+import com.google.android.exoplayer2.source.sabr.manifest.SabrManifestParser;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -222,7 +223,8 @@ public class ExoMediaSourceFactory {
     }
 
     private SabrManifest getManifest(MediaItemFormatInfo formatInfo) {
-        return new SabrManifest(formatInfo);
+        SabrManifestParser parser = new SabrManifestParser();
+        return parser.parse(formatInfo);
     }
 
     private DashManifest getManifest(Uri uri, InputStream mpdContent) {
