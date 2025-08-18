@@ -629,14 +629,14 @@ public class PlayerUIController extends BasePlayerController {
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
 
-            // Cause the background playback bugs if not to check for upcoming!!!
+            // Close unplayable videos with single back click
+            // Cause the background playback bugs if not to check for Video.isUnplayable!!!
             // To reproduce the bug:
             // 1) Set bg black to "Only audio when pressing HOME"
             // 2) Enable "keep finished activities"
             // 3) Close the video when it fully finished and ready to skip to the next
-            // Close future stream with single back click
             if (getVideo() != null && getPlayer() != null &&
-                    getVideo().isUpcoming && getPlayer().isControlsShown()) {
+                    getVideo().isUnplayable && getPlayer().isControlsShown()) {
                 getPlayer().finish();
             }
 

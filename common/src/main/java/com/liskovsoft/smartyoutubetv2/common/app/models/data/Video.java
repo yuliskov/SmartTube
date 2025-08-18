@@ -69,6 +69,7 @@ public final class Video {
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isUnplayable;
     public boolean isShorts;
     public boolean isChapter;
     public boolean isMovie;
@@ -762,6 +763,7 @@ public final class Video {
         }
 
         volume = formatInfo.getVolumeLevel();
+        isUnplayable = formatInfo.isUnplayable();
     }
 
     public void sync(DislikeData dislikeData) {
