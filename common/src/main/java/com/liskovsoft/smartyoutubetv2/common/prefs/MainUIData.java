@@ -128,17 +128,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return sInstance;
     }
 
-    public void enableCardMultilineTitle(boolean enable) {
-        mIsCardMultilineTitleEnabled = enable;
-        persistState();
-    }
-
     public boolean isCardMultilineTitleEnabled() {
         return mIsCardMultilineTitleEnabled;
     }
 
-    public void enableCardMultilineSubtitle(boolean enable) {
-        mIsCardMultilineSubtitleEnabled = enable;
+    public void setCardMultilineTitleEnabled(boolean enable) {
+        mIsCardMultilineTitleEnabled = enable;
         persistState();
     }
 
@@ -146,8 +141,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsCardMultilineSubtitleEnabled;
     }
 
-    public void enableCardTextAutoScroll(boolean enable) {
-        mIsCardTextAutoScrollEnabled = enable;
+    public void setCardMultilineSubtitleEnabled(boolean enable) {
+        mIsCardMultilineSubtitleEnabled = enable;
         persistState();
     }
 
@@ -155,8 +150,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsCardTextAutoScrollEnabled;
     }
 
-    public void setCartTitleLinesNum(int lines) {
-        mCardTitleLinesNum = lines;
+    public void setCardTextAutoScrollEnabled(boolean enable) {
+        mIsCardTextAutoScrollEnabled = enable;
         persistState();
     }
 
@@ -164,8 +159,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mCardTitleLinesNum;
     }
 
-    public void setThumbQuality(int quality) {
-        mThumbQuality = quality;
+    public void setCartTitleLinesNum(int lines) {
+        mCardTitleLinesNum = lines;
         persistState();
     }
 
@@ -173,9 +168,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mThumbQuality;
     }
 
-    public void setVideoGridScale(float scale) {
-        mVideoGridScale = scale;
-
+    public void setThumbQuality(int quality) {
+        mThumbQuality = quality;
         persistState();
     }
 
@@ -184,8 +178,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return Build.VERSION.SDK_INT <= 19 ? 1.2f : mVideoGridScale;
     }
 
-    public void setUIScale(float scale) {
-        mUIScale = scale;
+    public void setVideoGridScale(float scale) {
+        mVideoGridScale = scale;
 
         persistState();
     }
@@ -194,17 +188,23 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mUIScale;
     }
 
+    public void setUIScale(float scale) {
+        mUIScale = scale;
+
+        persistState();
+    }
+
     public List<ColorScheme> getColorSchemes() {
         return mColorSchemes;
+    }
+
+    public ColorScheme getColorScheme() {
+        return mColorSchemes.get(mColorSchemeIndex);
     }
 
     public void setColorScheme(ColorScheme scheme) {
         mColorSchemeIndex = mColorSchemes.indexOf(scheme);
         persistState();
-    }
-
-    public ColorScheme getColorScheme() {
-        return mColorSchemes.get(mColorSchemeIndex);
     }
 
     public int getChannelCategorySorting() {
@@ -225,17 +225,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
-    public void enableUploadsOldLook(boolean enable) {
-        mIsUploadsOldLookEnabled = enable;
-        persistState();
-    }
-
     public boolean isUploadsOldLookEnabled() {
         return mIsUploadsOldLookEnabled;
     }
 
-    public void enableChannelsFilter(boolean enable) {
-        mIsChannelsFilterEnabled = enable;
+    public void setUploadsOldLookEnabled(boolean enable) {
+        mIsUploadsOldLookEnabled = enable;
         persistState();
     }
 
@@ -243,8 +238,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsChannelsFilterEnabled;
     }
 
-    public void enablePinnedChannelRows(boolean enable) {
-        mIsPinnedChannelRowsEnabled = enable;
+    public void setChannelsFilterEnabled(boolean enable) {
+        mIsChannelsFilterEnabled = enable;
         persistState();
     }
 
@@ -252,8 +247,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsPinnedChannelRowsEnabled;
     }
 
-    public void enableChannelSearchBar(boolean enable) {
-        mIsChannelSearchBarEnabled = enable;
+    public void setPinnedChannelRowsEnabled(boolean enable) {
+        mIsPinnedChannelRowsEnabled = enable;
         persistState();
     }
 
@@ -261,8 +256,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsChannelSearchBarEnabled;
     }
 
-    public void enableUploadsAutoLoad(boolean enable) {
-        mIsUploadsAutoLoadEnabled = enable;
+    public void setChannelSearchBarEnabled(boolean enable) {
+        mIsChannelSearchBarEnabled = enable;
         persistState();
     }
 
@@ -270,11 +265,8 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsUploadsAutoLoadEnabled;
     }
 
-    public void setCardTextScrollSpeed(float factor) {
-        mCardTextScrollSpeed = factor;
-
-        enableCardTextAutoScroll(true);
-
+    public void setUploadsAutoLoadEnabled(boolean enable) {
+        mIsUploadsAutoLoadEnabled = enable;
         persistState();
     }
 
@@ -282,18 +274,34 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mCardTextScrollSpeed;
     }
 
-    public void enableMenuItem(long menuItems) {
-        mMenuItems |= menuItems;
-        persistState();
-    }
+    public void setCardTextScrollSpeed(float factor) {
+        mCardTextScrollSpeed = factor;
 
-    public void disableMenuItem(long menuItems) {
-        mMenuItems &= ~menuItems;
+        setCardTextAutoScrollEnabled(true);
+
         persistState();
     }
 
     public boolean isMenuItemEnabled(long menuItems) {
         return (mMenuItems & menuItems) == menuItems;
+    }
+
+    public void setMenuItemEnabled(long menuItems) {
+        mMenuItems |= menuItems;
+        persistState();
+    }
+
+    public void setMenuItemDisabled(long menuItems) {
+        mMenuItems &= ~menuItems;
+        persistState();
+    }
+
+    public List<Long> getMenuItemsOrdered() {
+        return Collections.unmodifiableList(mMenuItemsOrdered);
+    }
+
+    public int getMenuItemIndex(long menuItem) {
+        return mMenuItemsOrdered.indexOf(menuItem);
     }
 
     public void setMenuItemIndex(int index, Long menuItem) {
@@ -311,26 +319,18 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
-    public int getMenuItemIndex(long menuItem) {
-        return mMenuItemsOrdered.indexOf(menuItem);
+    public boolean isTopButtonEnabled(int button) {
+        return (mTopButtons & button) == button;
     }
 
-    public List<Long> getMenuItemsOrdered() {
-        return Collections.unmodifiableList(mMenuItemsOrdered);
-    }
-
-    public void enableTopButton(int button) {
+    public void setTopButtonEnabled(int button) {
         mTopButtons |= button;
         persistState();
     }
 
-    public void disableTopButton(int button) {
+    public void setTopButtonDisabled(int button) {
         mTopButtons &= ~button;
         persistState();
-    }
-
-    public boolean isTopButtonEnabled(int button) {
-        return (mTopButtons & button) == button;
     }
 
     public int getCardPreviewType() {
@@ -346,7 +346,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mIsUnlocalizedTitlesEnabled;
     }
 
-    public void enableUnlocalizedTitles(boolean enabled) {
+    public void setUnlocalizedTitlesEnabled(boolean enabled) {
         mIsUnlocalizedTitlesEnabled = enabled;
         persistState();
     }

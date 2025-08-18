@@ -125,14 +125,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
-        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.about_sponsorblock),
-                option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_provider_url)));
-
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_status_url)));
 
-        settingsPresenter.appendSingleButton(webSiteOption);
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.about_sponsorblock),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_provider_url)));
+
         settingsPresenter.appendSingleButton(statsCheckOption);
+        settingsPresenter.appendSingleButton(webSiteOption);
     }
 
     private void appendMiscSection(AppDialogPresenter settingsPresenter) {

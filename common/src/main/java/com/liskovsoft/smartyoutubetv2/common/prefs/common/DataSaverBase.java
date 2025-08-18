@@ -12,7 +12,11 @@ import java.util.List;
 public abstract class DataSaverBase extends DataChangeBase {
     private final AppPrefs mAppPrefs;
     private final String mDataKey;
-    private final List<String> mValues;
+    private final List<Object> mValues;
+
+    private interface Converter {
+        Object convert(String input);
+    }
 
     public DataSaverBase(Context context) {
         mAppPrefs = AppPrefs.instance(context.getApplicationContext());
@@ -21,32 +25,49 @@ public abstract class DataSaverBase extends DataChangeBase {
         restoreState();
     }
 
-    protected void setBoolean(int index, boolean value) {
-        checkCapacity(index);
-        mValues.set(index, Helpers.toString(value));
-        persistState();
+    protected boolean getBoolean(int index) {
+        return getBoolean(index, false);
     }
 
     protected boolean getBoolean(int index, boolean defaultValue) {
-        if (index >= mValues.size() || mValues.get(index) == null) {
-            return defaultValue;
-        }
-
-        return Helpers.parseBoolean(mValues.get(index));
+        return (Boolean) getValue(index, defaultValue, Helpers::parseBoolean);
     }
 
-    protected void setInt(int index, int value) {
-        checkCapacity(index);
-        mValues.set(index, Helpers.toString((Integer) value));
-        persistState();
+    protected void setBoolean(int index, boolean value) {
+        setValue(index, value);
+    }
+
+    protected int getInt(int index) {
+        return getInt(index, -1);
     }
 
     protected int getInt(int index, int defaultValue) {
+        return (Integer) getValue(index, defaultValue, Helpers::parseInt);
+    }
+
+    protected void setInt(int index, int value) {
+        setValue(index, value);
+    }
+
+    private Object getValue(int index, Object defaultValue, Converter converter) {
         if (index >= mValues.size() || mValues.get(index) == null) {
             return defaultValue;
         }
 
-        return Helpers.parseInt(mValues.get(index));
+        Object rawValue = mValues.get(index);
+        if (rawValue instanceof String) {
+            Object value = converter.convert((String) rawValue);
+            mValues.set(index, value);
+            return value;
+        } else {
+            return rawValue;
+        }
+    }
+
+    private void setValue(int index, Object value) {
+        checkCapacity(index);
+        mValues.set(index, value);
+        persistState();
     }
 
     private void checkCapacity(int index) {

@@ -193,10 +193,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
             options.add(UiOptionItem.from(getContext().getString(nameResId), optionItem -> {
                 if (optionItem.isSelected()) {
-                    mMainUIData.enableMenuItem(menuItem);
+                    mMainUIData.setMenuItemEnabled(menuItem);
                     showMenuItemOrderDialog(menuItem);
                 } else {
-                    mMainUIData.disableMenuItem(menuItem);
+                    mMainUIData.setMenuItemDisabled(menuItem);
                 }
             }, mMainUIData.isMenuItemEnabled(menuItem)));
         }
@@ -666,17 +666,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         SearchData searchData = SearchData.instance(getContext());
 
         // Remove all
-        mMainUIData.disableTopButton(Integer.MAX_VALUE);
+        mMainUIData.setTopButtonDisabled(Integer.MAX_VALUE);
         tweaksData.setPlayerButtonDisabled(Integer.MAX_VALUE);
-        mMainUIData.disableMenuItem(Integer.MAX_VALUE);
+        mMainUIData.setMenuItemDisabled(Integer.MAX_VALUE);
         BrowsePresenter.instance(getContext()).enableAllSections(false);
         searchData.disablePopularSearches(true);
 
         if (enable) {
             // apply child tweaks
-            mMainUIData.enableTopButton(topButtons);
+            mMainUIData.setTopButtonEnabled(topButtons);
             tweaksData.setPlayerButtonEnabled(playerButtons);
-            mMainUIData.enableMenuItem(menuItems);
+            mMainUIData.setMenuItemEnabled(menuItems);
             mPlayerData.setPlaybackMode(PlayerConstants.PLAYBACK_MODE_LIST);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_HISTORY, true);
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_USER_PLAYLISTS, true);
@@ -684,9 +684,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_CHANNEL_UPLOADS, true);
         } else {
             // apply default tweaks
-            mMainUIData.enableTopButton(MainUIData.TOP_BUTTON_DEFAULT);
+            mMainUIData.setTopButtonEnabled(MainUIData.TOP_BUTTON_DEFAULT);
             tweaksData.setPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_DEFAULT);
-            mMainUIData.enableMenuItem(MainUIData.MENU_ITEM_DEFAULT);
+            mMainUIData.setMenuItemEnabled(MainUIData.MENU_ITEM_DEFAULT);
             BrowsePresenter.instance(getContext()).enableAllSections(true);
             tweaksData.setSuggestionsDisabled(false);
             mPlayerData.setPlaybackMode(PlayerConstants.PLAYBACK_MODE_ALL);

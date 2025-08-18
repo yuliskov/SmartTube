@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DeArrowData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
@@ -23,6 +24,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
     private final PlayerData mPlayerData;
+    private final DeArrowData mDeArrowData;
     private boolean mRestartApp;
 
     private MainUISettingsPresenter(Context context) {
@@ -30,6 +32,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         mMainUIData = MainUIData.instance(context);
         mGeneralData = GeneralData.instance(context);
         mPlayerData = PlayerData.instance(context);
+        mDeArrowData = DeArrowData.instance(context);
     }
 
     public static MainUISettingsPresenter instance(Context context) {
@@ -74,9 +77,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 {R.string.settings_accounts, MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
-                    mMainUIData.enableTopButton(pair[1]);
+                    mMainUIData.setTopButtonEnabled(pair[1]);
                 } else {
-                    mMainUIData.disableTopButton(pair[1]);
+                    mMainUIData.setTopButtonDisabled(pair[1]);
                 }
             }, mMainUIData.isTopButtonEnabled(pair[1])));
         }
@@ -125,16 +128,16 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem multilineTitle = UiOptionItem.from(getContext().getString(R.string.card_multiline_title),
-                option -> mMainUIData.enableCardMultilineTitle(option.isSelected()), mMainUIData.isCardMultilineTitleEnabled());
+                option -> mMainUIData.setCardMultilineTitleEnabled(option.isSelected()), mMainUIData.isCardMultilineTitleEnabled());
 
         OptionItem multilineSubtitle = UiOptionItem.from(getContext().getString(R.string.card_multiline_subtitle),
-                option -> mMainUIData.enableCardMultilineSubtitle(option.isSelected()), mMainUIData.isCardMultilineSubtitleEnabled());
+                option -> mMainUIData.setCardMultilineSubtitleEnabled(option.isSelected()), mMainUIData.isCardMultilineSubtitleEnabled());
 
         OptionItem autoScrolledTitle = UiOptionItem.from(getContext().getString(R.string.card_auto_scrolled_title),
-                option -> mMainUIData.enableCardTextAutoScroll(option.isSelected()), mMainUIData.isCardTextAutoScrollEnabled());
+                option -> mMainUIData.setCardTextAutoScrollEnabled(option.isSelected()), mMainUIData.isCardTextAutoScrollEnabled());
 
         OptionItem unlocalizedTitle = UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
-                option -> mMainUIData.enableUnlocalizedTitles(option.isSelected()), mMainUIData.isUnlocalizedTitlesEnabled());
+                option -> mMainUIData.setUnlocalizedTitlesEnabled(option.isSelected()), mMainUIData.isUnlocalizedTitlesEnabled());
         
         options.add(multilineTitle);
         options.add(multilineSubtitle);
@@ -274,7 +277,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
-                option -> mMainUIData.enableUnlocalizedTitles(option.isSelected()),
+                option -> {
+                    mMainUIData.setUnlocalizedTitlesEnabled(option.isSelected());
+                    mDeArrowData.setReplaceTitlesEnabled(false);
+                },
                 mMainUIData.isUnlocalizedTitlesEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.time_format_24) + " " + getContext().getString(R.string.time_format),
@@ -315,7 +321,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
                 optionItem -> {
-                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
+                    mMainUIData.setUploadsOldLookEnabled(optionItem.isSelected());
                     mRestartApp = true;
                 },
                 mMainUIData.isUploadsOldLookEnabled()));
@@ -329,7 +335,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.pinned_channel_rows),
                 optionItem -> {
-                    mMainUIData.enablePinnedChannelRows(optionItem.isSelected());
+                    mMainUIData.setPinnedChannelRowsEnabled(optionItem.isSelected());
                     mRestartApp = true;
                 },
                 mMainUIData.isPinnedChannelRowsEnabled()));
@@ -342,15 +348,15 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 mMainUIData.getPlaylistsStyle() == MainUIData.PLAYLISTS_STYLE_ROWS));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_filter),
-                optionItem -> mMainUIData.enableChannelsFilter(optionItem.isSelected()),
+                optionItem -> mMainUIData.setChannelsFilterEnabled(optionItem.isSelected()),
                 mMainUIData.isChannelsFilterEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channel_search_bar),
-                optionItem -> mMainUIData.enableChannelSearchBar(optionItem.isSelected()),
+                optionItem -> mMainUIData.setChannelSearchBarEnabled(optionItem.isSelected()),
                 mMainUIData.isChannelSearchBarEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_auto_load),
-                optionItem -> mMainUIData.enableUploadsAutoLoad(optionItem.isSelected()),
+                optionItem -> mMainUIData.setUploadsAutoLoadEnabled(optionItem.isSelected()),
                 mMainUIData.isUploadsAutoLoadEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);

@@ -63,12 +63,22 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     private void appendSwitches(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
+                option -> {
+                    mMainUIData.setUnlocalizedTitlesEnabled(option.isSelected());
+                    mDeArrowData.setReplaceTitlesEnabled(false);
+                },
+                mMainUIData.isUnlocalizedTitlesEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.crowdsoursed_titles),
-                optionItem -> mDeArrowData.replaceTitles(optionItem.isSelected()),
+                optionItem -> {
+                    mDeArrowData.setReplaceTitlesEnabled(optionItem.isSelected());
+                    mMainUIData.setUnlocalizedTitlesEnabled(false);
+                },
                 mDeArrowData.isReplaceTitlesEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.crowdsourced_thumbnails),
-                optionItem -> mDeArrowData.replaceThumbnails(optionItem.isSelected()),
+                optionItem -> mDeArrowData.setReplaceThumbnailsEnabled(optionItem.isSelected()),
                 mDeArrowData.isReplaceThumbnailsEnabled()));
 
         for (OptionItem item : options) {
@@ -77,14 +87,14 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLinks(AppDialogPresenter settingsPresenter) {
-        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.about_dearrow),
-                option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_provider_url)));
-
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.dearrow_status),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_status_url)));
 
-        settingsPresenter.appendSingleButton(webSiteOption);
+        OptionItem webSiteOption = UiOptionItem.from(getContext().getString(R.string.about_dearrow),
+                option -> Utils.openLink(getContext(), getContext().getString(R.string.dearrow_provider_url)));
+
         settingsPresenter.appendSingleButton(statsCheckOption);
+        settingsPresenter.appendSingleButton(webSiteOption);
     }
 
     private void appendDeArrowSwitch(AppDialogPresenter settingsPresenter) {
@@ -94,7 +104,7 @@ public class DeArrowSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dearrow_provider_url)
         );
         OptionItem sponsorBlockOption = UiOptionItem.from(title,
-                option -> mDeArrowData.enableDeArrow(option.isSelected()),
+                option -> mDeArrowData.setDeArrowEnabled(option.isSelected()),
                 mDeArrowData.isDeArrowEnabled()
         );
 

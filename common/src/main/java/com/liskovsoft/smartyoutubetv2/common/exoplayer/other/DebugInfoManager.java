@@ -82,7 +82,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDebugViewGroup = activity.findViewById(resLayoutId);
         mContext = activity;
         mTextSize = activity.getResources().getDimension(R.dimen.debug_text_size);
-        mAppVersion = String.format("%s Version", mContext.getString(R.string.app_name));
+        mAppVersion = String.format("%s version", mContext.getString(R.string.app_name));
         inflate();
     }
 
@@ -237,15 +237,15 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         String videoRes = getVideoResolution(video);
 
-        mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
-        mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
+        mVideoInfo.add(new Pair<>("Video resolution", videoRes));
+        mVideoInfo.add(new Pair<>("Video/Audio codecs", String.format(
                 "%s(%s)/%s(%s)",
                 getFormatMimeType(video),
                 getFormatId(video),
                 getFormatMimeType(audio),
                 getFormatId(audio)
         )));
-        mVideoInfo.add(new Pair<>("Video/Audio Bitrate", String.format(
+        mVideoInfo.add(new Pair<>("Video/Audio bitrate", String.format(
                 "%s/%s",
                 toHumanReadable(video.bitrate),
                 toHumanReadable(audio.bitrate)
@@ -256,8 +256,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //        DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
-        mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
-        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(Helpers.isHardwareAccelerated(videoCodecName))));
+        mVideoInfo.add(new Pair<>("Video decoder name", videoCodecName));
+        mVideoInfo.add(new Pair<>("Hardware accelerated", String.valueOf(Helpers.isHardwareAccelerated(videoCodecName))));
     }
 
     private void appendRuntimeInfo() {
@@ -266,12 +266,12 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return;
 
         counters.ensureUpdated();
-        appendRow("Dropped/Rendered Frames", counters.droppedBufferCount + "/" + counters.renderedOutputBufferCount);
+        appendRow("Dropped/Rendered frames", counters.droppedBufferCount + "/" + counters.renderedOutputBufferCount);
         appendRow("Buffer size (seconds)", (int)(mPlayer.getBufferedPosition() - mPlayer.getCurrentPosition()) / 1_000);
     }
 
     private void appendPlayerState() {
-        appendRow("Player Paused", !mPlayer.getPlayWhenReady());
+        appendRow("Player paused", !mPlayer.getPlayWhenReady());
 
         String text;
         switch (mPlayer.getPlaybackState()) {
@@ -291,7 +291,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 text = "unknown";
                 break;
         }
-        appendRow("Playback State", text);
+        appendRow("Playback state", text);
     }
 
     private void appendDisplayModeId() {
@@ -299,29 +299,6 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             appendRow(pair.first, pair.second);
         }
     }
-
-    //private void updateDisplayModeId() {
-    //    mDisplayModeId.clear();
-    //
-    //    Mode currentMode = mUhdHelper.getCurrentMode();
-    //    Mode[] supportedModes = mUhdHelper.getSupportedModes();
-    //
-    //    boolean isAfrSupported = currentMode != null && supportedModes != null && supportedModes.length > 1;
-    //
-    //    mDisplayModeId.add(new Pair<>("Software Auto Frame Rate", isAfrSupported ? "supported" : NOT_AVAILABLE));
-    //
-    //    if (isAfrSupported) {
-    //        String bootResolution = AppPrefs.instance(mContext).getBootResolution();
-    //        String currentResolution = UhdHelper.toResolution(currentMode);
-    //        currentResolution = currentResolution != null ? currentResolution : bootResolution;
-    //
-    //        mDisplayModeId.add(new Pair<>("Current/UI Resolution", currentResolution));
-    //        mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
-    //
-    //        mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));
-    //        mDisplayModeId.add(new Pair<>("Display Modes Length", String.valueOf(supportedModes.length)));
-    //    }
-    //}
 
     private void updateDisplayModeId() {
         if (mUhdHelper == null) {
@@ -336,11 +313,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         String bootResolution = AppPrefs.instance(mContext).getBootResolution();
         String currentResolution = UhdHelper.toResolution(currentMode);
 
-        mDisplayModeId.add(new Pair<>("UI Resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
-        mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("UI resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Boot resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
 
-        mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
-        mDisplayModeId.add(new Pair<>("Display Modes Length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Display mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
     }
 
     private void appendDisplayInfo() {
@@ -352,16 +329,16 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void updateDisplayInfo() {
         mDisplayInfo.clear();
 
-        mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
+        mDisplayInfo.add(new Pair<>("Display DPI", String.valueOf(Helpers.getDeviceDpi(mContext))));
     }
 
     private void appendPlayerWindowIndex() {
-        appendRow("Window Index", mPlayer.getCurrentWindowIndex());
+        appendRow("Window index", mPlayer.getCurrentWindowIndex());
     }
 
     private void appendVersion() {
-        appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
-        appendRow("ExoPlayer DataSource",
+        appendRow("ExoPlayer version", ExoPlayerLibraryInfo.VERSION);
+        appendRow("ExoPlayer engine",
                 PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
                         PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET ? "Cronet" :
                         "Default");
@@ -382,8 +359,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendMemoryInfo() {
         long maxMemory = Runtime.getRuntime().maxMemory();
         long allocatedMemory = Runtime.getRuntime().totalMemory();
-        appendRow("Memory Limit (MB)", (int)(maxMemory / (1024 * 1024))); // Growth Limit
-        appendRow("Allocated Memory (MB)", (int)(allocatedMemory / (1024 * 1024)));
+        appendRow("Memory limit (MB)", (int)(maxMemory / (1024 * 1024))); // Growth Limit
+        appendRow("Allocated memory (MB)", (int)(allocatedMemory / (1024 * 1024)));
     }
 
     private void appendWebViewInfo() {

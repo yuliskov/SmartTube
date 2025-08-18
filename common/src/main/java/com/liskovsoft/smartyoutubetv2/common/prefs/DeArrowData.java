@@ -19,27 +19,27 @@ public class DeArrowData extends DataSaverBase {
         return sInstance;
     }
 
-    public void enableDeArrow(boolean enable) {
+    public boolean isDeArrowEnabled() {
+        return getBoolean(0);
+    }
+
+    public void setDeArrowEnabled(boolean enable) {
         setBoolean(0, enable);
     }
 
-    public boolean isDeArrowEnabled() {
-        return getBoolean(0, false);
-    }
-
-    public void replaceTitles(boolean replace) {
-        setBoolean(1, replace);
-    }
-
     public boolean isReplaceTitlesEnabled() {
-        return getBoolean(1, false);
+        return getBoolean(1);
     }
 
-    public void replaceThumbnails(boolean replace) {
-        setBoolean(2, replace);
+    public void setReplaceTitlesEnabled(boolean enable) {
+        setBoolean(1, enable);
     }
 
     public boolean isReplaceThumbnailsEnabled() {
-        return getBoolean(2, false);
+        return getBoolean(2);
+    }
+
+    public void setReplaceThumbnailsEnabled(boolean replace) {
+        setBoolean(2, replace);
     }
 }
