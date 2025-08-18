@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.leanback.widget.SearchBar {
+    <init>(...);
+}
 -keepclassmembers class com.liskovsoft.mediaserviceinterfaces.ServiceManager {
     <init>(...);
     com.liskovsoft.mediaserviceinterfaces.MediaItemService getMediaItemService();
