@@ -39,7 +39,12 @@ public class RemoteControlService extends Service {
         // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
         // NOTE: it's impossible to hide notification on Android 9 and above
         // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
-        startForeground(NOTIFICATION_ID, createNotification());
+        try {
+            startForeground(NOTIFICATION_ID, createNotification());
+        } catch (NullPointerException e) {
+            // NullPointerException: Attempt to read from field 'int com.android.server.am.UidRecord.curProcState' on a null object reference
+            e.printStackTrace();
+        }
     }
 
     @Override

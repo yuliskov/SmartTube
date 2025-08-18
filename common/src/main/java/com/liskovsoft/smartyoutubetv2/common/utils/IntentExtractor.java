@@ -234,7 +234,7 @@ public class IntentExtractor {
 
         List<String> matches = Helpers.findAll(time, timePattern);
 
-        if (matches.isEmpty()) {
+        if (matches == null) {
             return -1;
         }
 
