@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ public abstract class DataSaverBase extends DataChangeBase {
     private final AppPrefs mAppPrefs;
     private final String mDataKey;
     private final List<Object> mValues;
+    private final Runnable mPersistStateInt = this::persistStateInt;
 
     private interface Converter {
         Object convert(String input);
@@ -30,7 +32,7 @@ public abstract class DataSaverBase extends DataChangeBase {
     }
 
     protected boolean getBoolean(int index, boolean defaultValue) {
-        return (Boolean) getValue(index, defaultValue, Helpers::parseBoolean);
+        return getValue(index, defaultValue, Helpers::parseBoolean);
     }
 
     protected void setBoolean(int index, boolean value) {
@@ -42,14 +44,15 @@ public abstract class DataSaverBase extends DataChangeBase {
     }
 
     protected int getInt(int index, int defaultValue) {
-        return (Integer) getValue(index, defaultValue, Helpers::parseInt);
+        return getValue(index, defaultValue, Helpers::parseInt);
     }
 
     protected void setInt(int index, int value) {
         setValue(index, value);
     }
 
-    private Object getValue(int index, Object defaultValue, Converter converter) {
+    @SuppressWarnings("unchecked")
+    private <T> T getValue(int index, T defaultValue, Converter converter) {
         if (index >= mValues.size() || mValues.get(index) == null) {
             return defaultValue;
         }
@@ -58,13 +61,13 @@ public abstract class DataSaverBase extends DataChangeBase {
         if (rawValue instanceof String) {
             Object value = converter.convert((String) rawValue);
             mValues.set(index, value);
-            return value;
+            return (T) value;
         } else {
-            return rawValue;
+            return (T) rawValue;
         }
     }
 
-    private void setValue(int index, Object value) {
+    private <T> void setValue(int index, T value) {
         checkCapacity(index);
         mValues.set(index, value);
         persistState();
@@ -90,9 +93,13 @@ public abstract class DataSaverBase extends DataChangeBase {
     }
 
     private void persistState() {
+        onDataChange();
+        Utils.postDelayed(mPersistStateInt, 10_000);
+    }
+
+    private void persistStateInt() {
         mAppPrefs.setData(mDataKey, Helpers.mergeData(
                 mValues.toArray()
         ));
-        onDataChange();
     }
 }
