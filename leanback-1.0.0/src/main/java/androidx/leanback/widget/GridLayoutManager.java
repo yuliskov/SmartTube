@@ -32,6 +32,7 @@ import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.FocusFinder;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
@@ -2309,9 +2310,10 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                     while (appendOneColumnVisibleItems() && findViewByPosition(endPos) == null) {
                         // continuously append items until endPos
                     }
-                } catch (IndexOutOfBoundsException | NullPointerException e) {
+                } catch (IndexOutOfBoundsException | NullPointerException | InflateException e) {
                     // IndexOutOfBoundsException: Invalid item position 20(20). Item count:6 androidx.leanback.widget.VerticalGridView
                     // NullPointerException: Attempt to invoke virtual method 'android.content.res.StringBlock.get(int)' on a null object reference
+                    // InflateException: Binary XML file line #60: Binary XML file line #60: Error inflating class <unknown>
                     e.printStackTrace();
                 }
             }
