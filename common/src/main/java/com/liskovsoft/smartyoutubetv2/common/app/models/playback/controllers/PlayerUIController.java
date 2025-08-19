@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -143,8 +144,7 @@ public class PlayerUIController extends BasePlayerController {
         return false;
     }
 
-    @Override
-    public void onSubtitleClicked(boolean enabled) {
+    private void onSubtitleClicked(boolean enabled) {
         fitVideoIntoDialog();
 
         // First run
@@ -172,7 +172,7 @@ public class PlayerUIController extends BasePlayerController {
             FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : matchedFormat;
             getPlayer().setFormat(format);
             getPlayerData().setFormat(format);
-            getPlayer().setSubtitleButtonState(!FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled);
+            getPlayer().setButtonState(R.id.lb_control_closed_captioning, !FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
             enableSubtitleForChannel(!enabled);
         } else {
             // Match not found
@@ -180,8 +180,7 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    @Override
-    public void onSubtitleLongClicked(boolean enabled) {
+    private void onSubtitleLongClicked(boolean enabled) {
         if (getPlayer() == null) {
             return;
         }
@@ -241,8 +240,7 @@ public class PlayerUIController extends BasePlayerController {
         settingsPresenter.showDialog(subtitlesOrigCategoryTitle, mSetSubtitleButtonState);
     }
 
-    @Override
-    public void onPlaylistAddClicked() {
+    private void onPlaylistAddClicked() {
         fitVideoIntoDialog();
 
         if (mPlaylistInfos == null) {
@@ -254,10 +252,10 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    @Override
-    public void onDebugInfoClicked(boolean enabled) {
-        mDebugViewEnabled = enabled;
-        getPlayer().showDebugInfo(enabled);
+    private void onDebugInfoClicked(boolean enabled) {
+        mDebugViewEnabled = !enabled;
+        getPlayer().showDebugInfo(mDebugViewEnabled);
+        getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -272,7 +270,7 @@ public class PlayerUIController extends BasePlayerController {
             // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
             getPlayer().showOverlay(true);
             getPlayer().showDebugInfo(mDebugViewEnabled);
-            getPlayer().setDebugButtonState(mDebugViewEnabled);
+            getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
         
         if (getPlayerTweaksData().isScreenOffTimeoutEnabled() || getPlayerTweaksData().isBootScreenOffEnabled()) {
@@ -312,7 +310,7 @@ public class PlayerUIController extends BasePlayerController {
 
         // Activate debug infos when restoring after PIP.
         getPlayer().showDebugInfo(mDebugViewEnabled);
-        getPlayer().setDebugButtonState(mDebugViewEnabled);
+        getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         getPlayer().showSubtitles(true);
 
         // Maybe dialog just closed. Reset timeout just in case.
@@ -326,7 +324,7 @@ public class PlayerUIController extends BasePlayerController {
             // UI couldn't be properly displayed in PIP mode
             getPlayer().showOverlay(false);
             getPlayer().showDebugInfo(false);
-            getPlayer().setDebugButtonState(false);
+            getPlayer().setButtonState(R.id.action_video_stats, PlayerUI.BUTTON_OFF);
             getPlayer().showSubtitles(false);
         }
     }
@@ -336,12 +334,12 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        getPlayer().setLikeButtonState(false);
-        getPlayer().setDislikeButtonState(false);
+        getPlayer().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
         getPlayer().setChannelIcon(null);
-        getPlayer().setPlaylistAddButtonState(false);
-        getPlayer().setSubtitleButtonState(false);
-        getPlayer().setSpeedButtonState(false);
+        getPlayer().setButtonState(R.id.action_playlist_add, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_video_speed, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_chat, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_OFF);
     }
@@ -360,8 +358,8 @@ public class PlayerUIController extends BasePlayerController {
         if (getPlayerData().getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getPlayer().loadStoryboard();
         }
-        getPlayer().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
-        getPlayer().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
+        getPlayer().setButtonState(R.id.action_thumbs_up, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_down, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         if (getPlayerTweaksData().isRealChannelIconEnabled()) {
             getPlayer().setChannelIcon(metadata.getAuthorImageUrl());
         }
@@ -398,16 +396,16 @@ public class PlayerUIController extends BasePlayerController {
         });
     }
 
-    @Override
-    public void onDislikeClicked(boolean dislike) {
+    private void onDislikeClicked(boolean dislike) {
+        getPlayer().setButtonState(R.id.action_thumbs_down, !dislike ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-            getPlayer().setDislikeButtonState(!dislike);
             return;
         }
 
         if (!YouTubeSignInService.instance().isSigned()) {
-            getPlayer().setDislikeButtonState(false);
+            getPlayer().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
             return;
         }
@@ -419,16 +417,16 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    @Override
-    public void onLikeClicked(boolean like) {
+    private void onLikeClicked(boolean like) {
+        getPlayer().setButtonState(R.id.action_thumbs_up, !like ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-            getPlayer().setLikeButtonState(!like);
             return;
         }
 
         if (!YouTubeSignInService.instance().isSigned()) {
-            getPlayer().setLikeButtonState(false);
+            getPlayer().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
             return;
         }
@@ -440,8 +438,7 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    @Override
-    public void onSeekIntervalClicked() {
+    private void onSeekInterval() {
         fitVideoIntoDialog();
 
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();
@@ -451,8 +448,7 @@ public class PlayerUIController extends BasePlayerController {
         settingsPresenter.showDialog();
     }
 
-    @Override
-    public void onVideoInfoClicked() {
+    private void onVideoInfoClicked() {
         fitVideoIntoDialog();
 
         if (!mIsMetadataLoaded) {
@@ -482,8 +478,7 @@ public class PlayerUIController extends BasePlayerController {
         dialogPresenter.showDialog(title);
     }
 
-    @Override
-    public void onShareLinkClicked() {
+    private void onShareLinkClicked() {
         fitVideoIntoDialog();
 
         Video video = getVideo();
@@ -502,14 +497,12 @@ public class PlayerUIController extends BasePlayerController {
         dialogPresenter.showDialog(getVideo().getTitle());
     }
 
-    @Override
-    public void onSearchClicked() {
+    private void onSearchClicked() {
         startTempBackgroundMode(SearchPresenter.class);
         SearchPresenter.instance(getContext()).startSearch(null);
     }
-
-    @Override
-    public void onVideoZoomClicked() {
+    
+    private void onVideoZoom() {
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
                     getPlayer().setResizeMode(getPlayerData().getResizeMode());
@@ -530,8 +523,7 @@ public class PlayerUIController extends BasePlayerController {
         settingsPresenter.showDialog(getContext().getString(R.string.video_aspect));
     }
 
-    @Override
-    public void onPipClicked() {
+    private void onPipClicked() {
         getPlayer().showOverlay(false);
         getPlayer().blockEngine(true);
         getPlayer().finish();
@@ -561,6 +553,28 @@ public class PlayerUIController extends BasePlayerController {
             openChannel();
         } else if (buttonId == R.id.action_playback_queue) {
             AppDialogUtil.showPlaybackQueueDialog(getContext(), item -> getMainController().onNewVideo(item));
+        } else if (buttonId == R.id.action_video_zoom) {
+            onVideoZoom();
+        } else if (buttonId == R.id.action_seek_interval) {
+            onSeekInterval();
+        } else if (buttonId == R.id.action_share) {
+            onShareLinkClicked();
+        } else if (buttonId == R.id.action_info) {
+            onVideoInfoClicked();
+        } else if (buttonId == R.id.action_pip) {
+            onPipClicked();
+        } else if (buttonId == R.id.action_search) {
+            onSearchClicked();
+        } else if (buttonId == R.id.action_video_stats) {
+            onDebugInfoClicked(buttonState == PlayerUI.BUTTON_ON);
+        } else if (buttonId == R.id.action_playlist_add) {
+            onPlaylistAddClicked();
+        } else if (buttonId == R.id.lb_control_closed_captioning) {
+            onSubtitleClicked(buttonState == PlayerUI.BUTTON_ON);
+        } else if (buttonId == R.id.action_thumbs_down) {
+            onDislikeClicked(buttonState == PlayerUI.BUTTON_ON);
+        } else if (buttonId == R.id.action_thumbs_up) {
+            onLikeClicked(buttonState == PlayerUI.BUTTON_ON);
         }
     }
 
@@ -578,6 +592,8 @@ public class PlayerUIController extends BasePlayerController {
             AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(getPlayerData().isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
         } else if (buttonId == R.id.action_repeat) {
             showPlaybackModeDialog(buttonState);
+        } else if (buttonId == R.id.lb_control_closed_captioning) {
+            onSubtitleLongClicked(buttonState == PlayerUI.BUTTON_ON);
         }
     }
 
@@ -765,7 +781,7 @@ public class PlayerUIController extends BasePlayerController {
             }
         }
 
-        getPlayer().setPlaylistAddButtonState(isSelected);
+        getPlayer().setButtonState(R.id.action_playlist_add, isSelected ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void setSubtitleButtonState() {
@@ -773,7 +789,7 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        getPlayer().setSubtitleButtonState(isSubtitleEnabled() && isSubtitleSelected());
+        getPlayer().setButtonState(R.id.lb_control_closed_captioning, isSubtitleEnabled() && isSubtitleSelected() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void startTempBackgroundMode(Class<?> clazz) {

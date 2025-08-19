@@ -46,6 +46,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.ChatReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -698,81 +699,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
-        public void onHighQuality() {
-            mPlaybackPresenter.onHighQualityClicked();
-        }
-
-        @Override
-        public void onThumbsDown(boolean thumbsDown) {
-            mPlaybackPresenter.onDislikeClicked(thumbsDown);
-        }
-
-        @Override
-        public void onThumbsUp(boolean thumbsUp) {
-            mPlaybackPresenter.onLikeClicked(thumbsUp);
-        }
-
-        @Override
-        public void onClosedCaptions(boolean enabled) {
-            mPlaybackPresenter.onSubtitleClicked(enabled);
-        }
-
-        @Override
-        public void onClosedCaptionsLongPress(boolean enabled) {
-            mPlaybackPresenter.onSubtitleLongClicked(enabled);
-        }
-
-        @Override
-        public void onPlaylistAdd() {
-            mPlaybackPresenter.onPlaylistAddClicked();
-        }
-
-        @Override
-        public void onDebugInfo(boolean enabled) {
-            mPlaybackPresenter.onDebugInfoClicked(enabled);
-        }
-
-        @Override
-        public void onVideoSpeed(boolean enabled) {
-            mPlaybackPresenter.onSpeedClicked(enabled);
-        }
-
-        @Override
-        public void onVideoSpeedLongPress(boolean enabled) {
-            mPlaybackPresenter.onSpeedLongClicked(enabled);
-        }
-
-        @Override
-        public void onSeekInterval() {
-            mPlaybackPresenter.onSeekIntervalClicked();
-        }
-
-        @Override
-        public void onVideoInfo() {
-            mPlaybackPresenter.onVideoInfoClicked();
-        }
-
-        @Override
-        public void onShareLink() {
-            mPlaybackPresenter.onShareLinkClicked();
-        }
-
-        @Override
-        public void onSearch() {
-            mPlaybackPresenter.onSearchClicked();
-        }
-
-        @Override
-        public void onVideoZoom() {
-            mPlaybackPresenter.onVideoZoomClicked();
-        }
-
-        @Override
-        public void onPip() {
-            mPlaybackPresenter.onPipClicked();
-        }
-
-        @Override
         public void onAction(int actionId, int actionIndex) {
             mPlaybackPresenter.onButtonClicked(actionId, actionIndex);
         }
@@ -1062,7 +988,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setSpeed(float speed) {
         mExoPlayerController.setSpeed(speed);
         // NOTE: Real speed isn't changed immediately, so use supplied speed data
-        setSpeedButtonState(speed != 1.0f);
+        setButtonState(R.id.action_video_speed, speed != 1.0f ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -1268,41 +1194,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setLikeButtonState(boolean like) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setThumbsUpActionState(like);
-        }
-    }
-
-    @Override
-    public void setDislikeButtonState(boolean dislike) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setThumbsDownActionState(dislike);
-        }
-    }
-
-    @Override
-    public void setPlaylistAddButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setPlaylistAddButtonState(selected);
-        }
-    }
-
-    @Override
-    public void setSubtitleButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setClosedCaptionsButtonState(selected);
-        }
-    }
-
-    @Override
-    public void setSpeedButtonState(boolean selected) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setSpeedButtonState(selected);
-        }
-    }
-
-    @Override
     public void setButtonState(int buttonId, int buttonState) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setButtonState(buttonId, buttonState);
@@ -1329,13 +1220,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setNextTitle(Video nextVideo) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setNextTitle(createNextTitle(nextVideo));
-        }
-    }
-
-    @Override
-    public void setDebugButtonState(boolean show) {
-        if (mPlayerGlue != null) {
-            mPlayerGlue.setDebugInfoActionState(show);
         }
     }
 

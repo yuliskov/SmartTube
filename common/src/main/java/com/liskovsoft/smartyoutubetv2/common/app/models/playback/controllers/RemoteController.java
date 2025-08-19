@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
@@ -301,10 +302,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                         }
                     }
                     getPlayer().showSubtitles(true);
-                    getPlayer().setSubtitleButtonState(true);
+                    getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
                  } else if (getPlayer() != null) {
                     getPlayer().showSubtitles(false);
-                    getPlayer().setSubtitleButtonState(false);
+                    getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
                  }
                  openNewVideo(newVideo2);
                  break;

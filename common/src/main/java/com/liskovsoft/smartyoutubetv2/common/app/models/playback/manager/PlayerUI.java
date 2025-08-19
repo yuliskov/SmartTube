@@ -26,16 +26,10 @@ public interface PlayerUI {
     boolean isSuggestionsShown();
     void showControls(boolean show);
     boolean isControlsShown();
-    void setLikeButtonState(boolean like);
-    void setDislikeButtonState(boolean dislike);
-    void setPlaylistAddButtonState(boolean selected);
-    void setSubtitleButtonState(boolean selected);
-    void setSpeedButtonState(boolean selected);
     void setButtonState(int buttonId, int buttonState);
     void setChannelIcon(String iconUrl);
     void setSeekPreviewTitle(String title);
     void setNextTitle(Video nextVideo);
-    void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);
     void showSubtitles(boolean show);
     void loadStoryboard();

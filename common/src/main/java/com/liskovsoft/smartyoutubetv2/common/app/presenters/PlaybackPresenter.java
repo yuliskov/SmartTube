@@ -401,33 +401,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     @Override
-    public void onHighQualityClicked() {
-        process(PlayerUiEventListener::onHighQualityClicked);
-    }
-
-    @Override
-    public void onDislikeClicked(boolean dislike) {
-        process(listener -> listener.onDislikeClicked(dislike));
-    }
-
-    @Override
-    public void onLikeClicked(boolean like) {
-        process(listener -> listener.onLikeClicked(like));
-    }
-
-    @Override
     public void onTrackSelected(FormatItem track) {
         process(listener -> listener.onTrackSelected(track));
-    }
-
-    @Override
-    public void onSubtitleClicked(boolean enabled) {
-        process(listener -> listener.onSubtitleClicked(enabled));
-    }
-
-    @Override
-    public void onSubtitleLongClicked(boolean enabled) {
-        process(listener -> listener.onSubtitleLongClicked(enabled));
     }
 
     @Override
@@ -438,56 +413,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     @Override
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
-    }
-
-    @Override
-    public void onPlaylistAddClicked() {
-        process(PlayerUiEventListener::onPlaylistAddClicked);
-    }
-
-    @Override
-    public void onDebugInfoClicked(boolean enabled) {
-        process(listener -> listener.onDebugInfoClicked(enabled));
-    }
-
-    @Override
-    public void onSpeedClicked(boolean enabled) {
-        process(listener -> listener.onSpeedClicked(enabled));
-    }
-
-    @Override
-    public void onSpeedLongClicked(boolean enabled) {
-        process(listener -> listener.onSpeedLongClicked(enabled));
-    }
-
-    @Override
-    public void onSeekIntervalClicked() {
-        process(PlayerUiEventListener::onSeekIntervalClicked);
-    }
-
-    @Override
-    public void onVideoInfoClicked() {
-        process(PlayerUiEventListener::onVideoInfoClicked);
-    }
-
-    @Override
-    public void onShareLinkClicked() {
-        process(PlayerUiEventListener::onShareLinkClicked);
-    }
-
-    @Override
-    public void onSearchClicked() {
-        process(PlayerUiEventListener::onSearchClicked);
-    }
-
-    @Override
-    public void onVideoZoomClicked() {
-        process(PlayerUiEventListener::onVideoZoomClicked);
-    }
-
-    @Override
-    public void onPipClicked() {
-        process(PlayerUiEventListener::onPipClicked);
     }
 
     @Override

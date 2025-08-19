@@ -37,7 +37,13 @@ public class HQDialogController extends BasePlayerController {
     }
 
     @Override
-    public void onHighQualityClicked() {
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.lb_control_high_quality) {
+            onHighQualityClicked();
+        }
+    }
+
+    private void onHighQualityClicked() {
         fitVideoIntoDialog();
 
         addQualityCategories();

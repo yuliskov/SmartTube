@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -19,18 +20,18 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final Runnable likeAction = () -> {
         PlaybackPresenter playbackPresenter = getPlaybackPresenter();
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
-            playbackPresenter.onLikeClicked(true);
-            playbackPresenter.getView().setLikeButtonState(true);
-            playbackPresenter.getView().setDislikeButtonState(false);
+            playbackPresenter.onButtonClicked(R.id.action_thumbs_up, PlayerUI.BUTTON_ON);
+            playbackPresenter.getView().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_ON);
+            playbackPresenter.getView().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
             MessageHelpers.showMessage(getContext(), R.string.action_like);
         }
     };
     private final Runnable dislikeAction = () -> {
         PlaybackPresenter playbackPresenter = getPlaybackPresenter();
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
-            playbackPresenter.onDislikeClicked(true);
-            playbackPresenter.getView().setLikeButtonState(false);
-            playbackPresenter.getView().setDislikeButtonState(true);
+            playbackPresenter.onButtonClicked(R.id.action_thumbs_down, PlayerUI.BUTTON_ON);
+            playbackPresenter.getView().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
+            playbackPresenter.getView().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_ON);
             MessageHelpers.showMessage(getContext(), R.string.action_dislike);
         }
     };

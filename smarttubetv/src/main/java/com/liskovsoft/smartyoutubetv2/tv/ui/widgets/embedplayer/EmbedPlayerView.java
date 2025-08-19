@@ -148,31 +148,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
-    public void setLikeButtonState(boolean like) {
-
-    }
-
-    @Override
-    public void setDislikeButtonState(boolean dislike) {
-
-    }
-
-    @Override
-    public void setPlaylistAddButtonState(boolean selected) {
-
-    }
-
-    @Override
-    public void setSubtitleButtonState(boolean selected) {
-
-    }
-
-    @Override
-    public void setSpeedButtonState(boolean selected) {
-
-    }
-
-    @Override
     public void setButtonState(int buttonId, int buttonState) {
 
     }
@@ -189,11 +164,6 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public void setNextTitle(Video nextVideo) {
-
-    }
-
-    @Override
-    public void setDebugButtonState(boolean show) {
 
     }
 

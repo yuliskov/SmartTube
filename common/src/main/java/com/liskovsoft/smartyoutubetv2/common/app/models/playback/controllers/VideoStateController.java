@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -258,7 +259,20 @@ public class VideoStateController extends BasePlayerController {
     }
 
     @Override
-    public void onSpeedClicked(boolean enabled) {
+    public void onButtonClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_video_speed) {
+            onSpeedClicked(buttonState == PlayerUI.BUTTON_ON);
+        }
+    }
+
+    @Override
+    public void onButtonLongClicked(int buttonId, int buttonState) {
+        if (buttonId == R.id.action_video_speed) {
+            onSpeedLongClicked(buttonState == PlayerUI.BUTTON_ON);
+        }
+    }
+
+    private void onSpeedClicked(boolean enabled) {
         if (getPlayer() == null || getVideo() == null) {
             return;
         }
@@ -282,8 +296,7 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
-    @Override
-    public void onSpeedLongClicked(boolean enabled) {
+    private void onSpeedLongClicked(boolean enabled) {
         fitVideoIntoDialog();
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());

@@ -253,87 +253,12 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
-    public void onHighQualityClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onDislikeClicked(boolean dislike) {
-        // NOP
-    }
-
-    @Override
-    public void onLikeClicked(boolean like) {
-        // NOP
-    }
-
-    @Override
     public void onTrackSelected(FormatItem track) {
         // NOP
     }
 
     @Override
-    public void onSubtitleClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
-    public void onSubtitleLongClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
     public void onTrackChanged(FormatItem track) {
-        // NOP
-    }
-
-    @Override
-    public void onPlaylistAddClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onDebugInfoClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
-    public void onSpeedClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
-    public void onSpeedLongClicked(boolean enabled) {
-        // NOP
-    }
-
-    @Override
-    public void onSeekIntervalClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onVideoInfoClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onShareLinkClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onSearchClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onVideoZoomClicked() {
-        // NOP
-    }
-
-    @Override
-    public void onPipClicked() {
         // NOP
     }
 

@@ -967,6 +967,8 @@ public class VideoLoaderController extends BasePlayerController {
             boolean isShorts = width < height;
             if (width > 0 && height > 0 && (getPlayerData().getAspectRatio() == PlayerData.ASPECT_RATIO_DEFAULT || isShorts)) {
                 getPlayer().setAspectRatio((float) width / height);
+            } else {
+                getPlayer().setAspectRatio(getPlayerData().getAspectRatio());
             }
         }
     }
