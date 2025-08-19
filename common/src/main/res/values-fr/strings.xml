@@ -703,4 +703,8 @@
   <string name="card_preview_full">Vidéo avec son</string>
   <string name="card_preview">Aperçus des tuiles</string>
   <string name="card_unlocalized_titles">Titres originals des tuiles</string>
+  <string name="search_exit_shortcut">Quitter la recherche</string>
+  <string name="original_lang">Original</string>
+  <string name="remove_playlist_fmt">Supprimer %s définitivement\?</string>
+  <string name="dont_resize_video_to_fit_dialog">Ne pas ajuster la vidéo à la fenêtre</string>
 </resources>
