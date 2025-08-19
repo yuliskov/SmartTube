@@ -109,7 +109,7 @@
   <string name="repeat_mode_all">Toista kaikki videot yksi kerrallaan</string>
   <string name="repeat_mode_one">Toista tämä video uudelleen</string>
   <string name="repeat_mode_pause">Pysäytä toisto videon jälkeen</string>
-  <string name="repeat_mode_pause_alt">Pysäytä toisto jokaisen videon jälkeen</string>
+  <string name="repeat_mode_pause_alt">Toista vain soittolistan videot keskeytyksettä</string>
   <string name="repeat_mode_none">Pysäytä toisto jokaisen videon jälkeen</string>
   <string name="subscribed_to_channel">Kanava tilattu</string>
   <string name="unsubscribed_from_channel">Kanavaa ei ole tilattu</string>
