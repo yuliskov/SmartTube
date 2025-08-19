@@ -105,35 +105,35 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         mFastForwardAction = new PlaybackControlsRow.FastForwardAction(context);
         mRewindAction = new PlaybackControlsRow.RewindAction(context);
 
-        putAction(new RotateAction(context));
-        putAction(new FlipAction(context));
-        putAction(new ContentBlockAction(context));
-        putAction(new ScreenDimmingAction(context));
-        putAction(new SubscribeAction(context));
-        putAction(new SoundOffAction(context));
-        putAction(new AFRAction(context));
-        putAction(new PlaybackModeAction(context));
-        putAction(new ChannelAction(context));
-        putAction(new ChatAction(context));
-        putAction(new PlaybackQueueAction(context));
-        putAction(new VideoZoomAction(context));
-        putAction(new SeekIntervalAction(context));
-        putAction(new ShareAction(context));
-        putAction(new VideoInfoAction(context));
-        putAction(new PipAction(context));
-        putAction(new SearchAction(context));
-        putAction(new VideoSpeedAction(context));
-        putAction(new VideoStatsAction(context));
-        putAction(new PlaylistAddAction(context));
-        putAction(new ClosedCaptioningAction(context));
-        putAction(new HighQualityAction(context));
-
         ThumbsUpAction thumbsUpAction = new ThumbsUpAction(context);
         ThumbsDownAction thumbsDownAction = new ThumbsDownAction(context);
         thumbsUpAction.setBoundAction(thumbsDownAction);
         thumbsDownAction.setBoundAction(thumbsUpAction);
         putAction(thumbsUpAction);
         putAction(thumbsDownAction);
+
+        putAction(new HighQualityAction(context));
+        putAction(new PlaybackModeAction(context));
+        putAction(new ChannelAction(context));
+        putAction(new ClosedCaptioningAction(context));
+        putAction(new PlaylistAddAction(context));
+        putAction(new SubscribeAction(context));
+        putAction(new VideoInfoAction(context));
+        putAction(new VideoSpeedAction(context));
+        putAction(new VideoStatsAction(context));
+        putAction(new SearchAction(context));
+        putAction(new PipAction(context));
+        putAction(new AFRAction(context));
+        putAction(new ScreenDimmingAction(context));
+        putAction(new ChatAction(context));
+        putAction(new PlaybackQueueAction(context));
+        putAction(new ContentBlockAction(context));
+        putAction(new ShareAction(context));
+        putAction(new SeekIntervalAction(context));
+        putAction(new VideoZoomAction(context));
+        putAction(new RotateAction(context));
+        putAction(new FlipAction(context));
+        putAction(new SoundOffAction(context));
     }
 
     @Override

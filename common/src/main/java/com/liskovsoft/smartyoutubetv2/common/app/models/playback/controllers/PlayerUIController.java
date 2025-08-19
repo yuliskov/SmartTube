@@ -20,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -149,7 +148,7 @@ public class PlayerUIController extends BasePlayerController {
 
         // First run
         if (FormatItem.SUBTITLE_NONE.equals(getPlayerData().getLastSubtitleFormat())) {
-            onSubtitleLongClicked(enabled);
+            onSubtitleLongClicked();
             return;
         }
 
@@ -176,11 +175,11 @@ public class PlayerUIController extends BasePlayerController {
             enableSubtitleForChannel(!enabled);
         } else {
             // Match not found
-            onSubtitleLongClicked(enabled);
+            onSubtitleLongClicked();
         }
     }
 
-    private void onSubtitleLongClicked(boolean enabled) {
+    private void onSubtitleLongClicked() {
         if (getPlayer() == null) {
             return;
         }
@@ -410,7 +409,7 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        if (dislike) {
+        if (!dislike) {
             callMediaItemObservable(mMediaItemService::setDislikeObserve);
         } else {
             callMediaItemObservable(mMediaItemService::removeDislikeObserve);
@@ -431,7 +430,7 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        if (like) {
+        if (!like) {
             callMediaItemObservable(mMediaItemService::setLikeObserve);
         } else {
             callMediaItemObservable(mMediaItemService::removeLikeObserve);
@@ -478,7 +477,7 @@ public class PlayerUIController extends BasePlayerController {
         dialogPresenter.showDialog(title);
     }
 
-    private void onShareLinkClicked() {
+    private void onShareLink() {
         fitVideoIntoDialog();
 
         Video video = getVideo();
@@ -558,7 +557,7 @@ public class PlayerUIController extends BasePlayerController {
         } else if (buttonId == R.id.action_seek_interval) {
             onSeekInterval();
         } else if (buttonId == R.id.action_share) {
-            onShareLinkClicked();
+            onShareLink();
         } else if (buttonId == R.id.action_info) {
             onVideoInfoClicked();
         } else if (buttonId == R.id.action_pip) {
@@ -593,7 +592,7 @@ public class PlayerUIController extends BasePlayerController {
         } else if (buttonId == R.id.action_repeat) {
             showPlaybackModeDialog(buttonState);
         } else if (buttonId == R.id.lb_control_closed_captioning) {
-            onSubtitleLongClicked(buttonState == PlayerUI.BUTTON_ON);
+            onSubtitleLongClicked();
         }
     }
 
