@@ -406,6 +406,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void scheduleReloadVideoTimer(int delayMs) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Reloading the video...");
             getPlayer().showOverlay(true);
@@ -414,6 +418,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void scheduleNextVideoTimer(int delayMs) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Starting the next video...");
             getPlayer().showOverlay(true);

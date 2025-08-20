@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.core.view.LayoutInflaterCompat {
+    void setFactory2(android.view.LayoutInflater, android.view.LayoutInflater$Factory2);
+}
 -keepclassmembers class androidx.leanback.widget.SearchBar {
     <init>(...);
 }

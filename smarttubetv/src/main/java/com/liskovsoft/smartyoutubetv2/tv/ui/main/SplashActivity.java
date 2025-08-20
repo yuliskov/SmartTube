@@ -46,14 +46,11 @@ public class SplashActivity extends MotherActivity implements SplashView {
 
     @Override
     public void finishView() {
-        finish();
+        try {
+            finish();
+        } catch (NullPointerException e) {
+            // NullPointerException: Attempt to invoke virtual method 'void com.android.server.wm.DisplayContent.moveStack(com.android.server.wm.TaskStack, boolean)'
+            e.printStackTrace();
+        }
     }
-
-    //@Override
-    //protected void attachBaseContext(Context newBase) {
-    //    LangUpdater updater = new LangUpdater(newBase);
-    //    updater.update();
-    //    String langCode = updater.getUpdatedLocale();
-    //    super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
-    //}
 }
