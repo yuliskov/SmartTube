@@ -19,6 +19,7 @@ import java.util.List;
 
 public class ChatItemMessage implements IMessage {
     private static final int MAX_LENGTH = 700;
+    private static final int LINE_LENGTH = 30;
     private String mId;
     private CharSequence mText;
     private ChatItemAuthor mAuthor;
@@ -59,7 +60,7 @@ public class ChatItemMessage implements IMessage {
 
     public static List<ChatItemMessage> fromSplit(Context context, CommentItem commentItem) {
         if (shouldSplit(commentItem)) {
-            List<String> comments = Helpers.splitStringBySize(commentItem.getMessage(), MAX_LENGTH);
+            List<String> comments = Helpers.splitStringBySize(commentItem.getMessage(), getRealMaxLen(commentItem.getMessage()));
             List<ChatItemMessage> result = new ArrayList<>();
             for (int i = 0; i < comments.size(); i++) {
                 String prefix = i > 0 ? "..." : "";
@@ -115,7 +116,33 @@ public class ChatItemMessage implements IMessage {
     }
 
     public static boolean shouldSplit(CommentItem commentItem) {
-        return commentItem != null && commentItem.getMessage() != null && commentItem.getMessage().trim().length() > MAX_LENGTH;
+        return commentItem != null && commentItem.getMessage() != null && commentItem.getMessage().length() > getRealMaxLen(commentItem.getMessage());
+    }
+
+    private static int getRealMaxLen(String text) {
+        if (text == null) {
+            return -1;
+        }
+
+        String[] split = text.split("\n");
+
+        if (split.length == 1) {
+            return MAX_LENGTH;
+        }
+
+        int realCount = 0;
+        int fakeCount = 0;
+
+        for (String part : split) {
+            realCount += part.length();
+            fakeCount += Math.max(part.length(), LINE_LENGTH);
+
+            if (fakeCount > MAX_LENGTH) {
+                return realCount;
+            }
+        }
+
+        return MAX_LENGTH;
     }
 
     @Override
