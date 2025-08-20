@@ -1008,6 +1008,7 @@ public class Utils {
      * https://stackoverflow.com/a/5626208/1279056<br/>
      * https://stackoverflow.com/a/40237325/1279056
      */
+    @SuppressWarnings("MissingPermission")
     public static String getUniqueId(Context context) {
         String uniqueId = HiddenPrefs.instance(context).getUniqueId();
 
