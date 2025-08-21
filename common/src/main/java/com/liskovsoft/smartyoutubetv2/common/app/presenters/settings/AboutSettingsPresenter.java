@@ -76,7 +76,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
     private void appendOldUpdateNotificationSwitch(AppDialogPresenter settingsPresenter) {
         GeneralData generalData = GeneralData.instance(getContext());
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.dialog_notification), optionItem -> {
-            generalData.enableOldUpdateNotifications(optionItem.isSelected());
+            generalData.setOldUpdateNotificationsEnabled(optionItem.isSelected());
         }, generalData.isOldUpdateNotificationsEnabled()));
     }
 

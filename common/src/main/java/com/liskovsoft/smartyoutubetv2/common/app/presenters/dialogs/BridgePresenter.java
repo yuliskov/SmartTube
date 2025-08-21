@@ -65,7 +65,7 @@ abstract class BridgePresenter extends BasePresenter<Void> implements MotherActi
 
         settingsPresenter.appendSingleSwitch(
                 UiOptionItem.from(getContext().getString(R.string.show_again),
-                optionItem -> mGeneralData.enableBridgeCheck(optionItem.isSelected()),
+                optionItem -> mGeneralData.setBridgeCheckEnabled(optionItem.isSelected()),
                 mGeneralData.isBridgeCheckEnabled())
         );
         settingsPresenter.appendSingleButton(updateCheckOption);

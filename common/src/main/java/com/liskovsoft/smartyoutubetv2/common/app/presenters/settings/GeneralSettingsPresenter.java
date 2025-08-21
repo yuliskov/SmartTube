@@ -133,7 +133,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_WATCHED_SUBSCRIPTIONS)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_watched_from_notifications),
-                option -> mGeneralData.hideWatchedFromNotifications(option.isSelected()),
+                option -> mGeneralData.setHideWatchedFromNotificationsEnabled(option.isSelected()),
                 mGeneralData.isHideWatchedFromNotificationsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
@@ -329,75 +329,75 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isQuickSkipVideosEnabled()));
 
         options.add(UiOptionItem.from("Play/Pause -> OK",
-                option -> mGeneralData.remapPlayToOK(option.isSelected()),
+                option -> mGeneralData.setRemapPlayToOKEnabled(option.isSelected()),
                 mGeneralData.isRemapPlayToOKEnabled()));
 
         options.add(UiOptionItem.from("DPAD RIGHT/LEFT -> Volume Up/Down",
-                option -> mGeneralData.remapDpadLeftToVolume(option.isSelected()),
+                option -> mGeneralData.setRemapDpadLeftToVolumeEnabled(option.isSelected()),
                 mGeneralData.isRemapDpadLeftToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
-                option -> mGeneralData.remapDpadUpToVolume(option.isSelected()),
+                option -> mGeneralData.setRemapDpadUpToVolumeEnabled(option.isSelected()),
                 mGeneralData.isRemapDpadUpToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
-                option -> mGeneralData.remapDpadUpDownToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapDpadUpDownToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapDpadUpToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",
-                option -> mGeneralData.remapNumbersToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapNumbersToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapNumbersToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Next/Previous -> Fast Forward/Rewind",
-                option -> mGeneralData.remapNextToFastForward(option.isSelected()),
+                option -> mGeneralData.setRemapNextToFastForwardEnabled(option.isSelected()),
                 mGeneralData.isRemapNextToFastForwardEnabled()));
 
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
-                option -> mGeneralData.remapNextToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapNextToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapNextToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
-                option -> mGeneralData.remapFastForwardToNext(option.isSelected()),
+                option -> mGeneralData.setRemapFastForwardToNextEnabled(option.isSelected()),
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Up/Down",
-                option -> mGeneralData.remapFastForwardToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapFastForwardToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapFastForwardToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
-                option -> mGeneralData.remapPageUpToNext(option.isSelected()),
+                option -> mGeneralData.setRemapPageUpToNextEnabled(option.isSelected()),
                 mGeneralData.isRemapPageUpToNextEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Like/Dislike",
-                option -> mGeneralData.remapPageUpToLike(option.isSelected()),
+                option -> mGeneralData.setRemapPageUpToLikeEnabled(option.isSelected()),
                 mGeneralData.isRemapPageUpToLikeEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
-                option -> mGeneralData.remapPageUpToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapPageUpToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapPageUpToSpeedEnabled()));
         
         options.add(UiOptionItem.from("Page Up/Down -> Speed Down/Up",
-                option -> mGeneralData.remapPageDownToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapPageDownToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapPageDownToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Volume Up/Down",
-                option -> mGeneralData.remapChannelUpToVolume(option.isSelected()),
+                option -> mGeneralData.setRemapChannelUpToVolumeEnabled(option.isSelected()),
                 mGeneralData.isRemapChannelUpToVolumeEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
-                option -> mGeneralData.remapChannelUpToNext(option.isSelected()),
+                option -> mGeneralData.setRemapChannelUpToNextEnabled(option.isSelected()),
                 mGeneralData.isRemapChannelUpToNextEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Like/Dislike",
-                option -> mGeneralData.remapChannelUpToLike(option.isSelected()),
+                option -> mGeneralData.setRemapChannelUpToLikeEnabled(option.isSelected()),
                 mGeneralData.isRemapChannelUpToLikeEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Speed Up/Down",
-                option -> mGeneralData.remapChannelUpToSpeed(option.isSelected()),
+                option -> mGeneralData.setRemapChannelUpToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapChannelUpToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Search",
-                option -> mGeneralData.remapChannelUpToSearch(option.isSelected()),
+                option -> mGeneralData.setRemapChannelUpToSearchEnabled(option.isSelected()),
                 mGeneralData.isRemapChannelUpToSearchEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
@@ -507,7 +507,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.getSearchExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
+                option -> mGeneralData.setReturnToLauncherEnabled(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
@@ -589,19 +589,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         //        mGeneralData.isFullscreenModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
-                option -> mGeneralData.rememberSubscriptionsPosition(option.isSelected()),
+                option -> mGeneralData.setRememberSubscriptionsPositionEnabled(option.isSelected()),
                 mGeneralData.isRememberSubscriptionsPositionEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_pinned),
-                option -> mGeneralData.rememberPinnedPosition(option.isSelected()),
+                option -> mGeneralData.setRememberPinnedPositionEnabled(option.isSelected()),
                 mGeneralData.isRememberPinnedPositionEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
-                option -> mGeneralData.disableScreensaver(option.isSelected()),
+                option -> mGeneralData.setScreensaverDisabled(option.isSelected()),
                 mGeneralData.isScreensaverDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.select_channel_section),
-                option -> mGeneralData.enableSelectChannelSection(option.isSelected()),
+                option -> mGeneralData.setSelectChannelSectionEnabled(option.isSelected()),
                 mGeneralData.isSelectChannelSectionEnabled()));
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
@@ -638,7 +638,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         // Proxy with authentication supported only by OkHttp
                         mPlayerTweaksData.setPlayerDataSource(
                                 option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
-                        mGeneralData.enableProxy(option.isSelected());
+                        mGeneralData.setProxyEnabled(option.isSelected());
                         new WebProxyDialog(getContext()).enable(option.isSelected());
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
@@ -651,7 +651,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void enableChildMode(boolean enable) {
-        mGeneralData.enableChildMode(enable);
+        mGeneralData.setChildModeEnabled(enable);
 
         int topButtons = MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS;
         int playerButtons = PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE | PlayerTweaksData.PLAYER_BUTTON_NEXT | PlayerTweaksData.PLAYER_BUTTON_PREVIOUS |

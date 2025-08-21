@@ -237,6 +237,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Fix empty Subscriptions and Channels",
+                option -> mMediaServiceData.setLegacyUIEnabled(option.isSelected()),
+                mMediaServiceData.isLegacyUIEnabled()));
+        
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
                 getContext().getString(R.string.disable_network_error_fixing_desc),
                 option -> mPlayerTweaksData.setNetworkErrorFixingDisabled(option.isSelected()),
@@ -261,7 +265,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         // Disable long press on buggy controllers.
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
                 getContext().getString(R.string.disable_ok_long_press_desc),
-                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+                option -> mGeneralData.setOkButtonLongPressDisabled(option.isSelected()),
                 mGeneralData.isOkButtonLongPressDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),

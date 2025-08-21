@@ -92,7 +92,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                     settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
                             getContext().getString(R.string.auto_backup),
                             option2 -> {
-                                mGeneralData.enableAutoBackup(option2.isSelected());
+                                mGeneralData.setAutoBackupEnabled(option2.isSelected());
                                 if (option2.isSelected()) {
                                     GDriveBackupWorker.forceSchedule(getContext());
                                 } else {
@@ -103,7 +103,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                     ));
                     settingsPresenter2.appendSingleSwitch(UiOptionItem.from(
                             getContext().getString(R.string.device_specific_backup),
-                            option2 -> mGeneralData.enableDeviceSpecificBackup(option2.isSelected()),
+                            option2 -> mGeneralData.setDeviceSpecificBackupEnabled(option2.isSelected()),
                             mGeneralData.isDeviceSpecificBackupEnabled()
                     ));
                     settingsPresenter2.appendSingleButton(UiOptionItem.from(

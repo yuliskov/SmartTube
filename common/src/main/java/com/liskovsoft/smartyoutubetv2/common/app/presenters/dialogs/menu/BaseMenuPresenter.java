@@ -470,7 +470,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(enabled ? R.string.pause_history : R.string.resume_history),
                         optionItem -> {
                             mServiceManager.enableHistory(!enabled);
-                            generalData.enableHistory(!enabled);
+                            generalData.setHistoryEnabled(!enabled);
                             getDialogPresenter().closeDialog();
                         }));
     }

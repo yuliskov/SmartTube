@@ -257,7 +257,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_24),
                 option -> {
-                    mGeneralData.enable24HourLocale(true);
+                    mGeneralData.set24HourLocaleEnabled(true);
                     mRestartApp = true;
                 },
                 mGeneralData.is24HourLocaleEnabled()));
@@ -265,7 +265,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.time_format_12),
                 option -> {
-                    mGeneralData.enable24HourLocale(false);
+                    mGeneralData.set24HourLocaleEnabled(false);
                     mRestartApp = true;
                 },
                 !mGeneralData.is24HourLocaleEnabled()));
@@ -285,14 +285,14 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.time_format_24) + " " + getContext().getString(R.string.time_format),
                 option -> {
-                    mGeneralData.enable24HourLocale(option.isSelected());
+                    mGeneralData.set24HourLocaleEnabled(option.isSelected());
                     mRestartApp = true;
                 },
                 mGeneralData.is24HourLocaleEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
                 option -> {
-                    mGeneralData.enableGlobalClock(option.isSelected());
+                    mGeneralData.setGlobalClockEnabled(option.isSelected());
                     mRestartApp = true;
                 },
                 mGeneralData.isGlobalClockEnabled()));
@@ -328,7 +328,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
                 option -> {
-                    mGeneralData.enableFullscreenMode(option.isSelected());
+                    mGeneralData.setFullscreenModeEnabled(option.isSelected());
                     mRestartApp = true;
                 },
                 mGeneralData.isFullscreenModeEnabled()));

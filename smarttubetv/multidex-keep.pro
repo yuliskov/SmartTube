@@ -1,3 +1,10 @@
+-keepclassmembers class androidx.core.content.FileProvider {
+    <init>(...);
+    void attachInfo(android.content.Context, android.content.pm.ProviderInfo);
+}
+-keepclassmembers class okhttp3.OkHttpClient$Builder {
+    <init>(...);
+}
 -keepclassmembers class androidx.core.view.LayoutInflaterCompat {
     void setFactory2(android.view.LayoutInflater, android.view.LayoutInflater$Factory2);
 }
