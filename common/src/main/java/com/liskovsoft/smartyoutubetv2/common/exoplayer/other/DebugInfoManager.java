@@ -364,7 +364,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendWebViewInfo() {
-        appendRow("NpPot supported", MediaServiceData.instance().isNpPotSupported());
+        appendRow("Pot supported", MediaServiceData.instance().isPotSupported());
     }
 
     private void appendVideoInfoType() {
