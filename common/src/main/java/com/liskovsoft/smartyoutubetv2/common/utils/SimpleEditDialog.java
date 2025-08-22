@@ -78,8 +78,9 @@ public class SimpleEditDialog {
 
         try {
             configDialog.show();
-        } catch (BadTokenException e) {
-            // Unable to add window -- token null is not for an application
+        } catch (RuntimeException e) {
+            // BadTokenException: Unable to add window -- token null is not for an application
+            // RuntimeException: InputChannel is not initialized
             e.printStackTrace();
         }
 

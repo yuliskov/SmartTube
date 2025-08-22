@@ -1,3 +1,10 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity {
+    <init>(...);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.misc.TickleManager {
+    <init>(...);
+    com.liskovsoft.smartyoutubetv2.common.misc.TickleManager sInstance;
+}
 -keepclassmembers class androidx.core.content.FileProvider {
     <init>(...);
     void attachInfo(android.content.Context, android.content.pm.ProviderInfo);
