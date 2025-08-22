@@ -907,11 +907,11 @@ public class Utils {
         }
     }
 
-    public static void restartTheApp(Context context, String videoId) {
+    public static void restartTheApp(Context context, String videoId, long posMs) {
         try {
             Intent intent = new Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://www.youtube.com/watch?v=" + videoId),
+                    Uri.parse(String.format("https://www.youtube.com/watch?v=%s&t=%ss", videoId, posMs / 1_000)),
                     context,
                     Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME)
             );

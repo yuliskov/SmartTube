@@ -66,7 +66,7 @@ public class VideoLoaderController extends BasePlayerController {
     private final Runnable mRebootApp = () -> {
         Video video = getVideo();
         if (getPlayer() != null && video != null && video.hasVideo()) {
-            Utils.restartTheApp(getContext(), video.videoId);
+            Utils.restartTheApp(getContext(), video.videoId, getPlayer().getPositionMs());
         }
     };
     private final Runnable mOnApplyPlaybackMode = () -> {
