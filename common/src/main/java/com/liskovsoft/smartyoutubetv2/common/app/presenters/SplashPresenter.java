@@ -369,7 +369,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         boolean isRestartIntent = intent.getBooleanExtra(GlobalConstants.RESTART_INTENT, false);
         boolean isATVIntent = intent.getBooleanExtra(GlobalConstants.ATV_INTENT, false);
-        boolean isExternalIntent = !isRestartIntent && !isATVIntent;
+        boolean isExternalIntent = !isRestartIntent && !isATVIntent && !viewManager.isTopViewVisible();
 
         viewManager.enablePlayerOnlyMode((isATVIntent && GeneralData.instance(getContext()).isReturnToLauncherEnabled()) || isExternalIntent);
     }

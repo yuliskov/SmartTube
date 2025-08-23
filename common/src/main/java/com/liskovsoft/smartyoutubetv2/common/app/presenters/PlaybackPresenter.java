@@ -275,11 +275,15 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     @Override
     public void onViewPaused() {
+        super.onViewPaused();
+
         process(ViewEventListener::onViewPaused);
     }
 
     @Override
     public void onViewResumed() {
+        super.onViewResumed();
+
         process(ViewEventListener::onViewResumed);
     }
 

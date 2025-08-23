@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -437,10 +438,17 @@ public class ViewManager {
         }
 
         if (view instanceof androidx.fragment.app.Fragment) {
-            return ((androidx.fragment.app.Fragment) view).isVisible();
+            // Proper way to check the visibility
+            return ((androidx.fragment.app.Fragment) view).getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED);
         }
 
         return false;
+    }
+
+    public boolean isTopViewVisible() {
+        BasePresenter<?> presenter = getCurrentPresenter();
+
+        return presenter != null && isVisible(presenter.getView());
     }
 
     public static MotherActivity getMotherActivity(Object view) {
