@@ -1,3 +1,7 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager {
+    <init>(...);
+    android.view.View mProgressBarView;
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity {
     <init>(...);
 }
