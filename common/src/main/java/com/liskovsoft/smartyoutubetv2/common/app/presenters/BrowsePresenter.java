@@ -1184,13 +1184,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         VideoStateService stateService = VideoStateService.instance(getContext());
 
-        if (stateService.isEmpty()) {
+        if (stateService.isEmpty() || (!stateService.isHistoryBroken() && !videoGroup.isEmpty())) {
             return;
         }
 
+        Video lastHistoryItem = videoGroup.isEmpty() ? null : videoGroup.get(0);
         State lastState = stateService.getLastState();
 
-        if (lastState == null || videoGroup.contains(lastState.video)) {
+        if (lastState == null || Helpers.equals(lastHistoryItem, lastState.video)) {
             return;
         }
 

@@ -21,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -395,7 +396,7 @@ public class MediaServiceManager implements OnAccountChange {
             historyObservable = mItemService.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
         }
 
-        mHistoryAction = RxHelper.execute(historyObservable);
+        mHistoryAction = RxHelper.execute(historyObservable, error -> setHistoryBroken(true), () -> setHistoryBroken(false));
     }
 
     public void hideNotification(Video item) {
@@ -510,5 +511,13 @@ public class MediaServiceManager implements OnAccountChange {
                 MessageHelpers.showMessage(context, "Unknown type of channel");
             }
         }, error -> LoadingManager.showLoading(context, false));
+    }
+
+    private void setHistoryBroken(boolean isBroken) {
+        VideoStateService stateService = VideoStateService.instance(null);
+
+        if (stateService != null) {
+            stateService.setHistoryBroken(isBroken);
+        }
     }
 }
