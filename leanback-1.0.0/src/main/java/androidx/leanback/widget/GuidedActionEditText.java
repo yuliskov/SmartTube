@@ -13,6 +13,7 @@
  */
 package androidx.leanback.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -146,6 +147,7 @@ public class GuidedActionEditText extends EditText implements ImeKeyMonitor,
      * See
      * {@link TextViewCompat#setCustomSelectionActionModeCallback(TextView, ActionMode.Callback)}
      */
+    @SuppressLint("RestrictedApi")
     @Override
     public void setCustomSelectionActionModeCallback(ActionMode.Callback actionModeCallback) {
         super.setCustomSelectionActionModeCallback(TextViewCompat
