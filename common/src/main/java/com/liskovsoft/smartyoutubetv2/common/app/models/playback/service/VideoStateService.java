@@ -25,7 +25,6 @@ public class VideoStateService implements ProfileChangeListener {
     private final List<State> mStates;
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
-    private boolean mIsHistoryBroken;
     private final Runnable mPersistStateInt = this::persistStateInt;
 
     private VideoStateService(Context context) {
@@ -81,14 +80,6 @@ public class VideoStateService implements ProfileChangeListener {
     public void clear() {
         mStates.clear();
         persistState();
-    }
-
-    public void setHistoryBroken(boolean isBroken) {
-        mIsHistoryBroken = isBroken;
-    }
-
-    public boolean isHistoryBroken() {
-        return mIsHistoryBroken;
     }
 
     private void restoreState() {
