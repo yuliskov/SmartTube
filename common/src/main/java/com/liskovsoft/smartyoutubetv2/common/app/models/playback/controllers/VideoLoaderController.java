@@ -914,6 +914,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void switchNextEngine() {
         getPlayerTweaksData().setPlayerDataSource(getNextEngine());
+        getPlayerTweaksData().persistNow();
     }
 
     private int getNextEngine() {
