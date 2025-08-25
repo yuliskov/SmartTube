@@ -494,6 +494,8 @@ public class ViewManager {
             return ChannelPresenter.instance(mContext);
         } else if (topView == ChannelUploadsView.class) {
             return ChannelUploadsPresenter.instance(mContext);
+        } else if (topView == PlaybackView.class) {
+            return PlaybackPresenter.instance(mContext);
         }
 
         return null;
