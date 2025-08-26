@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.work.impl.constraints.trackers.Trackers {
+    <init>(...);
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager {
     <init>(...);
     android.view.View mProgressBarView;

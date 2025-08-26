@@ -119,16 +119,6 @@ android {
             // matchingFallbacks = ['lite']
             applicationId "org.smartteam.smarttube.tv.orig"
         }
-        strtarmenia {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.google.android.youtube.tv"
-        }
-        stredboxtv {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.redboxtv.smartyoutubetv"
-        }
         stfiretv {
             // matchingFallbacks = ['lite']
             applicationId "com.amazon.firetv.youtube"
@@ -226,10 +216,6 @@ dependencies {
     // Add the Firebase Crashlytics SDK.
 
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
-        transitive = true
-    }
-
-    strtarmeniaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
 
