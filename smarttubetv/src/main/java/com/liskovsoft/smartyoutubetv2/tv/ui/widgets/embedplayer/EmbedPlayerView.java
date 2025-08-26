@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -576,7 +575,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     private void syncPositionIfNeeded() {
         if (!mIsMute && isPositionChanged()) {
-            BasePresenter<?> presenter = ViewManager.instance(getContext()).getCurrentPresenter();
+            BasePresenter<?> presenter = ViewManager.instance(getContext()).getTopPresenter();
             if (presenter != null) {
                 presenter.syncItem(mVideo);
             }
