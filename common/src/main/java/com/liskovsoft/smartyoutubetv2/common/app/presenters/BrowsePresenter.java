@@ -1003,7 +1003,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 value.getTitle(),
                 "Primetime", // Free movies and shows row
                 "News", // Top news
-                "news" // Top news
+                "news", // Top news
+                "NBA TV" // Sports
         ) || Helpers.equalsAny(
                 value.getTitle(),
                 //getContext().getString(R.string.news_row_name),
