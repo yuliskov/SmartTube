@@ -68,7 +68,7 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
     }
 
     public Item createChannel(String title, String iconUrl, String channelId) {
-        return mService.createChannel(title, iconUrl, channelId);
+        return mService.createChannel(channelId, title, iconUrl);
     }
 
     public void renameChannelGroup(ItemGroup channelGroup, String title) {
