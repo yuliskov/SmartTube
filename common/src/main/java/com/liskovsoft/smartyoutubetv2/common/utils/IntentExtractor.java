@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Intent;
 import android.net.Uri;
+
+import com.liskovsoft.sharedutils.helpers.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
@@ -11,6 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IntentExtractor {
+    public static final String RESTART_INTENT = "RESTART_INTENT";
+    public static final String INCOGNITO_INTENT = "INCOGNITO_INTENT";
     private static final String TAG = IntentExtractor.class.getSimpleName();
     /**
      * Browser: https://www.youtube.com/results?search_query=twice<br/>
@@ -320,5 +324,17 @@ public class IntentExtractor {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    public static boolean isRestartIntent(Intent intent) {
+        return intent != null && intent.getBooleanExtra(RESTART_INTENT, false);
+    }
+
+    public static boolean isIncognitoIntent(Intent intent) {
+        return intent != null && intent.getBooleanExtra(INCOGNITO_INTENT, false);
+    }
+
+    public static boolean isATVIntent(Intent intent) {
+        return intent != null && intent.getBooleanExtra(GlobalConstants.ATV_INTENT, false);
     }
 }

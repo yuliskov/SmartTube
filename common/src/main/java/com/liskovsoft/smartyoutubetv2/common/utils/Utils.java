@@ -54,7 +54,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.liskovsoft.sharedutils.helpers.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
@@ -901,7 +900,7 @@ public class Utils {
     public static void restartTheApp(Context context) {
         try {
             Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
-            intent.putExtra(GlobalConstants.RESTART_INTENT, true);
+            intent.putExtra(IntentExtractor.RESTART_INTENT, true);
             ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -920,8 +919,8 @@ public class Utils {
                     context,
                     Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME)
             );
-            intent.putExtra(GlobalConstants.RESTART_INTENT, true);
-            intent.putExtra(GlobalConstants.INCOGNITO_INTENT, video.incognito);
+            intent.putExtra(IntentExtractor.RESTART_INTENT, true);
+            intent.putExtra(IntentExtractor.INCOGNITO_INTENT, video.incognito);
             ProcessPhoenix.triggerRebirth(context, intent);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
