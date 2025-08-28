@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.GlobalConstants;
+import com.liskovsoft.sharedutils.helpers.GlobalConstants;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -276,7 +276,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (videoId != null) {
                 long timeMs = IntentExtractor.extractVideoTimeMs(intent);
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId, IntentExtractor.hasFinishOnEndedFlag(intent), timeMs);
+                boolean finishOnEnded = IntentExtractor.hasFinishOnEndedFlag(intent);
+                boolean incognito = intent.getBooleanExtra(GlobalConstants.INCOGNITO_INTENT, false);
+                playbackPresenter.openVideo(videoId, finishOnEnded, timeMs, incognito);
 
                 enablePlayerOnlyModeIfNeeded(intent);
 

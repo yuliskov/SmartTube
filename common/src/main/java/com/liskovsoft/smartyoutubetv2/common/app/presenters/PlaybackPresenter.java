@@ -90,13 +90,13 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     public void openVideo(String videoId) {
-        openVideo(videoId, false, -1);
+        openVideo(videoId, false, -1, false);
     }
 
     /**
      * Opens video item from splash view
      */
-    public void openVideo(String videoId, boolean finishOnEnded, long timeMs) {
+    public void openVideo(String videoId, boolean finishOnEnded, long timeMs, boolean incognito) {
         if (videoId == null) {
             return;
         }
@@ -104,6 +104,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         Video video = Video.from(videoId);
         video.finishOnEnded = finishOnEnded;
         video.pendingPosMs = timeMs;
+        video.incognito = incognito;
         openVideo(video);
     }
 

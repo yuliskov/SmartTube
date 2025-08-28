@@ -7,10 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import com.liskovsoft.sharedutils.GlobalConstants;
+
 import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.configparser.ConfigParser;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.GlobalConstants;
 
 public class AppUtil {
     private final Context mContext;
