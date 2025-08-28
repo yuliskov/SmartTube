@@ -85,7 +85,9 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void enableChecked() {
-        if (mMode == MODE_SCREEN_OFF) {
+        // Fix dialog dimming when using the play button on the remote controller.
+        // NOTE: only the last activity will show dimming and in our case the last one is PlaybackActivity
+        if (mMode == MODE_SCREEN_OFF || getAppDialogPresenter().isDialogShown()) {
             return;
         }
 
