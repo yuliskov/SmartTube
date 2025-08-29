@@ -130,6 +130,7 @@ public class VideoLoaderController extends BasePlayerController {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
+            YouTubeServiceManager.instance().invalidateCache();
             rebootApp(); // without a reboot the app will keep buffering
         }
     }
@@ -492,7 +493,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyPlaybackFix();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
             reloadVideo();
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();
@@ -560,14 +561,14 @@ public class VideoLoaderController extends BasePlayerController {
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-                YouTubeServiceManager.instance().applyPlaybackFix();
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
                 YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
-                YouTubeServiceManager.instance().applyPlaybackFix(); // Response code: 403
+                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
