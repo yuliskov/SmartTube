@@ -530,8 +530,6 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
-        fitVideoIntoDialog();
-
         if (buttonId == R.id.action_rotate) {
             onRotate();
         } else if (buttonId == R.id.action_flip) {
@@ -579,8 +577,6 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onButtonLongClicked(int buttonId, int buttonState) {
-        fitVideoIntoDialog();
-
         if (buttonId == R.id.action_screen_dimming) {
             showScreenOffDialog();
         } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {

@@ -163,7 +163,7 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            if (VERSION.SDK_INT >= 21) {
+            if (VERSION.SDK_INT >= 21 && getViewManager().getTopView() != null) { // remain root activity in recents
                 super.finishAndRemoveTask();
             } else {
                 super.finish();
