@@ -33,7 +33,7 @@ public class VideoStateController extends BasePlayerController {
     private boolean mIsPlayBlocked;
     private int mTickleLeft;
     private boolean mIncognito;
-    private final Runnable mUpdateHistory = () -> { saveState(); persistState(); };
+    private final Runnable mUpdateHistory = this::saveState;
     private long mNewVideoTimeMs;
 
     /**
@@ -131,7 +131,6 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayer().containsMedia()) {
             setPlayEnabled(getPlayer().getPlayWhenReady());
             saveState();
-            persistState();
         }
     }
 
@@ -144,7 +143,6 @@ public class VideoStateController extends BasePlayerController {
         if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
             mTickleLeft = 0;
             saveState();
-            persistState(); // ???
         }
     }
 
@@ -441,14 +439,14 @@ public class VideoStateController extends BasePlayerController {
         restorePitch();
     }
 
-    private void persistState() {
-        // Skip mini player, but don't save for the previews (mute enabled)
-        if (isMutedEmbed() || isBeginEmbed()) {
-            return;
-        }
-
-        getStateService().persistState();
-    }
+    //private void persistState() {
+    //    // Skip mini player, but don't save for the previews (mute enabled)
+    //    if (isMutedEmbed() || isBeginEmbed()) {
+    //        return;
+    //    }
+    //
+    //    getStateService().persistState();
+    //}
 
     private void savePosition() {
         Video video = getVideo();

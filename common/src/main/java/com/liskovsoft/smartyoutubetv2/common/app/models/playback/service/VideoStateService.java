@@ -68,6 +68,7 @@ public class VideoStateService implements ProfileChangeListener {
 
     public void removeByVideoId(String videoId) {
         Helpers.removeIf(mStates, state -> Helpers.equals(state.video.videoId, videoId));
+        persistState();
     }
 
     public boolean isEmpty() {
@@ -76,6 +77,7 @@ public class VideoStateService implements ProfileChangeListener {
 
     public void save(State state) {
         mStates.add(state);
+        persistState();
     }
 
     public void clear() {
@@ -110,7 +112,7 @@ public class VideoStateService implements ProfileChangeListener {
         }
     }
 
-    public void persistState() {
+    private void persistState() {
         // Improve memory and disc usage
         Utils.postDelayed(mPersistStateInt, PERSIST_DELAY_MS);
     }

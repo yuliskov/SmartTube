@@ -427,7 +427,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
         VideoStateService stateService = VideoStateService.instance(getContext());
         stateService.removeByVideoId(mVideo.videoId);
-        stateService.persistState();
     }
 
     private void appendRemoveFromSubscriptionsButton() {
