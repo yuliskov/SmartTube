@@ -426,7 +426,8 @@
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
     <string name="save_remove_playlist">Aggiungi/Rimuovi playlist dalla sezione Playlist</string>
     <string name="save_playlist">Aggiungi playlist alla sezione Playlist</string>
-    <string name="remove_playlist">Rimuovi permanentemente la playlist dalla sezione Playlist</string>
+    <string name="remove_playlist">Rimuovi definitivamente la playlist dalla sezione Playlist</string>
+    <string name="remove_playlist_fmt">Rimuovere %s definitivamente?</string>
     <string name="removed_from_playlists">Rimossa dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
