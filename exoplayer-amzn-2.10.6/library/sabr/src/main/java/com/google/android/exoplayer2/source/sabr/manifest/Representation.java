@@ -36,6 +36,8 @@ public abstract class Representation {
      */
     public final long presentationTimeOffsetUs;
 
+    private final RangedUri initializationUri;
+
     public static Representation newInstance(
             Format format,
             String baseUrl,
@@ -66,11 +68,21 @@ public abstract class Representation {
     private Representation(
             long revisionId,
             Format format,
-            String baseUrl) {
+            String baseUrl,
+            SegmentBase segmentBase) {
         this.revisionId = revisionId;
         this.format = format;
         this.baseUrl = baseUrl;
-        presentationTimeOffsetUs = 0;
+        initializationUri = segmentBase.getInitialization(this);
+        presentationTimeOffsetUs = segmentBase.getPresentationTimeOffsetUs();
+    }
+
+    /**
+     * Returns a {@link RangedUri} defining the location of the representation's initialization data,
+     * or null if no initialization data exists.
+     */
+    public RangedUri getInitializationUri() {
+        return initializationUri;
     }
 
     /**
@@ -131,7 +143,7 @@ public abstract class Representation {
                 SingleSegmentBase segmentBase,
                 String cacheKey,
                 long contentLength) {
-            super(revisionId, format, baseUrl);
+            super(revisionId, format, baseUrl, segmentBase);
             this.uri = Uri.parse(baseUrl);
             this.indexUri = segmentBase.getIndex();
             this.cacheKey = cacheKey;

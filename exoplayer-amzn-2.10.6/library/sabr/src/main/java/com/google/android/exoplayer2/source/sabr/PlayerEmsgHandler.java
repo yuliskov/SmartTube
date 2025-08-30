@@ -84,6 +84,35 @@ public final class PlayerEmsgHandler implements Handler.Callback {
         removePreviouslyExpiredManifestPublishTimeValues();
     }
 
+    /* package */ boolean maybeRefreshManifestBeforeLoadingNextChunk(long presentationPositionUs) {
+        if (!manifest.dynamic) {
+            return false;
+        }
+        if (isWaitingForManifestRefresh) {
+            return true;
+        }
+        boolean manifestRefreshNeeded = false;
+        // Find the smallest publishTime (greater than or equal to the current manifest's publish time)
+        // that has a corresponding expiry time.
+        Map.Entry<Long, Long> expiredEntry = ceilingExpiryEntryForPublishTime(manifest.publishTimeMs);
+        if (expiredEntry != null) {
+            long expiredPointUs = expiredEntry.getValue();
+            if (expiredPointUs < presentationPositionUs) {
+                expiredManifestPublishTimeUs = expiredEntry.getKey();
+                notifyManifestPublishTimeExpired();
+                manifestRefreshNeeded = true;
+            }
+        }
+        if (manifestRefreshNeeded) {
+            maybeNotifyDashManifestRefreshNeeded();
+        }
+        return manifestRefreshNeeded;
+    }
+
+    private @Nullable Map.Entry<Long, Long> ceilingExpiryEntryForPublishTime(long publishTimeMs) {
+        return manifestPublishTimeToExpiryTimeUs.ceilingEntry(publishTimeMs);
+    }
+
     private void removePreviouslyExpiredManifestPublishTimeValues() {
         for (Iterator<Entry<Long, Long>> it =
              manifestPublishTimeToExpiryTimeUs.entrySet().iterator();
@@ -94,6 +123,22 @@ public final class PlayerEmsgHandler implements Handler.Callback {
                 it.remove();
             }
         }
+    }
+
+    private void notifyManifestPublishTimeExpired() {
+        playerEmsgCallback.onDashManifestPublishTimeExpired(expiredManifestPublishTimeUs);
+    }
+
+    /** Requests DASH media manifest to be refreshed if necessary. */
+    private void maybeNotifyDashManifestRefreshNeeded() {
+        if (lastLoadedChunkEndTimeBeforeRefreshUs != C.TIME_UNSET
+                && lastLoadedChunkEndTimeBeforeRefreshUs == lastLoadedChunkEndTimeUs) {
+            // Already requested manifest refresh.
+            return;
+        }
+        isWaitingForManifestRefresh = true;
+        lastLoadedChunkEndTimeBeforeRefreshUs = lastLoadedChunkEndTimeUs;
+        playerEmsgCallback.onDashManifestRefreshRequested();
     }
 
     /** Returns a {@link TrackOutput} that emsg messages could be written to. */
@@ -155,6 +200,18 @@ public final class PlayerEmsgHandler implements Handler.Callback {
         public void sampleMetadata(long timeUs, int flags, int size, int offset, @Nullable CryptoData encryptionData) {
             sampleQueue.sampleMetadata(timeUs, flags, size, offset, encryptionData);
             parseAndDiscardSamples();
+        }
+
+        /**
+         * For live streaming, check if the DASH manifest is expired before the next segment start time.
+         * If it is, the DASH media source will be notified to refresh the manifest.
+         *
+         * @param presentationPositionUs The next load position in presentation time.
+         * @return True if manifest refresh has been requested, false otherwise.
+         */
+        public boolean maybeRefreshManifestBeforeLoadingNextChunk(long presentationPositionUs) {
+            return PlayerEmsgHandler.this.maybeRefreshManifestBeforeLoadingNextChunk(
+                    presentationPositionUs);
         }
 
         /** Release this track emsg handler. It should not be reused after this call. */
