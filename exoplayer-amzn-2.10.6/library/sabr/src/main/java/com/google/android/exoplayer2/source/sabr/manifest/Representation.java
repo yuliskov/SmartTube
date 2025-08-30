@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.source.sabr.SabrSegmentIndex;
+import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SingleSegmentBase;
 
 /**
  * A SABR representation.
@@ -36,22 +38,29 @@ public abstract class Representation {
 
     public static Representation newInstance(
             Format format,
-            String baseUrl) {
-        return newInstance(REVISION_ID_DEFAULT, format, baseUrl, null);
+            String baseUrl,
+            SegmentBase segmentBase) {
+        return newInstance(REVISION_ID_DEFAULT, format, baseUrl, segmentBase, null);
     }
 
     public static Representation newInstance(
             long revisionId,
             Format format,
             String baseUrl,
+            SegmentBase segmentBase,
             String cacheKey) {
-        // TODO: add SubtitleRepresentation
-        return new AdaptiveRepresentation(
-                revisionId,
-                format,
-                baseUrl,
-                cacheKey,
-                C.LENGTH_UNSET);
+        if (segmentBase instanceof SingleSegmentBase) {
+            return new SingleSegmentRepresentation(
+                    revisionId,
+                    format,
+                    baseUrl,
+                    (SingleSegmentBase) segmentBase,
+                    cacheKey,
+                    C.LENGTH_UNSET);
+        } else {
+            throw new IllegalArgumentException("segmentBase must be of type SingleSegmentBase or "
+                    + "MultiSegmentBase");
+        }
     }
 
     private Representation(
@@ -64,13 +73,24 @@ public abstract class Representation {
         presentationTimeOffsetUs = 0;
     }
 
+    /**
+     * Returns a {@link RangedUri} defining the location of the representation's segment index, or
+     * null if the representation provides an index directly.
+     */
+    public abstract RangedUri getIndexUri();
+
+    /**
+     * Returns an index if the representation provides one directly, or null otherwise.
+     */
+    public abstract SabrSegmentIndex getIndex();
+
     /** Returns a cache key for the representation if set, or null. */
     public abstract String getCacheKey();
 
     /**
      * A DASH representation consisting of a single segment.
      */
-    public static class AdaptiveRepresentation extends Representation {
+    public static class SingleSegmentRepresentation extends Representation {
 
         /**
          * The uri of the single segment.
@@ -83,8 +103,10 @@ public abstract class Representation {
         public final long contentLength;
 
         private final String cacheKey;
+        private final RangedUri indexUri;
+        private final SingleSegmentIndex segmentIndex;
         
-        public static AdaptiveRepresentation newInstance(
+        public static SingleSegmentRepresentation newInstance(
                 long revisionId,
                 Format format,
                 String uri,
@@ -94,24 +116,40 @@ public abstract class Representation {
                 long indexEnd,
                 String cacheKey,
                 long contentLength) {
-            return new AdaptiveRepresentation(
-                    revisionId, format, uri, cacheKey, contentLength);
+            RangedUri rangedUri = new RangedUri(null, initializationStart,
+                    initializationEnd - initializationStart + 1);
+            SingleSegmentBase segmentBase = new SingleSegmentBase(rangedUri, 1, 0, indexStart,
+                    indexEnd - indexStart + 1);
+            return new SingleSegmentRepresentation(
+                    revisionId, format, uri, segmentBase, cacheKey, contentLength);
         }
 
-        public AdaptiveRepresentation(
+        public SingleSegmentRepresentation(
                 long revisionId,
                 Format format,
                 String baseUrl,
+                SingleSegmentBase segmentBase,
                 String cacheKey,
                 long contentLength) {
             super(revisionId, format, baseUrl);
             this.uri = Uri.parse(baseUrl);
+            this.indexUri = segmentBase.getIndex();
             this.cacheKey = cacheKey;
             this.contentLength = contentLength;
             // If we have an index uri then the index is defined externally, and we shouldn't return one
             // directly. If we don't, then we can't do better than an index defining a single segment.
-            //segmentIndex = indexUri != null ? null
-            //        : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
+            segmentIndex = indexUri != null ? null
+                    : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
+        }
+
+        @Override
+        public RangedUri getIndexUri() {
+            return indexUri;
+        }
+
+        @Override
+        public SabrSegmentIndex getIndex() {
+            return segmentIndex;
         }
 
         @Override

@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.source.CompositeSequenceableLoaderFactory;
+import com.google.android.exoplayer2.source.EmptySampleStream;
 import com.google.android.exoplayer2.source.MediaPeriod;
 import com.google.android.exoplayer2.source.MediaSourceEventListener.EventDispatcher;
 import com.google.android.exoplayer2.source.SampleStream;
@@ -17,9 +18,12 @@ import com.google.android.exoplayer2.source.SequenceableLoader;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.chunk.ChunkSampleStream;
+import com.google.android.exoplayer2.source.chunk.ChunkSampleStream.EmbeddedSampleStream;
 import com.google.android.exoplayer2.source.sabr.PlayerEmsgHandler.PlayerEmsgCallback;
+import com.google.android.exoplayer2.source.sabr.PlayerEmsgHandler.PlayerTrackEmsgHandler;
 import com.google.android.exoplayer2.source.sabr.SabrChunkSource.Factory;
 import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
+import com.google.android.exoplayer2.source.sabr.manifest.EventStream;
 import com.google.android.exoplayer2.source.sabr.manifest.Period;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
@@ -37,6 +41,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -45,22 +50,29 @@ final class SabrMediaPeriod
         SequenceableLoader.Callback<ChunkSampleStream<SabrChunkSource>>,
         ChunkSampleStream.ReleaseCallback<SabrChunkSource> {
     /* package */ final int id;
-    private final SabrManifest manifest;
-    private final int periodIndex;
     private final Factory chunkSourceFactory;
     @Nullable
     private final TransferListener transferListener;
     private final LoadErrorHandlingPolicy loadErrorHandlingPolicy;
     private final EventDispatcher eventDispatcher;
+    private final long elapsedRealtimeOffsetMs;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final TrackGroupArray trackGroups;
     private final TrackGroupInfo[] trackGroupInfos;
     private final Allocator allocator;
     private final CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
     private final PlayerEmsgHandler playerEmsgHandler;
+    private final IdentityHashMap<ChunkSampleStream<SabrChunkSource>, PlayerTrackEmsgHandler>
+            trackEmsgHandlerBySampleStream;
 
     private @Nullable Callback callback;
     private ChunkSampleStream<SabrChunkSource>[] sampleStreams;
+    private SequenceableLoader compositeSequenceableLoader;
+    private EventSampleStream[] eventSampleStreams;
+    private SabrManifest manifest;
+    private int periodIndex;
+    private List<EventStream> eventStreams;
+    private boolean notifiedReadingStarted;
 
     public SabrMediaPeriod(
             int id,
@@ -70,6 +82,7 @@ final class SabrMediaPeriod
             @Nullable TransferListener transferListener,
             LoadErrorHandlingPolicy loadErrorHandlingPolicy,
             EventDispatcher eventDispatcher,
+            long elapsedRealtimeOffsetMs,
             LoaderErrorThrower manifestLoaderErrorThrower,
             Allocator allocator,
             CompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory,
@@ -81,11 +94,16 @@ final class SabrMediaPeriod
         this.transferListener = transferListener;
         this.loadErrorHandlingPolicy = loadErrorHandlingPolicy;
         this.eventDispatcher = eventDispatcher;
+        this.elapsedRealtimeOffsetMs = elapsedRealtimeOffsetMs;
         this.manifestLoaderErrorThrower = manifestLoaderErrorThrower;
         this.allocator = allocator;
         this.compositeSequenceableLoaderFactory = compositeSequenceableLoaderFactory;
         playerEmsgHandler = new PlayerEmsgHandler(manifest, playerEmsgCallback, allocator);
         sampleStreams = newSampleStreamArray(0);
+        eventSampleStreams = new EventSampleStream[0];
+        trackEmsgHandlerBySampleStream = new IdentityHashMap<>();
+        compositeSequenceableLoader =
+                compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(sampleStreams);
         Period period = manifest.getPeriod(periodIndex);
         Pair<TrackGroupArray, TrackGroupInfo[]> result = buildTrackGroups(period.adaptationSets);
         trackGroups = result.first;
@@ -115,47 +133,89 @@ final class SabrMediaPeriod
             @Nullable SampleStream[] streams,
             boolean[] streamResetFlags,
             long positionUs) {
-        return 0;
+        int[] streamIndexToTrackGroupIndex = getStreamIndexToTrackGroupIndex(selections);
+        releaseDisabledStreams(selections, mayRetainStreamFlags, streams);
+        releaseOrphanEmbeddedStreams(selections, streams, streamIndexToTrackGroupIndex);
+        selectNewStreams(
+                selections, streams, streamResetFlags, positionUs, streamIndexToTrackGroupIndex);
+
+        ArrayList<ChunkSampleStream<SabrChunkSource>> sampleStreamList = new ArrayList<>();
+        ArrayList<EventSampleStream> eventSampleStreamList = new ArrayList<>();
+        for (SampleStream sampleStream : streams) {
+            if (sampleStream instanceof ChunkSampleStream) {
+                @SuppressWarnings("unchecked")
+                ChunkSampleStream<SabrChunkSource> stream =
+                        (ChunkSampleStream<SabrChunkSource>) sampleStream;
+                sampleStreamList.add(stream);
+            } else if (sampleStream instanceof EventSampleStream) {
+                eventSampleStreamList.add((EventSampleStream) sampleStream);
+            }
+        }
+        sampleStreams = newSampleStreamArray(sampleStreamList.size());
+        sampleStreamList.toArray(sampleStreams);
+        eventSampleStreams = new EventSampleStream[eventSampleStreamList.size()];
+        eventSampleStreamList.toArray(eventSampleStreams);
+
+        compositeSequenceableLoader =
+                compositeSequenceableLoaderFactory.createCompositeSequenceableLoader(sampleStreams);
+        return positionUs;
     }
 
     @Override
     public void discardBuffer(long positionUs, boolean toKeyframe) {
-
+        for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
+            sampleStream.discardBuffer(positionUs, toKeyframe);
+        }
     }
 
     @Override
     public long readDiscontinuity() {
-        return 0;
+        if (!notifiedReadingStarted) {
+            eventDispatcher.readingStarted();
+            notifiedReadingStarted = true;
+        }
+        return C.TIME_UNSET;
     }
 
     @Override
     public long seekToUs(long positionUs) {
-        return 0;
+        for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
+            sampleStream.seekToUs(positionUs);
+        }
+        for (EventSampleStream sampleStream : eventSampleStreams) {
+            sampleStream.seekToUs(positionUs);
+        }
+        return positionUs;
     }
 
     @Override
     public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
-        return 0;
+        for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
+            if (sampleStream.primaryTrackType == C.TRACK_TYPE_VIDEO) {
+                return sampleStream.getAdjustedSeekPositionUs(positionUs, seekParameters);
+            }
+        }
+        return positionUs;
     }
 
     @Override
     public long getBufferedPositionUs() {
-        return 0;
+        return compositeSequenceableLoader.getBufferedPositionUs();
     }
 
     @Override
     public long getNextLoadPositionUs() {
-        return 0;
+        return compositeSequenceableLoader.getNextLoadPositionUs();
     }
 
     @Override
     public boolean continueLoading(long positionUs) {
-        return false;
+        return compositeSequenceableLoader.continueLoading(positionUs);
     }
 
     @Override
     public void reevaluateBuffer(long positionUs) {
-
+        compositeSequenceableLoader.reevaluateBuffer(positionUs);
     }
 
     // SequenceableLoader.Callback implementation.
@@ -165,8 +225,29 @@ final class SabrMediaPeriod
     }
 
     @Override
-    public void onSampleStreamReleased(ChunkSampleStream<SabrChunkSource> chunkSampleStream) {
+    public synchronized void onSampleStreamReleased(ChunkSampleStream<SabrChunkSource> stream) {
+        PlayerTrackEmsgHandler trackEmsgHandler = trackEmsgHandlerBySampleStream.remove(stream);
+        if (trackEmsgHandler != null) {
+            trackEmsgHandler.release();
+        }
+    }
 
+    /**
+     * Updates the {@link SabrManifest} and the index of this period in the manifest.
+     *
+     * @param manifest The updated manifest.
+     * @param periodIndex the new index of this period in the updated manifest.
+     */
+    public void updateManifest(SabrManifest manifest, int periodIndex) {
+        this.manifest = manifest;
+        this.periodIndex = periodIndex;
+        playerEmsgHandler.updateManifest(manifest);
+        if (sampleStreams != null) {
+            for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
+                sampleStream.getChunkSource().updateManifest(manifest, periodIndex);
+            }
+            callback.onContinueLoadingRequested(this);
+        }
     }
 
     public void release() {
@@ -323,6 +404,205 @@ final class SabrMediaPeriod
     private static Format[] getCea608TrackFormats(
             List<AdaptationSet> adaptationSets, int[] adaptationSetIndices) {
         return new Format[0];
+    }
+
+    private int[] getStreamIndexToTrackGroupIndex(TrackSelection[] selections) {
+        int[] streamIndexToTrackGroupIndex = new int[selections.length];
+        for (int i = 0; i < selections.length; i++) {
+            if (selections[i] != null) {
+                streamIndexToTrackGroupIndex[i] = trackGroups.indexOf(selections[i].getTrackGroup());
+            } else {
+                streamIndexToTrackGroupIndex[i] = C.INDEX_UNSET;
+            }
+        }
+        return streamIndexToTrackGroupIndex;
+    }
+
+    private void releaseDisabledStreams(
+            TrackSelection[] selections, boolean[] mayRetainStreamFlags, SampleStream[] streams) {
+        for (int i = 0; i < selections.length; i++) {
+            if (selections[i] == null || !mayRetainStreamFlags[i]) {
+                if (streams[i] instanceof ChunkSampleStream) {
+                    @SuppressWarnings("unchecked")
+                    ChunkSampleStream<SabrChunkSource> stream =
+                            (ChunkSampleStream<SabrChunkSource>) streams[i];
+                    stream.release(this);
+                } else if (streams[i] instanceof ChunkSampleStream.EmbeddedSampleStream) {
+                    ((EmbeddedSampleStream) streams[i]).release();
+                }
+                streams[i] = null;
+            }
+        }
+    }
+
+    private void releaseOrphanEmbeddedStreams(
+            TrackSelection[] selections, SampleStream[] streams, int[] streamIndexToTrackGroupIndex) {
+        for (int i = 0; i < selections.length; i++) {
+            if (streams[i] instanceof EmptySampleStream || streams[i] instanceof EmbeddedSampleStream) {
+                // We need to release an embedded stream if the corresponding primary stream is released.
+                int primaryStreamIndex = getPrimaryStreamIndex(i, streamIndexToTrackGroupIndex);
+                boolean mayRetainStream;
+                if (primaryStreamIndex == C.INDEX_UNSET) {
+                    // If the corresponding primary stream is not selected, we may retain an existing
+                    // EmptySampleStream.
+                    mayRetainStream = streams[i] instanceof EmptySampleStream;
+                } else {
+                    // If the corresponding primary stream is selected, we may retain the embedded stream if
+                    // the stream's parent still matches.
+                    mayRetainStream =
+                            (streams[i] instanceof EmbeddedSampleStream)
+                                    && ((EmbeddedSampleStream) streams[i]).parent == streams[primaryStreamIndex];
+                }
+                if (!mayRetainStream) {
+                    if (streams[i] instanceof EmbeddedSampleStream) {
+                        ((EmbeddedSampleStream) streams[i]).release();
+                    }
+                    streams[i] = null;
+                }
+            }
+        }
+    }
+
+    private int getPrimaryStreamIndex(int embeddedStreamIndex, int[] streamIndexToTrackGroupIndex) {
+        int embeddedTrackGroupIndex = streamIndexToTrackGroupIndex[embeddedStreamIndex];
+        if (embeddedTrackGroupIndex == C.INDEX_UNSET) {
+            return C.INDEX_UNSET;
+        }
+        int primaryTrackGroupIndex = trackGroupInfos[embeddedTrackGroupIndex].primaryTrackGroupIndex;
+        for (int i = 0; i < streamIndexToTrackGroupIndex.length; i++) {
+            int trackGroupIndex = streamIndexToTrackGroupIndex[i];
+            if (trackGroupIndex == primaryTrackGroupIndex
+                    && trackGroupInfos[trackGroupIndex].trackGroupCategory
+                    == TrackGroupInfo.CATEGORY_PRIMARY) {
+                return i;
+            }
+        }
+        return C.INDEX_UNSET;
+    }
+
+    private void selectNewStreams(
+            TrackSelection[] selections,
+            SampleStream[] streams,
+            boolean[] streamResetFlags,
+            long positionUs,
+            int[] streamIndexToTrackGroupIndex) {
+        // Create newly selected primary and event streams.
+        for (int i = 0; i < selections.length; i++) {
+            TrackSelection selection = selections[i];
+            if (selection == null) {
+                continue;
+            }
+            if (streams[i] == null) {
+                // Create new stream for selection.
+                streamResetFlags[i] = true;
+                int trackGroupIndex = streamIndexToTrackGroupIndex[i];
+                TrackGroupInfo trackGroupInfo = trackGroupInfos[trackGroupIndex];
+                if (trackGroupInfo.trackGroupCategory == TrackGroupInfo.CATEGORY_PRIMARY) {
+                    streams[i] = buildSampleStream(trackGroupInfo, selection, positionUs);
+                } else if (trackGroupInfo.trackGroupCategory == TrackGroupInfo.CATEGORY_MANIFEST_EVENTS) {
+                    EventStream eventStream = eventStreams.get(trackGroupInfo.eventStreamGroupIndex);
+                    Format format = selection.getTrackGroup().getFormat(0);
+                    streams[i] = new EventSampleStream(eventStream, format, manifest.dynamic);
+                }
+            } else if (streams[i] instanceof ChunkSampleStream) {
+                // Update selection in existing stream.
+                @SuppressWarnings("unchecked")
+                ChunkSampleStream<SabrChunkSource> stream = (ChunkSampleStream<SabrChunkSource>) streams[i];
+                stream.getChunkSource().updateTrackSelection(selection);
+            }
+        }
+        // Create newly selected embedded streams from the corresponding primary stream. Note that this
+        // second pass is needed because the primary stream may not have been created yet in a first
+        // pass if the index of the primary stream is greater than the index of the embedded stream.
+        for (int i = 0; i < selections.length; i++) {
+            if (streams[i] == null && selections[i] != null) {
+                int trackGroupIndex = streamIndexToTrackGroupIndex[i];
+                TrackGroupInfo trackGroupInfo = trackGroupInfos[trackGroupIndex];
+                if (trackGroupInfo.trackGroupCategory == TrackGroupInfo.CATEGORY_EMBEDDED) {
+                    int primaryStreamIndex = getPrimaryStreamIndex(i, streamIndexToTrackGroupIndex);
+                    if (primaryStreamIndex == C.INDEX_UNSET) {
+                        // If an embedded track is selected without the corresponding primary track, create an
+                        // empty sample stream instead.
+                        streams[i] = new EmptySampleStream();
+                    } else {
+                        streams[i] =
+                                ((ChunkSampleStream) streams[primaryStreamIndex])
+                                        .selectEmbeddedTrack(positionUs, trackGroupInfo.trackType);
+                    }
+                }
+            }
+        }
+    }
+
+    private ChunkSampleStream<SabrChunkSource> buildSampleStream(TrackGroupInfo trackGroupInfo,
+                                                                 TrackSelection selection, long positionUs) {
+        int embeddedTrackCount = 0;
+        boolean enableEventMessageTrack =
+                trackGroupInfo.embeddedEventMessageTrackGroupIndex != C.INDEX_UNSET;
+        TrackGroup embeddedEventMessageTrackGroup = null;
+        if (enableEventMessageTrack) {
+            embeddedEventMessageTrackGroup =
+                    trackGroups.get(trackGroupInfo.embeddedEventMessageTrackGroupIndex);
+            embeddedTrackCount++;
+        }
+        boolean enableCea608Tracks = trackGroupInfo.embeddedCea608TrackGroupIndex != C.INDEX_UNSET;
+        TrackGroup embeddedCea608TrackGroup = null;
+        if (enableCea608Tracks) {
+            embeddedCea608TrackGroup = trackGroups.get(trackGroupInfo.embeddedCea608TrackGroupIndex);
+            embeddedTrackCount += embeddedCea608TrackGroup.length;
+        }
+
+        Format[] embeddedTrackFormats = new Format[embeddedTrackCount];
+        int[] embeddedTrackTypes = new int[embeddedTrackCount];
+        embeddedTrackCount = 0;
+        if (enableEventMessageTrack) {
+            embeddedTrackFormats[embeddedTrackCount] = embeddedEventMessageTrackGroup.getFormat(0);
+            embeddedTrackTypes[embeddedTrackCount] = C.TRACK_TYPE_METADATA;
+            embeddedTrackCount++;
+        }
+        List<Format> embeddedCea608TrackFormats = new ArrayList<>();
+        if (enableCea608Tracks) {
+            for (int i = 0; i < embeddedCea608TrackGroup.length; i++) {
+                embeddedTrackFormats[embeddedTrackCount] = embeddedCea608TrackGroup.getFormat(i);
+                embeddedTrackTypes[embeddedTrackCount] = C.TRACK_TYPE_TEXT;
+                embeddedCea608TrackFormats.add(embeddedTrackFormats[embeddedTrackCount]);
+                embeddedTrackCount++;
+            }
+        }
+
+        PlayerTrackEmsgHandler trackPlayerEmsgHandler =
+                manifest.dynamic && enableEventMessageTrack
+                        ? playerEmsgHandler.newPlayerTrackEmsgHandler()
+                        : null;
+        SabrChunkSource chunkSource =
+                chunkSourceFactory.createSabrChunkSource(
+                        manifestLoaderErrorThrower,
+                        manifest,
+                        periodIndex,
+                        trackGroupInfo.adaptationSetIndices,
+                        selection,
+                        trackGroupInfo.trackType,
+                        elapsedRealtimeOffsetMs,
+                        enableEventMessageTrack,
+                        embeddedCea608TrackFormats,
+                        trackPlayerEmsgHandler,
+                        transferListener);
+        ChunkSampleStream<SabrChunkSource> stream =
+                new ChunkSampleStream<>(
+                        trackGroupInfo.trackType,
+                        embeddedTrackTypes,
+                        embeddedTrackFormats,
+                        chunkSource,
+                        this,
+                        allocator,
+                        positionUs,
+                        loadErrorHandlingPolicy,
+                        eventDispatcher);
+        synchronized (this) {
+            // The map is also accessed on the loading thread so synchronize access.
+            trackEmsgHandlerBySampleStream.put(stream, trackPlayerEmsgHandler);
+        }
+        return stream;
     }
 
     private static final class TrackGroupInfo {

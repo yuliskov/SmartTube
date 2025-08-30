@@ -48,6 +48,17 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
     public final List<Period> periods;
 
+    /**
+     * Whether the manifest has value "dynamic" for the {@code type} attribute.
+     */
+    public final boolean dynamic = false;
+
+    /**
+     * The {@code minimumUpdatePeriod} value in milliseconds, or {@link C#TIME_UNSET} if not
+     * applicable.
+     */
+    public final long minUpdatePeriodMs = C.TIME_UNSET;
+
     public SabrManifest(
             long availabilityStartTimeMs,
             long durationMs,

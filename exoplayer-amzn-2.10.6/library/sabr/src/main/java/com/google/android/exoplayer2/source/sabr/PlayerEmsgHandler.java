@@ -1,18 +1,33 @@
 package com.google.android.exoplayer2.source.sabr;
 
+import android.os.Handler;
+import android.os.Message;
+
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.FormatHolder;
+import com.google.android.exoplayer2.ParserException;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.extractor.TrackOutput;
+import com.google.android.exoplayer2.metadata.Metadata;
+import com.google.android.exoplayer2.metadata.MetadataInputBuffer;
+import com.google.android.exoplayer2.metadata.emsg.EventMessage;
+import com.google.android.exoplayer2.metadata.emsg.EventMessageDecoder;
 import com.google.android.exoplayer2.source.SampleQueue;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.upstream.Allocator;
 import com.google.android.exoplayer2.util.ParsableByteArray;
+import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
-public final class PlayerEmsgHandler {
+public final class PlayerEmsgHandler implements Handler.Callback {
     /** Callbacks for player emsg events encountered during DASH live stream. */
     public interface PlayerEmsgCallback {
 
@@ -29,7 +44,15 @@ public final class PlayerEmsgHandler {
 
     private final Allocator allocator;
     private final PlayerEmsgCallback playerEmsgCallback;
+    private final EventMessageDecoder decoder;
     private SabrManifest manifest;
+    private final Handler handler;
+    private final TreeMap<Long, Long> manifestPublishTimeToExpiryTimeUs;
+
+    private long expiredManifestPublishTimeUs;
+    private long lastLoadedChunkEndTimeUs;
+    private long lastLoadedChunkEndTimeBeforeRefreshUs;
+    private boolean isWaitingForManifestRefresh;
     private boolean released;
 
     /**
@@ -43,6 +66,34 @@ public final class PlayerEmsgHandler {
         this.manifest = manifest;
         this.playerEmsgCallback = playerEmsgCallback;
         this.allocator = allocator;
+
+        manifestPublishTimeToExpiryTimeUs = new TreeMap<>();
+        handler = Util.createHandler(/* callback= */ this);
+        decoder = new EventMessageDecoder();
+    }
+
+    /**
+     * Updates the {@link SabrManifest} that this handler works on.
+     *
+     * @param newManifest The updated manifest.
+     */
+    public void updateManifest(SabrManifest newManifest) {
+        isWaitingForManifestRefresh = false;
+        expiredManifestPublishTimeUs = C.TIME_UNSET;
+        this.manifest = newManifest;
+        removePreviouslyExpiredManifestPublishTimeValues();
+    }
+
+    private void removePreviouslyExpiredManifestPublishTimeValues() {
+        for (Iterator<Entry<Long, Long>> it =
+             manifestPublishTimeToExpiryTimeUs.entrySet().iterator();
+             it.hasNext(); ) {
+            Map.Entry<Long, Long> entry = it.next();
+            long expiredManifestPublishTime = entry.getKey();
+            if (expiredManifestPublishTime < manifest.publishTimeMs) {
+                it.remove();
+            }
+        }
     }
 
     /** Returns a {@link TrackOutput} that emsg messages could be written to. */
@@ -55,31 +106,106 @@ public final class PlayerEmsgHandler {
         released = true;
     }
 
+    @Override
+    public boolean handleMessage(Message message) {
+        if (released) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns whether an event with given schemeIdUri and value is a DASH emsg event targeting the
+     * player.
+     */
+    public static boolean isPlayerEmsgEvent(String schemeIdUri, String value) {
+        return "urn:mpeg:sabr:event:2025".equals(schemeIdUri)
+                && ("1".equals(value) || "2".equals(value) || "3".equals(value));
+    }
+
     /** Handles emsg messages for a specific track for the player. */
-    public static final class PlayerTrackEmsgHandler implements TrackOutput {
+    public final class PlayerTrackEmsgHandler implements TrackOutput {
+        private final SampleQueue sampleQueue;
+        private final FormatHolder formatHolder;
+        private final MetadataInputBuffer buffer;
 
         public PlayerTrackEmsgHandler(SampleQueue sampleQueue) {
-            
+            this.sampleQueue = sampleQueue;
+
+            formatHolder = new FormatHolder();
+            buffer = new MetadataInputBuffer();
         }
 
         @Override
         public void format(Format format) {
-            
+            sampleQueue.format(format);
         }
 
         @Override
         public int sampleData(ExtractorInput input, int length, boolean allowEndOfInput) throws IOException, InterruptedException {
-            return 0;
+            return sampleQueue.sampleData(input, length, allowEndOfInput);
         }
 
         @Override
         public void sampleData(ParsableByteArray data, int length) {
-
+            sampleQueue.sampleData(data, length);
         }
 
         @Override
         public void sampleMetadata(long timeUs, int flags, int size, int offset, @Nullable CryptoData encryptionData) {
+            sampleQueue.sampleMetadata(timeUs, flags, size, offset, encryptionData);
+            parseAndDiscardSamples();
+        }
 
+        /** Release this track emsg handler. It should not be reused after this call. */
+        public void release() {
+            sampleQueue.reset();
+        }
+
+        private void parseAndDiscardSamples() {
+            while (sampleQueue.hasNextSample()) {
+                MetadataInputBuffer inputBuffer = dequeueSample();
+                if (inputBuffer == null) {
+                    continue;
+                }
+                long eventTimeUs = inputBuffer.timeUs;
+                Metadata metadata = decoder.decode(inputBuffer);
+                if (metadata == null) {
+                    continue;
+                }
+                EventMessage eventMessage = (EventMessage) metadata.get(0);
+                if (isPlayerEmsgEvent(eventMessage.schemeIdUri, eventMessage.value)) {
+                    parsePlayerEmsgEvent(eventTimeUs, eventMessage);
+                }
+            }
+            sampleQueue.discardToRead();
+        }
+
+        private void parsePlayerEmsgEvent(long eventTimeUs, EventMessage eventMessage) {
+            // NOP
+        }
+
+        @Nullable
+        private MetadataInputBuffer dequeueSample() {
+            buffer.clear();
+            int result = sampleQueue.read(formatHolder, buffer, false, false, 0);
+            if (result == C.RESULT_BUFFER_READ) {
+                buffer.flip();
+                return buffer;
+            }
+            return null;
+        }
+    }
+
+    /** Holds information related to a manifest expiry event. */
+    private static final class ManifestExpiryEventInfo {
+
+        public final long eventTimeUs;
+        public final long manifestPublishTimeMsInEmsg;
+
+        public ManifestExpiryEventInfo(long eventTimeUs, long manifestPublishTimeMsInEmsg) {
+            this.eventTimeUs = eventTimeUs;
+            this.manifestPublishTimeMsInEmsg = manifestPublishTimeMsInEmsg;
         }
     }
 }
