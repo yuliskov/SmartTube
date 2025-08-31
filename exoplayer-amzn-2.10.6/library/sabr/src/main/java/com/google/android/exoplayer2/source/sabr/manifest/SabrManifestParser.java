@@ -1,23 +1,81 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
+import android.util.Pair;
+
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.drm.DrmInitData.SchemeData;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SabrManifestParser {
-    public SabrManifest parse(MediaItemFormatInfo formatInfo) {
-        // TODO: Convert format info to the manifest
+    public SabrManifest parse(@NonNull MediaItemFormatInfo formatInfo) {
+        return parseSabrManifest(formatInfo);
+    }
+
+    private SabrManifest parseSabrManifest(MediaItemFormatInfo formatInfo) {
+        long availabilityStartTime = formatInfo.getStartTimeMs();
+        long durationMs = getDurationMs(formatInfo);
+        long minBufferTimeMs = C.TIME_UNSET;
+        long timeShiftBufferDepthMs = C.TIME_UNSET;
+        long suggestedPresentationDelayMs = C.TIME_UNSET;
+        long publishTimeMs = formatInfo.getStartTimeMs();
+
+        List<Period> periods = new ArrayList<>();
+        long nextPeriodStartMs = 0;
+
+        Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo, nextPeriodStartMs);
+        if (periodWithDurationMs != null) {
+            Period period = periodWithDurationMs.first;
+            periods.add(period);
+        }
+
         return new SabrManifest(
-                -1,
-                -1,
-                -1,
-                -1,
-                -1,
-                -1,
-                null);
+                availabilityStartTime,
+                durationMs,
+                minBufferTimeMs,
+                timeShiftBufferDepthMs,
+                suggestedPresentationDelayMs,
+                publishTimeMs,
+                periods);
+    }
+
+    private static long getDurationMs(MediaItemFormatInfo formatInfo) {
+        return Helpers.parseLong(formatInfo.getLengthSeconds()) * 1_000;
+    }
+
+    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long nextPeriodStartMs) {
+        String id = formatInfo.getVideoId();
+        long startMs = formatInfo.getStartTimeMs();
+        long durationMs = getDurationMs(formatInfo);
+        List<AdaptationSet> adaptationSets = new ArrayList<>();
+
+        for (MediaFormat format : formatInfo.getAdaptiveFormats()) {
+            adaptationSets.add(parseAdaptationSet(format));
+        }
+
+        return Pair.create(new Period(id, startMs, adaptationSets), durationMs);
+    }
+
+    private AdaptationSet parseAdaptationSet(MediaFormat format) {
+        // parseRepresentation
+
+        // TODO: not implemented
+        return null;
+    }
+
+    private RepresentationInfo parseRepresentation() {
+        // buildFormat
+
+        // TODO: not implemented
+        return null;
     }
 
     protected Format buildFormat(
@@ -138,5 +196,28 @@ public class SabrManifestParser {
                 || MimeTypes.APPLICATION_MP4VTT.equals(mimeType)
                 || MimeTypes.APPLICATION_CEA708.equals(mimeType)
                 || MimeTypes.APPLICATION_CEA608.equals(mimeType);
+    }
+
+    /** A parsed Representation element. */
+    protected static final class RepresentationInfo {
+
+        public final Format format;
+        public final String baseUrl;
+        public final SegmentBase segmentBase;
+        public final String drmSchemeType;
+        public final ArrayList<SchemeData> drmSchemeDatas;
+        public final long revisionId;
+
+        public RepresentationInfo(Format format, String baseUrl, SegmentBase segmentBase,
+                                  String drmSchemeType, ArrayList<SchemeData> drmSchemeDatas,
+                                  long revisionId) {
+            this.format = format;
+            this.baseUrl = baseUrl;
+            this.segmentBase = segmentBase;
+            this.drmSchemeType = drmSchemeType;
+            this.drmSchemeDatas = drmSchemeDatas;
+            this.revisionId = revisionId;
+        }
+
     }
 }
