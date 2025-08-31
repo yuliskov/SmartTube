@@ -564,8 +564,8 @@ public class VideoLoaderController extends BasePlayerController {
             if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
-                YouTubeServiceManager.instance().applySubtitleFix();
                 disableSubtitles(); // Response code: 429
+                YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
