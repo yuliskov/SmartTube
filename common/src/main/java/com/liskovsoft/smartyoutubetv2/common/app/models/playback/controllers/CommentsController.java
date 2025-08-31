@@ -61,7 +61,7 @@ public class CommentsController extends BasePlayerController {
             getPlayer().showControls(false);
         }
 
-        String title = getPlayer() != null && getPlayer().getVideo() != null ? getPlayer().getVideo().getPlayerTitle() : mTitle;
+        String title = getPlayer() != null && getPlayer().getVideo() != null ? getPlayer().getVideo().getTitleFull() : mTitle;
 
         CommentsReceiver commentsReceiver = new AbstractCommentsReceiver(getContext()) {
             @Override

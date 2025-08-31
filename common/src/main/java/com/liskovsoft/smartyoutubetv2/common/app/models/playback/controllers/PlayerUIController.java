@@ -470,7 +470,7 @@ public class PlayerUIController extends BasePlayerController {
 
         AppDialogPresenter dialogPresenter = getAppDialogPresenter();
 
-        String title = String.format("%s - %s", video.getTitle(), video.getAuthor());
+        String title = String.format("%s - %s", video.getTitleFull(), video.getAuthor());
 
         dialogPresenter.appendLongTextCategory(title, UiOptionItem.from(description));
 

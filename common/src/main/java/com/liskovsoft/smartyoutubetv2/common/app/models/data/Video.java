@@ -290,15 +290,15 @@ public final class Video {
         return deArrowTitle != null ? deArrowTitle : title;
     }
 
+    public String getTitleFull() {
+        return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
+    }
+
     public CharSequence getSecondTitle() {
         return secondTitle;
     }
 
-    public String getPlayerTitle() {
-        return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
-    }
-
-    public CharSequence getPlayerSubtitle() {
+    public CharSequence getSecondTitleFull() {
         // Don't sync future translation because of not precise info
         return metadataSecondTitle != null && !isUpcoming ? metadataSecondTitle : secondTitle;
     }
