@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -318,6 +319,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void loadFormatInfo(Video video) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().showProgressBar(true);
         disposeActions();
 
@@ -332,7 +337,9 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        if (getPlayer() == null || getVideo() == null) {
+        PlaybackView player = getPlayer();
+
+        if (player == null || getVideo() == null) {
             return;
         }
 
@@ -349,17 +356,16 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (formatInfo.isUnplayable()) {
             if (isEmbedPlayer()) {
-                getPlayer().finish();
+                player.finish();
                 return;
             }
 
-            getPlayer().setTitle(formatInfo.getPlayabilityStatus());
-            getPlayer().showProgressBar(false);
+            player.setTitle(formatInfo.getPlayabilityStatus());
+            player.showProgressBar(false);
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
 
             if (formatInfo.isBotCheckError()) {
-                //YouTubeServiceManager.instance().applyNoPlaybackFix();
                 scheduleRebootAppTimer(5_000);
             } else { // 18+ video or the video is hidden/removed
                 scheduleNextVideoTimer(5_000);
@@ -371,40 +377,35 @@ public class VideoLoaderController extends BasePlayerController {
                     .subscribe(
                             dashManifest -> {
                                 if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
-                                    getPlayer().openMerged(dashManifest, formatInfo.getHlsManifestUrl());
+                                    player.openMerged(dashManifest, formatInfo.getHlsManifestUrl());
                                 } else {
-                                    getPlayer().openDash(dashManifest);
+                                    player.openDash(dashManifest);
                                 }
                             },
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
-            getPlayer().openSabr(formatInfo);
+            player.openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
             Log.d(TAG, "Loading live video (current or past live stream) in dash format...");
-            getPlayer().openDashUrl(formatInfo.getDashManifestUrl());
+            player.openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.isLive() && formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Loading live video (current or past live stream) in hls format...");
-            getPlayer().openHlsUrl(formatInfo.getHlsManifestUrl());
+            player.openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlFormats()) {
             Log.d(TAG, "Loading url list video. This is always LQ...");
-            getPlayer().openUrlList(applyFix(formatInfo.createUrlList()));
+            player.openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
-            getPlayer().setTitle(formatInfo.getPlayabilityStatus());
-            getPlayer().showProgressBar(false);
+            player.setTitle(formatInfo.getPlayabilityStatus());
+            player.showProgressBar(false);
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
             scheduleReloadVideoTimer(30 * 1_000);
         }
 
-        getPlayer().showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
-
-        //if (bgImageUrl != null && getPlayer().containsMedia()) {
-        //    // Make background visible
-        //    getPlayer().restartEngine();
-        //}
+        player.showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
     }
 
     private void scheduleReloadVideoTimer(int delayMs) {
