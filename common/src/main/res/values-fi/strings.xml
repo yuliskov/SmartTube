@@ -704,4 +704,6 @@
   <string name="context_menu_sorting">Kontekstivalikon järjestely</string>
   <string name="video_flip">Peilaa</string>
   <string name="dont_resize_video_to_fit_dialog">Älä muuta videon kokoa kommentteja lukiessa</string>
+  <string name="hide_shorts_from_search">Piilota shortsit hakutuloksista</string>
+  <string name="remove_playlist_fmt">Poistetaanko %s pysyvästi\?</string>
 </resources>
