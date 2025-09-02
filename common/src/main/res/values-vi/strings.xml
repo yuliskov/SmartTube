@@ -702,4 +702,5 @@
   <string name="card_preview_full">Video có âm thanh</string>
   <string name="card_preview">Xem trước thẻ</string>
   <string name="original_lang">Nguyên bản</string>
+  <string name="remove_playlist_fmt">Xóa %s vĩnh viễn\?</string>
 </resources>
