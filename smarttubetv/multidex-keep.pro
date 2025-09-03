@@ -1,3 +1,10 @@
+-keepclassmembers class com.liskovsoft.sharedutils.helpers.Helpers {
+    long sCachedRamSize;
+}
+-keepclassmembers class com.google.android.exoplayer2.PlaybackParameters {
+    <init>(...);
+    float pitch;
+}
 -keepclassmembers class androidx.work.impl.constraints.trackers.Trackers {
     <init>(...);
 }
