@@ -145,7 +145,7 @@ public class ExoPlayerInitializer {
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
         float volume = mPlayerTweaksData.isPlayerAutoVolumeEnabled() ? 2.0f : mPlayerData.getPlayerVolume();
         if (volume > 1f && Build.VERSION.SDK_INT >= 19) {
-            VolumeBooster mVolumeBooster = new VolumeBooster(true, volume);
+            VolumeBooster mVolumeBooster = new VolumeBooster(true, volume, player);
             player.addAudioListener(mVolumeBooster);
         }
     }
