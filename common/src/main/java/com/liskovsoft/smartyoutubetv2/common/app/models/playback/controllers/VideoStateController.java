@@ -517,9 +517,11 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        long positionMs = video.isLive ? 0 : getPlayer().getPositionMs();
+        //long positionMs = video.isLive ? 0 : getPlayer().getPositionMs();
+        //
+        //MediaServiceManager.instance().updateHistory(video, positionMs);
 
-        MediaServiceManager.instance().updateHistory(video, positionMs);
+        MediaServiceManager.instance().updateHistory(video, Math.max(getPlayer().getPositionMs(), 3_000)); // 0 == fully watched
     }
 
     /**

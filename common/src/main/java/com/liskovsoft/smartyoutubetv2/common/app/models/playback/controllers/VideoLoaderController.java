@@ -128,7 +128,8 @@ public class VideoLoaderController extends BasePlayerController {
         if ((!getVideo().isLive || getVideo().isLiveEnd) &&
                 getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+        } else if (!getVideo().isLive && !getVideo().isLiveEnd
+                && !getPlayerTweaksData().isNetworkErrorFixingDisabled() && Playlist.instance().getAllAfterCurrent() == null) {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();

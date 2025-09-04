@@ -855,8 +855,11 @@ public final class Video {
     }
 
     public long getPositionMs() {
-        long positionMs = getPositionFromStartPosition();
-        return positionMs > 0 ? positionMs : getPositionFromPercentWatched();
+        if (startTimeSeconds > 0) {
+            return startTimeSeconds * 1_000L;
+        }
+
+        return getPositionFromPercentWatched();
     }
 
     private long getPositionFromPercentWatched() {
@@ -867,10 +870,6 @@ public final class Video {
 
         long posMs = (long) (durationMs / 100f * percentWatched);
         return posMs > 0 && posMs < durationMs ? posMs : 0;
-    }
-
-    private long getPositionFromStartPosition() {
-        return startTimeSeconds * 1_000L;
     }
 
     public MediaItem toMediaItem() {
