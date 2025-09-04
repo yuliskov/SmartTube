@@ -1,3 +1,8 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView {
+    <init>(...);
+    boolean mIsDateEnabled;
+    boolean mIsTimeEnabled;
+}
 -keepclassmembers class com.liskovsoft.sharedutils.helpers.Helpers {
     long sCachedRamSize;
 }
