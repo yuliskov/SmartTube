@@ -1,3 +1,19 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView {
+    <init>(...);
+    android.widget.TextView mTagNameText;
+    android.widget.ImageView mResultImage;
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView {
+    <init>(...);
+    float mDefaultMarqueeSpeed;
+    float mMarqueeSpeedFactor;
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView {
+    <init>(...);
+    android.widget.ProgressBar mProgressBar;
+    android.view.ViewGroup mProgressContainer;
+    android.widget.FrameLayout mPreviewContainer;
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView {
     <init>(...);
     boolean mIsDateEnabled;
