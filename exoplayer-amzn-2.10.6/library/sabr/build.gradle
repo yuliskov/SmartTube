@@ -42,6 +42,7 @@ dependencies {
     implementation project(modulePrefix + 'library-core')
     implementation project(':mediaserviceinterfaces')
     implementation project(':sharedutils')
+    implementation project(':youtubeapi')
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     implementation 'androidx.annotation:annotation:1.1.0'
     testImplementation project(modulePrefix + 'testutils-robolectric')

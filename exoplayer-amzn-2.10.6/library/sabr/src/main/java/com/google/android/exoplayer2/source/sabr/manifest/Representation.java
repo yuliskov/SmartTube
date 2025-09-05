@@ -49,6 +49,14 @@ public abstract class Representation {
             long revisionId,
             Format format,
             String baseUrl,
+            SegmentBase segmentBase) {
+        return newInstance(revisionId, format, baseUrl, segmentBase, null);
+    }
+
+    public static Representation newInstance(
+            long revisionId,
+            Format format,
+            String baseUrl,
             SegmentBase segmentBase,
             String cacheKey) {
         if (segmentBase instanceof SingleSegmentBase) {
