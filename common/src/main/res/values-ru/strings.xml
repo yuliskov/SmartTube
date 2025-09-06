@@ -697,4 +697,8 @@
     <string name="dont_resize_video_to_fit_dialog">Не изменять размер видео в соответствии с диалогом</string>
     <string name="oculus_quest_fix">Исправлять Oculus Quest</string>
     <string name="playback_buffering_fix">Исправлять воспроизведение буферизации</string>
+    <string name="keep_finished_activities">Сохранить законченную деятельность</string>
+    <string name="disable_channels_service">Обслуживание инвалидных каналов</string>
+    <string name="lb_playback_controls_closed_captioning_disable">Отключить закрытый захват</string>
+    <string name="lb_playback_controls_closed_captioning_enable">Включить закрытый захват</string>
 </resources>
