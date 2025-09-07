@@ -62,7 +62,8 @@ public class SabrManifestParser {
     }
 
     private static long getDurationMs(MediaItemFormatInfo formatInfo) {
-        return Helpers.parseLong(formatInfo.getLengthSeconds()) * 1_000;
+        long lenSeconds = Helpers.parseLong(formatInfo.getLengthSeconds());
+        return lenSeconds != -1 ? lenSeconds * 1_000 : C.TIME_UNSET;
     }
 
     private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long nextPeriodStartMs) {
@@ -85,9 +86,10 @@ public class SabrManifestParser {
         String codecs = MediaFormatUtils.extractCodecs(format);
         int width = format.getWidth();
         int height = format.getHeight();
-        float frameRate = Helpers.parseFloat(format.getFps());
+        float frameRate = Helpers.parseFloat(format.getFps(), Format.NO_VALUE);
         int audioChannels = Format.NO_VALUE;
-        int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(format.getITag()));
+        int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(format.getITag()), Format.NO_VALUE);
+        int bandwidth = Helpers.parseInt(format.getBitrate(), Format.NO_VALUE);
         String language = format.getLanguage();
         String label = null;
         String drmSchemeType = null;
@@ -95,6 +97,7 @@ public class SabrManifestParser {
         List<RepresentationInfo> representationInfos = new ArrayList<>();
 
         String baseUrl = format.getUrl();
+
         SegmentBase segmentBase = null;
 
         if (MediaFormatUtils.isLiveMedia(format)) {
@@ -106,8 +109,12 @@ public class SabrManifestParser {
             segmentBase = parseSegmentBase(format);
         }
 
+        segmentBase = segmentBase != null ? segmentBase : new SingleSegmentBase();
+
         RepresentationInfo representationInfo =
                 parseRepresentation(
+                        id,
+                        bandwidth,
                         baseUrl,
                         mimeType,
                         codecs,
@@ -230,7 +237,7 @@ public class SabrManifestParser {
 
         // SegmentURL tag
         for (String segment : format.getGlobalSegmentList()) {
-            long duration = Helpers.parseLong(segment);
+            long duration = Helpers.parseLong(segment, C.TIME_UNSET);
             int count = 1;
             for (int i = 0; i < count; i++) {
                 timeline.add(new SegmentTimelineElement(elapsedTime, duration));
@@ -270,11 +277,28 @@ public class SabrManifestParser {
     }
 
     private SingleSegmentBase parseSegmentBase(MediaFormat format) {
-        // TODO: not implemented
-        return null;
+        long timescale = 1000;
+        long presentationTimeOffset = 0;
+
+        long indexStart = 0;
+        long indexLength = 0;
+        String indexRangeText = format.getIndex();
+        if (indexRangeText != null) {
+            String[] indexRange = indexRangeText.split("-");
+            indexStart = Long.parseLong(indexRange[0]);
+            indexLength = Long.parseLong(indexRange[1]) - indexStart + 1;
+        }
+
+        RangedUri initialization = parseRangedUrl(format.getSourceUrl(), format.getInit());
+
+
+        return new SingleSegmentBase(initialization, timescale, presentationTimeOffset, indexStart,
+                indexLength);
     }
 
     private RepresentationInfo parseRepresentation(
+            int id,
+            int bandwidth,
             String baseUrl,
             String mimeType,
             String codecs,
@@ -285,10 +309,23 @@ public class SabrManifestParser {
             int audioSamplingRate,
             String language,
             SegmentBase segmentBase) {
-        // buildFormat
+        String drmSchemeType = null;
+        ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
-        // TODO: not implemented
-        return null;
+        Format format =
+                buildFormat(
+                        String.valueOf(id),
+                        mimeType,
+                        width,
+                        height,
+                        frameRate,
+                        audioChannels,
+                        audioSamplingRate,
+                        bandwidth,
+                        language,
+                        codecs);
+
+        return new RepresentationInfo(format, baseUrl, segmentBase, drmSchemeType, drmSchemeDatas, Representation.REVISION_ID_DEFAULT);
     }
 
     protected Representation buildRepresentation(
