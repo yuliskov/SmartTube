@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
+import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser2;
 import com.google.android.exoplayer2.source.dash.manifest.Period;
 import com.google.android.exoplayer2.source.dash.manifest.ProgramInformation;
 import com.google.android.exoplayer2.source.dash.manifest.UtcTimingElement;
@@ -75,6 +76,10 @@ public class ExoMediaSourceFactory {
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
         return buildSabrMediaSource(formatInfo);
+    }
+
+    public MediaSource fromDashFormatInfo(MediaItemFormatInfo formatInfo) {
+        return buildDashMediaSource(formatInfo);
     }
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
@@ -183,11 +188,25 @@ public class ExoMediaSourceFactory {
                 null
         )
                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
-                .createMediaSource(getManifest(formatInfo));
+                .createMediaSource(getSabrManifest(formatInfo));
         if (mTrackErrorFixer != null) {
             sabrSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
         return sabrSource;
+    }
+
+    private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo) {
+        // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        DashMediaSource dashSource = new DashMediaSource.Factory(
+                getDashChunkSourceFactory(),
+                null
+        )
+                .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
+                .createMediaSource(getManifest(formatInfo));
+        if (mTrackErrorFixer != null) {
+            dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
+        }
+        return dashSource;
     }
 
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
@@ -222,8 +241,13 @@ public class ExoMediaSourceFactory {
         return dashSource;
     }
 
-    private SabrManifest getManifest(MediaItemFormatInfo formatInfo) {
+    private SabrManifest getSabrManifest(MediaItemFormatInfo formatInfo) {
         SabrManifestParser parser = new SabrManifestParser();
+        return parser.parse(formatInfo);
+    }
+
+    private DashManifest getManifest(MediaItemFormatInfo formatInfo) {
+        DashManifestParser2 parser = new DashManifestParser2();
         return parser.parse(formatInfo);
     }
 

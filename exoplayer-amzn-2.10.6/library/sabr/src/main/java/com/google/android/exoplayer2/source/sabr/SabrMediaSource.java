@@ -88,6 +88,7 @@ public final class SabrMediaSource extends BaseMediaSource {
     @Override
     protected void prepareSourceInternal(@Nullable TransferListener mediaTransferListener) {
         this.mediaTransferListener = mediaTransferListener;
+        loader = new Loader("Loader:SabrMediaSource");
         processManifest();
     }
 

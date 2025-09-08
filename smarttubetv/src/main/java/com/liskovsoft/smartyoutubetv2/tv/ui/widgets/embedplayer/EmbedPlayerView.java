@@ -256,6 +256,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void openDash(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.openDash(formatInfo);
+    }
+
+    @Override
     public void openDash(InputStream dashManifest) {
         mExoPlayerController.openDash(dashManifest);
     }

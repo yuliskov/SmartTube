@@ -85,6 +85,11 @@ public class ExoPlayerController implements Player.EventListener {
         openMediaSource(mediaSource);
     }
 
+    public void openDash(MediaItemFormatInfo formatInfo) {
+        MediaSource mediaSource = mMediaSourceFactory.fromDashFormatInfo(formatInfo);
+        openMediaSource(mediaSource);
+    }
+
     public void openDash(InputStream dashManifest) {
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         openMediaSource(mediaSource);

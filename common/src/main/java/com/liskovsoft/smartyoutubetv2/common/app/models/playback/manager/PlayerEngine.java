@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface PlayerEngine extends PlayerConstants {
     void openSabr(MediaItemFormatInfo formatInfo);
+    void openDash(MediaItemFormatInfo formatInfo);
     void openDash(InputStream dashManifest);
     void openDashUrl(String dashManifestUrl);
     void openHlsUrl(String hlsPlaylistUrl);

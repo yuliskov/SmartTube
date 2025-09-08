@@ -44,25 +44,25 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
      */
     public final long publishTimeMs;
 
-    public final long startMs;
-
     public final List<Period> periods;
 
     /**
      * Whether the manifest has value "dynamic" for the {@code type} attribute.
      */
-    public final boolean dynamic = false;
+    public final boolean dynamic;
 
     /**
      * The {@code minimumUpdatePeriod} value in milliseconds, or {@link C#TIME_UNSET} if not
      * applicable.
      */
-    public final long minUpdatePeriodMs = C.TIME_UNSET;
+    public final long minUpdatePeriodMs;
 
     public SabrManifest(
             long availabilityStartTimeMs,
             long durationMs,
             long minBufferTimeMs,
+            boolean dynamic,
+            long minUpdatePeriodMs,
             long timeShiftBufferDepthMs,
             long suggestedPresentationDelayMs,
             long publishTimeMs,
@@ -70,11 +70,12 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
+        this.dynamic = dynamic;
+        this.minUpdatePeriodMs = minUpdatePeriodMs;
         this.timeShiftBufferDepthMs = timeShiftBufferDepthMs;
         this.suggestedPresentationDelayMs = suggestedPresentationDelayMs;
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
-        startMs = 0;
     }
 
     public final int getPeriodCount() {

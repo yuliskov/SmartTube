@@ -844,6 +844,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void openDash(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.openDash(formatInfo);
+    }
+
+    @Override
     public void openDash(InputStream dashManifest) {
         mExoPlayerController.openDash(dashManifest);
     }

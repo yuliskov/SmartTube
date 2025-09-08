@@ -1,4 +1,4 @@
-package com.google.android.exoplayer2.source.sabr.manifest;
+package com.google.android.exoplayer2.source.dash.manifest;
 
 import android.util.Pair;
 
@@ -8,10 +8,10 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmInitData;
 import com.google.android.exoplayer2.drm.DrmInitData.SchemeData;
-import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentList;
-import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentTemplate;
-import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentTimelineElement;
-import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SingleSegmentBase;
+import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentList;
+import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentTemplate;
+import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentTimelineElement;
+import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SingleSegmentBase;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class SabrManifestParser {
-    private static final String TAG = SabrManifestParser.class.getSimpleName();
+public class DashManifestParser2 {
+    private static final String TAG = DashManifestParser2.class.getSimpleName();
     private int mId;
     private static final String NULL_INDEX_RANGE = "0-0";
     private static final String NULL_CONTENT_LENGTH = "0";
@@ -42,7 +42,7 @@ public class SabrManifestParser {
     private Map<String, Set<MediaFormat>> mWEBMAudios;
     private List<MediaSubtitle> mSubs;
 
-    public SabrManifest parse(@NonNull MediaItemFormatInfo formatInfo) {
+    public DashManifest parse(@NonNull MediaItemFormatInfo formatInfo) {
         mFormatInfo = formatInfo;
         MediaFormatComparator comp = new MediaFormatComparator();
         mMP4Videos = new TreeSet<>(comp);
@@ -50,10 +50,10 @@ public class SabrManifestParser {
         mMP4Audios = new HashMap<>();
         mWEBMAudios = new HashMap<>();
         mSubs = new ArrayList<>();
-        return parseSabrManifest(formatInfo);
+        return parseDashManifest(formatInfo);
     }
 
-    private SabrManifest parseSabrManifest(MediaItemFormatInfo formatInfo) {
+    private DashManifest parseDashManifest(MediaItemFormatInfo formatInfo) {
         long availabilityStartTime = C.TIME_UNSET;
         long durationMs = getDurationMs(formatInfo);
         long minBufferTimeMs = 1500; // "PT1.500S"
@@ -72,7 +72,7 @@ public class SabrManifestParser {
             periods.add(period);
         }
 
-        return new SabrManifest(
+        return new DashManifest(
                 availabilityStartTime,
                 durationMs,
                 minBufferTimeMs,
@@ -81,6 +81,9 @@ public class SabrManifestParser {
                 timeShiftBufferDepthMs,
                 suggestedPresentationDelayMs,
                 publishTimeMs,
+                null,
+                null,
+                null,
                 periods);
     }
 
@@ -150,7 +153,7 @@ public class SabrManifestParser {
                             drmSchemeDatas));
         }
 
-        return new AdaptationSet(id, contentType, representations);
+        return new AdaptationSet(id, contentType, representations, new ArrayList<>(), new ArrayList<>());
     }
 
     private AdaptationSet parseAdaptationSet(Set<MediaFormat> formats, int contentType) {
@@ -176,7 +179,7 @@ public class SabrManifestParser {
                             drmSchemeDatas));
         }
 
-        return new AdaptationSet(id, contentType, representations);
+        return new AdaptationSet(id, contentType, representations, new ArrayList<>(), new ArrayList<>());
     }
 
     private SegmentTemplate parseSegmentTemplate(MediaFormat format) {
