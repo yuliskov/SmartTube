@@ -387,6 +387,7 @@ public class VideoLoaderController extends BasePlayerController {
                     );
 
             //player.openDash(formatInfo);
+            //player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);

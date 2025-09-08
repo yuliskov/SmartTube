@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.extractor.ChunkIndex;
 import com.google.android.exoplayer2.extractor.Extractor;
+import com.google.android.exoplayer2.extractor.SeekMap;
 import com.google.android.exoplayer2.extractor.TrackOutput;
 import com.google.android.exoplayer2.extractor.mkv.MatroskaExtractor;
 import com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
@@ -32,6 +34,7 @@ import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.MimeTypes;
@@ -368,12 +371,55 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     @Override
     public void onChunkLoadCompleted(Chunk chunk) {
-
+        if (chunk instanceof InitializationChunk) {
+            InitializationChunk initializationChunk = (InitializationChunk) chunk;
+            int trackIndex = trackSelection.indexOf(initializationChunk.trackFormat);
+            RepresentationHolder representationHolder = representationHolders[trackIndex];
+            // The null check avoids overwriting an index obtained from the manifest with one obtained
+            // from the stream. If the manifest defines an index then the stream shouldn't, but in cases
+            // where it does we should ignore it.
+            if (representationHolder.segmentIndex == null) {
+                SeekMap seekMap = representationHolder.extractorWrapper.getSeekMap();
+                if (seekMap != null) {
+                    representationHolders[trackIndex] =
+                            representationHolder.copyWithNewSegmentIndex(
+                                    new SabrWrappingSegmentIndex(
+                                            (ChunkIndex) seekMap,
+                                            representationHolder.representation.presentationTimeOffsetUs));
+                }
+            }
+        }
+        if (playerTrackEmsgHandler != null) {
+            playerTrackEmsgHandler.onChunkLoadCompleted(chunk);
+        }
     }
 
     @Override
     public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e, long blacklistDurationMs) {
-        return false;
+        if (!cancelable) {
+            return false;
+        }
+        if (playerTrackEmsgHandler != null
+                && playerTrackEmsgHandler.maybeRefreshManifestOnLoadingError(chunk)) {
+            return true;
+        }
+        // Workaround for missing segment at the end of the period
+        if (!manifest.dynamic && chunk instanceof MediaChunk
+                && e instanceof InvalidResponseCodeException
+                && ((InvalidResponseCodeException) e).responseCode == 404) {
+            RepresentationHolder representationHolder =
+                    representationHolders[trackSelection.indexOf(chunk.trackFormat)];
+            int segmentCount = representationHolder.getSegmentCount();
+            if (segmentCount != SabrSegmentIndex.INDEX_UNBOUNDED && segmentCount != 0) {
+                long lastAvailableSegmentNum = representationHolder.getFirstSegmentNum() + segmentCount - 1;
+                if (((MediaChunk) chunk).getNextChunkIndex() > lastAvailableSegmentNum) {
+                    missingLastSegment = true;
+                    return true;
+                }
+            }
+        }
+        return blacklistDurationMs != C.TIME_UNSET
+                && trackSelection.blacklist(trackSelection.indexOf(chunk.trackFormat), blacklistDurationMs);
     }
 
     private ArrayList<Representation> getRepresentations() {

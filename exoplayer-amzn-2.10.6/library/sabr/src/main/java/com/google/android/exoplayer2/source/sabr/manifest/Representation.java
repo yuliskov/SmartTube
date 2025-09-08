@@ -5,7 +5,10 @@ import android.net.Uri;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.sabr.SabrSegmentIndex;
+import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.MultiSegmentBase;
 import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SingleSegmentBase;
+
+import java.util.List;
 
 /**
  * A SABR representation.
@@ -67,6 +70,9 @@ public abstract class Representation {
                     (SingleSegmentBase) segmentBase,
                     cacheKey,
                     C.LENGTH_UNSET);
+        } else if (segmentBase instanceof MultiSegmentBase) {
+            return new MultiSegmentRepresentation(
+                    revisionId, format, baseUrl, (MultiSegmentBase) segmentBase);
         } else {
             throw new IllegalArgumentException("segmentBase must be of type SingleSegmentBase or "
                     + "MultiSegmentBase");
@@ -175,6 +181,83 @@ public abstract class Representation {
         @Override
         public String getCacheKey() {
             return cacheKey;
+        }
+
+    }
+
+    /**
+     * A DASH representation consisting of multiple segments.
+     */
+    public static class MultiSegmentRepresentation extends Representation
+            implements SabrSegmentIndex {
+
+        private final MultiSegmentBase segmentBase;
+
+        /**
+         * @param revisionId Identifies the revision of the content.
+         * @param format The format of the representation.
+         * @param baseUrl The base URL of the representation.
+         * @param segmentBase The segment base underlying the representation.
+         */
+        public MultiSegmentRepresentation(
+                long revisionId,
+                Format format,
+                String baseUrl,
+                MultiSegmentBase segmentBase) {
+            super(revisionId, format, baseUrl, segmentBase);
+            this.segmentBase = segmentBase;
+        }
+
+        @Override
+        public RangedUri getIndexUri() {
+            return null;
+        }
+
+        @Override
+        public SabrSegmentIndex getIndex() {
+            return this;
+        }
+
+        @Override
+        public String getCacheKey() {
+            return null;
+        }
+
+        // DashSegmentIndex implementation.
+
+        @Override
+        public RangedUri getSegmentUrl(long segmentIndex) {
+            return segmentBase.getSegmentUrl(this, segmentIndex);
+        }
+
+        @Override
+        public long getSegmentNum(long timeUs, long periodDurationUs) {
+            return segmentBase.getSegmentNum(timeUs, periodDurationUs);
+        }
+
+        @Override
+        public long getTimeUs(long segmentIndex) {
+            return segmentBase.getSegmentTimeUs(segmentIndex);
+        }
+
+        @Override
+        public long getDurationUs(long segmentIndex, long periodDurationUs) {
+            return segmentBase.getSegmentDurationUs(segmentIndex, periodDurationUs);
+        }
+
+        @Override
+        public long getFirstSegmentNum() {
+            return segmentBase.getFirstSegmentNum();
+        }
+
+        @Override
+        public int getSegmentCount(long periodDurationUs) {
+            return segmentBase.getSegmentCount(periodDurationUs);
+        }
+
+        @Override
+        public boolean isExplicit() {
+            return segmentBase.isExplicit();
         }
 
     }

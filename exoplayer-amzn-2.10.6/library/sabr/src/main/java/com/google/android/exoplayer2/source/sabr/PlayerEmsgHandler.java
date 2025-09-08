@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.metadata.MetadataInputBuffer;
 import com.google.android.exoplayer2.metadata.emsg.EventMessage;
 import com.google.android.exoplayer2.metadata.emsg.EventMessageDecoder;
 import com.google.android.exoplayer2.source.SampleQueue;
+import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.upstream.Allocator;
 import com.google.android.exoplayer2.util.ParsableByteArray;
@@ -107,6 +108,44 @@ public final class PlayerEmsgHandler implements Handler.Callback {
             maybeNotifyDashManifestRefreshNeeded();
         }
         return manifestRefreshNeeded;
+    }
+
+    /**
+     * For live streaming with emsg event stream, forward seeking can seek pass the emsg messages that
+     * signals end-of-stream or Manifest expiry, which results in load error. In this case, we should
+     * notify the Dash media source to refresh its manifest.
+     *
+     * @param chunk The chunk whose load encountered the error.
+     * @return True if manifest refresh has been requested, false otherwise.
+     */
+    /* package */ boolean maybeRefreshManifestOnLoadingError(Chunk chunk) {
+        if (!manifest.dynamic) {
+            return false;
+        }
+        if (isWaitingForManifestRefresh) {
+            return true;
+        }
+        boolean isAfterForwardSeek =
+                lastLoadedChunkEndTimeUs != C.TIME_UNSET && lastLoadedChunkEndTimeUs < chunk.startTimeUs;
+        if (isAfterForwardSeek) {
+            // if we are after a forward seek, and the playback is dynamic with embedded emsg stream,
+            // there's a chance that we have seek over the emsg messages, in which case we should ask
+            // media source for a refresh.
+            maybeNotifyDashManifestRefreshNeeded();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Called when the a new chunk in the current media stream has been loaded.
+     *
+     * @param chunk The chunk whose load has been completed.
+     */
+    /* package */ void onChunkLoadCompleted(Chunk chunk) {
+        if (lastLoadedChunkEndTimeUs != C.TIME_UNSET || chunk.endTimeUs > lastLoadedChunkEndTimeUs) {
+            lastLoadedChunkEndTimeUs = chunk.endTimeUs;
+        }
     }
 
     private @Nullable Map.Entry<Long, Long> ceilingExpiryEntryForPublishTime(long publishTimeMs) {
@@ -212,6 +251,27 @@ public final class PlayerEmsgHandler implements Handler.Callback {
         public boolean maybeRefreshManifestBeforeLoadingNextChunk(long presentationPositionUs) {
             return PlayerEmsgHandler.this.maybeRefreshManifestBeforeLoadingNextChunk(
                     presentationPositionUs);
+        }
+
+        /**
+         * Called when the a new chunk in the current media stream has been loaded.
+         *
+         * @param chunk The chunk whose load has been completed.
+         */
+        public void onChunkLoadCompleted(Chunk chunk) {
+            PlayerEmsgHandler.this.onChunkLoadCompleted(chunk);
+        }
+
+        /**
+         * For live streaming with emsg event stream, forward seeking can seek pass the emsg messages
+         * that signals end-of-stream or Manifest expiry, which results in load error. In this case, we
+         * should notify the Dash media source to refresh its manifest.
+         *
+         * @param chunk The chunk whose load encountered the error.
+         * @return True if manifest refresh has been requested, false otherwise.
+         */
+        public boolean maybeRefreshManifestOnLoadingError(Chunk chunk) {
+            return PlayerEmsgHandler.this.maybeRefreshManifestOnLoadingError(chunk);
         }
 
         /** Release this track emsg handler. It should not be reused after this call. */
