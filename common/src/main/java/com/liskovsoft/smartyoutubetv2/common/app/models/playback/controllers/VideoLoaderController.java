@@ -374,19 +374,19 @@ public class VideoLoaderController extends BasePlayerController {
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
             Log.d(TAG, "Loading regular video in dash format...");
 
-            mMpdStreamAction = formatInfo.createMpdStreamObservable()
-                    .subscribe(
-                            dashManifest -> {
-                                if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
-                                    player.openMerged(dashManifest, formatInfo.getHlsManifestUrl());
-                                } else {
-                                    player.openDash(dashManifest);
-                                }
-                            },
-                            error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
-                    );
+            //mMpdStreamAction = formatInfo.createMpdStreamObservable()
+            //        .subscribe(
+            //                dashManifest -> {
+            //                    if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
+            //                        player.openMerged(dashManifest, formatInfo.getHlsManifestUrl());
+            //                    } else {
+            //                        player.openDash(dashManifest);
+            //                    }
+            //                },
+            //                error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
+            //        );
 
-            //player.openDash(formatInfo);
+            player.openDash(formatInfo);
             //player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
