@@ -110,6 +110,12 @@ public class ExoPlayerController implements Player.EventListener {
         openMediaSource(mediaSource);
     }
 
+    public void openMerged(MediaItemFormatInfo formatInfo, String hlsPlaylistUrl) {
+        MediaSource dashMediaSource = mMediaSourceFactory.fromDashFormatInfo(formatInfo);
+        MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
+        openMediaSource(new MergingMediaSource(dashMediaSource, hlsMediaSource));
+    }
+
     public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
         MediaSource dashMediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);

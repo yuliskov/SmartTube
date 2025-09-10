@@ -386,7 +386,12 @@ public class VideoLoaderController extends BasePlayerController {
             //                error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
             //        );
 
-            player.openDash(formatInfo);
+            if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
+                player.openMerged(formatInfo, formatInfo.getHlsManifestUrl());
+            } else {
+                player.openDash(formatInfo);
+            }
+
             //player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
