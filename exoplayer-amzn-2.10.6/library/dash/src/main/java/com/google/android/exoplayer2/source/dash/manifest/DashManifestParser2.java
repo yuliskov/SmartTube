@@ -62,11 +62,11 @@ public class DashManifestParser2 {
         long timeShiftBufferDepthMs = C.TIME_UNSET;
         long suggestedPresentationDelayMs = C.TIME_UNSET;
         long publishTimeMs = C.TIME_UNSET;
-        boolean dynamic = false;
-        long minUpdateTimeMs = 3155690800000L; // "P100Y" no refresh (there is no dash url)
+        boolean dynamic = formatInfo.isLive();
+        long minUpdateTimeMs = dynamic ? 3155690800000L : C.TIME_UNSET; // "P100Y" no refresh (there is no dash url)
 
         List<Period> periods = new ArrayList<>();
-        long nextPeriodStartMs = 0;
+        long nextPeriodStartMs = dynamic ? C.TIME_UNSET : 0;
 
         Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo, nextPeriodStartMs);
         if (periodWithDurationMs != null) {
@@ -94,9 +94,9 @@ public class DashManifestParser2 {
         return lenSeconds > 0 ? lenSeconds * 1_000 : C.TIME_UNSET;
     }
 
-    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long nextPeriodStartMs) {
+    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long defaultStartMs) {
         String id = formatInfo.getVideoId();
-        long startMs = formatInfo.getStartTimeMs();
+        long startMs = formatInfo.getStartTimeMs(); // defaultStartMs
         long durationMs = getDurationMs(formatInfo);
         List<AdaptationSet> adaptationSets = new ArrayList<>();
 
@@ -348,6 +348,8 @@ public class DashManifestParser2 {
     }
 
     private RepresentationInfo parseRepresentation(MediaFormat mediaFormat) {
+        int roleFlags = C.ROLE_FLAG_MAIN;
+        int selectionFlags = C.SELECTION_FLAG_DEFAULT;
         String id = mediaFormat.isDrc() ? mediaFormat.getITag() + "-drc" : mediaFormat.getITag();
         int bandwidth = Helpers.parseInt(mediaFormat.getBitrate(), Format.NO_VALUE);
         String mimeType = MediaFormatUtils.extractMimeType(mediaFormat);
@@ -374,6 +376,8 @@ public class DashManifestParser2 {
                         audioSamplingRate,
                         bandwidth,
                         language,
+                        roleFlags,
+                        selectionFlags,
                         codecs);
 
         SegmentBase segmentBase = null;
@@ -393,6 +397,8 @@ public class DashManifestParser2 {
     }
 
     private RepresentationInfo parseRepresentation(MediaSubtitle sub) {
+        int roleFlags = C.ROLE_FLAG_SUBTITLE;
+        int selectionFlags = 0;
         String id = String.valueOf(mId++);
         int bandwidth = 268;
         String mimeType = sub.getMimeType();
@@ -419,6 +425,8 @@ public class DashManifestParser2 {
                         audioSamplingRate,
                         bandwidth,
                         language,
+                        roleFlags,
+                        selectionFlags,
                         codecs);
 
         SegmentBase segmentBase = new SingleSegmentBase();
@@ -448,7 +456,8 @@ public class DashManifestParser2 {
                 representationInfo.revisionId,
                 format,
                 representationInfo.baseUrl,
-                representationInfo.segmentBase);
+                representationInfo.segmentBase,
+                new ArrayList<>());
     }
 
     protected Format buildFormat(
@@ -461,10 +470,10 @@ public class DashManifestParser2 {
             int audioSamplingRate,
             int bitrate,
             String language,
+            @C.RoleFlags int roleFlags,
+            @C.SelectionFlags int selectionFlags,
             String codecs) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
-        @C.SelectionFlags int selectionFlags = C.SELECTION_FLAG_DEFAULT;
-        @C.RoleFlags int roleFlags = C.ROLE_FLAG_MAIN;
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
                 return Format.createVideoContainerFormat(
