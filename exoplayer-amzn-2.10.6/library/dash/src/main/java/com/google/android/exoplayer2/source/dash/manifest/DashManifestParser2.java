@@ -62,13 +62,12 @@ public class DashManifestParser2 {
         long timeShiftBufferDepthMs = C.TIME_UNSET;
         long suggestedPresentationDelayMs = C.TIME_UNSET;
         long publishTimeMs = C.TIME_UNSET;
-        boolean dynamic = formatInfo.isLive();
-        long minUpdateTimeMs = dynamic ? 3155690800000L : C.TIME_UNSET; // "P100Y" no refresh (there is no dash url)
+        boolean dynamic = false;
+        long minUpdateTimeMs = C.TIME_UNSET; // 3155690800000L, "P100Y" no refresh (there is no dash url)
 
         List<Period> periods = new ArrayList<>();
-        long nextPeriodStartMs = dynamic ? C.TIME_UNSET : 0;
 
-        Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo, nextPeriodStartMs);
+        Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo);
         if (periodWithDurationMs != null) {
             Period period = periodWithDurationMs.first;
             periods.add(period);
@@ -94,9 +93,9 @@ public class DashManifestParser2 {
         return lenSeconds > 0 ? lenSeconds * 1_000 : C.TIME_UNSET;
     }
 
-    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long defaultStartMs) {
+    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo) {
         String id = formatInfo.getVideoId();
-        long startMs = formatInfo.getStartTimeMs(); // defaultStartMs
+        long startMs = 0; // Should add real start time or make it unset?
         long durationMs = getDurationMs(formatInfo);
         List<AdaptationSet> adaptationSets = new ArrayList<>();
 
