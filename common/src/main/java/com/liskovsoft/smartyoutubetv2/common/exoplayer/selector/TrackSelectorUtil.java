@@ -73,6 +73,10 @@ public class TrackSelectorUtil {
     }
 
     public static boolean isHighBitrateFormat(Format format) {
+        return format != null && Helpers.equalsAny(format.id, "15");
+    }
+
+    public static boolean isHlsFormat(Format format) {
         return format != null && format.containerMimeType == null && format.height >= 1080;
     }
 
