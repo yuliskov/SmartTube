@@ -1,5 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.liskovsoft.youtubeapi.formatbuilders.utils.ITagUtils;
 import com.liskovsoft.youtubeapi.formatbuilders.utils.MediaFormatUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,37 +107,40 @@ public class SabrManifestParser {
 
         // MXPlayer fix: write high quality formats first
         if (!mMP4Videos.isEmpty()) {
-            adaptationSets.add(parseAdaptationSet(mMP4Videos, C.TRACK_TYPE_VIDEO));
+            adaptationSets.add(parseAdaptationSet(mMP4Videos));
         }
         if (!mWEBMVideos.isEmpty()) {
-            adaptationSets.add(parseAdaptationSet(mWEBMVideos, C.TRACK_TYPE_VIDEO));
+            adaptationSets.add(parseAdaptationSet(mWEBMVideos));
         }
 
         for (Set<MediaFormat> formats : mMP4Audios.values()) {
-            adaptationSets.add(parseAdaptationSet(formats, C.TRACK_TYPE_AUDIO));
+            adaptationSets.add(parseAdaptationSet(formats));
         }
 
         for (Set<MediaFormat> formats : mWEBMAudios.values()) {
-            adaptationSets.add(parseAdaptationSet(formats, C.TRACK_TYPE_AUDIO));
+            adaptationSets.add(parseAdaptationSet(formats));
         }
 
-        if (!mSubs.isEmpty()) {
-            adaptationSets.add(parseAdaptationSet(mSubs));
+        for (MediaSubtitle subtitle : mSubs) {
+            adaptationSets.add(parseAdaptationSet(Collections.singletonList(subtitle)));
         }
 
         return Pair.create(new Period(id, startMs, adaptationSets), durationMs);
     }
 
-    private AdaptationSet parseAdaptationSet(List<MediaSubtitle> formats) {
-        int contentType = C.TRACK_TYPE_TEXT;
+    private AdaptationSet parseAdaptationSet(Set<MediaFormat> formats) {
         int id = mId++;
+        int contentType = C.TRACK_TYPE_UNKNOWN;
         String label = null;
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
         List<RepresentationInfo> representationInfos = new ArrayList<>();
 
-        for (MediaSubtitle format : formats) {
+        for (MediaFormat format : formats) {
             RepresentationInfo representationInfo = parseRepresentation(format);
+            if (contentType == C.TRACK_TYPE_UNKNOWN) {
+                contentType = getContentType(representationInfo.format);
+            }
             representationInfos.add(representationInfo);
         }
 
@@ -153,15 +158,19 @@ public class SabrManifestParser {
         return new AdaptationSet(id, contentType, representations);
     }
 
-    private AdaptationSet parseAdaptationSet(Set<MediaFormat> formats, int contentType) {
+    private AdaptationSet parseAdaptationSet(List<MediaSubtitle> formats) {
         int id = mId++;
+        int contentType = C.TRACK_TYPE_UNKNOWN;
         String label = null;
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
         List<RepresentationInfo> representationInfos = new ArrayList<>();
 
-        for (MediaFormat format : formats) {
+        for (MediaSubtitle format : formats) {
             RepresentationInfo representationInfo = parseRepresentation(format);
+            if (contentType == C.TRACK_TYPE_UNKNOWN) {
+                contentType = getContentType(representationInfo.format);
+            }
             representationInfos.add(representationInfo);
         }
 
@@ -644,6 +653,20 @@ public class SabrManifestParser {
         }
 
         return mediaFormats;
+    }
+
+    protected int getContentType(Format format) {
+        String sampleMimeType = format.sampleMimeType;
+        if (TextUtils.isEmpty(sampleMimeType)) {
+            return C.TRACK_TYPE_UNKNOWN;
+        } else if (MimeTypes.isVideo(sampleMimeType)) {
+            return C.TRACK_TYPE_VIDEO;
+        } else if (MimeTypes.isAudio(sampleMimeType)) {
+            return C.TRACK_TYPE_AUDIO;
+        } else if (mimeTypeIsRawText(sampleMimeType)) {
+            return C.TRACK_TYPE_TEXT;
+        }
+        return C.TRACK_TYPE_UNKNOWN;
     }
 
     /** A parsed Representation element. */
