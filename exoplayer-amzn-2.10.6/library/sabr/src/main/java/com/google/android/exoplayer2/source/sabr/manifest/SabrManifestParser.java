@@ -63,12 +63,11 @@ public class SabrManifestParser {
         long suggestedPresentationDelayMs = C.TIME_UNSET;
         long publishTimeMs = C.TIME_UNSET;
         boolean dynamic = false;
-        long minUpdateTimeMs = 3155690800000L; // "P100Y" no refresh (there is no dash url)
+        long minUpdateTimeMs = C.TIME_UNSET; // 3155690800000L, "P100Y" no refresh (there is no dash url)
 
         List<Period> periods = new ArrayList<>();
-        long nextPeriodStartMs = 0;
 
-        Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo, nextPeriodStartMs);
+        Pair<Period, Long> periodWithDurationMs = parsePeriod(formatInfo);
         if (periodWithDurationMs != null) {
             Period period = periodWithDurationMs.first;
             periods.add(period);
@@ -91,9 +90,9 @@ public class SabrManifestParser {
         return lenSeconds > 0 ? lenSeconds * 1_000 : C.TIME_UNSET;
     }
 
-    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo, long nextPeriodStartMs) {
+    private Pair<Period, Long> parsePeriod(MediaItemFormatInfo formatInfo) {
         String id = formatInfo.getVideoId();
-        long startMs = formatInfo.getStartTimeMs();
+        long startMs = 0; // Should add real start time or make it unset?
         long durationMs = getDurationMs(formatInfo);
         List<AdaptationSet> adaptationSets = new ArrayList<>();
 
@@ -345,6 +344,8 @@ public class SabrManifestParser {
     }
 
     private RepresentationInfo parseRepresentation(MediaFormat mediaFormat) {
+        int roleFlags = C.ROLE_FLAG_MAIN;
+        int selectionFlags = C.SELECTION_FLAG_DEFAULT;
         String id = mediaFormat.isDrc() ? mediaFormat.getITag() + "-drc" : mediaFormat.getITag();
         int bandwidth = Helpers.parseInt(mediaFormat.getBitrate(), Format.NO_VALUE);
         String mimeType = MediaFormatUtils.extractMimeType(mediaFormat);
@@ -371,6 +372,8 @@ public class SabrManifestParser {
                         audioSamplingRate,
                         bandwidth,
                         language,
+                        roleFlags,
+                        selectionFlags,
                         codecs);
 
         SegmentBase segmentBase = null;
@@ -390,6 +393,8 @@ public class SabrManifestParser {
     }
 
     private RepresentationInfo parseRepresentation(MediaSubtitle sub) {
+        int roleFlags = C.ROLE_FLAG_SUBTITLE;
+        int selectionFlags = 0;
         String id = String.valueOf(mId++);
         int bandwidth = 268;
         String mimeType = sub.getMimeType();
@@ -416,6 +421,8 @@ public class SabrManifestParser {
                         audioSamplingRate,
                         bandwidth,
                         language,
+                        roleFlags,
+                        selectionFlags,
                         codecs);
 
         SegmentBase segmentBase = new SingleSegmentBase();
@@ -458,10 +465,10 @@ public class SabrManifestParser {
             int audioSamplingRate,
             int bitrate,
             String language,
+            @C.RoleFlags int roleFlags,
+            @C.SelectionFlags int selectionFlags,
             String codecs) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
-        @C.SelectionFlags int selectionFlags = C.SELECTION_FLAG_DEFAULT;
-        @C.RoleFlags int roleFlags = C.ROLE_FLAG_MAIN;
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
                 return Format.createVideoContainerFormat(
