@@ -1,3 +1,9 @@
+-keepclassmembers class com.liskovsoft.sharedutils.mylogger.Log {
+    static void d(java.lang.String, java.lang.Object, java.lang.Object[]);
+}
+-keepclassmembers class com.liskovsoft.youtubeapi.service.YouTubeServiceManager {
+    <init>(...);
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView {
     <init>(...);
     android.widget.TextView mTagNameText;
