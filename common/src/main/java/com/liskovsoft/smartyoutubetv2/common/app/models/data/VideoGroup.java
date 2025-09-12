@@ -244,6 +244,14 @@ public class VideoGroup {
         mType = type;
     }
 
+    public String getReloadPageKey() {
+        return getMediaGroup() != null ? getMediaGroup().getReloadPageKey() : null;
+    }
+
+    public String getNextPageKey() {
+        return getMediaGroup() != null ? getMediaGroup().getNextPageKey() : null;
+    }
+
     /**
      * Lightweight copy (without nested videos)
      */

@@ -563,10 +563,6 @@ public final class Video {
         return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
     }
 
-    public boolean belongsToUserPlaylists() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
-    }
-
     public String getGroupTitle() {
         return getGroup() != null ? getGroup().getTitle() : null;
     }
@@ -576,19 +572,15 @@ public final class Video {
      */
     public String getReloadPageKey() {
         return reloadPageKey != null ? reloadPageKey :
-                (getGroup() != null && getGroup().getMediaGroup() != null) ? getGroup().getMediaGroup().getReloadPageKey() : null;
+                getGroup() != null ? getGroup().getReloadPageKey() : null;
     }
 
     public String getNextPageKey() {
-        return getGroup() != null && getGroup().getMediaGroup() != null ? getGroup().getMediaGroup().getNextPageKey() : null;
+        return getGroup() != null ? getGroup().getNextPageKey() : null;
     }
 
     public String getBackgroundUrl() {
         return bgImageUrl != null ? bgImageUrl : BLACK_PLACEHOLDER_URL;
-    }
-
-    public boolean belongsToUndefined() {
-        return getGroup() != null && getGroup().getMediaGroup() != null && getGroup().getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
     }
 
     public boolean belongsToSameAuthorGroup() {
@@ -672,6 +664,14 @@ public final class Video {
 
     public boolean belongsToSuggestions() {
         return belongsToGroup(MediaGroup.TYPE_SUGGESTIONS);
+    }
+
+    public boolean belongsToUserPlaylists() {
+        return belongsToGroup(MediaGroup.TYPE_USER_PLAYLISTS);
+    }
+
+    public boolean belongsToUndefined() {
+        return belongsToGroup(MediaGroup.TYPE_UNDEFINED);
     }
 
     private boolean belongsToGroup(int groupId) {
