@@ -723,10 +723,6 @@ public final class Video {
         author = metadata.getAuthor();
         durationMs = metadata.getDurationMs();
         isSynced = true;
-
-        if (mediaItem != null) {
-            mediaItem.sync(metadata);
-        }
     }
 
     public void sync(MediaItemFormatInfo formatInfo) {
