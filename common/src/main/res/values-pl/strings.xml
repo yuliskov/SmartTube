@@ -193,7 +193,7 @@
   <string name="content_block_notification_type">Typ powiadomienia</string>
   <string name="content_block_notify_none">Bez powiadomienia</string>
   <string name="content_block_notify_toast">Powiadomienie typu Toast</string>
-  <string name="content_block_notify_dialog">Okno dialogowe potwierdzenia</string>
+  <string name="content_block_notify_dialog">Pole potwierdzenia</string>
   <string name="return_to_launcher">Wróć do programu uruchamiającego z trybu ATV (kanałów/wyszukiwania)</string>
   <string name="intent_force_close">Wymuś wyjście, jeśli wideo zostało otwarte ze źródła zewnętrznego</string>
   <string name="btn_confirm">Potwierdź</string>
@@ -327,7 +327,7 @@
   <string name="content_block_action_none">Nic nie rób</string>
   <string name="content_block_action_only_skip">Tylko pomiń</string>
   <string name="content_block_action_toast">Pomiń z powiadomieniem</string>
-  <string name="content_block_action_dialog">Pokaż okno dialogowe potwierdzenia</string>
+  <string name="content_block_action_dialog">Pokaż pole potwierdzenia</string>
   <string name="content_block_filler">Nie na temat (wypełniacz)</string>
   <string name="keyboard_auto_show">Pokaż klawiaturę automatycznie</string>
   <string name="cancel_dialog">Anuluj</string>
@@ -705,4 +705,5 @@
   <string name="card_unlocalized_titles">Oryginalne tytuły materiałów wideo</string>
   <string name="original_lang">Oryginalny</string>
   <string name="video_flip">Odbicie lustrzane</string>
+  <string name="dont_resize_video_to_fit_dialog">Nie zmieniaj rozmiaru wideo, by zmieścić napisy</string>
 </resources>
