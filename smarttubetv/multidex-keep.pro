@@ -1,3 +1,7 @@
+-keepclassmembers class com.jayway.jsonpath.Configuration$ConfigurationBuilder {
+    <init>(...);
+    com.jayway.jsonpath.spi.mapper.MappingProvider mappingProvider;
+}
 -keepclassmembers class com.liskovsoft.sharedutils.mylogger.Log {
     static void d(java.lang.String, java.lang.Object, java.lang.Object[]);
 }
