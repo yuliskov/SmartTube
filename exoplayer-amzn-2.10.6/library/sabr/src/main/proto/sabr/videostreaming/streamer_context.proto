@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "sabr/videostreaming/client_info.proto";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message SabrContext {
+  // Type and Value from a SabrContextUpdate
+  optional int32 type = 1;
+  optional bytes value = 2;
+}
+
+message StreamerContext {
+  optional ClientInfo client_info = 1;
+  optional bytes po_token = 2;
+  optional bytes playback_cookie = 3;
+  repeated SabrContext sabr_contexts = 5;
+  repeated int32 unsent_sabr_contexts = 6;
+}

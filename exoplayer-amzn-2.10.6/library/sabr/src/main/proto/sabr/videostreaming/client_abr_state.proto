@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message ClientAbrState {
+  optional int64 player_time_ms = 28;
+  optional int32 enabled_track_types_bitfield = 40;
+  bool drc_enabled = 46;
+}

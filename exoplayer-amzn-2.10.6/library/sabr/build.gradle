@@ -11,6 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+plugins {
+    id "com.google.protobuf" version "0.9.5"
+}
+
 apply from: '../../constants.gradle'
 apply plugin: 'com.android.library'
 
@@ -45,8 +49,25 @@ dependencies {
     implementation project(':youtubeapi')
     compileOnly 'org.checkerframework:checker-qual:' + checkerframeworkVersion
     implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'com.google.protobuf:protobuf-javalite:' + protobufVersion
     testImplementation project(modulePrefix + 'testutils-robolectric')
     testImplementation project(modulePrefix + 'library-sabr')
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:' + protobufVersion
+    }
+
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.builtins {
+                java {
+                    option "lite"
+                }
+            }
+        }
+    }
 }
 
 ext {
