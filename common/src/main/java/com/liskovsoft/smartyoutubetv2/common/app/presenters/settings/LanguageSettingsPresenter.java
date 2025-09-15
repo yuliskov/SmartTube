@@ -20,6 +20,12 @@ import java.util.Map.Entry;
 public class LanguageSettingsPresenter extends BasePresenter<Void> {
     private final LocaleUpdater mLangUpdater;
     private boolean mRestartApp;
+    private final Runnable mOnFinish = () -> {
+        if (mRestartApp) {
+            mRestartApp = false;
+            MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+        }
+    };
 
     public LanguageSettingsPresenter(Context context) {
         super(context);
@@ -36,12 +42,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         appendLanguageCategory(settingsPresenter);
         appendCountryCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_language_country), () -> {
-            if (mRestartApp) {
-                mRestartApp = false;
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-            }
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_language_country), mOnFinish);
     }
 
     private void appendLanguageCategory(AppDialogPresenter settingsPresenter) {

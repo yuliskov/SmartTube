@@ -16,6 +16,12 @@ import java.util.List;
 public class UIScaleSettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
     private boolean mRestartApp;
+    private final Runnable mOnFinish = () -> {
+        if (mRestartApp) {
+            mRestartApp = false;
+            MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+        }
+    };
 
     public UIScaleSettingsPresenter(Context context) {
         super(context);
@@ -32,12 +38,7 @@ public class UIScaleSettingsPresenter extends BasePresenter<Void> {
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_ui_scale), () -> {
-            if (mRestartApp) {
-                mRestartApp = false;
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-            }
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_ui_scale), mOnFinish);
     }
 
     private void appendVideoGridScale(AppDialogPresenter settingsPresenter) {

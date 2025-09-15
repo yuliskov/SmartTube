@@ -32,6 +32,12 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final SidebarService mSidebarService;
     private final MediaServiceData mMediaServiceData;
     private boolean mRestartApp;
+    private final Runnable mOnFinish = () -> {
+        if (mRestartApp) {
+            mRestartApp = false;
+            MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+        }
+    };
 
     private PlayerSettingsPresenter(Context context) {
         super(context);
@@ -73,12 +79,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_player), () -> {
-            if (mRestartApp) {
-                mRestartApp = false;
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-            }
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_player), mOnFinish);
     }
 
     private void appendOKButtonCategory(AppDialogPresenter settingsPresenter) {

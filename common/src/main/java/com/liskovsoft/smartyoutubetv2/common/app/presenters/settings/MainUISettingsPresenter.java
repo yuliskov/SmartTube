@@ -26,6 +26,12 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
     private final DeArrowData mDeArrowData;
     private boolean mRestartApp;
+    private final Runnable mOnFinish = () -> {
+        if (mRestartApp) {
+            mRestartApp = false;
+            MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+        }
+    };
 
     private MainUISettingsPresenter(Context context) {
         super(context);
@@ -60,12 +66,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         //appendTimeFormatCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
-            if (mRestartApp) {
-                mRestartApp = false;
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-            }
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), mOnFinish);
     }
 
     private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {

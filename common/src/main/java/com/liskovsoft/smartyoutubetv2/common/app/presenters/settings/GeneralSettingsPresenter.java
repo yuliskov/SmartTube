@@ -47,6 +47,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final MediaServiceData mMediaServiceData;
     private final SidebarService mSidebarService;
     private boolean mRestartApp;
+    private final Runnable mOnFinish = () -> {
+        if (mRestartApp) {
+            mRestartApp = false;
+            MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+        }
+    };
 
     private GeneralSettingsPresenter(Context context) {
         super(context);
@@ -84,12 +90,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
-            if (mRestartApp) {
-                mRestartApp = false;
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-            }
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_general), mOnFinish);
     }
 
     private void appendEnabledSections(AppDialogPresenter settingsPresenter) {
