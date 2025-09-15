@@ -27,7 +27,8 @@
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <!-- <item name="android:windowBackground">@null</item> -->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- NOTE: don't use transparency because the BackgroundManager won't work (BackgroundManager:778) -->
+        <item name="android:windowBackground">@android:color/black</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
