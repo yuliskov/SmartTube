@@ -716,7 +716,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handlePlayPauseKey(int keyCode) {
-        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE && getPlayer() != null) {
             getPlayer().setPlayWhenReady(!getPlayer().getPlayWhenReady());
             enableUiAutoHideTimeout(); // TODO: move out somehow
             return true;

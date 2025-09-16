@@ -344,16 +344,16 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        boolean handled = false;
+        if (!isSingleKeyDown(event.getAction())) {
+            return false;
+        }
 
-        if (isSingleKeyDown(event.getAction())) {
-            handled = mActionListener.onKeyDown(keyCode);
+        boolean handled = mActionListener.onKeyDown(keyCode);
 
-            if (!handled) {
-                Action action = findAction(keyCode);
+        if (!handled) {
+            Action action = findAction(keyCode);
 
-                handled = dispatchAction(action);
-            }
+            handled = dispatchAction(action);
         }
 
         // Ignore result to give a chance to handle this event in

@@ -53,6 +53,8 @@
                 android:visibility="gone"
                 style="?attr/browseTitleIconStyle"/>
 
+        <!-- MOD: disable auto GBoard auto complete -->
+        <!-- Old value: android:inputType="text|textAutoComplete" -->
         <androidx.leanback.widget.SearchEditText
                     android:id="@+id/lb_search_text_editor"
                     android:layout_width="match_parent"
@@ -68,7 +70,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:imeOptions="normal|flagNoExtractUi|actionSearch"
-                    android:inputType="text|textAutoComplete"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:textAlignment="viewStart"
                     android:textColor="@color/lb_search_bar_text"
