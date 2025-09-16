@@ -32,6 +32,9 @@
 }
 -keepclassmembers class com.liskovsoft.sharedutils.helpers.Helpers {
     long sCachedRamSize;
+    java.lang.String ARRAY_DELIM;
+    java.lang.String DATA_DELIM;
+    java.lang.String LEGACY_ARRAY_DELIM;
 }
 -keepclassmembers class com.google.android.exoplayer2.PlaybackParameters {
     <init>(...);
