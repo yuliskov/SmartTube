@@ -1,5 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
@@ -9,7 +11,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class ResponseParser {
     private static final String TAG = ResponseParser.class.getSimpleName();
-    private final ExtractorInput extractorInput;
+    private final UMPDecoder decoder;
     private final int[] KNOWN_PARTS = {
             UMPPartId.MEDIA_HEADER,
             UMPPartId.MEDIA,
@@ -26,28 +28,12 @@ public class ResponseParser {
             UMPPartId.RELOAD_PLAYER_RESPONSE
     };
 
-    public ResponseParser(ExtractorInput extractorInput) {
-        this.extractorInput = extractorInput;
+    public ResponseParser(@NonNull ExtractorInput extractorInput) {
+        decoder = new UMPDecoder(extractorInput);
     }
 
     public SabrPart parse() {
-        UMPDecoder decoder = new UMPDecoder(extractorInput);
-
-        UMPPart part;
-
-        while (true) {
-            part = decoder.decode();
-
-            if (part == null) {
-                break;
-            }
-
-            if (contains(KNOWN_PARTS, part.partId)) {
-                break;
-            } else {
-                Log.d(TAG, "Unknown part encountered: %s", part.partId);
-            }
-        }
+        UMPPart part = nextKnownUMPPart();
 
         if (part == null) {
             return null;
@@ -144,5 +130,25 @@ public class ResponseParser {
             }
         }
         return false;
+    }
+
+    private UMPPart nextKnownUMPPart() {
+        UMPPart part;
+
+        while (true) {
+            part = decoder.decode();
+
+            if (part == null) {
+                break;
+            }
+
+            if (contains(KNOWN_PARTS, part.partId)) {
+                break;
+            } else {
+                Log.d(TAG, "Unknown part encountered: %s", part.partId);
+            }
+        }
+
+        return part;
     }
 }
