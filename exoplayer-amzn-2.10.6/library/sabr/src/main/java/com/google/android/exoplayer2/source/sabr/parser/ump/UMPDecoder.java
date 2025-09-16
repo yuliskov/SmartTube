@@ -8,4 +8,8 @@ public class UMPDecoder {
     public UMPDecoder(ExtractorInput extractorInput) {
         this.extractorInput = extractorInput;
     }
+
+    public UMPPart decode() {
+        return null;
+    }
 }
