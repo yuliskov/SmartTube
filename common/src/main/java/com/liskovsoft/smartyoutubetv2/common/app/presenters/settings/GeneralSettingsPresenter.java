@@ -671,7 +671,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         tweaksData.setPlayerButtonDisabled(Integer.MAX_VALUE);
         mMainUIData.setMenuItemDisabled(Integer.MAX_VALUE);
         BrowsePresenter.instance(getContext()).enableAllSections(false);
-        searchData.disablePopularSearches(true);
+        searchData.setPopularSearchesDisabled(true);
 
         if (enable) {
             // apply child tweaks
@@ -691,7 +691,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             BrowsePresenter.instance(getContext()).enableAllSections(true);
             tweaksData.setSuggestionsDisabled(false);
             mPlayerData.setPlaybackMode(PlayerConstants.PLAYBACK_MODE_ALL);
-            searchData.disablePopularSearches(false);
+            searchData.setPopularSearchesDisabled(false);
         }
     }
 

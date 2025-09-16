@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -227,6 +228,7 @@ public class SearchSupportFragment extends Fragment {
     private ExternalQuery mExternalQuery;
     private boolean mIsKeyboardAutoShowEnabled;
     private boolean mIsKeyboardFixEnabled;
+    private boolean mIsTypingCorrectionDisabled;
 
     private SpeechRecognizer mSpeechRecognizer;
 
@@ -369,6 +371,9 @@ public class SearchSupportFragment extends Fragment {
         });
         if (mIsKeyboardFixEnabled) {
             KeyHelpers.fixEnterKey(mSearchTextEditor);
+        }
+        if (mIsTypingCorrectionDisabled) {
+            mSearchTextEditor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         }
         // BUGFIX: focus lost with keyboard???
         //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
@@ -794,7 +799,7 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
-    protected void enableKeyboardAutoShow(boolean enable) {
+    protected void setKeyboardAutoShowEnabled(boolean enable) {
         // Show/Hide kbd on activity first launch
         if (getActivity() != null) {
             // NOTE: You should set 'unspecified' instead of 'visible' to fix 'keyboard popup in the player' bug.
@@ -803,8 +808,12 @@ public class SearchSupportFragment extends Fragment {
         mIsKeyboardAutoShowEnabled = enable;
     }
 
-    protected void enableKeyboardFix(boolean enable) {
+    protected void setKeyboardFixEnabled(boolean enable) {
         mIsKeyboardFixEnabled = enable;
+    }
+
+    protected void setTypingCorrectionDisabled(boolean disable) {
+        mIsTypingCorrectionDisabled = disable;
     }
 
     protected void showListening() {

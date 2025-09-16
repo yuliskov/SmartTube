@@ -526,7 +526,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerData.isSleepTimerEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
-                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                option -> mSearchData.setTempBackgroundModeEnabled(option.isSelected()),
                 mSearchData.isTempBackgroundModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),

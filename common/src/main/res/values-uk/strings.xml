@@ -695,4 +695,5 @@
     <string name="card_preview">Попередній перегляд картки</string>
     <string name="card_unlocalized_titles">Не перекладати назви відео</string>
     <string name="dont_resize_video_to_fit_dialog">Не змінювати розмір відео відповідно до розміру діалогу</string>
+    <string name="typing_corrections">Вимкнути автокорекцію під час введення тексту</string>
 </resources>

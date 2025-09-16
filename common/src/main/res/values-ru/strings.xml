@@ -697,4 +697,5 @@
     <string name="dont_resize_video_to_fit_dialog">Не изменять размер видео в соответствии с диалогом</string>
     <string name="oculus_quest_fix">Исправлять Oculus Quest</string>
     <string name="playback_buffering_fix">Исправлять воспроизведение буферизации</string>
+    <string name="typing_corrections">Отключить автокоррекцию при наборе текста</string>
 </resources>

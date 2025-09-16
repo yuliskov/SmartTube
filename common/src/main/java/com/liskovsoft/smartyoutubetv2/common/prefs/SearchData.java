@@ -23,6 +23,7 @@ public class SearchData {
     private boolean mIsSearchHistoryDisabled;
     private boolean mIsPopularSearchesDisabled;
     private boolean mIsKeyboardFixEnabled;
+    private boolean mIsTypingCorrectionDisabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -37,17 +38,12 @@ public class SearchData {
         return sInstance;
     }
 
-    public void enableInstantVoiceSearch(boolean enabled) {
-        mIsInstantVoiceSearchEnabled = enabled;
-        persistData();
-    }
-
     public boolean isInstantVoiceSearchEnabled() {
         return mIsInstantVoiceSearchEnabled;
     }
 
-    public void enableFocusOnResults(boolean enabled) {
-        mIsFocusOnResultsEnabled = enabled;
+    public void setInstantVoiceSearchEnabled(boolean enabled) {
+        mIsInstantVoiceSearchEnabled = enabled;
         persistData();
     }
 
@@ -55,8 +51,8 @@ public class SearchData {
         return mIsFocusOnResultsEnabled;
     }
 
-    public void setSearchOptions(int searchOptions) {
-        mSearchOptions = searchOptions;
+    public void setFocusOnResultsEnabled(boolean enabled) {
+        mIsFocusOnResultsEnabled = enabled;
         persistData();
     }
 
@@ -64,8 +60,8 @@ public class SearchData {
         return mSearchOptions;
     }
 
-    public void enableKeyboardAutoShow(boolean enabled) {
-        mIsKeyboardAutoShowEnabled = enabled;
+    public void setSearchOptions(int searchOptions) {
+        mSearchOptions = searchOptions;
         persistData();
     }
 
@@ -73,8 +69,8 @@ public class SearchData {
         return mIsKeyboardAutoShowEnabled;
     }
 
-    public void enableKeyboardFix(boolean enabled) {
-        mIsKeyboardFixEnabled = enabled;
+    public void setKeyboardAutoShowEnabled(boolean enabled) {
+        mIsKeyboardAutoShowEnabled = enabled;
         persistData();
     }
 
@@ -82,7 +78,21 @@ public class SearchData {
         return mIsKeyboardFixEnabled;
     }
 
-    public void enableTrendingSearches(boolean enabled) {
+    public void setKeyboardFixEnabled(boolean enabled) {
+        mIsKeyboardFixEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isTypingCorrectionDisabled() {
+        return mIsTypingCorrectionDisabled;
+    }
+
+    public void setTypingCorrectionDisabled(boolean disabled) {
+        mIsTypingCorrectionDisabled = disabled;
+        persistData();
+    }
+
+    public void setTrendingSearchesEnabled(boolean enabled) {
         mIsTrendingSearchesEnabled = enabled;
         persistData();
     }
@@ -91,21 +101,25 @@ public class SearchData {
         return mIsTrendingSearchesEnabled;
     }
 
-    public void enableTempBackgroundMode(boolean enabled) {
+    public boolean isTempBackgroundModeEnabled() {
+        return mIsTempBackgroundModeEnabled;
+    }
+
+    public void setTempBackgroundModeEnabled(boolean enabled) {
         mIsTempBackgroundModeEnabled = enabled;
         persistData();
     }
 
-    public boolean isTempBackgroundModeEnabled() {
-        return mIsTempBackgroundModeEnabled;
+    public Class<?> getTempBackgroundModeClass() {
+        return mTempBackgroundModeClass;
     }
 
     public void setTempBackgroundModeClass(Class<?> clazz) {
         mTempBackgroundModeClass = clazz;
     }
 
-    public Class<?> getTempBackgroundModeClass() {
-        return mTempBackgroundModeClass;
+    public int getSpeechRecognizerType() {
+        return mSpeechRecognizerType;
     }
 
     public void setSpeechRecognizerType(int type) {
@@ -113,26 +127,22 @@ public class SearchData {
         persistData();
     }
 
-    public int getSpeechRecognizerType() {
-        return mSpeechRecognizerType;
-    }
-
-    public void disableSearchHistory(boolean enabled) {
-        mIsSearchHistoryDisabled = enabled;
-        persistData();
-    }
-
     public boolean isSearchHistoryDisabled() {
         return mIsSearchHistoryDisabled;
     }
 
-    public void disablePopularSearches(boolean enabled) {
-        mIsPopularSearchesDisabled = enabled;
+    public void setSearchHistoryDisabled(boolean disabled) {
+        mIsSearchHistoryDisabled = disabled;
         persistData();
     }
 
     public boolean isPopularSearchesDisabled() {
         return mIsPopularSearchesDisabled;
+    }
+
+    public void setPopularSearchesDisabled(boolean disabled) {
+        mIsPopularSearchesDisabled = disabled;
+        persistData();
     }
 
     private void restoreData() {
@@ -154,12 +164,14 @@ public class SearchData {
         mIsSearchHistoryDisabled = Helpers.parseBoolean(split, 8, false);
         mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
         mIsKeyboardFixEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsTypingCorrectionDisabled = Helpers.parseBoolean(split, 11, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
                 Helpers.mergeData(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
-                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled, mIsKeyboardFixEnabled));
+                        mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled,
+                        mIsKeyboardFixEnabled, mIsTypingCorrectionDisabled));
     }
 }

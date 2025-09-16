@@ -62,32 +62,36 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         //        option -> mSearchData.disablePopularSearches(option.isSelected()),
         //        mSearchData.isPopularSearchesDisabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.typing_corrections),
+                option -> mSearchData.setTypingCorrectionDisabled(option.isSelected()),
+                mSearchData.isTypingCorrectionDisabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.search_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
                 option -> mGeneralData.setSearchExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
                 mGeneralData.getSearchExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_search_history),
-                option -> mSearchData.disableSearchHistory(option.isSelected()),
+                option -> mSearchData.setSearchHistoryDisabled(option.isSelected()),
                 mSearchData.isSearchHistoryDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
-                option -> mSearchData.enableTempBackgroundMode(option.isSelected()),
+                option -> mSearchData.setTempBackgroundModeEnabled(option.isSelected()),
                 mSearchData.isTempBackgroundModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
-                option -> mSearchData.enableInstantVoiceSearch(option.isSelected()),
+                option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.focus_on_search_results),
-                option -> mSearchData.enableFocusOnResults(option.isSelected()),
+                option -> mSearchData.setFocusOnResultsEnabled(option.isSelected()),
                 mSearchData.isFocusOnResultsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_auto_show),
-                option -> mSearchData.enableKeyboardAutoShow(option.isSelected()),
+                option -> mSearchData.setKeyboardAutoShowEnabled(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_fix),
-                option -> mSearchData.enableKeyboardFix(option.isSelected()),
+                option -> mSearchData.setKeyboardFixEnabled(option.isSelected()),
                 mSearchData.isKeyboardFixEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
