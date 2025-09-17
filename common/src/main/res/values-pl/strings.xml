@@ -706,4 +706,5 @@
   <string name="original_lang">Oryginalny</string>
   <string name="video_flip">Odbicie lustrzane</string>
   <string name="dont_resize_video_to_fit_dialog">Nie zmieniaj rozmiaru wideo, by zmieścić napisy</string>
+  <string name="typing_corrections">Wyłącz autokorektę podczas pisania</string>
 </resources>
