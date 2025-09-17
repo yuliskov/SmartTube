@@ -93,7 +93,6 @@ public final class Video {
     public float volume = 1.0f;
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
-    public boolean forceSectionPlaylist;
     public boolean isShuffled;
     public String searchQuery;
     private int startSegmentNum;
@@ -873,10 +872,10 @@ public final class Video {
      * The section playlist intended (as a backup replacement) for cases when regular playlist not available
      */
     public boolean isSectionPlaylistEnabled(Context context) {
-        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null && getGroup().getSize() > 1 && !belongsToSuggestions() &&
-                (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || forceSectionPlaylist ||
-                        (!isMix() && !belongsToSamePlaylistGroup())) && // skip hidden playlists (music videos usually)
-                    (!isRemote || remotePlaylistId == null);
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null && getGroup().getSize() > 1 && !belongsToSuggestions()
+                && (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || getGroup().get(0).playlistId == null
+                       || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
+                && (!isRemote || remotePlaylistId == null);
     }
 
     public String createPlaylistTitle() {

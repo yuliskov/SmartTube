@@ -207,7 +207,6 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (next != null) {
             next.isShuffled = getVideo().isShuffled;
-            forceSectionPlaylistIfNeeded(getVideo(), next);
             openVideoInt(next);
         } else {
             waitMetadataSync(getVideo(), true);
@@ -911,18 +910,6 @@ public class VideoLoaderController extends BasePlayerController {
 
     private boolean isBufferingRecurrent() {
         return mBufferingCount != null && mBufferingCount.first > BUFFERING_RECURRENCE_COUNT;
-    }
-
-    private void forceSectionPlaylistIfNeeded(Video previous, Video next) {
-        if (previous == null || next == null) {
-            return;
-        }
-
-        // Force to all subsequent videos in section playlist row (e.g. on Home)
-        if (previous.isSectionPlaylistEnabled(getContext()) && !Helpers.equals(previous.playlistId, next.playlistId)) {
-            previous.forceSectionPlaylist = false;
-            next.forceSectionPlaylist = true;
-        }
     }
 
     private void switchNextEngine() {
