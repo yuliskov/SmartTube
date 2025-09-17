@@ -510,16 +510,11 @@ public class VideoStateController extends BasePlayerController {
     private void updateHistory() {
         Video video = getVideo();
 
-        if (video == null || (video.isShorts && getMediaServiceData().isContentHidden(MediaServiceData.CONTENT_SHORTS_HISTORY)) ||
-                mIncognito || getPlayer() == null || !getPlayer().containsMedia() ||
-                (video.isRemote && getRemoteControlData().isRemoteHistoryDisabled()) ||
-                getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED) {
+        if (video == null || mIncognito || getPlayer() == null || !getPlayer().containsMedia()
+                || (video.isRemote && getRemoteControlData().isRemoteHistoryDisabled())
+                || getGeneralData().getHistoryState() == GeneralData.HISTORY_DISABLED) {
             return;
         }
-
-        //long positionMs = video.isLive ? 0 : getPlayer().getPositionMs();
-        //
-        //MediaServiceManager.instance().updateHistory(video, positionMs);
 
         MediaServiceManager.instance().updateHistory(video, Math.max(getPlayer().getPositionMs(), 3_000)); // 0 == fully watched
     }
