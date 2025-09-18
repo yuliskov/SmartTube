@@ -707,4 +707,5 @@
     <string name="card_preview">Karten-Vorschau</string>
     <string name="card_unlocalized_titles">Videotitel nicht übersetzen</string>
     <string name="dont_resize_video_to_fit_dialog">Video mit Dialogfeld nicht verkleinern</string>
+    <string name="typing_corrections">Autokorrektur bei Texteingabe deaktivieren</string>
 </resources>
