@@ -537,8 +537,9 @@ public class VideoLoaderController extends BasePlayerController {
         String errorTitle = getErrorTitle(type, rendererIndex);
         String errorMessage = errorTitle + "\n" + errorContent;
 
-        if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
+        if (Helpers.startsWithAny(errorContent, "Unable to connect to", "Response code: 404")) {
             // No internet connection or WRONG DATE on the device
+            // Url no longer works (e.g. live streams)
             restartEngine = false;
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
