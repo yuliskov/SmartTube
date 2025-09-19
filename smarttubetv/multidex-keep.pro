@@ -1,3 +1,6 @@
+-keepclassmembers class io.reactivex.android.schedulers.HandlerSaheduler {
+    <init>(...);
+}
 -keepclassmembers class com.jayway.jsonpath.Configuration$ConfigurationBuilder {
     <init>(...);
     com.jayway.jsonpath.spi.mapper.MappingProvider mappingProvider;
