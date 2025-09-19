@@ -94,8 +94,6 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        boolean isVideoChanged = !item.equals(getVideo());
-
         if (!item.fromQueue) {
             mPlaylist.add(item);
         } else {
@@ -104,11 +102,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getPlayer() != null && getPlayer().isEngineInitialized()) { // player is initialized
             // Fix improperly resized video after exit from PIP (Device Formuler Z8 Pro)
-            if (isVideoChanged || !getPlayer().containsMedia() || getPlayer().isInPIPMode()) {
-                loadVideo(item); // force play immediately
-            } else {
-                loadSuggestions(item); // update suggestions only
-            }
+            loadVideo(item); // force play immediately even the same video
         } else {
             mPendingVideo = item;
         }
@@ -125,8 +119,11 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // Stream end check (hangs on buffering)
-        if ((!getVideo().isLive || getVideo().isLiveEnd) &&
-                getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
+        if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
+            getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
+            reloadVideo();
+        } else if ((!getVideo().isLive || getVideo().isLiveEnd)
+                && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else if (!getVideo().isLive && !getVideo().isLiveEnd
                 && !getPlayerTweaksData().isNetworkErrorFixingDisabled() && Playlist.instance().getAllAfterCurrent() == null) {
