@@ -191,6 +191,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     public void loadPrevious() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         openVideoInt(mSuggestionsController.getPrevious());
 
         if (getPlayerTweaksData().isPlayerUiOnNextEnabled()) {
@@ -199,8 +203,11 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     public void loadNext() {
+        if (getPlayer() == null || getVideo() == null) {
+            return;
+        }
+
         Video next = mSuggestionsController.getNext();
-        //getVideo() = null; // in case next video is the same as previous
 
         if (next != null) {
             next.isShuffled = getVideo().isShuffled;
@@ -518,6 +525,12 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
+        if (getVideo() != null && getVideo().isLiveEnd) {
+            // Url no longer works (e.g. live stream ended)
+            loadNext();
+            return;
+        }
+
         boolean restart = applyEngineErrorAction(type, rendererIndex, error);
 
         if (restart) {
@@ -534,9 +547,8 @@ public class VideoLoaderController extends BasePlayerController {
         String errorTitle = getErrorTitle(type, rendererIndex);
         String errorMessage = errorTitle + "\n" + errorContent;
 
-        if (Helpers.startsWithAny(errorContent, "Unable to connect to", "Response code: 404")) {
+        if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            // Url no longer works (e.g. live streams)
             restartEngine = false;
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
