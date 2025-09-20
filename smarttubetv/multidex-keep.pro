@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.leanback.widget.BrowseRowsFrameLayout {
+    <init>(...);
+}
 -keepclassmembers class io.reactivex.android.schedulers.HandlerSaheduler {
     <init>(...);
 }
