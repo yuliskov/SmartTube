@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "sabr/videostreaming/compression_algorithm.proto";
+import "sabr/videostreaming/format_id.proto";
+import "sabr/videostreaming/time_range.proto";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message MediaHeader {
+    optional uint32 header_id = 1;
+    optional string video_id = 2;
+    optional int32 itag = 3;
+    optional uint64 last_modified = 4;
+    optional string xtags = 5;
+    optional int32 start_data_range = 6;
+    optional CompressionAlgorithm compression = 7;
+    optional bool is_init_segment = 8;
+    optional int64 sequence_number = 9;
+    optional int64 bitrate_bps = 10;
+    optional int32 start_ms = 11;
+    optional int32 duration_ms = 12;
+    optional FormatId format_id = 13;
+    optional int64 content_length = 14;
+    optional TimeRange time_range = 15;
+    optional int32 sequence_lmt = 16;
+}

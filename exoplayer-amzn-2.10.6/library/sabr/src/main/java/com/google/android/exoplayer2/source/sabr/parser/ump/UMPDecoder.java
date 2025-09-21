@@ -27,7 +27,7 @@ public class UMPDecoder {
 
             byte[] partData = new byte[partSize];
 
-            return new UMPPart(partType, partSize, new ByteArrayInputStream(partData));
+            return new UMPPart(partType, partSize, partData);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
