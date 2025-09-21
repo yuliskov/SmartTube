@@ -629,6 +629,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setRealChannelIconEnabled(option.isSelected()),
                 mPlayerTweaksData.isRealChannelIconEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.pause_after_each_video_in_queue),
+                getContext().getString(R.string.pause_after_each_video_in_queue_desc),
+                option -> mPlayerTweaksData.setPauseAfterEachVideoInQueueEnabled(option.isSelected()),
+                mPlayerTweaksData.isPauseAfterEachVideoInQueueEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 

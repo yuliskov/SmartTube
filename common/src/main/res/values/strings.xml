@@ -708,4 +708,6 @@
     <string name="card_unlocalized_titles">Unlocalized video titles</string>
     <string name="dont_resize_video_to_fit_dialog">Don\'t resize video to fit dialog</string>
     <string name="typing_corrections">Disable auto-correction while typing text</string>
+    <string name="pause_after_each_video_in_queue">Pause after each video in playback queue</string>
+    <string name="pause_after_each_video_in_queue_desc">This takes effect when \"Pause playback after each video\" playback mode is selected in the player</string>
 </resources>
