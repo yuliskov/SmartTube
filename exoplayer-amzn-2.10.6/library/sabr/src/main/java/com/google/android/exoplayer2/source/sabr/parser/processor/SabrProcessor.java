@@ -13,11 +13,13 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
+    public static final int NO_VALUE = -1;
     private final int liveSegmentTargetDurationToleranceMs;
     private final int liveSegmentTargetDurationSec;
     private ClientAbrState clientAbrState;
@@ -26,15 +28,15 @@ public class SabrProcessor {
     private final Map<String, InitializedFormat> initializedFormats;
 
     public SabrProcessor() {
-        this(-1, -1);
+        this(NO_VALUE, NO_VALUE);
     }
 
     public SabrProcessor(
             int liveSegmentTargetDurationSec,
             int liveSegmentTargetDurationToleranceMs
     ) {
-        this.liveSegmentTargetDurationSec = liveSegmentTargetDurationSec != -1 ? liveSegmentTargetDurationSec : 5;
-        this.liveSegmentTargetDurationToleranceMs = liveSegmentTargetDurationToleranceMs != -1 ? liveSegmentTargetDurationToleranceMs : 100;
+        this.liveSegmentTargetDurationSec = liveSegmentTargetDurationSec != NO_VALUE ? liveSegmentTargetDurationSec : 5;
+        this.liveSegmentTargetDurationToleranceMs = liveSegmentTargetDurationToleranceMs != NO_VALUE ? liveSegmentTargetDurationToleranceMs : 100;
         if (this.liveSegmentTargetDurationToleranceMs >= (this.liveSegmentTargetDurationSec * 1_000) / 2) {
             throw new IllegalArgumentException("liveSegmentTargetDurationToleranceMs must be less than half of liveSegmentTargetDurationSec in milliseconds");
         }
@@ -76,14 +78,14 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Compression not supported in MediaHeader (media_header=%s)", mediaHeader));
         }
 
-        long sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : -1;
+        long sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
         boolean isInitSegment = mediaHeader.getIsInitSegment();
 
-        if (sequenceNumber == -1 && !isInitSegment) {
+        if (sequenceNumber == NO_VALUE && !isInitSegment) {
             throw new SabrStreamError(String.format("Sequence number not found in MediaHeader (media_header=%s)", mediaHeader));
         }
 
-        initializedFormat.sequenceLmt = mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : -1;
+        initializedFormat.sequenceLmt = mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE;
 
         // Need to keep track of if we discard due to be consumed or not
         // for processing down the line (MediaEnd)
@@ -129,9 +131,9 @@ public class SabrProcessor {
         int actualDurationMs = mediaHeader.hasDurationMs() ? mediaHeader.getDurationMs()
                 : timeRange != null && timeRange.hasDurationTicks() && timeRange.hasTimescale()
                     ? Utils.ticksToMs(timeRange.getDurationTicks(), timeRange.getTimescale())
-                : -1;
+                : NO_VALUE;
 
-        int estimatedDurationMs = -1;
+        int estimatedDurationMs = NO_VALUE;
         if (isLive()) {
             // Underestimate the duration of the segment slightly as
             // the real duration may be slightly shorter than the target duration.
@@ -140,15 +142,15 @@ public class SabrProcessor {
             estimatedDurationMs = 0;
         }
 
-        int durationMs = actualDurationMs != -1 ? actualDurationMs : estimatedDurationMs;
+        int durationMs = actualDurationMs != NO_VALUE ? actualDurationMs : estimatedDurationMs;
 
         // Guard: Bail out if we cannot determine the duration, which we need to progress.
-        if (durationMs == -1) {
+        if (durationMs == NO_VALUE) {
             throw new SabrStreamError(
                     String.format("Cannot determine duration of segment %s (media_header=%s)", sequenceNumber, mediaHeader));
         }
 
-        long estimatedContentLength = -1;
+        long estimatedContentLength = NO_VALUE;
         if (isLive() && !mediaHeader.hasContentLength() && mediaHeader.hasBitrateBps()) {
             estimatedContentLength = (long) Math.ceil(mediaHeader.getBitrateBps() * ((double) durationMs / 1_000));
         }
@@ -157,16 +159,16 @@ public class SabrProcessor {
                 mediaHeader.getFormatId(),
                 isInitSegment,
                 durationMs,
-                mediaHeader.hasStartDataRange() ? mediaHeader.getStartDataRange() : -1,
+                mediaHeader.hasStartDataRange() ? mediaHeader.getStartDataRange() : NO_VALUE,
                 sequenceNumber,
                 mediaHeader.hasContentLength() ? mediaHeader.getContentLength() : estimatedContentLength,
-                estimatedContentLength != -1,
+                estimatedContentLength != NO_VALUE,
                 startMs,
                 initializedFormat,
-                actualDurationMs == 0, // ???
+                actualDurationMs == 0 || actualDurationMs == NO_VALUE,
                 discard || consumed,
                 consumed,
-                mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : -1
+                mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE
         );
 
         partialSegments.put(mediaHeader.getHeaderId(), segment);
@@ -178,7 +180,7 @@ public class SabrProcessor {
                  new MediaSegmentInitSabrPart(
                     segment.initializedFormat.formatSelector,
                     segment.formatId,
-                    clientAbrState.hasPlayerTimeMs() ? clientAbrState.getPlayerTimeMs() : -1,
+                    clientAbrState.hasPlayerTimeMs() ? clientAbrState.getPlayerTimeMs() : NO_VALUE,
                     segment.sequenceNumber,
                     segment.initializedFormat.totalSegments,
                     segment.durationMs,
@@ -198,6 +200,10 @@ public class SabrProcessor {
                 mediaHeader.getHeaderId(), sequenceNumber, segment);
 
         return result;
+    }
+
+    public ProcessMediaResult processMedia(int headerId, int contentLength, ByteArrayInputStream inputStream) {
+        return null;
     }
 
     public boolean isLive() {

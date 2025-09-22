@@ -29,13 +29,11 @@ public class UMPDecoder {
 
             return new UMPPart(partType, partSize, partData);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        return null;
     }
 
-    private int readVarInt(ExtractorInput input) throws IOException, InterruptedException {
+    private int readVarInt(StreamWrapper input) throws IOException, InterruptedException {
         // https://web.archive.org/web/20250430054327/https://github.com/gsuberland/UMP_Format/blob/main/UMP_Format.md
         // https://web.archive.org/web/20250429151021/https://github.com/davidzeng0/innertube/blob/main/googlevideo/ump.md
         byte[] buffer = new byte[1];
@@ -69,7 +67,23 @@ public class UMPDecoder {
         return result;
     }
 
+    private int readVarInt(ExtractorInput input) throws IOException, InterruptedException {
+        return readVarInt(input::readFully);
+    }
+
+    public int readVarInt(ByteArrayInputStream inputStream) throws IOException, InterruptedException {
+        return readVarInt((target, offset, length, allowEndOfInput) -> {
+            int numRead = inputStream.read(target, offset, length);
+            return numRead != -1;
+        });
+    }
+
     private int varIntSize(int byteInt) {
         return byteInt < 128 ? 1 : byteInt < 192 ? 2 : byteInt < 224 ? 3 : byteInt < 240 ? 4 : 5;
+    }
+
+    private interface StreamWrapper {
+        boolean readFully(byte[] target, int offset, int length, boolean allowEndOfInput)
+                throws IOException, InterruptedException;
     }
 }

@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
@@ -14,6 +15,9 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbr
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.liskovsoft.sharedutils.mylogger.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class SabrStreamParser {
     private static final String TAG = SabrStreamParser.class.getSimpleName();
@@ -138,7 +142,16 @@ public class SabrStreamParser {
     }
 
     private SabrPart processMedia(UMPPart part) {
-        return null;
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
+            int headerId = decoder.readVarInt(inputStream);
+            int contentLength = inputStream.available();
+
+            ProcessMediaResult result = processor.processMedia(headerId, contentLength, inputStream);
+
+            return result.sabrPart;
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private SabrPart processMediaEnd(UMPPart part) {
