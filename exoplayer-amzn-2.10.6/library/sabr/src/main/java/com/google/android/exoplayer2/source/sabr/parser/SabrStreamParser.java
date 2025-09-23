@@ -8,12 +8,14 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessStreamProtectionStatusResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -159,6 +161,7 @@ public class SabrStreamParser {
     private SabrPart processMediaEnd(UMPPart part) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
             int headerId = decoder.readVarInt(inputStream);
+            Log.d(TAG, "Header ID: %s", headerId);
 
             ProcessMediaEndResult result = processor.processMediaEnd(headerId);
 
@@ -173,7 +176,18 @@ public class SabrStreamParser {
     }
 
     private SabrPart processStreamProtectionStatus(UMPPart part) {
-        return null;
+        StreamProtectionStatus sps;
+
+        try {
+            sps = StreamProtectionStatus.parseFrom(part.data);
+            Log.d(TAG, "Status: %s", sps);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        ProcessStreamProtectionStatusResult result = processor.processStreamProtectionStatus(sps);
+
+        return result.sabrPart;
     }
 
     private SabrPart processSabrRedirect(UMPPart part) {

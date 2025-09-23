@@ -4,13 +4,18 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
+import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
 import com.google.android.exoplayer2.source.sabr.parser.models.InitializedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.Segment;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus.Status;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -28,6 +33,8 @@ public class SabrProcessor {
     private String videoId;
     private final Map<Integer, Segment> partialSegments;
     private final Map<String, InitializedFormat> initializedFormats;
+    private Status streamProtectionStatus;
+    private String poToken;
 
     public SabrProcessor() {
         this(NO_VALUE, NO_VALUE);
@@ -281,7 +288,72 @@ public class SabrProcessor {
             return result;
         }
 
-        
+        if (segment.initializedFormat.currentSegment != null && isLive()) {
+            Segment previousSegment = segment.initializedFormat.currentSegment;
+            Log.d(TAG, "Previous segment %s for format %s " +
+                    "estimated duration difference from this segment (%s): %sms",
+                    previousSegment.sequenceNumber, segment.formatId, segment.sequenceNumber,
+                    segment.startMs - (previousSegment.startMs + previousSegment.durationMs));
+        }
+
+        segment.initializedFormat.currentSegment = segment;
+
+        if (segment.consumed) {
+            // Segment is already consumed, do not create a new consumed range. It was probably discarded.
+            // This can be expected to happen in the case of video-only, where we discard the audio track (and mark it as entirely buffered)
+            // We still want to create/update consumed range for discarded media IF it is not already consumed
+            Log.d(TAG, "%s} segment %s already consumed, not creating or updating consumed range (discard=%s)",
+                    segment.formatId, segment.sequenceNumber, segment.discard);
+            return result;
+        }
+
+        // Try to find a consumed range for this segment in sequence
+        ConsumedRange consumedRange =
+                Helpers.findFirst(segment.initializedFormat.consumedRanges, cr -> cr.endSequenceNumber == segment.sequenceNumber - 1);
+
+        if (consumedRange == null) {
+            // Create a new consumed range starting from this segment
+            segment.initializedFormat.consumedRanges.add(new ConsumedRange(
+                    segment.startMs,
+                    segment.durationMs,
+                    segment.sequenceNumber,
+                    segment.sequenceNumber
+            ));
+            Log.d(TAG, "Created new consumed range for %s %s",
+                    segment.initializedFormat.formatId, segment.initializedFormat.consumedRanges.get(segment.initializedFormat.consumedRanges.size() - 1));
+            return result;
+        }
+
+        // Update the existing consumed range to include this segment
+        consumedRange.endSequenceNumber = segment.sequenceNumber;
+        consumedRange.durationMs = (segment.startMs - consumedRange.startTimeMs) + segment.durationMs;
+
+        // TODO: Conduct a seek on consumed ranges
+
+        return result;
+    }
+
+    public ProcessStreamProtectionStatusResult processStreamProtectionStatus(StreamProtectionStatus streamProtectionStatus) {
+        this.streamProtectionStatus = streamProtectionStatus.hasStatus() ? streamProtectionStatus.getStatus() : null;
+        Status status = streamProtectionStatus.getStatus();
+        String poToken = this.poToken;
+        PoTokenStatus resultStatus = null;
+
+        if (status == StreamProtectionStatus.Status.OK) {
+            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.OK : PoTokenStatusSabrPart.PoTokenStatus.NOT_REQUIRED;
+        } else if (status == StreamProtectionStatus.Status.ATTESTATION_PENDING) {
+            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.PENDING : PoTokenStatusSabrPart.PoTokenStatus.PENDING_MISSING;
+        } else if (status == StreamProtectionStatus.Status.ATTESTATION_REQUIRED) {
+            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.INVALID : PoTokenStatusSabrPart.PoTokenStatus.MISSING;
+        } else {
+            Log.w(TAG, "Received an unknown StreamProtectionStatus: %s", streamProtectionStatus);
+        }
+
+        ProcessStreamProtectionStatusResult result = new ProcessStreamProtectionStatusResult();
+
+        if (resultStatus != null) {
+            result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
+        }
 
         return result;
     }
