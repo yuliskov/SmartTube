@@ -6,6 +6,8 @@ import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentM
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.models.InitializedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.Segment;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
@@ -173,11 +175,10 @@ public class SabrProcessor {
 
         partialSegments.put(mediaHeader.getHeaderId(), segment);
 
-        ProcessMediaHeaderResult result;
+        ProcessMediaHeaderResult result = new ProcessMediaHeaderResult();
 
         if (!segment.discard) {
-            result = new ProcessMediaHeaderResult(
-                 new MediaSegmentInitSabrPart(
+            result.sabrPart = new MediaSegmentInitSabrPart(
                     segment.initializedFormat.formatSelector,
                     segment.formatId,
                     clientAbrState.hasPlayerTimeMs() ? clientAbrState.getPlayerTimeMs() : NO_VALUE,
@@ -190,10 +191,7 @@ public class SabrProcessor {
                     segment.isInitSegment,
                     segment.contentLength,
                     segment.contentLengthEstimated
-                 )
             );
-        } else {
-            result = new ProcessMediaHeaderResult();
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
@@ -202,8 +200,90 @@ public class SabrProcessor {
         return result;
     }
 
-    public ProcessMediaResult processMedia(int headerId, int contentLength, ByteArrayInputStream inputStream) {
-        return null;
+    public ProcessMediaResult processMedia(int headerId, int contentLength, ByteArrayInputStream data) {
+        Segment segment = partialSegments.get(headerId);
+        if (segment == null) {
+            Log.d(TAG, "Header ID %s not found", headerId);
+            throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
+        }
+
+        int segmentStartBytes = segment.receivedDataLength;
+        segment.receivedDataLength += contentLength;
+
+        ProcessMediaResult result = new ProcessMediaResult();
+
+        if (!segment.discard) {
+            result.sabrPart = new MediaSegmentDataSabrPart(
+                    segment.initializedFormat.formatSelector,
+                    segment.formatId,
+                    segment.sequenceNumber,
+                    segment.isInitSegment,
+                    segment.initializedFormat.totalSegments,
+                    Utils.readAllBytes(data),
+                    contentLength,
+                    segmentStartBytes
+            );
+        }
+
+        return result;
+    }
+
+    public ProcessMediaEndResult processMediaEnd(int headerId) {
+        Segment segment = partialSegments.remove(headerId);
+        if (segment == null) {
+            Log.d(TAG, "Header ID %s not found", headerId);
+            throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
+        }
+
+        Log.d(TAG, "MediaEnd for %s (sequence %s, data length = %s)",
+                segment.formatId, segment.sequenceNumber, segment.receivedDataLength);
+
+        if (segment.contentLength != -1 && segment.receivedDataLength != segment.contentLength) {
+            if (segment.contentLengthEstimated) {
+                Log.d(TAG, "Content length for %s (sequence %s) was estimated, " +
+                        "estimated %s bytes, got %s bytes",
+                        segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength);
+            } else {
+                throw new SabrStreamError(String.format("Content length mismatch for %s (sequence %s): " +
+                        "expected %s bytes, got %s bytes",
+                        segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength));
+            }
+        }
+
+        ProcessMediaEndResult result = new ProcessMediaEndResult();
+
+        // Only count received segments as new segments if they are not consumed.
+        // Discarded segments that are not consumed are considered new segments.
+        if (!segment.consumed) {
+            result.isNewSegment = true;
+        }
+
+        // Return the segment here instead of during MEDIA part(s) because:
+        // 1. We can validate that we received the correct data length
+        // 2. In the case of a retry during segment media, the partial data is not sent to the consumer
+        if (!segment.discard) {
+            // This needs to be yielded AFTER we have processed the segment
+            // So the consumer can see the updated consumed ranges and use them for e.g. syncing between concurrent streams
+            result.sabrPart = new MediaSegmentEndSabrPart(
+                    segment.initializedFormat.formatSelector,
+                    segment.formatId,
+                    segment.sequenceNumber,
+                    segment.isInitSegment,
+                    segment.initializedFormat.totalSegments
+            );
+        } else {
+            Log.d(TAG, "Discarding media for %s", segment.initializedFormat.formatId);
+        }
+
+        if (segment.isInitSegment) {
+            segment.initializedFormat.initSegment = segment;
+            // Do not create a consumed range for init segments
+            return result;
+        }
+
+        
+
+        return result;
     }
 
     public boolean isLive() {

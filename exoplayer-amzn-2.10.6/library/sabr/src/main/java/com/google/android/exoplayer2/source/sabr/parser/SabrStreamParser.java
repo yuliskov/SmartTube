@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
@@ -21,10 +22,6 @@ import java.io.IOException;
 
 public class SabrStreamParser {
     private static final String TAG = SabrStreamParser.class.getSimpleName();
-    private final UMPDecoder decoder;
-    private final SabrProcessor processor;
-    private int sqMismatchForwardCount;
-    private int sqMismatchBacktrackCount;
     private final int[] KNOWN_PARTS = {
             UMPPartId.MEDIA_HEADER,
             UMPPartId.MEDIA,
@@ -40,6 +37,11 @@ public class SabrStreamParser {
             UMPPartId.SABR_CONTEXT_SENDING_POLICY,
             UMPPartId.RELOAD_PLAYER_RESPONSE
     };
+    private final UMPDecoder decoder;
+    private final SabrProcessor processor;
+    private int sqMismatchForwardCount;
+    private int sqMismatchBacktrackCount;
+    private boolean receivedNewSegments;
 
     public SabrStreamParser(@NonNull ExtractorInput extractorInput) {
         decoder = new UMPDecoder(extractorInput);
@@ -155,7 +157,19 @@ public class SabrStreamParser {
     }
 
     private SabrPart processMediaEnd(UMPPart part) {
-        return null;
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
+            int headerId = decoder.readVarInt(inputStream);
+
+            ProcessMediaEndResult result = processor.processMediaEnd(headerId);
+
+            if (result.isNewSegment) {
+                receivedNewSegments = true;
+            }
+
+            return result.sabrPart;
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private SabrPart processStreamProtectionStatus(UMPPart part) {

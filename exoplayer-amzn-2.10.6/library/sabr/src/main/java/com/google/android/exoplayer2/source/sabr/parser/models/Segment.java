@@ -16,6 +16,7 @@ public class Segment {
     public final boolean discard;
     public final boolean consumed;
     public final int sequenceLmt;
+    public int receivedDataLength;
 
     public Segment(FormatId formatId,
                    boolean isInitSegment,
