@@ -369,7 +369,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVideoInfoType() {
         Pair<Integer, Boolean> videoInfoType = MediaServiceData.instance().getVideoInfoType();
-        appendRow("Video info type", videoInfoType != null ? videoInfoType.first : -1);
+        appendRow("Video info type", videoInfoType.first);
     }
 
     private void appendVideoInfoVersion() {
