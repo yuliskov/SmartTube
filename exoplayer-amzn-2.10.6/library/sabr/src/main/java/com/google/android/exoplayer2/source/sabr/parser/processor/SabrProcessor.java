@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSa
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus.Status;
@@ -35,6 +36,8 @@ public class SabrProcessor {
     private final Map<String, InitializedFormat> initializedFormats;
     private Status streamProtectionStatus;
     private String poToken;
+    private boolean isLive;
+    private LiveMetadata liveMetadata;
 
     public SabrProcessor() {
         this(NO_VALUE, NO_VALUE);
@@ -359,7 +362,11 @@ public class SabrProcessor {
     }
 
     public boolean isLive() {
-        return false;
+        return liveMetadata != null || isLive;
+    }
+
+    public void setLive(boolean isLive) {
+        this.isLive = isLive;
     }
 
     @NonNull
