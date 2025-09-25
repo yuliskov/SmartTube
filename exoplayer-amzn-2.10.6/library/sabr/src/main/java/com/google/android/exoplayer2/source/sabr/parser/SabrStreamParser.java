@@ -4,23 +4,32 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessStreamProtectionStatusResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
+import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrRedirect;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class SabrStreamParser {
     private static final String TAG = SabrStreamParser.class.getSimpleName();
-    private final UMPDecoder decoder;
-    private final SabrProcessor processor;
-    private int sqMismatchForwardCount;
-    private int sqMismatchBacktrackCount;
     private final int[] KNOWN_PARTS = {
             UMPPartId.MEDIA_HEADER,
             UMPPartId.MEDIA,
@@ -36,6 +45,12 @@ public class SabrStreamParser {
             UMPPartId.SABR_CONTEXT_SENDING_POLICY,
             UMPPartId.RELOAD_PLAYER_RESPONSE
     };
+    private final UMPDecoder decoder;
+    private final SabrProcessor processor;
+    private int sqMismatchForwardCount;
+    private int sqMismatchBacktrackCount;
+    private boolean receivedNewSegments;
+    private String url;
 
     public SabrStreamParser(@NonNull ExtractorInput extractorInput) {
         decoder = new UMPDecoder(extractorInput);
@@ -73,7 +88,8 @@ public class SabrStreamParser {
             case UMPPartId.STREAM_PROTECTION_STATUS:
                 return processStreamProtectionStatus(part);
             case UMPPartId.SABR_REDIRECT:
-                return processSabrRedirect(part);
+                processSabrRedirect(part);
+                return null;
             case UMPPartId.FORMAT_INITIALIZATION_METADATA:
                 return processFormatInitializationMetadata(part);
             case UMPPartId.NEXT_REQUEST_POLICY:
@@ -138,19 +154,66 @@ public class SabrStreamParser {
     }
 
     private SabrPart processMedia(UMPPart part) {
-        return null;
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
+            int headerId = decoder.readVarInt(inputStream);
+            int contentLength = inputStream.available();
+
+            ProcessMediaResult result = processor.processMedia(headerId, contentLength, inputStream);
+
+            return result.sabrPart;
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private SabrPart processMediaEnd(UMPPart part) {
-        return null;
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
+            int headerId = decoder.readVarInt(inputStream);
+            Log.d(TAG, "Header ID: %s", headerId);
+
+            ProcessMediaEndResult result = processor.processMediaEnd(headerId);
+
+            if (result.isNewSegment) {
+                receivedNewSegments = true;
+            }
+
+            return result.sabrPart;
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private SabrPart processStreamProtectionStatus(UMPPart part) {
-        return null;
+        StreamProtectionStatus sps;
+
+        try {
+            sps = StreamProtectionStatus.parseFrom(part.data);
+            Log.d(TAG, "Status: %s", sps);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        ProcessStreamProtectionStatusResult result = processor.processStreamProtectionStatus(sps);
+
+        return result.sabrPart;
     }
 
-    private SabrPart processSabrRedirect(UMPPart part) {
-        return null;
+    private void processSabrRedirect(UMPPart part) {
+        SabrRedirect sabrRedirect;
+
+        try {
+            sabrRedirect = SabrRedirect.parseFrom(part.data);
+            Log.d(TAG, "Redirect: %s", sabrRedirect);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        if (!sabrRedirect.hasRedirectUrl()) {
+            Log.d(TAG, "Server requested to redirect to an invalid URL");
+            return;
+        }
+
+        setUrl(sabrRedirect.getRedirectUrl());
     }
 
     private SabrPart processFormatInitializationMetadata(UMPPart part) {
@@ -212,5 +275,24 @@ public class SabrStreamParser {
         }
 
         return part;
+    }
+
+    private String getUrl() {
+        return this.url;
+    }
+
+    private void setUrl(String url) {
+        Log.d(TAG, "New URL: %s", url);
+        UrlQueryString newQueryString = UrlQueryStringFactory.parse(url);
+        UrlQueryString oldQueryString = UrlQueryStringFactory.parse(this.url);
+        String bn = newQueryString.get("id");
+        String bc = oldQueryString.get("id");
+        if (processor.isLive() && this.url != null && !Helpers.equals(bn, bc)) {
+            throw new SabrStreamError(String.format("Broadcast ID changed from %s to %s. The download will need to be restarted.", bc, bn));
+        }
+        this.url = url;
+        if (Helpers.equals(newQueryString.get("source"), "yt_live_broadcast")) {
+            processor.setLive(true);
+        }
     }
 }

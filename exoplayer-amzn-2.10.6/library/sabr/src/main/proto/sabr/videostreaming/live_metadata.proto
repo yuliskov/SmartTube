@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message LiveMetadata {
+  optional int32 head_sequence_number = 3;
+  optional int64 head_sequence_time_ms = 4;
+  optional int64 wall_time_ms = 5;
+  optional string video_id = 6;
+  optional string source = 7;
+
+  optional int64 min_seekable_time_ticks = 12;
+  optional int32 min_seekable_timescale = 13;
+  optional int64 max_seekable_time_ticks = 14;
+  optional int32 max_seekable_timescale = 15;
+}
