@@ -707,4 +707,5 @@
   <string name="original_lang">Original</string>
   <string name="remove_playlist_fmt">Supprimer %s définitivement\?</string>
   <string name="dont_resize_video_to_fit_dialog">Ne pas ajuster la vidéo à la fenêtre</string>
+  <string name="typing_corrections">Désactiver la correction automatique lors de la saisie de texte</string>
 </resources>
