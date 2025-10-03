@@ -41,7 +41,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.okhttp.OkHttpCommons;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
@@ -290,8 +289,8 @@ public class ExoMediaSourceFactory {
                         Executors.newSingleThreadExecutor(),
                         null,
                         bandwidthMeter,
-                        (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
-                        (int) OkHttpCommons.READ_TIMEOUT_MS,
+                        (int) OkHttpManager.getConnectTimeoutMs(),
+                        (int) OkHttpManager.getReadTimeoutMs(),
                         true,
                         USER_AGENT);
         addCommonHeaders(dataSourceFactory);
@@ -303,8 +302,8 @@ public class ExoMediaSourceFactory {
      */
     private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                USER_AGENT, bandwidthMeter, (int) OkHttpCommons.CONNECT_TIMEOUT_MS,
-                (int) OkHttpCommons.READ_TIMEOUT_MS, true); // allowCrossProtocolRedirects = true
+                USER_AGENT, bandwidthMeter, (int) OkHttpManager.getConnectTimeoutMs(),
+                (int) OkHttpManager.getReadTimeoutMs(), true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         return dataSourceFactory;

@@ -706,4 +706,5 @@
   <string name="dont_resize_video_to_fit_dialog">Älä muuta videon kokoa kommentteja lukiessa</string>
   <string name="hide_shorts_from_search">Piilota shortsit hakutuloksista</string>
   <string name="remove_playlist_fmt">Poistetaanko %s pysyvästi\?</string>
+  <string name="typing_corrections">Poista automaattinen korjaus käytöstä tekstiä kirjoitettaessa</string>
 </resources>

@@ -617,6 +617,14 @@ public final class Video {
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
     }
 
+    private boolean checkAllVideosHasPlaylist() {
+        if (getGroup() == null || getGroup().getSize() < 2) {
+            return false;
+        }
+
+        return playlistId != null && getGroup().get(0).playlistId != null && getGroup().get(1).playlistId != null && getGroup().get(getGroup().getSize() - 1).playlistId != null;
+    }
+
     public boolean belongsToHome() {
         return belongsToGroup(MediaGroup.TYPE_HOME);
     }
@@ -872,8 +880,8 @@ public final class Video {
      * The section playlist intended (as a backup replacement) for cases when regular playlist not available
      */
     public boolean isSectionPlaylistEnabled(Context context) {
-        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && getGroup() != null && getGroup().getSize() > 1 && !belongsToSuggestions()
-                && (playlistId == null || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null || getGroup().get(0).playlistId == null
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
+                && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
                        || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
                 && (!isRemote || remotePlaylistId == null);
     }
