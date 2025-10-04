@@ -354,9 +354,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
             // otherwise we will call seekTo() and may need to restore the original position.
             mPositionBeforeSeek = mSeekProvider == null ? mPlayerAdapter.getCurrentPosition() : -1;
             mLastUserPosition = -1;
-            if (!mPlayerData.isSeekConfirmPlayEnabled()) {
-                pause();
-            }
+            pause();
         }
 
         @Override
@@ -383,13 +381,9 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
                 }
             }
             mIsSeek = false;
-            if (!mPausedBeforeSeek) {
-                play();
-            } else {
-                mPlayerAdapter.setProgressUpdatingEnabled(false);
-                // we neeed update UI since PlaybackControlRow still saves previous position.
-                onUpdateProgress();
-            }
+            mPlayerAdapter.setProgressUpdatingEnabled(false);
+            // we neeed update UI since PlaybackControlRow still saves previous position.
+            onUpdateProgress();
         }
     };
 
