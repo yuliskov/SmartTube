@@ -1,3 +1,7 @@
+-keepclassmembers class androidx.leanback.widget.HorizontalGridView {
+    <init>(...);
+    android.graphics.LinearGradient mLowFadeShader;
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment$ItemViewClickedListener {
     <init>(...);
 }
@@ -7,7 +11,6 @@
 }
 -keepclassmembers class androidx.work.impl.utils.ForceStopRunnable {
     <init>(...);
-    
 }
 -keepclassmembers class com.liskovsoft.youtubeapi.channelgroups.ChannelGroupServiceImpl {
     <init>(...);
@@ -154,6 +157,7 @@
 -keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
 }
+-keep class com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor { *; }
 -keep class com.google.android.exoplayer2.C { *; }
 -keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
 -keep class okhttp3.OkHttpClient$Builder { *; }
