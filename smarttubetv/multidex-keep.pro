@@ -1,3 +1,6 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment$ItemViewClickedListener {
+    <init>(...);
+}
 -keepclassmembers class com.liskovsoft.youtubeapi.common.helpers.PostDataHelper {
     <clinit>(...);
     java.lang.String createQueryTV(java.lang.String);
