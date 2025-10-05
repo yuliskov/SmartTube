@@ -605,6 +605,7 @@
     <string name="content_block_exclude_channel">Bu kanalı SponsorBlock\'tan hariç tut</string>
     <string name="content_block_stop_excluding_channel">Bu kanalı SponsorBlock\'tan hariç tutmayı durdur</string>
     <string name="player_chapter_notification">Açılır bildirimi kullanarak bölümler arasında hızlı ilerle</string>
+    <string name="player_chapter_notification2">Bildirime tıklayarak bir sonraki bölüme geç</string>
     <string name="subtitle_remember">Her kanal için etkinleştirilmiş altyazıları hatırla</string>
     <string name="amazon_frame_drop_fix">Kare bırakma düzeltmesi #2</string>
     <string name="amazon_frame_drop_fix_desc">Amazon Stick cihazları için tasarlanmıştır. Diğer cihazlarda da çalışabilir.</string>
