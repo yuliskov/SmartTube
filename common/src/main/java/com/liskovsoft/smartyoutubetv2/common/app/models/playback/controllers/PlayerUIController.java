@@ -733,12 +733,12 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            getController(VideoLoaderController.class).onNextClicked();
+            getMainController().onNextClicked();
             return true; // hide ui
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            getController(VideoLoaderController.class).onPreviousClicked();
+            getMainController().onPreviousClicked();
             return true; // hide ui
         }
 
