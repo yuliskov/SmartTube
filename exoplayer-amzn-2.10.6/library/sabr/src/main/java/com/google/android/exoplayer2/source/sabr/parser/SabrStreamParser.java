@@ -206,11 +206,11 @@ public class SabrStreamParser {
 
         try {
             sps = StreamProtectionStatus.parseFrom(part.data);
-            Log.d(TAG, "Status: %s", sps);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process StreamProtectionStatus: %s", sps);
         ProcessStreamProtectionStatusResult result = processor.processStreamProtectionStatus(sps);
 
         return result.sabrPart;
@@ -221,10 +221,11 @@ public class SabrStreamParser {
 
         try {
             sabrRedirect = SabrRedirect.parseFrom(part.data);
-            Log.d(TAG, "Process SabrRedirect: %s", sabrRedirect);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
+
+        Log.d(TAG, "Process SabrRedirect: %s", sabrRedirect);
 
         if (!sabrRedirect.hasRedirectUrl()) {
             Log.d(TAG, "Server requested to redirect to an invalid URL");
@@ -239,11 +240,11 @@ public class SabrStreamParser {
 
         try {
             fmtInitMetadata = FormatInitializationMetadata.parseFrom(part.data);
-            Log.d(TAG, "Process FormatInitializationMetadata: %s", fmtInitMetadata);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process FormatInitializationMetadata: %s", fmtInitMetadata);
         ProcessFormatInitializationMetadataResult result = processor.processFormatInitializationMetadata(fmtInitMetadata);
 
         return result.sabrPart;
@@ -254,11 +255,11 @@ public class SabrStreamParser {
 
         try {
             nextRequestPolicy = NextRequestPolicy.parseFrom(part.data);
-            Log.d(TAG, "Process NextRequestPolicy: %s", nextRequestPolicy);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process NextRequestPolicy: %s", nextRequestPolicy);
         processor.processNextRequestPolicy(nextRequestPolicy);
 
         return null;
@@ -269,11 +270,11 @@ public class SabrStreamParser {
 
         try {
             sabrError = SabrError.parseFrom(part.data);
-            Log.d(TAG, "Process SabrError: %s", sabrError);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process SabrError: %s", sabrError);
         throw new SabrStreamError(String.format("SABR Protocol Error: %s", sabrError));
     }
 
@@ -282,11 +283,11 @@ public class SabrStreamParser {
 
         try {
             sabrCtxUpdate = SabrContextUpdate.parseFrom(part.data);
-            Log.d(TAG, "Process SabrContextUpdate: %s", sabrCtxUpdate);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process SabrContextUpdate: %s", sabrCtxUpdate);
         processor.processSabrContextUpdate(sabrCtxUpdate);
 
         return null;
@@ -297,11 +298,11 @@ public class SabrStreamParser {
 
         try {
             sabrCtxSendingPolicy = SabrContextSendingPolicy.parseFrom(part.data);
-            Log.d(TAG, "Process SabrContextSendingPolicy: %s", sabrCtxSendingPolicy);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process SabrContextSendingPolicy: %s", sabrCtxSendingPolicy);
         processor.processSabrContextSendingPolicy(sabrCtxSendingPolicy);
 
         return null;
@@ -312,11 +313,11 @@ public class SabrStreamParser {
 
         try {
             reloadPlayerResponse = ReloadPlayerResponse.parseFrom(part.data);
-            Log.d(TAG, "Process ReloadPlayerResponse: %s", reloadPlayerResponse);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process ReloadPlayerResponse: %s", reloadPlayerResponse);
         return new RefreshPlayerResponseSabrPart(
                 RefreshPlayerResponseSabrPart.Reason.SABR_RELOAD_PLAYER_RESPONSE,
                 reloadPlayerResponse.hasReloadPlaybackParams() && reloadPlayerResponse.getReloadPlaybackParams().hasToken()
@@ -329,11 +330,11 @@ public class SabrStreamParser {
 
         try {
             liveMetadata = LiveMetadata.parseFrom(part.data);
-            Log.d(TAG, "Process LiveMetadata: %s", liveMetadata);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process LiveMetadata: %s", liveMetadata);
         return processor.processLiveMetadata(liveMetadata).seekSabrParts;
     }
 
@@ -342,11 +343,11 @@ public class SabrStreamParser {
 
         try {
             sabrSeek = SabrSeek.parseFrom(part.data);
-            Log.d(TAG, "Process SabrSeek: %s", sabrSeek);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
 
+        Log.d(TAG, "Process SabrSeek: %s", sabrSeek);
         return processor.processSabrSeek(sabrSeek).seekSabrParts;
     }
 
