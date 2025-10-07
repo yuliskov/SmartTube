@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
+import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessFormatInitializationMetadataResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
@@ -12,15 +13,21 @@ import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHe
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessStreamProtectionStatusResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
-import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrRedirect;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrError;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ReloadPlayerResponse;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -29,6 +36,7 @@ import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class SabrStreamParser {
     private static final String TAG = SabrStreamParser.class.getSimpleName();
@@ -53,6 +61,7 @@ public class SabrStreamParser {
     private int sqMismatchBacktrackCount;
     private boolean receivedNewSegments;
     private String url;
+    private List<? extends  SabrPart> multiResult = null;
 
     public SabrStreamParser(@NonNull ExtractorInput extractorInput) {
         decoder = new UMPDecoder(extractorInput);
@@ -62,7 +71,7 @@ public class SabrStreamParser {
     public SabrPart parse() {
         SabrPart result = null;
 
-        while (true) {
+        while (result == null && (multiResult == null || multiResult.isEmpty())) {
             UMPPart part = nextKnownUMPPart();
 
             if (part == null) {
@@ -71,12 +80,12 @@ public class SabrStreamParser {
 
             result = parsePart(part);
 
-            if (result != null) {
-                break;
+            if (result == null) {
+                multiResult = parseMultiPart(part);
             }
         }
 
-        return result;
+        return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
     private SabrPart parsePart(UMPPart part) {
@@ -96,10 +105,6 @@ public class SabrStreamParser {
                 return processFormatInitializationMetadata(part);
             case UMPPartId.NEXT_REQUEST_POLICY:
                 return processNextRequestPolicy(part);
-            case UMPPartId.LIVE_METADATA:
-                return processLiveMetadata(part);
-            case UMPPartId.SABR_SEEK:
-                return processSabrSeek(part);
             case UMPPartId.SABR_ERROR:
                 return processSabrError(part);
             case UMPPartId.SABR_CONTEXT_UPDATE:
@@ -108,6 +113,17 @@ public class SabrStreamParser {
                 return processSabrContextSendingPolicy(part);
             case UMPPartId.RELOAD_PLAYER_RESPONSE:
                 return processReloadPlayerResponse(part);
+        }
+
+        return null;
+    }
+
+    private List<? extends  SabrPart> parseMultiPart(UMPPart part) {
+        switch (part.partId) {
+            case UMPPartId.LIVE_METADATA:
+                return processLiveMetadata(part);
+            case UMPPartId.SABR_SEEK:
+                return processSabrSeek(part);
         }
 
         return null;
@@ -234,31 +250,104 @@ public class SabrStreamParser {
     }
 
     private SabrPart processNextRequestPolicy(UMPPart part) {
-        return null;
-    }
+        NextRequestPolicy nextRequestPolicy;
 
-    private SabrPart processLiveMetadata(UMPPart part) {
-        return null;
-    }
+        try {
+            nextRequestPolicy = NextRequestPolicy.parseFrom(part.data);
+            Log.d(TAG, "Process NextRequestPolicy: %s", nextRequestPolicy);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
 
-    private SabrPart processSabrSeek(UMPPart part) {
+        processor.processNextRequestPolicy(nextRequestPolicy);
+
         return null;
     }
 
     private SabrPart processSabrError(UMPPart part) {
-        return null;
+        SabrError sabrError;
+
+        try {
+            sabrError = SabrError.parseFrom(part.data);
+            Log.d(TAG, "Process SabrError: %s", sabrError);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        throw new SabrStreamError(String.format("SABR Protocol Error: %s", sabrError));
     }
 
     private SabrPart processSabrContextUpdate(UMPPart part) {
+        SabrContextUpdate sabrCtxUpdate;
+
+        try {
+            sabrCtxUpdate = SabrContextUpdate.parseFrom(part.data);
+            Log.d(TAG, "Process SabrContextUpdate: %s", sabrCtxUpdate);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        processor.processSabrContextUpdate(sabrCtxUpdate);
+
         return null;
     }
 
     private SabrPart processSabrContextSendingPolicy(UMPPart part) {
+        SabrContextSendingPolicy sabrCtxSendingPolicy;
+
+        try {
+            sabrCtxSendingPolicy = SabrContextSendingPolicy.parseFrom(part.data);
+            Log.d(TAG, "Process SabrContextSendingPolicy: %s", sabrCtxSendingPolicy);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        processor.processSabrContextSendingPolicy(sabrCtxSendingPolicy);
+
         return null;
     }
 
     private SabrPart processReloadPlayerResponse(UMPPart part) {
-        return null;
+        ReloadPlayerResponse reloadPlayerResponse;
+
+        try {
+            reloadPlayerResponse = ReloadPlayerResponse.parseFrom(part.data);
+            Log.d(TAG, "Process ReloadPlayerResponse: %s", reloadPlayerResponse);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        return new RefreshPlayerResponseSabrPart(
+                RefreshPlayerResponseSabrPart.Reason.SABR_RELOAD_PLAYER_RESPONSE,
+                reloadPlayerResponse.hasReloadPlaybackParams() && reloadPlayerResponse.getReloadPlaybackParams().hasToken()
+                        ? reloadPlayerResponse.getReloadPlaybackParams().getToken() : null
+        );
+    }
+
+    private List<? extends SabrPart> processLiveMetadata(UMPPart part) {
+        LiveMetadata liveMetadata;
+
+        try {
+            liveMetadata = LiveMetadata.parseFrom(part.data);
+            Log.d(TAG, "Process LiveMetadata: %s", liveMetadata);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        return processor.processLiveMetadata(liveMetadata).seekSabrParts;
+    }
+
+    private List<? extends SabrPart> processSabrSeek(UMPPart part) {
+        SabrSeek sabrSeek;
+
+        try {
+            sabrSeek = SabrSeek.parseFrom(part.data);
+            Log.d(TAG, "Process SabrSeek: %s", sabrSeek);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        return processor.processSabrSeek(sabrSeek).seekSabrParts;
     }
 
     public static boolean contains(int[] array, int value) {

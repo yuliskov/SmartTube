@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message SabrSeek {
+    optional int32 seek_time_ticks = 1;
+    optional int32 timescale = 2;
+    optional SeekSource seek_source = 3;
+}
+
+enum SeekSource {
+    SEEK_SOURCE_UNKNOWN = 0;
+    SEEK_SOURCE_SABR_PARTIAL_CHUNK = 9;
+    SEEK_SOURCE_SABR_SEEK_TO_HEAD = 10;
+    SEEK_SOURCE_SABR_LIVE_DVR_USER_SEEK = 11;
+    SEEK_SOURCE_SABR_SEEK_TO_DVR_LOWER_BOUND = 12;
+    SEEK_SOURCE_SABR_SEEK_TO_DVR_UPPER_BOUND = 13;
+    SEEK_SOURCE_SABR_ACCURATE_SEEK = 17;
+    SEEK_SOURCE_SABR_INGESTION_WALL_TIME_SEEK = 29;
+    SEEK_SOURCE_SABR_SEEK_TO_CLOSEST_KEYFRAME = 59;
+    SEEK_SOURCE_SABR_RELOAD_PLAYER_RESPONSE_TOKEN_SEEK = 106;
+}

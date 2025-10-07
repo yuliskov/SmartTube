@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message Error {
+    optional int32 status_code = 1;
+    optional int32 type = 4;
+}
+
+message SabrError {
+    optional string type = 1;
+    optional int32 action = 2;
+    optional Error error = 3;
+}

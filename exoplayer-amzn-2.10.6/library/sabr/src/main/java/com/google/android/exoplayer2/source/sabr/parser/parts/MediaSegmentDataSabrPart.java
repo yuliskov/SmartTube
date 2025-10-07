@@ -8,7 +8,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
     public final FormatId formatId;
     public final long sequenceNumber;
     public final boolean isInitSegment;
-    public final long totalSegments;
+    public final int totalSegments;
     public final byte[] data;
     public final int contentLength;
     public final int segmentStartBytes;
@@ -18,7 +18,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
             FormatId formatId,
             long sequenceNumber,
             boolean isInitSegment,
-            long totalSegments,
+            int totalSegments,
             byte[] data,
             int contentLength,
             int segmentStartBytes) {

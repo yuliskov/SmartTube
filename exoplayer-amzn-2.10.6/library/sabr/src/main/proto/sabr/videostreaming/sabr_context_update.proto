@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message SabrContextUpdate {
+    enum SabrContextScope {
+      SABR_CONTEXT_SCOPE_UNKNOWN = 0;
+      SABR_CONTEXT_SCOPE_PLAYBACK = 1;
+      SABR_CONTEXT_SCOPE_REQUEST = 2;
+      SABR_CONTEXT_SCOPE_WATCH_ENDPOINT = 3;
+      SABR_CONTEXT_SCOPE_CONTENT_ADS = 4;
+    }
+
+    enum SabrContextWritePolicy {
+      SABR_CONTEXT_WRITE_POLICY_UNSPECIFIED = 0;
+      SABR_CONTEXT_WRITE_POLICY_OVERWRITE = 1;
+      SABR_CONTEXT_WRITE_POLICY_KEEP_EXISTING = 2;
+    }
+
+    optional int32 type = 1;
+    optional SabrContextScope scope = 2;
+    optional bytes value = 3;
+    optional bool send_by_default = 4;
+    optional SabrContextWritePolicy write_policy = 5;
+}

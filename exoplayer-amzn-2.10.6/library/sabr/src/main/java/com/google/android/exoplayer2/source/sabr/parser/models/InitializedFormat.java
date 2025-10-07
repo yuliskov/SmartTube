@@ -12,7 +12,7 @@ public class InitializedFormat {
     public final String mimeType;
     public final String videoId;
     public final FormatSelector formatSelector;
-    public final long totalSegments;
+    public int totalSegments;
     public final boolean discard;
     public int sequenceLmt = -1;
     public Segment currentSegment;
@@ -26,7 +26,7 @@ public class InitializedFormat {
             String mimeType,
             String videoId,
             FormatSelector formatSelector,
-            long totalSegments,
+            int totalSegments,
             boolean discard
     ) {
         this.formatId = formatId;
