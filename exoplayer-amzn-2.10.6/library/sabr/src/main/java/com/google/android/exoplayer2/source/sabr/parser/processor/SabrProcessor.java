@@ -4,15 +4,21 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
+import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
+import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.InitializedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.Segment;
+import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
+import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
@@ -38,14 +44,21 @@ public class SabrProcessor {
     private String poToken;
     private boolean isLive;
     private LiveMetadata liveMetadata;
+    private VideoSelector videoFormatSelector;
+    private AudioSelector audioFormatSelector;
+    private CaptionSelector captionFormatSelector;
+    private int totalDurationMs;
 
     public SabrProcessor() {
-        this(NO_VALUE, NO_VALUE);
+        this(NO_VALUE, NO_VALUE, null, null, null);
     }
 
     public SabrProcessor(
             int liveSegmentTargetDurationSec,
-            int liveSegmentTargetDurationToleranceMs
+            int liveSegmentTargetDurationToleranceMs,
+            AudioSelector audioSelection,
+            VideoSelector videoSelection,
+            CaptionSelector captionSelection
     ) {
         this.liveSegmentTargetDurationSec = liveSegmentTargetDurationSec != NO_VALUE ? liveSegmentTargetDurationSec : 5;
         this.liveSegmentTargetDurationToleranceMs = liveSegmentTargetDurationToleranceMs != NO_VALUE ? liveSegmentTargetDurationToleranceMs : 100;
@@ -55,6 +68,9 @@ public class SabrProcessor {
         partialSegments = new HashMap<>();
         initializedFormats = new HashMap<>();
         // TODO: add more values
+        audioFormatSelector = audioSelection;
+        videoFormatSelector = videoSelection;
+        captionFormatSelector = captionSelection;
         initializeClientAbrState();
     }
 
@@ -361,6 +377,93 @@ public class SabrProcessor {
         return result;
     }
 
+    public ProcessFormatInitializationMetadataResult processFormatInitializationMetadata(FormatInitializationMetadata formatInitMetadata) {
+        ProcessFormatInitializationMetadataResult result = new ProcessFormatInitializationMetadataResult();
+
+        if (formatInitMetadata.hasFormatId() && initializedFormats.containsKey(formatInitMetadata.getFormatId().toString())) {
+            Log.d(TAG, "Format %s already initialized", formatInitMetadata.getFormatId());
+            return result;
+        }
+
+        if (formatInitMetadata.hasVideoId() && videoId != null && !formatInitMetadata.getVideoId().equals(videoId)) {
+            throw new SabrStreamError(String.format("Received unexpected Format Initialization Metadata for video" +
+                    "  %s (expecting %s)", formatInitMetadata.getVideoId(), videoId));
+        }
+
+        FormatSelector formatSelector = matchFormatSelector(formatInitMetadata);
+
+        if (formatSelector == null) {
+            // Should not happen. If we ignored the format the server may refuse to send us any more data
+            throw new SabrStreamError(String.format("Received format %s but it does not match any format selector", formatInitMetadata.getFormatId()));
+        }
+
+        // Guard: Check if the format selector is already in use by another initialized format.
+        // This can happen when the server changes the format to use (e.g. changing quality).
+        //
+        // Changing a format will require adding some logic to handle inactive formats.
+        // Given we only provide one FormatId currently, and this should not occur in this case,
+        // we will mark this as not currently supported and bail.
+        for (InitializedFormat izf : initializedFormats.values()) {
+            if (izf.formatSelector == formatSelector) {
+                throw new SabrStreamError("Server changed format. Changing formats is not currently supported");
+            }
+        }
+
+        int durationMs = Utils.ticksToMs(
+                formatInitMetadata.hasDurationTicks() ? formatInitMetadata.getDurationTicks() : -1,
+                formatInitMetadata.hasDurationTimescale() ? formatInitMetadata.getDurationTimescale() : -1
+        );
+
+        int totalSegments = formatInitMetadata.hasTotalSegments() ? formatInitMetadata.getTotalSegments() : -1;
+
+        if (totalSegments == -1 && liveMetadata != null && liveMetadata.hasHeadSequenceNumber()) {
+            totalSegments = liveMetadata.getHeadSequenceNumber();
+        }
+
+        InitializedFormat initializedFormat = new InitializedFormat(
+                formatInitMetadata.hasFormatId() ? formatInitMetadata.getFormatId() : null,
+                durationMs,
+                formatInitMetadata.hasEndTimeMs() ? formatInitMetadata.getEndTimeMs() : -1,
+                formatInitMetadata.hasMimeType() ? formatInitMetadata.getMimeType() : null,
+                formatInitMetadata.hasVideoId() ? formatInitMetadata.getVideoId() : null,
+                formatSelector,
+                totalSegments,
+                formatSelector.isDiscardMedia()
+        );
+
+        totalDurationMs = Math.max(
+                totalDurationMs != -1 ? totalDurationMs : 0,
+                Math.max(formatInitMetadata.hasEndTimeMs() ? formatInitMetadata.getEndTimeMs() : 0, durationMs != -1 ? durationMs : 0)
+        );
+
+        if (initializedFormat.discard) {
+            // Mark the entire format as buffered into oblivion if we plan to discard all media.
+            // This stops the server sending us any more data for this format.
+            // Note: Using JS_MAX_SAFE_INTEGER but could use any maximum value as long as the server accepts it.
+            initializedFormat.consumedRanges.clear();
+            initializedFormat.consumedRanges.add(new ConsumedRange(
+                    0,
+                    ((long) Math.pow(2, 53)) - 1,
+                    0,
+                    ((long) Math.pow(2, 53)) - 1
+            ));
+        }
+
+        if (formatInitMetadata.hasFormatId()) {
+            initializedFormats.put(formatInitMetadata.getFormatId().toString(), initializedFormat);
+            Log.d(TAG, "Initialized Format: %s", initializedFormat);
+        }
+
+        if (!initializedFormat.discard) {
+            result.sabrPart = new FormatInitializedSabrPart(
+                    formatInitMetadata.hasFormatId() ? formatInitMetadata.getFormatId() : null,
+                    formatSelector
+            );
+        }
+
+        return result;
+    }
+
     public boolean isLive() {
         return liveMetadata != null || isLive;
     }
@@ -384,5 +487,19 @@ public class SabrProcessor {
 
     public int getLiveSegmentTargetDurationSec() {
         return liveSegmentTargetDurationSec;
+    }
+
+    private FormatSelector matchFormatSelector(FormatInitializationMetadata formatInitMetadata) {
+        for (FormatSelector formatSelector : new FormatSelector[]{videoFormatSelector, audioFormatSelector, captionFormatSelector}) {
+            if (formatSelector == null) {
+                continue;
+            }
+
+            if (formatSelector.match(formatInitMetadata.getFormatId(), formatInitMetadata.getMimeType())) {
+                return formatSelector;
+            }
+        }
+
+        return null;
     }
 }

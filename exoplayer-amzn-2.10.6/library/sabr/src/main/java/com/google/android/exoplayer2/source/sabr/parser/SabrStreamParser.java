@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessFormatInitializationMetadataResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
@@ -16,6 +17,7 @@ import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrRedirect;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
@@ -203,7 +205,7 @@ public class SabrStreamParser {
 
         try {
             sabrRedirect = SabrRedirect.parseFrom(part.data);
-            Log.d(TAG, "Redirect: %s", sabrRedirect);
+            Log.d(TAG, "Process SabrRedirect: %s", sabrRedirect);
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalStateException(e);
         }
@@ -217,7 +219,18 @@ public class SabrStreamParser {
     }
 
     private SabrPart processFormatInitializationMetadata(UMPPart part) {
-        return null;
+        FormatInitializationMetadata fmtInitMetadata;
+
+        try {
+            fmtInitMetadata = FormatInitializationMetadata.parseFrom(part.data);
+            Log.d(TAG, "Process FormatInitializationMetadata: %s", fmtInitMetadata);
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalStateException(e);
+        }
+
+        ProcessFormatInitializationMetadataResult result = processor.processFormatInitializationMetadata(fmtInitMetadata);
+
+        return result.sabrPart;
     }
 
     private SabrPart processNextRequestPolicy(UMPPart part) {

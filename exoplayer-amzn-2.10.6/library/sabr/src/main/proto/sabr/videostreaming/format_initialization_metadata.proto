@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+import "sabr/videostreaming/format_id.proto";
+import "sabr/videostreaming/range.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message FormatInitializationMetadata {
+    optional string video_id = 1;
+    optional FormatId format_id = 2;
+    optional int32 end_time_ms = 3;
+    optional int32 total_segments = 4;
+    optional string mime_type = 5;
+    optional Range init_range = 6;
+    optional Range index_range = 7;
+    optional int32 duration_ticks = 9;
+    optional int32 duration_timescale = 10;
+}
