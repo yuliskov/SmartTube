@@ -603,6 +603,7 @@
     <string name="content_block_exclude_channel">Diesen Kanal von SponsorBlock ausschließen</string>
     <string name="content_block_stop_excluding_channel">Diesen Kanal nicht mehr von SponsorBlock ausschließen</string>
     <string name="player_chapter_notification">Schnelles Springen durch die Kapitel per Popup-Benachrichtigung</string>
+    <string name="player_chapter_notification2">Zum nächsten Kapitel wechseln durch Drücken der Benachrichtigung</string>
     <string name="subtitle_remember">Untertitel nur für den aktuellen Kanal aktivieren</string>
     <string name="amazon_frame_drop_fix">Frame-Drop-Fix #2</string>
     <string name="amazon_frame_drop_fix_desc">Gedacht für Amazon Stick-Geräte. Kann auch auf anderen Geräten funktionieren.</string>
