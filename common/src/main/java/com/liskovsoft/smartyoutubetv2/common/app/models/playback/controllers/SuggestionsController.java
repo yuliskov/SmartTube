@@ -613,6 +613,10 @@ public class SuggestionsController extends BasePlayerController {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (MediaServiceManager.instance().shouldContinueRowGroup(getContext(), group)) {
             continueGroup(group, getPlayer().isSuggestionsShown());
         }

@@ -67,6 +67,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -1278,12 +1279,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             }
         }
 
-        HeaderItem rowHeader = new HeaderItem(group.getTitle());
-        int mediaGroupId = group.getId(); // Create unique int from category.
-
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
+        VideoGroupObjectAdapter existingAdapter = GridFragmentHelper.findRelatedAdapter(mMediaGroupAdapters, group);
 
         if (existingAdapter == null) {
+            HeaderItem rowHeader = new HeaderItem(group.getTitle());
+            int mediaGroupId = group.getId(); // Create unique int from category.
+
             VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
             mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);

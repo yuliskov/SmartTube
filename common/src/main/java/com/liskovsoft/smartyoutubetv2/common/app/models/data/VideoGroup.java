@@ -105,7 +105,8 @@ public class VideoGroup {
         videoGroup.mTitle = mediaGroup != null && mediaGroup.getTitle() != null ?
                 mediaGroup.getTitle() : section != null ? section.getTitle() : null;
         // Fix duplicated rows e.g. Shorts
-        videoGroup.mId = !TextUtils.isEmpty(videoGroup.mTitle) ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
+        //videoGroup.mId = !TextUtils.isEmpty(videoGroup.mTitle) ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
+        videoGroup.mId = videoGroup.hashCode();
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -132,7 +133,7 @@ public class VideoGroup {
             return baseGroup;
         }
 
-        if (mediaGroup.isEmpty()) {
+        if (mediaGroup.getMediaItems() == null) {
             Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
             return baseGroup;
         }
@@ -178,9 +179,9 @@ public class VideoGroup {
     public void setTitle(String title) {
         mTitle = title;
 
-        if (!TextUtils.isEmpty(title) && (mId == 0 || mId == hashCode())) {
-            mId = title.hashCode();
-        }
+        //if (!TextUtils.isEmpty(title) && (mId == 0 || mId == hashCode())) {
+        //    mId = title.hashCode();
+        //}
     }
 
     public int getId() {
@@ -383,6 +384,10 @@ public class VideoGroup {
         }
 
         return mVideos.get(idx);
+    }
+
+    public List<Video> getAll() {
+        return mVideos;
     }
 
     public void remove(Video video) {

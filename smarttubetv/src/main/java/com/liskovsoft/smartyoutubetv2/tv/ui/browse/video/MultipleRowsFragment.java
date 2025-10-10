@@ -259,12 +259,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        HeaderItem rowHeader = new HeaderItem(group.getTitle());
-        int mediaGroupId = group.getId(); // Create unique int from category.
-
-        VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(mediaGroupId);
+        VideoGroupObjectAdapter existingAdapter = GridFragmentHelper.findRelatedAdapter(mVideoGroupAdapters, group);
 
         if (existingAdapter == null) {
+            HeaderItem rowHeader = new HeaderItem(group.getTitle());
+            int mediaGroupId = group.getId(); // Create unique int from category.
+
             VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
             mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);

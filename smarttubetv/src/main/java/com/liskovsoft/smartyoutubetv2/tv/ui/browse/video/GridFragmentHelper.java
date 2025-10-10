@@ -5,9 +5,12 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +19,7 @@ public class GridFragmentHelper {
     private static final Map<Integer, Pair<Integer, Integer>> sCardDimensPx = new HashMap<>();
     private static final Map<Integer, Float> sMaxColsNum = new HashMap<>();
     private static final Runnable sInvalidate = GridFragmentHelper::invalidate;
+    private static final int MIN_ADAPTER_SIZE = 6;
 
     private static void invalidate() {
         sCardDimensPx.clear();
@@ -108,5 +112,39 @@ public class GridFragmentHelper {
         }
 
         return new Pair<>((int) width, (int) height);
+    }
+
+    public static VideoGroupObjectAdapter findRelatedAdapter(Map<Integer, VideoGroupObjectAdapter> mediaGroupAdapters, VideoGroup group) {
+        if (group == null || group.getMediaGroup() == null || mediaGroupAdapters == null) {
+            return null;
+        }
+
+        int mediaGroupId = group.getId();
+
+        VideoGroupObjectAdapter existingAdapter = mediaGroupAdapters.get(mediaGroupId);
+
+        if (existingAdapter == null) {
+            Float value = sMaxColsNum.get(R.dimen.card_width);
+            int minAdapterSize = value != null ? value.intValue() : MIN_ADAPTER_SIZE;
+
+            for (VideoGroupObjectAdapter adapter : mediaGroupAdapters.values()) {
+                // if size < 6 && cannot continue && the titles equals
+                int size = adapter.size();
+                VideoGroup lastGroup = adapter.getAll().get(size - 1).getGroup();
+                if (lastGroup != null && lastGroup.getMediaGroup() != null
+                        && lastGroup.getMediaGroup().getNextPageKey() == null
+                        && group.getMediaGroup().getNextPageKey() == null) {
+                    if (size < minAdapterSize) {
+                        existingAdapter = adapter;
+                        break;
+                    } else if (Helpers.equals(lastGroup.getTitle(), group.getTitle())) {
+                        // Remain other rows of the same type untitled (usually the such rows share the same titles)
+                        group.setTitle(null);
+                    }
+                }
+            }
+        }
+
+        return existingAdapter;
     }
 }
