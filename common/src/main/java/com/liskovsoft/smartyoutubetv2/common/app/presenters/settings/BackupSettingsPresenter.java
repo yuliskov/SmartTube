@@ -157,7 +157,9 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         for (String name : backups) {
             options.add(UiOptionItem.from(name, optionItem -> {
-                backupManager.checkPermAndRestore(name);
+                AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
+                    backupManager.checkPermAndRestore(name);
+                });
             }));
         }
 
