@@ -113,6 +113,12 @@ public class VideoLoaderController extends BasePlayerController {
         Utils.postDelayed(mOnLongBuffering, BUFFERING_THRESHOLD_MS);
     }
 
+    @Override
+    public void onSeekEnd() {
+        // Reset buffering stats
+        mBufferingCount = null;
+    }
+
     private void onLongBuffering() {
         if (getPlayer() == null || getVideo() == null) {
             return;
