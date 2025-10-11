@@ -135,9 +135,11 @@ public class GridFragmentHelper {
                 // if size < 6 && cannot continue && the titles equals
                 int size = adapter.size();
                 VideoGroup lastGroup = adapter.getAll().get(size - 1).getGroup();
-                boolean matchedRowFound = lastGroup != null && lastGroup.getMediaGroup() != null
+                boolean matchedRowFound = lastGroup != null
+                        && lastGroup.getMediaGroup() != null
                         && lastGroup.getMediaGroup().getNextPageKey() == null
-                        && group.getMediaGroup().getNextPageKey() == null;
+                        && group.getMediaGroup().getNextPageKey() == null
+                        && group.getSize() < minAdapterSize;
                 if (matchedRowFound) {
                     // Remain other rows of the same type untitled (usually the such rows share the same titles)
                     group.setTitle(null);
