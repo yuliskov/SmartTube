@@ -128,7 +128,7 @@ public class GridFragmentHelper {
 
         // Find out could we continue an existing one (vertical scroll YouTube layout)
         if (existingAdapter == null) {
-            Float value = sMaxColsNum.get(R.dimen.card_width);
+            Float value = sMaxColsNum.get(group.isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width);
             int minAdapterSize = value != null ? value.intValue() : MIN_ADAPTER_SIZE;
 
             for (VideoGroupObjectAdapter adapter : mediaGroupAdapters.values()) {
@@ -140,7 +140,8 @@ public class GridFragmentHelper {
                         && lastGroup.getMediaGroup().getNextPageKey() == null
                         && group.getMediaGroup().getNextPageKey() == null
                         && size <= minAdapterSize
-                        && group.getSize() <= minAdapterSize;
+                        && group.getSize() <= minAdapterSize
+                        && lastGroup.isShorts() == group.isShorts();
                 if (matchedRowFound) {
                     // Remain other rows of the same type untitled (usually the such rows share the same titles)
                     group.setTitle(null);
