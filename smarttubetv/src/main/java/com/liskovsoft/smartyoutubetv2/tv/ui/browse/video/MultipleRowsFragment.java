@@ -207,22 +207,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        int action = group.getAction();
-
-        // Smooth remove animation
-        if (action == VideoGroup.ACTION_REMOVE) {
-            updateInt(group);
-            return;
-        }
-
-        freeze(true);
-
-        updateInt(group);
-
-        freeze(false);
-    }
-
-    private void updateInt(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
             return;
@@ -250,7 +234,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         } else if (action == VideoGroup.ACTION_SYNC) {
             VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
             if (adapter != null) {
+                freeze(true);
                 adapter.sync(group);
+                freeze(false);
             }
             return;
         }
@@ -259,17 +245,17 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        VideoGroupObjectAdapter existingAdapter = GridFragmentHelper.findRelatedAdapter(mVideoGroupAdapters, group);
+        VideoGroupObjectAdapter existingAdapter = GridFragmentHelper.findRelatedAdapter(mVideoGroupAdapters, group, this::freeze);
 
         if (existingAdapter == null) {
             HeaderItem rowHeader = new HeaderItem(group.getTitle());
-            int mediaGroupId = group.getId(); // Create unique int from category.
+            int videoGroupId = group.getId(); // Create unique int from category.
 
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
+            VideoGroupObjectAdapter videoGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
-            mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+            mVideoGroupAdapters.put(videoGroupId, videoGroupAdapter);
 
-            ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
+            ListRow row = new ListRow(rowHeader, videoGroupAdapter);
 
             if (group.getPosition() == -1 || group.getPosition() > mRowsAdapter.size()) {
                 mRowsAdapter.add(row);
@@ -279,7 +265,11 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         } else {
             Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
 
+            freeze(true);
+
             existingAdapter.add(group); // continue
+
+            freeze(false);
         }
 
         restorePosition();

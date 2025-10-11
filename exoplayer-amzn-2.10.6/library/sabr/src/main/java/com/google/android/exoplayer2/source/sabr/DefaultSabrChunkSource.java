@@ -484,6 +484,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         } else {
             requestUri = indexUri;
         }
+        // TODO: first protobuf request (before the video start off)
         DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
                 requestUri.length, representationHolder.representation.getCacheKey());
         return new InitializationChunk(dataSource, dataSpec, trackFormat,
@@ -528,6 +529,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                     periodDurationUs != C.TIME_UNSET && periodDurationUs <= endTimeUs
                             ? periodDurationUs
                             : C.TIME_UNSET;
+            // TODO: next protobuf requests (during the playback)
             DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
                     segmentUri.start, segmentUri.length, representation.getCacheKey());
             long sampleOffsetUs = -representation.presentationTimeOffsetUs;
@@ -776,6 +778,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 return null;
             }
             Extractor extractor;
+            // TODO: replace with SabrExtractor
             if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
                 extractor = new RawCcExtractor(representation.format);
             } else if (mimeTypeIsWebm(containerMimeType)) {

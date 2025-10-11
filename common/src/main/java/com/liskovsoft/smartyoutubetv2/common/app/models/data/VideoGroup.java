@@ -306,13 +306,19 @@ public class VideoGroup {
             return;
         }
 
-        int index = mVideos.indexOf(video);
+        removeAllBefore(mVideos.indexOf(video));
+    }
 
-        if (index == -1) {
+    public void removeAllBefore(int index) {
+        if (mVideos == null) {
             return;
         }
 
-        mVideos = mVideos.subList(index + 1, mVideos.size());
+        if (index <= 0 || index >= mVideos.size()) {
+            return;
+        }
+
+        mVideos = mVideos.subList(index, mVideos.size());
     }
 
     /**

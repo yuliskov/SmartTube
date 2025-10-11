@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -114,7 +113,11 @@ public class GridFragmentHelper {
         return new Pair<>((int) width, (int) height);
     }
 
-    public static VideoGroupObjectAdapter findRelatedAdapter(Map<Integer, VideoGroupObjectAdapter> mediaGroupAdapters, VideoGroup group) {
+    public interface RowFreezer {
+        void freeze(boolean freeze);
+    }
+
+    public static VideoGroupObjectAdapter findRelatedAdapter(Map<Integer, VideoGroupObjectAdapter> mediaGroupAdapters, VideoGroup group, RowFreezer freezer) {
         if (group == null || group.getMediaGroup() == null || mediaGroupAdapters == null) {
             return null;
         }
@@ -123,6 +126,7 @@ public class GridFragmentHelper {
 
         VideoGroupObjectAdapter existingAdapter = mediaGroupAdapters.get(mediaGroupId);
 
+        // Find out could we continue an existing one (vertical scroll YouTube layout)
         if (existingAdapter == null) {
             Float value = sMaxColsNum.get(R.dimen.card_width);
             int minAdapterSize = value != null ? value.intValue() : MIN_ADAPTER_SIZE;
@@ -131,15 +135,26 @@ public class GridFragmentHelper {
                 // if size < 6 && cannot continue && the titles equals
                 int size = adapter.size();
                 VideoGroup lastGroup = adapter.getAll().get(size - 1).getGroup();
-                if (lastGroup != null && lastGroup.getMediaGroup() != null
+                boolean matchedRowFound = lastGroup != null && lastGroup.getMediaGroup() != null
                         && lastGroup.getMediaGroup().getNextPageKey() == null
-                        && group.getMediaGroup().getNextPageKey() == null) {
+                        && group.getMediaGroup().getNextPageKey() == null;
+                if (matchedRowFound) {
+                    // Remain other rows of the same type untitled (usually the such rows share the same titles)
+                    group.setTitle(null);
+
                     if (size < minAdapterSize) {
-                        existingAdapter = adapter;
+                        int missingCount = minAdapterSize - size;
+                        if (group.getSize() > missingCount) {
+                            // Split the group to match 'minAdapterSize'
+                            VideoGroup missingGroup = VideoGroup.from(group.getVideos().subList(0, missingCount));
+                            group.removeAllBefore(missingCount);
+                            freezer.freeze(true);
+                            adapter.add(missingGroup);
+                            freezer.freeze(false);
+                        } else {
+                            existingAdapter = adapter; // continue inside a caller
+                        }
                         break;
-                    } else if (Helpers.equals(lastGroup.getTitle(), group.getTitle())) {
-                        // Remain other rows of the same type untitled (usually the such rows share the same titles)
-                        group.setTitle(null);
                     }
                 }
             }
