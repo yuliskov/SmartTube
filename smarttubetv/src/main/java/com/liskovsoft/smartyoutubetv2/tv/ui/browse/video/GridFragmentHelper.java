@@ -139,7 +139,8 @@ public class GridFragmentHelper {
                         && lastGroup.getMediaGroup() != null
                         && lastGroup.getMediaGroup().getNextPageKey() == null
                         && group.getMediaGroup().getNextPageKey() == null
-                        && group.getSize() < minAdapterSize;
+                        && size <= minAdapterSize
+                        && group.getSize() <= minAdapterSize;
                 if (matchedRowFound) {
                     // Remain other rows of the same type untitled (usually the such rows share the same titles)
                     group.setTitle(null);
