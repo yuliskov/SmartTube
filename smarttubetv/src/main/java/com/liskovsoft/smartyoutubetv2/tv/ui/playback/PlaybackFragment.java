@@ -514,6 +514,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        // NOTE: Don't set to null. This won't disable a notifications but makes them empty.
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
                 return null;
