@@ -497,8 +497,6 @@
   <string name="speech_recognizer">Taligenkännare</string>
   <string name="speech_engine">Röstsökningsmotor</string>
   <string name="speech_recognizer_system">System (föredras)</string>
-  <string name="speech_recognizer_external_">Extern 1 (Allvarligt felaktig. Åtkomst till mikrofonen måste inaktiveras för att den ska fungera.)</string>
-  <string name="speech_recognizer_external_">Extern 2 (Allvarligt felaktig.)</string>
   <string name="real_channel_icon">Visa ikon på kanalknappen</string>
   <string name="subtitle_yellow_semi_transparent">Gult på halvgenomskinlig bakgrund</string>
   <string name="subtitle_yellow_black">Gult på svart bakgrund</string>
@@ -539,7 +537,6 @@
   <string name="trending_searches">Populära sökningar</string>
   <string name="video_duration_any">Alla</string>
   <string name="video_duration">Längd</string>
-  <string name="video_duration_under_">Under 4 minuter</string>
   <string name="video_duration_between_4_20">4–20 minuter</string>
   <string name="video_duration_over_20">Mer än 20 minuter</string>
   <string name="content_type">Typ</string>
