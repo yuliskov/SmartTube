@@ -119,7 +119,7 @@ public class GridFragmentHelper {
     }
 
     public static VideoGroupObjectAdapter findRelatedAdapter(Map<Integer, VideoGroupObjectAdapter> mediaGroupAdapters, VideoGroup group, RowFreezer freezer) {
-        if (group == null || group.getMediaGroup() == null || mediaGroupAdapters == null) {
+        if (group == null || mediaGroupAdapters == null) {
             return null;
         }
 
@@ -163,6 +163,7 @@ public class GridFragmentHelper {
         boolean matchedRowFound = lastGroup != null
                 && lastGroup.getMediaGroup() != null
                 && lastGroup.getMediaGroup().getNextPageKey() == null
+                && group.getMediaGroup() != null
                 && group.getMediaGroup().getNextPageKey() == null
                 && lastGroup.isShorts() == group.isShorts()
                 && (Helpers.equals(lastGroup.getTitle(), group.getTitle())
