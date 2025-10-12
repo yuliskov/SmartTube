@@ -499,10 +499,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
-        mMediaSession.setActive(true);
-        mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        // NOTE: No way to disable only a notifications. We need to disable the media session instead.
         boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
+        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+        mMediaSession.setActive(!disableNotifications);
+        mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
 
         try {
             mMediaSessionConnector.setPlayer(mPlayer);
@@ -513,7 +514,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
+        mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
                 return null;
             }
@@ -554,12 +555,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // Fix exoplayer pause after activity is resumed (AFR switching).
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
-                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
-                //) {
-                //    return false;
-                //}
-
                 if (System.currentTimeMillis() - PlayerData.instance(getContext()).getAfrSwitchTimeMs() < 5_000) {
                     return false;
                 }
