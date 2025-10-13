@@ -1,5 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser;
 
+import static com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor.NO_VALUE;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
@@ -38,8 +40,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class SabrStreamParser {
-    private static final String TAG = SabrStreamParser.class.getSimpleName();
+public class SabrStream {
+    private static final String TAG = SabrStream.class.getSimpleName();
     private final int[] KNOWN_PARTS = {
             UMPPartId.MEDIA_HEADER,
             UMPPartId.MEDIA,
@@ -63,9 +65,21 @@ public class SabrStreamParser {
     private String url;
     private List<? extends  SabrPart> multiResult = null;
 
-    public SabrStreamParser(@NonNull ExtractorInput extractorInput) {
+    public SabrStream(@NonNull ExtractorInput extractorInput) {
         decoder = new UMPDecoder(extractorInput);
-        processor = new SabrProcessor();
+        processor = new SabrProcessor(
+                null, // TODO: not null
+                null, // TODO: not null
+                null,
+                null,
+                null,
+                NO_VALUE,
+                NO_VALUE,
+                NO_VALUE,
+                null,
+                false,
+                null
+        );
     }
 
     public SabrPart parse() {

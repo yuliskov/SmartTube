@@ -6,8 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormatSelector {
-    private final List<FormatId> formatIds = new ArrayList<>();
-    private boolean discardMedia;
+    public final String displayName;
+    public final List<FormatId> formatIds = new ArrayList<>();
+    public final boolean discardMedia;
+
+    public FormatSelector(String displayName, boolean discardMedia) {
+        this.displayName = displayName;
+        this.discardMedia = discardMedia;
+    }
 
     public String getMimePrefix() {
         return null;

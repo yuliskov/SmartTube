@@ -18,8 +18,9 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSab
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
-import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
@@ -34,62 +35,118 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
     public static final int NO_VALUE = -1;
-    private final int liveSegmentTargetDurationToleranceMs;
-    private final int liveSegmentTargetDurationSec;
-    private ClientAbrState clientAbrState;
-    private String videoId;
-    private final Map<Integer, Segment> partialSegments;
-    private final Map<String, InitializedFormat> initializedFormats;
-    private Status streamProtectionStatus;
-    private String poToken;
-    private boolean isLive;
-    private LiveMetadata liveMetadata;
+    private final String videoPlaybackUstreamerConfig;
+    private final ClientInfo clientInfo;
     private VideoSelector videoFormatSelector;
     private AudioSelector audioFormatSelector;
     private CaptionSelector captionFormatSelector;
+    private final int liveSegmentTargetDurationToleranceMs;
+    private final int liveSegmentTargetDurationSec;
+    private final long startTimeMs;
+    private final String poToken;
+    private final boolean postLive;
+    private final String videoId;
+    private ClientAbrState clientAbrState;
+    private final Map<Integer, Segment> partialSegments;
+    private final Map<String, InitializedFormat> initializedFormats;
+    private Status streamProtectionStatus;
+    private boolean isLive;
+    private LiveMetadata liveMetadata;
     private long totalDurationMs;
     private NextRequestPolicy nextRequestPolicy;
     private final Map<Integer, SabrContextUpdate> sabrContextUpdates;
-    private final List<Integer> sabrContextsToSend;
-
-    public SabrProcessor() {
-        this(NO_VALUE, NO_VALUE, null, null, null);
-    }
+    private final Set<Integer> sabrContextsToSend;
+    private List<FormatId> selectedAudioFormatIds;
+    private List<FormatId> selectedVideoFormatIds;
+    private List<FormatId> selectedCaptionFormatIds;
 
     public SabrProcessor(
-            int liveSegmentTargetDurationSec,
-            int liveSegmentTargetDurationToleranceMs,
+            @NonNull String videoPlaybackUstreamerConfig,
+            @NonNull ClientInfo clientInfo,
             AudioSelector audioSelection,
             VideoSelector videoSelection,
-            CaptionSelector captionSelection
+            CaptionSelector captionSelection,
+            int liveSegmentTargetDurationSec,
+            int liveSegmentTargetDurationToleranceMs,
+            long startTimeMs,
+            String poToken,
+            boolean postLive,
+            String videoId
     ) {
+        this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
+        this.poToken = poToken;
+        this.clientInfo = clientInfo;
         this.liveSegmentTargetDurationSec = liveSegmentTargetDurationSec != NO_VALUE ? liveSegmentTargetDurationSec : 5;
         this.liveSegmentTargetDurationToleranceMs = liveSegmentTargetDurationToleranceMs != NO_VALUE ? liveSegmentTargetDurationToleranceMs : 100;
         if (this.liveSegmentTargetDurationToleranceMs >= (this.liveSegmentTargetDurationSec * 1_000) / 2) {
             throw new IllegalArgumentException("liveSegmentTargetDurationToleranceMs must be less than half of liveSegmentTargetDurationSec in milliseconds");
         }
-        partialSegments = new HashMap<>();
-        initializedFormats = new HashMap<>();
-        // TODO: add more values
+        this.startTimeMs = startTimeMs != NO_VALUE ? startTimeMs : 0;
+        if (this.startTimeMs < 0) {
+            throw new IllegalArgumentException("start_time_ms must be greater than or equal to 0");
+        }
+
+        this.postLive = postLive;
+        isLive = false;
+        this.videoId = videoId;
+
         audioFormatSelector = audioSelection;
         videoFormatSelector = videoSelection;
         captionFormatSelector = captionSelection;
-        sabrContextsToSend = new ArrayList<>();
+
+        // IMPORTANT: initialized formats is assumed to contain only ACTIVE formats
+        initializedFormats = new HashMap<>();
+
+        partialSegments = new HashMap<>();
+        totalDurationMs = NO_VALUE;
+        sabrContextsToSend = new HashSet<>();
         sabrContextUpdates = new HashMap<>();
         initializeClientAbrState();
     }
 
     private void initializeClientAbrState() {
-        // TODO: initialize builder
+        if (videoFormatSelector == null) {
+            videoFormatSelector = new VideoSelector("video_ignore", true);
+        }
+
+        if (audioFormatSelector == null) {
+            audioFormatSelector = new AudioSelector("audio_ignore", true);
+        }
+
+        if (captionFormatSelector == null) {
+            captionFormatSelector = new CaptionSelector("caption_ignore", true);
+        }
+
+        int enabledTrackTypesBitfield = 0;  // Audio+Video
+
+        if (videoFormatSelector.discardMedia) {
+            enabledTrackTypesBitfield = 1; // Audio only
+        }
+
+        if (!captionFormatSelector.discardMedia) {
+            // SABR does not support caption-only or audio+captions only - can only get audio+video with captions
+            // If audio or video is not selected, the tracks will be initialized but marked as buffered.
+            enabledTrackTypesBitfield = 7;
+        }
+
+        selectedAudioFormatIds = audioFormatSelector.formatIds;
+        selectedVideoFormatIds = videoFormatSelector.formatIds;
+        selectedCaptionFormatIds = captionFormatSelector.formatIds;
+
+        Log.d(TAG, "Starting playback at: %sms", startTimeMs);
         clientAbrState = ClientAbrState.newBuilder()
+                .setPlayerTimeMs(startTimeMs)
+                .setEnabledTrackTypesBitfield(enabledTrackTypesBitfield)
+                .setDrcEnabled(true) // Required to stream DRC formats
                 .build();
     }
 
