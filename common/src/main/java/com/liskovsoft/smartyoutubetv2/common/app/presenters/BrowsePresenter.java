@@ -764,6 +764,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        // Stay on the same group in case of multiple subscribe calls
+        VideoGroup baseGroup = VideoGroup.from(section, column);
+
         Disposable updateAction = group
                 .subscribe(
                         mediaGroup -> {
@@ -775,7 +778,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 return;
                             }
 
-                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, column);
+                            VideoGroup videoGroup = VideoGroup.from(baseGroup, mediaGroup);
                             appendLocalHistory(videoGroup);
                             getView().updateSection(videoGroup);
                             mBrowseProcessor.process(videoGroup);

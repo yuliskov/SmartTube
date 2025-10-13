@@ -392,10 +392,6 @@ public class VideoGroup {
         return mVideos.get(idx);
     }
 
-    public List<Video> getAll() {
-        return mVideos;
-    }
-
     public void remove(Video video) {
         if (mVideos == null) {
             return;
