@@ -103,7 +103,6 @@ public class SabrStream {
     }
 
     public SabrStream(
-            @NonNull ExtractorInput extractorInput,
             @NonNull String serverAbrStreamingUrl,
             @NonNull String videoPlaybackUstreamerConfig,
             @NonNull ClientInfo clientInfo,
@@ -117,7 +116,7 @@ public class SabrStream {
             boolean postLive,
             String videoId
     ) {
-        decoder = new UMPDecoder(extractorInput);
+        decoder = new UMPDecoder();
         processor = new SabrProcessor(
                 videoPlaybackUstreamerConfig,
                 clientInfo,
@@ -141,11 +140,11 @@ public class SabrStream {
         sqMismatchForwardCount = 0;
     }
 
-    public SabrPart parse() {
+    public SabrPart parse(@NonNull ExtractorInput extractorInput) {
         SabrPart result = null;
 
         while (result == null && (multiResult == null || multiResult.isEmpty())) {
-            UMPPart part = nextKnownUMPPart();
+            UMPPart part = nextKnownUMPPart(extractorInput);
 
             if (part == null) {
                 break;
@@ -439,11 +438,11 @@ public class SabrStream {
         return false;
     }
 
-    private UMPPart nextKnownUMPPart() {
+    private UMPPart nextKnownUMPPart(@NonNull ExtractorInput extractorInput) {
         UMPPart part;
 
         while (true) {
-            part = decoder.decode();
+            part = decoder.decode(extractorInput);
 
             if (part == null) {
                 break;

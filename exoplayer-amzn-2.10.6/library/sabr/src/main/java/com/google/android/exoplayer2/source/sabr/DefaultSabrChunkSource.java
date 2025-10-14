@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
 import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
+import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -777,21 +778,25 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             if (mimeTypeIsRawText(containerMimeType)) {
                 return null;
             }
-            Extractor extractor;
-            // TODO: replace with SabrExtractor
-            if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
-                extractor = new RawCcExtractor(representation.format);
-            } else if (mimeTypeIsWebm(containerMimeType)) {
-                extractor = new MatroskaExtractor(MatroskaExtractor.FLAG_DISABLE_SEEK_FOR_CUES);
-            } else {
-                int flags = 0;
-                if (enableEventMessageTrack) {
-                    flags |= FragmentedMp4Extractor.FLAG_ENABLE_EMSG_TRACK;
-                }
-                extractor =
-                        new FragmentedMp4Extractor(
-                                flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
-            }
+
+            // MOD: replaced with SabrExtractor
+            //Extractor extractor;
+            //if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
+            //    extractor = new RawCcExtractor(representation.format);
+            //} else if (mimeTypeIsWebm(containerMimeType)) {
+            //    extractor = new MatroskaExtractor(MatroskaExtractor.FLAG_DISABLE_SEEK_FOR_CUES);
+            //} else {
+            //    int flags = 0;
+            //    if (enableEventMessageTrack) {
+            //        flags |= FragmentedMp4Extractor.FLAG_ENABLE_EMSG_TRACK;
+            //    }
+            //    extractor =
+            //            new FragmentedMp4Extractor(
+            //                    flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
+            //}
+
+            Extractor extractor = new SabrExtractor(); // TODO: add more params into the constructor
+
             // Prefer drmInitData obtained from the manifest over drmInitData obtained from the stream,
             // as per DASH IF Interoperability Recommendations V3.0, 7.5.3.
             return new ChunkExtractorWrapper(extractor, trackType, representation.format);

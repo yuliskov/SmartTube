@@ -1,5 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.ump;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
@@ -7,13 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class UMPDecoder {
-    private final ExtractorInput extractorInput;
-
-    public UMPDecoder(ExtractorInput extractorInput) {
-        this.extractorInput = extractorInput;
-    }
-
-    public UMPPart decode() {
+    public UMPPart decode(@NonNull ExtractorInput extractorInput) {
         try {
             int partType = readVarInt(extractorInput);
             if (partType == -1) {
