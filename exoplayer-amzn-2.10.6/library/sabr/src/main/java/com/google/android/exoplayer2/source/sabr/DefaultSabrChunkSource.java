@@ -795,7 +795,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //                    flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
             //}
 
-            Extractor extractor = new SabrExtractor(); // TODO: add more params into the constructor
+            Extractor extractor = new SabrExtractor(); // TODO: add more params (from the manifest) into the constructor
 
             // Prefer drmInitData obtained from the manifest over drmInitData obtained from the stream,
             // as per DASH IF Interoperability Recommendations V3.0, 7.5.3.

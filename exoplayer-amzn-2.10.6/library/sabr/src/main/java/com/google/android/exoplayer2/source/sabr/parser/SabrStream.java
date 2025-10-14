@@ -8,6 +8,12 @@ import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamErr
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
+import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSeekSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessFormatInitializationMetadataResult;
@@ -176,13 +182,17 @@ public class SabrStream {
             case UMPPartId.FORMAT_INITIALIZATION_METADATA:
                 return processFormatInitializationMetadata(part);
             case UMPPartId.NEXT_REQUEST_POLICY:
-                return processNextRequestPolicy(part);
+                processNextRequestPolicy(part);
+                return null;
             case UMPPartId.SABR_ERROR:
-                return processSabrError(part);
+                processSabrError(part);
+                return null;
             case UMPPartId.SABR_CONTEXT_UPDATE:
-                return processSabrContextUpdate(part);
+                processSabrContextUpdate(part);
+                return null;
             case UMPPartId.SABR_CONTEXT_SENDING_POLICY:
-                return processSabrContextSendingPolicy(part);
+                processSabrContextSendingPolicy(part);
+                return null;
             case UMPPartId.RELOAD_PLAYER_RESPONSE:
                 return processReloadPlayerResponse(part);
         }
@@ -196,7 +206,7 @@ public class SabrStream {
         return null;
     }
 
-    private List<? extends  SabrPart> parseMultiPart(UMPPart part) {
+    private List<? extends SabrPart> parseMultiPart(UMPPart part) {
         switch (part.partId) {
             case UMPPartId.LIVE_METADATA:
                 return processLiveMetadata(part);
@@ -207,7 +217,7 @@ public class SabrStream {
         return null;
     }
 
-    private SabrPart processMediaHeader(UMPPart part) {
+    private MediaSegmentInitSabrPart processMediaHeader(UMPPart part) {
         MediaHeader mediaHeader;
 
         try {
@@ -249,7 +259,7 @@ public class SabrStream {
         }
     }
 
-    private SabrPart processMedia(UMPPart part) {
+    private MediaSegmentDataSabrPart processMedia(UMPPart part) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
             int headerId = decoder.readVarInt(inputStream);
             int contentLength = inputStream.available();
@@ -262,7 +272,7 @@ public class SabrStream {
         }
     }
 
-    private SabrPart processMediaEnd(UMPPart part) {
+    private MediaSegmentEndSabrPart processMediaEnd(UMPPart part) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
             int headerId = decoder.readVarInt(inputStream);
             Log.d(TAG, "Header ID: %s", headerId);
@@ -279,7 +289,7 @@ public class SabrStream {
         }
     }
 
-    private SabrPart processStreamProtectionStatus(UMPPart part) {
+    private PoTokenStatusSabrPart processStreamProtectionStatus(UMPPart part) {
         StreamProtectionStatus sps;
 
         try {
@@ -313,7 +323,7 @@ public class SabrStream {
         setUrl(sabrRedirect.getRedirectUrl());
     }
 
-    private SabrPart processFormatInitializationMetadata(UMPPart part) {
+    private FormatInitializedSabrPart processFormatInitializationMetadata(UMPPart part) {
         FormatInitializationMetadata fmtInitMetadata;
 
         try {
@@ -328,7 +338,7 @@ public class SabrStream {
         return result.sabrPart;
     }
 
-    private SabrPart processNextRequestPolicy(UMPPart part) {
+    private void processNextRequestPolicy(UMPPart part) {
         NextRequestPolicy nextRequestPolicy;
 
         try {
@@ -339,11 +349,9 @@ public class SabrStream {
 
         Log.d(TAG, "Process NextRequestPolicy: %s", nextRequestPolicy);
         processor.processNextRequestPolicy(nextRequestPolicy);
-
-        return null;
     }
 
-    private SabrPart processSabrError(UMPPart part) {
+    private void processSabrError(UMPPart part) {
         SabrError sabrError;
 
         try {
@@ -356,7 +364,7 @@ public class SabrStream {
         throw new SabrStreamError(String.format("SABR Protocol Error: %s", sabrError));
     }
 
-    private SabrPart processSabrContextUpdate(UMPPart part) {
+    private void processSabrContextUpdate(UMPPart part) {
         SabrContextUpdate sabrCtxUpdate;
 
         try {
@@ -367,11 +375,9 @@ public class SabrStream {
 
         Log.d(TAG, "Process SabrContextUpdate: %s", sabrCtxUpdate);
         processor.processSabrContextUpdate(sabrCtxUpdate);
-
-        return null;
     }
 
-    private SabrPart processSabrContextSendingPolicy(UMPPart part) {
+    private void processSabrContextSendingPolicy(UMPPart part) {
         SabrContextSendingPolicy sabrCtxSendingPolicy;
 
         try {
@@ -382,11 +388,9 @@ public class SabrStream {
 
         Log.d(TAG, "Process SabrContextSendingPolicy: %s", sabrCtxSendingPolicy);
         processor.processSabrContextSendingPolicy(sabrCtxSendingPolicy);
-
-        return null;
     }
 
-    private SabrPart processReloadPlayerResponse(UMPPart part) {
+    private RefreshPlayerResponseSabrPart processReloadPlayerResponse(UMPPart part) {
         ReloadPlayerResponse reloadPlayerResponse;
 
         try {
@@ -403,7 +407,7 @@ public class SabrStream {
         );
     }
 
-    private List<? extends SabrPart> processLiveMetadata(UMPPart part) {
+    private List<MediaSeekSabrPart> processLiveMetadata(UMPPart part) {
         LiveMetadata liveMetadata;
 
         try {
@@ -416,7 +420,7 @@ public class SabrStream {
         return processor.processLiveMetadata(liveMetadata).seekSabrParts;
     }
 
-    private List<? extends SabrPart> processSabrSeek(UMPPart part) {
+    private List<MediaSeekSabrPart> processSabrSeek(UMPPart part) {
         SabrSeek sabrSeek;
 
         try {

@@ -1,7 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.processor;
 
-import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
 
 public class ProcessMediaResult {
-    public SabrPart sabrPart;
+    public MediaSegmentDataSabrPart sabrPart;
 }
