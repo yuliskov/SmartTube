@@ -395,6 +395,9 @@ public class SuggestionsController extends BasePlayerController {
 
                 if (TextUtils.isEmpty(videoGroup.getTitle())) {
                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
+                    if (getPlayerTweaksData().isSuggestionsHorizontallyScrolled()) {
+                        videoGroup.setId(videoGroup.getTitle().hashCode()); // merge by the id
+                    }
                 }
 
                 getPlayer().updateSuggestions(videoGroup);

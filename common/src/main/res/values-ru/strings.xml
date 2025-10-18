@@ -699,4 +699,5 @@
     <string name="oculus_quest_fix">Исправлять Oculus Quest</string>
     <string name="playback_buffering_fix">Исправлять воспроизведение буферизации</string>
     <string name="typing_corrections">Отключить автокоррекцию при наборе текста</string>
+    <string name="suggestions_horizontally_scrolled">Горизонтально прокручиваемые рекомендации</string>
 </resources>

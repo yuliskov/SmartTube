@@ -101,6 +101,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsAudioFocusEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
     private boolean mIsDontResizeVideoToFitDialogEnabled;
+    private boolean mIsSuggestionsHorizontallyScrolled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -612,6 +613,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isSuggestionsHorizontallyScrolled() {
+        return mIsSuggestionsHorizontallyScrolled;
+    }
+
+    public void setSuggestionsHorizontallyScrolled(boolean enable) {
+        mIsSuggestionsHorizontallyScrolled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -678,6 +688,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         //mIsPersistentAntiBotFixEnabled = Helpers.parseBoolean(split, 53, false);
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
+        mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
 
         updateDefaultValues();
     }
@@ -704,7 +715,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSimplePlayerNavigationEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
-                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled
+                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled
                 ));
     }
 

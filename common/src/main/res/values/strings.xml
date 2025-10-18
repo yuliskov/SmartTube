@@ -709,4 +709,5 @@
     <string name="card_unlocalized_titles">Unlocalized video titles</string>
     <string name="dont_resize_video_to_fit_dialog">Don\'t resize video to fit dialog</string>
     <string name="typing_corrections">Disable auto-correction while typing text</string>
+    <string name="suggestions_horizontally_scrolled">Horizontally scrolled Suggestions</string>
 </resources>
