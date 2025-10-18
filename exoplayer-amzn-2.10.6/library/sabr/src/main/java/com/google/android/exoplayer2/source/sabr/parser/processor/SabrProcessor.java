@@ -2,6 +2,7 @@ package com.google.android.exoplayer2.source.sabr.parser.processor;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
@@ -56,7 +57,7 @@ public class SabrProcessor {
     private final boolean postLive;
     private final String videoId;
     private ClientAbrState clientAbrState;
-    private final Map<Integer, Segment> partialSegments;
+    private final Map<Long, Segment> partialSegments;
     private final Map<String, InitializedFormat> initializedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
@@ -161,7 +162,7 @@ public class SabrProcessor {
         }
 
         // Guard. This should not happen, except if we don't clear partial segments
-        if (partialSegments.containsKey(mediaHeader.getHeaderId())) {
+        if (partialSegments.containsKey(Utils.toLong(mediaHeader.getHeaderId()))) {
             throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
         }
 
@@ -269,7 +270,7 @@ public class SabrProcessor {
                 mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE
         );
 
-        partialSegments.put(mediaHeader.getHeaderId(), segment);
+        partialSegments.put(Utils.toLong(mediaHeader.getHeaderId()), segment);
 
         ProcessMediaHeaderResult result = new ProcessMediaHeaderResult();
 
@@ -291,12 +292,12 @@ public class SabrProcessor {
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
-                mediaHeader.getHeaderId(), sequenceNumber, segment);
+                Utils.toLong(mediaHeader.getHeaderId()), sequenceNumber, segment);
 
         return result;
     }
 
-    public ProcessMediaResult processMedia(int headerId, int contentLength, ByteArrayInputStream data) {
+    public ProcessMediaResult processMedia(long headerId, int contentLength, ExtractorInput data) {
         Segment segment = partialSegments.get(headerId);
         if (segment == null) {
             Log.d(TAG, "Header ID %s not found", headerId);
@@ -315,7 +316,7 @@ public class SabrProcessor {
                     segment.sequenceNumber,
                     segment.isInitSegment,
                     segment.initializedFormat.totalSegments,
-                    Utils.readAllBytes(data),
+                    data,
                     contentLength,
                     segmentStartBytes
             );
@@ -324,7 +325,7 @@ public class SabrProcessor {
         return result;
     }
 
-    public ProcessMediaEndResult processMediaEnd(int headerId) {
+    public ProcessMediaEndResult processMediaEnd(long headerId) {
         Segment segment = partialSegments.remove(headerId);
         if (segment == null) {
             Log.d(TAG, "Header ID %s not found", headerId);

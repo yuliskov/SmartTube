@@ -221,8 +221,8 @@ public class SabrStream {
         MediaHeader mediaHeader;
 
         try {
-            mediaHeader = MediaHeader.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            mediaHeader = MediaHeader.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -260,11 +260,13 @@ public class SabrStream {
     }
 
     private MediaSegmentDataSabrPart processMedia(UMPPart part) {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
-            int headerId = decoder.readVarInt(inputStream);
-            int contentLength = inputStream.available();
+        try {
+            long position = part.data.getPosition();
+            long headerId = decoder.readVarInt(part.data);
+            long offset = part.data.getPosition() - position;
+            int contentLength = part.size - (int) offset;
 
-            ProcessMediaResult result = processor.processMedia(headerId, contentLength, inputStream);
+            ProcessMediaResult result = processor.processMedia(headerId, contentLength, part.data);
 
             return result.sabrPart;
         } catch (IOException | InterruptedException e) {
@@ -273,8 +275,8 @@ public class SabrStream {
     }
 
     private MediaSegmentEndSabrPart processMediaEnd(UMPPart part) {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(part.data)) {
-            int headerId = decoder.readVarInt(inputStream);
+        try {
+            long headerId = decoder.readVarInt(part.data);
             Log.d(TAG, "Header ID: %s", headerId);
 
             ProcessMediaEndResult result = processor.processMediaEnd(headerId);
@@ -293,8 +295,8 @@ public class SabrStream {
         StreamProtectionStatus sps;
 
         try {
-            sps = StreamProtectionStatus.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sps = StreamProtectionStatus.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -308,8 +310,8 @@ public class SabrStream {
         SabrRedirect sabrRedirect;
 
         try {
-            sabrRedirect = SabrRedirect.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sabrRedirect = SabrRedirect.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -327,8 +329,8 @@ public class SabrStream {
         FormatInitializationMetadata fmtInitMetadata;
 
         try {
-            fmtInitMetadata = FormatInitializationMetadata.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            fmtInitMetadata = FormatInitializationMetadata.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -342,8 +344,8 @@ public class SabrStream {
         NextRequestPolicy nextRequestPolicy;
 
         try {
-            nextRequestPolicy = NextRequestPolicy.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            nextRequestPolicy = NextRequestPolicy.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -355,8 +357,8 @@ public class SabrStream {
         SabrError sabrError;
 
         try {
-            sabrError = SabrError.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sabrError = SabrError.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -368,8 +370,8 @@ public class SabrStream {
         SabrContextUpdate sabrCtxUpdate;
 
         try {
-            sabrCtxUpdate = SabrContextUpdate.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sabrCtxUpdate = SabrContextUpdate.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -381,8 +383,8 @@ public class SabrStream {
         SabrContextSendingPolicy sabrCtxSendingPolicy;
 
         try {
-            sabrCtxSendingPolicy = SabrContextSendingPolicy.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sabrCtxSendingPolicy = SabrContextSendingPolicy.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -394,8 +396,8 @@ public class SabrStream {
         ReloadPlayerResponse reloadPlayerResponse;
 
         try {
-            reloadPlayerResponse = ReloadPlayerResponse.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            reloadPlayerResponse = ReloadPlayerResponse.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -411,8 +413,8 @@ public class SabrStream {
         LiveMetadata liveMetadata;
 
         try {
-            liveMetadata = LiveMetadata.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            liveMetadata = LiveMetadata.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
@@ -424,8 +426,8 @@ public class SabrStream {
         SabrSeek sabrSeek;
 
         try {
-            sabrSeek = SabrSeek.parseFrom(part.data);
-        } catch (InvalidProtocolBufferException e) {
+            sabrSeek = SabrSeek.parseFrom(part.toStream());
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
