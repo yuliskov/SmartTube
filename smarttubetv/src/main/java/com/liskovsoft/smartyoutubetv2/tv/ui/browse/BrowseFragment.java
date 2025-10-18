@@ -128,11 +128,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             // Restore state after crash
             selectSectionItem(mSelectedVideo);
-            if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mIsPlayerInForeground && mSelectedVideo != null) {
+            if (PlaybackPresenter.instance(getContext()).getPlayer() == null && mIsPlayerInForeground) {
                 VideoStateService stateService = VideoStateService.instance(getContext());
-                boolean isLastStateActual = stateService.getByVideoId(mSelectedVideo.videoId) != null;
+                boolean isVideoStateSynced = mSelectedVideo == null || stateService.getByVideoId(mSelectedVideo.videoId) != null;
                 State lastState = stateService.getLastState();
-                PlaybackPresenter.instance(getContext()).openVideo(lastState != null && isLastStateActual ? lastState.video : mSelectedVideo);
+                PlaybackPresenter.instance(getContext()).openVideo(lastState != null && isVideoStateSynced ? lastState.video : mSelectedVideo);
             }
             mSelectedVideo = null;
         }

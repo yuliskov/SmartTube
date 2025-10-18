@@ -67,6 +67,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -102,7 +103,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private ListRowPresenter mRowPresenter;
     private VideoCardPresenter mCardPresenter;
     private ShortsCardPresenter mShortsPresenter;
-    private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
+    private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private ExoPlayerController mExoPlayerController;
     private ExoPlayerInitializer mPlayerInitializer;
     private SubtitleManager mSubtitleManager;
@@ -123,7 +124,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         super.onCreate(null); // trying to fix bug with presets
 
         mSelectedVideoId = savedInstanceState != null ? savedInstanceState.getString(SELECTED_VIDEO_ID, null) : null;
-        mMediaGroupAdapters = new HashMap<>();
+        mVideoGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
@@ -498,10 +499,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
-        mMediaSession.setActive(true);
-        mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        // NOTE: No way to disable only a notifications. We need to disable the media session instead.
         boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
+        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+        mMediaSession.setActive(!disableNotifications);
+        mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
 
         try {
             mMediaSessionConnector.setPlayer(mPlayer);
@@ -512,7 +514,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mMediaSessionConnector.setMediaMetadataProvider(disableNotifications ? null : player -> {
+        // NOTE: Don't set to null. This won't disable a notifications but makes them empty.
+        mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
                 return null;
             }
@@ -553,12 +556,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // Fix exoplayer pause after activity is resumed (AFR switching).
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                //if (System.currentTimeMillis() - mResumeTimeMs < 5_000 ||
-                //        (!isResumed() && !isInPIPMode() && !AppDialogPresenter.instance(getContext()).isDialogShown())
-                //) {
-                //    return false;
-                //}
-
                 if (System.currentTimeMillis() - PlayerData.instance(getContext()).getAfrSwitchTimeMs() < 5_000) {
                     return false;
                 }
@@ -663,7 +660,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         private void checkScrollEnd(Video item) {
-            for (VideoGroupObjectAdapter adapter : mMediaGroupAdapters.values()) {
+            for (VideoGroupObjectAdapter adapter : mVideoGroupAdapters.values()) {
                 int index = adapter.indexOf(item);
 
                 if (index != -1) {
@@ -1264,13 +1261,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (group.getAction() == VideoGroup.ACTION_SYNC) {
-            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
             if (adapter != null) {
                 adapter.sync(group);
             }
             return;
         } else if (group.getAction() == VideoGroup.ACTION_REPLACE) {
-            VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+            VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
             if (adapter != null) {
                 adapter.clear();
                 adapter.add(group);
@@ -1278,17 +1275,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             }
         }
 
-        HeaderItem rowHeader = new HeaderItem(group.getTitle());
-        int mediaGroupId = group.getId(); // Create unique int from category.
-
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
+        VideoGroupObjectAdapter existingAdapter = GridFragmentHelper.findRelatedAdapter(mVideoGroupAdapters, group, this::freeze);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
+            HeaderItem rowHeader = new HeaderItem(group.getTitle());
+            int videoGroupId = group.getId(); // Create unique int from category.
 
-            mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+            VideoGroupObjectAdapter videoGroupAdapter = new VideoGroupObjectAdapter(group, group.isShorts() ? mShortsPresenter : mCardPresenter);
 
-            ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
+            mVideoGroupAdapters.put(videoGroupId, videoGroupAdapter);
+
+            ListRow row = new ListRow(rowHeader, videoGroupAdapter);
 
             int newPosition = group.getPosition() + SUGGESTIONS_START_INDEX;
             if (group.getPosition() == -1 || newPosition > mRowsAdapter.size()) {
@@ -1297,6 +1294,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 mRowsAdapter.add(newPosition, row);
             }
         } else {
+            Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
+
             freeze(true);
 
             existingAdapter.add(group); // continue
@@ -1311,7 +1310,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        VideoGroupObjectAdapter adapter = mMediaGroupAdapters.get(group.getId());
+        VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
 
         if (adapter != null) {
             adapter.remove(group);
@@ -1319,7 +1318,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             if (adapter.isEmpty()) {
                 int position = getSuggestionsIndex(group);
                 if (position != -1) {
-                    mMediaGroupAdapters.remove(group.getId());
+                    mVideoGroupAdapters.remove(group.getId());
                     mRowsAdapter.removeItems(position + SUGGESTIONS_START_INDEX, 1);
                 }
             }
@@ -1333,7 +1332,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return -1;
         }
 
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(group.getId());
+        VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(group.getId());
 
         int index = getRowAdapterIndex(existingAdapter);
 
@@ -1406,7 +1405,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mPendingFocus.getGroup().getId());
+        VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(mPendingFocus.getGroup().getId());
 
         if (existingAdapter == null) {
             return;
@@ -1440,7 +1439,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mRowsAdapter.removeItems(SUGGESTIONS_START_INDEX, mRowsAdapter.size() - 1);
         }
 
-        mMediaGroupAdapters.clear();
+        mVideoGroupAdapters.clear();
         mPendingFocus = null;
     }
 

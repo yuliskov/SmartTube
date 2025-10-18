@@ -154,7 +154,11 @@ public class RowHeaderPresenter extends Presenter {
             }
         } else {
             if (vh.mTitleView != null) {
-                vh.mTitleView.setText(headerItem.getName());
+                // MOD: hide row header if the title is null
+                //vh.mTitleView.setText(headerItem.getName());
+                String name = headerItem.getName();
+                vh.mTitleView.setText(name);
+                vh.mTitleView.setVisibility(name != null ? View.VISIBLE : View.GONE);
             }
             if (vh.mDescriptionView != null) {
                 if (TextUtils.isEmpty(headerItem.getDescription())) {

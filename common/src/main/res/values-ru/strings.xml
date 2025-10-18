@@ -598,6 +598,7 @@
     <string name="content_block_exclude_channel">Исключить канал из SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Перестать исключать канал из SponsorBlock</string>
     <string name="player_chapter_notification">Быстрое перемещение по эпизодам с помощью всплывающего уведомления</string>
+    <string name="player_chapter_notification2">Перейти к следующему эпизоду, нажав на уведомление</string>
     <string name="subtitle_remember">Запомнить включенные субтитры для каждого канала</string>
     <string name="amazon_frame_drop_fix">Исправление выпадения кадров #2</string>
     <string name="amazon_frame_drop_fix_desc">Исправляет лаги на Amazon Stick и некоторых других устройствах.</string>
@@ -698,4 +699,5 @@
     <string name="oculus_quest_fix">Исправлять Oculus Quest</string>
     <string name="playback_buffering_fix">Исправлять воспроизведение буферизации</string>
     <string name="typing_corrections">Отключить автокоррекцию при наборе текста</string>
+    <string name="suggestions_horizontally_scrolled">Горизонтально прокручиваемые рекомендации</string>
 </resources>

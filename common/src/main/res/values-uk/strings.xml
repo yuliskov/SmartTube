@@ -598,6 +598,7 @@
     <string name="content_block_exclude_channel">Виключити канал із SponsorBlock</string>
     <string name="content_block_stop_excluding_channel">Припинити виключати канал із SponsorBlock</string>
     <string name="player_chapter_notification">Швидке просування по епізодах за допомогою спливаючого сповіщення</string>
+    <string name="player_chapter_notification2">Перейти до наступного епізоду, натиснувши на сповіщення</string>
     <string name="subtitle_remember">Запам\'ятати ввімкнені субтитри для кожного каналу</string>
     <string name="amazon_frame_drop_fix">Виправлення випадіння кадрів #2</string>
     <string name="amazon_frame_drop_fix_desc">Виправляє лагання на Amazon Stick та деяких інших пристроях.</string>
@@ -696,4 +697,5 @@
     <string name="card_unlocalized_titles">Не перекладати назви відео</string>
     <string name="dont_resize_video_to_fit_dialog">Не змінювати розмір відео відповідно до розміру діалогу</string>
     <string name="typing_corrections">Вимкнути автокорекцію під час введення тексту</string>
+    <string name="suggestions_horizontally_scrolled">Рекомендації з горизонтальним прокручуванням</string>
 </resources>

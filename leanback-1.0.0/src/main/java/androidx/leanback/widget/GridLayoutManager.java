@@ -2367,7 +2367,12 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
         }
 
         if (state.willRunPredictiveAnimations()) {
-            fillScrapViewsInPostLayout();
+            try {
+                fillScrapViewsInPostLayout();
+            } catch (NullPointerException e) {
+                // NullPointerException: Attempt to invoke virtual method 'android.view.View.getLayoutParams()' on a null object reference
+                e.printStackTrace();
+            }
         }
 
         if (DEBUG) {

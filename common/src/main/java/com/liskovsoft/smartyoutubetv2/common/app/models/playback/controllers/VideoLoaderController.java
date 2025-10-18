@@ -113,6 +113,12 @@ public class VideoLoaderController extends BasePlayerController {
         Utils.postDelayed(mOnLongBuffering, BUFFERING_THRESHOLD_MS);
     }
 
+    @Override
+    public void onSeekEnd() {
+        // Reset buffering stats
+        mBufferingCount = null;
+    }
+
     private void onLongBuffering() {
         if (getPlayer() == null || getVideo() == null) {
             return;
@@ -376,18 +382,6 @@ public class VideoLoaderController extends BasePlayerController {
             }
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
             Log.d(TAG, "Loading regular video in dash format...");
-
-            //mMpdStreamAction = formatInfo.createMpdStreamObservable()
-            //        .subscribe(
-            //                dashManifest -> {
-            //                    if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
-            //                        player.openMerged(dashManifest, formatInfo.getHlsManifestUrl());
-            //                    } else {
-            //                        player.openDash(dashManifest);
-            //                    }
-            //                },
-            //                error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
-            //        );
 
             if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
                 player.openMerged(formatInfo, formatInfo.getHlsManifestUrl());

@@ -105,7 +105,8 @@ public class VideoGroup {
         videoGroup.mTitle = mediaGroup != null && mediaGroup.getTitle() != null ?
                 mediaGroup.getTitle() : section != null ? section.getTitle() : null;
         // Fix duplicated rows e.g. Shorts
-        videoGroup.mId = !TextUtils.isEmpty(videoGroup.mTitle) ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
+        //videoGroup.mId = !TextUtils.isEmpty(videoGroup.mTitle) ? videoGroup.mTitle.hashCode() : videoGroup.hashCode();
+        videoGroup.mId = videoGroup.hashCode();
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -132,7 +133,7 @@ public class VideoGroup {
             return baseGroup;
         }
 
-        if (mediaGroup.isEmpty()) {
+        if (mediaGroup.getMediaItems() == null) {
             Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
             return baseGroup;
         }
@@ -165,7 +166,7 @@ public class VideoGroup {
     public List<Video> getVideos() {
         // NOTE: Don't make the collection read only
         // The collection will be filtered inside VideoGroupObjectAdapter
-        return mVideos;
+        return Collections.unmodifiableList(mVideos);
     }
 
     public String getTitle() {
@@ -178,9 +179,9 @@ public class VideoGroup {
     public void setTitle(String title) {
         mTitle = title;
 
-        if (!TextUtils.isEmpty(title) && (mId == 0 || mId == hashCode())) {
-            mId = title.hashCode();
-        }
+        //if (!TextUtils.isEmpty(title) && (mId == 0 || mId == hashCode())) {
+        //    mId = title.hashCode();
+        //}
     }
 
     public int getId() {
@@ -305,13 +306,19 @@ public class VideoGroup {
             return;
         }
 
-        int index = mVideos.indexOf(video);
+        removeAllBefore(mVideos.indexOf(video));
+    }
 
-        if (index == -1) {
+    public void removeAllBefore(int index) {
+        if (mVideos == null) {
             return;
         }
 
-        mVideos = mVideos.subList(index + 1, mVideos.size());
+        if (index <= 0 || index >= mVideos.size()) {
+            return;
+        }
+
+        mVideos = mVideos.subList(index, mVideos.size());
     }
 
     /**
@@ -409,6 +416,14 @@ public class VideoGroup {
     }
 
     public void add(Video video) {
+        // TODO: remove the hack someday.
+        // Dirty hack for avoiding group duplication.
+        // Duplicated items suddenly appeared in Home, Subscriptions and History.
+        // See: VideoGroupObjectAdapter.mVideoItems
+        if (mVideos != null && mVideos.contains(video)) {
+            return;
+        }
+
         int size = getSize();
         add(size != -1 ? size : 0, video);
     }

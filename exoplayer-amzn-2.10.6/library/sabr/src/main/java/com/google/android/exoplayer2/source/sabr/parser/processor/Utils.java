@@ -1,6 +1,9 @@
 package com.google.android.exoplayer2.source.sabr.parser.processor;
 
+import com.google.android.exoplayer2.extractor.ExtractorInput;
+
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class Utils {
     public static int ticksToMs(long timeTicks, int timescale) {
@@ -18,5 +21,15 @@ public class Utils {
         is.read(result, 0, streamLength);
 
         return result;
+    }
+
+    public static byte[] readExactBytes(ExtractorInput input, int length) throws IOException, InterruptedException {
+        byte[] result = new byte[length];
+        input.readFully(result, 0, length);
+        return result;
+    }
+
+    public static long toLong(int value) {
+        return Integer.toUnsignedLong(value);
     }
 }

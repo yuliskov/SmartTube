@@ -15,25 +15,26 @@ import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
-    private final List<Video> mVideoItems = new ArrayList<Video>() {
-        @Override
-        public boolean addAll(@NonNull Collection<? extends Video> c) {
-            // TODO: remove the hack someday.
-            // Dirty hack for avoiding group duplication.
-            // Duplicated items suddenly appeared in Home, Subscriptions and History.
-
-            // Another alt method.
-            int size = size();
-            if (size > 0) {
-                if (size < CHECK_MAX_SIZE)
-                    Helpers.removeIf(c, this::contains);
-            } else {
-                Helpers.removeDuplicates(c);
-            }
-
-            return super.addAll(c);
-        }
-    };
+    //private final List<Video> mVideoItems = new ArrayList<Video>() {
+    //    @Override
+    //    public boolean addAll(@NonNull Collection<? extends Video> c) {
+    //        // TODO: remove the hack someday.
+    //        // Dirty hack for avoiding group duplication.
+    //        // Duplicated items suddenly appeared in Home, Subscriptions and History.
+    //
+    //        // Another alt method.
+    //        int size = size();
+    //        if (size > 0) {
+    //            if (size < CHECK_MAX_SIZE)
+    //                Helpers.removeIf(c, this::contains);
+    //        } else {
+    //            Helpers.removeDuplicates(c);
+    //        }
+    //
+    //        return super.addAll(c);
+    //    }
+    //};
+    private final List<Video> mVideoItems = new ArrayList<>();
     private final List<VideoGroup> mVideoGroups = new ArrayList<>(); // keep groups from being garbage collected
     private static final int CHECK_MAX_SIZE = 200;
 

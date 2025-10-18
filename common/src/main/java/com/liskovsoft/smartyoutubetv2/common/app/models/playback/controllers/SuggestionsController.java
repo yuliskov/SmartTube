@@ -395,6 +395,9 @@ public class SuggestionsController extends BasePlayerController {
 
                 if (TextUtils.isEmpty(videoGroup.getTitle())) {
                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
+                    if (getPlayerTweaksData().isSuggestionsHorizontallyScrolled()) {
+                        videoGroup.setId(videoGroup.getTitle().hashCode()); // merge by the id
+                    }
                 }
 
                 getPlayer().updateSuggestions(videoGroup);
@@ -613,6 +616,10 @@ public class SuggestionsController extends BasePlayerController {
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup group) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (MediaServiceManager.instance().shouldContinueRowGroup(getContext(), group)) {
             continueGroup(group, getPlayer().isSuggestionsShown());
         }

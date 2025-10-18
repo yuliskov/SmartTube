@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class CategoryEmptyError implements ErrorFragmentData {
     private final Context mContext;
@@ -26,7 +27,9 @@ public class CategoryEmptyError implements ErrorFragmentData {
     public String getMessage() {
         String result = mContext.getString(R.string.msg_cant_load_content);
         if (mError != null && !Helpers.containsAny(mError.getMessage(), "fromNullable result is null")) {
-            result = mError.getMessage();
+            String className = mError.getClass().getSimpleName();
+            result = String.format("%s: %s", className, Utils.getStackTraceAsString(mError));
+            //result = mError.getMessage();
         }
         return result;
     }

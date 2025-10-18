@@ -5,9 +5,12 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +19,7 @@ public class GridFragmentHelper {
     private static final Map<Integer, Pair<Integer, Integer>> sCardDimensPx = new HashMap<>();
     private static final Map<Integer, Float> sMaxColsNum = new HashMap<>();
     private static final Runnable sInvalidate = GridFragmentHelper::invalidate;
+    private static final int MIN_ADAPTER_SIZE = 6;
 
     private static void invalidate() {
         sCardDimensPx.clear();
@@ -108,5 +112,62 @@ public class GridFragmentHelper {
         }
 
         return new Pair<>((int) width, (int) height);
+    }
+
+    public interface RowFreezer {
+        void freeze(boolean freeze);
+    }
+
+    public static VideoGroupObjectAdapter findRelatedAdapter(Map<Integer, VideoGroupObjectAdapter> mediaGroupAdapters, VideoGroup group, RowFreezer freezer) {
+        if (group == null || mediaGroupAdapters == null) {
+            return null;
+        }
+
+        int mediaGroupId = group.getId();
+
+        VideoGroupObjectAdapter existingAdapter = mediaGroupAdapters.get(mediaGroupId);
+
+        // Find out could we continue an existing one (vertical scroll YouTube layout)
+        if (existingAdapter == null) {
+            Float value = sMaxColsNum.get(group.isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width);
+            int minAdapterSize = value != null ? value.intValue() : MIN_ADAPTER_SIZE;
+
+            for (VideoGroupObjectAdapter adapter : mediaGroupAdapters.values()) {
+                if (isMatchedRowFound(adapter, group)) {
+                    // Remain other rows of the same type untitled (usually the such rows share the same titles)
+                    group.setTitle(null);
+
+                    if (adapter.size() < minAdapterSize && group.getSize() < minAdapterSize) {
+                        int missingCount = minAdapterSize - adapter.size();
+                        if (group.getSize() > missingCount) {
+                            // Split the group to match 'minAdapterSize'
+                            VideoGroup missingGroup = VideoGroup.from(group.getVideos().subList(0, missingCount));
+                            group.removeAllBefore(missingCount);
+                            freezer.freeze(true);
+                            adapter.add(missingGroup);
+                            freezer.freeze(false);
+                        } else {
+                            existingAdapter = adapter; // continue inside a caller
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        return existingAdapter;
+    }
+
+    private static boolean isMatchedRowFound(VideoGroupObjectAdapter adapter, VideoGroup group) {
+        VideoGroup lastGroup = adapter.getAll().get(adapter.size() - 1).getGroup();
+        boolean matchedRowFound = lastGroup != null
+                && lastGroup.getMediaGroup() != null
+                && lastGroup.getMediaGroup().getNextPageKey() == null
+                && group.getMediaGroup() != null
+                && group.getMediaGroup().getNextPageKey() == null
+                && lastGroup.isShorts() == group.isShorts()
+                && (Helpers.equals(lastGroup.getTitle(), group.getTitle())
+                    || lastGroup.getTitle() == null); // we could set title to null in the previous iteration
+        return matchedRowFound;
     }
 }

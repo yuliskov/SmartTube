@@ -1,3 +1,20 @@
+-keepclassmembers class androidx.leanback.widget.HorizontalGridView {
+    <init>(...);
+    android.graphics.LinearGradient mLowFadeShader;
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment$ItemViewClickedListener {
+    <init>(...);
+}
+-keepclassmembers class com.liskovsoft.youtubeapi.common.helpers.PostDataHelper {
+    <clinit>(...);
+    java.lang.String createQueryTV(java.lang.String);
+}
+-keepclassmembers class androidx.work.impl.utils.ForceStopRunnable {
+    <init>(...);
+}
+-keepclassmembers class com.liskovsoft.youtubeapi.channelgroups.ChannelGroupServiceImpl {
+    <init>(...);
+}
 -keepclassmembers class androidx.leanback.widget.BrowseRowsFrameLayout {
     <init>(...);
 }
@@ -64,9 +81,6 @@
     <init>(...);
     void attachInfo(android.content.Context, android.content.pm.ProviderInfo);
 }
--keepclassmembers class okhttp3.OkHttpClient$Builder {
-    <init>(...);
-}
 -keepclassmembers class androidx.core.view.LayoutInflaterCompat {
     void setFactory2(android.view.LayoutInflater, android.view.LayoutInflater$Factory2);
 }
@@ -132,16 +146,10 @@
     <init>(...);
     java.util.List mActionExtrasList;
 }
--keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
--keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
--keep class com.google.android.exoplayer2.util.Util { *; }
--keep class com.bumptech.glide.request.RequestOptions { *; }
--keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keepclassmembers class android.view.View {
     <init>(...);
     void setZ(float);
 }
--keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController {
     <init>(...);
     boolean containsMedia();
@@ -149,6 +157,16 @@
 -keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
 }
+-keep class com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor { *; }
+-keep class com.google.android.exoplayer2.C { *; }
+-keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
+-keep class okhttp3.OkHttpClient$Builder { *; }
+-keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
+-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
+-keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
+-keep class com.google.android.exoplayer2.util.Util { *; }
+-keep class com.bumptech.glide.request.RequestOptions { *; }
+-keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keep class androidx.leanback.app.BrowseSupportFragment { *; }
 -keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController { *; }
 -keep class io.reactivex.internal.operators.observable.ObservableDelaySubscriptionOther { *; }

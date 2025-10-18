@@ -726,7 +726,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleLeftRightSkip(int keyCode) {
-        if (getPlayer().isOverlayShown() || getVideo() == null ||
+        if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null ||
                 (getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsEnabled() ||
                 (!getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosEnabled()))) {
             return false;
@@ -750,6 +750,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void setPlaylistAddButtonStateCached() {
+        if (getVideo() == null) {
+            return;
+        }
+
         String videoId = getVideo().videoId;
         mPlaylistInfos = null;
         Disposable playlistsInfoAction =

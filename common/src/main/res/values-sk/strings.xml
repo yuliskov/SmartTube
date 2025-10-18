@@ -238,7 +238,7 @@
     <string name="pin_unpin_channel">Pridať/Odstrániť kanál na postranný panel</string>
     <string name="pin_playlist">Pridať playlist na postranný panel</string>
     <string name="pin_channel">Pridať kanál na postranný panel</string>
-    <string name="pin_to_sidebar">Pridať na postranný panel</string>
+    <string name="pinned_to_sidebar">Pridané na postranný panel</string>
     <string name="unpin_from_sidebar">Odstrániť z postranného panela</string>
     <string name="unpin_group_from_sidebar">Odstrániť skupinu z Odberov</string>
     <string name="unpinned_from_sidebar">Odstránené z postranného panela</string>
@@ -250,7 +250,7 @@
     <string name="hide_shorts">Skryť Shorts z Odberov</string>
     <string name="hide_shorts_channel">Skryť Shorts z kanála</string>
     <string name="key_remapping">Prednastavenie tlačidiel</string>
-    <string name="screen_diming">Stmavenie obrazovky</string>
+    <string name="screen_dimming">Stmavenie obrazovky</string>
     <string name="removed_from_playback_queue">Odstránené zo zoznamu</string>
     <string name="added_to_playback_queue">Pridané do poradia</string>
     <string name="add_remove_from_playback_queue">Pridať/Odstrániť z poradia</string>
@@ -427,6 +427,7 @@
     <string name="save_remove_playlist">Uložiť/Zmazať playlist zo sekcie Playlisty</string>
     <string name="save_playlist">Uložiť playlist do sekcie Playlisty</string>
     <string name="remove_playlist">Zmazať playlist zo sekcie Playlisty natrvalo</string>
+    <string name="remove_playlist_fmt">Natrvalo zmazať %s?</string>
     <string name="removed_from_playlists">Zmazané zo sekcie Playlisty</string>
     <string name="saved_to_playlists">Pridané do sekcie Playlisty</string>
     <string name="create_playlist">Vytvoriť playlist</string>
@@ -602,6 +603,7 @@
     <string name="content_block_exclude_channel">Neaplikovať SponsorBlock na tento kanál</string>
     <string name="content_block_stop_excluding_channel">Znovu aplikovať SponsorBlock na tento kanál</string>
     <string name="player_chapter_notification">Rýchlejšie presúvanie cez kapitoly pomocou notifikácií</string>
+    <string name="player_chapter_notification2">Prepnúť na ďalšiu kapitolu kliknutím na notifikáciu</string>
     <string name="subtitle_remember">Povoliť titulky iba na aktuálnom kanáli</string>
     <string name="amazon_frame_drop_fix">Oprava výpadkov prehrávania #2</string>
     <string name="amazon_frame_drop_fix_desc">Určené pre zariadenia Amazon Stick. Môže fungovať aj na iných zariadeniach.</string>
@@ -705,4 +707,6 @@
     <string name="card_preview_full">Video so zvukom</string>
     <string name="card_preview">Náhľad karty</string>
     <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
+    <string name="dont_resize_video_to_fit_dialog">Nemeniť veľkosť videa na veľkosť dialógu</string>
+    <string name="typing_corrections">Vypnúť automatické opravy pri písaní textu</string>
 </resources>

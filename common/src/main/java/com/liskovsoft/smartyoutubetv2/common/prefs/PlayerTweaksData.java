@@ -101,6 +101,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsAudioFocusEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
     private boolean mIsDontResizeVideoToFitDialogEnabled;
+    private boolean mIsSuggestionsHorizontallyScrolled;
     private boolean mIsPauseAfterEachVideoInQueueEnabled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
@@ -613,6 +614,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isSuggestionsHorizontallyScrolled() {
+        return mIsSuggestionsHorizontallyScrolled;
+    }
+
+    public void setSuggestionsHorizontallyScrolled(boolean enable) {
+        mIsSuggestionsHorizontallyScrolled = enable;
+        persistData();
+    }
+
     public boolean isPauseAfterEachVideoInQueueEnabled() {
         return mIsPauseAfterEachVideoInQueueEnabled;
     }
@@ -688,7 +698,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
         //mIsPersistentAntiBotFixEnabled = Helpers.parseBoolean(split, 53, false);
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
-        mIsPauseAfterEachVideoInQueueEnabled = Helpers.parseBoolean(split, 56, false);
+        mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
+        mIsPauseAfterEachVideoInQueueEnabled = Helpers.parseBoolean(split, 57, false);
 
         updateDefaultValues();
     }
@@ -715,7 +726,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSimplePlayerNavigationEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
-                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsPauseAfterEachVideoInQueueEnabled
+                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled, mIsPauseAfterEachVideoInQueueEnabled
                 ));
     }
 

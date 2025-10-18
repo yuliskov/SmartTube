@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message NextRequestPolicy {
+    optional int32 target_audio_readahead_ms = 1;
+    optional int32 target_video_readahead_ms = 2;
+    optional int32 max_time_since_last_request_ms = 3;
+    optional int32 backoff_time_ms = 4;
+    optional int32 min_audio_readahead_ms = 5;
+    optional int32 min_video_readahead_ms = 6;
+    optional bytes playback_cookie = 7;
+    optional string video_id = 8;
+}
