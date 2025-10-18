@@ -33,7 +33,8 @@ project.ext {
     checkerframeworkVersion = '2.5.0'
     // MOD: use versions from sharedutils
     // androidXTestVersion = '1.1.0'
-    protobufVersion = '4.32.1'
+    //protobufVersion = '4.32.1'
+    protobufVersion = '3.17.3' // the latest for Android 4
     androidXTestVersion = project.properties.testXSupportLibraryVersion
     modulePrefix = ':'
     if (gradle.ext.has('exoplayerModulePrefix')) {
