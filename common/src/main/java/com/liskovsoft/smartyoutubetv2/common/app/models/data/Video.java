@@ -881,8 +881,7 @@ public final class Video {
      */
     public boolean isSectionPlaylistEnabled(Context context) {
         return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
-                // && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
-                && (!checkAllVideosHasPlaylist() || nextMediaItem == null
+                && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
                        || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
                 && (!isRemote || remotePlaylistId == null);
     }

@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 public class UMPInputStream extends InputStream {
     private final UMPPart part;
-    private long position = 0; // bytes read so far
+    private int position = 0; // bytes read so far
 
     public UMPInputStream(UMPPart part) {
         this.part = part;
@@ -35,7 +35,7 @@ public class UMPInputStream extends InputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         if (position >= part.size) return -1;
 
-        int toRead = (int) Math.min(len, part.size - position);
+        int toRead = Math.min(len, part.size - position);
         int read;
         try {
             read = part.data.read(b, off, toRead);
@@ -52,7 +52,7 @@ public class UMPInputStream extends InputStream {
     @Override
     public long skip(long n) throws IOException {
         int toSkip = (int) Math.min(n, part.size - position);
-        long skipped;
+        int skipped;
         try {
             skipped = part.data.skip(toSkip);
         } catch (InterruptedException e) {
@@ -65,8 +65,7 @@ public class UMPInputStream extends InputStream {
 
     @Override
     public int available() {
-        long remaining = part.size - position;
-        return remaining > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) remaining;
+        return part.size - position;
     }
 }
 
