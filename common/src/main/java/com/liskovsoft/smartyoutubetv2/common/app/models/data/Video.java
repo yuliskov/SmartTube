@@ -876,13 +876,22 @@ public final class Video {
         }
     }
 
+    ///**
+    // * The section playlist intended (as a backup replacement) for cases when regular playlist not available
+    // */
+    //public boolean isSectionPlaylistEnabled(Context context) {
+    //    return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
+    //            && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
+    //                   || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
+    //            && (!isRemote || remotePlaylistId == null);
+    //}
+
     /**
      * The section playlist intended (as a backup replacement) for cases when regular playlist not available
      */
     public boolean isSectionPlaylistEnabled(Context context) {
         return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
-                && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
-                       || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
+                && (!checkAllVideosHasPlaylist() || nextMediaItem == null || !isMix()) // skip hidden playlists (music videos usually)
                 && (!isRemote || remotePlaylistId == null);
     }
 

@@ -149,6 +149,27 @@ public class VideoGroup {
         return baseGroup;
     }
 
+    public static VideoGroup from(VideoGroup baseGroup, VideoGroup newGroup) {
+        baseGroup.mMediaGroup = newGroup.mMediaGroup;
+
+        if (newGroup.mMediaGroup == null) {
+            return baseGroup;
+        }
+
+        if (newGroup.getVideos() == null) {
+            Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + newGroup.getTitle());
+            return baseGroup;
+        }
+
+        for (Video video : newGroup.getVideos()) {
+            baseGroup.add(video);
+        }
+
+        baseGroup.mAction = ACTION_APPEND;
+
+        return baseGroup;
+    }
+
     public static VideoGroup fromChapters(List<ChapterItem> chapters, String title) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mTitle = title;

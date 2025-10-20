@@ -497,6 +497,7 @@ public class MediaServiceManager implements OnAccountChange {
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
                 if (atomicIndex.incrementAndGet() == 1) {
                     ChannelUploadsPresenter.instance(context).clear();
+                    ChannelUploadsPresenter.instance(context).setChannel(item);
                 }
                 // NOTE: Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
                 Utils.postDelayed(() -> ChannelUploadsPresenter.instance(context).update(firstGroup), 100);

@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
+
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -33,8 +35,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private final BrowseProcessorManager mBrowseProcessor;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
-    private Video mVideoItem;
-    private MediaGroup mRootGroup;
+    private Video mChannel;
+    private MediaGroup mPendingGroup;
+    private VideoGroup mBaseGroup;
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
@@ -70,9 +73,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
-        mVideoItem = null;
-        mRootGroup = null;
         disposeActions();
+        mChannel = null;
+        mPendingGroup = null;
+        mBaseGroup = null;
     }
 
     @Override
@@ -130,15 +134,14 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
-        disposeActions();
+        clear();
+
+        mChannel = item;
+
         getViewManager().startView(ChannelUploadsView.class);
 
         if (getView() != null) {
-            mVideoItem = null;
-            getView().clear();
             update(item);
-        } else {
-            mVideoItem = item;
         }
     }
 
@@ -167,6 +170,14 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
+    public Video getChannel() {
+        return mChannel;
+    }
+
+    public void setChannel(Video channel) {
+        mChannel = channel;
+    }
+
     private void disposeActions() {
         RxHelper.disposeActions(mUpdateAction, mScrollAction);
         MediaServiceManager.instance().disposeActions();
@@ -193,12 +204,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         MediaGroup mediaGroup = group.getMediaGroup();
 
         Observable<MediaGroup> continuation;
-
-        //if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
-        //    continuation = getMediaItemService().continueGroupObserve(mediaGroup);
-        //} else {
-        //    continuation = getContentService().continueGroupObserve(mediaGroup);
-        //}
 
         continuation = getContentService().continueGroupObserve(mediaGroup);
 
@@ -247,18 +252,19 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void update(MediaGroup mediaGroup) {
-        if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
-            mVideoItem = null;
-            mRootGroup = mediaGroup; // start loading from this group
-            getViewManager().startView(ChannelUploadsView.class);
-            return;
-        }
-
         // The view could be running in the background
         getViewManager().startView(ChannelUploadsView.class);
 
-        VideoGroup group = VideoGroup.from(mediaGroup);
-        update(group);
+        if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
+            mPendingGroup = mediaGroup; // start loading from this group
+            return;
+        }
+
+        mBaseGroup = mBaseGroup != null ? VideoGroup.from(mBaseGroup, mediaGroup) : VideoGroup.from(mediaGroup);
+        if (mChannel != null && TextUtils.isEmpty(mBaseGroup.getTitle())) {
+            mBaseGroup.setTitle(mChannel.getTitle());
+        }
+        update(mBaseGroup);
     }
 
     private void update(VideoGroup group) {
@@ -316,9 +322,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void clear() {
+        disposeActions();
         if (getView() != null) {
             getView().clear();
         }
+        mChannel = null;
+        mPendingGroup = null;
+        mBaseGroup = null;
     }
 
     public void refresh() {
@@ -326,12 +336,12 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
-        if (mVideoItem != null) {
+        if (mPendingGroup != null) {
             getView().clear();
-            update(mVideoItem);
-        } else if (mRootGroup != null) {
+            update(mPendingGroup);
+        } else if (mChannel != null) {
             getView().clear();
-            update(mRootGroup);
+            update(mChannel);
         }
     }
 }

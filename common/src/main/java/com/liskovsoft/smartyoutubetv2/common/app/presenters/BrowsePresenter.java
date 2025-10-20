@@ -754,18 +754,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         getView().showProgressBar(true);
 
-        VideoGroup firstGroup = VideoGroup.from(section, column);
-        firstGroup.setAction(VideoGroup.ACTION_REPLACE);
-        getView().updateSection(firstGroup);
+        // Stay on the same group in case of multiple subscribe calls
+        VideoGroup baseGroup = VideoGroup.from(section, column);
+        baseGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(baseGroup);
 
         if (group == null) {
             // No group. Maybe just clear.
             getView().showProgressBar(false);
             return;
         }
-
-        // Stay on the same group in case of multiple subscribe calls
-        VideoGroup baseGroup = VideoGroup.from(section, column);
 
         Disposable updateAction = group
                 .subscribe(

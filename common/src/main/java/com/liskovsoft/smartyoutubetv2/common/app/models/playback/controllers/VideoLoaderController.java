@@ -246,7 +246,8 @@ public class VideoLoaderController extends BasePlayerController {
     public void onSuggestionItemClicked(Video item) {
         openVideoInt(item);
 
-        getPlayer().showControls(false);
+        if (getPlayer() != null)
+            getPlayer().showControls(false);
     }
 
     @Override
