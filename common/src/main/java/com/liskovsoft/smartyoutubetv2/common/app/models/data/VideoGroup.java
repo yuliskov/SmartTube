@@ -88,7 +88,7 @@ public class VideoGroup {
 
         for (Video item : items) {
             // Section as playlist fix. Don't change the root.
-            if (item.getGroup() == null) {
+            if (item.getGroup() == null || section != null) {
                 item.setGroup(videoGroup);
             }
         }
@@ -259,7 +259,7 @@ public class VideoGroup {
     }
 
     public int getType() {
-        return mType != -1 ? mType : getMediaGroup() != null ? getMediaGroup().getType() : -1;
+        return mType != -1 ? mType : getMediaGroup() != null ? getMediaGroup().getType() : mSection != null ? mSection.getId() : -1;
     }
 
     public void setType(int type) {

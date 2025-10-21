@@ -225,12 +225,15 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     private void notifyOtherAdapters(VideoGroup group, int type) {
         sAdapterRegistry.forEach(adapter -> {
-            if (adapter == this)
+            if (adapter == this || adapter.isEmpty())
                 return;
 
             List<VideoGroup> groups = adapter.getAllGroups();
-            boolean adapterMatch = Helpers.findFirst(groups, item -> Helpers.equals(group.getId(), item.getId())) != null;
-            if (adapterMatch) {
+
+            VideoGroup lastGroup = groups.get(groups.size() - 1);
+            boolean adapterFound = lastGroup.getId() == group.getId();
+
+            if (adapterFound) {
                 switch (type) {
                     case TYPE_ADD:
                         adapter.add(group);

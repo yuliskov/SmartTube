@@ -94,7 +94,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (!item.fromQueue) {
+        if (!item.fromQueue && !item.belongsToPlaybackQueue()) {
             mPlaylist.add(item);
         } else {
             item.fromQueue = false;

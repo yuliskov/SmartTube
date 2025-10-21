@@ -447,7 +447,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         } else {
             VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_REMOVE ||
-                    action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST) {
+                    action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST ||
+                    action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
                     removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
                     removeItem(mCurrentVideo);
@@ -665,6 +666,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void updateLocalGrid(BrowseSection section, Callable<List<Video>> items) {
         VideoGroup videoGroup = VideoGroup.from(Helpers.get(items), section);
         videoGroup.setAction(VideoGroup.ACTION_REPLACE);
+        videoGroup.setId(videoGroup.hashCode());
+        videoGroup.setTitle(section.getTitle());
         getView().updateSection(videoGroup);
         getView().showProgressBar(false);
     }
@@ -866,7 +869,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             if (isHistorySection() && !VideoStateService.instance(getContext()).isEmpty()) {
                 getView().showProgressBar(false);
                 VideoGroup videoGroup = VideoGroup.from(getCurrentSection());
-                videoGroup.setType(MediaGroup.TYPE_HISTORY);
                 appendLocalHistory(videoGroup);
                 getView().updateSection(videoGroup);
             } else {
@@ -1060,6 +1062,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     public boolean isSubscriptionsSection() {
         return isSection(MediaGroup.TYPE_SUBSCRIPTIONS);
+    }
+    
+    public boolean isPlaybackQueueSection() {
+        return isSection(MediaGroup.TYPE_PLAYBACK_QUEUE);
     }
 
     public boolean isPinnedSection() {
