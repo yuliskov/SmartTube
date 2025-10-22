@@ -481,7 +481,7 @@
   <string name="protect_settings_with_password">Suojaa kaikki asetukset salasanalla</string>
   <string name="enter_settings_password">Syötä asetusten salasana</string>
   <string name="child_mode">Lapsilukko</string>
-  <string name="child_mode_desc">Tässä tilassa käyttäjä ei voi käyttää hakua tai nähdä ehdotettuja sisältöjä. Asetukset ovat suojattu salasanalla.</string>
+  <string name="child_mode_desc">Tässä tilassa et voi käyttää hakua tai nähdä ehdotettuja sisältöjä. Asetukset on suojattu salasanalla.</string>
   <string name="lost_setting_warning">Sovelluksen asetuksia muutetaan. Varmista, että olet luonut varmuuskopion asetuksista.</string>
   <string name="player_button_long_click">Lyhyt painallus nopeaan toimintaan ja pitkä painallus asetusten valintaikkunaan.</string>
   <string name="pause_history">Keskeytä historiatoiminto</string>
@@ -707,4 +707,5 @@
   <string name="hide_shorts_from_search">Piilota shortsit hakutuloksista</string>
   <string name="remove_playlist_fmt">Poistetaanko %s pysyvästi\?</string>
   <string name="typing_corrections">Poista automaattinen korjaus käytöstä tekstiä kirjoitettaessa</string>
+  <string name="suggestions_horizontally_scrolled">Vaakasuunnassa vieritettävät ehdotukset</string>
 </resources>
