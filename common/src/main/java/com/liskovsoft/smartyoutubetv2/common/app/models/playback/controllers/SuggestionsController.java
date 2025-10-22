@@ -498,7 +498,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void addChapterMarkersIfNeeded() {
-        if (mChapters == null) {
+        if (getPlayer() == null || mChapters == null) {
             return;
         }
 
@@ -506,7 +506,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void appendChapterSuggestionsIfNeeded() {
-        if (mChapters == null) {
+        if (getPlayer() == null || mChapters == null) {
             return;
         }
 
