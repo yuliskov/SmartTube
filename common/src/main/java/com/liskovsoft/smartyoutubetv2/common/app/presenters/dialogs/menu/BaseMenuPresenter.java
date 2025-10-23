@@ -242,7 +242,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Video video = Video.from(original);
 
         // Need correct playlist title to further comparison (decide whether save or remove)
-        if (original.belongsToSamePlaylistGroup()) {
+        if (original.getGroup() != null && original.belongsToSamePlaylistGroup()) {
             video.title = original.getGroup().getTitle();
         }
 
@@ -412,7 +412,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mServiceManager.loadChannelUploads(
                 video,
                 mediaGroup -> {
-                    if (mediaGroup == null) { // crash fix
+                    if (mediaGroup.getMediaItems() == null) { // crash fix
                         return;
                     }
 
