@@ -1391,7 +1391,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void focusSuggestedItem(Video video) {
-        if (video == null || video.getGroup() == null || mPendingFocus != null) {
+        if (mPendingFocus != null || video == null || video.getGroup() == null || !mVideoGroupAdapters.containsKey(video.getGroup().getId())) {
             return;
         }
 
