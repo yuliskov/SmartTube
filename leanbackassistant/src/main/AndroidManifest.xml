@@ -16,10 +16,18 @@
         com.github.rubensousa.previewseekbar.exoplayer,
         androidx.recommendation"/>
 
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+
     <application android:allowBackup="true"
                  android:label="@string/app_name"
                  android:supportsRtl="true"
-                 android:theme="@style/AppTheme">
+                 android:theme="@style/AppTheme"
+                 tools:ignore="MissingTvBanner">
 
         <!--    SEARCH    -->
 
@@ -49,7 +57,9 @@
 
         <!--    CHANNELS    -->
 
-        <!-- Old channel updater
+        <!-- Old channel updater -->
+
+        <!--
 
         <service
             android:name=".channels.UpdateChannelsJobService"
@@ -58,6 +68,8 @@
             android:exported="true"/>
 
         -->
+
+        <!-- END Old channel updater -->
 
         <receiver
             android:name=".channels.UpdateChannelsReceiver"
