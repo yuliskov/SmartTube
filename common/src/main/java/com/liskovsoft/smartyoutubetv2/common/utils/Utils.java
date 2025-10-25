@@ -875,7 +875,6 @@ public class Utils {
      */
     public static void properlyFinishTheApp(Context context) {
         ViewManager.instance(context).properlyFinishTheApp(context);
-        //forceFinishTheApp();
     }
 
     /**

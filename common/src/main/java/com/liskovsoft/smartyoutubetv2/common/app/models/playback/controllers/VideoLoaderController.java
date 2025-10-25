@@ -131,13 +131,12 @@ public class VideoLoaderController extends BasePlayerController {
         } else if ((!getVideo().isLive || getVideo().isLiveEnd)
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (!getVideo().isLive && !getVideo().isLiveEnd
-                && !getPlayerTweaksData().isNetworkErrorFixingDisabled() && Playlist.instance().getAllAfterCurrent() == null) {
+        } else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
+            YouTubeServiceManager.instance().invalidateCache();
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
-            YouTubeServiceManager.instance().invalidateCache();
-            rebootApp(); // without a reboot the app will keep buffering
+            restartEngine();
         }
     }
 
