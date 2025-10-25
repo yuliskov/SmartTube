@@ -137,9 +137,9 @@ public abstract class LeanbackActivity extends MotherActivity {
     }
 
     private void finishTheApp() {
-        if (RemoteControlData.instance(this).isConnectedBefore()) {
-            Utils.properlyFinishTheApp(this);
-        } else {
+        Utils.properlyFinishTheApp(this);
+
+        if (!RemoteControlData.instance(this).isConnectedBefore()) {
             Utils.forceFinishTheApp();
         }
     }
