@@ -709,4 +709,6 @@
   <string name="card_unlocalized_titles">Título de vídeos não traduzidos</string>
   <string name="dont_resize_video_to_fit_dialog">Diálogo \"Não ajustar vídeo para caber\"</string>
   <string name="typing_corrections">Desativar correção automática ao escrever</string>
+  <string name="player_chapter_notification2">Trocar para o capítulo seguinte ao tocar na notificação</string>
+  <string name="suggestions_horizontally_scrolled">Deslocação horizontal de sugestões</string>
 </resources>
