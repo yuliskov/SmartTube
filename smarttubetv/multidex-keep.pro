@@ -1,3 +1,12 @@
+-keepclassmembers class androidx.core.content.ContextCompat {
+    static int checkSelfPermission(android.content.Context, java.lang.String);
+}
+-keepclassmembers class androidx.work.WorkManager {
+   static void initialize(android.content.Context, androidx.work.Configuration);
+}
+-keepclassmembers class com.liskovsoft.youtubeapi.search.SearchTagStorage {
+    <clinit>(...);
+}
 -keepclassmembers class androidx.leanback.widget.HorizontalGridView {
     <init>(...);
     android.graphics.LinearGradient mLowFadeShader;

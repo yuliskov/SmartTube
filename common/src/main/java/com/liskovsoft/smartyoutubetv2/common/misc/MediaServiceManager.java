@@ -463,6 +463,10 @@ public class MediaServiceManager implements OnAccountChange {
         return mSingInService.isSigned();
     }
 
+    public String printAccountDebugInfo() {
+        return mSingInService.printDebugInfo();
+    }
+
     @Override
     public void onAccountChanged(Account account) {
         for (AccountChangeListener listener : mAccountListeners) {

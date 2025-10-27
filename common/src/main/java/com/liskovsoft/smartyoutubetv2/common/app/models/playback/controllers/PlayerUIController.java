@@ -376,7 +376,9 @@ public class PlayerUIController extends BasePlayerController {
             if (getPlayer() == null || item.getGroup() == null)
                 return;
 
-            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE || action == VideoMenuCallback.ACTION_REMOVE) {
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE
+                    || action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST
+                    || action == VideoMenuCallback.ACTION_REMOVE) {
                 int id = item.getGroup().getId();
                 VideoGroup group = VideoGroup.from(videoItem);
                 group.setId(id);
