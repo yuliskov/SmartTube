@@ -24,14 +24,14 @@ import java.util.List;
 public class StreamReminderService implements TickleListener {
     private static final String TAG = StreamReminderService.class.getSimpleName();
     private static StreamReminderService sInstance;
-    private final MediaItemService mItemManager;
+    private final MediaItemService mMediaItemService;
     private final Context mContext;
     private final GeneralData mGeneralData;
     private Disposable mReminderAction;
 
     private StreamReminderService(Context context) {
         ServiceManager service = YouTubeServiceManager.instance();
-        mItemManager = service.getMediaItemService();
+        mMediaItemService = service.getMediaItemService();
         mContext = context.getApplicationContext();
         mGeneralData = GeneralData.instance(context);
     }
@@ -120,7 +120,7 @@ public class StreamReminderService implements TickleListener {
         List<Observable<MediaItemFormatInfo>> result = new ArrayList<>();
 
         for (Video item : mGeneralData.getPendingStreams()) {
-            result.add(mItemManager.getFormatInfoObserve(item.videoId));
+            result.add(mMediaItemService.getFormatInfoObserve(item.videoId));
         }
 
         return result;

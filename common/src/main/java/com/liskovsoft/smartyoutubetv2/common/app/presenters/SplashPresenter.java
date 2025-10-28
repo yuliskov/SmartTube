@@ -77,20 +77,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        applyRunOnceTasks();
-        applyRunPerInstanceTasks();
-        Utils.postDelayed(mCheckForUpdates, APP_INIT_DELAY_MS);
-        Utils.updateRemoteControlService(getContext());
-
-        //runRefreshCachePeriodicTask();
-
-        checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
-
-        showAccountSelectionIfNeeded(); // should be placed after Intent chain
-        checkAccountPassword();
+        runOneTimeTasks();
+        runPerInstanceTasks();
+        runPerViewTasks();
     }
 
-    private void applyRunOnceTasks() {
+    private void runOneTimeTasks() {
         if (!sRunOnce) {
             sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();
@@ -98,24 +90,30 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             initProxy();
             initVideoStateService();
             initStreamReminderService();
-            //Utils.initVolume(getContext());
             CustomInit.init(getContext());
         }
     }
 
-    private void applyRunPerInstanceTasks() {
+    private void runPerInstanceTasks() {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
             initIntentChain();
-            // Fake service to prevent the app destroying?
-            //runRemoteControlFakeTask();
         }
+    }
+
+    private void runPerViewTasks() {
+        Utils.postDelayed(mCheckForUpdates, APP_INIT_DELAY_MS);
+        Utils.updateRemoteControlService(getContext());
+
+        checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
+
+        showAccountSelectionIfNeeded(); // should be placed after Intent chain
+        checkAccountPassword();
     }
 
     private void runBackgroundTasks() {
         YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up player engine
-        //YouTubeServiceManager.instance().applyAntiBotFix();
         enableHistoryIfNeeded();
         Utils.updateChannels(getContext());
         GDriveBackupWorker.schedule(getContext());
@@ -138,15 +136,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void checkForUpdates() {
         BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
         updatePresenter.start();
-        //updatePresenter.unhold();
-    }
-
-    private void runRemoteControlFakeTask() {
-        // Fake service to prevent the app from destroying
-        if (getContext() != null) {
-            //Utils.startRemoteControlService(getContext());
-            Utils.startRemoteControlWorkRequest(getContext());
-        }
     }
 
     private void initVideoStateService() {
@@ -163,7 +152,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     /**
      * Need to be the first line and executed on earliest stage once.<br/>
-     * Inits media service language and context.<br/>
+     * Do init media service language and context.<br/>
      * NOTE: this command should run before using any of the media service api.
      */
     private void initGlobalPrefs() {
@@ -190,13 +179,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         GeneralData generalData = GeneralData.instance(getContext());
         if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
             MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
-        }
-    }
-
-    private void checkTouchSupport() {
-        if (Helpers.isTouchSupported(getContext())) {
-            MessageHelpers.showLongMessage(getContext(), "The app is designed for tv boxes. Phones aren't supported.");
-            Utils.forceFinishTheApp();
         }
     }
 

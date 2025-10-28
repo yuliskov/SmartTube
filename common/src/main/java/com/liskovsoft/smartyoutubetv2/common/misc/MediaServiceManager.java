@@ -45,7 +45,7 @@ public class MediaServiceManager implements OnAccountChange {
     private static MediaServiceManager sInstance;
     private final MediaItemService mItemService;
     private final ContentService mContentService;
-    private final SignInService mSingInService;
+    private final SignInService mSignInService;
     private final NotificationsService mNotificationsService;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
@@ -98,10 +98,10 @@ public class MediaServiceManager implements OnAccountChange {
         ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
         mContentService = service.getContentService();
-        mSingInService = service.getSignInService();
+        mSignInService = service.getSignInService();
         mNotificationsService = service.getNotificationsService();
 
-        mSingInService.addOnAccountChange(this);
+        mSignInService.addOnAccountChange(this);
     }
 
     public static MediaServiceManager instance() {
@@ -110,10 +110,6 @@ public class MediaServiceManager implements OnAccountChange {
         }
 
         return sInstance;
-    }
-
-    public SignInService getSingInService() {
-        return mSingInService;
     }
 
     public void loadMetadata(Video video, OnMetadata onMetadata) {
@@ -280,7 +276,7 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public void loadAccounts(OnAccountList onAccountList) {
-        onAccountList.onAccountList(mSingInService.getAccounts());
+        onAccountList.onAccountList(mSignInService.getAccounts());
     }
 
     public void authCheck(Runnable onSuccess, Runnable onError) {
@@ -288,7 +284,7 @@ public class MediaServiceManager implements OnAccountChange {
             return;
         }
 
-        if (mSingInService.isSigned()) {
+        if (mSignInService.isSigned()) {
             if (onSuccess != null) {
                 onSuccess.run();
             }
@@ -414,7 +410,7 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public void removeFromWatchLaterPlaylist(Video video, Runnable onSuccess) {
-        if (video == null || !mSingInService.isSigned()) {
+        if (video == null || !mSignInService.isSigned()) {
             return;
         }
 
@@ -456,15 +452,11 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public Account getSelectedAccount() {
-        return mSingInService.getSelectedAccount();
-    }
-
-    public boolean isSigned() {
-        return mSingInService.isSigned();
+        return mSignInService.getSelectedAccount();
     }
 
     public String printAccountDebugInfo() {
-        return mSingInService.printDebugInfo();
+        return mSignInService.printDebugInfo();
     }
 
     @Override
