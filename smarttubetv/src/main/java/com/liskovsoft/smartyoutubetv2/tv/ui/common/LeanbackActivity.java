@@ -26,6 +26,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager2 mDoubleBackManager;
     private GlobalKeyTranslator mGlobalKeyTranslator;
+    private static final Runnable sOnFinish = Utils::forceFinishTheApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +141,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         Utils.properlyFinishTheApp(this);
 
         if (!RemoteControlData.instance(this).isConnectedBefore()) {
-            Utils.forceFinishTheApp();
+            getViewManager().addOnFinish(sOnFinish);
         }
     }
 }
