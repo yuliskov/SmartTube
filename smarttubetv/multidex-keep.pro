@@ -2,7 +2,7 @@
     static int checkSelfPermission(android.content.Context, java.lang.String);
 }
 -keepclassmembers class androidx.work.WorkManager {
-   static void initialize(android.content.Context, androidx.work.Configuration);
+    static void initialize(android.content.Context, androidx.work.Configuration);
 }
 -keepclassmembers class com.liskovsoft.youtubeapi.search.SearchTagStorage {
     <clinit>(...);
@@ -118,10 +118,10 @@
 -keepclassmembers class okhttp3.OkHttpClient {
     <init>(...);
 }
--keepclassmembers class androidx.recyclerview.widget.RecyclerView {
-    <init>(...);
-    void setNestedScrollingEnabled(boolean);
-}
+#-keepclassmembers class androidx.recyclerview.widget.RecyclerView {
+#    <init>(...);
+#    void setNestedScrollingEnabled(boolean);
+#}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.utils.Utils {
     boolean isFormatSupported(com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack);
 }
@@ -166,6 +166,7 @@
 -keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
 }
+-keep class androidx.recyclerview.widget.RecyclerView { *; }
 -keep class com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor { *; }
 -keep class com.google.android.exoplayer2.C { *; }
 -keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
