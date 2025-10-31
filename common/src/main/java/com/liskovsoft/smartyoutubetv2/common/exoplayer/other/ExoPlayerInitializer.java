@@ -74,6 +74,8 @@ public class ExoPlayerInitializer {
 
         setupVolumeBoost(player);
 
+        setupMutedPlayback(player);
+
         return player;
     }
 
@@ -154,12 +156,23 @@ public class ExoPlayerInitializer {
      * Manage audio focus. E.g. use Spotify when audio is disabled.
      */
     private void setupAudioFocus(SimpleExoPlayer player) {
-        if (player != null && mPlayerTweaksData.isAudioFocusEnabled()) {
+        if (player != null && mPlayerTweaksData.isAudioFocusEnabled() && !mPlayerTweaksData.isMutedPlaybackEnabled()) {
             try {
                 player.setAudioAttributes(getAudioAttributes(), true);
             } catch (SecurityException e) { // uid 10390 not allowed to perform TAKE_AUDIO_FOCUS
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Mute playback when option is enabled to allow background music from other apps.
+     */
+    private void setupMutedPlayback(SimpleExoPlayer player) {
+        if (player != null && mPlayerTweaksData.isMutedPlaybackEnabled()) {
+            // Mute the player by setting volume to 0
+            player.setVolume(0f);
+            // Don't request audio focus (already handled in setupAudioFocus)
         }
     }
 

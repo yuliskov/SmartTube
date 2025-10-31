@@ -99,6 +99,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsAudioFocusEnabled;
+    private boolean mIsMutedPlaybackEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
     private boolean mIsDontResizeVideoToFitDialogEnabled;
     private boolean mIsSuggestionsHorizontallyScrolled;
@@ -543,6 +544,19 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isMutedPlaybackEnabled() {
+        return mIsMutedPlaybackEnabled;
+    }
+
+    public void setMutedPlaybackEnabled(boolean enable) {
+        mIsMutedPlaybackEnabled = enable;
+        // When muted playback is enabled, disable audio focus
+        if (enable) {
+            mIsAudioFocusEnabled = false;
+        }
+        persistData();
+    }
+
     public boolean isSimplePlayerNavigationEnabled() {
         return mIsSimplePlayerNavigationEnabled;
     }
@@ -689,6 +703,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
+        mIsMutedPlaybackEnabled = Helpers.parseBoolean(split, 57, false);
 
         updateDefaultValues();
     }
@@ -715,7 +730,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSimplePlayerNavigationEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
-                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled
+                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled, mIsMutedPlaybackEnabled
                 ));
     }
 
