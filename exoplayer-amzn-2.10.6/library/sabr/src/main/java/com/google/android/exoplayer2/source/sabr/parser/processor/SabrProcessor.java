@@ -316,6 +316,7 @@ public class SabrProcessor {
                     segment.sequenceNumber,
                     segment.isInitSegment,
                     segment.initializedFormat.totalSegments,
+                    segment.startMs,
                     data,
                     contentLength,
                     segmentStartBytes

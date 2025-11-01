@@ -10,6 +10,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
     public final long sequenceNumber;
     public final boolean isInitSegment;
     public final int totalSegments;
+    public final int startTimeMs;
     public final ExtractorInput data;
     public final int contentLength;
     public final int segmentStartBytes;
@@ -20,6 +21,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
             long sequenceNumber,
             boolean isInitSegment,
             int totalSegments,
+            int startTimeMs,
             ExtractorInput data,
             int contentLength,
             int segmentStartBytes) {
@@ -28,6 +30,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
         this.sequenceNumber = sequenceNumber;
         this.isInitSegment = isInitSegment;
         this.totalSegments = totalSegments;
+        this.startTimeMs = startTimeMs;
         this.data = data;
         this.contentLength = contentLength;
         this.segmentStartBytes = segmentStartBytes;

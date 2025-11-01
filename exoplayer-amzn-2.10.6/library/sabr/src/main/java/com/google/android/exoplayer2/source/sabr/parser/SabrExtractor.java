@@ -399,8 +399,9 @@ public class SabrExtractor implements Extractor {
 
         writeSampleData(part.data, track, part.contentLength);
         // TODO: improve segment start time calc
-        long sampleTimeUs = blockTimeUs
-                + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
+        //long sampleTimeUs = blockTimeUs
+        //        + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
+        long sampleTimeUs = part.startTimeMs * 1_000L;
         commitSampleToOutput(track, sampleTimeUs);
     }
 
