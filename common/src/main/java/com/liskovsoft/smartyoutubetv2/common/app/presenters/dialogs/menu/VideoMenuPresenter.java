@@ -614,7 +614,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isSynced || mVideo.isSubscribed || (!mServiceManager.isSigned() && mVideo.channelId != null) ? mVideo.isSubscribed ?
+                        mVideo.isSynced || mVideo.isSubscribed || (!getSignInService().isSigned() && mVideo.channelId != null) ? mVideo.isSubscribed ?
                                 R.string.unsubscribe_from_channel : R.string.subscribe_to_channel : R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
     }
@@ -643,7 +643,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
         // Toggle between add/remove while dialog is opened
-        boolean containsVideo = playlist.containsAfterCurrent(mVideo);
+        //boolean containsVideo = playlist.containsAfterCurrent(mVideo);
+        boolean containsVideo = playlist.contains(mVideo);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
@@ -680,6 +681,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         Playlist playlist = Playlist.instance();
+
+        if (Helpers.equals(playlist.getNext(), mVideo)) {
+            return;
+        }
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
@@ -811,7 +816,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
-        if (mVideo.isSynced || mVideo.isSubscribed || mVideo.isChannel() || (!mServiceManager.isSigned() && mVideo.channelId != null)) {
+        if (mVideo.isSynced || mVideo.isSubscribed || mVideo.isChannel() || (!getSignInService().isSigned() && mVideo.channelId != null)) {
             toggleSubscribe(mVideo);
         } else {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);

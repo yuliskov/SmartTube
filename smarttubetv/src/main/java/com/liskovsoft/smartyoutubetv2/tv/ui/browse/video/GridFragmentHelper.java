@@ -133,7 +133,7 @@ public class GridFragmentHelper {
             int minAdapterSize = value != null ? value.intValue() : MIN_ADAPTER_SIZE;
 
             for (VideoGroupObjectAdapter adapter : mediaGroupAdapters.values()) {
-                if (isMatchedRowFound(adapter, group)) {
+                if (canMergeWithGroup(adapter, group)) {
                     // Remain other rows of the same type untitled (usually the such rows share the same titles)
                     group.setTitle(null);
 
@@ -142,6 +142,7 @@ public class GridFragmentHelper {
                         if (group.getSize() > missingCount) {
                             // Split the group to match 'minAdapterSize'
                             VideoGroup missingGroup = VideoGroup.from(group.getVideos().subList(0, missingCount));
+                            missingGroup.setId(missingGroup.hashCode());
                             group.removeAllBefore(missingCount);
                             freezer.freeze(true);
                             adapter.add(missingGroup);
@@ -158,7 +159,10 @@ public class GridFragmentHelper {
         return existingAdapter;
     }
 
-    private static boolean isMatchedRowFound(VideoGroupObjectAdapter adapter, VideoGroup group) {
+    private static boolean canMergeWithGroup(VideoGroupObjectAdapter adapter, VideoGroup group) {
+        if (adapter.isEmpty())
+            return false;
+
         VideoGroup lastGroup = adapter.getAll().get(adapter.size() - 1).getGroup();
         boolean matchedRowFound = lastGroup != null
                 && lastGroup.getMediaGroup() != null

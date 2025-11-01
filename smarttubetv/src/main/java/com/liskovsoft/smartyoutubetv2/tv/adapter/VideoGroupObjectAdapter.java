@@ -1,42 +1,24 @@
 package com.liskovsoft.smartyoutubetv2.tv.adapter;
 
-import androidx.annotation.NonNull;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
-    private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
-    //private final List<Video> mVideoItems = new ArrayList<Video>() {
-    //    @Override
-    //    public boolean addAll(@NonNull Collection<? extends Video> c) {
-    //        // TODO: remove the hack someday.
-    //        // Dirty hack for avoiding group duplication.
-    //        // Duplicated items suddenly appeared in Home, Subscriptions and History.
-    //
-    //        // Another alt method.
-    //        int size = size();
-    //        if (size > 0) {
-    //            if (size < CHECK_MAX_SIZE)
-    //                Helpers.removeIf(c, this::contains);
-    //        } else {
-    //            Helpers.removeDuplicates(c);
-    //        }
-    //
-    //        return super.addAll(c);
-    //    }
-    //};
+    private static final WeakHashSet<VideoGroupObjectAdapter> sAdapterRegistry = new WeakHashSet<>();
     private final List<Video> mVideoItems = new ArrayList<>();
     private final List<VideoGroup> mVideoGroups = new ArrayList<>(); // keep groups from being garbage collected
-    private static final int CHECK_MAX_SIZE = 200;
+    private static final int TYPE_ADD = 0;
+    private static final int TYPE_REMOVE = 1;
+    private static final int TYPE_SYNC = 2;
 
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
@@ -59,6 +41,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     private void initData(VideoGroup videoGroup) {
+        sAdapterRegistry.add(this);
+
         if (videoGroup != null) {
             add(videoGroup);
         }
@@ -96,6 +80,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         } else {
             append(group); // add at the end of the the existing group
         }
+
+        notifyOtherAdapters(group, TYPE_ADD);
     }
 
     public void add(List<Video> videos) {
@@ -200,6 +186,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 }
             }
         }
+
+        notifyOtherAdapters(group, TYPE_REMOVE);
     }
 
     public void removeAuthor(VideoGroup group) {
@@ -221,6 +209,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 }
             }
         }
+
+        notifyOtherAdapters(group, TYPE_SYNC);
     }
 
     public boolean isEmpty() {
@@ -231,5 +221,32 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (video != null && video.getGroup() != null) {
             video.getGroup().remove(video);
         }
+    }
+
+    private void notifyOtherAdapters(VideoGroup group, int type) {
+        sAdapterRegistry.forEach(adapter -> {
+            if (adapter == this || adapter.isEmpty())
+                return;
+
+            List<VideoGroup> groups = adapter.getAllGroups();
+
+            VideoGroup lastGroup = groups.get(groups.size() - 1);
+            boolean adapterFound = lastGroup.getId() == group.getId();
+
+            if (adapterFound) {
+                switch (type) {
+                    case TYPE_ADD:
+                        adapter.add(group);
+                        break;
+                    case TYPE_REMOVE:
+                        adapter.remove(group);
+                        break;
+                    case TYPE_SYNC:
+                        adapter.sync(group);
+                        break;
+                }
+                sAdapterRegistry.stopForEach();
+            }
+        });
     }
 }

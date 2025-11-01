@@ -60,7 +60,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendSeparateSettings(settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
 
-        Account account = MediaServiceManager.instance().getSelectedAccount();
+        Account account = getSignInService().getSelectedAccount();
         settingsPresenter.showDialog(account != null ? account.getName() : getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
@@ -165,7 +165,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void removeAccount(Account account) {
-        mMediaServiceManager.getSingInService().removeAccount(account);
+        getSignInService().removeAccount(account);
         BrowsePresenter.instance(getContext()).refresh(false);
     }
 

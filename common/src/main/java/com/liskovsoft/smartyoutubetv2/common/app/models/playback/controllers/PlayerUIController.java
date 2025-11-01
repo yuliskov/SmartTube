@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
@@ -372,19 +373,24 @@ public class PlayerUIController extends BasePlayerController {
     @Override
     public void onSuggestionItemLongClicked(Video item) {
         VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
-            String title = getContext().getString(R.string.action_playback_queue);
-            int id = title.hashCode();
+            if (getPlayer() == null || item.getGroup() == null)
+                return;
 
-            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE
+                    || action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST
+                    || action == VideoMenuCallback.ACTION_REMOVE) {
+                int id = item.getGroup().getId();
                 VideoGroup group = VideoGroup.from(videoItem);
-                group.setTitle(title);
                 group.setId(id);
                 getPlayer().removeSuggestions(group);
             } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE || action == VideoMenuCallback.ACTION_PLAY_NEXT) {
+                String title = getContext().getString(R.string.action_playback_queue);
+                int id = title.hashCode();
                 Video newItem = videoItem.copy();
                 VideoGroup group = VideoGroup.from(newItem, 0);
                 group.setTitle(title);
                 group.setId(id);
+                group.setType(MediaGroup.TYPE_PLAYBACK_QUEUE);
                 newItem.setGroup(group);
                 if (action == VideoMenuCallback.ACTION_PLAY_NEXT) {
                     group.setAction(VideoGroup.ACTION_PREPEND);
@@ -396,6 +402,9 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onDislikeClicked(boolean dislike) {
+        if (getPlayer() == null)
+            return;
+
         getPlayer().setButtonState(R.id.action_thumbs_down, !dislike ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
         if (!mIsMetadataLoaded) {

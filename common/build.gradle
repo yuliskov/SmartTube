@@ -42,10 +42,6 @@ android {
         stbeta {}
         ststable {}
         storig {}
-        strtarmenia {}
-        stbolshoetv {}
-        stredboxtv {}
-        stsibsetru {}
         stamazon {}
         staptoide {}
     }
@@ -106,9 +102,6 @@ dependencies {
     stbetaImplementation project(':appupdatechecker2')
     ststableImplementation project(':appupdatechecker2')
     storigImplementation project(':appupdatechecker2')
-    strtarmeniaImplementation project(':appupdatechecker2')
-    stredboxtvImplementation project(':appupdatechecker2')
-    stsibsetruImplementation project(':appupdatechecker2')
     stamazonImplementation project(':appupdatechecker2')
     staptoideImplementation project(':appupdatechecker2')
 }

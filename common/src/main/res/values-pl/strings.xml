@@ -101,8 +101,8 @@
   <string name="open_channel">Otwórz Kanał</string>
   <string name="open_playlist">Otwórz listę odtwarzania</string>
   <string name="not_interested">Nie interesuje mnie</string>
-  <string name="not_recommend_channel">Nie polecaj Kanału</string>
-  <string name="you_wont_see_this_video">Wideo zostało usunięte z polecanych</string>
+  <string name="not_recommend_channel">Nie rekomenduj Kanału</string>
+  <string name="you_wont_see_this_video">Wideo zostało usunięte z rekomendowanych</string>
   <string name="you_wont_see_this_channel">Nie zobaczysz już treści z tego Kanału w rekomendowanych</string>
   <string name="settings_search">Wyszukiwanie</string>
   <string name="dialog_search">Szukaj</string>
@@ -513,7 +513,7 @@
   <string name="protect_settings_with_password">Chroń wszystkie ustawienia hasłem</string>
   <string name="enter_settings_password">Wprowadź hasło do ustawień</string>
   <string name="child_mode">Tryb dziecka</string>
-  <string name="child_mode_desc">W tym trybie użytkownik nie może używać wyszukiwarki ani zobaczyć sugerowanej zawartości. Ustawienia będą zabezpieczone hasłem.</string>
+  <string name="child_mode_desc">W tym trybie użytkownik nie może używać wyszukiwarki ani zobaczyć innej, polecanej zawartości. Ustawienia będą zabezpieczone hasłem.</string>
   <string name="lost_setting_warning">Ustawienia aplikacji zostaną zmienione. Upewnij się, że utworzyłeś kopię zapasową ustawień.</string>
   <string name="player_button_long_click">Krótkie naciśnięcie przycisku dla wywołania akcji, długie dla ustawień</string>
   <string name="pause_history">Wstrzymaj historię odtwarzania</string>
@@ -707,4 +707,5 @@
   <string name="video_flip">Odbicie lustrzane</string>
   <string name="dont_resize_video_to_fit_dialog">Nie zmieniaj rozmiaru wideo, by zmieścić napisy</string>
   <string name="typing_corrections">Wyłącz autokorektę podczas pisania</string>
+  <string name="suggestions_horizontally_scrolled">Przewijaj sugestie w poziomie</string>
 </resources>

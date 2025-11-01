@@ -112,9 +112,9 @@ public class Playlist {
         }
 
         // Skip remove currently playing item
-        if (video.equals(getCurrent())) {
-            return;
-        }
+        //if (video.equals(getCurrent())) {
+        //    return;
+        //}
 
         int index = mPlaylist.indexOf(video);
 

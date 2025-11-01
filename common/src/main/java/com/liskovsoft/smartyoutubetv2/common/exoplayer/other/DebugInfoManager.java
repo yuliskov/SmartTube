@@ -34,6 +34,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -208,6 +209,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendWebViewInfo();
         appendVideoInfoType();
         appendVideoInfoVersion();
+        appendAccountInfo();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -382,6 +384,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             appendRow("Video info version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
             appendRow("Video info url", isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl);
         }
+    }
+
+    private void appendAccountInfo() {
+        appendRow("Account info", MediaServiceManager.instance().printAccountDebugInfo());
     }
 
     private void appendRow(String name, boolean val) {

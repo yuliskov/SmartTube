@@ -6,12 +6,12 @@ import android.view.KeyEvent;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.PlayerKeyTranslator;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager2;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
@@ -26,6 +26,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager2 mDoubleBackManager;
     private GlobalKeyTranslator mGlobalKeyTranslator;
+    private static final Runnable sOnFinish = Utils::forceFinishTheApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,5 +139,9 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     private void finishTheApp() {
         Utils.properlyFinishTheApp(this);
+
+        if (!RemoteControlData.instance(this).isConnectedBefore()) {
+            getViewManager().addOnFinish(sOnFinish);
+        }
     }
 }

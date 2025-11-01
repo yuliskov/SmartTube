@@ -94,7 +94,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (!item.fromQueue) {
+        if (!item.fromQueue && !item.belongsToPlaybackQueue()) {
             mPlaylist.add(item);
         } else {
             item.fromQueue = false;
@@ -131,13 +131,12 @@ public class VideoLoaderController extends BasePlayerController {
         } else if ((!getVideo().isLive || getVideo().isLiveEnd)
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
-        } else if (!getVideo().isLive && !getVideo().isLiveEnd
-                && !getPlayerTweaksData().isNetworkErrorFixingDisabled() && Playlist.instance().getAllAfterCurrent() == null) {
+        } else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
+            YouTubeServiceManager.instance().invalidateCache();
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
-            YouTubeServiceManager.instance().invalidateCache();
-            rebootApp(); // without a reboot the app will keep buffering
+            restartEngine();
         }
     }
 
@@ -246,7 +245,8 @@ public class VideoLoaderController extends BasePlayerController {
     public void onSuggestionItemClicked(Video item) {
         openVideoInt(item);
 
-        getPlayer().showControls(false);
+        if (getPlayer() != null)
+            getPlayer().showControls(false);
     }
 
     @Override
@@ -375,11 +375,14 @@ public class VideoLoaderController extends BasePlayerController {
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
 
-            if (formatInfo.isBotCheckError()) {
-                scheduleRebootAppTimer(5_000);
-            } else { // 18+ video or the video is hidden/removed
-                scheduleNextVideoTimer(5_000);
-            }
+            // 18+ video or the video is hidden/removed
+            scheduleNextVideoTimer(5_000);
+
+            //if (formatInfo.isUnknownError()) { // the bot error or the video not available
+            //    scheduleRebootAppTimer(5_000);
+            //} else { // 18+ video or the video is hidden/removed
+            //    scheduleNextVideoTimer(5_000);
+            //}
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
             Log.d(TAG, "Loading regular video in dash format...");
 

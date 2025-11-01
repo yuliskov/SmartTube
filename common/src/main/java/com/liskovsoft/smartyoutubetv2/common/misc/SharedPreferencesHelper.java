@@ -41,6 +41,7 @@ public class SharedPreferencesHelper {
     }
 
     // Restore SharedPreferences from a backup file
+    @SuppressWarnings("unchecked")
     public static void restoreFromObj(Context context, InputStream backupFile, String preferenceName) {
         if (preferenceName.endsWith(".xml")) {
             preferenceName = preferenceName.replace(".xml", "");

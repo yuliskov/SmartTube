@@ -88,7 +88,7 @@ public class VideoGroup {
 
         for (Video item : items) {
             // Section as playlist fix. Don't change the root.
-            if (item.getGroup() == null) {
+            if (item.getGroup() == null || section != null) {
                 item.setGroup(videoGroup);
             }
         }
@@ -141,6 +141,27 @@ public class VideoGroup {
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
 
+            baseGroup.add(video);
+        }
+
+        baseGroup.mAction = ACTION_APPEND;
+
+        return baseGroup;
+    }
+
+    public static VideoGroup from(VideoGroup baseGroup, VideoGroup newGroup) {
+        baseGroup.mMediaGroup = newGroup.mMediaGroup;
+
+        if (newGroup.mMediaGroup == null) {
+            return baseGroup;
+        }
+
+        if (newGroup.getVideos() == null) {
+            Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + newGroup.getTitle());
+            return baseGroup;
+        }
+
+        for (Video video : newGroup.getVideos()) {
             baseGroup.add(video);
         }
 
@@ -238,7 +259,7 @@ public class VideoGroup {
     }
 
     public int getType() {
-        return mType != -1 ? mType : getMediaGroup() != null ? getMediaGroup().getType() : -1;
+        return mType != -1 ? mType : getMediaGroup() != null ? getMediaGroup().getType() : mSection != null ? mSection.getId() : -1;
     }
 
     public void setType(int type) {

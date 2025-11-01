@@ -28,7 +28,7 @@ public class VideoStateController extends BasePlayerController {
     private static final long SHORT_LIVE_BUFFER_MS = 0; // Note, on buffer lower than the 60sec you'll notice segment skip
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private static final long EMBED_THRESHOLD_MS = 30_000;
-    private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 5; // Sync history every five minutes
+    private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 3; // Sync history every x minutes
     private boolean mIsPlayEnabled;
     private boolean mIsPlayBlocked;
     private int mTickleLeft;

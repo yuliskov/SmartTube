@@ -10,11 +10,13 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.ParserException;
 import com.google.android.exoplayer2.drm.DrmInitData;
+import com.google.android.exoplayer2.extractor.ChunkIndex;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.extractor.ExtractorOutput;
 import com.google.android.exoplayer2.extractor.MpegAudioHeader;
 import com.google.android.exoplayer2.extractor.PositionHolder;
+import com.google.android.exoplayer2.extractor.SeekMap;
 import com.google.android.exoplayer2.extractor.TrackOutput;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class SabrExtractor implements Extractor {
@@ -364,69 +367,45 @@ public class SabrExtractor implements Extractor {
         // TODO: not implemented
     }
 
-    private void initializeFormat(FormatInitializedSabrPart part) {
-        // TODO: not implemented
+    private void initializeFormat(FormatInitializedSabrPart part) throws ParserException {
+        //startMasterElement
+        //endMasterElement
 
-        // initializeOutput
-        // initializeTrack
-        // put track to the tracks array
+        initCurrentTrack();
+
+        // TODO: init seekMap
+
+        initExtractorOutput();
     }
 
     private void initializeSegment(MediaSegmentInitSabrPart part) {
         // TODO: not implemented
     }
 
-    private void writeSegmentData(MediaSegmentDataSabrPart part) {
+    private void writeSegmentData(MediaSegmentDataSabrPart part) throws IOException, InterruptedException {
         // TODO: not implemented
+
+        // binaryElement
+
+        // init seek segemnt data
+
+        Track track = tracks.get(blockTrackNumber);
+
+        // Ignore the block if we don't know about the track to which it belongs.
+        if (track == null) {
+            part.data.skipFully(part.contentLength);
+            return;
+        }
+
+        writeSampleData(part.data, track, part.contentLength);
+        // TODO: improve segment start time calc
+        long sampleTimeUs = blockTimeUs
+                + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
+        commitSampleToOutput(track, sampleTimeUs);
     }
 
     private void endSegment(MediaSegmentEndSabrPart part) {
         // TODO: not implemented
-    }
-
-    private void resetSample() {
-        sampleBytesRead = 0;
-        sampleBytesWritten = 0;
-        sampleCurrentNalBytesRemaining = 0;
-        sampleEncodingHandled = false;
-        sampleSignalByteRead = false;
-        samplePartitionCountRead = false;
-        samplePartitionCount = 0;
-        sampleSignalByte = (byte) 0;
-        sampleInitializationVectorRead = false;
-        sampleStrippedBytes.reset();
-    }
-
-    /**
-     * Updates the position of the holder to Cues element's position if the extractor configuration
-     * permits use of master seek entry. After building Cues sets the holder's position back to where
-     * it was before.
-     *
-     * @param seekPosition The holder whose position will be updated.
-     * @param currentPosition Current position of the input.
-     * @return Whether the seek position was updated.
-     */
-    private boolean maybeSeekForCues(PositionHolder seekPosition, long currentPosition) {
-        if (seekForCues) {
-            seekPositionAfterBuildingCues = currentPosition;
-            seekPosition.position = cuesContentPosition;
-            seekForCues = false;
-            return true;
-        }
-        // After parsing Cues, seek back to original position if available. We will not do this unless
-        // we seeked to get to the Cues in the first place.
-        if (sentSeekMap && seekPositionAfterBuildingCues != C.POSITION_UNSET) {
-            seekPosition.position = seekPositionAfterBuildingCues;
-            seekPositionAfterBuildingCues = C.POSITION_UNSET;
-            return true;
-        }
-        return false;
-    }
-
-    private void commitSampleToOutput(Track track, long timeUs) {
-        track.output.sampleMetadata(timeUs, blockFlags, sampleBytesWritten, 0, track.cryptoData);
-        sampleRead = true;
-        resetSample();
     }
 
     private void initCurrentTrack() {
@@ -457,6 +436,56 @@ public class SabrExtractor implements Extractor {
         currentTrack.audioBitDepth = Format.NO_VALUE;
 
         // TODO: maybe init more fields
+    }
+
+    private void initExtractorOutput() throws ParserException {
+        if (isCodecSupported(currentTrack.codecId)) {
+            currentTrack.initializeOutput(extractorOutput, currentTrack.number);
+            tracks.put(currentTrack.number, currentTrack);
+        }
+        currentTrack = null;
+
+        // We have a single track per SABR stream
+        if (tracks.size() == 0) {
+            throw new ParserException("No valid tracks were found");
+        }
+        extractorOutput.endTracks();
+    }
+
+    private void commitSampleToOutput(Track track, long timeUs) {
+        track.output.sampleMetadata(timeUs, blockFlags, sampleBytesWritten, 0, track.cryptoData);
+        sampleRead = true;
+        resetSample();
+    }
+
+    private void resetSample() {
+        sampleBytesRead = 0;
+        sampleBytesWritten = 0;
+        sampleCurrentNalBytesRemaining = 0;
+        sampleEncodingHandled = false;
+        sampleSignalByteRead = false;
+        samplePartitionCountRead = false;
+        samplePartitionCount = 0;
+        sampleSignalByte = (byte) 0;
+        sampleInitializationVectorRead = false;
+        sampleStrippedBytes.reset();
+    }
+
+    /**
+     * Ensures {@link #scratch} contains at least {@code requiredLength} bytes of data, reading from
+     * the extractor input if necessary.
+     */
+    private void readScratch(ExtractorInput input, int requiredLength)
+            throws IOException, InterruptedException {
+        if (scratch.limit() >= requiredLength) {
+            return;
+        }
+        if (scratch.capacity() < requiredLength) {
+            scratch.reset(Arrays.copyOf(scratch.data, Math.max(scratch.data.length * 2, requiredLength)),
+                    scratch.limit());
+        }
+        input.readFully(scratch.data, scratch.limit(), requiredLength - scratch.limit());
+        scratch.setLimit(requiredLength);
     }
 
     private void writeSampleData(ExtractorInput input, Track track, int size)
@@ -559,6 +588,36 @@ public class SabrExtractor implements Extractor {
         // the correct end timecode, which we might not have yet.
     }
 
+    private void commitSubtitleSample(Track track, String timecodeFormat, int endTimecodeOffset,
+                                      long lastTimecodeValueScalingFactor, byte[] emptyTimecode) {
+        setSampleDuration(subtitleSample.data, blockDurationUs, timecodeFormat, endTimecodeOffset,
+                lastTimecodeValueScalingFactor, emptyTimecode);
+        // Note: If we ever want to support DRM protected subtitles then we'll need to output the
+        // appropriate encryption data here.
+        track.output.sampleData(subtitleSample, subtitleSample.limit());
+        sampleBytesWritten += subtitleSample.limit();
+    }
+
+    private static void setSampleDuration(byte[] subripSampleData, long durationUs,
+                                          String timecodeFormat, int endTimecodeOffset, long lastTimecodeValueScalingFactor,
+                                          byte[] emptyTimecode) {
+        byte[] timeCodeData;
+        if (durationUs == C.TIME_UNSET) {
+            timeCodeData = emptyTimecode;
+        } else {
+            int hours = (int) (durationUs / (3600 * C.MICROS_PER_SECOND));
+            durationUs -= (hours * 3600 * C.MICROS_PER_SECOND);
+            int minutes = (int) (durationUs / (60 * C.MICROS_PER_SECOND));
+            durationUs -= (minutes * 60 * C.MICROS_PER_SECOND);
+            int seconds = (int) (durationUs / C.MICROS_PER_SECOND);
+            durationUs -= (seconds * C.MICROS_PER_SECOND);
+            int lastValue = (int) (durationUs / lastTimecodeValueScalingFactor);
+            timeCodeData = Util.getUtf8Bytes(String.format(Locale.US, timecodeFormat, hours, minutes,
+                    seconds, lastValue));
+        }
+        System.arraycopy(timeCodeData, 0, subripSampleData, endTimecodeOffset, emptyTimecode.length);
+    }
+
     /**
      * Writes {@code length} bytes of sample data into {@code target} at {@code offset}, consisting of
      * pending {@link #sampleStrippedBytes} and any remaining data read from {@code input}.
@@ -590,6 +649,123 @@ public class SabrExtractor implements Extractor {
         sampleBytesRead += bytesRead;
         sampleBytesWritten += bytesRead;
         return bytesRead;
+    }
+
+    /**
+     * Builds a {@link SeekMap} from the recently gathered Cues information.
+     *
+     * @return The built {@link SeekMap}. The returned {@link SeekMap} may be unseekable if cues
+     *     information was missing or incomplete.
+     */
+    private SeekMap buildSeekMap() {
+        if (segmentContentPosition == C.POSITION_UNSET || durationUs == C.TIME_UNSET
+                || cueTimesUs == null || cueTimesUs.size() == 0
+                || cueClusterPositions == null || cueClusterPositions.size() != cueTimesUs.size()) {
+            // Cues information is missing or incomplete.
+            cueTimesUs = null;
+            cueClusterPositions = null;
+            return new SeekMap.Unseekable(durationUs);
+        }
+        int cuePointsSize = cueTimesUs.size();
+        int[] sizes = new int[cuePointsSize];
+        long[] offsets = new long[cuePointsSize];
+        long[] durationsUs = new long[cuePointsSize];
+        long[] timesUs = new long[cuePointsSize];
+        for (int i = 0; i < cuePointsSize; i++) {
+            timesUs[i] = cueTimesUs.get(i);
+            offsets[i] = segmentContentPosition + cueClusterPositions.get(i);
+        }
+        for (int i = 0; i < cuePointsSize - 1; i++) {
+            sizes[i] = (int) (offsets[i + 1] - offsets[i]);
+            durationsUs[i] = timesUs[i + 1] - timesUs[i];
+        }
+        sizes[cuePointsSize - 1] =
+                (int) (segmentContentPosition + segmentContentSize - offsets[cuePointsSize - 1]);
+        durationsUs[cuePointsSize - 1] = durationUs - timesUs[cuePointsSize - 1];
+        cueTimesUs = null;
+        cueClusterPositions = null;
+        return new ChunkIndex(sizes, offsets, durationsUs, timesUs);
+    }
+
+    /**
+     * Updates the position of the holder to Cues element's position if the extractor configuration
+     * permits use of master seek entry. After building Cues sets the holder's position back to where
+     * it was before.
+     *
+     * @param seekPosition The holder whose position will be updated.
+     * @param currentPosition Current position of the input.
+     * @return Whether the seek position was updated.
+     */
+    private boolean maybeSeekForCues(PositionHolder seekPosition, long currentPosition) {
+        if (seekForCues) {
+            seekPositionAfterBuildingCues = currentPosition;
+            seekPosition.position = cuesContentPosition;
+            seekForCues = false;
+            return true;
+        }
+        // After parsing Cues, seek back to original position if available. We will not do this unless
+        // we seeked to get to the Cues in the first place.
+        if (sentSeekMap && seekPositionAfterBuildingCues != C.POSITION_UNSET) {
+            seekPosition.position = seekPositionAfterBuildingCues;
+            seekPositionAfterBuildingCues = C.POSITION_UNSET;
+            return true;
+        }
+        return false;
+    }
+
+    private long scaleTimecodeToUs(long unscaledTimecode) throws ParserException {
+        if (timecodeScale == C.TIME_UNSET) {
+            throw new ParserException("Can't scale timecode prior to timecodeScale being set.");
+        }
+        return Util.scaleLargeTimestamp(unscaledTimecode, timecodeScale, 1000);
+    }
+
+    private static boolean isCodecSupported(String codecId) {
+        return CODEC_ID_VP8.equals(codecId)
+                || CODEC_ID_VP9.equals(codecId)
+                || CODEC_ID_AV1.equals(codecId)
+                || CODEC_ID_MPEG2.equals(codecId)
+                || CODEC_ID_MPEG4_SP.equals(codecId)
+                || CODEC_ID_MPEG4_ASP.equals(codecId)
+                || CODEC_ID_MPEG4_AP.equals(codecId)
+                || CODEC_ID_H264.equals(codecId)
+                || CODEC_ID_H265.equals(codecId)
+                || CODEC_ID_FOURCC.equals(codecId)
+                || CODEC_ID_THEORA.equals(codecId)
+                || CODEC_ID_OPUS.equals(codecId)
+                || CODEC_ID_VORBIS.equals(codecId)
+                || CODEC_ID_AAC.equals(codecId)
+                || CODEC_ID_MP2.equals(codecId)
+                || CODEC_ID_MP3.equals(codecId)
+                || CODEC_ID_AC3.equals(codecId)
+                || CODEC_ID_E_AC3.equals(codecId)
+                || CODEC_ID_TRUEHD.equals(codecId)
+                || CODEC_ID_DTS.equals(codecId)
+                || CODEC_ID_DTS_EXPRESS.equals(codecId)
+                || CODEC_ID_DTS_LOSSLESS.equals(codecId)
+                || CODEC_ID_FLAC.equals(codecId)
+                || CODEC_ID_ACM.equals(codecId)
+                || CODEC_ID_PCM_INT_LIT.equals(codecId)
+                || CODEC_ID_SUBRIP.equals(codecId)
+                || CODEC_ID_ASS.equals(codecId)
+                || CODEC_ID_VOBSUB.equals(codecId)
+                || CODEC_ID_PGS.equals(codecId)
+                || CODEC_ID_DVBSUB.equals(codecId);
+    }
+
+    /**
+     * Returns an array that can store (at least) {@code length} elements, which will be either a new
+     * array or {@code array} if it's not null and large enough.
+     */
+    private static int[] ensureArrayCapacity(int[] array, int length) {
+        if (array == null) {
+            return new int[length];
+        } else if (array.length >= length) {
+            return array;
+        } else {
+            // Double the size to avoid allocating constantly if the required length increases gradually.
+            return new int[Math.max(array.length * 2, length)];
+        }
     }
 
     private static final class Track {

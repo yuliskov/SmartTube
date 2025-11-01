@@ -603,6 +603,7 @@
     <string name="content_block_exclude_channel">Vyloučit tento kanál ze SponsorBlocku</string>
     <string name="content_block_stop_excluding_channel">Přestat vylučovat tento kanál ze SponsorBlocku</string>
     <string name="player_chapter_notification">Rychlý posun mezi kapitolami pomocí vyskakovacího upozornění</string>
+    <string name="player_chapter_notification2">Přepnout na další kapitolu kliknutím na upozornění</string>
     <string name="subtitle_remember">Povolit titulky pouze na aktuálním kanálu</string>
     <string name="amazon_frame_drop_fix">Oprava poklesu snímků #2</string>
     <string name="amazon_frame_drop_fix_desc">Určeno pro zařízení Amazon Stick. Může fungovat i na jiných zařízeních.</string>
@@ -708,4 +709,6 @@
     <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
     <string name="dont_resize_video_to_fit_dialog">Neměnit velikost videa, aby se přizpůsobilo dialogu</string>
     <string name="typing_corrections">Zakázat automatické opravy při psaní textu</string>
+    <string name="suggestions_horizontally_scrolled">Horizontálně posouvané Návrhy</string>
 </resources>
+

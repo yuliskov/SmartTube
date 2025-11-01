@@ -242,7 +242,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         Video video = Video.from(original);
 
         // Need correct playlist title to further comparison (decide whether save or remove)
-        if (original.belongsToSamePlaylistGroup()) {
+        if (original.getGroup() != null && original.belongsToSamePlaylistGroup()) {
             video.title = original.getGroup().getTitle();
         }
 
@@ -255,6 +255,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     private void toggleSaveRemovePlaylist(Video video) {
         mServiceManager.loadPlaylists(video, group -> {
+            if (group.getMediaItems() == null)
+                return;
+
             boolean isSaved = false;
 
             for (MediaItem playlist : group.getMediaItems()) {
@@ -296,7 +299,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     private void savePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
-        Observable<Void> action = video.mediaItem != null ? manager.savePlaylistObserve(video.mediaItem) : manager.savePlaylistObserve(video.playlistId);
+        Observable<Void> action = video.mediaItem != null && video.mediaItem.getPlaylistId() != null ? manager.savePlaylistObserve(video.mediaItem) : manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
                 (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                 () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists))
@@ -409,7 +412,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         mServiceManager.loadChannelUploads(
                 video,
                 mediaGroup -> {
-                    if (mediaGroup == null) { // crash fix
+                    if (mediaGroup.getMediaItems() == null) { // crash fix
                         return;
                     }
 
