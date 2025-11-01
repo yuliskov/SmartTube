@@ -55,9 +55,11 @@ public class ExoPlayerController implements Player.EventListener {
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
     private Runnable mOnVideoLoaded;
+    private final PlayerTweaksData mPlayerTweaksData;
 
     public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+        mPlayerTweaksData = playerTweaksData;
         mContext = context.getApplicationContext();
         mMediaSourceFactory = new ExoMediaSourceFactory(context);
         mTrackSelectorManager = new TrackSelectorManager(context);
@@ -203,6 +205,11 @@ public class ExoPlayerController implements Player.EventListener {
     public void setPlayer(SimpleExoPlayer player) {
         mPlayer = player;
         player.addListener(this);
+
+        // If muted playback is enabled, ensure the player is muted
+        if (mPlayerTweaksData.isMutedPlaybackEnabled()) {
+            player.setVolume(0f);
+        }
     }
 
     //@Override
@@ -405,13 +412,22 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void setVolume(float volume) {
         if (mPlayer != null && volume >= 0) {
-            mPlayer.setVolume(Math.min(volume, 1f));
+            // If muted playback is enabled, always set volume to 0
+            if (mPlayerTweaksData.isMutedPlaybackEnabled()) {
+                mPlayer.setVolume(0f);
+            } else {
+                mPlayer.setVolume(Math.min(volume, 1f));
+            }
 
             //applyVolumeBoost(volume);
         }
     }
     
     public float getVolume() {
+        // If muted playback is enabled, always return 0
+        if (mPlayerTweaksData.isMutedPlaybackEnabled()) {
+            return 0f;
+        }
         if (mPlayer != null) {
             return mPlayer.getVolume();
         } else {

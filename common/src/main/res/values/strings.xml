@@ -698,6 +698,7 @@
     <string name="lb_playback_controls_closed_captioning_enable">Enable Closed Captioning</string>
     <string name="my_videos">My videos</string>
     <string name="player_audio_focus">Audio focus (pause if other players detected)</string>
+    <string name="player_muted_playback">Play videos muted (allows background music from other apps)</string>
     <string name="paid_content_notification">Paid content notification</string>
     <string name="you_liked">you liked</string>
     <string name="premium_users_only">Premium users only. Fix for incomplete video format list</string>

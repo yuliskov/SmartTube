@@ -512,6 +512,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setAudioFocusEnabled(option.isSelected()),
                 mPlayerTweaksData.isAudioFocusEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_muted_playback),
+                option -> mPlayerTweaksData.setMutedPlaybackEnabled(option.isSelected()),
+                mPlayerTweaksData.isMutedPlaybackEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_auto_volume),
                 option -> mPlayerTweaksData.setPlayerAutoVolumeEnabled(option.isSelected()),
                 mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
