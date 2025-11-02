@@ -42,7 +42,6 @@ import com.google.protobuf.ByteString;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,8 +51,8 @@ import java.util.Set;
 
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
-    public static final int NO_VALUE = -1;
-    private final String videoPlaybackUstreamerConfig; // TODO: not initialized
+    private static final int NO_VALUE = -1;
+    private final String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
     private VideoSelector videoFormatSelector;
     private AudioSelector audioFormatSelector;
@@ -185,7 +184,7 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Compression not supported in MediaHeader (media_header=%s)", mediaHeader));
         }
 
-        long sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
+        int sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
         boolean isInitSegment = mediaHeader.getIsInitSegment();
 
         if (sequenceNumber == NO_VALUE && !isInitSegment) {
@@ -523,9 +522,9 @@ public class SabrProcessor {
             initializedFormat.consumedRanges.clear();
             initializedFormat.consumedRanges.add(new ConsumedRange(
                     0,
-                    ((long) Math.pow(2, 53)) - 1,
+                    Integer.MAX_VALUE, // ((long) Math.pow(2, 53)) - 1
                     0,
-                    ((long) Math.pow(2, 53)) - 1
+                    Integer.MAX_VALUE // ((long) Math.pow(2, 53)) - 1
             ));
         }
 
@@ -766,8 +765,8 @@ public class SabrProcessor {
                 result.add(
                         BufferedRange.newBuilder()
                                 .setFormatId(initializedFormat.formatId)
-                                .setStartSegmentIndex((int) cr.startSequenceNumber) // TODO: maybe change to int64?
-                                .setEndSegmentIndex((int) cr.endSequenceNumber) // TODO: maybe change to int64?
+                                .setStartSegmentIndex(cr.startSequenceNumber)
+                                .setEndSegmentIndex(cr.endSequenceNumber)
                                 .setStartTimeMs(cr.startTimeMs)
                                 .setDurationMs(cr.durationMs)
                                 .setTimeRange(
