@@ -1,3 +1,6 @@
+-keepclassmembers class io.reactivex.plugins.RxJavaPlugins {
+    static io.reactivex.Observable onAssembly(io.reactivex.Observable);
+}
 -keepclassmembers class androidx.core.content.ContextCompat {
     static int checkSelfPermission(android.content.Context, java.lang.String);
 }
