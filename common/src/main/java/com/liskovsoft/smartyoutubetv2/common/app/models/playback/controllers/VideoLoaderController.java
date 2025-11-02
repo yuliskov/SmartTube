@@ -748,16 +748,6 @@ public class VideoLoaderController extends BasePlayerController {
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    getPlayer().setPositionMs(getPlayer().getDurationMs());
-                    getPlayer().setPlayWhenReady(false);
-                    getPlayer().showSuggestions(true);
-                }
-                break;
-            case PlayerConstants.PLAYBACK_MODE_LOOP_LIST:
-                // if video has a playlist load next or restart playlist
-                if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
-                    loadNext();
-                } else {
                     restartPlaylist();
                 }
                 break;
@@ -768,19 +758,14 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void restartPlaylist() {
-        Video currentVideo = getVideo();
-        VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
+        if (getPlayer() == null || getVideo() == null) {
+            return;
+        }
+        
+        VideoGroup group = getVideo().getGroup(); // Get the VideoGroup (playlist)
 
         if (group != null && !group.isEmpty()) {
-            // Clear current playlist
-            mPlaylist.clear();
-
-            // Add all videos from VideoGroup
-            mPlaylist.addAll(group.getVideos());
-            
-            Video firstVideo = group.get(0);
-            mPlaylist.setCurrent(firstVideo);
-            openVideoInt(firstVideo);
+            openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
             getPlayer().setPositionMs(getPlayer().getDurationMs());

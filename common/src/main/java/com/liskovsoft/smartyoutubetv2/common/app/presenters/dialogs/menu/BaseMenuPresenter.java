@@ -493,8 +493,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(R.string.clear_history),
                         optionItem -> AppDialogUtil.showConfirmationDialog(getContext(),
                                 getContext().getString(R.string.clear_history), () -> {
-                                    mServiceManager.clearHistory();
-                                    //VideoStateService.instance(getContext()).clear();
+                                    mServiceManager.clearHistory(getContext());
+
                                     getDialogPresenter().closeDialog();
                                     presenter.refresh();
                         })));
