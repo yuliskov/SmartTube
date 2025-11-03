@@ -41,7 +41,7 @@ public class VideoLoaderController extends BasePlayerController {
     private static final long BUFFERING_THRESHOLD_MS = 3_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
     private static final long BUFFERING_RECURRENCE_COUNT = 5;
-    private static final long BUFFERING_CONTINUATION_MS = 15_000;
+    private static final long BUFFERING_CONTINUATION_MS = 20_000;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private int mLastErrorType = -1;

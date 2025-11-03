@@ -274,26 +274,12 @@ public class SabrExtractor implements Extractor {
      * @param trackType The type of the track. Typically one of the {@link com.google.android.exoplayer2.C}
      *    {@code TRACK_TYPE_*} constants.
      */
-    public SabrExtractor(int trackType, @NonNull Format format) {
-        this(0, trackType, format);
+    public SabrExtractor(int trackType, @NonNull Format format, @NonNull SabrStream sabrStream) {
+        this(0, trackType, format, sabrStream);
     }
 
-    private SabrExtractor(@Flags int flags, int trackType, @NonNull Format format) {
-        // TODO: replace nulls with the actual values
-        sabrStream = new SabrStream(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                -1,
-                -1,
-                -1,
-                null,
-                false,
-                null
-        );
+    private SabrExtractor(@Flags int flags, int trackType, @NonNull Format format, @NonNull SabrStream sabrStream) {
+        this.sabrStream = sabrStream;
         this.format = format;
         this.trackType = trackType;
         seekForCuesEnabled = (flags & FLAG_DISABLE_SEEK_FOR_CUES) == 0;
