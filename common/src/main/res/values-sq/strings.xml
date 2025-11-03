@@ -707,7 +707,7 @@
   <string name="original_lang">Origjinale</string>
   <string name="dont_resize_video_to_fit_dialog">Mos ndrysho madhësinë e videos për t\'u përshtatur me dritaren e dialogut</string>
   <string name="typing_corrections">Çaktivizo vetë-korrigjimin gjatë shtypjes së tekstit</string>
-  <string name="remove_playlist_fmt">Do ta fshish %s përgjithmonë\?</string>
+  <string name="remove_playlist_fmt">Do ta fshish %s përgjithmonë?</string>
   <string name="player_chapter_notification2">Kalo te kapitulli tjetër duke klikuar mbi njoftimin</string>
   <string name="suggestions_horizontally_scrolled">Sugjerime të lëvizura horizontalisht</string>
 </resources>
