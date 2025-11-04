@@ -162,7 +162,7 @@
   <string name="subscribe_to_channel">Abonohu në kanal</string>
   <string name="wait_data_loading">Prit që të dhënat të ngarkohen…</string>
   <string name="auto_frame_rate_pause">Frekuenca pamore automatike (pezullo gjatë ndryshimit)</string>
-  <string name="auto_frame_rate_applying">Apliko frekuencën vizuale automatike %sx%s\@%s</string>
+  <string name="auto_frame_rate_applying">Apliko frekuencën pamore automatike %sx%s\@%s</string>
   <string name="audio_shift">Modifiko tingullin</string>
   <string name="player_remember_speed">Mbaj mend shpejtësinë</string>
   <string name="mark_channel_as_watched">Shëno si të shikuar</string>
@@ -705,4 +705,9 @@
   <string name="card_preview">Pamje paraprake të skedave</string>
   <string name="card_unlocalized_titles">Tituj video të palokalizuar</string>
   <string name="original_lang">Origjinale</string>
+  <string name="dont_resize_video_to_fit_dialog">Mos ndrysho madhësinë e videos për t\'u përshtatur me dritaren e dialogut</string>
+  <string name="typing_corrections">Çaktivizo vetë-korrigjimin gjatë shtypjes së tekstit</string>
+  <string name="remove_playlist_fmt">Do ta fshish %s përgjithmonë?</string>
+  <string name="player_chapter_notification2">Kalo te kapitulli tjetër duke klikuar mbi njoftimin</string>
+  <string name="suggestions_horizontally_scrolled">Sugjerime të lëvizura horizontalisht</string>
 </resources>
