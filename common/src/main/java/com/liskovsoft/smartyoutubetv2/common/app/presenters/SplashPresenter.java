@@ -335,7 +335,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     getContext().getString(R.string.enter_master_password),
                     null,
                     newValue -> {
-                        if (password.equals(newValue)) {
+                        if (Utils.passwordMatch(password, newValue)) {
                             onSuccess.run();
                             return true;
                         }

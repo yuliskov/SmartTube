@@ -96,7 +96,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initSectionMappings();
         updateChannelSorting();
         updatePlaylistsStyle();
-        initPinnedData();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -121,7 +120,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        refreshSections();
+        updateSections();
 
         // Move default focus
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : mBootstrapSectionId);

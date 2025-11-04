@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +197,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.enter_account_password),
                 null,
                 newValue -> {
-                    if (password.equals(newValue)) {
+                    if (Utils.passwordMatch(password, newValue)) {
                         AccountsData.instance(getContext()).setAccountPassword(null);
                         BrowsePresenter.instance(getContext()).updateSections();
                         //onSuccess.run();
@@ -218,7 +219,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.enter_account_password),
                 null,
                 newValue -> {
-                    if (password.equals(newValue)) {
+                    if (Utils.passwordMatch(password, newValue)) {
                         AccountsData.instance(getContext()).setPasswordAccepted(true);
                         BrowsePresenter.instance(getContext()).updateSections();
                         //onSuccess.run();

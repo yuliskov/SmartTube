@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
@@ -124,12 +125,12 @@ public class SettingsGridFragment extends GridFragment implements SettingsSectio
                 if (password == null) {
                     ((SettingsItem) item).onClick.run();
                 } else {
-                    SimpleEditDialog.show(
+                    SimpleEditDialog.showPassword(
                             getContext(),
                             getContext().getString(R.string.enter_settings_password),
                             null,
                             newValue -> {
-                                if (password.equals(newValue)) {
+                                if (Utils.passwordMatch(password, newValue)) {
                                     ((SettingsItem) item).onClick.run();
                                     return true;
                                 }
