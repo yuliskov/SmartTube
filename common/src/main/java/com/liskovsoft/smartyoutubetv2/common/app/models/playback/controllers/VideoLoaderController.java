@@ -764,7 +764,7 @@ public class VideoLoaderController extends BasePlayerController {
         
         VideoGroup group = getVideo().getGroup(); // Get the VideoGroup (playlist)
 
-        if (group != null && !group.isEmpty() && group.get(0).belongsToSamePlaylistGroup()) {
+        if (group != null && !group.isEmpty() && getVideo().belongsToSamePlaylistGroup()) {
             openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");

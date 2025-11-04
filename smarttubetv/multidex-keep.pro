@@ -1,3 +1,6 @@
+-keepclassmembers class androidx.leanback.widget.SearchOrbView {
+    <init>(...);
+}
 -keepclassmembers class io.reactivex.plugins.RxJavaPlugins {
     static io.reactivex.Observable onAssembly(io.reactivex.Observable);
 }
