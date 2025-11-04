@@ -314,7 +314,7 @@
     <string name="action_pip">Картинка в картинці</string>
     <string name="action_video_info">Опис відео</string>
     <string name="action_screen_off">Вимкнути екран</string>
-    <string name="action_sound_off">Вимкнути звук</string>
+    <string name="action_sound_off">Без звуку</string>
     <string name="action_playback_queue">Черга відтворення</string>
     <string name="action_video_speed">Швидкість відео</string>
     <string name="action_subtitles">Субтитри</string>

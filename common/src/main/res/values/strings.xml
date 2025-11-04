@@ -318,7 +318,7 @@
     <string name="action_pip">PIP</string>
     <string name="action_video_info">Video description</string>
     <string name="action_screen_off">Screen off</string>
-    <string name="action_sound_off">Sound off</string>
+    <string name="action_sound_off">Mute</string>
     <string name="action_playback_queue">Playback queue</string>
     <string name="action_video_speed">Video speed</string>
     <string name="action_subtitles">Subtitles</string>
