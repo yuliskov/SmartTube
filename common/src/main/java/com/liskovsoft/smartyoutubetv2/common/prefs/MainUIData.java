@@ -464,8 +464,10 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType,
                 mIsUnlocalizedTitlesEnabled));
+    }
 
-        //onDataChange();
+    public void persistNow() {
+        Utils.post(mPersistStateInt);
     }
 
     public static class ColorScheme {
