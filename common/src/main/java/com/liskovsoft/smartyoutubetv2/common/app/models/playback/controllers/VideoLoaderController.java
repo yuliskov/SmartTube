@@ -748,7 +748,7 @@ public class VideoLoaderController extends BasePlayerController {
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    restartPlaylist();
+                    restartPlaylistIfNeeded();
                 }
                 break;
             default:
@@ -757,14 +757,14 @@ public class VideoLoaderController extends BasePlayerController {
         }
     }
 
-    private void restartPlaylist() {
+    private void restartPlaylistIfNeeded() {
         if (getPlayer() == null || getVideo() == null) {
             return;
         }
         
         VideoGroup group = getVideo().getGroup(); // Get the VideoGroup (playlist)
 
-        if (group != null && !group.isEmpty()) {
+        if (group != null && !group.isEmpty() && group.get(0).hasPlaylist()) {
             openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
