@@ -316,7 +316,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Check view to allow open playlist in grid
-        if (mVideo == null || !mVideo.hasPlaylist() || (mVideo.belongsToSamePlaylistGroup() && getViewManager().getTopView() == ChannelUploadsView.class)) {
+        if (mVideo == null || !mVideo.hasPlaylist() || (getViewManager().getTopView() == ChannelUploadsView.class && mVideo.belongsToSamePlaylistGroup())) {
             return;
         }
 

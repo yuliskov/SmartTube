@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-import android.text.TextUtils;
-
 import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
