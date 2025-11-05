@@ -39,13 +39,11 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrConte
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ReloadPlayerResponse;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -89,7 +87,7 @@ public class SabrStream {
     private String url;
     private List<? extends  SabrPart> multiResult = null;
 
-    private static class NoSegmentsTracker { // TODO: move to the SABR request builder
+    private static class NoSegmentsTracker {
         public int consecutiveRequests = 0;
         public float timestampStarted = -1;
         public int liveHeadSegmentStarted = -1;
@@ -169,6 +167,10 @@ public class SabrStream {
         }
 
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
+    }
+
+    public void reset() {
+        noNewSegmentsTracker.reset();
     }
 
     private SabrPart parsePart(UMPPart part) {
