@@ -149,7 +149,8 @@ class ControlBar extends LinearLayout {
 
     private void setFocusIndex(int index) {
         mLastFocusIndex = index;
-        mGlobalFocusIndex = index;
+        if (index != -1) // don't reset global focus between player launches
+            mGlobalFocusIndex = index;
     }
 
     private int getFocusIndex() {
