@@ -20,7 +20,6 @@ public class PlaybackModeAction extends MultiAction {
     private static final int INDEX_LIST = PlayerConstants.PLAYBACK_MODE_LIST;
     private static final int INDEX_SHUFFLE = PlayerConstants.PLAYBACK_MODE_SHUFFLE;
     private static final int INDEX_REVERSE_LIST = PlayerConstants.PLAYBACK_MODE_REVERSE_LIST;
-    private static final int INDEX_LOOP_LIST = PlayerConstants.PLAYBACK_MODE_LOOP_LIST;
     private final Context mContext;
 
     /**

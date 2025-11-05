@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrError
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ReloadPlayerResponse;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -144,6 +145,10 @@ public class SabrStream {
 
         sqMismatchBacktrackCount = 0;
         sqMismatchForwardCount = 0;
+    }
+
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+        return processor.buildVideoPlaybackAbrRequest();
     }
 
     public SabrPart parse(@NonNull ExtractorInput extractorInput) {

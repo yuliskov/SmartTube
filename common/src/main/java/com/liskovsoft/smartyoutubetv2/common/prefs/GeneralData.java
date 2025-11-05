@@ -784,6 +784,10 @@ public class GeneralData implements ProfileChangeListener {
                 mIsRemapPageDownToSpeedEnabled, mSearchExitShortcut));
     }
 
+    public void persistNow() {
+        Utils.post(mPersistStateInt);
+    }
+
     @Override
     public void onProfileChanged() {
         Utils.removeCallbacks(mPersistStateInt);

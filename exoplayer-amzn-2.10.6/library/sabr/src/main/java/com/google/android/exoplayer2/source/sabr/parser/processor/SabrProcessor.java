@@ -1,5 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.processor;
 
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
@@ -19,6 +21,7 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSab
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
@@ -26,16 +29,20 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatIni
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus.Status;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
+import com.google.protobuf.ByteString;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
-import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +51,7 @@ import java.util.Set;
 
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
-    public static final int NO_VALUE = -1;
+    private static final int NO_VALUE = -1;
     private final String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
     private VideoSelector videoFormatSelector;
@@ -177,7 +184,7 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Compression not supported in MediaHeader (media_header=%s)", mediaHeader));
         }
 
-        long sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
+        int sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
         boolean isInitSegment = mediaHeader.getIsInitSegment();
 
         if (sequenceNumber == NO_VALUE && !isInitSegment) {
@@ -316,6 +323,7 @@ public class SabrProcessor {
                     segment.sequenceNumber,
                     segment.isInitSegment,
                     segment.initializedFormat.totalSegments,
+                    segment.startMs,
                     data,
                     contentLength,
                     segmentStartBytes
@@ -514,9 +522,9 @@ public class SabrProcessor {
             initializedFormat.consumedRanges.clear();
             initializedFormat.consumedRanges.add(new ConsumedRange(
                     0,
-                    ((long) Math.pow(2, 53)) - 1,
+                    Integer.MAX_VALUE, // ((long) Math.pow(2, 53)) - 1
                     0,
-                    ((long) Math.pow(2, 53)) - 1
+                    Integer.MAX_VALUE // ((long) Math.pow(2, 53)) - 1
             ));
         }
 
@@ -675,6 +683,105 @@ public class SabrProcessor {
 
     public int getLiveSegmentTargetDurationSec() {
         return liveSegmentTargetDurationSec;
+    }
+
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+        return VideoPlaybackAbrRequest.newBuilder()
+                .setClientAbrState(getClientAbrState())
+                .addAllSelectedVideoFormatIds(selectedVideoFormatIds)
+                .addAllSelectedAudioFormatIds(selectedAudioFormatIds)
+                .addAllSelectedCaptionFormatIds(selectedCaptionFormatIds)
+                .addAllInitializedFormatIds(getInitializedFormatIds())
+                .setVideoPlaybackUstreamerConfig(
+                        ByteString.copyFrom(
+                                Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
+                        )
+                )
+                .setStreamerContext(createStreamerContext())
+                .addAllBufferedRanges(createBufferedRanges())
+                .build();
+    }
+
+    private List<FormatId> getInitializedFormatIds() {
+        List<FormatId> result = new ArrayList<>();
+
+        for (InitializedFormat initializedFormat : initializedFormats.values()) {
+            result.add(initializedFormat.formatId);
+        }
+
+        return result;
+    }
+
+    private StreamerContext createStreamerContext() {
+        return StreamerContext.newBuilder()
+                .setPoToken(
+                        ByteString.copyFrom(
+                                Base64.decode(poToken, Base64.URL_SAFE)
+                        )
+                )
+                .setPlaybackCookie(
+                        nextRequestPolicy != null ? nextRequestPolicy.getPlaybackCookie() : ByteString.EMPTY
+                )
+                .setClientInfo(clientInfo)
+                .addAllSabrContexts(createSabrContexts())
+                .addAllUnsentSabrContexts(createUnsentSabrContexts())
+                .build();
+    }
+
+    private List<SabrContext> createSabrContexts() {
+        List<SabrContext> result = new ArrayList<>();
+
+        for (SabrContextUpdate context : sabrContextUpdates.values()) {
+            if (sabrContextsToSend.contains(context.getType())) {
+                result.add(
+                        SabrContext.newBuilder()
+                            .setType(context.getType())
+                            .setValue(context.getValue())
+                            .build()
+                );
+            }
+        }
+
+        return result;
+    }
+
+    private List<Integer> createUnsentSabrContexts() {
+        List<Integer> result = new ArrayList<>();
+
+        for (Integer contextType : sabrContextsToSend) {
+            if (!sabrContextUpdates.containsKey(contextType)) {
+                result.add(contextType);
+            }
+        }
+
+        return result;
+    }
+
+    private List<BufferedRange> createBufferedRanges() {
+        List<BufferedRange> result = new ArrayList<>();
+
+        for (InitializedFormat initializedFormat : initializedFormats.values()) {
+            for (ConsumedRange cr : initializedFormat.consumedRanges) {
+                result.add(
+                        BufferedRange.newBuilder()
+                                .setFormatId(initializedFormat.formatId)
+                                .setStartSegmentIndex(cr.startSequenceNumber)
+                                .setEndSegmentIndex(cr.endSequenceNumber)
+                                .setStartTimeMs(cr.startTimeMs)
+                                .setDurationMs(cr.durationMs)
+                                .setTimeRange(
+                                        TimeRange.newBuilder()
+                                                .setStartTicks(cr.startTimeMs)
+                                                .setDurationTicks(cr.durationMs)
+                                                .setTimescale(1_000)
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+        }
+
+        return result;
     }
 
     private FormatSelector matchFormatSelector(FormatInitializationMetadata formatInitMetadata) {

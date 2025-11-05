@@ -10,7 +10,6 @@ public interface PlayerConstants {
     int PLAYBACK_MODE_SHUFFLE = 4;
     int PLAYBACK_MODE_LIST = 5;
     int PLAYBACK_MODE_REVERSE_LIST = 6;
-    int PLAYBACK_MODE_LOOP_LIST = 7;
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;

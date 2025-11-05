@@ -96,7 +96,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initSectionMappings();
         updateChannelSorting();
         updatePlaylistsStyle();
-        initPinnedData();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -121,7 +120,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        refreshSections();
+        updateSections();
 
         // Move default focus
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : mBootstrapSectionId);
@@ -1027,7 +1026,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private Observable<MediaGroup> createPinnedGridAction(Video item) {
         if (item.channelGroupId != null) {
-            return getContentService().getSubscriptionsObserve(ChannelGroupServiceWrapper.instance(getContext()).findChannelIdsForGroup(item.channelGroupId));
+            return getContentService().getRssFeedObserve(ChannelGroupServiceWrapper.instance(getContext()).findChannelIdsForGroup(item.channelGroupId));
         }
 
         return ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item);

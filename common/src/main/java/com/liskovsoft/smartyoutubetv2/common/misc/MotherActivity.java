@@ -426,4 +426,8 @@ public class MotherActivity extends FragmentActivity {
     protected PlayerData getPlayerData() {
         return PlayerData.instance(this);
     }
+
+    protected MainUIData getMainUIData() {
+        return MainUIData.instance(this);
+    }
 }

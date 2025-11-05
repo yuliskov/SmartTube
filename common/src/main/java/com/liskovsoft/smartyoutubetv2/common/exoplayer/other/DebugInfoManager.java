@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
@@ -359,10 +360,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendMemoryInfo() {
-        long maxMemory = Runtime.getRuntime().maxMemory();
-        long allocatedMemory = Runtime.getRuntime().totalMemory();
-        appendRow("Memory limit (MB)", (int)(maxMemory / (1024 * 1024))); // Growth Limit
-        appendRow("Allocated memory (MB)", (int)(allocatedMemory / (1024 * 1024)));
+        appendRow("Max heap memory (MB)", DeviceHelpers.getMaxHeapMemoryMB()); // Growth Limit
+        appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB());
     }
 
     private void appendWebViewInfo() {

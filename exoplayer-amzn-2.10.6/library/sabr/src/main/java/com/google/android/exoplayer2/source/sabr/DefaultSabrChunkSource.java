@@ -32,6 +32,7 @@ import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
+import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -111,6 +112,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private boolean missingLastSegment;
     private long liveEdgeTimeUs;
 
+    private final SabrStream sabrStream;
+
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
      * @param manifest The initial manifest.
@@ -157,6 +160,22 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
         liveEdgeTimeUs = C.TIME_UNSET;
 
+        // TODO: replace nulls with the actual values
+        sabrStream = new SabrStream(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                -1,
+                -1,
+                -1,
+                null,
+                false,
+                null
+        );
+
         List<Representation> representations = getRepresentations();
         representationHolders = new RepresentationHolder[trackSelection.length()];
         for (int i = 0; i < representationHolders.length; i++) {
@@ -168,7 +187,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                             representation,
                             enableEventMessageTrack,
                             closedCaptionFormats,
-                            playerTrackEmsgHandler);
+                            playerTrackEmsgHandler,
+                            sabrStream);
         }
     }
 
@@ -611,7 +631,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Representation representation,
                 boolean enableEventMessageTrack,
                 List<Format> closedCaptionFormats,
-                TrackOutput playerEmsgTrackOutput) {
+                TrackOutput playerEmsgTrackOutput,
+                SabrStream sabrStream) {
             this(
                     periodDurationUs,
                     representation,
@@ -620,7 +641,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                             representation,
                             enableEventMessageTrack,
                             closedCaptionFormats,
-                            playerEmsgTrackOutput),
+                            playerEmsgTrackOutput,
+                            sabrStream),
                     /* segmentNumShift= */ 0,
                     representation.getIndex());
         }
@@ -773,7 +795,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Representation representation,
                 boolean enableEventMessageTrack,
                 List<Format> closedCaptionFormats,
-                TrackOutput playerEmsgTrackOutput) {
+                TrackOutput playerEmsgTrackOutput,
+                SabrStream sabrStream) {
             String containerMimeType = representation.format.containerMimeType;
             if (mimeTypeIsRawText(containerMimeType)) {
                 return null;
@@ -795,7 +818,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //                    flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
             //}
 
-            Extractor extractor = new SabrExtractor(trackType, representation.format); // TODO: add more params (from the manifest) into the constructor
+            Extractor extractor = new SabrExtractor(trackType, representation.format, sabrStream); // TODO: add more params (from the manifest) into the constructor
 
             // Prefer drmInitData obtained from the manifest over drmInitData obtained from the stream,
             // as per DASH IF Interoperability Recommendations V3.0, 7.5.3.

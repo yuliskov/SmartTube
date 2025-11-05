@@ -7,7 +7,7 @@ public class Segment {
     public final boolean isInitSegment;
     public final int durationMs;
     public final int startDataRange;
-    public long sequenceNumber;
+    public final int sequenceNumber;
     public final long contentLength;
     public final boolean contentLengthEstimated;
     public final int startMs;
@@ -22,7 +22,7 @@ public class Segment {
                    boolean isInitSegment,
                    int durationMs,
                    int startDataRange,
-                   long sequenceNumber,
+                   int sequenceNumber,
                    long contentLength,
                    boolean contentLengthEstimated,
                    int startMs,

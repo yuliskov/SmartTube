@@ -41,7 +41,7 @@ public class VideoLoaderController extends BasePlayerController {
     private static final long BUFFERING_THRESHOLD_MS = 3_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
     private static final long BUFFERING_RECURRENCE_COUNT = 5;
-    private static final long BUFFERING_CONTINUATION_MS = 10_000;
+    private static final long BUFFERING_CONTINUATION_MS = 20_000;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private int mLastErrorType = -1;
@@ -748,17 +748,7 @@ public class VideoLoaderController extends BasePlayerController {
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    getPlayer().setPositionMs(getPlayer().getDurationMs());
-                    getPlayer().setPlayWhenReady(false);
-                    getPlayer().showSuggestions(true);
-                }
-                break;
-            case PlayerConstants.PLAYBACK_MODE_LOOP_LIST:
-                // if video has a playlist load next or restart playlist
-                if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
-                    loadNext();
-                } else {
-                    restartPlaylist();
+                    restartPlaylistIfNeeded();
                 }
                 break;
             default:
@@ -767,20 +757,15 @@ public class VideoLoaderController extends BasePlayerController {
         }
     }
 
-    private void restartPlaylist() {
-        Video currentVideo = getVideo();
-        VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
+    private void restartPlaylistIfNeeded() {
+        if (getPlayer() == null || getVideo() == null) {
+            return;
+        }
+        
+        VideoGroup group = getVideo().getGroup(); // Get the VideoGroup (playlist)
 
-        if (group != null && !group.isEmpty()) {
-            // Clear current playlist
-            mPlaylist.clear();
-
-            // Add all videos from VideoGroup
-            mPlaylist.addAll(group.getVideos());
-            
-            Video firstVideo = group.get(0);
-            mPlaylist.setCurrent(firstVideo);
-            openVideoInt(firstVideo);
+        if (group != null && !group.isEmpty() && getVideo().belongsToSamePlaylistGroup()) {
+            openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
             getPlayer().setPositionMs(getPlayer().getDurationMs());
@@ -1003,7 +988,7 @@ public class VideoLoaderController extends BasePlayerController {
         //if (getVideo() != null) {
         //    getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
         //}
-        getPlayerData().setSubtitlesPerChannelEnabled(false);
+        //getPlayerData().setSubtitlesPerChannelEnabled(false);
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
     }
 }
