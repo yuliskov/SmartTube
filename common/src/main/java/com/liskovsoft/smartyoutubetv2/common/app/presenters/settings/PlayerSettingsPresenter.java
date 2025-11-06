@@ -598,8 +598,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_global_focus),
                 getContext().getString(R.string.player_global_focus_desc),
-                option -> mPlayerTweaksData.setSimplePlayerNavigationEnabled(option.isSelected()),
-                mPlayerTweaksData.isSimplePlayerNavigationEnabled()));
+                option -> mPlayerTweaksData.setSyncRowButtonIndexEnabled(option.isSelected()),
+                mPlayerTweaksData.isSyncRowButtonIndexEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_ui_on_next),
                 option -> mPlayerTweaksData.setPlayerUiOnNextEnabled(option.isSelected()),

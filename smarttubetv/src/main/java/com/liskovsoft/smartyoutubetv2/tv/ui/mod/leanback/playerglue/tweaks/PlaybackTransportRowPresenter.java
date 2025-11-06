@@ -429,8 +429,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mPlayerData = PlayerData.instance(rootView.getContext());
             // MOD: switch between navigation modes
             PlayerTweaksData tweaksData = PlayerTweaksData.instance(rootView.getContext());
-            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setGlobalFocus(tweaksData.isSimplePlayerNavigationEnabled());
-            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setGlobalFocus(tweaksData.isSimplePlayerNavigationEnabled());
+            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setSyncedFocusIndexEnabled(tweaksData.isSyncRowButtonIndexEnabled());
+            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setSyncedFocusIndexEnabled(tweaksData.isSyncRowButtonIndexEnabled());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
