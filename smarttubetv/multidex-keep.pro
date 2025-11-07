@@ -1,3 +1,7 @@
+-keepclassmembers class androidx.work.Logger {
+    <clinit>(...);
+    static java.lang.String tagWithPrefix(java.lang.String);
+}
 -keepclassmembers class androidx.leanback.widget.SearchOrbView {
     <init>(...);
 }
