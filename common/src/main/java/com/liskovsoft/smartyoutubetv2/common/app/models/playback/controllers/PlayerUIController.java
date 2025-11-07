@@ -287,6 +287,15 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         getPlayer().updateEndingTime();
+
+        // Restore sound off state if it was previously enabled
+        if (getPlayerData().isSoundOffEnabled()) {
+            mAudioFormat = getPlayer().getAudioFormat();
+            if (mAudioFormat != null && !mAudioFormat.isDefault()) {
+                getPlayer().setFormat(FormatItem.NO_AUDIO);
+            }
+        }
+
         applySoundOffButtonState();
     }
 
@@ -946,20 +955,25 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applySoundOff(int buttonState) {
-        if (buttonState == PlayerUI.BUTTON_OFF) {
+        boolean soundOffEnabled = buttonState == PlayerUI.BUTTON_OFF;
+
+        if (soundOffEnabled) {
             mAudioFormat = getPlayer().getAudioFormat();
             getPlayer().setFormat(FormatItem.NO_AUDIO);
         } else {
             getPlayer().setFormat(mAudioFormat);
         }
 
-        getPlayer().setButtonState(R.id.action_sound_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayerData().setSoundOffEnabled(soundOffEnabled);
+        getPlayer().setButtonState(R.id.action_sound_off, soundOffEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void applySoundOffButtonState() {
         if (getPlayer() != null && getPlayer().getAudioFormat() != null) {
-            getPlayer().setButtonState(R.id.action_sound_off,
-                    (getPlayer().getAudioFormat().isDefault() || getPlayerData().getPlayerVolume() == 0) ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+            boolean isSoundOff = getPlayerData().isSoundOffEnabled() ||
+                    getPlayer().getAudioFormat().isDefault() ||
+                    getPlayerData().getPlayerVolume() == 0;
+            getPlayer().setButtonState(R.id.action_sound_off, isSoundOff ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         }
     }
 
