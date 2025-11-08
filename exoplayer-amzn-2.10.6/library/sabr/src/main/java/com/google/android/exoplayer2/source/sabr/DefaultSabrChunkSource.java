@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -44,7 +45,9 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DefaultSabrChunkSource implements SabrChunkSource {
     public static final class Factory implements SabrChunkSource.Factory {
@@ -113,6 +116,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private long liveEdgeTimeUs;
 
     private final SabrStream sabrStream;
+    private final Map<String, String> sabrHeaders;
+    private int sabrRequestNumber = 0;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -175,6 +180,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 false,
                 null
         );
+
+        sabrHeaders = new HashMap<>();
+        sabrHeaders.put("content-type", "application/x-protobuf");
+        sabrHeaders.put("accept-encoding", "identity");
+        sabrHeaders.put("accept", "application/vnd.yt-ump");
 
         List<Representation> representations = getRepresentations();
         representationHolders = new RepresentationHolder[trackSelection.length()];
@@ -505,9 +515,20 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         } else {
             requestUri = indexUri;
         }
-        // TODO: first protobuf request (before the video start off)
-        DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
-                requestUri.length, representationHolder.representation.getCacheKey());
+        // NOTE: first protobuf request (before the video start off)
+        // MOD: add protobuf data
+        //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
+        //        requestUri.length, representationHolder.representation.getCacheKey());
+        DataSpec dataSpec = new DataSpec(
+                requestUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                DataSpec.HTTP_METHOD_POST,
+                sabrStream.buildVideoPlaybackAbrRequest().toByteArray(),
+                requestUri.start,
+                requestUri.start,
+                requestUri.length,
+                representationHolder.representation.getCacheKey(),
+                0,
+                sabrHeaders);
         return new InitializationChunk(dataSource, dataSpec, trackFormat,
                 trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
@@ -550,9 +571,20 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                     periodDurationUs != C.TIME_UNSET && periodDurationUs <= endTimeUs
                             ? periodDurationUs
                             : C.TIME_UNSET;
-            // TODO: next protobuf requests (during the playback)
-            DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
-                    segmentUri.start, segmentUri.length, representation.getCacheKey());
+            // NOTE: next protobuf requests (during the playback)
+            // MOD: add protobuf data
+            //DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
+            //        segmentUri.start, segmentUri.length, representation.getCacheKey());
+            DataSpec dataSpec = new DataSpec(
+                    segmentUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                    DataSpec.HTTP_METHOD_POST,
+                    sabrStream.buildVideoPlaybackAbrRequest().toByteArray(),
+                    segmentUri.start,
+                    segmentUri.start,
+                    segmentUri.length,
+                    representation.getCacheKey(),
+                    0,
+                    sabrHeaders);
             long sampleOffsetUs = -representation.presentationTimeOffsetUs;
             return new ContainerMediaChunk(
                     dataSource,

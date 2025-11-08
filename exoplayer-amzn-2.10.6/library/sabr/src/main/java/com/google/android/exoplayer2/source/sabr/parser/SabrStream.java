@@ -145,10 +145,6 @@ public class SabrStream {
         sqMismatchForwardCount = 0;
     }
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
-        return processor.buildVideoPlaybackAbrRequest();
-    }
-
     public SabrPart parse(@NonNull ExtractorInput extractorInput) {
         SabrPart result = null;
 
@@ -167,6 +163,10 @@ public class SabrStream {
         }
 
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
+    }
+
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+        return processor.buildVideoPlaybackAbrRequest();
     }
 
     public void reset() {

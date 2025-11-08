@@ -32,4 +32,10 @@ public class Utils {
     public static long toLong(int value) {
         return Integer.toUnsignedLong(value);
     }
+
+    public static String updateQuery(String baseUrl, String key, Object value) {
+        if (baseUrl == null || key == null || value == null) return baseUrl;
+        String separator = baseUrl.contains("?") ? "&" : "?";
+        return baseUrl + separator + key + "=" + value;
+    }
 }

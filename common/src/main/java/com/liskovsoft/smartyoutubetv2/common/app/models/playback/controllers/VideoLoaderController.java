@@ -524,7 +524,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getVideo() != null && getVideo().isLiveEnd) {
             // Url no longer works (e.g. live stream ended)
-            loadNext();
+            getMainController().onPlayEnd();
             return;
         }
 
