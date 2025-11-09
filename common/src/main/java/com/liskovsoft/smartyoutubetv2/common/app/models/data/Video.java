@@ -545,7 +545,8 @@ public final class Video {
     }
 
     public boolean isMix() {
-        return mediaItem != null && !isLive && !isLiveEnd && Helpers.hasWords(badge) &&
+        // NOTE: don't check for 'mediaItem != null'. some objects are lightweight
+        return !isLive && !isLiveEnd && Helpers.hasWords(badge) &&
                 (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
