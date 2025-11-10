@@ -195,7 +195,7 @@ public class SabrManifestParser {
 
         if (segmentDurationUs <= 0) {
             // Inaccurate. Present on past (!) live streams.
-            segmentDurationUs = Integer.parseInt(format.getTargetDurationSec()) * 1_000_000;
+            segmentDurationUs = format.getTargetDurationSec() * 1_000_000;
         }
 
         int lengthSeconds = Integer.parseInt(mFormatInfo.getLengthSeconds());
