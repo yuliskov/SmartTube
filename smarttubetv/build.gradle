@@ -115,19 +115,15 @@ android {
             //applicationId "org.smartteam.smarttube.tv"
             applicationId "com.teamsmart.videomanager.tv"
         }
-        storig {
-            // matchingFallbacks = ['lite']
-            applicationId "org.smartteam.smarttube.tv.orig"
-        }
-        stamazon {
-            // matchingFallbacks = ['lite']
-            applicationId "com.amazon.firetv.youtube"
-        }
-        staptoide {
+        stmarket {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
-            //applicationId "com.liskovsoft.videomanager" // legacy?
             applicationId "com.teamsmart.videomanager.tv"
+        }
+        stlegacy {
+            // matchingFallbacks = ['lite']
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
         }
     }
 
