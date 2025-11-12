@@ -143,6 +143,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         if (!RemoteControlData.instance(this).isConnectedBefore()) {
             getMainUIData().persistNow();
             getGeneralData().persistNow();
+            getMediaServiceData().persistNow();
             getViewManager().addOnFinish(sOnFinish);
         }
     }

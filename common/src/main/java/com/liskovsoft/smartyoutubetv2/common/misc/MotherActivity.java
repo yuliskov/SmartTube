@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -429,5 +430,9 @@ public class MotherActivity extends FragmentActivity {
 
     protected MainUIData getMainUIData() {
         return MainUIData.instance(this);
+    }
+
+    protected MediaServiceData getMediaServiceData() {
+        return MediaServiceData.instance();
     }
 }

@@ -177,7 +177,7 @@
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
 }
 -keep class androidx.recyclerview.widget.RecyclerView { *; }
--keep class com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor { *; }
+#-keep class com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor { *; }
 -keep class com.google.android.exoplayer2.C { *; }
 -keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
 -keep class okhttp3.OkHttpClient$Builder { *; }
