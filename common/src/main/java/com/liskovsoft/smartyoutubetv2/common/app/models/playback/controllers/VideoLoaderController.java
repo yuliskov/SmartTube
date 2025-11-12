@@ -721,10 +721,15 @@ public class VideoLoaderController extends BasePlayerController {
                 break;
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown
-                AppDialogPresenter dialog = getAppDialogPresenter();
-                if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
-                    dialog.closeDialog();
-                    getPlayer().finishReally();
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                } else {
+                    AppDialogPresenter dialog = getAppDialogPresenter();
+                    if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
+                        dialog.closeDialog();
+                        getPlayer().finishReally();
+                    }
                 }
                 break;
             case PlayerConstants.PLAYBACK_MODE_PAUSE:

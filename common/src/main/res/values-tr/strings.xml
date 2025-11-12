@@ -119,7 +119,7 @@
     <string name="repeat_mode_one">Videoyu tekrarla</string>
     <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat</string>
     <string name="repeat_mode_pause_alt">Sadece oynatma listesi videolarını sürekli oynat</string>
-    <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
+    <string name="repeat_mode_none">Videodan sonra oynatmayı durdur (kuyruk hariç)</string>
     <string name="subscribed_to_channel">Abone olundu</string>
     <string name="unsubscribed_from_channel">Abonelikten çıkıldı</string>
     <string name="subtitle_yellow_transparent">Sarı (Saydam arka plan)</string>
