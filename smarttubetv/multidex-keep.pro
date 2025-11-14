@@ -1,3 +1,7 @@
+-keepclassmembers class com.bumptech.glide.Glide {
+    <init>(...);
+    void registerRequestManager(com.bumptech.glide.RequestManager);
+}
 -keepclassmembers class androidx.work.Logger {
     <clinit>(...);
     static java.lang.String tagWithPrefix(java.lang.String);
