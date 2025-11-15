@@ -398,6 +398,8 @@
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio/Video scale/Screenshots fix</string>
     <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 720p.</string>
     <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
+    <string name="disable_av1_support">Disable AV1 support</string>
+    <string name="disable_av1_support_desc">Avoid selecting AV1 streams (useful for devices without hardware AV1 decoding).</string>
     <string name="live_stream_fix_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
     <string name="live_stream_fix_4k_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance. Maximum resolution is 4K.</string>
     <string name="live_stream_fix">Live stream fix (1080p)</string>
