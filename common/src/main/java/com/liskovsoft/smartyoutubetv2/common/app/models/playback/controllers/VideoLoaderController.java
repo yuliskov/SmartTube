@@ -909,7 +909,7 @@ public class VideoLoaderController extends BasePlayerController {
         Integer[] engineList = Utils.skipCronet() ?
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Helpers.getNextValue(currentEngine, engineList);
+        return Helpers.getNextValue(engineList, currentEngine);
     }
 
     private static int getFasterDataSource() {

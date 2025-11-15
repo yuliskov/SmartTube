@@ -13,13 +13,13 @@
   <string name="subscriptions_signin_title">Se det senaste från kanaler du älskar</string>
   <string name="subscriptions_signin_subtitle">Logga in för att se dina prenumerationer</string>
   <string name="subscriptions_signin_button_text">LOGGA IN</string>
-  <string name="library_signin_to_show_more">Titta på videor du gillat, sparat eller prenumererat på</string>
+  <string name="library_signin_to_show_more">Titta på videor du har gillat, sparat eller som du prenumererar på</string>
   <string name="library_signin_subtitle">Logga in för att se ditt bibliotek</string>
   <string name="action_signin">LOGGA IN</string>
   <string name="title_video_formats">Videoformat</string>
   <string name="title_audio_formats">Ljudformat</string>
   <string name="subtitle_category_title">Undertexter</string>
-  <string name="playback_queue_category_title">Uppspelningskön</string>
+  <string name="playback_queue_category_title">Uppspelningskö</string>
   <string name="video_max_quality">Automatisk (maximal kvalitet)</string>
   <string name="audio_max_quality">Automatisk (maximal kvalitet)</string>
   <string name="subtitles_disabled">Undertexter inaktiverade</string>
@@ -42,7 +42,7 @@
   <string name="section_is_empty">Oj! Det finns inget här</string>
   <string name="dialog_add_to_playlist">Lägg till/ta bort från spellista</string>
   <string name="msg_signed_users_only">Endast inloggade användare</string>
-  <string name="msg_cant_load_content">Det går inte att läsa in innehållet.\n1) Aktivera visningshistoriken.\n2) Kontrollera datum och tid på din enhet.\n3) Kontrollera nätverksanslutningen.\n4) Kontrollera dina proxyinställningar.\n5) Testa att logga in på ditt konto.\n6) Kanske det inte finns något här.</string>
+  <string name="msg_cant_load_content">Det går inte att läsa in innehållet.\n1) Aktivera visningshistoriken.\n2) Kontrollera datum och klockslag på enheten.\n3) Kontrollera nätverksanslutningen.\n4) Kontrollera dina proxyinställningar.\n5) Testa att logga in på ditt konto.\n6) Kanske det inte finns något här.</string>
   <string name="title_video_presets">Förinställningar för video</string>
   <string name="settings_accounts">Konton</string>
   <string name="settings_left_panel">Redigera kategorier</string>
@@ -109,7 +109,7 @@
   <string name="card_multiline_title">Titlar med flera rader</string>
   <string name="cards_style">Kortstil</string>
   <string name="repeat_mode_all">Spela upp videor kontinuerligt</string>
-  <string name="repeat_mode_one">Upprepa aktuell video</string>
+  <string name="repeat_mode_one">Upprepa den aktuella videon</string>
   <string name="repeat_mode_pause">Pausa uppspelningen efter varje video</string>
   <string name="repeat_mode_pause_alt">Spela upp endast videor i spellistor kontinuerligt</string>
   <string name="repeat_mode_none">Stoppa uppspelningen efter en video</string>
@@ -129,7 +129,7 @@
   <string name="playlists_style_rows">Rader</string>
   <string name="player_show_clock">Visa klocka i fältet för uppspelningsknappar</string>
   <string name="player_show_remaining_time">Visa återstående tid i fältet för uppspelningsknappar</string>
-  <string name="player_show_ending_time">Visa sluttid i fältet för uppspelningsknappar</string>
+  <string name="player_show_ending_time">Visa klockslaget då videon slutar i fältet för uppspelningsknappar</string>
   <string name="open_channel_uploads">Öppna kanalens uppladdningar</string>
   <string name="app_exit_shortcut">Avsluta appen</string>
   <string name="player_exit_shortcut">Avsluta spelaren</string>
@@ -216,7 +216,7 @@
   <string name="player_tweaks">Utvecklaralternativ</string>
   <string name="header_uploads">Uppladdningar</string>
   <string name="player_show_global_clock">Visa klockan hela tiden</string>
-  <string name="player_show_global_ending_time">Visa sluttiden för video hela tiden</string>
+  <string name="player_show_global_ending_time">Visa sluttiden för videon hela tiden</string>
   <string name="app_corner_clock">Hem: klocka högst upp till höger</string>
   <string name="player_corner_clock">Spelare: klocka högst upp till höger</string>
   <string name="player_corner_ending_time">Spelare: sluttid högst upp till höger</string>
@@ -319,7 +319,7 @@
   <string name="action_video_info">Videobeskrivning</string>
   <string name="action_screen_off">Skärm av</string>
   <string name="action_sound_off">Ljud av</string>
-  <string name="action_playback_queue">Uppspelningskön</string>
+  <string name="action_playback_queue">Uppspelningskö</string>
   <string name="action_video_speed">Videohastighet</string>
   <string name="action_subtitles">Undertexter</string>
   <string name="action_like">Gilla</string>
@@ -472,8 +472,8 @@
   <string name="signin_view_action_text">Klart</string>
   <string name="require_checked">Kräver \"%s</string>
   <string name="msg_press_again_to_exit">Tryck igen för att avsluta</string>
-  <string name="player_remaining_time">Återstår: %s</string>
-  <string name="player_ending_time">Slutar vid %s</string>
+  <string name="player_remaining_time">Återstående: %s</string>
+  <string name="player_ending_time">Slutar kl. %s</string>
   <string name="badge_new_content">NYTT INNEHÅLL</string>
   <string name="badge_live">LIVE</string>
   <string name="add_device_view_description">Om du vill länka en enhet, ange den här koden i din telefons YouTube-app i avsnittet Inställningar/Titta på tv:n\nOBS: Detta fungerar endast med Gboard-tangentbordet!</string>
@@ -621,8 +621,8 @@
   <string name="remember_position_subscriptions">Kom ihåg den senast visade platsen i Prenumerationer</string>
   <string name="remember_position_pinned">Kom ihåg den senast visade platsen i fästa spellistor</string>
   <string name="msg_player_unknown_error">Okänt fel</string>
-  <string name="unknown_source_error">Okänt fel med källa</string>
-  <string name="unknown_renderer_error">Okänt fel med renderare</string>
+  <string name="unknown_source_error">Okänt fel med källan</string>
+  <string name="unknown_renderer_error">Okänt fel med renderaren</string>
   <string name="header_notifications">Aviseringar</string>
   <string name="disable_search_history">Inaktivera sökhistorik</string>
   <string name="unlock_high_bitrate_formats">Lås upp vp9-format i 1080p med hög bildhastighet</string>
@@ -647,7 +647,7 @@
   <string name="disable_remote_history">Inaktivera historik när du använder fjärrstyrning</string>
   <string name="keyboard_fix">Förhindra OK-knappen från att öppna tangentbordet (G20s och andra)</string>
   <string name="nothing_found">Hittade inget</string>
-  <string name="auto_frame_rate_desc">Det här alternativet tar bort bildstörningar från scener där kameran rör sig snabbt som t.ex. i sportsändningar</string>
+  <string name="auto_frame_rate_desc">Det här alternativet tar bort bildstörningar från scener där kameran rör sig snabbt som i t.ex. sportsändningar</string>
   <string name="channel_filter_hint">Filtrera kanaler</string>
   <string name="player_loop_shorts">Spela upp Shorts-videor i en slinga</string>
   <string name="player_quick_shorts_skip">Hoppa över Shorts-videor med vänster- och högerknapparna</string>
@@ -677,7 +677,7 @@
   <string name="device_specific_backup">Säkerhetskopia för endast den här enheten</string>
   <string name="local_backup">Säkerhetskopiera lokalt</string>
   <string name="auto_backup">Säkerhetskopiera automatiskt (en gång om dagen)</string>
-  <string name="repeat_mode_reverse_list">Spela upp spellistans eller kanalens videor i omvänd ordning</string>
+  <string name="repeat_mode_reverse_list">Spela upp spellistan eller kanalens videor i omvänd ordning</string>
   <string name="calm_msg">Vi håller på att åtgärda problemet. Kontrollera om det finns uppdateringar då och då</string>
   <string name="without_picture">Utan bild</string>
   <string name="video_disabled">Video inaktiverad</string>
