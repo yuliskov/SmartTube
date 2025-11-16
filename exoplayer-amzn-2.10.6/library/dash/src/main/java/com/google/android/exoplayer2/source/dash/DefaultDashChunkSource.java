@@ -363,13 +363,8 @@ public class DefaultDashChunkSource implements DashChunkSource {
       return;
     }
 
-    //// MOD: minimize load time by setting num to 1 on start and seek
     int maxSegmentCount =
         (int) Math.min(maxSegmentsPerLoad, lastAvailableSegmentNum - segmentNum + 1);
-    //boolean isStartup = Math.abs(playbackPositionUs - loadPositionUs) < 15_000_000L; // 15 sec tolerance
-    //int maxSegmentCount =
-    //    (int) Math.min(isStartup ? 1 : maxSegmentsPerLoad, lastAvailableSegmentNum - segmentNum + 1);
-
     if (periodDurationUs != C.TIME_UNSET) {
       while (maxSegmentCount > 1
           && representationHolder.getSegmentStartTimeUs(segmentNum + maxSegmentCount - 1)
