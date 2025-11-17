@@ -169,7 +169,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         sabrStream = new SabrStream(
                 manifest.getServerAbrStreamingUrl(),
                 manifest.getVideoPlaybackUstreamerConfig(),
-                null,
+                manifest.getClientInfo(),
                 null,
                 null,
                 null,

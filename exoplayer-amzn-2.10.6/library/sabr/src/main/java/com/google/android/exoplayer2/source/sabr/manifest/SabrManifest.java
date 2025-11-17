@@ -3,6 +3,7 @@ package com.google.android.exoplayer2.source.sabr.manifest;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
 
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final String videoPlaybackUstreamerConfig;
     private final String poToken;
     private final String videoId;
+    private final ClientInfo clientInfo;
 
     public SabrManifest(
             long availabilityStartTimeMs,
@@ -75,7 +77,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             String serverAbrStreamingUrl,
             String videoPlaybackUstreamerConfig,
             String poToken,
-            String videoId) {
+            String videoId,
+            ClientInfo clientInfo) {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
@@ -89,6 +92,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.poToken = poToken;
         this.videoId = videoId;
+        this.clientInfo = clientInfo;
     }
 
     public final int getPeriodCount() {
@@ -128,5 +132,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
     public final String getVideoId() {
         return videoId;
+    }
+
+    public ClientInfo getClientInfo() {
+        return clientInfo;
     }
 }
