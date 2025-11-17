@@ -18,9 +18,9 @@
     android:label="@string/search_label"
     android:icon="@drawable/lb_ic_in_app_search"
     android:searchSettingsDescription="@string/settings_description"
-    android:searchSuggestAuthority="com.liskovsoft.leanbackassistant.stmarket"
+    android:searchSuggestAuthority="com.liskovsoft.leanbackassistant.market"
     android:searchSuggestIntentAction="android.intent.action.VIEW"
-    android:searchSuggestIntentData="content://com.liskovsoft.leanbackassistant.stmarket/video"
+    android:searchSuggestIntentData="content://com.liskovsoft.leanbackassistant.market/video"
     android:queryAfterZeroResults="true"
     android:searchSuggestPath="search"
     android:searchSuggestThreshold="0" />

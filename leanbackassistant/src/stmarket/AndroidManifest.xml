@@ -10,7 +10,7 @@
         <!--    SEARCH    -->
 
         <provider android:name=".search.VideoContentProvider"
-                  android:authorities="com.liskovsoft.leanbackassistant.stmarket"
+                  android:authorities="com.liskovsoft.leanbackassistant.market"
                   android:exported="true"
                   android:initOrder="1999999999"
                   tools:ignore="ExportedContentProvider"
