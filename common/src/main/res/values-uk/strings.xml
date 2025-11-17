@@ -583,6 +583,7 @@
     <string name="update_found">Оновлення</string>
     <string name="volume_boost_warning">Налаштування, які перевищують ліміт можуть пошкодити динаміки</string>
     <string name="play_video_incognito">Відтворити анонімно</string>
+    <string name="play_from_start">Відтворити спочатку</string>
     <string name="header_kids_home">Дітям</string>
     <string name="player_section_playlist">Використовувати вміст поточного розділу як список відтворення</string>
     <string name="header_trending">Популярне</string>

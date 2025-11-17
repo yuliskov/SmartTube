@@ -583,6 +583,7 @@
     <string name="update_found">Обновление</string>
     <string name="volume_boost_warning">Настройки привышающие лимит могу повредить динамики</string>
     <string name="play_video_incognito">Воспроизвести анонимно</string>
+    <string name="play_from_start">Воспроизвести сначала</string>
     <string name="header_kids_home">Детям</string>
     <string name="player_section_playlist">Использовать содержимое текущего раздела в качестве плейлиста</string>
     <string name="header_trending">В тренде</string>
