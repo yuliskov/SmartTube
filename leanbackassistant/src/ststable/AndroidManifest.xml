@@ -9,6 +9,7 @@
 
         <!--    SEARCH    -->
 
+        <!-- NOTE: Don't change authorities to allow further updates of the apk -->
         <provider android:name=".search.VideoContentProvider"
                   android:authorities="com.liskovsoft.leanbackassistant.ststable"
                   android:exported="true"
