@@ -167,8 +167,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         // TODO: replace nulls with the actual values
         sabrStream = new SabrStream(
-                null,
-                null,
+                manifest.getServerAbrStreamingUrl(),
+                manifest.getVideoPlaybackUstreamerConfig(),
                 null,
                 null,
                 null,
@@ -176,9 +176,9 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 -1,
                 -1,
                 -1,
-                null,
+                manifest.getPoToken(),
                 false,
-                null
+                manifest.getVideoId()
         );
 
         sabrHeaders = new HashMap<>();

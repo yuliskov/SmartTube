@@ -57,6 +57,11 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
      */
     public final long minUpdatePeriodMs;
 
+    private final String serverAbrStreamingUrl;
+    private final String videoPlaybackUstreamerConfig;
+    private final String poToken;
+    private final String videoId;
+
     public SabrManifest(
             long availabilityStartTimeMs,
             long durationMs,
@@ -66,7 +71,11 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             long timeShiftBufferDepthMs,
             long suggestedPresentationDelayMs,
             long publishTimeMs,
-            List<Period> periods) {
+            List<Period> periods,
+            String serverAbrStreamingUrl,
+            String videoPlaybackUstreamerConfig,
+            String poToken,
+            String videoId) {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
@@ -76,6 +85,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.suggestedPresentationDelayMs = suggestedPresentationDelayMs;
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
+        this.serverAbrStreamingUrl = serverAbrStreamingUrl;
+        this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
+        this.poToken = poToken;
+        this.videoId = videoId;
     }
 
     public final int getPeriodCount() {
@@ -99,5 +112,21 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     @Override
     public SabrManifest copy(List<StreamKey> streamKeys) {
         return null;
+    }
+
+    public final String getServerAbrStreamingUrl() {
+        return serverAbrStreamingUrl;
+    }
+
+    public final String getVideoPlaybackUstreamerConfig() {
+        return videoPlaybackUstreamerConfig;
+    }
+
+    public final String getPoToken() {
+        return poToken;
+    }
+
+    public final String getVideoId() {
+        return videoId;
     }
 }

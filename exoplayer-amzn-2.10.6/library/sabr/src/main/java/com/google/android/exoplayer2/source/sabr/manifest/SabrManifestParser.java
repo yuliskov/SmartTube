@@ -82,7 +82,11 @@ public class SabrManifestParser {
                 timeShiftBufferDepthMs,
                 suggestedPresentationDelayMs,
                 publishTimeMs,
-                periods);
+                periods,
+                formatInfo.getServerAbrStreamingUrl(),
+                formatInfo.getVideoPlaybackUstreamerConfig(),
+                formatInfo.getPoToken(),
+                formatInfo.getVideoId());
     }
 
     private static long getDurationMs(MediaItemFormatInfo formatInfo) {
