@@ -685,21 +685,10 @@ public class SabrManifestParser {
 
     private ClientInfo createClientInfo(MediaItemFormatInfo formatInfo) {
         MediaItemFormatInfo.ClientInfo clientInfo = formatInfo.getClientInfo();
-        ClientName clientName = ClientName.WEB;
-
-        if (Helpers.startsWith(clientInfo.getName(), "TV")) {
-            clientName = ClientName.TVHTML5;
-        } else if (Helpers.startsWith(clientInfo.getName(), "MWEB")) {
-            clientName = ClientName.MWEB;
-        } else if (Helpers.startsWith(clientInfo.getName(), "ANDROID")) {
-            clientName = ClientName.ANDROID;
-        } else if (Helpers.startsWith(clientInfo.getName(), "IOS")) {
-            clientName = ClientName.IOS;
-        }
 
         return ClientInfo.newBuilder()
-                .setClientName(clientName)
-                .setClientVersion(clientInfo.getVersion())
+                .setClientName(ClientName.valueOf(clientInfo.getClientName()))
+                .setClientVersion(clientInfo.getClientVersion())
                 .build();
     }
 
