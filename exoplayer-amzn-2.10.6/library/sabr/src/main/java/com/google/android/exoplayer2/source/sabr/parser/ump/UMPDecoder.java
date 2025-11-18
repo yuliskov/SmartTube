@@ -48,7 +48,7 @@ public class UMPDecoder {
             result |= byteInt & mask;
         }
 
-        for (int i : Helpers.range(1, size, 1)) {
+        for (int i : Helpers.range(1, size - 1, 1)) {
             success = input.readFully(buffer, 0, 1, true);
             if (!success) {
                 return -1;

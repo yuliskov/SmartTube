@@ -13,9 +13,6 @@ import com.google.android.exoplayer2.extractor.ChunkIndex;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.SeekMap;
 import com.google.android.exoplayer2.extractor.TrackOutput;
-import com.google.android.exoplayer2.extractor.mkv.MatroskaExtractor;
-import com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
-import com.google.android.exoplayer2.extractor.rawcc.RawCcExtractor;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.source.chunk.BaseMediaChunkIterator;
 import com.google.android.exoplayer2.source.chunk.Chunk;
@@ -33,7 +30,11 @@ import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -42,6 +43,7 @@ import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -164,15 +166,14 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
         liveEdgeTimeUs = C.TIME_UNSET;
-
-        // TODO: replace nulls with the actual values
+        
         sabrStream = new SabrStream(
                 manifest.getServerAbrStreamingUrl(),
                 manifest.getVideoPlaybackUstreamerConfig(),
                 manifest.getClientInfo(),
-                null,
-                null,
-                null,
+                createAudioSelection(trackType, trackSelection),
+                createVideoSelection(trackType, trackSelection),
+                createCaptionSelection(trackType, trackSelection),
                 -1,
                 -1,
                 -1,
@@ -601,6 +602,43 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                     sampleOffsetUs,
                     representationHolder.extractorWrapper);
         }
+    }
+
+    private static AudioSelector createAudioSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_AUDIO) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new AudioSelector(Helpers.firstNonNull(selectedFormat.label, "selected_audio"), false, createFormatId(selectedFormat));
+    }
+
+    private static VideoSelector createVideoSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_VIDEO) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new VideoSelector(Helpers.firstNonNull(selectedFormat.label, "selected_video"), false, createFormatId(selectedFormat));
+    }
+
+    private static CaptionSelector createCaptionSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_TEXT) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new CaptionSelector(Helpers.firstNonNull(selectedFormat.label, "selected_caption"), false, createFormatId(selectedFormat));
+    }
+
+    private static FormatId createFormatId(Format format) {
+        FormatId formatId = FormatId.newBuilder()
+                .setItag(Helpers.parseInt(format.id))
+                .build();
+        return formatId;
     }
 
     /** {@link MediaChunkIterator} wrapping a {@link RepresentationHolder}. */

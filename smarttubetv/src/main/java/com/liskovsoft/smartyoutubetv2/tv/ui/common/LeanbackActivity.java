@@ -26,7 +26,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager2 mDoubleBackManager;
     private GlobalKeyTranslator mGlobalKeyTranslator;
-    private static final Runnable sOnFinish = Utils::forceFinishTheApp;
+    private final Runnable sOnFinish = () -> Utils.forceFinishTheApp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,9 +141,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         Utils.properlyFinishTheApp(this);
 
         if (!RemoteControlData.instance(this).isConnectedBefore()) {
-            getMainUIData().persistNow();
-            getGeneralData().persistNow();
-            getMediaServiceData().persistNow();
             getViewManager().addOnFinish(sOnFinish);
         }
     }

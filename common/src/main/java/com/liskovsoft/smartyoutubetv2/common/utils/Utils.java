@@ -78,8 +78,11 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -871,6 +874,14 @@ public class Utils {
         return Helpers.getDeviceName().startsWith("Oculus Quest");
     }
 
+    public static void updateChannels(Context context) {
+        startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
+    }
+
+    public static void startRemoteControl(Context context) {
+        startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
+    }
+
     /**
      * Finish the app but remain running services
      */
@@ -881,23 +892,21 @@ public class Utils {
     /**
      * Simply kills the app.
      */
-    public static void forceFinishTheApp() {
+    public static void forceFinishTheApp(Context context) {
+        persistData(context);
+        postDelayed(Utils::forceFinishTheApp, 1_000);
+    }
+
+    private static void forceFinishTheApp() {
         Runtime.getRuntime().exit(0);
     }
 
-    public static void updateChannels(Context context) {
-        startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
-    }
-
-    public static void startRemoteControl(Context context) {
-        startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
-    }
-
-    public static void restartTheApp(Context context, Intent intent) {
-        ProcessPhoenix.triggerRebirth(context, intent);
-    }
-
     public static void restartTheApp(Context context) {
+        persistData(context);
+        postDelayed(() -> restartTheAppInt(context), 1_000);
+    }
+
+    private static void restartTheAppInt(Context context) {
         try {
             Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
             intent.putExtra(IntentExtractor.RESTART_INTENT, true);
@@ -908,6 +917,11 @@ public class Utils {
     }
 
     public static void restartTheApp(Context context, Video video, long posMs) {
+        persistData(context);
+        postDelayed(() -> restartTheAppInt(context, video, posMs), 1_000);
+    }
+
+    private static void restartTheAppInt(Context context, Video video, long posMs) {
         if (video == null || !video.hasVideo()) {
             return;
         }
@@ -1178,5 +1192,12 @@ public class Utils {
         }
 
         return original.equals(typed);
+    }
+
+    private static void persistData(Context context) {
+        PlayerTweaksData.instance(context).persistNow();
+        MainUIData.instance(context).persistNow();
+        GeneralData.instance(context).persistNow();
+        MediaServiceData.instance().persistNow();
     }
 }

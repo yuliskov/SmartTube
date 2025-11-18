@@ -1176,7 +1176,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
                 if (!playerTweaksData.isIPv4DnsPreferred()) {
                     playerTweaksData.setIPv4DnsPreferred(true);
-                    playerTweaksData.persistNow();
                     // Restart app to reinit okhttp internal objects
                     Utils.restartTheApp(getContext());
                 }
