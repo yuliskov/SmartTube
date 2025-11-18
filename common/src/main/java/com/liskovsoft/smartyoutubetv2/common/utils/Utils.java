@@ -894,10 +894,10 @@ public class Utils {
      */
     public static void forceFinishTheApp(Context context) {
         persistData(context);
-        postDelayed(Utils::forceFinishTheApp, 1_000);
+        postDelayed(Utils::forceFinishTheAppInt, 1_000);
     }
 
-    private static void forceFinishTheApp() {
+    private static void forceFinishTheAppInt() {
         Runtime.getRuntime().exit(0);
     }
 

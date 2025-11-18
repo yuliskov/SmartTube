@@ -183,9 +183,9 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         );
 
         sabrHeaders = new HashMap<>();
-        sabrHeaders.put("content-type", "application/x-protobuf");
-        sabrHeaders.put("accept-encoding", "identity");
-        sabrHeaders.put("accept", "application/vnd.yt-ump");
+        sabrHeaders.put("Content-Type", "application/x-protobuf");
+        sabrHeaders.put("Accept-Encoding", "identity");
+        sabrHeaders.put("Accept", "application/vnd.yt-ump");
 
         List<Representation> representations = getRepresentations();
         representationHolders = new RepresentationHolder[trackSelection.length()];

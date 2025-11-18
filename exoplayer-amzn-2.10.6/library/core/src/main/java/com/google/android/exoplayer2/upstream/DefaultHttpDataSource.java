@@ -537,6 +537,14 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     for (Map.Entry<String, String> property : requestProperties.getSnapshot().entrySet()) {
       connection.setRequestProperty(property.getKey(), property.getValue());
     }
+
+    // MOD: apply headers from DataSpec
+    if (dataSpec != null) {
+      for (Map.Entry<String, String> headerEntry : dataSpec.httpRequestHeaders.entrySet()) {
+        connection.setRequestProperty(headerEntry.getKey(), headerEntry.getValue());
+      }
+    }
+
     if (!(position == 0 && length == C.LENGTH_UNSET)) {
       String rangeRequest = "bytes=" + position + "-";
       if (length != C.LENGTH_UNSET) {
