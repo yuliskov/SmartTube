@@ -637,6 +637,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private static FormatId createFormatId(Format format) {
         FormatId formatId = FormatId.newBuilder()
                 .setItag(Helpers.parseInt(format.id))
+                .setLmt(format.lastModified)
                 .build();
         return formatId;
     }

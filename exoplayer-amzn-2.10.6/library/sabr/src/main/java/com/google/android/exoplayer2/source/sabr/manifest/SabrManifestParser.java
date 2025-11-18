@@ -353,7 +353,7 @@ public class SabrManifestParser {
     private RepresentationInfo parseRepresentation(MediaFormat mediaFormat) {
         int roleFlags = C.ROLE_FLAG_MAIN;
         int selectionFlags = C.SELECTION_FLAG_DEFAULT;
-        String id = mediaFormat.isDrc() ? mediaFormat.getITag() + "-drc" : mediaFormat.getITag();
+        String id = mediaFormat.getITag();
         int bandwidth = Helpers.parseInt(mediaFormat.getBitrate(), Format.NO_VALUE);
         String mimeType = MediaFormatUtils.extractMimeType(mediaFormat);
         String codecs = MediaFormatUtils.extractCodecs(mediaFormat);
@@ -364,13 +364,16 @@ public class SabrManifestParser {
         int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(mediaFormat.getITag()), Format.NO_VALUE);
         String language = mediaFormat.getLanguage();
         String baseUrl = mediaFormat.getUrl();
-        String label = null;
+        String label = mediaFormat.getQualityLabel();
+        boolean isDrc = mediaFormat.isDrc();
+        long lastModified = Helpers.parseLong(mediaFormat.getLastModified());
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -381,7 +384,9 @@ public class SabrManifestParser {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = null;
 
@@ -414,12 +419,15 @@ public class SabrManifestParser {
         String language = sub.getName() == null ? sub.getLanguageCode() : sub.getName();
         String baseUrl = sub.getBaseUrl();
         String label = null;
+        boolean isDrc = false;
+        long lastModified = Format.NO_VALUE;
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -430,7 +438,9 @@ public class SabrManifestParser {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = new SingleSegmentBase();
 
@@ -464,6 +474,7 @@ public class SabrManifestParser {
 
     protected Format buildFormat(
             String id,
+            String label,
             String containerMimeType,
             int width,
             int height,
@@ -474,13 +485,15 @@ public class SabrManifestParser {
             String language,
             @C.RoleFlags int roleFlags,
             @C.SelectionFlags int selectionFlags,
-            String codecs) {
+            String codecs,
+            boolean isDrc,
+            long lastModified) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
                 return Format.createVideoContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -491,11 +504,12 @@ public class SabrManifestParser {
                         frameRate,
                         /* initializationData= */ null,
                         selectionFlags,
-                        roleFlags);
+                        roleFlags,
+                        lastModified);
             } else if (MimeTypes.isAudio(sampleMimeType)) {
                 return Format.createAudioContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -506,11 +520,13 @@ public class SabrManifestParser {
                         /* initializationData= */ null,
                         selectionFlags,
                         roleFlags,
-                        language);
+                        language,
+                        isDrc,
+                        lastModified);
             } else if (mimeTypeIsRawText(sampleMimeType)) {
                 return Format.createTextContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -523,7 +539,7 @@ public class SabrManifestParser {
         }
         return Format.createContainerFormat(
                 id,
-                /* label= */ null,
+                label,
                 containerMimeType,
                 sampleMimeType,
                 codecs,
