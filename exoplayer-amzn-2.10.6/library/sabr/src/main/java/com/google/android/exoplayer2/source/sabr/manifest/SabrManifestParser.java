@@ -366,7 +366,7 @@ public class SabrManifestParser {
         String baseUrl = mediaFormat.getUrl();
         String label = mediaFormat.getQualityLabel();
         boolean isDrc = mediaFormat.isDrc();
-        long lastModified = Helpers.parseLong(mediaFormat.getLastModified());
+        long lastModified = Helpers.parseLong(mediaFormat.getLmt());
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
