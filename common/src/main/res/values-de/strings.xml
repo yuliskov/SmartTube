@@ -588,6 +588,7 @@
     <string name="update_found">Update</string>
     <string name="volume_boost_warning">Einstellungen über dem Grenzwert können die Lautsprecher möglicherweise beschädigen</string>
     <string name="play_video_incognito">Inkognito abspielen</string>
+    <string name="play_from_start">Von Anfang an abspielen</string>
     <string name="header_kids_home">Kinder</string>
     <string name="player_section_playlist">Inhalt der aktuellen Kategorie als Wiedergabeliste verwenden</string>
     <string name="header_trending">Trends</string>
