@@ -229,7 +229,8 @@ public class SabrManifestParser {
         long duration = segmentDurationUnits;
         long startNumber = mFormatInfo.getStartSegmentNum();
         long endNumber = C.INDEX_UNSET;
-        UrlTemplate mediaTemplate = UrlTemplate.compile(format.getUrl() + "&sq=$Number$");
+        String url = mFormatInfo.getServerAbrStreamingUrl();
+        UrlTemplate mediaTemplate = UrlTemplate.compile(url + "&sq=$Number$");
         //UrlTemplate initializationTemplate = UrlTemplate.compile(format.getOtfInitUrl()); // ?
         UrlTemplate initializationTemplate = null; // ?
 
@@ -363,7 +364,7 @@ public class SabrManifestParser {
         int audioChannels = Format.NO_VALUE;
         int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(mediaFormat.getITag()), Format.NO_VALUE);
         String language = mediaFormat.getLanguage();
-        String baseUrl = mediaFormat.getUrl();
+        String baseUrl = mFormatInfo.getServerAbrStreamingUrl();
         String label = mediaFormat.getQualityLabel();
         boolean isDrc = mediaFormat.isDrc();
         long lastModified = Helpers.parseLong(mediaFormat.getLmt());
