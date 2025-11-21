@@ -382,6 +382,16 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> GlobalPreferences.instance(getContext()).setChannelsServiceEnabled(!option.isSelected()),
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
+        // Disable AV1 support (useful for devices with only software AV1 decoding)
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_av1_support),
+                getContext().getString(R.string.disable_av1_support_desc),
+                option -> {
+                    GlobalPreferences.instance(getContext()).setAV1Disabled(option.isSelected());
+                    // Apply runtime override
+                    com.liskovsoft.sharedutils.helpers.Helpers.setAV1Disabled(option.isSelected());
+                },
+                GlobalPreferences.instance(getContext()).isAV1Disabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
                 option -> {
                     mSidebarService.enableSettingsSection(!option.isSelected());
