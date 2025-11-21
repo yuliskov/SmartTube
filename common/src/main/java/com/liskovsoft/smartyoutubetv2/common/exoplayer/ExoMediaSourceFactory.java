@@ -43,6 +43,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -186,7 +187,7 @@ public class ExoMediaSourceFactory {
                 getSabrChunkSourceFactory(),
                 null
         )
-                .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
+                .setLoadErrorHandlingPolicy(new SabrDefaultLoadErrorHandlingPolicy())
                 .createMediaSource(getSabrManifest(formatInfo));
         if (mTrackErrorFixer != null) {
             sabrSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
