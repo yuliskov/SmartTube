@@ -579,14 +579,13 @@ public class VideoLoaderController extends BasePlayerController {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
-                restartEngine = false;
-                //YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
             restartEngine = false;
+            showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
