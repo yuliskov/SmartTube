@@ -248,8 +248,8 @@ public class SidebarService implements ProfileChangeListener {
 
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
-            // Notifications is broken
-            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[]{MediaGroup.TYPE_NOTIFICATIONS, MediaGroup.TYPE_PLAYBACK_QUEUE}));
+            // Broken sections
+            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[]{MediaGroup.TYPE_NOTIFICATIONS, MediaGroup.TYPE_PLAYBACK_QUEUE, MediaGroup.TYPE_TRENDING}));
         }
     }
 
