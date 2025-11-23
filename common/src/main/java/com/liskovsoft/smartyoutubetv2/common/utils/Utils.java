@@ -898,7 +898,8 @@ public class Utils {
         postDelayed(sForceFinishTheApp, 1_000);
     }
 
-    public static void cancelFinishTheApp() {
+    public static void cancelFinishTheApp(Context context) {
+        ViewManager.instance(context).cancelOnFinish();
         removeCallbacks(sForceFinishTheApp);
     }
 

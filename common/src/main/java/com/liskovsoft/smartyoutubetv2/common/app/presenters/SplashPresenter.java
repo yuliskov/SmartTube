@@ -77,7 +77,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return;
         }
 
-        Utils.cancelFinishTheApp();
+        Utils.cancelFinishTheApp(getContext());
 
         runOneTimeTasks();
         runPerInstanceTasks();
