@@ -42,8 +42,8 @@
   <string name="section_is_empty">Oj! Det finns inget här</string>
   <string name="dialog_add_to_playlist">Lägg till/ta bort från spellista</string>
   <string name="msg_signed_users_only">Endast inloggade användare</string>
-  <string name="msg_cant_load_content">Det går inte att läsa in innehållet.\n1) Aktivera visningshistoriken.\n2) Kontrollera datum och klockslag på enheten.\n3) Kontrollera nätverksanslutningen.\n4) Kontrollera dina proxyinställningar.\n5) Testa att logga in på ditt konto.\n6) Kanske det inte finns något här.</string>
-  <string name="title_video_presets">Förinställningar för video</string>
+  <string name="msg_cant_load_content">Det går inte att läsa in innehållet.\n1) Aktivera visningshistoriken.\n2) Kontrollera datum och klockslag på enheten.\n3) Kontrollera nätverksanslutningen.\n4) Kontrollera dina proxyinställningar.\n5) Testa att logga in på ditt konto.\n6) Det kanske inte finns något här.</string>
+  <string name="title_video_presets">Videoförinställningar</string>
   <string name="settings_accounts">Konton</string>
   <string name="settings_left_panel">Redigera kategorier</string>
   <string name="settings_themes">Teman</string>
@@ -128,8 +128,8 @@
   <string name="playlists_style_grid">Rutnät</string>
   <string name="playlists_style_rows">Rader</string>
   <string name="player_show_clock">Visa klocka i fältet för uppspelningsknappar</string>
-  <string name="player_show_remaining_time">Visa återstående tid i fältet för uppspelningsknappar</string>
-  <string name="player_show_ending_time">Visa klockslaget då videon slutar i fältet för uppspelningsknappar</string>
+  <string name="player_show_remaining_time">Visa den återstående tiden i fältet för uppspelningsknappar</string>
+  <string name="player_show_ending_time">Visa när videon slutar i fältet för uppspelningsknappar</string>
   <string name="open_channel_uploads">Öppna kanalens uppladdningar</string>
   <string name="app_exit_shortcut">Avsluta appen</string>
   <string name="player_exit_shortcut">Avsluta spelaren</string>
@@ -199,7 +199,7 @@
   <string name="msg_mode_switch_error">Det går inte att byta visningsläge till \"%s\"</string>
   <string name="msg_player_error">Det uppstod ett fel med spelaren %s. Uppspelningen startas om …</string>
   <string name="video_preset_disabled">Utan förinställning</string>
-  <string name="video_preset_enabled">Format för nästa video kommer att ställas in enligt förinställningen</string>
+  <string name="video_preset_enabled">Formatet för nästa video ställs in enligt förinställningen</string>
   <string name="player_sleep_timer">Sovtimer</string>
   <string name="player_show_quality_info">Visa kvalitetsinfo i fältet för uppspelningsknappar</string>
   <string name="player_remember_each_speed">Kom ihåg hastighet för varje video</string>
@@ -241,7 +241,7 @@
   <string name="preferred_update_source">Välj källa för uppdateringar</string>
   <string name="hide_shorts">Dölj Shorts-videor i Prenumerationer</string>
   <string name="hide_shorts_channel">Dölj Shorts-videor i kanaler</string>
-  <string name="key_remapping">Ställ in knappar</string>
+  <string name="key_remapping">Konfigurera knappar</string>
   <string name="screen_dimming">Skärmnedtoning</string>
   <string name="removed_from_playback_queue">Borttagen från uppspelningskön</string>
   <string name="added_to_playback_queue">Tillagd i uppspelningskön</string>
@@ -267,8 +267,8 @@
   <string name="player_time_correction">Visa tiden med hastighetskorrigering</string>
   <string name="not_supported_by_device">Enheten har inte stöd för denna funktion</string>
   <string name="video_buffer_size_none">Ingen</string>
-  <string name="video_buffer_size_lowest">Lägsta</string>
-  <string name="video_buffer_size_highest">Högsta</string>
+  <string name="video_buffer_size_lowest">Lägst</string>
+  <string name="video_buffer_size_highest">Högst</string>
   <string name="original_lang">Ursprungligt</string>
   <string name="not_recommend_channel">Rekommendera inte kanalen</string>
   <string name="you_wont_see_this_channel">Du kommer inte att se den här kanalen i rekommendationerna </string>
@@ -314,7 +314,7 @@
   <string name="action_playlist_add">Lägg till i spellista</string>
   <string name="action_video_stats">Videostatistik</string>
   <string name="action_subscribe">Prenumerera</string>
-  <string name="action_channel">Öppna kanal</string>
+  <string name="action_channel">Öppna kanalen</string>
   <string name="action_pip">BIB</string>
   <string name="action_video_info">Videobeskrivning</string>
   <string name="action_screen_off">Skärm av</string>
@@ -406,7 +406,7 @@
   <string name="playback_notifications_fix">Inaktivera uppspelningsaviseringar</string>
   <string name="amlogic_fix_desc">Åtgärdar tappade bildrutor på Amlogic-baserade enheter.</string>
   <string name="amlogic_fix">Lösning för Amlogic 1080p\@60fps</string>
-  <string name="tunneled_video_playback_desc">OBS! Att pausa kanske inte fungerar som det ska! Tunnlad videouppspelning utlovar fördelar som bättre ljud- och videosynkronisering (AV sync) och smidigare uppspelning. Kräver Android 5+</string>
+  <string name="tunneled_video_playback_desc">OBS! Att pausa kanske inte fungerar som det ska! Tunnlad videouppspelning utlovar fördelar som bättre ljud- och videosynkronisering (A/V-synkronisering) och smidigare uppspelning. Kräver Android 5+</string>
   <string name="tunneled_video_playback">Tunnlad videouppspelning (Android 5+)</string>
   <string name="master_volume">Huvudvolym</string>
   <string name="volume_limit">Volymgräns</string>
@@ -472,8 +472,8 @@
   <string name="signin_view_action_text">Klart</string>
   <string name="require_checked">Kräver \"%s</string>
   <string name="msg_press_again_to_exit">Tryck igen för att avsluta</string>
-  <string name="player_remaining_time">Återstående: %s</string>
-  <string name="player_ending_time">Slutar kl. %s</string>
+  <string name="player_remaining_time">Tid kvar: %s</string>
+  <string name="player_ending_time">Slutar %s</string>
   <string name="badge_new_content">NYTT INNEHÅLL</string>
   <string name="badge_live">LIVE</string>
   <string name="add_device_view_description">Om du vill länka en enhet, ange den här koden i din telefons YouTube-app i avsnittet Inställningar/Titta på tv:n\nOBS: Detta fungerar endast med Gboard-tangentbordet!</string>
@@ -677,7 +677,7 @@
   <string name="device_specific_backup">Säkerhetskopia för endast den här enheten</string>
   <string name="local_backup">Säkerhetskopiera lokalt</string>
   <string name="auto_backup">Säkerhetskopiera automatiskt (en gång om dagen)</string>
-  <string name="repeat_mode_reverse_list">Spela upp spellistan eller kanalens videor i omvänd ordning</string>
+  <string name="repeat_mode_reverse_list">Spela upp spellistan eller kanalvideorna i omvänd ordning</string>
   <string name="calm_msg">Vi håller på att åtgärda problemet. Kontrollera om det finns uppdateringar då och då</string>
   <string name="without_picture">Utan bild</string>
   <string name="video_disabled">Video inaktiverad</string>
@@ -710,4 +710,5 @@
   <string name="dont_resize_video_to_fit_dialog">Ändra inte storlek på videon för att passa dialogruta</string>
   <string name="typing_corrections">Inaktivera autokorrigering medan du skriver text</string>
   <string name="suggestions_horizontally_scrolled">Horisontellt rullande förslag</string>
+  <string name="play_from_start">Spela upp från början</string>
 </resources>
