@@ -707,4 +707,8 @@
   <string name="hide_shorts_from_search">在搜尋結果中隱藏 Shorts</string>
   <string name="remove_playlist_fmt">永久移除 %s \?</string>
   <string name="dont_resize_video_to_fit_dialog">選單跳出時不調整影片大小</string>
+  <string name="play_from_start">從頭播放</string>
+  <string name="player_chapter_notification2">點選通知即可切換至下一章節</string>
+  <string name="typing_corrections">輸入文字時停用自動更正</string>
+  <string name="suggestions_horizontally_scrolled">水平捲動建議內容</string>
 </resources>
