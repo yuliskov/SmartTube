@@ -731,9 +731,14 @@ public class VideoLoaderController extends BasePlayerController {
                 break;
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
-                getPlayer().setPositionMs(getPlayer().getDurationMs());
-                getPlayer().setPlayWhenReady(false);
-                getPlayer().showSuggestions(true);
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                } else {
+                    getPlayer().setPositionMs(getPlayer().getDurationMs());
+                    getPlayer().setPlayWhenReady(false);
+                    getPlayer().showSuggestions(true);
+                }
                 break;
             case PlayerConstants.PLAYBACK_MODE_LIST:
                 // if video has a playlist load next or restart playlist

@@ -117,7 +117,7 @@
     <string name="cards_style">Cards style</string>
     <string name="repeat_mode_all">Play videos continuously</string>
     <string name="repeat_mode_one">Repeat current video</string>
-    <string name="repeat_mode_pause">Pause playback after each video</string>
+    <string name="repeat_mode_pause">Pause playback after each video (except queue)</string>
     <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video (except queue)</string>
     <string name="subscribed_to_channel">Subscribed</string>

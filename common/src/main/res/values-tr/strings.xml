@@ -117,7 +117,7 @@
     <string name="cards_style">Kart stili</string>
     <string name="repeat_mode_all">Videoları sürekli oynat</string>
     <string name="repeat_mode_one">Videoyu tekrarla</string>
-    <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat</string>
+    <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat (kuyruk hariç)</string>
     <string name="repeat_mode_pause_alt">Sadece oynatma listesi videolarını sürekli oynat</string>
     <string name="repeat_mode_none">Videodan sonra oynatmayı durdur (kuyruk hariç)</string>
     <string name="subscribed_to_channel">Abone olundu</string>

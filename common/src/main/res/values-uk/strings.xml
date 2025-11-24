@@ -117,7 +117,7 @@
     <string name="cards_style">Стиль карток</string>
     <string name="repeat_mode_all">Відтворювати відео безперервно</string>
     <string name="repeat_mode_one">Повторювати поточне відео</string>
-    <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
+    <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео (крім черги)</string>
     <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео (крім черги)</string>
     <string name="subscribed_to_channel">Підписка оформлена</string>
