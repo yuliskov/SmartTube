@@ -520,6 +520,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setSectionPlaylistEnabled(option.isSelected()),
                 mPlayerTweaksData.isSectionPlaylistEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_treat_watch_later_as_playlist),
+                option -> mPlayerTweaksData.setTreatWatchLaterAsPlaylistEnabled(option.isSelected()),
+                mPlayerTweaksData.isTreatWatchLaterAsPlaylistEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification2),
                 option -> mPlayerTweaksData.setChapterNotificationEnabled(option.isSelected()),
                 mPlayerTweaksData.isChapterNotificationEnabled()));
