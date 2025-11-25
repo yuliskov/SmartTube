@@ -50,10 +50,15 @@ public class VolumeBooster implements AudioListener {
         try {
             mBooster = new LoudnessEnhancer(audioSessionId);
             mBooster.setEnabled(mIsEnabled);
- 
-            // Convert linear volume multiplier to millibels (100mB = 1dB)
-            double gainMillibels = 20 * Math.log10(mVolume) * 100;
-            mBooster.setTargetGain((int) Math.round(gainMillibels));
+
+            //double log2 = Math.log(mVolume) / Math.log(2);
+            //double gainMb = 10 * log2 * 100;
+            //mBooster.setTargetGain((int) gainMb);
+
+            double gainMb = 20 * Math.log10(mVolume * 3) * 100;
+            mBooster.setTargetGain((int) gainMb);
+
+            //mBooster.setTargetGain((int) (1000 * mVolume));
 
             mIsSupported = true;
         } catch (RuntimeException | UnsatisfiedLinkError | NoClassDefFoundError | NoSuchFieldError e) { // Cannot initialize effect engine
