@@ -103,5 +103,3 @@ dependencies {
     stmarketImplementation project(':appupdatechecker2')
     stlegacyImplementation project(':appupdatechecker2')
 }
-
-apply from: 'custom-deps.gradle'
