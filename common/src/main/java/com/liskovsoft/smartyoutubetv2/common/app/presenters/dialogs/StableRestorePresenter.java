@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.content.Context;
 
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers.ArchType;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class StableRestorePresenter extends BridgePresenter {
@@ -38,9 +40,17 @@ public class StableRestorePresenter extends BridgePresenter {
 
     @Override
     protected String getPackageUrl() {
-        //String primaryAbi = DeviceHelpers.getPrimaryAbi();
+        ArchType archType = DeviceHelpers.getArchType();
 
-        return STABLE_PKG_URL_ARM;
+        switch (archType) {
+            case ARM_64:
+                return STABLE_PKG_URL_ARM64;
+            case X86_64:
+            case X86:
+                return STABLE_PKG_URL_X86;
+            default:
+                return STABLE_PKG_URL_ARM;
+        }
     }
 
     @Override
