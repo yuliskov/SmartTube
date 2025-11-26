@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ATVBridgePre
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AmazonBridgePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.StableInstallPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.StableRestorePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -51,7 +51,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         appendUpdateSource(settingsPresenter);
 
-        appendInstallStable(settingsPresenter);
+        appendStableRestore(settingsPresenter);
 
         appendInstallBridge(settingsPresenter);
 
@@ -181,19 +181,19 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void appendInstallStable(AppDialogPresenter settingsPresenter) {
-        StableInstallPresenter stableInstallPresenter = StableInstallPresenter.instance(getContext());
+    private void appendStableRestore(AppDialogPresenter settingsPresenter) {
+        StableRestorePresenter stableRestorePresenter = StableRestorePresenter.instance(getContext());
 
-        if (!stableInstallPresenter.isSupported()) {
+        if (!stableRestorePresenter.isSupported()) {
             return;
         }
         
 
         OptionItem installBridgeOption = UiOptionItem.from(
-                getContext().getString(R.string.install_stable),
+                getContext().getString(R.string.stable_restore),
                 option -> {
-                    stableInstallPresenter.runBridgeInstaller(true);
-                    stableInstallPresenter.unhold();
+                    stableRestorePresenter.runBridgeInstaller(true);
+                    stableRestorePresenter.unhold();
                 });
 
         settingsPresenter.appendSingleButton(installBridgeOption);

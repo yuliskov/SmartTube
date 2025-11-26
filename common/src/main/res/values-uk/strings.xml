@@ -699,5 +699,5 @@
     <string name="dont_resize_video_to_fit_dialog">Не змінювати розмір відео відповідно до розміру діалогу</string>
     <string name="typing_corrections">Вимкнути автокорекцію під час введення тексту</string>
     <string name="suggestions_horizontally_scrolled">Рекомендації з горизонтальним прокручуванням</string>
-    <string name="install_stable">Перевстановити стабільну збірку (всі дані будуть втрачені)</string>
+    <string name="stable_restore">Відновити стабільну збірку (всі дані будуть втрачені)</string>
 </resources>

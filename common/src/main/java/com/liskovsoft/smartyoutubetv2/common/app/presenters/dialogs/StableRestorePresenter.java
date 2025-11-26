@@ -4,22 +4,22 @@ import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class StableInstallPresenter extends BridgePresenter {
+public class StableRestorePresenter extends BridgePresenter {
     private static final Integer[] STABLE_PKG_HASH = {-1}; // always re-install
     private static final String STABLE_PKG_NAME = "com.teamsmart.videomanager.tv";
     private static final String BETA_PKG_NAME = "com.liskovsoft.smarttubetv.beta";
     private static final String STABLE_PKG_URL_ARM = "https://github.com/yuliskov/SmartTube/releases/download/latest/smarttube_stable.apk";
     private static final String STABLE_PKG_URL_ARM64 = "https://github.com/yuliskov/SmartTube/releases/download/latest/smarttube_stable_arm64-v8a.apk";
     private static final String STABLE_PKG_URL_X86 = "https://github.com/yuliskov/SmartTube/releases/download/latest/smarttube_stable_x86.apk";
-    private static StableInstallPresenter sInstance;
+    private static StableRestorePresenter sInstance;
 
-    public StableInstallPresenter(Context context) {
+    public StableRestorePresenter(Context context) {
         super(context);
     }
 
-    public static StableInstallPresenter instance(Context context) {
+    public static StableRestorePresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new StableInstallPresenter(context);
+            sInstance = new StableRestorePresenter(context);
         }
 
         sInstance.setContext(context);
