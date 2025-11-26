@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers.ArchType;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class StableRestorePresenter extends BridgePresenter {
     private static final Integer[] STABLE_PKG_HASH = {-1}; // always re-install
@@ -60,7 +59,7 @@ public class StableRestorePresenter extends BridgePresenter {
 
     @Override
     protected boolean checkLauncher() {
-        return Helpers.isAndroidTVLauncher(getContext());
+        return true;
     }
 
     public boolean isSupported() {
