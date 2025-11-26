@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ATVBridgePre
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AmazonBridgePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.StableInstallPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -49,6 +50,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         appendUpdateChangelogButton(settingsPresenter);
 
         appendUpdateSource(settingsPresenter);
+
+        appendInstallStable(settingsPresenter);
 
         appendInstallBridge(settingsPresenter);
 
@@ -176,6 +179,24 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         if (!feedbackOptions.isEmpty()) {
             settingsPresenter.appendStringsCategory(getContext().getString(R.string.feedback), feedbackOptions);
         }
+    }
+
+    private void appendInstallStable(AppDialogPresenter settingsPresenter) {
+        StableInstallPresenter stableInstallPresenter = StableInstallPresenter.instance(getContext());
+
+        if (!stableInstallPresenter.isSupported()) {
+            return;
+        }
+        
+
+        OptionItem installBridgeOption = UiOptionItem.from(
+                getContext().getString(R.string.install_stable),
+                option -> {
+                    stableInstallPresenter.runBridgeInstaller(true);
+                    stableInstallPresenter.unhold();
+                });
+
+        settingsPresenter.appendSingleButton(installBridgeOption);
     }
 
     private void appendInstallBridge(AppDialogPresenter settingsPresenter) {

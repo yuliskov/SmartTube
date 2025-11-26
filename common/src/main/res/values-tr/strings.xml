@@ -710,4 +710,5 @@
     <string name="dont_resize_video_to_fit_dialog">Videoyu diyaloğa uyacak şekilde yeniden boyutlandırmayın</string>
     <string name="typing_corrections">Metin yazarken otomatik düzeltmeyi devre dışı bırak</string>
     <string name="suggestions_horizontally_scrolled">Yatay Kaydırılan Öneriler</string>
+    <string name="install_stable">Kararlı sürümü yeniden yükle (tüm veriler silinecek)</string>
 </resources>
