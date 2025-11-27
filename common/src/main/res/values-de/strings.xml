@@ -117,7 +117,7 @@
     <string name="cards_style">Karten-Stil</string>
     <string name="repeat_mode_all">Videos fortlaufend abspielen</string>
     <string name="repeat_mode_one">Aktuelles Video wiederholen</string>
-    <string name="repeat_mode_pause">Wiedergabe nach jedem Video pausieren</string>
+    <string name="repeat_mode_pause">Wiedergabe nach jedem Video pausieren (außer Warteschlange)</string>
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen (außer Warteschlange)</string>
     <string name="subscribed_to_channel">Abonniert</string>
@@ -711,4 +711,5 @@
     <string name="dont_resize_video_to_fit_dialog">Video mit Dialogfeld nicht verkleinern</string>
     <string name="typing_corrections">Autokorrektur bei Texteingabe deaktivieren</string>
     <string name="suggestions_horizontally_scrolled">Horizontal scrollbare Vorschläge</string>
+    <string name="stable_restore">Stable-Version wiederherstellen (alle Daten werden gelöscht)</string>
 </resources>
