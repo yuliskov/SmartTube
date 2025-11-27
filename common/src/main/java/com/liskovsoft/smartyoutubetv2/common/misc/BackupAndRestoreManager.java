@@ -9,7 +9,6 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -35,16 +34,27 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     public BackupAndRestoreManager(Context context) {
         mContext = context;
+
         mDataDirs = new ArrayList<>();
         mDataDirs.add(new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR));
 
         mBackupDirs = new ArrayList<>();
-        mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), BACKUP_DIR_NAME));
-        //mBackupDirs.add(new File(FileHelpers.getExternalFilesDir(mContext), BACKUP_DIR_NAME)); // isn't used at a moment
-        // Fallback dir: Stable (in case app installed from scratch)
-        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"), BACKUP_DIR_NAME));
-        // Fallback dir: Beta (in case app installed from scratch)
-        mBackupDirs.add(new File(new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta"), BACKUP_DIR_NAME));
+
+        initBackupDirs();
+    }
+
+    private void initBackupDirs() {
+        for (File backupDir : new File[] {
+                FileHelpers.getBackupDir(mContext),
+                // FileHelpers.getExternalFilesDir(mContext) // isn't used at a moment
+                // Fallback dirs (in case the app installed from scratch)
+                new File(Environment.getExternalStorageDirectory(), "data/org.smartteam.smarttube.tv.stable"),
+                new File(Environment.getExternalStorageDirectory(), "data/org.smartteam.smarttube.tv.beta"),
+                new File(Environment.getExternalStorageDirectory(), "data/com.teamsmart.videomanager.tv"),
+                new File(Environment.getExternalStorageDirectory(), "data/com.liskovsoft.smarttubetv.beta")
+        }) {
+            mBackupDirs.add(new File(backupDir, BACKUP_DIR_NAME));
+        }
     }
 
     public void checkPermAndRestore() {
