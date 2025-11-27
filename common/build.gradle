@@ -41,8 +41,6 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
-        stmarket {}
-        stlegacy {}
     }
 }
 
@@ -95,11 +93,7 @@ dependencies {
 
     stbetaImplementation project(':leanbackassistant')
     ststableImplementation project(':leanbackassistant')
-    stmarketImplementation project(':leanbackassistant')
-    stlegacyImplementation project(':leanbackassistant')
 
     stbetaImplementation project(':appupdatechecker2')
     ststableImplementation project(':appupdatechecker2')
-    stmarketImplementation project(':appupdatechecker2')
-    stlegacyImplementation project(':appupdatechecker2')
 }

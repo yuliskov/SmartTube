@@ -525,8 +525,9 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       throws IOException {
     // MODIFIED: Add modern TLS ciphers to HttpUrlConnection and custom Dns
     // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
-    //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-    HttpURLConnection connection = NetworkHelpers.getHttpsURLConnection(url);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    // TODO: Exceptions on API 34 (maybe lowers too). Enable for old api or at least switch to Cronet on error
+    //HttpURLConnection connection = NetworkHelpers.getHttpsURLConnection(url);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
     if (defaultRequestProperties != null) {

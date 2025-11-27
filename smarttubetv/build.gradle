@@ -35,16 +35,6 @@ if (new File("${projectDir}/google-services.json").exists() && (getGradle().getS
 }
 
 android {
-    // Use same key for release and debug
-    // signingConfigs {
-    //     release {
-    //         storeFile file("android-main.keystore")
-    //         storePassword "my_passwd"
-    //         keyAlias "private"
-    //         keyPassword "my_passwd"
-    //     }
-    // }
-
     // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,7 +47,7 @@ android {
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "com.liskovsoft.smarttubetv"
+        applicationId "org.smartteam.smarttube.tv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
         versionCode 2245
@@ -113,18 +103,7 @@ android {
         }
         ststable {
             // matchingFallbacks = ['lite']
-            //applicationId "org.smartteam.smarttube.tv"
-            applicationId "com.teamsmart.videomanager.tv"
-        }
-        stmarket {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.teamsmart.videomanager.tv"
-        }
-        stlegacy {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationId "com.liskovsoft.videomanager"
+            applicationIdSuffix ".stable"
         }
     }
 
@@ -216,12 +195,7 @@ dependencies {
         transitive = true
     }
 
-    // Android 4 SponsorBlock fix???
-    // implementation 'org.conscrypt:conscrypt-android:2.5.2'
-
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
-
-    //implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
 
     implementation 'net.gotev:speech:' + gotevSpeechVersion
 }
