@@ -390,6 +390,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreVideoFormat() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (getPlayerData().getTempVideoFormat() != null) {
             getPlayer().setFormat(getPlayerData().getTempVideoFormat());
         } else {
@@ -480,6 +484,10 @@ public class VideoStateController extends BasePlayerController {
 
     private void restorePosition() {
         Video item = getVideo();
+
+        if (getPlayer() == null || item == null) {
+            return;
+        }
 
         State state = getStateService().getByVideoId(item.videoId);
 

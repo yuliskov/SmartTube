@@ -13,9 +13,6 @@ import com.google.android.exoplayer2.extractor.ChunkIndex;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.SeekMap;
 import com.google.android.exoplayer2.extractor.TrackOutput;
-import com.google.android.exoplayer2.extractor.mkv.MatroskaExtractor;
-import com.google.android.exoplayer2.extractor.mp4.FragmentedMp4Extractor;
-import com.google.android.exoplayer2.extractor.rawcc.RawCcExtractor;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.source.chunk.BaseMediaChunkIterator;
 import com.google.android.exoplayer2.source.chunk.Chunk;
@@ -32,6 +29,12 @@ import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
+import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
+import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -40,10 +43,13 @@ import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DefaultSabrChunkSource implements SabrChunkSource {
     public static final class Factory implements SabrChunkSource.Factory {
@@ -111,6 +117,10 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private boolean missingLastSegment;
     private long liveEdgeTimeUs;
 
+    private final SabrStream sabrStream;
+    private final Map<String, String> sabrHeaders;
+    private int sabrRequestNumber = 0;
+
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
      * @param manifest The initial manifest.
@@ -156,6 +166,26 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
         liveEdgeTimeUs = C.TIME_UNSET;
+        
+        sabrStream = new SabrStream(
+                manifest.getServerAbrStreamingUrl(),
+                manifest.getVideoPlaybackUstreamerConfig(),
+                manifest.getClientInfo(),
+                createAudioSelection(trackType, trackSelection),
+                createVideoSelection(trackType, trackSelection),
+                createCaptionSelection(trackType, trackSelection),
+                -1,
+                -1,
+                -1,
+                manifest.getPoToken(),
+                false,
+                manifest.getVideoId()
+        );
+
+        sabrHeaders = new HashMap<>();
+        sabrHeaders.put("Content-Type", "application/x-protobuf");
+        sabrHeaders.put("Accept-Encoding", "identity");
+        sabrHeaders.put("Accept", "application/vnd.yt-ump");
 
         List<Representation> representations = getRepresentations();
         representationHolders = new RepresentationHolder[trackSelection.length()];
@@ -168,7 +198,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                             representation,
                             enableEventMessageTrack,
                             closedCaptionFormats,
-                            playerTrackEmsgHandler);
+                            playerTrackEmsgHandler,
+                            sabrStream);
         }
     }
 
@@ -485,9 +516,20 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         } else {
             requestUri = indexUri;
         }
-        // TODO: first protobuf request (before the video start off)
-        DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
-                requestUri.length, representationHolder.representation.getCacheKey());
+        // NOTE: first protobuf request (before the video start off)
+        // MOD: add protobuf data
+        //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
+        //        requestUri.length, representationHolder.representation.getCacheKey());
+        DataSpec dataSpec = new DataSpec(
+                requestUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                DataSpec.HTTP_METHOD_POST,
+                sabrStream.buildVideoPlaybackAbrRequest().toByteArray(),
+                requestUri.start,
+                requestUri.start,
+                requestUri.length,
+                representationHolder.representation.getCacheKey(),
+                0,
+                sabrHeaders);
         return new InitializationChunk(dataSource, dataSpec, trackFormat,
                 trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
@@ -530,9 +572,20 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                     periodDurationUs != C.TIME_UNSET && periodDurationUs <= endTimeUs
                             ? periodDurationUs
                             : C.TIME_UNSET;
-            // TODO: next protobuf requests (during the playback)
-            DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
-                    segmentUri.start, segmentUri.length, representation.getCacheKey());
+            // NOTE: next protobuf requests (during the playback)
+            // MOD: add protobuf data
+            //DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
+            //        segmentUri.start, segmentUri.length, representation.getCacheKey());
+            DataSpec dataSpec = new DataSpec(
+                    segmentUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                    DataSpec.HTTP_METHOD_POST,
+                    sabrStream.buildVideoPlaybackAbrRequest().toByteArray(),
+                    segmentUri.start,
+                    segmentUri.start,
+                    segmentUri.length,
+                    representation.getCacheKey(),
+                    0,
+                    sabrHeaders);
             long sampleOffsetUs = -representation.presentationTimeOffsetUs;
             return new ContainerMediaChunk(
                     dataSource,
@@ -549,6 +602,44 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                     sampleOffsetUs,
                     representationHolder.extractorWrapper);
         }
+    }
+
+    private static AudioSelector createAudioSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_AUDIO) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new AudioSelector(Helpers.firstNonNull(selectedFormat.label, "selected_audio"), false, createFormatId(selectedFormat));
+    }
+
+    private static VideoSelector createVideoSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_VIDEO) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new VideoSelector(Helpers.firstNonNull(selectedFormat.label, "selected_video"), false, createFormatId(selectedFormat));
+    }
+
+    private static CaptionSelector createCaptionSelection(int trackType, TrackSelection trackSelection) {
+        if (trackType != C.TRACK_TYPE_TEXT) {
+            return null;
+        }
+
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        return new CaptionSelector(Helpers.firstNonNull(selectedFormat.label, "selected_caption"), false, createFormatId(selectedFormat));
+    }
+
+    private static FormatId createFormatId(Format format) {
+        FormatId formatId = FormatId.newBuilder()
+                .setItag(Helpers.parseInt(format.id))
+                .setLmt(format.lastModified)
+                .build();
+        return formatId;
     }
 
     /** {@link MediaChunkIterator} wrapping a {@link RepresentationHolder}. */
@@ -611,7 +702,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Representation representation,
                 boolean enableEventMessageTrack,
                 List<Format> closedCaptionFormats,
-                TrackOutput playerEmsgTrackOutput) {
+                TrackOutput playerEmsgTrackOutput,
+                SabrStream sabrStream) {
             this(
                     periodDurationUs,
                     representation,
@@ -620,7 +712,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                             representation,
                             enableEventMessageTrack,
                             closedCaptionFormats,
-                            playerEmsgTrackOutput),
+                            playerEmsgTrackOutput,
+                            sabrStream),
                     /* segmentNumShift= */ 0,
                     representation.getIndex());
         }
@@ -773,7 +866,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Representation representation,
                 boolean enableEventMessageTrack,
                 List<Format> closedCaptionFormats,
-                TrackOutput playerEmsgTrackOutput) {
+                TrackOutput playerEmsgTrackOutput,
+                SabrStream sabrStream) {
             String containerMimeType = representation.format.containerMimeType;
             if (mimeTypeIsRawText(containerMimeType)) {
                 return null;
@@ -795,7 +889,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //                    flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
             //}
 
-            Extractor extractor = new SabrExtractor(trackType, representation.format); // TODO: add more params (from the manifest) into the constructor
+            Extractor extractor = new SabrExtractor(trackType, representation.format, sabrStream);
 
             // Prefer drmInitData obtained from the manifest over drmInitData obtained from the stream,
             // as per DASH IF Interoperability Recommendations V3.0, 7.5.3.

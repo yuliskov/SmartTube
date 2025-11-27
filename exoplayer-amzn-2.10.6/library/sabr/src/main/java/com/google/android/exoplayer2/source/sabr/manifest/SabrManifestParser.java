@@ -13,6 +13,8 @@ import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentLis
 import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentTemplate;
 import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SegmentTimelineElement;
 import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SingleSegmentBase;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientName;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -82,7 +84,12 @@ public class SabrManifestParser {
                 timeShiftBufferDepthMs,
                 suggestedPresentationDelayMs,
                 publishTimeMs,
-                periods);
+                periods,
+                formatInfo.getServerAbrStreamingUrl(),
+                formatInfo.getVideoPlaybackUstreamerConfig(),
+                formatInfo.getPoToken(),
+                formatInfo.getVideoId(),
+                createClientInfo(formatInfo));
     }
 
     private static long getDurationMs(MediaItemFormatInfo formatInfo) {
@@ -195,7 +202,7 @@ public class SabrManifestParser {
 
         if (segmentDurationUs <= 0) {
             // Inaccurate. Present on past (!) live streams.
-            segmentDurationUs = Integer.parseInt(format.getTargetDurationSec()) * 1_000_000;
+            segmentDurationUs = format.getTargetDurationSec() * 1_000_000;
         }
 
         int lengthSeconds = Integer.parseInt(mFormatInfo.getLengthSeconds());
@@ -222,7 +229,8 @@ public class SabrManifestParser {
         long duration = segmentDurationUnits;
         long startNumber = mFormatInfo.getStartSegmentNum();
         long endNumber = C.INDEX_UNSET;
-        UrlTemplate mediaTemplate = UrlTemplate.compile(format.getUrl() + "&sq=$Number$");
+        String url = mFormatInfo.getServerAbrStreamingUrl();
+        UrlTemplate mediaTemplate = UrlTemplate.compile(url + "&sq=$Number$");
         //UrlTemplate initializationTemplate = UrlTemplate.compile(format.getOtfInitUrl()); // ?
         UrlTemplate initializationTemplate = null; // ?
 
@@ -346,7 +354,7 @@ public class SabrManifestParser {
     private RepresentationInfo parseRepresentation(MediaFormat mediaFormat) {
         int roleFlags = C.ROLE_FLAG_MAIN;
         int selectionFlags = C.SELECTION_FLAG_DEFAULT;
-        String id = mediaFormat.isDrc() ? mediaFormat.getITag() + "-drc" : mediaFormat.getITag();
+        String id = mediaFormat.getITag();
         int bandwidth = Helpers.parseInt(mediaFormat.getBitrate(), Format.NO_VALUE);
         String mimeType = MediaFormatUtils.extractMimeType(mediaFormat);
         String codecs = MediaFormatUtils.extractCodecs(mediaFormat);
@@ -356,14 +364,17 @@ public class SabrManifestParser {
         int audioChannels = Format.NO_VALUE;
         int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(mediaFormat.getITag()), Format.NO_VALUE);
         String language = mediaFormat.getLanguage();
-        String baseUrl = mediaFormat.getUrl();
-        String label = null;
+        String baseUrl = mFormatInfo.getServerAbrStreamingUrl();
+        String label = mediaFormat.getQualityLabel();
+        boolean isDrc = mediaFormat.isDrc();
+        long lastModified = Helpers.parseLong(mediaFormat.getLmt());
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -374,11 +385,13 @@ public class SabrManifestParser {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = null;
 
-        if (MediaFormatUtils.isLiveMedia(mediaFormat)) {
+        if (MediaFormatUtils.isLiveMedia(baseUrl)) {
             segmentBase = parseSegmentTemplate(mediaFormat);
         } else if (mediaFormat.getSegmentUrlList() != null) {
             segmentBase = parseSegmentList(mediaFormat);
@@ -407,12 +420,15 @@ public class SabrManifestParser {
         String language = sub.getName() == null ? sub.getLanguageCode() : sub.getName();
         String baseUrl = sub.getBaseUrl();
         String label = null;
+        boolean isDrc = false;
+        long lastModified = Format.NO_VALUE;
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -423,7 +439,9 @@ public class SabrManifestParser {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = new SingleSegmentBase();
 
@@ -457,6 +475,7 @@ public class SabrManifestParser {
 
     protected Format buildFormat(
             String id,
+            String label,
             String containerMimeType,
             int width,
             int height,
@@ -467,13 +486,15 @@ public class SabrManifestParser {
             String language,
             @C.RoleFlags int roleFlags,
             @C.SelectionFlags int selectionFlags,
-            String codecs) {
+            String codecs,
+            boolean isDrc,
+            long lastModified) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
                 return Format.createVideoContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -484,11 +505,12 @@ public class SabrManifestParser {
                         frameRate,
                         /* initializationData= */ null,
                         selectionFlags,
-                        roleFlags);
+                        roleFlags,
+                        lastModified);
             } else if (MimeTypes.isAudio(sampleMimeType)) {
                 return Format.createAudioContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -499,11 +521,13 @@ public class SabrManifestParser {
                         /* initializationData= */ null,
                         selectionFlags,
                         roleFlags,
-                        language);
+                        language,
+                        isDrc,
+                        lastModified);
             } else if (mimeTypeIsRawText(sampleMimeType)) {
                 return Format.createTextContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -516,7 +540,7 @@ public class SabrManifestParser {
         }
         return Format.createContainerFormat(
                 id,
-                /* label= */ null,
+                label,
                 containerMimeType,
                 sampleMimeType,
                 codecs,
@@ -603,10 +627,10 @@ public class SabrManifestParser {
     }
 
     private void append(MediaFormat mediaItem) {
-        if (!MediaFormatUtils.checkMediaUrl(mediaItem)) {
-            Log.e(TAG, "Media item doesn't contain required url field!");
-            return;
-        }
+        //if (!MediaFormatUtils.checkMediaUrl(mediaItem)) {
+        //    Log.e(TAG, "Media item doesn't contain required url field!");
+        //    return;
+        //}
 
         // NOTE: FORMAT_STREAM_TYPE_OTF not supported
         if (!MediaFormatUtils.isDash(mediaItem)) {
@@ -674,6 +698,15 @@ public class SabrManifestParser {
             return C.TRACK_TYPE_TEXT;
         }
         return C.TRACK_TYPE_UNKNOWN;
+    }
+
+    private ClientInfo createClientInfo(MediaItemFormatInfo formatInfo) {
+        MediaItemFormatInfo.ClientInfo clientInfo = formatInfo.getClientInfo();
+
+        return ClientInfo.newBuilder()
+                .setClientName(ClientName.valueOf(clientInfo.getClientName()))
+                .setClientVersion(clientInfo.getClientVersion())
+                .build();
     }
 
     /** A parsed Representation element. */

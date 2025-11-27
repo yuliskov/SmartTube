@@ -2,6 +2,5 @@
 <resources>
     <string-array name="update_urls">
         <item>https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.json</item>
-        <!--<item>https://drive.google.com/uc?id=174NUD7rr_v-NVG6H2rTmd6JDzlJNL2i7</item>-->
     </string-array>
 </resources>

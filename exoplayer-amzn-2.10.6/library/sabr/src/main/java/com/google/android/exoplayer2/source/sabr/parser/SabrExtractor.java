@@ -274,26 +274,12 @@ public class SabrExtractor implements Extractor {
      * @param trackType The type of the track. Typically one of the {@link com.google.android.exoplayer2.C}
      *    {@code TRACK_TYPE_*} constants.
      */
-    public SabrExtractor(int trackType, @NonNull Format format) {
-        this(0, trackType, format);
+    public SabrExtractor(int trackType, @NonNull Format format, @NonNull SabrStream sabrStream) {
+        this(0, trackType, format, sabrStream);
     }
 
-    private SabrExtractor(@Flags int flags, int trackType, @NonNull Format format) {
-        // TODO: replace nulls with the actual values
-        sabrStream = new SabrStream(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                -1,
-                -1,
-                -1,
-                null,
-                false,
-                null
-        );
+    private SabrExtractor(@Flags int flags, int trackType, @NonNull Format format, @NonNull SabrStream sabrStream) {
+        this.sabrStream = sabrStream;
         this.format = format;
         this.trackType = trackType;
         seekForCuesEnabled = (flags & FLAG_DISABLE_SEEK_FOR_CUES) == 0;
@@ -311,8 +297,8 @@ public class SabrExtractor implements Extractor {
 
     @Override
     public boolean sniff(ExtractorInput input) throws IOException, InterruptedException {
-        // TODO: not implemented
-        return true;
+        // NOTE: checks whether the input contains SABR stream
+        return true; // always ok
     }
 
     @Override
@@ -351,20 +337,18 @@ public class SabrExtractor implements Extractor {
 
     @Override
     public void seek(long position, long timeUs) {
-        // TODO: not implemented
-        //clusterTimecodeUs = C.TIME_UNSET;
-        //blockState = BLOCK_STATE_START;
-        //reader.reset();
-        //varintReader.reset();
-        //resetSample();
-        //for (int i = 0; i < tracks.size(); i++) {
-        //    tracks.valueAt(i).reset();
-        //}
+        clusterTimecodeUs = C.TIME_UNSET;
+        blockState = BLOCK_STATE_START;
+        sabrStream.reset();
+        resetSample();
+        for (int i = 0; i < tracks.size(); i++) {
+            tracks.valueAt(i).reset();
+        }
     }
 
     @Override
     public void release() {
-        // TODO: not implemented
+        // Do nothing
     }
 
     private void initializeFormat(FormatInitializedSabrPart part) throws ParserException {
@@ -383,11 +367,9 @@ public class SabrExtractor implements Extractor {
     }
 
     private void writeSegmentData(MediaSegmentDataSabrPart part) throws IOException, InterruptedException {
-        // TODO: not implemented
-
         // binaryElement
 
-        // init seek segemnt data
+        // TODO: init seek segment data
 
         Track track = tracks.get(blockTrackNumber);
 
@@ -398,9 +380,9 @@ public class SabrExtractor implements Extractor {
         }
 
         writeSampleData(part.data, track, part.contentLength);
-        // TODO: improve segment start time calc
-        long sampleTimeUs = blockTimeUs
-                + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
+        //long sampleTimeUs = blockTimeUs
+        //        + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
+        long sampleTimeUs = part.startTimeMs * 1_000L;
         commitSampleToOutput(track, sampleTimeUs);
     }
 
@@ -523,8 +505,6 @@ public class SabrExtractor implements Extractor {
         size += sampleStrippedBytes.limit();
 
         if (CODEC_ID_H264.equals(track.codecId) || CODEC_ID_H265.equals(track.codecId)) {
-            // TODO: Deduplicate with Mp4Extractor.
-
             // Zero the top three bytes of the array that we'll use to decode nal unit lengths, in case
             // they're only 1 or 2 bytes long.
             byte[] nalLengthData = nalLength.data;
@@ -1084,6 +1064,11 @@ public class SabrExtractor implements Extractor {
 
             this.output = output.track(number, type);
             this.output.format(format);
+        }
+
+        /** Resets any state stored in the track in response to a seek. */
+        public void reset() {
+            // Do nothing
         }
 
         /** Returns the HDR Static Info as defined in CTA-861.3. */

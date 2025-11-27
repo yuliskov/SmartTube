@@ -41,9 +41,6 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
-        storig {}
-        stamazon {}
-        staptoide {}
     }
 }
 
@@ -96,14 +93,7 @@ dependencies {
 
     stbetaImplementation project(':leanbackassistant')
     ststableImplementation project(':leanbackassistant')
-    storigImplementation project(':leanbackassistant')
-    staptoideImplementation project(':leanbackassistant')
 
     stbetaImplementation project(':appupdatechecker2')
     ststableImplementation project(':appupdatechecker2')
-    storigImplementation project(':appupdatechecker2')
-    stamazonImplementation project(':appupdatechecker2')
-    staptoideImplementation project(':appupdatechecker2')
 }
-
-apply from: 'custom-deps.gradle'

@@ -297,6 +297,12 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
     for (Map.Entry<String, String> property : requestProperties.getSnapshot().entrySet()) {
       builder.header(property.getKey(), property.getValue());
     }
+
+    // MOD: apply headers from DataSpec
+    for (Map.Entry<String, String> headerEntry : dataSpec.httpRequestHeaders.entrySet()) {
+      builder.header(headerEntry.getKey(), headerEntry.getValue());
+    }
+
     if (!(position == 0 && length == C.LENGTH_UNSET)) {
       String rangeRequest = "bytes=" + position + "-";
       if (length != C.LENGTH_UNSET) {

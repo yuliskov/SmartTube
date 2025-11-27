@@ -525,8 +525,9 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       throws IOException {
     // MODIFIED: Add modern TLS ciphers to HttpUrlConnection and custom Dns
     // https://stackoverflow.com/questions/16299531/how-to-override-the-cipherlist-sent-to-the-server-by-android-when-using-httpsurl
-    //HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-    HttpURLConnection connection = NetworkHelpers.getHttpsURLConnection(url);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    // TODO: Exceptions on API 34 (maybe lowers too). Enable for old api or at least switch to Cronet on error
+    //HttpURLConnection connection = NetworkHelpers.getHttpsURLConnection(url);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
     if (defaultRequestProperties != null) {
@@ -537,6 +538,14 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     for (Map.Entry<String, String> property : requestProperties.getSnapshot().entrySet()) {
       connection.setRequestProperty(property.getKey(), property.getValue());
     }
+
+    // MOD: apply headers from DataSpec
+    if (dataSpec != null) {
+      for (Map.Entry<String, String> headerEntry : dataSpec.httpRequestHeaders.entrySet()) {
+        connection.setRequestProperty(headerEntry.getKey(), headerEntry.getValue());
+      }
+    }
+
     if (!(position == 0 && length == C.LENGTH_UNSET)) {
       String rangeRequest = "bytes=" + position + "-";
       if (length != C.LENGTH_UNSET) {

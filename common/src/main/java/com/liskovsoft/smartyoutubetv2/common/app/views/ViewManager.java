@@ -501,6 +501,12 @@ public class ViewManager {
         return null;
     }
 
+    public void cancelOnFinish() {
+        if (mOnFinish != null) {
+            mOnFinish.clear();
+        }
+    }
+
     public void addOnFinish(Runnable onFinish) {
         if (mOnFinish == null) {
             mOnFinish = new WeakHashSet<>();

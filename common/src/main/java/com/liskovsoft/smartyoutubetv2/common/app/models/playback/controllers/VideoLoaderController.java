@@ -41,7 +41,7 @@ public class VideoLoaderController extends BasePlayerController {
     private static final long BUFFERING_THRESHOLD_MS = 3_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
     private static final long BUFFERING_RECURRENCE_COUNT = 5;
-    private static final long BUFFERING_CONTINUATION_MS = 10_000;
+    private static final long BUFFERING_CONTINUATION_MS = 20_000;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private int mLastErrorType = -1;
@@ -391,8 +391,6 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-
-            //player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);
@@ -524,7 +522,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getVideo() != null && getVideo().isLiveEnd) {
             // Url no longer works (e.g. live stream ended)
-            loadNext();
+            getMainController().onPlayEnd();
             return;
         }
 
@@ -581,14 +579,13 @@ public class VideoLoaderController extends BasePlayerController {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
-                restartEngine = false;
-                //YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
             restartEngine = false;
+            showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
@@ -748,17 +745,7 @@ public class VideoLoaderController extends BasePlayerController {
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    getPlayer().setPositionMs(getPlayer().getDurationMs());
-                    getPlayer().setPlayWhenReady(false);
-                    getPlayer().showSuggestions(true);
-                }
-                break;
-            case PlayerConstants.PLAYBACK_MODE_LOOP_LIST:
-                // if video has a playlist load next or restart playlist
-                if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
-                    loadNext();
-                } else {
-                    restartPlaylist();
+                    restartPlaylistIfNeeded();
                 }
                 break;
             default:
@@ -767,20 +754,15 @@ public class VideoLoaderController extends BasePlayerController {
         }
     }
 
-    private void restartPlaylist() {
-        Video currentVideo = getVideo();
-        VideoGroup group = currentVideo.getGroup(); // Get the VideoGroup (playlist)
+    private void restartPlaylistIfNeeded() {
+        if (getPlayer() == null || getVideo() == null) {
+            return;
+        }
+        
+        VideoGroup group = getVideo().getGroup(); // Get the VideoGroup (playlist)
 
-        if (group != null && !group.isEmpty()) {
-            // Clear current playlist
-            mPlaylist.clear();
-
-            // Add all videos from VideoGroup
-            mPlaylist.addAll(group.getVideos());
-            
-            Video firstVideo = group.get(0);
-            mPlaylist.setCurrent(firstVideo);
-            openVideoInt(firstVideo);
+        if (group != null && !group.isEmpty() && getVideo().belongsToSamePlaylistGroup()) {
+            openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
             getPlayer().setPositionMs(getPlayer().getDurationMs());
@@ -921,7 +903,6 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void switchNextEngine() {
         getPlayerTweaksData().setPlayerDataSource(getNextEngine());
-        getPlayerTweaksData().persistNow();
     }
 
     private int getNextEngine() {
@@ -929,7 +910,7 @@ public class VideoLoaderController extends BasePlayerController {
         Integer[] engineList = Utils.skipCronet() ?
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Helpers.getNextValue(currentEngine, engineList);
+        return Helpers.getNextValue(engineList, currentEngine);
     }
 
     private static int getFasterDataSource() {
@@ -1003,7 +984,7 @@ public class VideoLoaderController extends BasePlayerController {
         //if (getVideo() != null) {
         //    getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
         //}
-        getPlayerData().setSubtitlesPerChannelEnabled(false);
+        //getPlayerData().setSubtitlesPerChannelEnabled(false);
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
     }
 }

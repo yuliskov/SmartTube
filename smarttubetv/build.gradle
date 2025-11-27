@@ -35,16 +35,6 @@ if (new File("${projectDir}/google-services.json").exists() && (getGradle().getS
 }
 
 android {
-    // Use same key for release and debug
-    // signingConfigs {
-    //     release {
-    //         storeFile file("android-main.keystore")
-    //         storePassword "my_passwd"
-    //         keyAlias "private"
-    //         keyPassword "my_passwd"
-    //     }
-    // }
-
     // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,11 +47,11 @@ android {
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "com.liskovsoft.smarttubetv"
+        applicationId "org.smartteam.smarttube.tv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2210
-        versionName "30.20"
+        versionCode 2245
+        versionName "30.55"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -105,6 +95,7 @@ android {
     // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
     flavorDimensions "default"
 
+    // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
     productFlavors {
         stbeta {
             // matchingFallbacks = ['lite']
@@ -112,22 +103,7 @@ android {
         }
         ststable {
             // matchingFallbacks = ['lite']
-            //applicationId "org.smartteam.smarttube.tv"
-            applicationId "com.teamsmart.videomanager.tv"
-        }
-        storig {
-            // matchingFallbacks = ['lite']
-            applicationId "org.smartteam.smarttube.tv.orig"
-        }
-        stamazon {
-            // matchingFallbacks = ['lite']
-            applicationId "com.amazon.firetv.youtube"
-        }
-        staptoide {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            //applicationId "com.liskovsoft.videomanager" // legacy?
-            applicationId "com.teamsmart.videomanager.tv"
+            applicationIdSuffix ".stable"
         }
     }
 
@@ -219,12 +195,7 @@ dependencies {
         transitive = true
     }
 
-    // Android 4 SponsorBlock fix???
-    // implementation 'org.conscrypt:conscrypt-android:2.5.2'
-
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
-
-    //implementation 'com.github.stfalcon-studio:Chatkit:' + chatkitVersion
 
     implementation 'net.gotev:speech:' + gotevSpeechVersion
 }

@@ -26,6 +26,8 @@ import java.util.List;
 public class AppDataSourceManager {
     private static AppDataSourceManager sInstance;
     private static final String[] KNOWN_PACKAGES = {
+            "org.smartteam.smarttube.tv.beta",
+            "org.smartteam.smarttube.tv.stable",
             "com.liskovsoft.smarttubetv.beta",
             "com.teamsmart.videomanager.tv"
     };

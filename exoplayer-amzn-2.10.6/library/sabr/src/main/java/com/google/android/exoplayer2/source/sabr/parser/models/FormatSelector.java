@@ -3,6 +3,7 @@ package com.google.android.exoplayer2.source.sabr.parser.models;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FormatSelector {
@@ -11,8 +12,16 @@ public class FormatSelector {
     public final boolean discardMedia;
 
     public FormatSelector(String displayName, boolean discardMedia) {
+        this(displayName, discardMedia, (FormatId[]) null);
+    }
+
+    public FormatSelector(String displayName, boolean discardMedia, FormatId... formatIds) {
         this.displayName = displayName;
         this.discardMedia = discardMedia;
+
+        if (formatIds != null) {
+            this.formatIds.addAll(Arrays.asList(formatIds));
+        }
     }
 
     public String getMimePrefix() {

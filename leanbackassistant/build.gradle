@@ -32,8 +32,6 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
-        storig {}
-        staptoide {}
     }
 }
 

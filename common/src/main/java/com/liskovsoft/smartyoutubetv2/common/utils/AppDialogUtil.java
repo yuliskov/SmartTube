@@ -903,10 +903,17 @@ public class AppDialogUtil {
     }
 
     private static void runFilePicker(Activity activity, String title) {
+        File filesDir = FileUtils.getFile(activity, null);
+
+        if (filesDir == null) {
+            Log.e(TAG, "Storage device is unavailable");
+            return;
+        }
+
         new MaterialFilePicker()
                 .withActivity(activity)
                 .withTitle(title)
-                .withRootPath(FileUtils.getFile(activity, null).getAbsolutePath())
+                .withRootPath(filesDir.getAbsolutePath())
                 .start(FILE_PICKER_REQUEST_CODE);
     }
 

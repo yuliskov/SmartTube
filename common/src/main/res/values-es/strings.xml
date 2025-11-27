@@ -155,7 +155,7 @@
   <string name="player_seek_preview_carousel_fast">Carrusel (rápido)</string>
   <string name="unsubscribe_from_channel">Desuscribirse del canal</string>
   <string name="card_title_lines_num">Título de tarjeta número de líneas</string>
-  <string name="card_auto_scrolled_title">Auto-scroll título recortado</string>
+  <string name="card_auto_scrolled_title">Título recortado con desplazamiento automático</string>
   <string name="share_link">Compartir enlace</string>
   <string name="subscribe_to_channel">Suscribirse al canal</string>
   <string name="wait_data_loading">Por favor, espera mientras se cargan datos…</string>
@@ -229,7 +229,7 @@
   <string name="dialog_select_country">País</string>
   <string name="settings_language_country">Idioma/país</string>
   <string name="share_embed_link">Compartir enlace embebido</string>
-  <string name="card_text_scroll_factor">Velocidad scroll texto tarjeta</string>
+  <string name="card_text_scroll_factor">Velocidad desplazamiento texto tarjeta</string>
   <string name="preferred_update_source">Seleccionar fuente actualizaciones</string>
   <string name="hide_shorts">Ocultar Shorts de Suscripciones</string>
   <string name="key_remapping">Remapeo de teclas</string>
@@ -342,7 +342,7 @@
   <string name="proxy_test_btn">Probar</string>
   <string name="proxy_settings_title">Configuración del Servidor Proxy</string>
   <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com	</string>
-  <string name="proxy_test_cancelled">Prueba#%d: cancelada.</string>
+  <string name="proxy_test_cancelled">Prueba #%d: cancelada.</string>
   <string name="proxy_type_invalid">Tipo de proxy no configurado.</string>
   <string name="proxy_host_invalid">Proxy host no configurado.</string>
   <string name="proxy_port_invalid">Puerto Proxy inválido, debe ser &gt; 0.</string>
@@ -386,8 +386,8 @@
   <string name="play_video">Reproducir</string>
   <string name="remember_position_of_short_videos">Recuerde la posición de los vídeos cortos (menos de 10 minutos)</string>
   <string name="player_show_tooltips">Mostrar información sobre los botones</string>
-  <string name="action_like_unset">Como no está establecido</string>
-  <string name="action_dislike_unset">No se ha establecido el \"Dislike\".</string>
+  <string name="action_like_unset">Removido \"me gusta\"</string>
+  <string name="action_dislike_unset">Removido \"no me gusta\".</string>
   <string name="various_buttons">Botones en la parte superior de la ventana principal</string>
   <string name="not_compatible_with">La opción seleccionada no es compatible con</string>
   <string name="subtitle_position">Desplazamiento inferior de los subtítulos</string>
@@ -419,7 +419,7 @@
   <string name="disable_vsync_desc">Mejora un poco el rendimiento de la reproducción</string>
   <string name="skip_codec_profile_check">Omitir la comprobación del nivel del perfil del códec</string>
   <string name="skip_codec_profile_check_desc">No comprueba la compatibilidad de los códecs al iniciar un vídeo. Podría ser útil en firmwares con errores.</string>
-  <string name="force_sw_codec">Forzar el decodificador de vídeo SW</string>
+  <string name="force_sw_codec">Forzar el decodificador de vídeo por software</string>
   <string name="force_sw_codec_desc">Puede reproducir casi cualquier vídeo pero el rendimiento es muy pobre.</string>
   <string name="playlist_order">Orden lista</string>
   <string name="playlist_order_added_date_newer_first">Fecha de añadido (más nuevos primero)</string>
@@ -455,7 +455,7 @@
   <string name="feedback">Feedback</string>
   <string name="sources">Fuentes</string>
   <string name="releases">Publicaciones</string>
-  <string name="prefer_avc_over_vp9">Selección de códecs: prefiero avc a vp9</string>
+  <string name="prefer_avc_over_vp9">Selección de códecs: preferir avc sobre vp9</string>
   <string name="open_chat">Chat/Comentarios</string>
   <string name="place_chat_left">Colocar chat a la izquierda</string>
   <string name="use_alt_speech_recognizer">Reconocimiento de voz alternativo</string>
@@ -546,7 +546,7 @@
   <string name="update_found">Actualizar</string>
   <string name="volume_boost_warning">Cualquier ajuste por encima del límite puede dañar los altavoces</string>
   <string name="play_video_incognito">Reproducción de incógnito</string>
-  <string name="header_kids_home">Kids</string>
+  <string name="header_kids_home">Niños</string>
   <string name="player_screen_off_timeout">Tiempo de espera de apagado de pantalla</string>
   <string name="screensaver">Salvapantallas</string>
   <string name="header_trending">Tendencias</string>
@@ -704,4 +704,10 @@
   <string name="context_menu_sorting">Ordenar el menú contextual</string>
   <string name="search_exit_shortcut">Salir del buscador</string>
   <string name="original_lang">Original</string>
+  <string name="suggestions">Sugerencias</string>
+  <string name="remove_playlist_fmt">Eliminar %s permanentemente </string>
+  <string name="player_chapter_notification2">Avanzar al siguiente capítulo presionando en la notificación</string>
+  <string name="dont_resize_video_to_fit_dialog">No redimensione el video para ajustar al cuadro de diálogo</string>
+  <string name="typing_corrections">Desactivar auto corrección mientras ingresa texto</string>
+  <string name="suggestions_horizontally_scrolled">Desplazamiento horizontal de Sugerencias </string>
 </resources>

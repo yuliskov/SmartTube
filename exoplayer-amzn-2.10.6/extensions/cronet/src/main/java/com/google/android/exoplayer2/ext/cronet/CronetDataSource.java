@@ -512,6 +512,14 @@ public class CronetDataSource extends BaseDataSource implements HttpDataSource {
       isContentTypeHeaderSet = isContentTypeHeaderSet || CONTENT_TYPE.equals(key);
       requestBuilder.addHeader(key, headerEntry.getValue());
     }
+
+    // MOD: apply headers from DataSpec
+    for (Entry<String, String> headerEntry : dataSpec.httpRequestHeaders.entrySet()) {
+      String key = headerEntry.getKey();
+      isContentTypeHeaderSet = isContentTypeHeaderSet || CONTENT_TYPE.equals(key);
+      requestBuilder.addHeader(key, headerEntry.getValue());
+    }
+
     if (dataSpec.httpBody != null && !isContentTypeHeaderSet) {
       throw new IOException("HTTP request with non-empty body must set Content-Type");
     }

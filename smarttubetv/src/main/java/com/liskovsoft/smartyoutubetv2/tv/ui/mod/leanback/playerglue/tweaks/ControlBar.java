@@ -33,11 +33,11 @@ class ControlBar extends LinearLayout {
     private OnChildFocusedListener mOnChildFocusedListener;
     // Can't set to static. Because we have two control bars.
     private int mLastFocusIndex = -1;
-    // MOD: Maintain global focus index to seamless navigation between control rows.
-    private static int mGlobalFocusIndex = -1;
+    // MOD: Sync focus index between rows
+    private static int sSyncedFocusIndex = -1;
     private boolean mDefaultFocusToMiddle = true;
     private boolean mFocusRecovery = true;
-    private boolean mGlobalFocus = true;
+    private boolean mIsSyncedFocusIndexEnabled = true;
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -61,10 +61,10 @@ class ControlBar extends LinearLayout {
     }
 
     /**
-     * MOD: global navigation
+     * MOD: synced navigation between rows
      */
-    void setGlobalFocus(boolean globalFocus) {
-        mGlobalFocus = globalFocus;
+    void setSyncedFocusIndexEnabled(boolean enabled) {
+        mIsSyncedFocusIndexEnabled = enabled;
     }
 
     void resetFocus() {
@@ -149,10 +149,11 @@ class ControlBar extends LinearLayout {
 
     private void setFocusIndex(int index) {
         mLastFocusIndex = index;
-        mGlobalFocusIndex = index;
+        if (index != -1) // don't reset global focus between player launches
+            sSyncedFocusIndex = index;
     }
 
     private int getFocusIndex() {
-        return mGlobalFocus ? mGlobalFocusIndex : mLastFocusIndex;
+        return mIsSyncedFocusIndexEnabled ? sSyncedFocusIndex : mLastFocusIndex;
     }
 }

@@ -229,7 +229,7 @@ public final class SabrMediaSource extends BaseMediaSource {
     public static final class Factory implements AdsMediaSource.MediaSourceFactory {
         private final SabrChunkSource.Factory chunkSourceFactory;
         @Nullable private final DataSource.Factory manifestDataSourceFactory;
-        private final DefaultLoadErrorHandlingPolicy loadErrorHandlingPolicy;
+        private LoadErrorHandlingPolicy loadErrorHandlingPolicy;
         private final DefaultCompositeSequenceableLoaderFactory compositeSequenceableLoaderFactory;
         private long livePresentationDelayMs;
         private boolean livePresentationDelayOverridesManifest;
@@ -313,8 +313,8 @@ public final class SabrMediaSource extends BaseMediaSource {
          * @throws IllegalStateException If one of the {@code create} methods has already been called.
          */
         public Factory setLoadErrorHandlingPolicy(LoadErrorHandlingPolicy loadErrorHandlingPolicy) {
-            //Assertions.checkState(!isCreateCalled);
-            //this.loadErrorHandlingPolicy = loadErrorHandlingPolicy;
+            Assertions.checkState(!isCreateCalled);
+            this.loadErrorHandlingPolicy = loadErrorHandlingPolicy;
             return this;
         }
 

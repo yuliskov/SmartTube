@@ -19,7 +19,7 @@ message MediaHeader {
     optional int32 start_data_range = 6;
     optional CompressionAlgorithm compression = 7;
     optional bool is_init_segment = 8;
-    optional int64 sequence_number = 9;
+    optional int32 sequence_number = 9; // NOTE: changed from int64 to int32
     optional int64 bitrate_bps = 10;
     optional int32 start_ms = 11;
     optional int32 duration_ms = 12;

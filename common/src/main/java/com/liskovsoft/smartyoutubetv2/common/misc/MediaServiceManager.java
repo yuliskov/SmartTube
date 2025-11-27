@@ -369,8 +369,9 @@ public class MediaServiceManager implements OnAccountChange {
         }
     }
 
-    public void clearHistory() {
-        RxHelper.runAsyncUser(mContentService::clearHistory);
+    public void clearHistory(Context context, Runnable onFinish) {
+        RxHelper.runAsyncUser(mContentService::clearHistory, onFinish);
+        VideoStateService.instance(context).clear(); // even for the logged users this needed too
     }
 
     public void clearSearchHistory() {
