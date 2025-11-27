@@ -47,7 +47,7 @@
         </activity>
 
         <provider android:name=".search.VideoContentProvider"
-                  android:authorities="org.smartteam.smarttube.tv"
+                  android:authorities="org.smarttube"
                   android:exported="true"
                   android:initOrder="1999999999"
                   tools:ignore="ExportedContentProvider" />

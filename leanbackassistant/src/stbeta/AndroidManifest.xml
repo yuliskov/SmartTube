@@ -11,7 +11,7 @@
 
         <!-- NOTE: Don't change authorities to allow further updates of the apk -->
         <provider android:name=".search.VideoContentProvider"
-                  android:authorities="org.smartteam.smarttube.tv.beta"
+                  android:authorities="org.smarttube.beta"
                   android:exported="true"
                   android:initOrder="1999999999"
                   tools:ignore="ExportedContentProvider"

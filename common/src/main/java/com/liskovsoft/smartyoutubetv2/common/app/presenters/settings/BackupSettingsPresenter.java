@@ -145,9 +145,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         if (backups != null && backups.size() > 1) {
             showLocalRestoreSelectorDialog(backups, backupManager);
         } else {
-            AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), () -> {
-                backupManager.checkPermAndRestore();
-            });
+            AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_restore), backupManager::checkPermAndRestore);
         }
     }
 

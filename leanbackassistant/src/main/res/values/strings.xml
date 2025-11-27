@@ -1,6 +1,6 @@
 <resources>
     <string translatable="false" name="app_name">LeanbackAssistant</string>
-    <string translatable="false" name="search_authority">org.smartteam.smarttube.tv</string>
+    <string translatable="false" name="search_authority">org.smarttube</string>
 
     <string name="search_hint">Search for Videos</string>
     <string name="search_label">SmartTube</string>
