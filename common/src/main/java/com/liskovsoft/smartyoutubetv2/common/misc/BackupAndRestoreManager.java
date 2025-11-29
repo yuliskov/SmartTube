@@ -26,6 +26,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private final List<File> mDataDirs;
     private final List<File> mBackupDirs;
+    private final BackupAndRestoreHelper mHelper;
     private Runnable mPendingHandler;
 
     public interface OnBackupNames {
@@ -34,6 +35,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     public BackupAndRestoreManager(Context context) {
         mContext = context;
+
+        mHelper = new BackupAndRestoreHelper(context);
 
         mDataDirs = new ArrayList<>();
         mDataDirs.add(new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR));
@@ -148,6 +151,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
                 FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
             }
         }
+
+        mHelper.exportAppMediaFolder();
     }
 
     private void restoreData(String backupName) {
@@ -264,6 +269,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         File currentBackup = getBackup();
 
         return currentBackup != null ? currentBackup.toString() : null;
+    }
+
+    public String getBackupPathRoot() {
+        return String.format("%s/data", getExternalStorageDirectory());
     }
 
     public String getBackupPathCheck() {
