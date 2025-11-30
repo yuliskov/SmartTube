@@ -163,6 +163,10 @@ public final class Format implements Parcelable {
    */
   public final int accessibilityChannel;
 
+  // MOD: Sabr specific
+  public final boolean isDrc;
+  public final long lastModified;
+
   // Lazily initialized hashcode.
   private int hashCode;
 
@@ -214,6 +218,38 @@ public final class Format implements Parcelable {
       @Nullable List<byte[]> initializationData,
       @C.SelectionFlags int selectionFlags,
       @C.RoleFlags int roleFlags) {
+    return createVideoContainerFormat(
+        id,
+        label,
+        containerMimeType,
+        sampleMimeType,
+        codecs,
+        metadata,
+        bitrate,
+        width,
+        height,
+        frameRate,
+        initializationData,
+        selectionFlags,
+        roleFlags,
+        /* lastModified */ NO_VALUE);
+  }
+
+  public static Format createVideoContainerFormat(
+      @Nullable String id,
+      @Nullable String label,
+      @Nullable String containerMimeType,
+      String sampleMimeType,
+      String codecs,
+      @Nullable Metadata metadata,
+      int bitrate,
+      int width,
+      int height,
+      float frameRate,
+      @Nullable List<byte[]> initializationData,
+      @C.SelectionFlags int selectionFlags,
+      @C.RoleFlags int roleFlags,
+      long lastModified) {
     return new Format(
         id,
         label,
@@ -242,7 +278,9 @@ public final class Format implements Parcelable {
         /* encoderDelay= */ NO_VALUE,
         /* encoderPadding= */ NO_VALUE,
         /* language= */ null,
-        /* accessibilityChannel= */ NO_VALUE);
+        /* accessibilityChannel= */ NO_VALUE,
+        /* isDrc */ false,
+        lastModified);
   }
 
   public static Format createVideoSampleFormat(
@@ -397,6 +435,40 @@ public final class Format implements Parcelable {
       @C.SelectionFlags int selectionFlags,
       @C.RoleFlags int roleFlags,
       @Nullable String language) {
+    return createAudioContainerFormat(
+        id,
+        label,
+        containerMimeType,
+        sampleMimeType,
+        codecs,
+        metadata,
+        bitrate,
+        channelCount,
+        sampleRate,
+        initializationData,
+        selectionFlags,
+        roleFlags,
+        language,
+        /* isDrc */ false,
+        /* lastModified */ NO_VALUE);
+  }
+
+  public static Format createAudioContainerFormat(
+      @Nullable String id,
+      @Nullable String label,
+      @Nullable String containerMimeType,
+      @Nullable String sampleMimeType,
+      @Nullable String codecs,
+      @Nullable Metadata metadata,
+      int bitrate,
+      int channelCount,
+      int sampleRate,
+      @Nullable List<byte[]> initializationData,
+      @C.SelectionFlags int selectionFlags,
+      @C.RoleFlags int roleFlags,
+      @Nullable String language,
+      boolean isDrc,
+      long lastModified) {
     return new Format(
         id,
         label,
@@ -425,7 +497,9 @@ public final class Format implements Parcelable {
         /* encoderDelay= */ NO_VALUE,
         /* encoderPadding= */ NO_VALUE,
         language,
-        /* accessibilityChannel= */ NO_VALUE);
+        /* accessibilityChannel= */ NO_VALUE,
+        isDrc,
+        lastModified);
   }
 
   public static Format createAudioSampleFormat(
@@ -923,6 +997,75 @@ public final class Format implements Parcelable {
       // Audio and text specific.
       @Nullable String language,
       int accessibilityChannel) {
+    this(
+      id,
+      label,
+      selectionFlags,
+      roleFlags,
+      bitrate,
+      codecs,
+      metadata,
+      containerMimeType,
+      sampleMimeType,
+      maxInputSize,
+      initializationData,
+      drmInitData,
+      subsampleOffsetUs,
+      width,
+      height,
+      frameRate,
+      rotationDegrees,
+      pixelWidthHeightRatio,
+      projectionData,
+      stereoMode,
+      colorInfo,
+      channelCount,
+      sampleRate,
+      pcmEncoding,
+      encoderDelay,
+      encoderPadding,
+      language,
+      accessibilityChannel,
+      /* isDrc */ false,
+      /* lastModified */ NO_VALUE);
+  }
+
+  /* package */ Format(
+      @Nullable String id,
+      @Nullable String label,
+      @C.SelectionFlags int selectionFlags,
+      @C.RoleFlags int roleFlags,
+      int bitrate,
+      @Nullable String codecs,
+      @Nullable Metadata metadata,
+      // Container specific.
+      @Nullable String containerMimeType,
+      // Elementary stream specific.
+      @Nullable String sampleMimeType,
+      int maxInputSize,
+      @Nullable List<byte[]> initializationData,
+      @Nullable DrmInitData drmInitData,
+      long subsampleOffsetUs,
+      // Video specific.
+      int width,
+      int height,
+      float frameRate,
+      int rotationDegrees,
+      float pixelWidthHeightRatio,
+      @Nullable byte[] projectionData,
+      @C.StereoMode int stereoMode,
+      @Nullable ColorInfo colorInfo,
+      // Audio specific.
+      int channelCount,
+      int sampleRate,
+      @C.PcmEncoding int pcmEncoding,
+      int encoderDelay,
+      int encoderPadding,
+      // Audio and text specific.
+      @Nullable String language,
+      int accessibilityChannel,
+      boolean isDrc,
+      long lastModified) {
     this.id = id;
     this.label = label;
     this.selectionFlags = selectionFlags;
@@ -958,6 +1101,9 @@ public final class Format implements Parcelable {
     // Audio and text specific.
     this.language = Util.normalizeLanguageCode(language);
     this.accessibilityChannel = accessibilityChannel;
+    // MOD: Sabr specific
+    this.isDrc = isDrc;
+    this.lastModified = lastModified;
   }
 
   @SuppressWarnings("ResourceType")
@@ -1000,6 +1146,9 @@ public final class Format implements Parcelable {
     // Audio and text specific.
     language = in.readString();
     accessibilityChannel = in.readInt();
+    // Sabr specific
+    this.isDrc = false;
+    this.lastModified = in.readLong();
   }
 
   public Format copyWithMaxInputSize(int maxInputSize) {
@@ -1647,6 +1796,8 @@ public final class Format implements Parcelable {
     // Audio and text specific.
     dest.writeString(language);
     dest.writeInt(accessibilityChannel);
+    // MOD: Sabr specific
+    dest.writeLong(lastModified);
   }
 
   public static final Creator<Format> CREATOR = new Creator<Format>() {

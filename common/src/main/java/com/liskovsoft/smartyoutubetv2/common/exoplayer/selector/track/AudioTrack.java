@@ -68,7 +68,7 @@ public class AudioTrack extends MediaTrack {
 
         if (format.id == null && format.language == null && format.bitrate == -1 && codecEquals(this, track2)) {
             result = 0;
-        } else if (Helpers.equals(format.id, track2.format.id)) {
+        } else if (Helpers.equals(format.id, track2.format.id) && drcEquals(format, track2.format)) {
             result = 1;
         } else if (!codecEquals(this, track2) || !drcEquals(format, track2.format) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
             result = 0;

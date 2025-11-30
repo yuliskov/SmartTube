@@ -391,8 +391,6 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-
-            //player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);
@@ -524,7 +522,7 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getVideo() != null && getVideo().isLiveEnd) {
             // Url no longer works (e.g. live stream ended)
-            loadNext();
+            getMainController().onPlayEnd();
             return;
         }
 
@@ -581,14 +579,13 @@ public class VideoLoaderController extends BasePlayerController {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
             } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
                 disableSubtitles(); // Response code: 429
-                restartEngine = false;
-                //YouTubeServiceManager.instance().applySubtitleFix();
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
             restartEngine = false;
+            showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
@@ -721,17 +718,27 @@ public class VideoLoaderController extends BasePlayerController {
                 break;
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown
-                AppDialogPresenter dialog = getAppDialogPresenter();
-                if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
-                    dialog.closeDialog();
-                    getPlayer().finishReally();
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                } else {
+                    AppDialogPresenter dialog = getAppDialogPresenter();
+                    if (!getPlayer().isSuggestionsShown() && (!dialog.isDialogShown() || dialog.isOverlay())) {
+                        dialog.closeDialog();
+                        getPlayer().finishReally();
+                    }
                 }
                 break;
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
-                getPlayer().setPositionMs(getPlayer().getDurationMs());
-                getPlayer().setPlayWhenReady(false);
-                getPlayer().showSuggestions(true);
+                // Except when playing from queue
+                if (mPlaylist.getNext() != null) {
+                    loadNext();
+                } else {
+                    getPlayer().setPositionMs(getPlayer().getDurationMs());
+                    getPlayer().setPlayWhenReady(false);
+                    getPlayer().showSuggestions(true);
+                }
                 break;
             case PlayerConstants.PLAYBACK_MODE_LIST:
                 // if video has a playlist load next or restart playlist
@@ -896,7 +903,6 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void switchNextEngine() {
         getPlayerTweaksData().setPlayerDataSource(getNextEngine());
-        getPlayerTweaksData().persistNow();
     }
 
     private int getNextEngine() {
@@ -904,7 +910,7 @@ public class VideoLoaderController extends BasePlayerController {
         Integer[] engineList = Utils.skipCronet() ?
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
                 new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Helpers.getNextValue(currentEngine, engineList);
+        return Helpers.getNextValue(engineList, currentEngine);
     }
 
     private static int getFasterDataSource() {

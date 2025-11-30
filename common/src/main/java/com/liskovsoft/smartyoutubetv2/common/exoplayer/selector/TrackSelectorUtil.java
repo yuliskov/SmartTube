@@ -213,7 +213,7 @@ public class TrackSelectorUtil {
     }
 
     public static boolean isDrc(Format format) {
-        return format != null && Helpers.endsWithAny(format.id, "drc");
+        return format != null && (Helpers.endsWithAny(format.id, "drc") || format.isDrc);
     }
 
     public static boolean is51Audio(Format format) {

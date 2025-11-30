@@ -117,9 +117,9 @@
     <string name="cards_style">Стиль карточек</string>
     <string name="repeat_mode_all">Воспроизводить видео непрерывно</string>
     <string name="repeat_mode_one">Повторять текущее видео</string>
-    <string name="repeat_mode_pause">Ставить воспроизведение на паузу после каждого видео</string>
+    <string name="repeat_mode_pause">Ставить воспроизведение на паузу после каждого видео (кроме очереди)</string>
     <string name="repeat_mode_pause_alt">Воспроизводить непрерывно только видео из плейлиста</string>
-    <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
+    <string name="repeat_mode_none">Завершать воспроизведение после одного видео (кроме очереди)</string>
     <string name="subscribed_to_channel">Подписка оформлена</string>
     <string name="unsubscribed_from_channel">Подписка не оформлена</string>
     <string name="subtitle_yellow_transparent">Жёлтые на прозрачном фоне</string>
@@ -583,6 +583,7 @@
     <string name="update_found">Обновление</string>
     <string name="volume_boost_warning">Настройки привышающие лимит могу повредить динамики</string>
     <string name="play_video_incognito">Воспроизвести анонимно</string>
+    <string name="play_from_start">Воспроизвести сначала</string>
     <string name="header_kids_home">Детям</string>
     <string name="player_section_playlist">Использовать содержимое текущего раздела в качестве плейлиста</string>
     <string name="header_trending">В тренде</string>
@@ -700,4 +701,5 @@
     <string name="playback_buffering_fix">Исправлять воспроизведение буферизации</string>
     <string name="typing_corrections">Отключить автокоррекцию при наборе текста</string>
     <string name="suggestions_horizontally_scrolled">Горизонтально прокручиваемые рекомендации</string>
+    <string name="stable_restore">Восстановить стабильную версию (все данные будут удалены)</string>
 </resources>

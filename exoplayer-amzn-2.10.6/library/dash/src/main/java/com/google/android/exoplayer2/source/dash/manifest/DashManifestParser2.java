@@ -198,7 +198,7 @@ public class DashManifestParser2 {
 
         if (segmentDurationUs <= 0) {
             // Inaccurate. Present on past (!) live streams.
-            segmentDurationUs = Integer.parseInt(format.getTargetDurationSec()) * 1_000_000;
+            segmentDurationUs = format.getTargetDurationSec() * 1_000_000;
         }
 
         int lengthSeconds = Integer.parseInt(mFormatInfo.getLengthSeconds());
@@ -349,7 +349,7 @@ public class DashManifestParser2 {
     private RepresentationInfo parseRepresentation(MediaFormat mediaFormat) {
         int roleFlags = C.ROLE_FLAG_MAIN;
         int selectionFlags = C.SELECTION_FLAG_DEFAULT;
-        String id = mediaFormat.isDrc() ? mediaFormat.getITag() + "-drc" : mediaFormat.getITag();
+        String id = mediaFormat.getITag();
         int bandwidth = Helpers.parseInt(mediaFormat.getBitrate(), Format.NO_VALUE);
         String mimeType = MediaFormatUtils.extractMimeType(mediaFormat);
         String codecs = MediaFormatUtils.extractCodecs(mediaFormat);
@@ -360,13 +360,16 @@ public class DashManifestParser2 {
         int audioSamplingRate = Helpers.parseInt(ITagUtils.getAudioRateByTag(mediaFormat.getITag()), Format.NO_VALUE);
         String language = mediaFormat.getLanguage();
         String baseUrl = mediaFormat.getUrl();
-        String label = null;
+        String label = mediaFormat.getQualityLabel();
+        boolean isDrc = mediaFormat.isDrc();
+        long lastModified = Helpers.parseLong(mediaFormat.getLmt());
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -377,7 +380,9 @@ public class DashManifestParser2 {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = null;
 
@@ -410,12 +415,15 @@ public class DashManifestParser2 {
         String language = sub.getName() == null ? sub.getLanguageCode() : sub.getName();
         String baseUrl = sub.getBaseUrl();
         String label = null;
+        boolean isDrc = false;
+        long lastModified = Format.NO_VALUE;
         String drmSchemeType = null;
         ArrayList<SchemeData> drmSchemeDatas = new ArrayList<>();
 
         Format format =
                 buildFormat(
                         id,
+                        label,
                         mimeType,
                         width,
                         height,
@@ -426,7 +434,9 @@ public class DashManifestParser2 {
                         language,
                         roleFlags,
                         selectionFlags,
-                        codecs);
+                        codecs,
+                        isDrc,
+                        lastModified);
 
         SegmentBase segmentBase = new SingleSegmentBase();
 
@@ -461,6 +471,7 @@ public class DashManifestParser2 {
 
     protected Format buildFormat(
             String id,
+            String label,
             String containerMimeType,
             int width,
             int height,
@@ -471,13 +482,15 @@ public class DashManifestParser2 {
             String language,
             @C.RoleFlags int roleFlags,
             @C.SelectionFlags int selectionFlags,
-            String codecs) {
+            String codecs,
+            boolean isDrc,
+            long lastModified) {
         String sampleMimeType = getSampleMimeType(containerMimeType, codecs);
         if (sampleMimeType != null) {
             if (MimeTypes.isVideo(sampleMimeType)) {
                 return Format.createVideoContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -488,11 +501,12 @@ public class DashManifestParser2 {
                         frameRate,
                         /* initializationData= */ null,
                         selectionFlags,
-                        roleFlags);
+                        roleFlags,
+                        lastModified);
             } else if (MimeTypes.isAudio(sampleMimeType)) {
                 return Format.createAudioContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -503,11 +517,13 @@ public class DashManifestParser2 {
                         /* initializationData= */ null,
                         selectionFlags,
                         roleFlags,
-                        language);
+                        language,
+                        isDrc,
+                        lastModified);
             } else if (mimeTypeIsRawText(sampleMimeType)) {
                 return Format.createTextContainerFormat(
                         id,
-                        /* label= */ null,
+                        label,
                         containerMimeType,
                         sampleMimeType,
                         codecs,
@@ -520,7 +536,7 @@ public class DashManifestParser2 {
         }
         return Format.createContainerFormat(
                 id,
-                /* label= */ null,
+                label,
                 containerMimeType,
                 sampleMimeType,
                 codecs,

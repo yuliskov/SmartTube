@@ -21,30 +21,33 @@ android.libraryVariants.all { variant ->
     def allSourceDirs = variant.sourceSets.inject ([]) {
         acc, val -> acc << val.javaDirectories
     }
-    task("generateJavadoc", type: Javadoc) {
-        description = "Generates Javadoc for the ${javadocTitle}."
-        title = "ExoPlayer ${javadocTitle}"
-        source = allSourceDirs
-        options {
-            links "http://docs.oracle.com/javase/7/docs/api/"
-            linksOffline "https://developer.android.com/reference",
-                "${android.sdkDirectory}/docs/reference"
-            encoding = "UTF-8"
-        }
-        exclude "**/BuildConfig.java"
-        exclude "**/R.java"
-        doFirst {
-            classpath =
-                files(
-                    variant.javaCompileProvider.get().classpath.files,
-                    project.android.getBootClasspath())
-        }
-        doLast {
-            copy {
-                from "src/main/javadoc"
-                into "$buildDir/docs/javadoc"
+
+    if (!tasks.findByName('generateJavadoc')) {
+        task("generateJavadoc", type: Javadoc) {
+            description = "Generates Javadoc for the ${javadocTitle}."
+            title = "ExoPlayer ${javadocTitle}"
+            source = allSourceDirs
+            options {
+                links "http://docs.oracle.com/javase/7/docs/api/"
+                linksOffline "https://developer.android.com/reference",
+                        "${android.sdkDirectory}/docs/reference"
+                encoding = "UTF-8"
             }
-            project.fixJavadoc()
+            exclude "**/BuildConfig.java"
+            exclude "**/R.java"
+            doFirst {
+                classpath =
+                        files(
+                                variant.javaCompileProvider.get().classpath.files,
+                                project.android.getBootClasspath())
+            }
+            doLast {
+                copy {
+                    from "src/main/javadoc"
+                    into "$buildDir/docs/javadoc"
+                }
+                project.fixJavadoc()
+            }
         }
     }
 }

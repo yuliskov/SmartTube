@@ -704,4 +704,12 @@
   <string name="card_preview">Előnézet</string>
   <string name="card_unlocalized_titles">Nem lokalizált videócímek</string>
   <string name="oculus_quest_fix">Oculus Quest javítása</string>
+  <string name="original_lang">Eredeti</string>
+  <string name="remove_playlist_fmt">%s végleges eltávolítása\?</string>
+  <string name="play_from_start">Lejátszás az elejétől</string>
+  <string name="player_chapter_notification2">Váltson a következő fejezetre az értesítésre kattintva</string>
+  <string name="dont_resize_video_to_fit_dialog">Ne méretezze át a videót </string>
+  <string name="typing_corrections">Az automatikus javítás letiltása szöveg beírása közben</string>
+  <string name="suggestions_horizontally_scrolled">Vízszintesen görgetett Javaslatok</string>
+  <string name="stable_restore">Minden beállítás törlése!</string>
 </resources>

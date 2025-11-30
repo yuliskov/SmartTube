@@ -705,4 +705,9 @@
   <string name="search_exit_shortcut">Saír da busca</string>
   <string name="video_flip">Volteo (espello)</string>
   <string name="original_lang">Orixinal</string>
+  <string name="remove_playlist_fmt">Eliminar %s permanentemente\?</string>
+  <string name="player_chapter_notification2">Cambia ao seguinte capítulo facendo clic na notificación</string>
+  <string name="dont_resize_video_to_fit_dialog">Non redimensionar o vídeo para axustalo ao diálogo</string>
+  <string name="typing_corrections">Desactivar a autocorrección ao escribir texto</string>
+  <string name="suggestions_horizontally_scrolled">Suxestións desprazables horizontalmente</string>
 </resources>

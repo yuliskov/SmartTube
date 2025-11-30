@@ -117,9 +117,9 @@
     <string name="cards_style">Kart stili</string>
     <string name="repeat_mode_all">Videoları sürekli oynat</string>
     <string name="repeat_mode_one">Videoyu tekrarla</string>
-    <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat</string>
+    <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat (kuyruk hariç)</string>
     <string name="repeat_mode_pause_alt">Sadece oynatma listesi videolarını sürekli oynat</string>
-    <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
+    <string name="repeat_mode_none">Videodan sonra oynatmayı durdur (kuyruk hariç)</string>
     <string name="subscribed_to_channel">Abone olundu</string>
     <string name="unsubscribed_from_channel">Abonelikten çıkıldı</string>
     <string name="subtitle_yellow_transparent">Sarı (Saydam arka plan)</string>
@@ -590,6 +590,7 @@
     <string name="update_found">Güncelleme</string>
     <string name="volume_boost_warning">Sınırın üzerindeki herhangi bir ayar hoparlörlere zarar verebilir</string>
     <string name="play_video_incognito">Gizli oynat</string>
+    <string name="play_from_start">Baştan oyna</string>
     <string name="header_kids_home">Kids</string>
     <string name="player_section_playlist">Geçerli bölüm içeriklerini oynatma listesi olarak kullan</string>
     <string name="header_trending">Trendler</string>
@@ -709,4 +710,5 @@
     <string name="dont_resize_video_to_fit_dialog">Videoyu diyaloğa uyacak şekilde yeniden boyutlandırmayın</string>
     <string name="typing_corrections">Metin yazarken otomatik düzeltmeyi devre dışı bırak</string>
     <string name="suggestions_horizontally_scrolled">Yatay Kaydırılan Öneriler</string>
+    <string name="stable_restore">Kararlı sürümü geri yükle (tüm veriler silinecek)</string>
 </resources>

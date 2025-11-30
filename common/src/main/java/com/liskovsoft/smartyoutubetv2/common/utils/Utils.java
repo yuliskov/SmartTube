@@ -78,8 +78,11 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -106,6 +109,7 @@ public class Utils {
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
     private static Boolean sGlobalVolumeFixed;
     private static int sCurrentVolume = -1;
+    private static final Runnable sForceFinishTheApp = () -> Runtime.getRuntime().exit(0);
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
@@ -871,6 +875,14 @@ public class Utils {
         return Helpers.getDeviceName().startsWith("Oculus Quest");
     }
 
+    public static void updateChannels(Context context) {
+        startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
+    }
+
+    public static void startRemoteControl(Context context) {
+        startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
+    }
+
     /**
      * Finish the app but remain running services
      */
@@ -881,23 +893,22 @@ public class Utils {
     /**
      * Simply kills the app.
      */
-    public static void forceFinishTheApp() {
-        Runtime.getRuntime().exit(0);
+    public static void forceFinishTheApp(Context context) {
+        persistData(context);
+        postDelayed(sForceFinishTheApp, 1_000);
     }
 
-    public static void updateChannels(Context context) {
-        startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
-    }
-
-    public static void startRemoteControl(Context context) {
-        startReceiver(context, REMOTE_CONTROL_RECEIVER_CLASS_NAME);
-    }
-
-    public static void restartTheApp(Context context, Intent intent) {
-        ProcessPhoenix.triggerRebirth(context, intent);
+    public static void cancelFinishTheApp(Context context) {
+        ViewManager.instance(context).cancelOnFinish();
+        removeCallbacks(sForceFinishTheApp);
     }
 
     public static void restartTheApp(Context context) {
+        persistData(context);
+        postDelayed(() -> restartTheAppInt(context), 1_000);
+    }
+
+    private static void restartTheAppInt(Context context) {
         try {
             Intent intent = new Intent(context, Class.forName(BOOTSTRAP_ACTIVITY_CLASS_NAME));
             intent.putExtra(IntentExtractor.RESTART_INTENT, true);
@@ -908,6 +919,11 @@ public class Utils {
     }
 
     public static void restartTheApp(Context context, Video video, long posMs) {
+        persistData(context);
+        postDelayed(() -> restartTheAppInt(context, video, posMs), 1_000);
+    }
+
+    private static void restartTheAppInt(Context context, Video video, long posMs) {
         if (video == null || !video.hasVideo()) {
             return;
         }
@@ -1178,5 +1194,12 @@ public class Utils {
         }
 
         return original.equals(typed);
+    }
+
+    private static void persistData(Context context) {
+        PlayerTweaksData.instance(context).persistNow();
+        MainUIData.instance(context).persistNow();
+        GeneralData.instance(context).persistNow();
+        MediaServiceData.instance().persistNow();
     }
 }

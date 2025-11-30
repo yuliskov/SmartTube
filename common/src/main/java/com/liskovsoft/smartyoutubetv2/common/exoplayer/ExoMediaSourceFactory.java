@@ -43,6 +43,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -57,7 +58,7 @@ public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     //private static ExoMediaSourceFactory sInstance;
-    private static final int MAX_SEGMENTS_PER_LOAD = 1;
+    private static final int MAX_SEGMENTS_PER_LOAD = 3; // default - 1 (1-5)
     private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
@@ -186,7 +187,7 @@ public class ExoMediaSourceFactory {
                 getSabrChunkSourceFactory(),
                 null
         )
-                .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
+                .setLoadErrorHandlingPolicy(new SabrDefaultLoadErrorHandlingPolicy())
                 .createMediaSource(getSabrManifest(formatInfo));
         if (mTrackErrorFixer != null) {
             sabrSource.addEventListener(Utils.sHandler, mTrackErrorFixer);

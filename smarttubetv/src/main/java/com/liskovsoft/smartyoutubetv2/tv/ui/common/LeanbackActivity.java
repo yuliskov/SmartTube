@@ -26,15 +26,11 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager2 mDoubleBackManager;
     private GlobalKeyTranslator mGlobalKeyTranslator;
-    private static final Runnable sOnFinish = Utils::forceFinishTheApp;
+    private final Runnable sOnFinish = () -> Utils.forceFinishTheApp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Fix situations when the app is killed but the activity is restored by the system
-        //if (savedInstanceState != null) {
-        //    finishTheApp();
-        //}
         mBackgroundManager = new UriBackgroundManager(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager2(this);
@@ -141,8 +137,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         Utils.properlyFinishTheApp(this);
 
         if (!RemoteControlData.instance(this).isConnectedBefore()) {
-            getMainUIData().persistNow();
-            getGeneralData().persistNow();
             getViewManager().addOnFinish(sOnFinish);
         }
     }

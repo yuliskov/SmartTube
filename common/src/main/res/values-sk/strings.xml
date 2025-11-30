@@ -36,8 +36,8 @@
     <string name="resolution_switch">Prepnúť rozlíšenie</string>
     <string name="video_buffer">Vyrovnávacia pamäť videa</string>
     <string name="video_buffer_size_none">Žiadna</string>
-    <string name="video_buffer_size_low">Nízka</string>
     <string name="video_buffer_size_lowest">Najnižšia</string>
+    <string name="video_buffer_size_low">Nízka</string>
     <string name="video_buffer_size_med">Stredná</string>
     <string name="video_buffer_size_high">Vysoká</string>
     <string name="video_buffer_size_highest">Najvyššia</string>
@@ -117,9 +117,9 @@
     <string name="cards_style">Štýl kariet</string>
     <string name="repeat_mode_all">Prehrať všetko po jednom</string>
     <string name="repeat_mode_one">Zopakovať aktuálne video</string>
-    <string name="repeat_mode_pause">Pozastaviť prehrávanie po každom videu</string>
+    <string name="repeat_mode_pause">Pozastaviť prehrávanie po každom videu (okrem poradia)</string>
     <string name="repeat_mode_pause_alt">Pozastaviť prehrávanie po každom videu, ktoré nie je v poradí</string>
-    <string name="repeat_mode_none">Vypnúť prehrávanie po jednom videu</string>
+    <string name="repeat_mode_none">Zastaviť prehrávanie po jednom videu (okrem poradia)</string>
     <string name="subscribed_to_channel">Odoberané</string>
     <string name="unsubscribed_from_channel">Odber zrušený</string>
     <string name="subtitle_yellow_transparent">Žlté na priehľadnom pozadí</string>
@@ -489,8 +489,8 @@
     <string name="sources">Zdroje</string>
     <string name="releases">Vydané verzie</string>
     <string name="prefer_avc_over_vp9">Výber kodeku: preferovať AVC pred VP9</string>
+    <string name="open_chat">Chat/Komentáre</string>
     <string name="open_comments">Otvoriť komentáre</string>
-    <string name="open_chat">Chat</string>
     <string name="place_chat_left">Zobraziť chat na ľavej strane</string>
     <string name="place_comments_left">Umiestniť komentáre vľavo</string>
     <string name="use_alt_speech_recognizer">Alternatívne rozpoznávanie jazyka</string>
@@ -588,6 +588,7 @@
     <string name="update_found">Aktualizácia</string>
     <string name="volume_boost_warning">Akékoľvek nastavenie nad limit môže poškodiť reproduktory</string>
     <string name="play_video_incognito">Prehrať anonymne</string>
+    <string name="play_from_start">Prehrať od začiatku</string>
     <string name="header_kids_home">Deti</string>
     <string name="player_section_playlist">Použiť aktuálny obsah sekcie ako playlist</string>
     <string name="header_trending">Trendy</string>
@@ -709,4 +710,5 @@
     <string name="card_unlocalized_titles">Nelokalizované názvy videí</string>
     <string name="dont_resize_video_to_fit_dialog">Nemeniť veľkosť videa na veľkosť dialógu</string>
     <string name="typing_corrections">Vypnúť automatické opravy pri písaní textu</string>
+    <string name="suggestions_horizontally_scrolled">Horizontálne posúvané návrhy</string>
 </resources>
