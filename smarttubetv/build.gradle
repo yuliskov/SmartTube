@@ -105,6 +105,10 @@ android {
             // matchingFallbacks = ['lite']
             applicationIdSuffix ".stable"
         }
+        stfdroid {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".fdroid"
+        }
     }
 
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk

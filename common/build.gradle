@@ -41,6 +41,7 @@ android {
     productFlavors {
         stbeta {}
         ststable {}
+        stfdroid {}
     }
 }
 
@@ -91,9 +92,7 @@ dependencies {
 
     implementation 'com.jakewharton:process-phoenix:' + phoenixVersion
 
-    stbetaImplementation project(':leanbackassistant')
-    ststableImplementation project(':leanbackassistant')
+    implementation project(':leanbackassistant')
 
-    stbetaImplementation project(':appupdatechecker2')
-    ststableImplementation project(':appupdatechecker2')
+    implementation project(':appupdatechecker2')
 }
