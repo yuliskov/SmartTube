@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.provider.OpenableColumns;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
@@ -101,6 +102,42 @@ public class BackupAndRestoreHelper implements OnResult {
             zipFile.delete();
 
             mOnSuccess.run();
+        }
+    }
+
+    public void handleIncomingZip(Intent intent) {
+        if (intent == null || !Intent.ACTION_SEND.equals(intent.getAction())) return;
+
+        Uri zipUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (zipUri == null) {
+            Toast.makeText(mContext, "No ZIP received", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            // Target folder: /Android/media/<package>/data
+            File mediaDir = getExternalStorageDirectory();
+            File dataDir = new File(mediaDir, "data");
+
+            // Remove old data
+            if (dataDir.exists()) deleteRecursive(dataDir);
+
+            // Copy ZIP from URI to temporary file
+            File tempZip = new File(mediaDir, "imported_backup.zip");
+            copyUriToFile(zipUri, tempZip);
+
+            // Unpack ZIP to data folder
+            unzip(tempZip, dataDir);
+
+            // Delete the temporary ZIP
+            tempZip.delete();
+
+            Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
+
+            // TODO: possibly launch restore dialog
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show();
         }
     }
 

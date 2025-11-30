@@ -41,5 +41,14 @@
         </receiver>
         <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService" android:enabled="true"/>
         <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService" android:enabled="true"/>
+
+        <activity android:name=".misc.BackupReceiverActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/zip"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
