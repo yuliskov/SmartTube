@@ -110,9 +110,9 @@
   <string name="cards_style">Kortstil</string>
   <string name="repeat_mode_all">Spela upp videor kontinuerligt</string>
   <string name="repeat_mode_one">Upprepa den aktuella videon</string>
-  <string name="repeat_mode_pause">Pausa uppspelningen efter varje video</string>
+  <string name="repeat_mode_pause">Pausa uppspelningen efter varje video (utom i kön)</string>
   <string name="repeat_mode_pause_alt">Spela upp endast videor i spellistor kontinuerligt</string>
-  <string name="repeat_mode_none">Stoppa uppspelningen efter en video</string>
+  <string name="repeat_mode_none">Stoppa uppspelningen efter en video (utom i kön)</string>
   <string name="subscribed_to_channel">Prenumererar</string>
   <string name="unsubscribed_from_channel">Prenumererar inte</string>
   <string name="subtitle_yellow_transparent">Gult på genomskinlig bakgrund</string>
@@ -149,9 +149,9 @@
   <string name="player_seek_preview_none">Inaktiverad</string>
   <string name="player_seek_preview_single">En bild</string>
   <string name="player_seek_preview_carousel">Snurra</string>
-  <string name="player_seek_preview_carousel_slow">Snurra (långsam, baserat på nyckelbilder)</string>
+  <string name="player_seek_preview_carousel_slow">Snurra (långsam, baserad på nyckelbildrutor)</string>
   <string name="player_seek_preview_carousel_fast">Snurra (snabb, inte exaxt förhandsgranskning)</string>
-  <string name="unsubscribe_from_channel">Avsluta prenumerationen på kanalen</string>
+  <string name="unsubscribe_from_channel">Avsluta prenumeration på kanalen</string>
   <string name="card_title_lines_num">Antal rader för titlar i kort</string>
   <string name="card_auto_scrolled_title">Rulla beskuren titel automatiskt</string>
   <string name="share_link">Dela länk</string>
@@ -230,10 +230,10 @@
   <string name="pin_unpin_channel">Lägg till/ta bort kanal från sidofältet</string>
   <string name="pin_playlist">Lägg till spellistan i sidofältet</string>
   <string name="pin_channel">Lägg till kanalen i sidofältet</string>
-  <string name="pinned_to_sidebar">Tillagd i sidofältet</string>
+  <string name="pinned_to_sidebar">Lades till i sidofältet</string>
   <string name="unpin_from_sidebar">Ta bort från sidofältet</string>
   <string name="unpin_group_from_sidebar">Ta bort prenumerationsgruppen</string>
-  <string name="unpinned_from_sidebar">Borttagen från sidofältet</string>
+  <string name="unpinned_from_sidebar">Togs bort från sidofältet</string>
   <string name="dialog_select_country">Land</string>
   <string name="settings_language_country">Språk/land</string>
   <string name="share_embed_link">Dela inbäddningslänk</string>
@@ -243,8 +243,8 @@
   <string name="hide_shorts_channel">Dölj Shorts-videor i kanaler</string>
   <string name="key_remapping">Konfigurera knappar</string>
   <string name="screen_dimming">Skärmnedtoning</string>
-  <string name="removed_from_playback_queue">Borttagen från uppspelningskön</string>
-  <string name="added_to_playback_queue">Tillagd i uppspelningskön</string>
+  <string name="removed_from_playback_queue">Togs bort från uppspelningskön</string>
+  <string name="added_to_playback_queue">Lades till i uppspelningskön</string>
   <string name="add_remove_from_playback_queue">Lägg till/ta bort från uppspelningskön</string>
   <string name="add_to_playback_queue">Lägg till i uppspelningskön</string>
   <string name="remove_from_playback_queue">Ta bort från uppspelningskön</string>
@@ -257,7 +257,7 @@
   <string name="breaking_news_row_name">Senaste nytt</string>
   <string name="covid_news_row_name">Nyheter om COVID-19</string>
   <string name="enable_voice_search">Aktivera global sökning (kräver stöd av fast programvara)</string>
-  <string name="subscribe_unsubscribe_from_channel">Prenumerera/avsluta prenumerationen på kanalen</string>
+  <string name="subscribe_unsubscribe_from_channel">Prenumerera/avsluta prenumeration på kanalen</string>
   <string name="app_backup_restore">Säkerhetskopiera/återställ</string>
   <string name="app_backup">Säkerhetskopiera appdata</string>
   <string name="app_restore">Återställ appdata</string>
@@ -282,8 +282,8 @@
   <string name="background_service_started">Bakgrundstjänst har startat</string>
   <string name="dialog_add_to">Lägg till i %s</string>
   <string name="dialog_remove_from">Ta bort från %s</string>
-  <string name="added_to">Tillagd i %s</string>
-  <string name="removed_from">Borttagen från %s</string>
+  <string name="added_to">Lades till i %s</string>
+  <string name="removed_from">Togs bort från %s</string>
   <string name="video_preset_adaptive">Adaptiv</string>
   <string name="content_block_preview_recap">Förhandstitt eller sammanfattning av videon</string>
   <string name="content_block_highlight">Intressant punkt (bokmärke)</string>
@@ -394,8 +394,8 @@
   <string name="subtitle_scale">Undertextskala</string>
   <string name="audio_sync_fix_desc">Ett alternativt sätt att synkronisera ljud och video. Det anses vara föråldrat, men kan i vissa fall vara till hjälp.</string>
   <string name="audio_sync_fix">Lösning för ljudsynkronisering</string>
-  <string name="ambilight_ratio_fix_desc">Åtgärdar ambientljus som saknas. Åtgärdar felaktigt bildformat eller felaktig videoskala. Åtgärdar tomma skärmdumpar. Påverkar prestandan!</string>
-  <string name="ambilight_ratio_fix">Lösning för ambientljus/bildformat/videoskala/skärmdumpar</string>
+  <string name="ambilight_ratio_fix_desc">Åtgärdar bakgrundsbelysning som saknas. Åtgärdar felaktigt bildformat eller felaktig videoskala. Åtgärdar tomma skärmdumpar. Påverkar prestandan!</string>
+  <string name="ambilight_ratio_fix">Lösning för Ambilight-ljus/bildformat/videoskala/skärmdumpar</string>
   <string name="force_legacy_codecs_desc">Förbättrar prestandan på bristande enheter avsevärt. Maximal upplösning är 720p.</string>
   <string name="force_legacy_codecs">Tvinga gamla kodekar (720p)</string>
   <string name="live_stream_fix_desc">OBS! Detta inaktiverar förmågan att spola tillbaka streamar. Förbättrar livestreamprestandan på bristande enheter avsevärt. Maximal upplösning är 1080p.</string>
@@ -428,8 +428,8 @@
   <string name="save_playlist">Lägg till spellistan i avsnittet Spellistor</string>
   <string name="remove_playlist">Ta bort spellistan från avsnittet Spellistor permanent</string>
   <string name="remove_playlist_fmt">Ta bort %s permanent\?</string>
-  <string name="removed_from_playlists">Borttagen från avsnittet Spellistor</string>
-  <string name="saved_to_playlists">Tillagd i avsnittet Spellistor</string>
+  <string name="removed_from_playlists">Togs bort från avsnittet Spellistor</string>
+  <string name="saved_to_playlists">Lades till i avsnittet Spellistor</string>
   <string name="create_playlist">Skapa en spellista</string>
   <string name="add_video_to_new_playlist">Lägg till i ny spellista</string>
   <string name="cant_delete_empty_playlist">Det går inte att ta bort en tom spellista</string>
@@ -574,7 +574,7 @@
   <string name="unlock_all_formats_desc">På vissa enheter rapporterar den fasta programvaran felaktigt att vissa format inte stöds, även om de stöds.\n(t.ex. smart-tv:ar med 1080p-upplösning brukar rapportera att 4k inte stöds).</string>
   <string name="okhttp_desc">Den här nätverksmotorn är den långsammaste men har bra stabilitet.</string>
   <string name="select_channel_section">Öppna motsvarande avsnitt när appen startas från ATV-kanaler</string>
-  <string name="enable_voice_search_desc">Den officiella byts ut mot en så kallad \"bro\". En bro hjälper att överföra globala sökförfrågningar till vår app.</string>
+  <string name="enable_voice_search_desc">Den officiella appen byts ut mot en så kallad \"bro\". En bro hjälper att överföra globala sökförfrågningar till vår app.</string>
   <string name="enable_master_password">Aktivera huvudlösenord</string>
   <string name="enter_master_password">Ange huvudlösenord</string>
   <string name="disable_stream_buffer">Inaktivera buffert för streamar</string>
@@ -616,7 +616,7 @@
   <string name="autogenerated">Autogenererat</string>
   <string name="player_auto_volume">Automatisk volymjustering</string>
   <string name="header_shorts">Shorts</string>
-  <string name="player_global_focus">Sömlös navigering mellan spelarens knapprader</string>
+  <string name="player_global_focus">Synkronisera fokus mellan spelarens knapprader</string>
   <string name="auto_history">Automatiskt (använd kontoinställningarna)</string>
   <string name="remember_position_subscriptions">Kom ihåg den senast visade platsen i Prenumerationer</string>
   <string name="remember_position_pinned">Kom ihåg den senast visade platsen i fästa spellistor</string>
@@ -625,8 +625,8 @@
   <string name="unknown_renderer_error">Okänt fel med renderaren</string>
   <string name="header_notifications">Aviseringar</string>
   <string name="disable_search_history">Inaktivera sökhistorik</string>
-  <string name="unlock_high_bitrate_formats">Lås upp vp9-format i 1080p med hög bildhastighet</string>
-  <string name="unlock_high_bitrate_audio_formats">Lås upp mp4a-format med hög bildhastighet</string>
+  <string name="unlock_high_bitrate_formats">Lås upp vp9-format i 1080p med hög bithastighet</string>
+  <string name="unlock_high_bitrate_audio_formats">Lås upp mp4a-format med hög bithastighet</string>
   <string name="color_scheme_blue">Blått</string>
   <string name="color_scheme_dark_blue">Mörkblått</string>
   <string name="player_speed_per_channel">För varje kanal</string>
@@ -690,7 +690,7 @@
   <string name="add_to_subscriptions_group">Lägg till/ta bort från prenumerationsgrupp</string>
   <string name="new_subscriptions_group">Ny grupp</string>
   <string name="rename_group">Byt namn på prenumerationsgruppen</string>
-  <string name="screen_dimming_amount">Skärmnedtoningsgrad</string>
+  <string name="screen_dimming_amount">Nedtoningsgrad för skärmen</string>
   <string name="screen_dimming_timeout">Tidsgräns för skärmnedtoning</string>
   <string name="playlists_rows">Visa avsnittet Spellistor som rader</string>
   <string name="import_subscriptions_group">Importera</string>
@@ -711,4 +711,5 @@
   <string name="typing_corrections">Inaktivera autokorrigering medan du skriver text</string>
   <string name="suggestions_horizontally_scrolled">Horisontellt rullande förslag</string>
   <string name="play_from_start">Spela upp från början</string>
+  <string name="stable_restore">Återgå till den stabila versionen (alla data kommer att gå förlorade)</string>
 </resources>
