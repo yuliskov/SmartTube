@@ -14,11 +14,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Release Assets
-        uses: actions/download-release-asset@v1 
-        with:
-          release_id: ${{ github.event.release.id }} 
-          path: ./release_assets
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p release_assets
+          gh release download ${{ github.event.release.tag_name }} --dir ./release_assets --pattern "*"
+
 
       - name: VirusTotal Scan
         uses: cssnr/virustotal-action@v1 
