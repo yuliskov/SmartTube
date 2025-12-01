@@ -1,4 +1,4 @@
-name: VirusTotal Scan on Release
+name: VirusTotal Quick Scan on Release
 
 on:
   release:
@@ -13,26 +13,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y jq curl
+
       - name: Download Release Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          # Скачиваем все APK из релиза
           gh release download ${{ github.event.release.tag_name }} --dir release_assets --pattern "*.apk"
-          # Проверяем, что они есть
           ls -l release_assets
 
-      - name: Scan APKs with VirusTotal
-        uses: cssnr/virustotal-action@v1
-        with:
-          vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
-          # Сканируем все APK в папке
-          file_globs: release_assets/*.apk
-          summary: true
-          update_release: true
-          release_heading: '🛡️ VirusTotal Scan Results:'
-          wait: true
+      - name: Install VirusTotal CLI
+        run: |
+          curl -L https://github.com/VirusTotal/vt-cli/releases/latest/download/vt-linux64.tar.gz | tar xz
+          sudo mv vt /usr/local/bin/
 
-      - name: Print Scan Completed
-        run: echo "VirusTotal scan finished for all APKs."
+      - name: Scan APKs and Generate Quick Report
+        env:
+          VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🛡️ VirusTotal Scan Results:" > vt_report.txt
+
+          for apk in release_assets/*.apk; do
+            echo "Scanning $apk..."
+            scan_id=$(vt file scan "$apk" --apikey $VT_API_KEY --json | jq -r '.data.id')
+
+            # Быстро проверяем анализ (может быть небольшой задержкой)
+            sleep 15
+            malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
+
+            if [ "$malicious" -gt 0 ]; then
+              echo "$apk — BAD ❌" >> vt_report.txt
+            else
+              echo "$apk — OK ✅" >> vt_report.txt
+            fi
+          done
+
+      - name: Update Release with Quick Report
+        run: |
+          gh release edit ${{ github.event.release.tag_name }} --add-body-file vt_report.txt
+
+      - name: Done
+        run: echo "VirusTotal quick scan finished and report added to release."
