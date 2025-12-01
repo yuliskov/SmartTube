@@ -12,12 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Download Release Assets
         uses: actions/download-release-asset@v1 
         with:
           release_id: ${{ github.event.release.id }} 
-          path: ./release_assets 
+          path: ./release_assets
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: VirusTotal Scan
         uses: cssnr/virustotal-action@v1 
