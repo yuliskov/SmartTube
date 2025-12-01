@@ -53,8 +53,10 @@ jobs:
           done
 
       - name: Update Release with Quick Report
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- обязательно
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
           gh release view "$TAG" --json body -q .body > current_notes.txt
           cat vt_report.txt >> current_notes.txt
           gh release edit "$TAG" --notes-file current_notes.txt
