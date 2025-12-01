@@ -26,7 +26,8 @@ jobs:
 
       - name: Install VirusTotal CLI
         run: |
-          curl -L https://github.com/VirusTotal/vt-cli/releases/latest/download/vt-linux64.tar.gz | tar xz
+          curl -L https://github.com/VirusTotal/vt-cli/releases/download/1.2.0/Linux64.zip -o vt-cli.zip
+          unzip vt-cli.zip
           sudo mv vt /usr/local/bin/
 
       - name: Scan APKs and Generate Quick Report
