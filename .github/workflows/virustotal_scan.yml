@@ -1,0 +1,25 @@
+name: VirusTotal Scan on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  virustotal_scan:
+    permissions:
+      contents: write 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: VirusTotal Scan
+        uses: cssnr/virustotal-action@v1 
+        with:
+          vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          file_globs: |
+            *.apk
+          
+          summary: true 
+          update_release: true 
+          release_heading: '🛡️ VirusTotal Scan Results:'
