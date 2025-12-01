@@ -53,12 +53,11 @@ jobs:
           done
 
       - name: Update Release with Quick Report
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          gh release view "$RELEASE_TAG" --json body -q .body > current_notes.txt
+          TAG=${GITHUB_REF#refs/tags/}
+          gh release view "$TAG" --json body -q .body > current_notes.txt
           cat vt_report.txt >> current_notes.txt
-          gh release edit "$RELEASE_TAG" --notes-file current_notes.txt
+          gh release edit "$TAG" --notes-file current_notes.txt
 
       - name: Done
         run: echo "VirusTotal quick scan finished and report added to release."
