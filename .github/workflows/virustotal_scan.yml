@@ -38,7 +38,7 @@ jobs:
           echo "🛡️ VirusTotal Scan Results:" > vt_report.txt
 
           for apk in release_assets/*.apk; do
-            filename="${apk##*/}"  # <-- только имя файла, без пути
+            filename=$(basename "$apk")  # <-- только имя файла, без пути
             echo "Scanning $filename..."
             scan_id=$(vt file scan "$apk" --apikey $VT_API_KEY --json | jq -r '.data.id')
 
