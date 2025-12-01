@@ -7,7 +7,7 @@ on:
 jobs:
   virustotal_scan:
     permissions:
-      contents: write 
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,16 +18,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          gh release download ${{ github.event.release.tag_name }} --dir ./release_assets --pattern "*"
+          # Скачиваем все APK из релиза
+          gh release download ${{ github.event.release.tag_name }} --dir release_assets --pattern "*.apk"
+          # Проверяем, что они есть
+          ls -l release_assets
 
-
-      - name: VirusTotal Scan
-        uses: cssnr/virustotal-action@v1 
+      - name: Scan APKs with VirusTotal
+        uses: cssnr/virustotal-action@v1
         with:
           vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
-          file_globs: |
-            ./release_assets/*.apk
-          
-          summary: true 
-          update_release: true 
+          # Сканируем все APK в папке
+          file_globs: release_assets/*.apk
+          summary: true
+          update_release: true
           release_heading: '🛡️ VirusTotal Scan Results:'
+
+      - name: Print Scan Completed
+        run: echo "VirusTotal scan finished for all APKs."
