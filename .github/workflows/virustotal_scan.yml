@@ -42,9 +42,13 @@ jobs:
             echo "Scanning $filename..."
             scan_id=$(vt file scan "$apk" --apikey $VT_API_KEY --json | jq -r '.data.id')
 
-            # Быстро проверяем анализ (может быть небольшой задержкой)
-            sleep 15
-            malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
+            for i in {1..10}; do
+              sleep 15
+              malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
+              if [ "$malicious" != "null" ]; then
+                break
+              fi
+            done
 
             if [ "$malicious" -gt 0 ]; then
               echo "$filename — BAD ❌" >> vt_report.txt
