@@ -44,13 +44,16 @@ jobs:
 
             for i in {1..10}; do
               sleep 15
-              malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
-              if [ "$malicious" != "null" ]; then
+              status=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.status')
+              if [ "$status" == "completed" ]; then
+                malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
                 break
               fi
             done
 
-            if [ "$malicious" -gt 0 ]; then
+            if [ "$status" != "completed" ]; then
+              echo "$filename — BAD ❌ (analysis incomplete)" >> vt_report.txt
+            elif [ "$malicious" -gt 0 ]; then
               echo "$filename — BAD ❌" >> vt_report.txt
             else
               echo "$filename — OK ✅" >> vt_report.txt
