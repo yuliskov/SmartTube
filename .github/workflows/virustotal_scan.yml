@@ -40,13 +40,16 @@ jobs:
           for apk in release_assets/*.apk; do
             filename=$(basename "$apk")
             echo "Scanning $filename..."
-            scan_id=$(vt file scan "$apk" --apikey $VT_API_KEY --json | jq -r '.data.id')
+            
+            scan_id=$(vt scan file "$apk" -k $VT_API_KEY | awk '{print $2}')
+            echo "Scan ID: $scan_id"
 
             for i in {1..10}; do
               sleep 15
-              status=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.status')
+              analysis_json=$(vt analysis report "$scan_id" -k $VT_API_KEY --format json)
+              status=$(echo "$analysis_json" | jq -r '.[0].status')
+              malicious=$(echo "$analysis_json" | jq '.[0].stats.malicious')
               if [ "$status" == "completed" ]; then
-                malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
                 break
               fi
             done
