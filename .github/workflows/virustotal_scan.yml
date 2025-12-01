@@ -38,7 +38,7 @@ jobs:
           echo "🛡️ VirusTotal Scan Results:" > vt_report.txt
 
           for apk in release_assets/*.apk; do
-            echo "Scanning $(basename "$apk")..."
+            echo "Scanning $apk..." # вместе с имененем папаки
             scan_id=$(vt file scan "$apk" --apikey $VT_API_KEY --json | jq -r '.data.id')
 
             # Быстро проверяем анализ (может быть небольшой задержкой)
@@ -46,9 +46,9 @@ jobs:
             malicious=$(vt analysis report "$scan_id" --apikey $VT_API_KEY --json | jq -r '.data.attributes.stats.malicious')
 
             if [ "$malicious" -gt 0 ]; then
-              echo "$(basename "$apk") — BAD ❌" >> vt_report.txt
+              echo "$apk — BAD ❌" >> vt_report.txt
             else
-              echo "$(basename "$apk") — OK ✅" >> vt_report.txt
+              echo "$apk — OK ✅" >> vt_report.txt
             fi
           done
 
