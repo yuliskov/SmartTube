@@ -12,13 +12,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Download Release Assets
+        uses: actions/download-release-asset@v1 
+        with:
+          release_id: ${{ github.event.release.id }} 
+          path: ./release_assets 
 
       - name: VirusTotal Scan
         uses: cssnr/virustotal-action@v1 
         with:
           vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           file_globs: |
-            *.apk
+            ./release_assets/*.apk
           
           summary: true 
           update_release: true 
