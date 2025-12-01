@@ -54,7 +54,9 @@ jobs:
 
       - name: Update Release with Quick Report
         run: |
-          gh release edit ${{ github.event.release.tag_name }} --add-body-file vt_report.txt
+          gh release view ${{ github.event.release.tag_name }} --json body -q .body > current_notes.txt
+          cat vt_report.txt >> current_notes.txt
+          gh release edit ${{ github.event.release.tag_name }} --notes-file current_notes.txt
 
       - name: Done
         run: echo "VirusTotal quick scan finished and report added to release."
