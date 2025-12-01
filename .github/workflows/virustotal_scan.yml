@@ -32,6 +32,7 @@ jobs:
           summary: true
           update_release: true
           release_heading: '🛡️ VirusTotal Scan Results:'
+          wait: true
 
       - name: Print Scan Completed
         run: echo "VirusTotal scan finished for all APKs."
