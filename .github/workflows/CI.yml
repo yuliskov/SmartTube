@@ -22,6 +22,6 @@ jobs:
           ./gradlew clean assembleStstableDebug
       - uses: actions/upload-artifact@v5.0.0
         with:
-          path: .
+          path: ./smarttubetv/build/outputs/apk/ststable/debug/*.apk
       
       
