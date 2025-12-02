@@ -1,0 +1,25 @@
+name: Main
+
+on:
+  push:
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  Build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '14'
+          cache: 'gradle'
+      - run: gradlew clean installStstableDebug
+      - uses: actions/upload-artifact@v5.0.0
+        with:
+          path: .
+      
+      
