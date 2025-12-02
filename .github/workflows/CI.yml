@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
           cache: 'gradle'
-      - run: gradlew clean installStstableDebug
+      - run: ./gradlew clean StstableDebug
       - uses: actions/upload-artifact@v5.0.0
         with:
           path: .
