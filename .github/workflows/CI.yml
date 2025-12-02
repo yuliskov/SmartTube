@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '14'
+          java-version: '11'
           cache: 'gradle'
       - run: gradlew clean installStstableDebug
       - uses: actions/upload-artifact@v5.0.0
