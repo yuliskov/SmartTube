@@ -19,7 +19,7 @@ jobs:
           cache: 'gradle'
       - run: |
           chmod +x gradlew
-          ./gradlew clean StstableDebug
+          ./gradlew clean assembleStstableDebug
       - uses: actions/upload-artifact@v5.0.0
         with:
           path: .
