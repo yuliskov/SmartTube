@@ -32,8 +32,7 @@ Give it a try!
 
 ## Device support
 
-![:white_check_mark: supported: all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat). :x: not supported: Smartphones, non-Android plattforms like Samsung Tizen, LG webOS, iOS, etc.
-](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
+![Device support image](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
 * **Supported:** all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
 * **Not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
 
@@ -469,5 +468,6 @@ A: No, this is technically not possible. Only the preinstalled app manager (usua
 ### Q: Can I whitelist ads on some channels?
 
 A: No, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+
 
 
