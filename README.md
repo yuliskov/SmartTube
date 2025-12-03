@@ -300,7 +300,7 @@ A: They're some reports that the latest update for "Google app for Android TV" c
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 
-A: Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
+A: Because AV01 is very new, **most** TVs and TV boxes **not** offer hardware support and **cannot** play AV01 **at all**.
 
 If your device has hardware support for a codec, videos using that codec should play smoothly. High resolutions might also be slow in VP9 on cheap TV boxes that don't officially support 4k. Your device probably can play VP9 videos even without hardware support, however this requires a powerful CPU to run smoothly. Fixing AV01 without hardware support is technically possible, but currently not planned and probably not efficient enough.
 
@@ -469,5 +469,6 @@ A: no, this is technically not possible. Only the preinstalled app manager (usua
 ### Q: Can I whitelist ads on some channels?
 
 A: no, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+
 
 
