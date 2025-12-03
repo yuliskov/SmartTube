@@ -162,7 +162,7 @@ To enable global voice search, an additional app must be installed alongside Sma
 **On Google Chromecast with Google TV**: 
 
 1. uninstall the original YouTube app (no root required)
-3. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
+2. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
@@ -458,17 +458,18 @@ A: That's a firmware or Android issue. If you are using a custom rom, maybe that
 
 ### Q: Can I download videos?
 
-A: not with SmartTube
+A: Not with SmartTube
 
 
 ### Q: Can updates be installed automatically?
 
-A: no, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTube can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
+A: No, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTube can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
 
 
 ### Q: Can I whitelist ads on some channels?
 
-A: no, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+A: No, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+
 
 
 
