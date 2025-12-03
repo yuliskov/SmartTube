@@ -1,3 +1,20 @@
+### Important announcement about the situation
+
+Thank you for your support. My development environment was infected by unknown malicious software, as a result of which a few builds may have been affected. Once the issue was detected, I secured everything with a full disk wipe, restored a clean setup, and now all builds are scanned with VirusTotal. The F-Droid version will also be verified before release.
+
+Public keys may have been compromised, which is why I am sharing this issue. You can download the new version and the new public key below, and instructions for restoring backups are provided.
+
+No extra actions are required since the app uses **one-time connection codes**. These codes have very limited permissions (for example, they cannot change your password). Still, you can revoke them if you want full peace of mind.
+
+## How to revoke access:
+
+1. Open [myaccount.google.com/security](https://myaccount.google.com/security)
+2. Find **“Third-party apps with account access”**
+3. Tap **“All apps”** and locate **YouTube TV** or **Google Drive**
+4. Select the app → **“Remove access”**
+
+Please keep built-in security features enabled to stay protected.
+
 # SmartTube
   
 <!-- <img width="100" src="https://github.com/yuliskov/SmartTube/blob/master/smarttubetv/src/ststable/res/mipmap-nodpi/app_icon.png" alt="logo"/> -->
