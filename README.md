@@ -471,9 +471,3 @@ A: No, this is technically not possible. Only the preinstalled app manager (usua
 A: No, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
 
 
-
-
-
-
-
-
