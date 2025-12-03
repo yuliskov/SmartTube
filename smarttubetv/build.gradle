@@ -50,8 +50,8 @@ android {
         applicationId "org.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2246
-        versionName "30.56"
+        versionCode 2247
+        versionName "30.57"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -196,6 +196,10 @@ dependencies {
     // Add the Firebase Crashlytics SDK.
 
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
+        transitive = true
+    }
+
+    ststableImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
 
