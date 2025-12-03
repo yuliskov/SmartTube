@@ -456,11 +456,6 @@ A: No, when you seek back (e.g. jump back 5 seconds), SmartTube will have to reb
 A: That's a firmware or Android issue. If you are using a custom rom, maybe that rom is buggy. Because this issue is nearly impossible for the developer to debug, we cannot help you, sorry. You can try the usual workarounds: rebooting, clearing cache, reinstalling the app, or factory resetting the device.
 
 
-### Q: Can I remove videos from the history?
-
-A: not yet
-
-
 ### Q: Can I download videos?
 
 A: not with SmartTube
@@ -474,4 +469,5 @@ A: no, this is technically not possible. Only the preinstalled app manager (usua
 ### Q: Can I whitelist ads on some channels?
 
 A: no, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+
 
