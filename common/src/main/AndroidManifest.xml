@@ -13,6 +13,12 @@
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <!-- <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" /> -->
 
+    <!-- Android 11+: fix access package info -->
+    <queries>
+        <package android:name="com.google.android.youtube.tv" />
+        <package android:name="com.amazon.firetv.youtube" />
+    </queries>
+
     <!-- Add requestLegacyExternalStorage to fix unavailable storage on Android 10 (doesn't work on Android 11) -->
     <!-- More info: https://stackoverflow.com/questions/63364476/requestlegacyexternalstorage-is-not-working-in-android-11-api-30 -->
     <application android:requestLegacyExternalStorage="true">

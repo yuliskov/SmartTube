@@ -9,8 +9,8 @@ No extra actions are required since the app uses **one-time connection codes**. 
 # How to revoke access:
 
 1. Open [myaccount.google.com/security](https://myaccount.google.com/security)
-2. Find **“Third-party apps with account access”**
-3. Tap **“All apps”** and locate **YouTube TV** or **Google Drive**
+2. Find **“Your connections to third-party apps & services”**
+3. Tap **“See all connection”** and locate **YouTube TV** or **Google Drive**
 4. Select the app → **“Remove access”**
 
 Please keep built-in security features enabled to stay protected.
