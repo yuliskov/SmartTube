@@ -708,4 +708,8 @@
   <string name="remove_playlist_fmt">Supprimer %s définitivement\?</string>
   <string name="dont_resize_video_to_fit_dialog">Ne pas ajuster la vidéo à la fenêtre</string>
   <string name="typing_corrections">Désactiver la correction automatique lors de la saisie de texte</string>
+  <string name="play_from_start">Lire depuis le début</string>
+  <string name="player_chapter_notification2">Passez au chapitre suivant en cliquant sur la notification</string>
+  <string name="suggestions_horizontally_scrolled">Suggestions défilant horizontalement</string>
+  <string name="stable_restore">Restaurer la version stable (toutes les données seront perdues)</string>
 </resources>
