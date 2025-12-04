@@ -1,4 +1,4 @@
-### Important announcement about the app
+# Important announcement about the app
 
 My development environment was infected by unknown malicious software, as a result of which a few builds may have been affected. Once the issue was detected, I secured everything with a full disk wipe, restored a clean setup, and now all builds are scanned with VirusTotal. The F-Droid version will also be verified before release.
 
@@ -6,7 +6,7 @@ Public keys may have been compromised, which is why I am sharing this issue. You
 
 No extra actions are required since the app uses **one-time connection codes**. These codes have very limited permissions (for example, they cannot change your password). Still, you can revoke them if you want full peace of mind.
 
-## How to revoke access:
+# How to revoke access:
 
 1. Open [myaccount.google.com/security](https://myaccount.google.com/security)
 2. Find **“Third-party apps with account access”**
