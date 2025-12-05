@@ -45,8 +45,13 @@
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
             </intent-filter>
         </receiver>
-        <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService" android:enabled="true"/>
-        <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService" android:enabled="true"/>
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService"
+            android:enabled="true"
+            android:foregroundServiceType="connectedDevice"/>
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService"
+            android:enabled="true"/>
 
         <activity android:name=".misc.BackupReceiverActivity"
             android:exported="true">
