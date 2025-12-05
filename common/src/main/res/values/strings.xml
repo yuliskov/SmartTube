@@ -591,6 +591,7 @@
     <string name="play_from_start">Play from start</string>
     <string name="header_kids_home">Kids</string>
     <string name="player_section_playlist">Use current section contents as a playlist</string>
+    <string name="player_treat_watch_later_as_playlist">Autoplay treats Watch Later as a playlist</string>
     <string name="header_trending">Trending</string>
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Screen off timeout</string>

@@ -83,6 +83,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mUnlockAllFormats;
     private boolean mIsBufferOnStreamsDisabled;
     private boolean mIsSectionPlaylistEnabled;
+    private boolean mIsTreatWatchLaterAsPlaylistEnabled;
     private boolean mIsScreenOffTimeoutEnabled;
     private boolean mIsBootScreenOffEnabled;
     private int mScreenOffTimeoutSec;
@@ -452,6 +453,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isTreatWatchLaterAsPlaylistEnabled() {
+        return mIsTreatWatchLaterAsPlaylistEnabled;
+    }
+
+    public void setTreatWatchLaterAsPlaylistEnabled(boolean enable) {
+        mIsTreatWatchLaterAsPlaylistEnabled = enable;
+        persistData();
+    }
+
     public boolean isScreenOffTimeoutEnabled() {
         return mIsScreenOffTimeoutEnabled;
     }
@@ -689,6 +699,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
+        mIsTreatWatchLaterAsPlaylistEnabled = Helpers.parseBoolean(split, 57, true);
 
         updateDefaultValues();
     }
@@ -715,7 +726,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSyncRowButtonIndexEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
-                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled
+                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled, mIsTreatWatchLaterAsPlaylistEnabled
                 ));
     }
 
