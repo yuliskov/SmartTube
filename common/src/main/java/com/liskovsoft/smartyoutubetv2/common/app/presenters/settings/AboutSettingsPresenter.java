@@ -180,7 +180,8 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
     private void appendInstallBridge(AppDialogPresenter settingsPresenter) {
         OptionItem installBridgeOption = UiOptionItem.from(
-                getContext().getString(R.string.enable_voice_search),
+                //getContext().getString(R.string.enable_voice_search),
+                "Install ATV/Amazon bridge",
                 option -> startBridgePresenter());
 
         settingsPresenter.appendSingleButton(installBridgeOption);
