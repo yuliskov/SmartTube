@@ -27,6 +27,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private final List<File> mDataDirs;
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
+    private final String[] mBackupPatterns;
     private Runnable mPendingHandler;
 
     public interface OnBackupNames {
@@ -40,6 +41,13 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         mDataDirs = new ArrayList<>();
         mDataDirs.add(new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR));
+
+        mBackupPatterns = new String[] {
+                "yt_service_prefs.xml",
+                "com.liskovsoft.appupdatechecker2.preferences.xml",
+                "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
+                "_preferences.xml" // before _ should be the app package name
+        };
 
         mBackupDirs = new ArrayList<>();
 

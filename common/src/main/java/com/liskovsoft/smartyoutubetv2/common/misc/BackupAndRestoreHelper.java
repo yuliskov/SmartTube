@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
 
 import java.io.File;
@@ -91,7 +92,7 @@ public class BackupAndRestoreHelper implements OnResult {
             if (uri == null) return;
 
             File zipFile = new File(mediaDir, "restore.zip");
-            copyUriToFile(uri, zipFile);
+            copyUriToDir(uri, zipFile);
 
             // Cleanup previous data
             deleteRecursive(dataDir);
@@ -127,12 +128,14 @@ public class BackupAndRestoreHelper implements OnResult {
             copyUriToFile(zipUri, tempZip);
 
             // Unpack ZIP to data folder
-            unzip(tempZip, dataDir);
+            unzip(tempZip, mediaDir);
 
             // Delete the temporary ZIP
             tempZip.delete();
 
-            Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
+            BackupSettingsPresenter.instance(mContext).showLocalRestoreDialog();
+
+            //Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
 
             // TODO: possibly launch restore dialog
         } catch (Exception e) {
@@ -141,13 +144,32 @@ public class BackupAndRestoreHelper implements OnResult {
         }
     }
 
-    private void copyUriToFile(Uri uri, File targetDir) {
+    private void copyUriToDir(Uri uri, File targetDir) {
         try {
             String fileName = getFileName(uri);
             if (fileName == null) fileName = "imported_" + System.currentTimeMillis();
 
             File outFile = new File(targetDir, fileName);
 
+            InputStream in = mContext.getContentResolver().openInputStream(uri);
+            OutputStream out = new FileOutputStream(outFile);
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+
+            in.close();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void copyUriToFile(Uri uri, File outFile) {
+        try {
             InputStream in = mContext.getContentResolver().openInputStream(uri);
             OutputStream out = new FileOutputStream(outFile);
 
@@ -212,7 +234,7 @@ public class BackupAndRestoreHelper implements OnResult {
             }
         } else {
             FileInputStream fis = new FileInputStream(file);
-            zos.putNextEntry(new ZipEntry(base.substring(5, base.length() -1))); // strip "data/" prefix and "/" at the end
+            zos.putNextEntry(new ZipEntry(base.substring(0, base.length() -1))); // strip "/" at the end to mark as file
             byte[] buf = new byte[8192];
             int len;
             while ((len = fis.read(buf)) > 0) zos.write(buf, 0, len);

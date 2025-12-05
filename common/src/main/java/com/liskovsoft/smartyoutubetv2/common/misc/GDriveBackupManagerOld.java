@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 
-import com.liskovsoft.googleapi.service.DriveService;
 import com.liskovsoft.googleapi.oauth2.impl.GoogleSignInService;
+import com.liskovsoft.googleapi.service.DriveService;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -26,9 +26,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class GDriveBackupManager {
+public class GDriveBackupManagerOld {
     @SuppressLint("StaticFieldLeak")
-    private static GDriveBackupManager sInstance;
+    private static GDriveBackupManagerOld sInstance;
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
@@ -41,7 +41,7 @@ public class GDriveBackupManager {
     private final String[] mBackupNames;
     private boolean mIsBlocking;
 
-    private GDriveBackupManager(Context context) {
+    private GDriveBackupManagerOld(Context context) {
         mContext = context;
         mGeneralData = GeneralData.instance(context);
         mDataDir = String.format("%s/%s", mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
@@ -55,9 +55,9 @@ public class GDriveBackupManager {
         };
     }
 
-    public static GDriveBackupManager instance(Context context) {
+    public static GDriveBackupManagerOld instance(Context context) {
         if (sInstance == null) {
-            sInstance = new GDriveBackupManager(context);
+            sInstance = new GDriveBackupManagerOld(context);
         }
 
         return sInstance;

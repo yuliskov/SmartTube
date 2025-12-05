@@ -26,7 +26,7 @@ apply plugin: 'com.android.application'
 
 // First letter of flavor name must be in Uppercase
 if (new File("${projectDir}/google-services.json").exists() && (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
-        getGradle().getStartParameter().getTaskRequests().toString().contains("Strtarmenia"))) {
+        getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
@@ -50,8 +50,8 @@ android {
         applicationId "org.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2246
-        versionName "30.56"
+        versionCode 2247
+        versionName "30.57"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
