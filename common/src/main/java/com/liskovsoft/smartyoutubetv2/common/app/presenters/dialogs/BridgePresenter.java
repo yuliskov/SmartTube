@@ -10,6 +10,7 @@ import android.net.Uri;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManagerTask;
 import com.liskovsoft.appupdatechecker2.other.downloadmanager.DownloadManagerTask.DownloadListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -95,7 +96,7 @@ abstract class BridgePresenter extends BasePresenter<Void> implements MotherActi
     private boolean isOldApkInstalled() {
         PackageInfo info = getPackageSignature(getPackageName());
 
-        return Helpers.isUserApp(info) && !Helpers.equalsAny(info.signatures[0].hashCode(), getPackageSignatureHash());
+        return info != null && !Helpers.equalsAny(info.signatures[0].hashCode(), getPackageSignatureHash());
     }
 
     private PackageInfo getPackageSignature(String pkgName) {
@@ -126,6 +127,8 @@ abstract class BridgePresenter extends BasePresenter<Void> implements MotherActi
     public void onResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Helpers.REMOVE_PACKAGE_CODE && !isOldApkInstalled()) {
             installBridgeFromPath(getContext());
+        } else {
+            MessageHelpers.showMessage(getContext(), "The package " + getPackageName() + " cannot be uninstalled!");
         }
     }
 

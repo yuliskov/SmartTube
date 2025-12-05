@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <!-- <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" /> -->
+    <!-- Android 9+: needed to run package uninstaller (ATV, Amazon bride) -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
 
     <!-- Android 11+: fix access package info -->
     <queries>
