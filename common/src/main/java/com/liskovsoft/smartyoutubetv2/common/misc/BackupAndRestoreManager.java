@@ -24,10 +24,15 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String BACKUP_DIR_NAME = "Backup";
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
-    private final List<File> mDataDirs;
+    private final File mDataDir;
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
-    private final String[] mBackupPatterns;
+    private final String[] mBackupPatterns = new String[] {
+            "yt_service_prefs.xml",
+            "com.liskovsoft.appupdatechecker2.preferences.xml",
+            "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
+            "_preferences.xml" // before _ should be the app package name
+    };
     private Runnable mPendingHandler;
 
     public interface OnBackupNames {
@@ -39,15 +44,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         mHelper = new BackupAndRestoreHelper(context);
 
-        mDataDirs = new ArrayList<>();
-        mDataDirs.add(new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR));
-
-        mBackupPatterns = new String[] {
-                "yt_service_prefs.xml",
-                "com.liskovsoft.appupdatechecker2.preferences.xml",
-                "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
-                "_preferences.xml" // before _ should be the app package name
-        };
+        mDataDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
 
         mBackupDirs = new ArrayList<>();
 
@@ -150,14 +147,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(currentBackup);
         }
 
-        for (File dataDir : mDataDirs) {
-            if (dataDir.isDirectory() && !FileHelpers.isEmpty(dataDir)) {
-                File destination = new File(currentBackup, dataDir.getName());
-                FileHelpers.copy(dataDir, destination);
+        if (mDataDir.isDirectory() && !FileHelpers.isEmpty(mDataDir)) {
+            File destination = new File(currentBackup, mDataDir.getName());
+            FileHelpers.copy(mDataDir, destination);
 
-                // Don't store unique id
-                FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
-            }
+            // Don't store unique id
+            FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
         }
 
         mHelper.exportAppMediaFolder();
@@ -167,31 +162,27 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         Log.d(TAG, "App just updated. Restoring data...");
 
         File currentBackup = getBackupCheck(backupName);
+        File sourceBackupDir = new File(currentBackup, SHARED_PREFS_SUBDIR);
 
-        if (FileHelpers.isEmpty(currentBackup)) {
+        if (FileHelpers.isEmpty(sourceBackupDir)) {
             Log.d(TAG, "Oops. Backup folder is empty.");
             MessageHelpers.showLongMessage(mContext, "Oops. Backup folder is empty.");
             return;
         }
 
-        for (File dataDir : mDataDirs) {
-            if (dataDir.isDirectory()) {
-                // remove old data
-                FileHelpers.delete(dataDir);
-            }
-
-            File sourceBackupDir = new File(currentBackup, dataDir.getName());
-
-            if (sourceBackupDir.exists() && !FileHelpers.isEmpty(sourceBackupDir)) {
-                FileHelpers.copy(sourceBackupDir, dataDir);
-                fixFileNames(dataDir);
-            }
+        if (mDataDir.isDirectory()) {
+            // remove old data
+            FileHelpers.delete(mDataDir);
         }
+
+        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), mBackupPatterns));
+        fixFileNames(mDataDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);
 
+        // NOTE: Don't restart the app, just kill. The reboot will broke the files.
         // To apply settings we need to kill the app
-        new Handler(mContext.getMainLooper()).postDelayed(() -> Utils.restartTheApp(mContext), 1_000);
+        new Handler(mContext.getMainLooper()).postDelayed(() -> Runtime.getRuntime().exit(0), 1_000);
     }
 
     /**
