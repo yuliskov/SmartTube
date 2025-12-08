@@ -26,6 +26,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private final File mDataDir;
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
+    private final boolean mForceApi30;
     private final String[] mBackupPatterns = new String[] {
             "yt_service_prefs.xml",
             "com.liskovsoft.appupdatechecker2.preferences.xml",
@@ -39,7 +40,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     public BackupAndRestoreManager(Context context) {
+        this(context, false);
+    }
+
+    public BackupAndRestoreManager(Context context, boolean forceApi30) {
         mContext = context;
+        mForceApi30 = forceApi30;
 
         mHelper = new BackupAndRestoreHelper(context);
 
@@ -334,7 +340,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     // Android 11+: only backup through the file manager (no shared dir)
     private boolean hasAccessOnlyToAppFolders() {
-        return getTargetSdkVersion() > 29;
+        return getTargetSdkVersion() > 29 || mForceApi30;
     }
 
     private int getTargetSdkVersion() {

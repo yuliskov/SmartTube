@@ -54,8 +54,8 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         createAndShowDialog();
     }
 
-    public void showLocalRestoreDialog() {
-        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+    public void showLocalRestoreDialogApi30() {
+        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext(), true);
 
         backupManager.getBackupNames(names -> showLocalRestoreDialog(backupManager, names));
     }

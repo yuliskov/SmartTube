@@ -139,7 +139,7 @@ public class BackupAndRestoreHelper implements OnResult {
             // Delete the temporary ZIP
             tempZip.delete();
 
-            BackupSettingsPresenter.instance(mContext).showLocalRestoreDialog();
+            BackupSettingsPresenter.instance(mContext).showLocalRestoreDialogApi30();
 
             //Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
 
