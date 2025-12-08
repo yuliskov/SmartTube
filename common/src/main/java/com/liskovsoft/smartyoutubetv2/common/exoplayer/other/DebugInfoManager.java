@@ -260,7 +260,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video decoder name", videoCodecName));
-        mVideoInfo.add(new Pair<>("Hardware accelerated", String.valueOf(Helpers.isHardwareAccelerated(videoCodecName))));
+        mVideoInfo.add(new Pair<>("Hardware accelerated", String.valueOf(DeviceHelpers.isHardwareAccelerated(videoCodecName))));
     }
 
     private void appendRuntimeInfo() {

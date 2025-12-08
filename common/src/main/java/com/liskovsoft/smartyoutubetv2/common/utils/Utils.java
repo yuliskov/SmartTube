@@ -54,6 +54,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
@@ -773,11 +774,11 @@ public class Utils {
     }
 
     public static boolean isPresetSupported(VideoPreset preset) {
-        if (preset.isVP9Preset() && !Helpers.isVP9ResolutionSupported(preset.getHeight())) {
+        if (preset.isVP9Preset() && !DeviceHelpers.isVP9ResolutionSupported(preset.getHeight())) {
             return false;
         }
 
-        if (preset.isAV1Preset() && !Helpers.isAV1ResolutionSupported(preset.getHeight())) {
+        if (preset.isAV1Preset() && !DeviceHelpers.isAV1ResolutionSupported(preset.getHeight())) {
             return false;
         }
 
@@ -785,11 +786,11 @@ public class Utils {
     }
 
     public static boolean isFormatSupported(MediaTrack mediaTrack) {
-        if (mediaTrack.isVP9Codec() && !Helpers.isVP9ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
+        if (mediaTrack.isVP9Codec() && !DeviceHelpers.isVP9ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
             return false;
         }
 
-        if (mediaTrack.isAV1Codec() && !Helpers.isAV1ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
+        if (mediaTrack.isAV1Codec() && !DeviceHelpers.isAV1ResolutionSupported(TrackSelectorUtil.getRealHeight(mediaTrack.format))) {
             return false;
         }
 

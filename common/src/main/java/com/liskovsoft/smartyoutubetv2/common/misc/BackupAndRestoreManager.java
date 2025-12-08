@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.Handler;
+
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -220,11 +222,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackup() {
-        initBackupDirs();
-
         File currentBackup = null;
 
-        for (File backupDir : mBackupDirs) {
+        for (File backupDir : getBackupDirs()) {
             currentBackup = backupDir;
             break;
         }
@@ -233,11 +233,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackupCheck(String backupName) {
-        initBackupDirs();
-
         File currentBackup = null;
 
-        for (File backupDir : mBackupDirs) {
+        for (File backupDir : getBackupDirs()) {
             File parentFile = backupDir.getParentFile(); // backupDir: /data/<app_id>/Backup
 
             if (parentFile == null) {
@@ -254,9 +252,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackupCheck() {
-        initBackupDirs();
-
-        for (File backupDir : mBackupDirs) {
+        for (File backupDir : getBackupDirs()) {
             if (backupDir.exists()) {
                 return backupDir.getParentFile();
             }
@@ -311,11 +307,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private List<String> getBackupNames() {
-        initBackupDirs();
-
         List<String> names = new ArrayList<>();
 
-        for (File backupDir : mBackupDirs) {
+        for (File backupDir : getBackupDirs()) {
             File parentFile = backupDir.getParentFile();
 
             if (parentFile == null) {
@@ -330,6 +324,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return names;
     }
 
+    private List<File> getBackupDirs() {
+        initBackupDirs();
+
+        return mBackupDirs;
+    }
+
     private boolean hasStoragePermissions(Context context) {
         return hasAccessOnlyToAppFolders() || PermissionHelpers.hasStoragePermissions(context);
     }
@@ -340,10 +340,6 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     // Android 11+: only backup through the file manager (no shared dir)
     private boolean hasAccessOnlyToAppFolders() {
-        return getTargetSdkVersion() > 29 || mForceApi30;
-    }
-
-    private int getTargetSdkVersion() {
-        return mContext.getApplicationInfo().targetSdkVersion;
+        return AppInfoHelpers.getTargetSdkVersion(mContext) > 29 || mForceApi30;
     }
 }

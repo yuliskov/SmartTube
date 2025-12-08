@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION;
 
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -14,7 +15,7 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // Starting from Android 12 foreground service not supported
-        if (VERSION.SDK_INT < 31) {
+        if (AppInfoHelpers.getTargetSdkVersion(context) < 31) {
             Log.d(TAG, "Initializing remote control listener...");
 
             // Fix unload from the memory on some devices?
