@@ -691,4 +691,16 @@
   <string name="my_videos">Mijn video\'s</string>
   <string name="player_audio_focus">Audiofocus (pauzeren als andere spelers gedetecteerd worden)</string>
   <string name="paid_content_notification">Melding betaalde content</string>
+  <string name="you_liked">Je vond het leuk</string>
+  <string name="premium_users_only">Alleen voor Premium-gebruikers. Oplossing voor onvolledige lijst met videoformaten.</string>
+  <string name="playback_buffering_fix">Oplossing voor buffering bij afspelen</string>
+  <string name="oculus_quest_fix">Oculus Quest-oplossing</string>
+  <string name="card_preview_muted">Video zonder geluid</string>
+  <string name="card_preview_full">Video met geluid</string>
+  <string name="card_preview">Kaartvoorbeeld</string>
+  <string name="card_unlocalized_titles">Niet-gelokaliseerde videotitels</string>
+  <string name="dont_resize_video_to_fit_dialog">Pas de video niet aan om in de dialoog te passen</string>
+  <string name="typing_corrections">Automatische correctie uitschakelen tijdens het typen van tekst</string>
+  <string name="suggestions_horizontally_scrolled">Horizontaal gescrolde suggesties</string>
+  <string name="stable_restore">Herstel de stable build (alle gegevens gaan verloren)</string>
 </resources>
