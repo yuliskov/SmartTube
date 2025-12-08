@@ -92,7 +92,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private File getExternalStorageDirectory() {
         File result;
 
-        if (hasAccessOnlyToAppFolders()) {
+        if (hasAccessOnlyToAppFolders() && VERSION.SDK_INT >= 21) {
             result = mContext.getExternalMediaDirs()[0];
 
             if (!result.exists()) {
