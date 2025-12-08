@@ -123,10 +123,11 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
 
-        String backupPath = backupManager.getBackupPathRoot();
+        String backupPath = backupManager.getBackupRootPath();
 
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupPath),
+                backupPath == null ? getContext().getString(R.string.app_backup) :
+                    String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupPath),
                 option -> {
                     AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.app_backup), () -> {
                         mSidebarService.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
@@ -136,7 +137,8 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
                 }));
 
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPath),
+                backupPath == null ? getContext().getString(R.string.app_restore) :
+                    String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPath),
                 option -> {
                     backupManager.getBackupNames(names -> showLocalRestoreDialog(backupManager, names));
                 }));

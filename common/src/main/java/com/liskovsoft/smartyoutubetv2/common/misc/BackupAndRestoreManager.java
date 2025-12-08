@@ -12,7 +12,6 @@ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,11 +46,13 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         mDataDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
 
         mBackupDirs = new ArrayList<>();
-
-        initBackupDirs();
     }
 
     private void initBackupDirs() {
+        if (!mBackupDirs.isEmpty()) {
+            return;
+        }
+
         File externalDir = getExternalStorageDirectory();
         // Main backup dir
         mBackupDirs.add(createBackupDir(new File(externalDir, String.format("data/%s", mContext.getPackageName()))));
@@ -85,7 +86,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private File getExternalStorageDirectory() {
         File result;
 
-        if (VERSION.SDK_INT > 29) {
+        if (hasAccessOnlyToAppFolders()) {
             result = mContext.getExternalMediaDirs()[0];
 
             if (!result.exists()) {
@@ -155,7 +156,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
         }
 
-        mHelper.exportAppMediaFolder();
+        if (hasAccessOnlyToAppFolders()) {
+            mHelper.exportAppMediaFolder();
+        }
     }
 
     private void restoreData(String backupName) {
@@ -211,6 +214,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackup() {
+        initBackupDirs();
+
         File currentBackup = null;
 
         for (File backupDir : mBackupDirs) {
@@ -222,6 +227,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackupCheck(String backupName) {
+        initBackupDirs();
+
         File currentBackup = null;
 
         for (File backupDir : mBackupDirs) {
@@ -241,6 +248,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private File getBackupCheck() {
+        initBackupDirs();
+
         for (File backupDir : mBackupDirs) {
             if (backupDir.exists()) {
                 return backupDir.getParentFile();
@@ -270,7 +279,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return currentBackup != null ? currentBackup.toString() : null;
     }
 
-    public String getBackupPathRoot() {
+    public String getBackupRootPath() {
+        if (hasAccessOnlyToAppFolders()) {
+            return null; // Android 11+: only backup through the file manager (no shared dir)
+        }
+
         return String.format("%s/data", getExternalStorageDirectory());
     }
 
@@ -292,6 +305,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     private List<String> getBackupNames() {
+        initBackupDirs();
+
         List<String> names = new ArrayList<>();
 
         for (File backupDir : mBackupDirs) {
@@ -309,11 +324,20 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return names;
     }
 
-    private static boolean hasStoragePermissions(Context context) {
-        return VERSION.SDK_INT > 29 || PermissionHelpers.hasStoragePermissions(context);
+    private boolean hasStoragePermissions(Context context) {
+        return hasAccessOnlyToAppFolders() || PermissionHelpers.hasStoragePermissions(context);
     }
 
     public boolean hasBackup() {
         return getBackupCheck() != null;
+    }
+
+    // Android 11+: only backup through the file manager (no shared dir)
+    private boolean hasAccessOnlyToAppFolders() {
+        return getTargetSdkVersion() > 29;
+    }
+
+    private int getTargetSdkVersion() {
+        return mContext.getApplicationInfo().targetSdkVersion;
     }
 }
