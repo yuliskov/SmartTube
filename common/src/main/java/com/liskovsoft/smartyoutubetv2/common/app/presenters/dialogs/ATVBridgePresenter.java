@@ -11,7 +11,7 @@ public class ATVBridgePresenter extends BridgePresenter {
             -593272746
     };
     private static final String ATV_YOUTUBE_PKG_NAME = "com.google.android.youtube.tv";
-    private static final String ATV_BRIDGE_PKG_URL = "https://github.com/yuliskov/SmartTubeNext/releases/download/latest/ATV_Bridge.apk";
+    private static final String ATV_BRIDGE_PKG_URL = "https://github.com/yuliskov/SmartTubeNext/releases/download/latest/ATV_SYTV_Bridge.apk";
     private static ATVBridgePresenter sInstance;
 
     public ATVBridgePresenter(Context context) {
