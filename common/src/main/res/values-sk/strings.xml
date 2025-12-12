@@ -711,4 +711,5 @@
     <string name="dont_resize_video_to_fit_dialog">Nemeniť veľkosť videa na veľkosť dialógu</string>
     <string name="typing_corrections">Vypnúť automatické opravy pri písaní textu</string>
     <string name="suggestions_horizontally_scrolled">Horizontálne posúvané návrhy</string>
+    <string name="stable_restore">Obnoviť stabilnú verziu (všetky dáta budú stratené)</string>
 </resources>
