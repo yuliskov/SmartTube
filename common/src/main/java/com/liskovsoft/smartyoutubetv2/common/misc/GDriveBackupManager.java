@@ -12,13 +12,18 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -280,5 +285,29 @@ public class GDriveBackupManager {
                 FileHelpers.delete(file);
             }
         }
+    }
+
+    private void showLocalRestoreDialog(BackupAndRestoreManager backupManager, List<String> backups) {
+        if (backups != null && backups.size() > 1) {
+            showLocalRestoreSelectorDialog(backups, backupManager);
+        } else {
+            AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), backupManager::checkPermAndRestore);
+        }
+    }
+
+    private void showLocalRestoreSelectorDialog(List<String> backups, BackupAndRestoreManager backupManager) {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(mContext);
+        List<OptionItem> options = new ArrayList<>();
+
+        for (String name : backups) {
+            options.add(UiOptionItem.from(name, optionItem -> {
+                AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), () -> {
+                    backupManager.checkPermAndRestore(name);
+                });
+            }));
+        }
+
+        dialog.appendStringsCategory(mContext.getString(R.string.app_restore), options);
+        dialog.showDialog();
     }
 }

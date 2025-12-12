@@ -20,7 +20,7 @@ public class IntentExtractor {
      * Browser: https://www.youtube.com/results?search_query=twice<br/>
      * Amazon: youtube://search?query=linkin+park&isVoice=true
      */
-    private static final String[] SEARCH_KEYS = {"search_query", "query"};
+    private static final String[] SEARCH_KEYS = {"search_query", "query", "q"};
     private static final String VIDEO_ID_KEY = "v";
     private static final String VIDEO_TIME_KEY = "t";
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
