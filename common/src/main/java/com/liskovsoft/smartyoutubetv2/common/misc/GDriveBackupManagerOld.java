@@ -179,7 +179,7 @@ public class GDriveBackupManagerOld {
     }
 
     private void startRestore(String backupDir, String dataDir, Runnable onError) {
-        mRestoreAction = DriveService.getList(Uri.parse(backupDir))
+        mRestoreAction = DriveService.getFileList(Uri.parse(backupDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io()) // run subscribe on separate thread
                 .subscribe(names -> {
