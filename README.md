@@ -49,10 +49,9 @@ Give it a try!
 
 ## Device support
 
-![:white_check_mark: supported: all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat). :x: not supported: Smartphones, non-Android plattforms like Samsung Tizen, LG webOS, iOS, etc.
-](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
-* **supported:** all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
-* **not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
+![Device support image](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
+* **Supported:** all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
+* **Not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
 
 
 ## Installation
@@ -65,10 +64,10 @@ There is a **beta release** (recommended) and a **stable release**. Beta gets ne
 
 You can use either of the following methods to install the app:
 
-- (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `kutt.it/stn_beta` or `kutt.it/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
-- install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/) from the Google Play Store / Amazon AppStore)
-- download the APK onto a USB stick, put the USB stick into your TV and use a file manager app from the Google Play Store / Amazon AppStore (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx) or [_X-plore_](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore)). Android's preinstalled file manager does not work! Do **not** get the ad-infested _FileCommander_.
-- if you are an advanced user, you can install it using ADB. [guide](https://fossbytes.com/side-load-apps-android-tv/#h-how-to-sideload-apps-on-your-android-tv-using-adb) | [alternative guide](https://www.aftvnews.com/sideload/)
+- (**Easiest**) Install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `kutt.it/stn_beta` or `kutt.it/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
+- Install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/) from the Google Play Store / Amazon AppStore)
+- Download the APK onto a USB stick, put the USB stick into your TV and use a file manager app from the Google Play Store / Amazon AppStore (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx) or [_X-plore_](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore)). Android's preinstalled file manager does not work! Do **not** get the ad-infested _FileCommander_.
+- If you are an advanced user, you can install it using ADB. [guide](https://fossbytes.com/side-load-apps-android-tv/#h-how-to-sideload-apps-on-your-android-tv-using-adb) | [alternative guide](https://www.aftvnews.com/sideload/)
 
 **Troubleshooting:** See device specific notes below. If installation fails, either your **disk space is full** or the APK file didn't download correctly; clear up space and try downloading again. If the app installed, but crashes when opening, make sure to install it to internal memory, not to an SD card / external storage.
 
@@ -100,8 +99,8 @@ After this, you can follow the [general installation guide](#installation) above
 ### Installation (Xiaomi devices with Chinese firmware)
 
 Xiaomi's **Chinese firmware** might block the installation **of the beta version**. The international firmware is not affected. Solutions:
-1. use SmartTube's **stable version** instead (**recommended**)
-2. use the international firmware for your device
+1. Use SmartTube's **stable version** instead (**recommended**)
+2. Use the international firmware for your device
 3. (if your device is from 2020 or before) You can do a factory reset and then install SmartTube beta before doing any system updates. You can then safely update your system, SmartTube should continue working.
 
 
@@ -172,21 +171,21 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 **On Amazon Fire TV**: 
 
-1. uninstall the original YouTube app (no root required)
-2. download and install the Amazon Bridge SmartTube app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader by AFTVnews_)
+1. Uninstall the original YouTube app (no root required)
+2. Download and install the Amazon Bridge SmartTube app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader by AFTVnews_)
 
 
 **On Google Chromecast with Google TV**: 
 
-1. uninstall the original YouTube app (no root required)
-3. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
+1. Uninstall the original YouTube app (no root required)
+2. Download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
-1. root your device (search for a guide for your specific device)
-2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
+1. Root your device (search for a guide for your specific device)
+2. Uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
+3. Download and install the ATV Bridge SmartTube app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
 
 ## Donation
@@ -265,16 +264,16 @@ At the same resolution, a **lower bitrate is better!** YouTube explicitly target
 Currently, there is no automatic mode based on your bandwidth. But you can configure a default video preset yourself under settings \> video player \> video presets. The first option ("none") will remember your last selection within the video player. Any other preset is used initially for each video; if the selected profile is not available, the next best available option is used. You can still override the profile on each video individually within the player.
 
 To decide the optional resolution / video quality for you, you need to consider a few limiting factors:
-- your bandwidth (choose only up to the bitrate that your bandwidth can handle; you can do a speedtest using [fast.com](https://fast.com) by Netflix)
-- your TV's display resolution (the quality **might slightly** improve, if you select the next higher resolution, e.g. 1080p on a 720p display; but don't expect a big difference)
-- your TV's capabilities (e.g. HDR, 60fps)
+- Your bandwidth (choose only up to the bitrate that your bandwidth can handle; you can do a speedtest using [fast.com](https://fast.com) by Netflix)
+- Your TV's display resolution (the quality **might slightly** improve, if you select the next higher resolution, e.g. 1080p on a 720p display; but don't expect a big difference)
+- Your TV's capabilities (e.g. HDR, 60fps)
 
 Generally 60fps is an improvement, but if you personally don't notice (or mind) the difference, you can save bandwidth (and the environment) by not choosing 60fps.
 
 
 ### HDR
 
-HDR works only **if your hardware supports it**. It's a complicated mess.
+HDR works only **if your hardware supports it**. It's a complicated mess:
 - Your TV must support it
 - If you use a TV box, that TV box **and** your TV cable **and** the TV must support HDR
 - Yes, there truly are different HDMI cable versions with different HDR-support, it's complicated
@@ -317,7 +316,7 @@ A: They're some reports that the latest update for "Google app for Android TV" c
 
 ### Q: AV01 does not play / Why is VP9 slow on my device?
 
-A: Because AV01 is very new, **most** TVs and TV boxes **not not** offer hardware support and **cannot** play AV01 **at all**.
+A: Because AV01 is very new, **most** TVs and TV boxes **do not** offer hardware support and **cannot** play AV01 **at all**.
 
 If your device has hardware support for a codec, videos using that codec should play smoothly. High resolutions might also be slow in VP9 on cheap TV boxes that don't officially support 4k. Your device probably can play VP9 videos even without hardware support, however this requires a powerful CPU to run smoothly. Fixing AV01 without hardware support is technically possible, but currently not planned and probably not efficient enough.
 
@@ -351,9 +350,9 @@ You **can cast** videos **from** your smartphone to a TV / TV box running SmartT
 
 Yes... maybe.. Requirements:
 
-- it is an Android device
-- it has a large screen
-- it has a TV remote, controller, or keyboard
+- It is an Android device
+- It has a large screen
+- It has a TV remote, controller, or keyboard
   **Touch input is not supported.** Mouse/touchpad scrolling neither. You cannot properly use SmartTube with only touch or mouse input.
 
 Some users reported great success (incl. on a [car entertainment system](https://t.me/SmartTubeEN/6060)). **Please share your success stories with us.**
@@ -388,10 +387,10 @@ A: The issue might not be specific to SmartTube, as other unofficial YouTube app
 
 For now, try to see if it helps to:
 
-- reduce the resolution (or chance it back)
-- change the video format to AVC
-- increase the buffer in the settings
-- hit the back button and try playing the video again
+- Reduce the resolution (or chance it back)
+- Change the video format to AVC
+- Increase the buffer in the settings
+- Hit the back button and try playing the video again
 
 
 ### Q: The debug information says my display is 1080p, but I have a 4k/UHD display!
@@ -473,22 +472,19 @@ A: No, when you seek back (e.g. jump back 5 seconds), SmartTube will have to reb
 A: That's a firmware or Android issue. If you are using a custom rom, maybe that rom is buggy. Because this issue is nearly impossible for the developer to debug, we cannot help you, sorry. You can try the usual workarounds: rebooting, clearing cache, reinstalling the app, or factory resetting the device.
 
 
-### Q: Can I remove videos from the history?
-
-A: not yet
-
-
 ### Q: Can I download videos?
 
-A: not with SmartTube
+A: Not with SmartTube
 
 
 ### Q: Can updates be installed automatically?
 
-A: no, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTube can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
+A: No, this is technically not possible. Only the preinstalled app manager (usually Google PlayStore, Amazon AppStore, etc) has the required permission. All other apps, incl. SmartTube can only show open installation prompt. A workaround using root would be possible, but hasn't been implemented yet.
 
 
 ### Q: Can I whitelist ads on some channels?
 
-A: no, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+A: No, this is not possible. SmartTube does not have any code to display ads. Adding this functionality would actually take time and effort, which is instead spent on adding useful features and fixing bugs.
+
+
 
