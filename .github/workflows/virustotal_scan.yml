@@ -20,6 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          rm -rf release_assets
           mkdir -p release_assets
           gh release download ${{ github.event.release.tag_name }} --dir release_assets --pattern "*.apk"
           ls -l release_assets
@@ -71,8 +72,9 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
         run: |
-          gh release view "$TAG" --json body -q .body > current_notes.txt
-          cat vt_report.txt >> current_notes.txt
+          body=$(gh release view "$TAG" --json body -q .body || echo "")
+          body=$(echo "$body" | sed '/🛡️ VirusTotal Scan Results:/,$d')
+          echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
           gh release edit "$TAG" --notes-file current_notes.txt
 
       - name: Done
