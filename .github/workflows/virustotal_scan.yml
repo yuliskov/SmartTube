@@ -2,7 +2,7 @@ name: VirusTotal Quick Scan for Release Draft
 
 on:
   release:
-    types: [published]
+    types: [published, prereleased]
 
 jobs:
   virustotal_scan:
