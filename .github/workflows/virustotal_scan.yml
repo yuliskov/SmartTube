@@ -3,7 +3,6 @@ name: VirusTotal Quick Scan on Release
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 jobs:
   virustotal_scan:
@@ -21,7 +20,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          rm -rf release_assets
           mkdir -p release_assets
           gh release download ${{ github.event.release.tag_name }} --dir release_assets --pattern "*.apk"
           ls -l release_assets
@@ -48,7 +46,7 @@ jobs:
             echo "Scan ID: $scan_id"
 
             for i in {1..10}; do
-              sleep 15
+              sleep 22
               analysis_json=$(vt analysis report "$scan_id" -k $VT_API_KEY --format json)
               status=$(echo "$analysis_json" | jq -r '.[0].status')
               malicious=$(echo "$analysis_json" | jq '.[0].stats.malicious')
@@ -73,9 +71,8 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
         run: |
-          body=$(gh release view "$TAG" --json body -q .body || echo "")
-          body=$(echo "$body" | sed '/🛡️ VirusTotal Scan Results:/,$d')
-          echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
+          gh release view "$TAG" --json body -q .body > current_notes.txt
+          cat vt_report.txt >> current_notes.txt
           gh release edit "$TAG" --notes-file current_notes.txt
 
       - name: Done
