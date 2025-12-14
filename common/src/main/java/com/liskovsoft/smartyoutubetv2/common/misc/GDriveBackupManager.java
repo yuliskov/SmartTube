@@ -170,7 +170,9 @@ public class GDriveBackupManager {
                             unused -> {},
                             error -> {
                                 MessageHelpers.showLongMessage(mContext, error.getMessage());
-                                logIn(this::startBackupConfirm); // auth data outdated (invalid_grant)
+                                if (Helpers.startsWith(error.getMessage(), "AuthError")) {
+                                    logIn(this::startBackupConfirm); // auth data outdated (AuthError: invalid_grant)
+                                }
                             },
                             () -> MessageHelpers.showMessage(mContext, R.string.msg_done)
                     );
@@ -305,7 +307,9 @@ public class GDriveBackupManager {
                         this::showLocalRestoreDialog,
                         error -> {
                             MessageHelpers.showLongMessage(mContext, error.getMessage());
-                            logIn(this::startRestoreConfirm); // auth outdated (invalid_grant)
+                            if (Helpers.startsWith(error.getMessage(), "AuthError")) {
+                                logIn(this::startRestoreConfirm); // auth data outdated (AuthError: invalid_grant)
+                            }
                         }
                 );
     }
