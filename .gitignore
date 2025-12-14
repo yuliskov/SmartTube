@@ -42,7 +42,7 @@ build/
 /smarttube/output
 /smarttubetv/output
 /smarttubemobile/release
-google-services.json
+# google-services.json
 *.hprof
 log.txt
 android.keystore
