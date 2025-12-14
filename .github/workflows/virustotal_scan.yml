@@ -1,6 +1,8 @@
 name: VirusTotal Quick Scan for Release Draft
 
-on: workflow_dispatch
+on:
+  release:
+    types: [published]
 
 jobs:
   virustotal_scan:
