@@ -1,8 +1,8 @@
-name: VirusTotal Quick Scan for Release Draft
+name: VirusTotal Quick Scan on Release
 
 on:
   release:
-    types: [published, prereleased]
+    types: [published]
 
 jobs:
   virustotal_scan:
@@ -19,12 +19,11 @@ jobs:
       - name: Download Release Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
         run: |
-          gh release list --limit 1 --json tagName -q .[0].tagName > release_tag.txt
-          tag=$(cat release_tag.txt)
-          echo "Downloading release tag $tag"
+          echo "Downloading release tag $TAG"
           mkdir -p release_assets
-          gh release download "$tag" --dir release_assets --pattern "*.apk"
+          gh release download "$TAG" --dir release_assets --pattern "*.apk"
           ls -l release_assets
 
       - name: Install VirusTotal CLI
@@ -70,15 +69,16 @@ jobs:
       - name: Update Release with Quick Report
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- обязательно
+          TAG: ${{ github.event.release.tag_name }}
         run: |
-          tag=$(cat release_tag.txt)
-          gh release view "$tag" --json body -q .body > current_notes.txt
+          gh release view "$TAG" --json body -q .body > current_notes.txt
           cat vt_report.txt >> current_notes.txt
-          gh release edit "$tag" --notes-file current_notes.txt
+          gh release edit "$TAG" --notes-file current_notes.txt
 
       - name: Done
+        env:
+          TAG: ${{ github.event.release.tag_name }}
         run: |
-          tag=$(cat release_tag.txt)
-          echo "VirusTotal quick scan finished and report added to release $tag"
+          echo "VirusTotal quick scan finished and report added to release $TAG"
 
 
