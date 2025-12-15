@@ -37,7 +37,6 @@ public class GDriveBackupWorker extends Worker {
     private static final String TAG = GDriveBackupWorker.class.getSimpleName();
     private static final String WORK_NAME = TAG;
     private static final String BLOCKED_FILE_NAME = "blocked";
-    private static final long REPEAT_INTERVAL_DAYS = 1;
     private static Disposable sAction;
     private final GDriveBackupManager mTask;
 
@@ -48,14 +47,18 @@ public class GDriveBackupWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).isAutoBackupEnabled()) {
+        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getGDriveBackupFreqDays() > 0) {
             WorkManager workManager = WorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
                     ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(GDriveBackupWorker.class, REPEAT_INTERVAL_DAYS, TimeUnit.DAYS).addTag(WORK_NAME).build()
+                    new PeriodicWorkRequest.Builder(
+                            GDriveBackupWorker.class,
+                            GeneralData.instance(context).getGDriveBackupFreqDays(),
+                            TimeUnit.DAYS).addTag(WORK_NAME)
+                            .build()
             );
         }
     }
@@ -86,7 +89,7 @@ public class GDriveBackupWorker extends Worker {
     public static void cancel(Context context) {
         RxHelper.disposeActions(sAction);
 
-        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).isAutoBackupEnabled()) {
+        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getGDriveBackupFreqDays() > 0) {
             Log.d(TAG, "Unregistering worker job...");
 
             WorkManager workManager = WorkManager.getInstance(context);
@@ -125,7 +128,7 @@ public class GDriveBackupWorker extends Worker {
                         runBackup();
                     } else {
                         // if id not found then disable auto backup in settings
-                        GeneralData.instance(getApplicationContext()).setAutoBackupEnabled(false);
+                        GeneralData.instance(getApplicationContext()).setGDriveBackupFreqDays(-1);
                     }
                 }, error -> Log.e(TAG, error.getMessage()));
     }

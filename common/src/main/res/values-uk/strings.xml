@@ -700,4 +700,8 @@
     <string name="typing_corrections">Вимкнути автокорекцію під час введення тексту</string>
     <string name="suggestions_horizontally_scrolled">Рекомендації з горизонтальним прокручуванням</string>
     <string name="stable_restore">Відновити стабільну збірку (всі дані будуть втрачені)</string>
+    <string name="auto_backup_category">Автоматичне резервне копіювання</string>
+    <string name="once_a_day">Один раз на день</string>
+    <string name="once_a_week">Один раз на тиждень</string>
+    <string name="once_a_month">Один раз на місяць</string>
 </resources>

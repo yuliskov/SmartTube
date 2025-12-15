@@ -711,4 +711,8 @@
     <string name="typing_corrections">Metin yazarken otomatik düzeltmeyi devre dışı bırak</string>
     <string name="suggestions_horizontally_scrolled">Yatay Kaydırılan Öneriler</string>
     <string name="stable_restore">Kararlı sürümü geri yükle (tüm veriler silinecek)</string>
+    <string name="auto_backup_category">Otomatik yedekleme</string>
+    <string name="once_a_day">Günde bir kez</string>
+    <string name="once_a_week">Haftada bir kez</string>
+    <string name="once_a_month">Ayda bir kez</string>
 </resources>

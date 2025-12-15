@@ -702,4 +702,8 @@
     <string name="typing_corrections">Отключить автокоррекцию при наборе текста</string>
     <string name="suggestions_horizontally_scrolled">Горизонтально прокручиваемые рекомендации</string>
     <string name="stable_restore">Восстановить стабильную версию (все данные будут удалены)</string>
+    <string name="auto_backup_category">Автоматическое резервное копирование</string>
+    <string name="once_a_day">Один раз в день</string>
+    <string name="once_a_week">Один раз в неделю</string>
+    <string name="once_a_month">Один раз в месяц</string>
 </resources>

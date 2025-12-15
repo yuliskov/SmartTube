@@ -712,4 +712,8 @@
     <string name="typing_corrections">Disable auto-correction while typing text</string>
     <string name="suggestions_horizontally_scrolled">Horizontally scrolled Suggestions</string>
     <string name="stable_restore">Restore the stable build (all data will be lost)</string>
+    <string name="auto_backup_category">Auto backup</string>
+    <string name="once_a_day">Once a day</string>
+    <string name="once_a_week">Once a week</string>
+    <string name="once_a_month">Once a month</string>
 </resources>
