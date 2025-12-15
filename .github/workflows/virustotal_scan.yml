@@ -3,6 +3,11 @@ name: VirusTotal Quick Scan on Release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to scan'
+        required: true
 
 jobs:
   virustotal_scan:
@@ -10,6 +15,14 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      - name: Set tag variable
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.release_tag }}" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -21,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          gh release download ${{ github.event.release.tag_name }} --dir release_assets --pattern "*.apk"
+          gh release download $TAG_NAME --dir release_assets --pattern "*.apk"
           ls -l release_assets
 
       - name: Install VirusTotal CLI
@@ -55,10 +68,11 @@ jobs:
               fi
             done
 
-            apk_url="https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/$filename"
+            apk_url="https://github.com/${{ github.repository }}/releases/download/$TAG_NAME/$filename"
 
             if [ "$status" != "completed" ]; then
               echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌ (analysis incomplete)" >> vt_report.txt
+              break
             elif [ "$malicious" -gt 0 ]; then
               echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌" >> vt_report.txt
             else
@@ -68,12 +82,12 @@ jobs:
 
       - name: Update Release with Quick Report
         env:
-          TAG: ${{ github.event.release.tag_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
         run: |
-          gh release view "$TAG" --json body -q .body > current_notes.txt
-          cat vt_report.txt >> current_notes.txt
-          gh release edit "$TAG" --notes-file current_notes.txt
+          body=$(gh release view "$TAG_NAME" --json body -q .body || echo "")
+          body=$(echo "$body" | sed '/🛡️ VirusTotal Scan Results:/,$d')
+          echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
+          gh release edit "$TAG_NAME" --notes-file current_notes.txt
 
       - name: Done
         run: echo "VirusTotal quick scan finished and report added to release."
