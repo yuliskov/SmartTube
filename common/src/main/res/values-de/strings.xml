@@ -431,6 +431,7 @@
     <string name="removed_from_playlists">Entfernt aus der Wiedergabelisten-Kategorie</string>
     <string name="saved_to_playlists">Hinzugefügt zur Wiedergabelisten-Kategorie</string>
     <string name="create_playlist">Wiedergabeliste erstellen</string>
+    <string name="create_playlist_note">wird nicht in der YouTube-App angezeigt</string>
     <string name="add_video_to_new_playlist">Hinzufügen zu neuer Wiedergabeliste</string>
     <string name="cant_delete_empty_playlist">Leere Wiedergabeliste kann nicht gelöscht werden</string>
     <string name="playlist">Wiedergabeliste</string>
