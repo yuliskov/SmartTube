@@ -708,4 +708,9 @@
   <string name="dont_resize_video_to_fit_dialog">Nie zmieniaj rozmiaru wideo, by zmieścić napisy</string>
   <string name="typing_corrections">Wyłącz autokorektę podczas pisania</string>
   <string name="suggestions_horizontally_scrolled">Przewijaj sugestie w poziomie</string>
+  <string name="stable_restore">Przywróć stabilną wersję programu (wszystkie dane zostaną utracone)</string>
+  <string name="auto_backup_category">Automatyczna kopia zapasowa</string>
+  <string name="once_a_day">Raz na dzień</string>
+  <string name="once_a_week">Raz w tygodniu</string>
+  <string name="once_a_month">Raz w miesiącu</string>
 </resources>
