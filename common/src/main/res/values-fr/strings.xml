@@ -712,4 +712,8 @@
   <string name="player_chapter_notification2">Passez au chapitre suivant en cliquant sur la notification</string>
   <string name="suggestions_horizontally_scrolled">Suggestions défilant horizontalement</string>
   <string name="stable_restore">Restaurer la version stable (toutes les données seront perdues)</string>
+  <string name="auto_backup_category">Sauvegarde automatique</string>
+  <string name="once_a_day">Une fois par jour</string>
+  <string name="once_a_week">Une fois par semaine</string>
+  <string name="once_a_month">Une fois par mois</string>
 </resources>
