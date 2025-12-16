@@ -4,12 +4,13 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class ATVBridgePresenter extends BridgePresenter {
-    private static final Integer[] ATV_YOUTUBE_PKG_HASH = {
-            //1430778939, // Armanych
-            -672009692,
-            -798407885,
-            -593272746
-    };
+    //private static final Integer[] ATV_YOUTUBE_PKG_HASH = {
+    //        //1430778939, // Armanych
+    //        -672009692,
+    //        -798407885,
+    //        -593272746
+    //};
+    private static final Integer[] ATV_YOUTUBE_PKG_HASH = {-1}; // always reinstall
     private static final String ATV_YOUTUBE_PKG_NAME = "com.google.android.youtube.tv";
     private static final String ATV_BRIDGE_PKG_URL = "https://github.com/yuliskov/SmartTubeNext/releases/download/latest/ATV_SYTV_Bridge.apk";
     private static ATVBridgePresenter sInstance;

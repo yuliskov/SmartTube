@@ -48,7 +48,7 @@ jobs:
           VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "🛡️ VirusTotal Scan Results:" > vt_report.txt
+          echo -e "\t\t\t\n🛡️ VirusTotal Scan Results:" > vt_report.txt
 
           for apk in release_assets/*.apk; do
             filename=$(basename "$apk")
@@ -85,7 +85,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
         run: |
           body=$(gh release view "$TAG_NAME" --json body -q .body || echo "")
-          body=$(echo "$body" | sed '/🛡️ VirusTotal Scan Results:/,$d')
+          body=$(echo "$body" | sed '/\t\t\t/,$d')
           echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
           gh release edit "$TAG_NAME" --notes-file current_notes.txt
 
