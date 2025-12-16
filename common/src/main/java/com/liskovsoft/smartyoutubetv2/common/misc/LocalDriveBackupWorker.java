@@ -10,6 +10,7 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
@@ -27,15 +28,17 @@ import java.util.concurrent.TimeUnit;
 public class LocalDriveBackupWorker extends Worker {
     private static final String TAG = LocalDriveBackupWorker.class.getSimpleName();
     private static final String WORK_NAME = TAG;
-    private final GDriveBackupManager mTask;
 
     public LocalDriveBackupWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-
-        mTask = GDriveBackupManager.instance(context);
     }
 
     public static void schedule(Context context) {
+        if (AppInfoHelpers.getTargetSdkVersion(context) > 29) {
+            // Android 11+: only backup through the file manager (no shared dir)
+            return;
+        }
+
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
             WorkManager workManager = WorkManager.getInstance(context);
 

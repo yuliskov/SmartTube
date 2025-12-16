@@ -313,10 +313,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setBufferOnStreamsDisabled(option.isSelected()),
                 mPlayerTweaksData.isBufferOnStreamsDisabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
-                getContext().getString(R.string.playback_notifications_fix_desc),
-                option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
-                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
+        //        getContext().getString(R.string.playback_notifications_fix_desc),
+        //        option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
+        //        mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.unlock_all_formats),
                 getContext().getString(R.string.unlock_all_formats_desc),

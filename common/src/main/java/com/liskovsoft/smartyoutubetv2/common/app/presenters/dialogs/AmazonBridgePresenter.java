@@ -4,12 +4,6 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class AmazonBridgePresenter extends BridgePresenter {
-    //private static final Integer[] AMAZON_YOUTUBE_PKG_HASH = {
-    //        //1430778939, // Armanych
-    //        -672009692,
-    //        -798407885,
-    //        -593272746
-    //};
     private static final Integer[] AMAZON_YOUTUBE_PKG_HASH = {-1}; // always reinstall
     private static final String AMAZON_YOUTUBE_PKG_NAME = "com.amazon.firetv.youtube";
     private static final String AMAZON_BRIDGE_PKG_URL = "https://github.com/yuliskov/SmartTubeNext/releases/download/latest/Amazon_SYTV_Bridge.apk";
