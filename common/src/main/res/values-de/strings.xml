@@ -712,4 +712,8 @@
     <string name="typing_corrections">Autokorrektur bei Texteingabe deaktivieren</string>
     <string name="suggestions_horizontally_scrolled">Horizontal scrollbare Vorschläge</string>
     <string name="stable_restore">Stable-Version wiederherstellen (alle Daten werden gelöscht)</string>
+    <string name="auto_backup_category">Automatische Sicherung</string>
+    <string name="once_a_day">Einmal pro Tag</string>
+    <string name="once_a_week">Einmal pro Woche</string>
+    <string name="once_a_month">Einmal pro Monat</string>
 </resources>
