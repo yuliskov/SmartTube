@@ -431,6 +431,7 @@
     <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Added to Playlists section</string>
     <string name="create_playlist">Create playlist</string>
+    <string name="create_playlist_note">it won\'t be seen in the YouTube app</string>
     <string name="add_video_to_new_playlist">Add to new playlist</string>
     <string name="cant_delete_empty_playlist">Can\'t delete empty playlist</string>
     <string name="playlist">Playlist</string>

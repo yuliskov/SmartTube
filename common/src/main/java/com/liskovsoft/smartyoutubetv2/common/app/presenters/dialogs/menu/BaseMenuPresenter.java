@@ -357,7 +357,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         closeDialog();
         SimpleEditDialog.show(
                 getContext(),
-                getContext().getString(R.string.create_playlist),
+                String.format("%s (%s)", getContext().getString(R.string.create_playlist), getContext().getString(R.string.create_playlist_note)),
                 null,
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
