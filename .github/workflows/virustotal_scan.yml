@@ -1,13 +1,9 @@
 name: VirusTotal Quick Scan
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      release_tag:
-        description: 'Release tag to scan'
-        required: true
 
 jobs:
   virustotal_scan:
@@ -18,7 +14,10 @@ jobs:
       - name: Set tag variable
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TAG_NAME=${{ github.event.inputs.release_tag }}" >> $GITHUB_ENV
+            tag=$(echo "${{ github.ref }}" | grep -oP "refs/tags/\K.*")
+            echo "Tag $tag"
+            test -z "$tag" && exit 1
+            echo "TAG_NAME=$tag" >> $GITHUB_ENV
           else
             echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           fi
@@ -72,14 +71,12 @@ jobs:
               fi
             done
 
-            apk_url="https://github.com/${{ github.repository }}/releases/download/$TAG_NAME/$filename"
-
             if [ "$status" != "completed" ]; then
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌ (analysis incomplete)" >> vt_report.txt
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256) — BAD ❌ (analysis incomplete)" >> vt_report.txt
             elif [ "$malicious" -gt 0 ]; then
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌" >> vt_report.txt
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256) — BAD ❌" >> vt_report.txt
             else
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url)" >> vt_report.txt
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256)" >> vt_report.txt
             fi
           done
 
@@ -94,3 +91,4 @@ jobs:
 
       - name: Done
         run: echo "VirusTotal quick scan finished and report added to release."
+
