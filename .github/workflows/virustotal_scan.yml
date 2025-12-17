@@ -52,9 +52,14 @@ jobs:
           VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
+          first=true
 
           for apk in release_assets/*.apk; do
+            if $first; then
+              echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
+              first=false
+            fi
+
             filename=$(basename "$apk")
             sha256=$(sha256sum "$apk" | head -c 64)
             echo "Scanning $filename..."
