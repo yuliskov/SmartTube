@@ -27,6 +27,7 @@
   <string name="frame_rate_correction">Korrigera bildfrekvens:\n%s</string>
   <string name="category_background_playback">Bakgrundsuppspelning</string>
   <string name="not_implemented">Inte implementerad</string>
+  <string name="not_supported_by_device">Enheten har inte stöd för denna funktion</string>
   <string name="option_background_playback_off">Inaktiverad</string>
   <string name="option_background_playback_pip">Bild-i-bild</string>
   <string name="option_background_playback_only_audio">Endast ljud</string>
@@ -34,9 +35,12 @@
   <string name="video_speed">Videohastighet</string>
   <string name="resolution_switch">Byt upplösning</string>
   <string name="video_buffer">Videobuffert</string>
+  <string name="video_buffer_size_none">Ingen</string>
+  <string name="video_buffer_size_lowest">Lägst</string>
   <string name="video_buffer_size_low">Låg</string>
   <string name="video_buffer_size_med">Medelhög</string>
   <string name="video_buffer_size_high">Hög</string>
+  <string name="video_buffer_size_highest">Högst</string>
   <string name="update_changelog">Ändringslogg</string>
   <string name="install_update">Installera uppdatering</string>
   <string name="section_is_empty">Oj! Det finns inget här</string>
@@ -57,6 +61,7 @@
   <string name="dialog_remove_account">Logga ut</string>
   <string name="dialog_add_account">Logga in</string>
   <string name="default_lang">Standard</string>
+  <string name="original_lang">Ursprungligt</string>
   <string name="dialog_select_language">Språk</string>
   <string name="subtitle_default">Standard</string>
   <string name="subtitle_white_semi_transparent">Vitt på halvgenomskinlig bakgrund</string>
@@ -100,7 +105,9 @@
   <string name="open_channel">Öppna kanalen</string>
   <string name="open_playlist">Öppna spellistan</string>
   <string name="not_interested">Inte intresserad</string>
+  <string name="not_recommend_channel">Rekommendera inte kanalen</string>
   <string name="you_wont_see_this_video">Videon har tagits bort från rekommendationerna</string>
+  <string name="you_wont_see_this_channel">Du kommer inte att se den här kanalen i rekommendationerna</string>
   <string name="settings_search">Sök</string>
   <string name="dialog_search">Sök</string>
   <string name="instant_voice_search">Direkt röstsökning</string>
@@ -116,6 +123,7 @@
   <string name="subscribed_to_channel">Prenumererar</string>
   <string name="unsubscribed_from_channel">Prenumererar inte</string>
   <string name="subtitle_yellow_transparent">Gult på genomskinlig bakgrund</string>
+  <string name="subtitle_white_transparent">Vitt på genomskinlig bakgrund</string>
   <string name="subtitle_white_black">Vitt på svart bakgrund</string>
   <string name="player_seek_preview">Förhandsgranskning under sökning</string>
   <string name="color_scheme_dark_grey_oled">Mörkgrått (OLED)</string>
@@ -256,7 +264,7 @@
   <string name="news_row_name">Nyheter</string>
   <string name="breaking_news_row_name">Senaste nytt</string>
   <string name="covid_news_row_name">Nyheter om COVID-19</string>
-  <string name="enable_voice_search">Aktivera global sökning (kräver stöd av fast programvara)</string>
+  <string name="enable_voice_search">Aktivera global sökning (kräver att den fasta programvaran har stöd för det)</string>
   <string name="subscribe_unsubscribe_from_channel">Prenumerera/avsluta prenumeration på kanalen</string>
   <string name="app_backup_restore">Säkerhetskopiera/återställ</string>
   <string name="app_backup">Säkerhetskopiera appdata</string>
@@ -265,14 +273,6 @@
   <string name="disable_ok_long_press">Inaktivera långt tryck på OK-knappen</string>
   <string name="disable_ok_long_press_desc">Avsedd för trasiga kontroller där OK-knappen inte fungerar som den ska</string>
   <string name="player_time_correction">Visa tiden med hastighetskorrigering</string>
-  <string name="not_supported_by_device">Enheten har inte stöd för denna funktion</string>
-  <string name="video_buffer_size_none">Ingen</string>
-  <string name="video_buffer_size_lowest">Lägst</string>
-  <string name="video_buffer_size_highest">Högst</string>
-  <string name="original_lang">Ursprungligt</string>
-  <string name="not_recommend_channel">Rekommendera inte kanalen</string>
-  <string name="you_wont_see_this_channel">Du kommer inte att se den här kanalen i rekommendationerna </string>
-  <string name="subtitle_white_transparent">Vitt på genomskinlig bakgrund</string>
   <string name="sponsor_color_markers">Färgmarkörer på förloppsindikatorn</string>
   <string name="refresh_section">Uppdatera avsnittet</string>
   <string name="option_disabled">Inaktiverat</string>
@@ -431,6 +431,7 @@
   <string name="removed_from_playlists">Togs bort från avsnittet Spellistor</string>
   <string name="saved_to_playlists">Lades till i avsnittet Spellistor</string>
   <string name="create_playlist">Skapa en spellista</string>
+  <string name="create_playlist_note">den kommer inte att synas i YouTube-appen</string>
   <string name="add_video_to_new_playlist">Lägg till i ny spellista</string>
   <string name="cant_delete_empty_playlist">Det går inte att ta bort en tom spellista</string>
   <string name="playlist">Spellista</string>
@@ -588,6 +589,7 @@
   <string name="update_found">Uppdatering</string>
   <string name="volume_boost_warning">Inställningar över gränsen kan eventuellt skada högtalare</string>
   <string name="play_video_incognito">Spela upp i inkognitoläge</string>
+  <string name="play_from_start">Spela upp från början</string>
   <string name="header_kids_home">Barn</string>
   <string name="player_section_playlist">Andvänd det aktuella avsnittets innehåll som spellista</string>
   <string name="header_trending">Populärt</string>
@@ -636,7 +638,7 @@
   <string name="enter_account_password">Ange kontolösenord</string>
   <string name="show_connect_messages">Visa anslutningsmeddelanden</string>
   <string name="prefer_avc_over_vp9_desc">OBS! Maximal upplösning är 1080p</string>
-  <string name="play_next">Spela upp nästa</string>
+  <string name="play_next">Spela upp som nästa</string>
   <string name="hide_watched_from_subscriptions">Dölj sedda videor i Prenumerationer</string>
   <string name="hide_watched_from_notifications">Dölj sedda videor i Aviseringar</string>
   <string name="hide_unwanted_content">Dölj videor</string>
@@ -710,6 +712,9 @@
   <string name="dont_resize_video_to_fit_dialog">Ändra inte storlek på videon för att passa dialogruta</string>
   <string name="typing_corrections">Inaktivera autokorrigering medan du skriver text</string>
   <string name="suggestions_horizontally_scrolled">Horisontellt rullande förslag</string>
-  <string name="play_from_start">Spela upp från början</string>
   <string name="stable_restore">Återgå till den stabila versionen (alla data kommer att gå förlorade)</string>
+  <string name="auto_backup_category">Automatisk säkerhetskopiering</string>
+  <string name="once_a_day">En gång om dagen</string>
+  <string name="once_a_week">En gång i veckan</string>
+  <string name="once_a_month">En gång i månaden</string>
 </resources>
