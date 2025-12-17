@@ -1,0 +1,96 @@
+name: VirusTotal Quick Scan
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to scan'
+        required: true
+
+jobs:
+  virustotal_scan:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set tag variable
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.release_tag }}" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set report marker variable
+        run: |
+          echo -e "REPORT_MARKER=\t\t\t" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y jq curl
+
+      - name: Download Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p release_assets
+          gh release download $TAG_NAME --dir release_assets --pattern "*.apk"
+          ls -l release_assets
+
+      - name: Install VirusTotal CLI
+        run: |
+          curl -L https://github.com/VirusTotal/vt-cli/releases/download/1.2.0/Linux64.zip -o vt-cli.zip
+          unzip vt-cli.zip
+          sudo mv vt /usr/local/bin/
+
+      - name: Scan APKs and Generate Quick Report
+        env:
+          VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
+
+          for apk in release_assets/*.apk; do
+            filename=$(basename "$apk")
+            sha256=$(sha256sum "$apk" | head -c 64)
+            echo "Scanning $filename..."
+            
+            scan_id=$(vt scan file "$apk" -k $VT_API_KEY | awk '{print $2}')
+            echo "Scan ID: $scan_id"
+
+            for i in {1..15}; do
+              sleep 22
+              analysis_json=$(vt analysis report "$scan_id" -k $VT_API_KEY --format json)
+              status=$(echo "$analysis_json" | jq -r '.[0].status')
+              malicious=$(echo "$analysis_json" | jq '.[0].stats.malicious')
+              if [ "$status" == "completed" ]; then
+                break
+              fi
+            done
+
+            apk_url="https://github.com/${{ github.repository }}/releases/download/$TAG_NAME/$filename"
+
+            if [ "$status" != "completed" ]; then
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌ (analysis incomplete)" >> vt_report.txt
+            elif [ "$malicious" -gt 0 ]; then
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url) — BAD ❌" >> vt_report.txt
+            else
+              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1)](https://www.virustotal.com/gui/file/$sha256) [$filename]($apk_url)" >> vt_report.txt
+            fi
+          done
+
+      - name: Update Release with Quick Report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
+        run: |
+          body=$(gh release view "$TAG_NAME" --json body -q .body || echo "")
+          body=$(echo "$body" | sed "/$REPORT_MARKER/,\$d")
+          echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
+          gh release edit "$TAG_NAME" --notes-file current_notes.txt
+
+      - name: Done
+        run: echo "VirusTotal quick scan finished and report added to release."
