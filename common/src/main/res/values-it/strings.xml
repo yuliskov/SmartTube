@@ -431,6 +431,7 @@
     <string name="removed_from_playlists">Rimossa dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
+    <string name="create_playlist_note">non sarà visibile nell'app di YouTube</string>
     <string name="add_video_to_new_playlist">Aggiungi a nuova playlist</string>
     <string name="cant_delete_empty_playlist">Impossibile eliminare una playlist vuota</string>
     <string name="playlist">Playlist</string>
@@ -711,4 +712,9 @@
     <string name="dont_resize_video_to_fit_dialog">Non ridimensionare il video per adattarlo al dialogo</string>
     <string name="typing_corrections">Disattiva la correzione automatica durante la digitazione del testo</string>
     <string name="suggestions_horizontally_scrolled">Suggerimenti a scorrimento orizzontale</string>
+    <string name="stable_restore">Ripristina la versione stabile (tutti i dati verranno eliminati)</string>
+    <string name="auto_backup_category">Backup automatico</string>
+    <string name="once_a_day">Una volta al giorno</string>
+    <string name="once_a_week">Una volta alla settimana</string>
+    <string name="once_a_month">Una volta al mese</string>
 </resources>
