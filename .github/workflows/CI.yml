@@ -23,5 +23,6 @@ jobs:
       - uses: actions/upload-artifact@v5.0.0
         with:
           path: ./smarttubetv/build/outputs/apk/ststable/debug/*.apk
+          retention-days: 1
       
       
