@@ -431,7 +431,7 @@
     <string name="removed_from_playlists">Rimossa dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
-    <string name="create_playlist_note">non sarà visibile nell'app di YouTube</string>
+    <string name="create_playlist_note">non sarà visibile nell\'app di YouTube</string>
     <string name="add_video_to_new_playlist">Aggiungi a nuova playlist</string>
     <string name="cant_delete_empty_playlist">Impossibile eliminare una playlist vuota</string>
     <string name="playlist">Playlist</string>
