@@ -703,4 +703,8 @@
   <string name="card_preview">Xem trước thẻ</string>
   <string name="original_lang">Nguyên bản</string>
   <string name="remove_playlist_fmt">Xóa %s vĩnh viễn\?</string>
+  <string name="auto_backup_category">Tự động sao lưu</string>
+  <string name="once_a_day">Một lần một ngày</string>
+  <string name="once_a_week">Một lần một tuần</string>
+  <string name="once_a_month">Một lần một tháng</string>
 </resources>
