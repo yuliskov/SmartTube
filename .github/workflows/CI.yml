@@ -22,44 +22,46 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Extract Version Name
+      - name: Extract and Calculate Version
         id: get_version
         run: |
-          VERSION=$(grep "versionName" smarttubetv/build.gradle | head -n 1 | awk '{print $2}' | tr -d '"')
-          echo "BASE_VERSION=$VERSION" >> $GITHUB_OUTPUT
+          BASE_VERSION_CODE=$(grep "versionCode" smarttubetv/build.gradle | head -n 1 | grep -o '[0-9]\+')
+          echo "VERSION_CODE=$((BASE_VERSION_CODE * 100000 + ${{ github.run_number }}))" >> $GITHUB_OUTPUT
+          BASE_VERSION_NAME=$(grep "versionName" smarttubetv/build.gradle | head -n 1 | awk '{print $2}' | tr -d '"' | tr -d "'")
+          echo "VERSION_NAME=${BASE_VERSION_NAME}-beta-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Bump Version
         uses: chkfung/android-version-actions@v1.2.3
         with:
           gradlePath: smarttubetv/build.gradle
-          versionCode: ${{ github.run_number }}
-          versionName: "${{ steps.get_version.outputs.BASE_VERSION }}-#${{ github.run_number }}"
+          versionCode: ${{ steps.get_version.outputs.VERSION_CODE }}
+          versionName: ${{ steps.get_version.outputs.VERSION_NAME }}
 
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew clean assembleStstableDebug
+          ./gradlew clean assembleStbetaDebug
 
       - name: Upload ARM64 APK
         uses: actions/upload-artifact@v6
         with:
-          name: SmartTube_debug_${{ steps.get_version.outputs.BASE_VERSION }}_#${{ github.run_number }}_arm64
-          path: ./smarttubetv/build/outputs/apk/ststable/debug/*_arm64-v8a.apk
+          name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_arm64
+          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_arm64-v8a.apk
           if-no-files-found: error
           retention-days: 1
 
       - name: Upload ARMv7 APK
         uses: actions/upload-artifact@v6
         with:
-          name: SmartTube_debug_${{ steps.get_version.outputs.BASE_VERSION }}_#${{ github.run_number }}_armeabi-v7a
-          path: ./smarttubetv/build/outputs/apk/ststable/debug/*_armeabi-v7a.apk
+          name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_armeabi-v7a
+          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_armeabi-v7a.apk
           if-no-files-found: error
           retention-days: 1
 
       - name: Upload x86 APK
         uses: actions/upload-artifact@v6
         with:
-          name: SmartTube_debug_${{ steps.get_version.outputs.BASE_VERSION }}_#${{ github.run_number }}_x86
-          path: ./smarttubetv/build/outputs/apk/ststable/debug/*_x86.apk
+          name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_x86
+          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_x86.apk
           if-no-files-found: error
           retention-days: 1
