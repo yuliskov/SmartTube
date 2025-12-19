@@ -774,6 +774,10 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, -1);
     }
 
+    public void persistNow() {
+        Utils.post(mPersistStateInt);
+    }
+
     private void persistState() {
         Utils.postDelayed(mPersistStateInt, 10_000);
     }
@@ -795,10 +799,6 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 mIsRemapPageDownToSpeedEnabled, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays));
-    }
-
-    public void persistNow() {
-        Utils.post(mPersistStateInt);
     }
 
     @Override

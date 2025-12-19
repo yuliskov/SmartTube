@@ -1198,9 +1198,13 @@ public class Utils {
     }
 
     private static void persistData(Context context) {
+        VideoStateService.instance(context).persistNow();
         PlayerTweaksData.instance(context).persistNow();
         MainUIData.instance(context).persistNow();
         GeneralData.instance(context).persistNow();
-        MediaServiceData.instance().persistNow();
+        MediaServiceData mediaServiceData = MediaServiceData.instance();
+        if (mediaServiceData != null) {
+            mediaServiceData.persistNow();
+        }
     }
 }

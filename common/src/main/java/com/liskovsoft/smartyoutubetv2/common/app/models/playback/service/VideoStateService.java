@@ -112,6 +112,10 @@ public class VideoStateService implements ProfileChangeListener {
         }
     }
 
+    public void persistNow() {
+        Utils.post(mPersistStateInt);
+    }
+
     private void persistState() {
         // Improve memory and disc usage
         Utils.postDelayed(mPersistStateInt, PERSIST_DELAY_MS);
