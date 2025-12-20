@@ -186,10 +186,6 @@
 -keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
 -keep class okhttp3.OkHttpClient$Builder { *; }
 -keep class androidx.leanback.widget.ItemBridgeAdapter { *; }
--keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
--keep class com.google.android.exoplayer2.util.Util { *; }
--keep class com.bumptech.glide.request.RequestOptions { *; }
--keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
 -keep class androidx.leanback.app.BrowseSupportFragment { *; }
 -keep class io.reactivex.internal.operators.observable.ObservableDelaySubscriptionOther { *; }
 -keep class com.google.gson.internal.bind.TypeAdapters$7 { *; }
@@ -207,8 +203,14 @@
 #-keep class kotlin.collections.builders.* { *; }
 #-keep class androidx.room.** { *; }
 
-# NOTE: the lines below makes VirusTotal treat the app as Malware (Google: Detected, Ikarus: Trojan.AndroidOS.Agent)
+# NOTE: Stable/Beta: VirusTotal (Google: Detected, Ikarus: Trojan.AndroidOS.Agent)
 #-keep class com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication { *; }
 #-keep class com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController { *; }
 #-keep class com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData { *; }
 #-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter { *; }
+
+# NOTE: Fdroid: VirusTotal (Google: Detected, Ikarus: Trojan.AndroidOS.Agent)
+#-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider { *; }
+#-keep class com.google.android.exoplayer2.util.Util { *; }
+#-keep class com.bumptech.glide.request.RequestOptions { *; }
+#-keep class com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler { *; }
