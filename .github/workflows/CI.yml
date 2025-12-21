@@ -45,6 +45,9 @@ jobs:
             echo "keyPassword='${{ secrets.KEY_PASSWORD }}'" >> smarttubetv/keystore.properties
             echo "storeFile='../key.jks'" >> smarttubetv/keystore.properties
             echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > key.jks
+          else
+            echo "ERROR: SIGNING_KEY secret is not set."
+            exit 1
           fi
 
       - name: Build with Gradle
