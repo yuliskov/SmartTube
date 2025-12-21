@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HAS_SIGNING_KEY: ${{ secrets.SIGNING_KEY != '' }}
+      HAS_VT_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY != '' }}
     
     steps:
       - name: Checkout Code
@@ -38,17 +41,13 @@ jobs:
           versionName: ${{ steps.get_version.outputs.VERSION_NAME }}
 
       - name: Configure Build Signing
+        if: ${{ env.HAS_SIGNING_KEY == 'true' }}
         run: |
-          if [ ! -z "${{ secrets.SIGNING_KEY }}" ]; then
-            echo "storePassword='${{ secrets.KEY_STORE_PASSWORD }}'" > smarttubetv/keystore.properties
-            echo "keyAlias='${{ secrets.ALIAS }}'" >> smarttubetv/keystore.properties
-            echo "keyPassword='${{ secrets.KEY_PASSWORD }}'" >> smarttubetv/keystore.properties
-            echo "storeFile='../key.jks'" >> smarttubetv/keystore.properties
-            echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > key.jks
-          else
-            echo "ERROR: SIGNING_KEY secret is not set."
-            exit 1
-          fi
+          echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" > keystore.properties
+          echo "keyAlias=${{ secrets.ALIAS }}" >> keystore.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> keystore.properties
+          echo "storeFile=${{ github.workspace }}/key.jks" >> keystore.properties
+          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ${{ github.workspace }}/key.jks
 
       - name: Build with Gradle
         run: |
@@ -56,6 +55,7 @@ jobs:
           ./gradlew clean assembleStbetaDebug
 
       - name: VirusTotal Scan
+        if: ${{ env.HAS_VT_KEY == 'true' }}
         id: vt
         uses: crazy-max/ghaction-virustotal@v4
         with:
@@ -65,7 +65,11 @@ jobs:
           request_rate: 3
 
       - name: VirusTotal Summary
+        if: steps.vt.outcome == 'success'
         run: |
+          echo "Waiting 150s for VirusTotal engines to report..."
+          sleep 150
+          
           echo "### Security Scan Results" >> $GITHUB_STEP_SUMMARY
           echo "| Artifact Name | VirusTotal Status | Detailed Report |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
