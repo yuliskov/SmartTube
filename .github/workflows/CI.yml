@@ -37,10 +37,46 @@ jobs:
           versionCode: ${{ steps.get_version.outputs.VERSION_CODE }}
           versionName: ${{ steps.get_version.outputs.VERSION_NAME }}
 
+      - name: Configure Build Signing
+        run: |
+          if [ ! -z "${{ secrets.SIGNING_KEY }}" ]; then
+            echo "storePassword='${{ secrets.KEY_STORE_PASSWORD }}'" > smarttubetv/keystore.properties
+            echo "keyAlias='${{ secrets.ALIAS }}'" >> smarttubetv/keystore.properties
+            echo "keyPassword='${{ secrets.KEY_PASSWORD }}'" >> smarttubetv/keystore.properties
+            echo "storeFile='../key.jks'" >> smarttubetv/keystore.properties
+            echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > key.jks
+          fi
+
       - name: Build with Gradle
         run: |
           chmod +x gradlew
           ./gradlew clean assembleStbetaDebug
+
+      - name: VirusTotal Scan
+        id: vt
+        uses: crazy-max/ghaction-virustotal@v4
+        with:
+          vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          files: |
+            ./smarttubetv/build/outputs/apk/stbeta/debug/*.apk
+          request_rate: 3
+
+      - name: VirusTotal Summary
+        run: |
+          echo "### Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Artifact Name | VirusTotal Status | Detailed Report |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+
+          for apk in ./smarttubetv/build/outputs/apk/stbeta/debug/*.apk; do
+            filename=$(basename "$apk")
+            sha256=$(sha256sum "$apk" | awk '{print $1}')
+            
+            # Construct the dynamic badge URL using the hash
+            badge_url="https://badges.cssnr.com/vt/id/$sha256?start=green&end=red&n=8"
+            vt_link="https://www.virustotal.com/gui/file/$sha256"
+
+            echo "| $filename | ![$filename]($badge_url) | [View Report]($vt_link) |" >> $GITHUB_STEP_SUMMARY
+          done
 
       - name: Upload ARM64 APK
         uses: actions/upload-artifact@v6
