@@ -686,7 +686,12 @@ public final class MediaSessionConnector {
         mediaMetadataProvider != null && player != null
             ? mediaMetadataProvider.getMetadata(player)
             : METADATA_EMPTY;
-    mediaSession.setMetadata(metadata != null ? metadata : METADATA_EMPTY);
+    // MOD: fix NullPointerException: Attempt to invoke virtual method 'int java.lang.String.length()' on a null object reference
+    try {
+      mediaSession.setMetadata(metadata != null ? metadata : METADATA_EMPTY);
+    } catch (NullPointerException e) {
+      e.printStackTrace();
+    }
   }
 
   /**

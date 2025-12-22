@@ -180,6 +180,17 @@
 -keepclassmembers interface com.google.android.exoplayer2.Player$EventListener {
     void onPlaybackParametersChanged(com.google.android.exoplayer2.PlaybackParameters);
 }
+-keepclassmembers interface com.google.android.exoplayer2.Player {
+    boolean isPlaying();
+}
+-keepclassmembers class com.liskovsoft.sharedutils.locale.LocaleContextWrapper {
+    public static android.content.Context wrap(android.content.Context, java.util.Locale, android.util.DisplayMetrics);
+}
+-keepclassmembers class kotlin.collections.ArraysKt___ArraysKt {
+    public static java.lang.Object firstOrNull(java.lang.Object[]);
+}
+
+# NOTE: Debug build: VirusTotal (Google: Detected, Ikarus: Trojan.AndroidOS.Agent)
 #-keep class androidx.recyclerview.widget.RecyclerView { *; }
 #-keep class com.google.android.exoplayer2.C { *; }
 #-keep class kotlin.collections.CollectionsKt__CollectionsKt { *; }
