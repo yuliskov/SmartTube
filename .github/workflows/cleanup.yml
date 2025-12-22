@@ -1,0 +1,48 @@
+name: Cleanup old workflow runs
+
+on:
+  # schedule:
+  #   - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const KEEP = 10;
+            const workflowName = "Build Debug APK";
+
+            // Get workflow ID
+            const workflows = await github.rest.actions.listRepoWorkflows({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const wf = workflows.data.workflows.find(w => w.name === workflowName);
+            if (!wf) {
+              core.setFailed("Workflow not found");
+              return;
+            }
+
+            // List runs
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: wf.id,
+              per_page: 100
+            });
+
+            const toDelete = runs.data.workflow_runs.slice(KEEP);
+            core.info(`Deleting ${toDelete.length} old runs`);
+
+            for (const run of toDelete) {
+              await github.rest.actions.deleteWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: run.id
+              });
+            }
