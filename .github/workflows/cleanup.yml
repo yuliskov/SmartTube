@@ -14,8 +14,8 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const KEEP = 10;
-            const workflowNames = ["Build Debug APK", "VirusTotal Scan"];
+            const KEEP = 0;
+            const workflowNames = ["VirusTotal Scan"];
 
             // Get workflow ID
             const workflows = await github.rest.actions.listRepoWorkflows({
