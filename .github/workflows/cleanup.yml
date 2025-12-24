@@ -1,8 +1,8 @@
 name: Cleanup old workflow runs
 
 on:
-  # schedule:
-  #   - cron: '0 3 * * *'
+  schedule:
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         with:
           script: |
             const KEEP = 0;
-            const workflowNames = ["VirusTotal Scan"];
+            const workflowNames = ["VirusTotal Scan", "Cleanup old workflow runs"];
 
             // Get workflow ID
             const workflows = await github.rest.actions.listRepoWorkflows({
