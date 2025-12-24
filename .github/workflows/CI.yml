@@ -107,4 +107,4 @@ jobs:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_x86
           path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_x86.apk
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
