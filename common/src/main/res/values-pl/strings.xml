@@ -210,7 +210,7 @@
   <string name="player_remember_speed_all">Dla wszystkich wideo taka sama</string>
   <string name="player_remember_speed_each">Dla każdego wideo oddzielnie</string>
   <string name="msg_player_error_source">Nie można pobrać wideo</string>
-  <string name="msg_player_error_renderer">Wybrany format nie jest obsługiwany. Spróbuj zresetować urządzenie.</string>
+  <string name="msg_player_error_renderer">Wybrany format nie jest obsługiwany.\nSpróbuj zresetować urządzenie.</string>
   <string name="msg_player_error_video_renderer">Wybrany format WIDEO nie jest obsługiwany.\nSpróbuj wybrać inny poprzez naciśnięcie przycisku HQ na odtwarzaczu.\nJeśli to nie pomoże, wyłącz urządzenie.</string>
   <string name="msg_player_error_audio_renderer">Wybrany format AUDIO nie jest obsługiwany.\nSpróbuj wybrać inny poprzez naciśnięcie przycisku HQ na odtwarzaczu.\nJeśli to nie pomoże, wyłącz urządzenie.</string>
   <string name="msg_player_error_subtitle_renderer">Wybrany format NAPISÓW nie jest obsługiwany.\nSpróbuj wybrać inny poprzez naciśnięcie przycisku CC na odtwarzaczu.\nJeśli to nie pomoże, wyłącz urządzenie.</string>
@@ -391,9 +391,9 @@
   <string name="force_legacy_codecs_desc">Znacząco poprawia wydajność na słabszych urządzeniach. Maksymalna rozdzielczość to 720p.</string>
   <string name="force_legacy_codecs">Wymuś starsze kodeki (720p)</string>
   <string name="live_stream_fix_desc">UWAGA: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo na słabszych urządzeniach. Maksymalna rozdzielczość to 1080p.</string>
-  <string name="live_stream_fix_4k_desc">UWAGA: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo. Maksymalna rozdzielczość to 4K.</string>
-  <string name="live_stream_fix">Poprawka transmisji na żywo (1080p)</string>
-  <string name="live_stream_fix_4k">Poprawka transmisji na żywo (4K)</string>
+  <string name="live_stream_fix_4k_desc">UWAGA: ta poprawka wyłącza przewijanie. Znacząco poprawia wydajność transmisji na żywo. Maksymalna rozdzielczość to UHD.</string>
+  <string name="live_stream_fix">Poprawka transmisji na żywo (FHD)</string>
+  <string name="live_stream_fix_4k">Poprawka transmisji na żywo (UHD)</string>
   <string name="playback_notifications_fix_desc">Ukrywa powiadomienia o zmianach utworu. Może być przydatny w przypadku oprogramowania opartego na AOSP (custom ROM).</string>
   <string name="playback_notifications_fix">Wyłącz powiadomienia o odtwarzaniu</string>
   <string name="amlogic_fix_desc">Poprawka dla gubienia klatek na urządzeniach opartych o chip Amlogic</string>
@@ -542,7 +542,7 @@
   <string name="video_features">Właściwości</string>
   <string name="video_feature_any">Wszystkie</string>
   <string name="video_feature_live">Na żywo</string>
-  <string name="video_feature_4k">4K</string>
+  <string name="video_feature_4k">UHD</string>
   <string name="video_feature_hdr">HDR</string>
   <string name="search_sorting">Sortuj wg</string>
   <string name="sort_by_relevance">Trafności</string>
@@ -558,7 +558,7 @@
   <string name="player_network_stack">Biblioteka sieciowa</string>
   <string name="cronet_desc">Cronet jest biblioteką sieciową projektu Chromium. Cronet potrafi zmniejszyć opóźnienia i zwiększyć wydajność operacji sieciowych, czym może pomóc w przypadku problemów z buforowaniem wideo.</string>
   <string name="unlock_all_formats">Odblokuj wszystkie formaty wideo</string>
-  <string name="unlock_all_formats_desc">W przypadku niektórych urządzeń ich oprogramowanie wewnętrzne (firmware) nieprawidłowo rozpoznaje pewne formaty jako nieobsługiwane. \nNa przykład telewizory smart TV 1080p zwykle zgłaszają format 4K jako nieobsługiwany.</string>
+  <string name="unlock_all_formats_desc">W przypadku niektórych urządzeń ich oprogramowanie wewnętrzne (firmware) nieprawidłowo rozpoznaje pewne formaty jako nieobsługiwane.\nNa przykład telewizory Smart TV FHD zwykle zgłaszają format UHD jako nieobsługiwany.</string>
   <string name="okhttp_desc">Biblioteka mało wydajna, ale zapewnia wysoką stabilność działania.</string>
   <string name="select_channel_section">Otwórz odpowiednią sekcję, kiedy aplikacja jest uruchamiana z ATV Channels</string>
   <string name="enable_voice_search_desc">Oficjalna aplikacja będzie zastąpiona aplikacją Bridge, to pomoże przenieść wyszukiwane zapytania do naszej aplikacji</string>
@@ -713,4 +713,8 @@
   <string name="once_a_day">Raz na dzień</string>
   <string name="once_a_week">Raz w tygodniu</string>
   <string name="once_a_month">Raz w miesiącu</string>
+  <string name="create_playlist_note">Nie będzie widoczne w aplikacji YouTube</string>
+  <string name="remove_playlist_fmt">Usunąć %s na zawsze\?</string>
+  <string name="play_from_start">Odtwórz od początku</string>
+  <string name="player_chapter_notification2">Przejdź do następnego rozdziału, klikając powiadomienie</string>
 </resources>
