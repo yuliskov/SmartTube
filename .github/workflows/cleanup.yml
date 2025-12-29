@@ -14,8 +14,8 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const KEEP = 0;
-            const workflowNames = ["VirusTotal Scan"];
+            const KEEP = 1;
+            const workflowNames = ["VirusTotal Scan", "Cleanup old workflow runs"];
 
             // Get workflow ID
             const workflows = await github.rest.actions.listRepoWorkflows({
@@ -49,11 +49,4 @@ jobs:
                 });
               } 
             }
-      - name: Delete this cleanup run
-        run: |
-          curl -X DELETE \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
 
