@@ -91,7 +91,6 @@ jobs:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_arm64
           path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_arm64-v8a.apk
           if-no-files-found: error
-          retention-days: 1
 
       - name: Upload ARMv7 APK
         uses: actions/upload-artifact@v6
@@ -99,7 +98,6 @@ jobs:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_armeabi-v7a
           path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_armeabi-v7a.apk
           if-no-files-found: error
-          retention-days: 1
 
       - name: Upload x86 APK
         uses: actions/upload-artifact@v6
@@ -107,4 +105,3 @@ jobs:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_x86
           path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_x86.apk
           if-no-files-found: error
-          retention-days: 1
