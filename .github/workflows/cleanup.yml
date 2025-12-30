@@ -14,8 +14,9 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const KEEP = 1;
+            const KEEP = 0;
             const workflowNames = ["VirusTotal Scan", "Cleanup old workflow runs"];
+            const currentWorkflowName = context.workflow;
 
             // Get workflow ID
             const workflows = await github.rest.actions.listRepoWorkflows({
@@ -27,6 +28,11 @@ jobs:
               const wf = workflows.data.workflows.find(w => w.name === name);
               if (!wf) {
                 core.info(`Workflow "${name}" not found, skipping`);
+                continue;
+              }
+
+              if (wf.name === currentWorkflowName) {
+                core.info(`Skipping current workflow "${wf.name}"`);
                 continue;
               }
 
