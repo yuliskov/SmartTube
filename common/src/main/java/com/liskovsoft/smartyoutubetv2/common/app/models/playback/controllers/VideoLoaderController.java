@@ -370,7 +370,7 @@ public class VideoLoaderController extends BasePlayerController {
                 return;
             }
 
-            player.setTitle(formatInfo.getPlayabilityStatus());
+            player.setTitle(formatInfo.getPlayabilityReason());
             player.showProgressBar(false);
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
@@ -405,7 +405,7 @@ public class VideoLoaderController extends BasePlayerController {
             player.openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
-            player.setTitle(formatInfo.getPlayabilityStatus());
+            player.setTitle(formatInfo.getPlayabilityReason());
             player.showProgressBar(false);
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
