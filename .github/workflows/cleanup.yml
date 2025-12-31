@@ -16,7 +16,6 @@ jobs:
           script: |
             const KEEP = 0;
             const workflowNames = ["VirusTotal Scan", "Cleanup old workflow runs"];
-            const currentWorkflowName = context.workflow;
 
             // Get workflow ID
             const workflows = await github.rest.actions.listRepoWorkflows({
@@ -28,11 +27,6 @@ jobs:
               const wf = workflows.data.workflows.find(w => w.name === name);
               if (!wf) {
                 core.info(`Workflow "${name}" not found, skipping`);
-                continue;
-              }
-
-              if (wf.name === currentWorkflowName) {
-                core.info(`Skipping current workflow "${wf.name}"`);
                 continue;
               }
 
@@ -48,11 +42,15 @@ jobs:
               core.info(`Deleting ${toDelete.length} old runs`);
 
               for (const run of toDelete) {
-                await github.rest.actions.deleteWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  run_id: run.id
-                });
+                try {
+                  await github.rest.actions.deleteWorkflowRun({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    run_id: run.id
+                  });
+                } catch (e) {
+                  core.info(`Skip run ${run.id}: ${e.message}`);
+                }
               } 
             }
 
