@@ -1,6 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 import java.util.ArrayList;
 import java.util.Arrays;

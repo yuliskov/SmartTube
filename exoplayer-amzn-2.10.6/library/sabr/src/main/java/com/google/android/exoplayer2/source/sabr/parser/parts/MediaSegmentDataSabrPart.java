@@ -2,7 +2,7 @@ package com.google.android.exoplayer2.source.sabr.parser.parts;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 public class MediaSegmentDataSabrPart implements SabrPart {
     public final FormatSelector formatSelector;

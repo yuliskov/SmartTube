@@ -1,6 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.parser.exceptions;
 
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 public class MediaSegmentMismatchError extends SabrStreamError {
     public final long expectedSequenceNumber;

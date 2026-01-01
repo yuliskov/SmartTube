@@ -11,7 +11,7 @@ import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
-import com.google.android.exoplayer2.source.sabr.parser.models.InitializedFormat;
+import com.google.android.exoplayer2.source.sabr.parser.models.SelectedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.Segment;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
@@ -24,7 +24,7 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrP
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
@@ -65,7 +65,7 @@ public class SabrProcessor {
     private final String videoId;
     private ClientAbrState clientAbrState;
     private final Map<Long, Segment> partialSegments;
-    private final Map<String, InitializedFormat> initializedFormats;
+    private final Map<String, SelectedFormat> selectedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
     private LiveMetadata liveMetadata;
@@ -112,7 +112,7 @@ public class SabrProcessor {
         captionFormatSelector = captionSelection;
 
         // IMPORTANT: initialized formats is assumed to contain only ACTIVE formats
-        initializedFormats = new HashMap<>();
+        selectedFormats = new HashMap<>();
 
         partialSegments = new HashMap<>();
         totalDurationMs = NO_VALUE;
@@ -154,7 +154,7 @@ public class SabrProcessor {
         clientAbrState = ClientAbrState.newBuilder()
                 .setPlayerTimeMs(startTimeMs)
                 .setEnabledTrackTypesBitfield(enabledTrackTypesBitfield)
-                .setDrcEnabled(true) // Required to stream DRC formats
+                .setDrcEnabled(false) // Required to stream DRC formats
                 .build();
     }
 
@@ -173,7 +173,7 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
         }
 
-        InitializedFormat initializedFormat = initializedFormats.get(mediaHeader.getFormatId().toString());
+        SelectedFormat initializedFormat = selectedFormats.get(mediaHeader.getFormatId().toString());
 
         if (initializedFormat == null) {
             throw new SabrStreamError(String.format("Initialized format not found for %s", mediaHeader.getFormatId()));
@@ -459,7 +459,7 @@ public class SabrProcessor {
     public ProcessFormatInitializationMetadataResult processFormatInitializationMetadata(FormatInitializationMetadata formatInitMetadata) {
         ProcessFormatInitializationMetadataResult result = new ProcessFormatInitializationMetadataResult();
 
-        if (formatInitMetadata.hasFormatId() && initializedFormats.containsKey(formatInitMetadata.getFormatId().toString())) {
+        if (formatInitMetadata.hasFormatId() && selectedFormats.containsKey(formatInitMetadata.getFormatId().toString())) {
             Log.d(TAG, "Format %s already initialized", formatInitMetadata.getFormatId());
             return result;
         }
@@ -482,8 +482,8 @@ public class SabrProcessor {
         // Changing a format will require adding some logic to handle inactive formats.
         // Given we only provide one FormatId currently, and this should not occur in this case,
         // we will mark this as not currently supported and bail.
-        for (InitializedFormat izf : initializedFormats.values()) {
-            if (izf.formatSelector == formatSelector) {
+        for (SelectedFormat selectedFormat : selectedFormats.values()) {
+            if (selectedFormat.formatSelector == formatSelector) {
                 throw new SabrStreamError("Server changed format. Changing formats is not currently supported");
             }
         }
@@ -499,7 +499,7 @@ public class SabrProcessor {
             totalSegments = liveMetadata.getHeadSequenceNumber();
         }
 
-        InitializedFormat initializedFormat = new InitializedFormat(
+        SelectedFormat initializedFormat = new SelectedFormat(
                 formatInitMetadata.hasFormatId() ? formatInitMetadata.getFormatId() : null,
                 durationMs,
                 formatInitMetadata.hasEndTimeMs() ? formatInitMetadata.getEndTimeMs() : -1,
@@ -529,7 +529,7 @@ public class SabrProcessor {
         }
 
         if (formatInitMetadata.hasFormatId()) {
-            initializedFormats.put(formatInitMetadata.getFormatId().toString(), initializedFormat);
+            selectedFormats.put(formatInitMetadata.getFormatId().toString(), initializedFormat);
             Log.d(TAG, "Initialized Format: %s", initializedFormat);
         }
 
@@ -558,7 +558,7 @@ public class SabrProcessor {
         // If we have a head sequence number, we need to update the total sequences for each initialized format
         // For livestreams, it is not available in the format initialization metadata
         if (liveMetadata.hasHeadSequenceNumber()) {
-            for (InitializedFormat izf : initializedFormats.values()) {
+            for (SelectedFormat izf : selectedFormats.values()) {
                 izf.totalSegments = liveMetadata.getHeadSequenceNumber();
             }
         }
@@ -574,7 +574,7 @@ public class SabrProcessor {
             Log.d(TAG, "Player time %s is less than min seekable time %s, simulating server seek",
                     clientAbrState.getPlayerTimeMs(), minSeekableTimeMs);
             clientAbrState = clientAbrState.toBuilder().setPlayerTimeMs(minSeekableTimeMs).build();
-            for (InitializedFormat izf : initializedFormats.values()) {
+            for (SelectedFormat izf : selectedFormats.values()) {
                 izf.currentSegment = null; // Clear the current segment as we expect segments to no longer be in order.
                 result.seekSabrParts.add(
                         new MediaSeekSabrPart(
@@ -590,7 +590,7 @@ public class SabrProcessor {
     }
 
     public ProcessSabrSeekResult processSabrSeek(SabrSeek sabrSeek) {
-        int seekTo = Utils.ticksToMs(sabrSeek.hasSeekTimeTicks() ? sabrSeek.getSeekTimeTicks() : -1, sabrSeek.hasTimescale() ? sabrSeek.getTimescale() : -1);
+        long seekTo = Utils.ticksToMs(sabrSeek.hasSeekMediaTime() ? sabrSeek.getSeekMediaTime() : -1, sabrSeek.hasSeekMediaTimescale() ? sabrSeek.getSeekMediaTimescale() : -1);
         if (seekTo == -1) {
             throw new SabrStreamError(String.format("Server sent a SabrSeek part that is missing required seek data: %s", sabrSeek));
         }
@@ -601,7 +601,7 @@ public class SabrProcessor {
 
         // Clear latest segment of each initialized format
         // as we expect them to no longer be in order.
-        for (InitializedFormat initializedFormat : initializedFormats.values()) {
+        for (SelectedFormat initializedFormat : selectedFormats.values()) {
             initializedFormat.currentSegment = null;
             result.seekSabrParts.add(
                     new MediaSeekSabrPart(
@@ -688,10 +688,10 @@ public class SabrProcessor {
     public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
         return VideoPlaybackAbrRequest.newBuilder()
                 .setClientAbrState(getClientAbrState())
-                .addAllSelectedVideoFormatIds(selectedVideoFormatIds)
-                .addAllSelectedAudioFormatIds(selectedAudioFormatIds)
-                .addAllSelectedCaptionFormatIds(selectedCaptionFormatIds)
-                .addAllInitializedFormatIds(getInitializedFormatIds())
+                .addAllPreferredVideoFormatIds(selectedVideoFormatIds)
+                .addAllPreferredAudioFormatIds(selectedAudioFormatIds)
+                .addAllPreferredSubtitleFormatIds(selectedCaptionFormatIds)
+                .addAllSelectedFormatIds(getSelectedFormatIds())
                 .setVideoPlaybackUstreamerConfig(
                         ByteString.copyFrom(
                                 Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
@@ -702,11 +702,11 @@ public class SabrProcessor {
                 .build();
     }
 
-    private List<FormatId> getInitializedFormatIds() {
+    private List<FormatId> getSelectedFormatIds() {
         List<FormatId> result = new ArrayList<>();
 
-        for (InitializedFormat initializedFormat : initializedFormats.values()) {
-            result.add(initializedFormat.formatId);
+        for (SelectedFormat selectedFormat : selectedFormats.values()) {
+            result.add(selectedFormat.formatId);
         }
 
         return result;
@@ -760,7 +760,7 @@ public class SabrProcessor {
     private List<BufferedRange> createBufferedRanges() {
         List<BufferedRange> result = new ArrayList<>();
 
-        for (InitializedFormat initializedFormat : initializedFormats.values()) {
+        for (SelectedFormat initializedFormat : selectedFormats.values()) {
             for (ConsumedRange cr : initializedFormat.consumedRanges) {
                 result.add(
                         BufferedRange.newBuilder()

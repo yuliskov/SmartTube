@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message MediaCapabilities {
+  repeated VideoFormatCapability video_format_capabilities = 1;
+  repeated AudioFormatCapability audio_format_capabilities = 2;
+  optional int32 hdr_mode_bitmask = 5;
+
+  message VideoFormatCapability {
+    optional int32 video_codec = 1;
+    optional int32 max_height = 3;
+    optional int32 max_width = 4;
+    optional int32 max_framerate = 11;
+    optional int32 max_bitrate_bps = 12;
+    optional bool is_10_bit_supported = 15;
+  }
+
+  message AudioFormatCapability {
+    optional int32 audio_codec = 1;
+    optional int32 num_channels = 2;
+    optional int32 max_bitrate_bps = 3;
+    optional int32 spatial_capability_bitmask = 6;
+  }
+}

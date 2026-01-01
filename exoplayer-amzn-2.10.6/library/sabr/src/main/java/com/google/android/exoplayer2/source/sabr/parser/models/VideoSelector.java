@@ -1,6 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 public class VideoSelector extends FormatSelector {
     public VideoSelector(String displayName, boolean discardMedia) {

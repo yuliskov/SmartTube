@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "sabr/videostreaming/compression_algorithm.proto";
-import "sabr/videostreaming/format_id.proto";
+import "sabr/misc/common.proto";
 import "sabr/videostreaming/time_range.proto";
 
 package sabr.videostreaming;
@@ -23,7 +23,7 @@ message MediaHeader {
     optional int64 bitrate_bps = 10;
     optional int32 start_ms = 11;
     optional int32 duration_ms = 12;
-    optional FormatId format_id = 13;
+    optional sabr.misc.FormatId format_id = 13;
     optional int64 content_length = 14;
     optional TimeRange time_range = 15;
     optional int32 sequence_lmt = 16;

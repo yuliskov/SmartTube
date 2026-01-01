@@ -1,6 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 public class Segment {
     public final FormatId formatId;
@@ -11,7 +11,7 @@ public class Segment {
     public final long contentLength;
     public final boolean contentLengthEstimated;
     public final int startMs;
-    public final InitializedFormat initializedFormat;
+    public final SelectedFormat initializedFormat;
     public final boolean durationEstimated;
     public final boolean discard;
     public final boolean consumed;
@@ -26,7 +26,7 @@ public class Segment {
                    long contentLength,
                    boolean contentLengthEstimated,
                    int startMs,
-                   InitializedFormat initializedFormat,
+                   SelectedFormat initializedFormat,
                    boolean durationEstimated,
                    boolean discard,
                    boolean consumed,

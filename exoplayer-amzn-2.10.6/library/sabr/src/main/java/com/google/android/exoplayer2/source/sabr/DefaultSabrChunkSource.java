@@ -34,7 +34,7 @@ import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -637,7 +637,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private static FormatId createFormatId(Format format) {
         FormatId formatId = FormatId.newBuilder()
                 .setItag(Helpers.parseInt(format.id))
-                .setLmt(format.lastModified)
+                .setLastModified(format.lastModified)
                 .build();
         return formatId;
     }

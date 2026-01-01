@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message InnertubeRequest {
+  optional bytes context = 1;
+  optional bytes encrypted_onesie_innertube_request = 2;
+  optional bytes encrypted_client_key = 5;
+  optional bytes iv = 6;
+  optional bytes hmac = 7;
+  optional string reverse_proxy_config = 9;
+  optional bool serialize_response_as_json = 10;
+  optional bool enable_ad_placements_preroll = 13;
+  optional bool enable_compression = 14;
+  optional UstreamerFlags ustreamer_flags = 15;
+  optional bytes unencrypted_onesie_innertube_request = 16;
+  optional bool use_jsonformatter_to_parse_player_response = 17;
+}
+
+message UstreamerFlags {
+  optional bool send_video_playback_config = 2;
+}
