@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          gh release download $TAG_NAME --dir release_assets --pattern "*.apk"
+          gh release download $TAG_NAME --dir release_assets --pattern "*.apk" || echo "No APKs found"
           ls -l release_assets
 
       - name: Install VirusTotal CLI
