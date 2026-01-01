@@ -431,6 +431,7 @@
     <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
     <string name="saved_to_playlists">Přidáno do sekce Playlisty</string>
     <string name="create_playlist">Vytvořit playlist</string>
+    <string name="create_playlist_note">nebude to viditelné v YouTube aplikaci</string>
     <string name="add_video_to_new_playlist">Přidat do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nelze smazat prázdný playlist</string>
     <string name="playlist">Playlist</string>
@@ -712,6 +713,11 @@
     <string name="typing_corrections">Zakázat automatické opravy při psaní textu</string>
     <string name="suggestions_horizontally_scrolled">Horizontálně posouvané Návrhy</string>
     <string name="stable_restore">Obnovit stabilní verzi (všechna data budou ztracena)</string>
+    <string name="auto_backup_category">Automatická záloha</string>
+    <string name="once_a_day">Jednou denně</string>
+    <string name="once_a_week">Jednou týdně</string>
+    <string name="once_a_month">Jednou měsíčně</string>
 </resources>
+
 
 
