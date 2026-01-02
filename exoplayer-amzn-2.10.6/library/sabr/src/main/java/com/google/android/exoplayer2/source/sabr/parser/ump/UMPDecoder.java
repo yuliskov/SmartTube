@@ -28,71 +28,71 @@ public class UMPDecoder {
         }
     }
 
-    //private long readVarInt(StreamWrapper input) throws IOException, InterruptedException {
-    //    // https://web.archive.org/web/20250430054327/https://github.com/gsuberland/UMP_Format/blob/main/UMP_Format.md
-    //    // https://web.archive.org/web/20250429151021/https://github.com/davidzeng0/innertube/blob/main/googlevideo/ump.md
-    //    byte[] buffer = new byte[1];
-    //    boolean success = input.readFully(buffer, 0, 1, true);
-    //    if (!success) {
-    //        // Expected EOF
-    //        return -1;
-    //    }
-    //
-    //    long byteInt = buffer[0] & 0xFF; // convert to unsigned (0..255)
-    //    int size = varIntSize(byteInt);
-    //    long result = 0;
-    //    int shift = 0;
-    //
-    //    if (size != 5) {
-    //        shift = 8 - size;
-    //        int mask = (1 << shift) - 1;
-    //        result |= byteInt & mask;
-    //    }
-    //
-    //    for (int i : Helpers.range(1, size - 1, 1)) {
-    //        success = input.readFully(buffer, 0, 1, true);
-    //        if (!success) {
-    //            return -1;
-    //        }
-    //        byteInt = buffer[0] & 0xFF; // convert to unsigned (0..255)
-    //        result |= byteInt << shift;
-    //        shift += 8;
-    //    }
-    //
-    //    return result;
-    //}
-
     private long readVarInt(StreamWrapper input) throws IOException, InterruptedException {
         // https://web.archive.org/web/20250430054327/https://github.com/gsuberland/UMP_Format/blob/main/UMP_Format.md
         // https://web.archive.org/web/20250429151021/https://github.com/davidzeng0/innertube/blob/main/googlevideo/ump.md
         byte[] buffer = new byte[1];
-        if (!input.readFully(buffer, 0, 1, true)) {
-            return -1; // clean EOF before reading anything
+        boolean success = input.readFully(buffer, 0, 1, true);
+        if (!success) {
+            // Expected EOF
+            return -1;
         }
 
-        long first = buffer[0] & 0xFF;
-        int size = varIntSize(first);
+        long byteInt = buffer[0] & 0xFF; // convert to unsigned (0..255)
+        int size = varIntSize(byteInt);
+        long result = 0;
+        int shift = 0;
 
-        if (size < 1 || size > 5) {
-            throw new IOException("Invalid VarInt size: " + size);
+        if (size != 5) {
+            shift = 8 - size;
+            int mask = (1 << shift) - 1;
+            result |= byteInt & mask;
         }
 
-        int payloadBits = 8 - (size + 1);
-        long result = first & ((1L << payloadBits) - 1);
-        int shift = payloadBits;
-
-        for (int i = 1; i < size; i++) {
-            if (!input.readFully(buffer, 0, 1, true)) {
-                throw new EOFException("Unexpected EOF in VarInt");
+        for (int i : Helpers.range(1, size - 1, 1)) {
+            success = input.readFully(buffer, 0, 1, true);
+            if (!success) {
+                return -1;
             }
-            long b = buffer[0] & 0xFF;
-            result |= b << shift;
+            byteInt = buffer[0] & 0xFF; // convert to unsigned (0..255)
+            result |= byteInt << shift;
             shift += 8;
         }
 
         return result;
     }
 
+    //private long readVarInt(StreamWrapper input) throws IOException, InterruptedException {
+    //    // https://web.archive.org/web/20250430054327/https://github.com/gsuberland/UMP_Format/blob/main/UMP_Format.md
+    //    // https://web.archive.org/web/20250429151021/https://github.com/davidzeng0/innertube/blob/main/googlevideo/ump.md
+    //    byte[] buffer = new byte[1];
+    //    if (!input.readFully(buffer, 0, 1, true)) {
+    //        return -1; // clean EOF before reading anything
+    //    }
+    //
+    //    long first = buffer[0] & 0xFF;
+    //    int size = varIntSize(first);
+    //
+    //    if (size < 1 || size > 5) {
+    //        throw new IOException("Invalid VarInt size: " + size);
+    //    }
+    //
+    //    int payloadBits = 8 - (size + 1);
+    //    long result = first & ((1L << payloadBits) - 1);
+    //    int shift = payloadBits;
+    //
+    //    for (int i = 1; i < size; i++) {
+    //        if (!input.readFully(buffer, 0, 1, true)) {
+    //            throw new EOFException("Unexpected EOF in VarInt");
+    //        }
+    //        long b = buffer[0] & 0xFF;
+    //        result |= b << shift;
+    //        shift += 8;
+    //    }
+    //
+    //    return result;
+    //}
+    
     public long readVarInt(ExtractorInput input) throws IOException, InterruptedException {
         return readVarInt(input::readFully);
     }

@@ -461,10 +461,12 @@ public class SabrStream {
                 break;
             }
 
+            // Normal reading: 47, 58. 52, 53, 42, 35, 20, 21, 22, 20...
             if (contains(KNOWN_PARTS, part.partId)) {
                 break;
             } else {
                 Log.d(TAG, "Unknown part encountered: %s", part.partId);
+                part.skip(); // an essential part to continue reading
             }
         }
 
