@@ -26,7 +26,7 @@ import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;

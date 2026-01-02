@@ -1,23 +1,161 @@
 syntax = "proto3";
 
-import "sabr/videostreaming/client_info.proto";
-
 package sabr.videostreaming;
 
 option java_multiple_files = true;
 option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
 option optimize_for = LITE_RUNTIME;
 
-message SabrContext {
-  // Type and Value from a SabrContextUpdate
-  optional int32 type = 1;
-  optional bytes value = 2;
-}
-
 message StreamerContext {
+  message ClientInfo {
+    optional string hl = 1;
+    optional string gl = 2;
+    optional string remote_host = 4;
+
+    optional string device_make = 12;
+    optional string device_model = 13;
+    optional ClientName client_name = 16;
+    optional string client_version = 17;
+    optional string os_name = 18;
+    optional string os_version = 19;
+    optional string accept_language = 21;
+    optional string accept_region = 22;
+    optional int32 screen_width_points = 37;
+    optional int32 screen_height_points = 38;
+    optional float screen_width_inches = 39;
+    optional float screen_height_inches = 40;
+    optional int32 screen_pixel_density = 41;
+    optional ClientFormFactor client_form_factor = 46;
+    optional int32 gmscore_version_code = 50; // e.g. 243731017
+    optional int32 window_width_points = 55;
+    optional int32 window_height_points = 56;
+    optional int32 android_sdk_version = 64;
+    optional float screen_density_float = 65;
+    optional int64 utc_offset_minutes = 67;
+    optional string time_zone = 80;
+    optional string chipset = 92; // e.g. "qcom;taro"
+    optional GLDeviceInfo gl_device_info = 102;
+  }
+
+  enum ClientName {
+    UNKNOWN_INTERFACE = 0;
+    WEB = 1;
+    MWEB = 2;
+    ANDROID = 3;
+    IOS = 5;
+    TVHTML5 = 7;
+    TVLITE = 8;
+    TVANDROID = 10;
+    XBOX = 11;
+    CLIENTX = 12;
+    XBOXONEGUIDE = 13;
+    ANDROID_CREATOR = 14;
+    IOS_CREATOR = 15;
+    TVAPPLE = 16;
+    IOS_INSTANT = 17;
+    ANDROID_KIDS = 18;
+    IOS_KIDS = 19;
+    ANDROID_INSTANT = 20;
+    ANDROID_MUSIC = 21;
+    IOS_TABLOID = 22;
+    ANDROID_TV = 23;
+    ANDROID_GAMING = 24;
+    IOS_GAMING = 25;
+    IOS_MUSIC = 26;
+    MWEB_TIER_2 = 27;
+    ANDROID_VR = 28;
+    ANDROID_UNPLUGGED = 29;
+    ANDROID_TESTSUITE = 30;
+    WEB_MUSIC_ANALYTICS = 31;
+    WEB_GAMING = 32;
+    IOS_UNPLUGGED = 33;
+    ANDROID_WITNESS = 34;
+    IOS_WITNESS = 35;
+    ANDROID_SPORTS = 36;
+    IOS_SPORTS = 37;
+    ANDROID_LITE = 38;
+    IOS_EMBEDDED_PLAYER = 39;
+    IOS_DIRECTOR = 40;
+    WEB_UNPLUGGED = 41;
+    WEB_EXPERIMENTS = 42;
+    TVHTML5_CAST = 43;
+    WEB_EMBEDDED_PLAYER = 56;
+    TVHTML5_AUDIO = 57;
+    TV_UNPLUGGED_CAST = 58;
+    TVHTML5_KIDS = 59;
+    WEB_HEROES = 60;
+    WEB_MUSIC = 61;
+    WEB_CREATOR = 62;
+    TV_UNPLUGGED_ANDROID = 63;
+    IOS_LIVE_CREATION_EXTENSION = 64;
+    TVHTML5_UNPLUGGED = 65;
+    IOS_MESSAGES_EXTENSION = 66;
+    WEB_REMIX = 67;
+    IOS_UPTIME = 68;
+    WEB_UNPLUGGED_ONBOARDING = 69;
+    WEB_UNPLUGGED_OPS = 70;
+    WEB_UNPLUGGED_PUBLIC = 71;
+    TVHTML5_VR = 72;
+    WEB_LIVE_STREAMING = 73;
+    ANDROID_TV_KIDS = 74;
+    TVHTML5_SIMPLY = 75;
+    WEB_KIDS = 76;
+    MUSIC_INTEGRATIONS = 77;
+    TVHTML5_YONGLE = 80;
+    GOOGLE_ASSISTANT = 84;
+    TVHTML5_SIMPLY_EMBEDDED_PLAYER = 85;
+    WEB_MUSIC_EMBEDDED_PLAYER = 86;
+    WEB_INTERNAL_ANALYTICS = 87;
+    WEB_PARENT_TOOLS = 88;
+    GOOGLE_MEDIA_ACTIONS = 89;
+    WEB_PHONE_VERIFICATION = 90;
+    ANDROID_PRODUCER = 91;
+    IOS_PRODUCER = 92;
+    TVHTML5_FOR_KIDS = 93;
+    GOOGLE_LIST_RECS = 94;
+    MEDIA_CONNECT_FRONTEND = 95;
+    WEB_EFFECT_MAKER = 98;
+    WEB_SHOPPING_EXTENSION = 99;
+    WEB_PLAYABLES_PORTAL = 100;
+    VISIONOS = 101;
+    WEB_LIVE_APPS = 102;
+    WEB_MUSIC_INTEGRATIONS = 103;
+    ANDROID_MUSIC_AOSP = 104;
+  }
+
+  enum ClientFormFactor {
+    UNKNOWN_FORM_FACTOR = 0;
+    FORM_FACTOR_VAL1 = 1;
+    FORM_FACTOR_VAL2 = 2;
+  }
+
+  message GLDeviceInfo {
+    optional string gl_renderer = 1;
+    optional int32 gl_es_version_major = 2;
+    optional int32 gl_es_version_minor = 3;
+  }
+
+  message SabrContext {
+    optional int32 type = 1;
+    optional bytes value = 2;
+  }
+
+  message UnknownMessage1 {
+    message UnknownInnerMessage1 {
+      optional int32 code = 1;
+      optional string message = 2;
+    }
+
+    optional bytes field1 = 1;
+    optional UnknownInnerMessage1 field2 = 2;
+  }
+
   optional ClientInfo client_info = 1;
   optional bytes po_token = 2;
   optional bytes playback_cookie = 3;
+  optional bytes field4 = 4;
   repeated SabrContext sabr_contexts = 5;
   repeated int32 unsent_sabr_contexts = 6;
+  optional string field7 = 7;
+  optional UnknownMessage1 field8 = 8;
 }

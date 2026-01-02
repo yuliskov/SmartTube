@@ -3,7 +3,7 @@ package com.google.android.exoplayer2.source.sabr.manifest;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 
 import java.util.List;
 

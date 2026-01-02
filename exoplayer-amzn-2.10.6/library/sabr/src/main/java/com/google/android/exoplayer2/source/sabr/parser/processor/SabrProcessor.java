@@ -23,13 +23,14 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrP
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContext;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientName;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.SabrContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
@@ -685,20 +686,100 @@ public class SabrProcessor {
         return liveSegmentTargetDurationSec;
     }
 
+    //public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+    //    return VideoPlaybackAbrRequest.newBuilder()
+    //            .setClientAbrState(getClientAbrState())
+    //            .addAllPreferredVideoFormatIds(selectedVideoFormatIds)
+    //            .addAllPreferredAudioFormatIds(selectedAudioFormatIds)
+    //            .addAllPreferredSubtitleFormatIds(selectedCaptionFormatIds)
+    //            .addAllSelectedFormatIds(getSelectedFormatIds())
+    //            .setVideoPlaybackUstreamerConfig(
+    //                    ByteString.copyFrom(
+    //                            Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
+    //                    )
+    //            )
+    //            .setStreamerContext(createStreamerContext())
+    //            .addAllBufferedRanges(createBufferedRanges())
+    //            .build();
+    //}
+
     public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+        ClientAbrState clientAbrStateTest = ClientAbrState.newBuilder()
+                .setLastManualSelectedResolution(1080)
+                .setStickyResolution(1080)
+                .setBandwidthEstimate(1350000)
+                .setEnabledTrackTypesBitfield(2)
+                .setDrcEnabled(false)
+                .setSabrForceMaxNetworkInterruptionDurationMs(0)
+                .build();
+
+        FormatId selectedVideo = FormatId.newBuilder()
+                .setItag(399)
+                .setLastModified(1759475866788004L)
+                .build();
+        FormatId selectedAudio = FormatId.newBuilder()
+                .setItag(140)
+                .setLastModified(1759475037898391L)
+                .build();
+        List<FormatId> selectedFormats = new ArrayList<>();
+        selectedFormats.add(selectedAudio);
+
+        List<FormatId> preferredVideoFormats = new ArrayList<>();
+        preferredVideoFormats.add(selectedVideo);
+
+        List<FormatId> preferredAudioFormats = new ArrayList<>();
+        preferredAudioFormats.add(selectedAudio);
+
+        TimeRange timeRange = TimeRange.newBuilder()
+                .setStartTicks(0)
+                .setDurationTicks(2147483647)
+                .setTimescale(1000)
+                .build();
+        BufferedRange bufferedRange = BufferedRange.newBuilder()
+                .setFormatId(selectedAudio)
+                .setStartTimeMs(0)
+                .setDurationMs(2147483647)
+                .setStartSegmentIndex(2147483647)
+                .setEndSegmentIndex(2147483647)
+                .setTimeRange(timeRange)
+                .build();
+        List<BufferedRange> bufferedRanges = new ArrayList<>();
+        bufferedRanges.add(bufferedRange);
+
+        ClientInfo clientInfoTest = ClientInfo.newBuilder()
+                .setClientName(ClientName.WEB)
+                .setClientVersion("2.20250222.10.00")
+                .setOsName("Macintosh")
+                .setOsVersion("10_15_7")
+                .build();
+
+        StreamerContext streamerContext = StreamerContext.newBuilder()
+                .setPoToken(
+                        ByteString.copyFrom(
+                                Base64.decode(poToken, Base64.URL_SAFE)
+                        )
+                )
+                .setPlaybackCookie(
+                        nextRequestPolicy != null ? nextRequestPolicy.getPlaybackCookie() : ByteString.EMPTY
+                )
+                .setClientInfo(clientInfoTest)
+                .addAllSabrContexts(createSabrContexts())
+                .addAllUnsentSabrContexts(createUnsentSabrContexts())
+                .build();
+
         return VideoPlaybackAbrRequest.newBuilder()
-                .setClientAbrState(getClientAbrState())
-                .addAllPreferredVideoFormatIds(selectedVideoFormatIds)
-                .addAllPreferredAudioFormatIds(selectedAudioFormatIds)
+                .setClientAbrState(clientAbrStateTest)
+                .addAllPreferredVideoFormatIds(preferredVideoFormats)
+                .addAllPreferredAudioFormatIds(preferredAudioFormats)
                 .addAllPreferredSubtitleFormatIds(selectedCaptionFormatIds)
-                .addAllSelectedFormatIds(getSelectedFormatIds())
+                .addAllSelectedFormatIds(selectedFormats)
+                .addAllBufferedRanges(bufferedRanges)
                 .setVideoPlaybackUstreamerConfig(
                         ByteString.copyFrom(
                                 Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
                         )
                 )
-                .setStreamerContext(createStreamerContext())
-                .addAllBufferedRanges(createBufferedRanges())
+                .setStreamerContext(streamerContext)
                 .build();
     }
 
