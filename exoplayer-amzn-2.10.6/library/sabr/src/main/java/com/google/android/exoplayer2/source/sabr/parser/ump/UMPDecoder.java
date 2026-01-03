@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.ByteArrayInputStream;
-import java.io.EOFException;
 import java.io.IOException;
 
 public class UMPDecoder {
@@ -92,7 +91,7 @@ public class UMPDecoder {
     //
     //    return result;
     //}
-    
+
     public long readVarInt(ExtractorInput input) throws IOException, InterruptedException {
         return readVarInt(input::readFully);
     }

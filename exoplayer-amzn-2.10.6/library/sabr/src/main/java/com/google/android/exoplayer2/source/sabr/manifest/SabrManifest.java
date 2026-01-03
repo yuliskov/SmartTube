@@ -3,6 +3,7 @@ package com.google.android.exoplayer2.source.sabr.manifest;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
+import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 
 import java.util.List;
@@ -63,6 +64,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final String poToken;
     private final String videoId;
     private final ClientInfo clientInfo;
+    private final SabrStream sabrStream;
 
     public SabrManifest(
             long availabilityStartTimeMs,
@@ -93,8 +95,22 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.poToken = poToken;
         this.videoId = videoId;
         this.clientInfo = clientInfo;
+        this.sabrStream = new SabrStream(
+                serverAbrStreamingUrl,
+                videoPlaybackUstreamerConfig,
+                clientInfo,
+                //createAudioSelection(trackType, trackSelection),
+                //createVideoSelection(trackType, trackSelection),
+                //createCaptionSelection(trackType, trackSelection),
+                -1,
+                -1,
+                -1,
+                poToken,
+                false,
+                videoId
+        );
     }
-
+    
     public final int getPeriodCount() {
         return periods.size();
     }
@@ -118,23 +134,27 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return null;
     }
 
-    public final String getServerAbrStreamingUrl() {
-        return serverAbrStreamingUrl;
-    }
-
-    public final String getVideoPlaybackUstreamerConfig() {
-        return videoPlaybackUstreamerConfig;
-    }
-
-    public final String getPoToken() {
-        return poToken;
-    }
+    //public final String getServerAbrStreamingUrl() {
+    //    return serverAbrStreamingUrl;
+    //}
+    //
+    //public final String getVideoPlaybackUstreamerConfig() {
+    //    return videoPlaybackUstreamerConfig;
+    //}
+    //
+    //public final String getPoToken() {
+    //    return poToken;
+    //}
+    //
+    //public ClientInfo getClientInfo() {
+    //    return clientInfo;
+    //}
 
     public final String getVideoId() {
         return videoId;
     }
 
-    public ClientInfo getClientInfo() {
-        return clientInfo;
+    public SabrStream getSabrStream() {
+        return sabrStream;
     }
 }

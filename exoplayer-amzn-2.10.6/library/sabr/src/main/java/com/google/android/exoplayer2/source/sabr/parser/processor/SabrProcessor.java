@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
@@ -29,7 +30,6 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatIni
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientName;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.SabrContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
@@ -81,9 +81,9 @@ public class SabrProcessor {
     public SabrProcessor(
             @NonNull String videoPlaybackUstreamerConfig,
             @NonNull ClientInfo clientInfo,
-            AudioSelector audioSelection,
-            VideoSelector videoSelection,
-            CaptionSelector captionSelection,
+            //AudioSelector audioSelection,
+            //VideoSelector videoSelection,
+            //CaptionSelector captionSelection,
             int liveSegmentTargetDurationSec,
             int liveSegmentTargetDurationToleranceMs,
             long startTimeMs,
@@ -108,9 +108,9 @@ public class SabrProcessor {
         isLive = false;
         this.videoId = videoId;
 
-        audioFormatSelector = audioSelection;
-        videoFormatSelector = videoSelection;
-        captionFormatSelector = captionSelection;
+        //audioFormatSelector = audioSelection;
+        //videoFormatSelector = videoSelection;
+        //captionFormatSelector = captionSelection;
 
         // IMPORTANT: initialized formats is assumed to contain only ACTIVE formats
         selectedFormats = new HashMap<>();
@@ -703,83 +703,32 @@ public class SabrProcessor {
     //            .build();
     //}
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType) {
+        int resolution = 1080; // ???
+        int bandwidthEstimate = 1350000; // ???
+
         ClientAbrState clientAbrStateTest = ClientAbrState.newBuilder()
-                .setLastManualSelectedResolution(1080)
-                .setStickyResolution(1080)
-                .setBandwidthEstimate(1350000)
-                .setEnabledTrackTypesBitfield(2)
+                .setLastManualSelectedResolution(resolution)
+                .setStickyResolution(resolution)
+                .setBandwidthEstimate(bandwidthEstimate)
+                .setEnabledTrackTypesBitfield(getAllSelectedTracksBitfield(trackType))
                 .setDrcEnabled(false)
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
                 .build();
-
-        FormatId selectedVideo = FormatId.newBuilder()
-                .setItag(399)
-                .setLastModified(1759475866788004L)
-                .build();
-        FormatId selectedAudio = FormatId.newBuilder()
-                .setItag(140)
-                .setLastModified(1759475037898391L)
-                .build();
-        List<FormatId> selectedFormats = new ArrayList<>();
-        selectedFormats.add(selectedAudio);
-
-        List<FormatId> preferredVideoFormats = new ArrayList<>();
-        preferredVideoFormats.add(selectedVideo);
-
-        List<FormatId> preferredAudioFormats = new ArrayList<>();
-        preferredAudioFormats.add(selectedAudio);
-
-        TimeRange timeRange = TimeRange.newBuilder()
-                .setStartTicks(0)
-                .setDurationTicks(2147483647)
-                .setTimescale(1000)
-                .build();
-        BufferedRange bufferedRange = BufferedRange.newBuilder()
-                .setFormatId(selectedAudio)
-                .setStartTimeMs(0)
-                .setDurationMs(2147483647)
-                .setStartSegmentIndex(2147483647)
-                .setEndSegmentIndex(2147483647)
-                .setTimeRange(timeRange)
-                .build();
-        List<BufferedRange> bufferedRanges = new ArrayList<>();
-        bufferedRanges.add(bufferedRange);
-
-        ClientInfo clientInfoTest = ClientInfo.newBuilder()
-                .setClientName(ClientName.WEB)
-                .setClientVersion("2.20250222.10.00")
-                .setOsName("Macintosh")
-                .setOsVersion("10_15_7")
-                .build();
-
-        StreamerContext streamerContext = StreamerContext.newBuilder()
-                .setPoToken(
-                        ByteString.copyFrom(
-                                Base64.decode(poToken, Base64.URL_SAFE)
-                        )
-                )
-                .setPlaybackCookie(
-                        nextRequestPolicy != null ? nextRequestPolicy.getPlaybackCookie() : ByteString.EMPTY
-                )
-                .setClientInfo(clientInfoTest)
-                .addAllSabrContexts(createSabrContexts())
-                .addAllUnsentSabrContexts(createUnsentSabrContexts())
-                .build();
-
+        
         return VideoPlaybackAbrRequest.newBuilder()
                 .setClientAbrState(clientAbrStateTest)
-                .addAllPreferredVideoFormatIds(preferredVideoFormats)
-                .addAllPreferredAudioFormatIds(preferredAudioFormats)
-                .addAllPreferredSubtitleFormatIds(selectedCaptionFormatIds)
-                .addAllSelectedFormatIds(selectedFormats)
-                .addAllBufferedRanges(bufferedRanges)
+                .addAllPreferredVideoFormatIds(videoFormatSelector.formatIds)
+                .addAllPreferredAudioFormatIds(audioFormatSelector.formatIds)
+                .addAllPreferredSubtitleFormatIds(captionFormatSelector.formatIds)
+                .addAllSelectedFormatIds(getAllSelectedFormatIds(trackType))
+                .addAllBufferedRanges(createAllBufferedRanges(trackType))
                 .setVideoPlaybackUstreamerConfig(
                         ByteString.copyFrom(
                                 Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
                         )
                 )
-                .setStreamerContext(streamerContext)
+                .setStreamerContext(createStreamerContext())
                 .build();
     }
 
@@ -788,6 +737,32 @@ public class SabrProcessor {
 
         for (SelectedFormat selectedFormat : selectedFormats.values()) {
             result.add(selectedFormat.formatId);
+        }
+
+        return result;
+    }
+
+    private int getAllSelectedTracksBitfield(int trackType) {
+        if (!videoFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_VIDEO) {
+            return 1;
+        } else if (!audioFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_AUDIO) {
+            return 2;
+        } else if (!captionFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_TEXT) {
+            return 3;
+        }
+
+        return 0;
+    }
+
+    private List<FormatId> getAllSelectedFormatIds(int trackType) {
+        List<FormatId> result = new ArrayList<>();
+
+        if (!videoFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_VIDEO) {
+            return videoFormatSelector.formatIds;
+        } else if (!audioFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_AUDIO) {
+            return audioFormatSelector.formatIds;
+        } else if (!captionFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_TEXT) {
+            return captionFormatSelector.formatIds;
         }
 
         return result;
@@ -865,6 +840,30 @@ public class SabrProcessor {
         return result;
     }
 
+    private List<BufferedRange> createAllBufferedRanges(int trackType) {
+        List<FormatId> allSelectedFormatIds = getAllSelectedFormatIds(trackType);
+        
+        int durationMs = 2147483647; // ???
+
+        TimeRange timeRange = TimeRange.newBuilder()
+                .setStartTicks(0)
+                .setDurationTicks(durationMs)
+                .setTimescale(1_000)
+                .build();
+        BufferedRange bufferedRange = BufferedRange.newBuilder()
+                .setFormatId(allSelectedFormatIds.get(0))
+                .setStartTimeMs(0)
+                .setDurationMs(durationMs)
+                .setStartSegmentIndex(durationMs)
+                .setEndSegmentIndex(durationMs)
+                .setTimeRange(timeRange)
+                .build();
+        List<BufferedRange> bufferedRanges = new ArrayList<>();
+        bufferedRanges.add(bufferedRange);
+
+        return bufferedRanges;
+    }
+
     private FormatSelector matchFormatSelector(FormatInitializationMetadata formatInitMetadata) {
         for (FormatSelector formatSelector : new FormatSelector[]{videoFormatSelector, audioFormatSelector, captionFormatSelector}) {
             if (formatSelector == null) {
@@ -877,5 +876,20 @@ public class SabrProcessor {
         }
 
         return null;
+    }
+
+    public void setVideoFormatSelector(VideoSelector videoFormatSelector) {
+        this.videoFormatSelector = videoFormatSelector;
+        initializeClientAbrState();
+    }
+
+    public void setAudioFormatSelector(AudioSelector audioFormatSelector) {
+        this.audioFormatSelector = audioFormatSelector;
+        initializeClientAbrState();
+    }
+
+    public void setCaptionFormatSelector(CaptionSelector captionFormatSelector) {
+        this.captionFormatSelector = captionFormatSelector;
+        initializeClientAbrState();
     }
 }

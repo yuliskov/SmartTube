@@ -20,7 +20,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaSubtitle;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.youtubeapi.formatbuilders.mpdbuilder.MediaFormatComparator;
 import com.liskovsoft.youtubeapi.formatbuilders.utils.ITagUtils;
 import com.liskovsoft.youtubeapi.formatbuilders.utils.MediaFormatUtils;
@@ -706,6 +705,8 @@ public class SabrManifestParser {
         return ClientInfo.newBuilder()
                 .setClientName(ClientName.valueOf(clientInfo.getClientName()))
                 .setClientVersion(clientInfo.getClientVersion())
+                .setOsName(clientInfo.getOsName())
+                .setOsVersion(clientInfo.getOsVersion())
                 .build();
     }
 

@@ -19,9 +19,9 @@ public class UMPPart {
 
     public void skip() {
         try {
-            data.skipFully(size, true);
+            data.skipFully(size);
         } catch (Exception e) {
-            throw new IllegalStateException("Cannot skip part with the id: " + partId, e);
+            throw new IllegalStateException("Cannot skip part with the id: " + partId + ", and size: " + size, e);
         }
     }
 }

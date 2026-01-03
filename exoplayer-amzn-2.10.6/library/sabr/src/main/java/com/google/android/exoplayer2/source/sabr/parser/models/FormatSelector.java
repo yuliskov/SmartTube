@@ -1,6 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +31,8 @@ public class FormatSelector {
 
     public boolean match(FormatId formatId, String mimeType) {
         return formatIds.contains(formatId)
-                || (formatIds.isEmpty() && getMimePrefix() != null && mimeType != null && mimeType.toLowerCase().startsWith(getMimePrefix()));
+                || (formatIds.isEmpty() && getMimePrefix() != null && mimeType != null && mimeType.toLowerCase().startsWith(getMimePrefix()))
+                || Helpers.findFirst(formatIds, fmt -> fmt.hasItag() && formatId.hasItag() && fmt.getItag() == formatId.getItag()) != null;
     }
 
     public boolean isDiscardMedia() {

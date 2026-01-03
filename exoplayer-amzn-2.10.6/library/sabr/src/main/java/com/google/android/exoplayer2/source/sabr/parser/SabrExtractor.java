@@ -315,15 +315,15 @@ public class SabrExtractor implements Extractor {
             SabrPart sabrPart = sabrStream.parse(input);
             continueReading = sabrPart != null;
 
-            if (sabrPart instanceof FormatInitializedSabrPart) {
-                initializeFormat((FormatInitializedSabrPart) sabrPart);
-            } else if (sabrPart instanceof MediaSegmentInitSabrPart) {
-                initializeSegment((MediaSegmentInitSabrPart) sabrPart);
-            } else if (sabrPart instanceof MediaSegmentDataSabrPart) {
-                writeSegmentData((MediaSegmentDataSabrPart) sabrPart);
-            } else if (sabrPart instanceof MediaSegmentEndSabrPart) {
-                endSegment((MediaSegmentEndSabrPart) sabrPart);
-            }
+            //if (sabrPart instanceof FormatInitializedSabrPart) {
+            //    initializeFormat((FormatInitializedSabrPart) sabrPart);
+            //} else if (sabrPart instanceof MediaSegmentInitSabrPart) {
+            //    initializeSegment((MediaSegmentInitSabrPart) sabrPart);
+            //} else if (sabrPart instanceof MediaSegmentDataSabrPart) {
+            //    writeSegmentData((MediaSegmentDataSabrPart) sabrPart);
+            //} else if (sabrPart instanceof MediaSegmentEndSabrPart) {
+            //    endSegment((MediaSegmentEndSabrPart) sabrPart);
+            //}
 
             if (continueReading && maybeSeekForCues(seekPosition, input.getPosition())) {
                 return Extractor.RESULT_SEEK;

@@ -111,9 +111,9 @@ public class SabrStream {
             @NonNull String serverAbrStreamingUrl,
             @NonNull String videoPlaybackUstreamerConfig,
             @NonNull ClientInfo clientInfo,
-            AudioSelector audioSelection,
-            VideoSelector videoSelection,
-            CaptionSelector captionSelection,
+            //AudioSelector audioSelection,
+            //VideoSelector videoSelection,
+            //CaptionSelector captionSelection,
             int liveSegmentTargetDurationSec,
             int liveSegmentTargetDurationToleranceMs,
             long startTimeMs,
@@ -125,9 +125,9 @@ public class SabrStream {
         processor = new SabrProcessor(
                 videoPlaybackUstreamerConfig,
                 clientInfo,
-                audioSelection,
-                videoSelection,
-                captionSelection,
+                //audioSelection,
+                //videoSelection,
+                //captionSelection,
                 liveSegmentTargetDurationSec,
                 liveSegmentTargetDurationToleranceMs,
                 startTimeMs,
@@ -165,8 +165,32 @@ public class SabrStream {
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
-        return processor.buildVideoPlaybackAbrRequest();
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType) {
+        return processor.buildVideoPlaybackAbrRequest(trackType);
+    }
+
+    public void setAudioSelection(AudioSelector audioFormatSelector) {
+        if (audioFormatSelector == null) {
+            return;
+        }
+
+        processor.setAudioFormatSelector(audioFormatSelector);
+    }
+
+    public void setVideoSelection(VideoSelector videoFormatSelector) {
+        if (videoFormatSelector == null) {
+            return;
+        }
+
+        processor.setVideoFormatSelector(videoFormatSelector);
+    }
+
+    public void setCaptionSelection(CaptionSelector captionFormatSelector) {
+        if (captionFormatSelector == null) {
+            return;
+        }
+
+        processor.setCaptionFormatSelector(captionFormatSelector);
     }
 
     public void reset() {
@@ -465,7 +489,7 @@ public class SabrStream {
             if (contains(KNOWN_PARTS, part.partId)) {
                 break;
             } else {
-                Log.d(TAG, "Unknown part encountered: %s", part.partId);
+                Log.e(TAG, "Unknown part encountered: %s", part.partId);
                 part.skip(); // an essential part to continue reading
             }
         }
