@@ -70,6 +70,18 @@ public class AppDialogActivity extends MotherActivity {
             return false;
         }
 
+        // Forward media keys (play/pause) to playback view so video can be paused while viewing comments
+        if (KeyHelpers.isMediaKey(event.getKeyCode())) {
+            PlaybackView view = PlaybackPresenter.instance(this).getView();
+            if (view instanceof Fragment) {
+                Activity activity = ((Fragment) view).getActivity();
+                if (activity != null) {
+                    activity.dispatchKeyEvent(event);
+                    return true;
+                }
+            }
+        }
+
         // Toggle dialog
         if (!mFragment.isOverlay() && (KeyHelpers.isLeftRightKey(event.getKeyCode()) || KeyHelpers.isMenuKey(event.getKeyCode()))) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
