@@ -130,14 +130,11 @@ public class ChatItemMessage implements IMessage {
             return MAX_LENGTH;
         }
 
-        // My additions:
         List<String> splitNoLongLines = new ArrayList<>();
         for (String line : split) {
             while (line.length() > LINE_LENGTH) {
-                // Find last space before LINE_LENGTH
                 int breakPoint = line.lastIndexOf(' ', LINE_LENGTH);
 
-                // If no space found, just break at LINE_LENGTH
                 if (breakPoint == -1) {
                     breakPoint = LINE_LENGTH;
                 }
@@ -145,11 +142,8 @@ public class ChatItemMessage implements IMessage {
                 splitNoLongLines.add(line.substring(0, breakPoint));
                 line = line.substring(breakPoint).trim();
             }
-            // Add remaining part (or whole line if it was short)
             splitNoLongLines.add(line);
         }
-
-        // Then convert back to array and continue with original logic
         split = splitNoLongLines.toArray(new String[0]);
 
         int realCount = 0;
