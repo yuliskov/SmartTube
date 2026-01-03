@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          gh release download $TAG_NAME --dir release_assets --pattern "*.apk" || echo "No APKs found"
+          gh release download $TAG_NAME --dir release_assets --pattern "*.apk"
           ls -l release_assets
 
       - name: Install VirusTotal CLI
@@ -52,11 +52,9 @@ jobs:
           VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for apk in release_assets/*.apk; do
-            if [ ! -f vt_report.txt ]; then
-              echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
-            fi
+          echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
 
+          for apk in release_assets/*.apk; do
             filename=$(basename "$apk")
             sha256=$(sha256sum "$apk" | head -c 64)
             echo "Scanning $filename..."
