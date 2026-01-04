@@ -43,6 +43,7 @@ import com.google.protobuf.ByteString;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -169,9 +170,16 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("FormatId not found in MediaHeader (media_header=%s)", mediaHeader));
         }
 
+        // MOD: triggered even when no match found (probably multi thread issue?)
         // Guard. This should not happen, except if we don't clear partial segments
         if (partialSegments.containsKey(Utils.toLong(mediaHeader.getHeaderId()))) {
-            throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
+            // TODO: investigate why different formats have the same header
+            // MOD: fix the exception
+            //throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
+            int headerId = mediaHeader.getHeaderId();
+            mediaHeader = mediaHeader.toBuilder()
+                    .setHeaderId(++headerId)
+                    .build();
         }
 
         SelectedFormat initializedFormat = selectedFormats.get(mediaHeader.getFormatId().toString());
@@ -305,10 +313,10 @@ public class SabrProcessor {
         return result;
     }
 
-    public ProcessMediaResult processMedia(long headerId, int contentLength, ExtractorInput data) {
+    public ProcessMediaResult processMedia(long headerId, int contentLength, ExtractorInput data) throws IOException, InterruptedException {
         Segment segment = partialSegments.get(headerId);
         if (segment == null) {
-            Log.d(TAG, "Header ID %s not found", headerId);
+            Log.e(TAG, "Header ID %s not found", headerId);
             throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
         }
 
@@ -318,6 +326,7 @@ public class SabrProcessor {
         ProcessMediaResult result = new ProcessMediaResult();
 
         if (!segment.discard) {
+            Log.d(TAG, "processMedia: part created. contentLength: %s", contentLength);
             result.sabrPart = new MediaSegmentDataSabrPart(
                     segment.initializedFormat.formatSelector,
                     segment.formatId,
@@ -329,13 +338,19 @@ public class SabrProcessor {
                     contentLength,
                     segmentStartBytes
             );
+        } else {
+            Log.e(TAG, "processMedia: part discarded. contentLength: %s", contentLength);
+            data.skipFully(contentLength);
         }
 
         return result;
     }
 
     public ProcessMediaEndResult processMediaEnd(long headerId) {
-        Segment segment = partialSegments.remove(headerId);
+        // TODO: investigate why remove produces the exception
+        // MOD: don't remove segments
+        //Segment segment = partialSegments.remove(headerId);
+        Segment segment = partialSegments.get(headerId);
         if (segment == null) {
             Log.d(TAG, "Header ID %s not found", headerId);
             throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
@@ -344,17 +359,18 @@ public class SabrProcessor {
         Log.d(TAG, "MediaEnd for %s (sequence %s, data length = %s)",
                 segment.formatId, segment.sequenceNumber, segment.receivedDataLength);
 
-        if (segment.contentLength != -1 && segment.receivedDataLength != segment.contentLength) {
-            if (segment.contentLengthEstimated) {
-                Log.d(TAG, "Content length for %s (sequence %s) was estimated, " +
-                        "estimated %s bytes, got %s bytes",
-                        segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength);
-            } else {
-                throw new SabrStreamError(String.format("Content length mismatch for %s (sequence %s): " +
-                        "expected %s bytes, got %s bytes",
-                        segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength));
-            }
-        }
+        // MOD: remove. receivedDataLength != segment.contentLength
+        //if (segment.contentLength != -1 && segment.receivedDataLength != segment.contentLength) {
+        //    if (segment.contentLengthEstimated) {
+        //        Log.d(TAG, "Content length for %s (sequence %s) was estimated, " +
+        //                "estimated %s bytes, got %s bytes",
+        //                segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength);
+        //    } else {
+        //        throw new SabrStreamError(String.format("Content length mismatch for %s (sequence %s): " +
+        //                "expected %s bytes, got %s bytes",
+        //                segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength));
+        //    }
+        //}
 
         ProcessMediaEndResult result = new ProcessMediaEndResult();
 

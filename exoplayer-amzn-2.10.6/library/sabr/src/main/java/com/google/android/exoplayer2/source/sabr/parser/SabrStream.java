@@ -59,12 +59,13 @@ public class SabrStream {
             UMPPartId.SABR_REDIRECT,
             UMPPartId.FORMAT_INITIALIZATION_METADATA,
             UMPPartId.NEXT_REQUEST_POLICY,
-            UMPPartId.LIVE_METADATA,
-            UMPPartId.SABR_SEEK,
+            //UMPPartId.LIVE_METADATA,
+            //UMPPartId.SABR_SEEK,
             UMPPartId.SABR_ERROR,
             UMPPartId.SABR_CONTEXT_UPDATE,
             UMPPartId.SABR_CONTEXT_SENDING_POLICY,
-            UMPPartId.RELOAD_PLAYER_RESPONSE
+            UMPPartId.RELOAD_PLAYER_RESPONSE,
+            //UMPPartId.SNACKBAR_MESSAGE // ???
     };
     private final int[] IGNORED_PARTS = {
             UMPPartId.REQUEST_IDENTIFIER,
@@ -144,6 +145,7 @@ public class SabrStream {
         sqMismatchBacktrackCount = 0;
         sqMismatchForwardCount = 0;
     }
+
 
     public SabrPart parse(@NonNull ExtractorInput extractorInput) {
         SabrPart result = null;
@@ -482,16 +484,22 @@ public class SabrStream {
             part = decoder.decode(extractorInput);
 
             if (part == null) {
+                Log.e(TAG, "Cannot decode UMP stream. It is possibly ended.");
                 break;
             }
 
             // Normal reading: 47, 58. 52, 53, 42, 35, 20, 21, 22, 20...
             if (contains(KNOWN_PARTS, part.partId)) {
+                Log.d(TAG, "Found known part. id: %s, size: %s, position: %s", part.partId, part.size, part.data.getPosition());
                 break;
             } else {
-                Log.e(TAG, "Unknown part encountered: %s", part.partId);
+                Log.e(TAG, "Unknown part encountered. id: %s, size: %s, position: %s", part.partId, part.size, part.data.getPosition());
                 part.skip(); // an essential part to continue reading
             }
+
+            // Debug
+            //Log.e(TAG, "Unknown part encountered. id: %s, size: %s, position: %s", part.partId, part.size, part.data.getPosition());
+            //part.skip(); // an essential part to continue reading
         }
 
         return part;

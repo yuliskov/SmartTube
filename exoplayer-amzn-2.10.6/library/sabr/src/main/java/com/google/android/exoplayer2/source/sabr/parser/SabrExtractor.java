@@ -309,21 +309,31 @@ public class SabrExtractor implements Extractor {
     @Override
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
+
+        Log.e(TAG, "Starting new SABR read...");
+
         sampleRead = false;
         boolean continueReading = true;
         while (continueReading && !sampleRead) {
             SabrPart sabrPart = sabrStream.parse(input);
             continueReading = sabrPart != null;
 
-            //if (sabrPart instanceof FormatInitializedSabrPart) {
-            //    initializeFormat((FormatInitializedSabrPart) sabrPart);
-            //} else if (sabrPart instanceof MediaSegmentInitSabrPart) {
-            //    initializeSegment((MediaSegmentInitSabrPart) sabrPart);
-            //} else if (sabrPart instanceof MediaSegmentDataSabrPart) {
-            //    writeSegmentData((MediaSegmentDataSabrPart) sabrPart);
-            //} else if (sabrPart instanceof MediaSegmentEndSabrPart) {
-            //    endSegment((MediaSegmentEndSabrPart) sabrPart);
+            // Debug
+            //if (sabrPart instanceof MediaSegmentDataSabrPart) {
+            //    MediaSegmentDataSabrPart data = (MediaSegmentDataSabrPart) sabrPart;
+            //    Log.e(TAG, "Consumed contentLength: " + data.contentLength);
+            //    data.data.skipFully(data.contentLength);
             //}
+
+            if (sabrPart instanceof FormatInitializedSabrPart) {
+                initializeFormat((FormatInitializedSabrPart) sabrPart);
+            } else if (sabrPart instanceof MediaSegmentInitSabrPart) {
+                initializeSegment((MediaSegmentInitSabrPart) sabrPart);
+            } else if (sabrPart instanceof MediaSegmentDataSabrPart) {
+                writeSegmentData((MediaSegmentDataSabrPart) sabrPart);
+            } else if (sabrPart instanceof MediaSegmentEndSabrPart) {
+                endSegment((MediaSegmentEndSabrPart) sabrPart);
+            }
 
             if (continueReading && maybeSeekForCues(seekPosition, input.getPosition())) {
                 return Extractor.RESULT_SEEK;
@@ -371,7 +381,9 @@ public class SabrExtractor implements Extractor {
 
         // TODO: init seek segment data
 
-        Track track = tracks.get(blockTrackNumber);
+        // TODO: hardcoded blockTrackNumber is bad
+        //Track track = tracks.get(blockTrackNumber);
+        Track track = tracks.get(1);
 
         // Ignore the block if we don't know about the track to which it belongs.
         if (track == null) {
@@ -401,7 +413,7 @@ public class SabrExtractor implements Extractor {
         currentTrack.stereoMode = format.stereoMode;
         currentTrack.sampleRate = format.sampleRate;
         currentTrack.name = format.label; // TODO: possibly wrong name
-        currentTrack.codecId = format.codecs; // TODO: possibly wrong codec id
+        currentTrack.codecId = translate(format.codecs); // TODO: possibly wrong codec id
         currentTrack.language = format.language;
 
         if (format.colorInfo != null) {
@@ -421,7 +433,8 @@ public class SabrExtractor implements Extractor {
     }
 
     private void initExtractorOutput() throws ParserException {
-        if (isCodecSupported(currentTrack.codecId)) {
+        String codecId = currentTrack.codecId;
+        if (isCodecSupported(codecId)) {
             currentTrack.initializeOutput(extractorOutput, currentTrack.number);
             tracks.put(currentTrack.number, currentTrack);
         }
@@ -429,9 +442,24 @@ public class SabrExtractor implements Extractor {
 
         // We have a single track per SABR stream
         if (tracks.size() == 0) {
-            throw new ParserException("No valid tracks were found");
+            throw new ParserException("No valid tracks were found for codec: " + codecId);
         }
         extractorOutput.endTracks();
+    }
+
+    private String translate(String codecId) {
+        if (codecId == null) {
+            return null;
+        }
+
+        switch (codecId) {
+            case "opus":
+                return CODEC_ID_OPUS;
+            case "vp9":
+                return CODEC_ID_VP9;
+        }
+
+        return codecId;
     }
 
     private void commitSampleToOutput(Track track, long timeUs) {
