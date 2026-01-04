@@ -53,6 +53,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapPageDownToSpeedEnabled;
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
+    private boolean mIsRemapFastForwardToSpeedToggleEnabled;
     private boolean mIsRemapNextToFastForwardEnabled;
     private boolean mIsRemapNextToSpeedEnabled;
     private boolean mIsRemapNumbersToSpeedEnabled;
@@ -88,6 +89,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mGDriveBackupFreqDays;
     private int mLocalDriveBackupFreqDays;
     private List<Video> mOldPinnedItems;
+    private boolean mIsRemapSToSpeedToggleEnabled;
     private final Runnable mPersistStateInt = this::persistStateInt;
 
     private GeneralData(Context context) {
@@ -210,7 +212,18 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public boolean isRemapFastForwardToSpeedToggleEnabled() {
+        return mIsRemapFastForwardToSpeedToggleEnabled;
+    }
+
+    public void setRemapFastForwardToSpeedToggleEnabled(boolean enable) {
+        resetFastForwardSettings();
+        mIsRemapFastForwardToSpeedToggleEnabled = enable;
+        persistState();
+    }
+
     private void resetFastForwardSettings() {
+        mIsRemapFastForwardToSpeedToggleEnabled = false;
         mIsRemapFastForwardToSpeedEnabled = false;
         mIsRemapFastForwardToNextEnabled = false;
     }
@@ -689,6 +702,15 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public boolean isRemapSToSpeedToggleEnabled() {
+        return mIsRemapSToSpeedToggleEnabled;
+    }
+
+    public void setRemapSToSpeedToggleEnabled(boolean enable) {
+        mIsRemapSToSpeedToggleEnabled = enable;
+        persistState();
+    }
+
     /**
      * Fixed ConcurrentModificationException after onProfileChanged()<br/>
      * Happened inside cleanupPinnedItems()
@@ -772,6 +794,8 @@ public class GeneralData implements ProfileChangeListener {
         mSearchExitShortcut = Helpers.parseInt(split, 68, EXIT_SINGLE_BACK);
         mGDriveBackupFreqDays = Helpers.parseInt(split, 69, -1);
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, -1);
+        mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
+        mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
     }
 
     public void persistNow() {
@@ -798,7 +822,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled,
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
-                mIsRemapPageDownToSpeedEnabled, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays));
+                mIsRemapPageDownToSpeedEnabled, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, mIsRemapFastForwardToSpeedToggleEnabled, mIsRemapSToSpeedToggleEnabled));
     }
 
     @Override
