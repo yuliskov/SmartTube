@@ -1,20 +1,26 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.preference.DialogPreference;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver.Backup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.CommentsReceiver.Callback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPreferenceDialogFragment;
@@ -36,7 +42,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     private ChatItemMessage mFocusedMessage;
 
     private static class CommentsBackup implements Backup {
-        public CommentsBackup(List<ChatItemMessage> backupMessages, ChatItemMessage focusedMessage, CommentGroup currentGroup) {
+        public CommentsBackup(List<ChatItemMessage> backupMessages, ChatItemMessage focusedMessage,
+                CommentGroup currentGroup) {
             this.backupMessages = backupMessages;
             this.focusedMessage = focusedMessage;
             this.currentGroup = currentGroup;
@@ -51,8 +58,7 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         final Bundle args = new Bundle(1);
         args.putString(ARG_KEY, key);
 
-        final CommentsPreferenceDialogFragment
-                fragment = new CommentsPreferenceDialogFragment();
+        final CommentsPreferenceDialogFragment fragment = new CommentsPreferenceDialogFragment();
         fragment.setArguments(args);
         fragment.mCommentsReceiver = commentsReceiver;
 
@@ -86,17 +92,36 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         }
 
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
-        MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
-                Glide.with(view.getContext())
-                    .load(url)
-                    .apply(ViewUtil.glideOptions())
-                    .circleCrop() // resize image
-                    .into(imageView));
+        MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID,
+                (imageView, url, payload) -> Glide.with(view.getContext())
+                        .load(url)
+                        .apply(ViewUtil.glideOptions())
+                        .circleCrop() // resize image
+                        .into(imageView));
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mCurrentGroup));
-        adapter.setOnMessageViewClickListener((v, message) -> mCommentsReceiver.onCommentClicked(message.getCommentItem()));
-        adapter.setOnMessageViewLongClickListener((v, message) -> mCommentsReceiver.onCommentLongClicked(message.getCommentItem()));
+        adapter.setOnMessageViewClickListener(
+                (v, message) -> mCommentsReceiver.onCommentClicked(message.getCommentItem()));
+        adapter.setOnMessageViewLongClickListener(
+                (v, message) -> mCommentsReceiver.onCommentLongClicked(message.getCommentItem()));
         adapter.setOnMessageViewFocusListener((view1, message) -> mFocusedMessage = message);
         messagesList.setAdapter(adapter);
+
+        // Forward media keys (play/pause) to playback view so video can be paused while
+        // viewing comments
+        messagesList.setOnKeyListener((v, keyCode, event) -> {
+            if (KeyHelpers.isMediaKey(keyCode)) {
+                PlaybackView playbackView = PlaybackPresenter.instance(getActivity()).getView();
+                if (playbackView instanceof Fragment) {
+                    Activity activity = ((Fragment) playbackView).getActivity();
+                    if (activity != null) {
+                        activity.dispatchKeyEvent(event);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+
         messagesList.requestFocus(); // hold focus even when there's no messages
         adapter.enableStackFromEnd(true);
         adapter.setLoadingMessage(mCommentsReceiver.getLoadingMessage());
@@ -161,7 +186,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         }
 
         if (mIsTransparent) {
-            // Enable transparent shadow outline on parent (R.id.settings_preference_fragment_container)
+            // Enable transparent shadow outline on parent
+            // (R.id.settings_preference_fragment_container)
             ViewUtil.enableTransparentDialog(getActivity(), getParentFragment().getView());
             // Enable transparency on child fragment itself (isn't attached to parent yet)
             ViewUtil.enableTransparentDialog(getActivity(), view);
@@ -186,7 +212,8 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
     private void syncMessage(MessagesListAdapter<ChatItemMessage> adapter, ChatItemMessage message) {
         adapter.update(message);
 
-        if ((mFocusedMessage == null || Helpers.equals(mFocusedMessage.getId(), message.getId())) && IMessage.checkMessage(message)) {
+        if ((mFocusedMessage == null || Helpers.equals(mFocusedMessage.getId(), message.getId()))
+                && IMessage.checkMessage(message)) {
             mFocusedMessage = message;
             adapter.setFocusedMessage(message);
         }
