@@ -5,36 +5,36 @@ import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 public class Segment {
     public final FormatId formatId;
     public final boolean isInitSegment;
-    public final int durationMs;
-    public final int startDataRange;
+    public final long durationMs;
+    public final long startRange;
     public final int sequenceNumber;
     public final long contentLength;
     public final boolean contentLengthEstimated;
-    public final int startMs;
+    public final long startMs;
     public final SelectedFormat initializedFormat;
     public final boolean durationEstimated;
     public final boolean discard;
     public final boolean consumed;
-    public final int sequenceLmt;
+    public final long sequenceLmt;
     public int receivedDataLength;
 
     public Segment(FormatId formatId,
                    boolean isInitSegment,
-                   int durationMs,
-                   int startDataRange,
+                   long durationMs,
+                   long startRange,
                    int sequenceNumber,
                    long contentLength,
                    boolean contentLengthEstimated,
-                   int startMs,
+                   long startMs,
                    SelectedFormat initializedFormat,
                    boolean durationEstimated,
                    boolean discard,
                    boolean consumed,
-                   int sequenceLmt) {
+                   long sequenceLmt) {
         this.formatId = formatId;
         this.isInitSegment = isInitSegment;
         this.durationMs = durationMs;
-        this.startDataRange = startDataRange;
+        this.startRange = startRange;
         this.sequenceNumber = sequenceNumber;
         this.contentLength = contentLength;
         this.contentLengthEstimated = contentLengthEstimated;

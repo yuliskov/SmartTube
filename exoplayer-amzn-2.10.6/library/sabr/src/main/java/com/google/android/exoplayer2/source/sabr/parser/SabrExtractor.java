@@ -399,7 +399,8 @@ public class SabrExtractor implements Extractor {
     }
 
     private void endSegment(MediaSegmentEndSabrPart part) {
-        // TODO: not implemented
+        // TODO: not implemented full
+        extractorOutput.endTracks(); // commit all written data
     }
 
     private void initCurrentTrack() {
@@ -452,11 +453,12 @@ public class SabrExtractor implements Extractor {
             return null;
         }
 
-        switch (codecId) {
-            case "opus":
-                return CODEC_ID_OPUS;
-            case "vp9":
-                return CODEC_ID_VP9;
+        if (codecId.startsWith("opus")) {
+            return CODEC_ID_OPUS;
+        } else if (codecId.startsWith("vp9")) {
+            return CODEC_ID_VP9;
+        } else if (codecId.startsWith("avc")) {
+            return CODEC_ID_H264;
         }
 
         return codecId;

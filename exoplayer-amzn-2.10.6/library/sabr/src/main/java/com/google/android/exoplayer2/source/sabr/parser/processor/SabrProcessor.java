@@ -188,13 +188,13 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Initialized format not found for %s", mediaHeader.getFormatId()));
         }
 
-        if (mediaHeader.hasCompression()) {
+        if (mediaHeader.hasCompressionAlgorithm()) {
             // Unknown when this is used, but it is not supported currently
             throw new SabrStreamError(String.format("Compression not supported in MediaHeader (media_header=%s)", mediaHeader));
         }
 
         int sequenceNumber = mediaHeader.hasSequenceNumber() ? mediaHeader.getSequenceNumber() : NO_VALUE;
-        boolean isInitSegment = mediaHeader.getIsInitSegment();
+        boolean isInitSegment = mediaHeader.getIsInitSeg();
 
         if (sequenceNumber == NO_VALUE && !isInitSegment) {
             throw new SabrStreamError(String.format("Sequence number not found in MediaHeader (media_header=%s)", mediaHeader));
@@ -212,7 +212,7 @@ public class SabrProcessor {
         // However, if retrying a request, we may get the same segment again
         if (!isInitSegment &&
                 Helpers.findFirst(initializedFormat.consumedRanges,
-                        cr -> cr.startSequenceNumber <= sequenceNumber && sequenceNumber <= cr.endSequenceNumber) == null) {
+                        cr -> cr.startSequenceNumber <= sequenceNumber && sequenceNumber <= cr.endSequenceNumber) != null) {
             Log.d(TAG, "%s segment %s already consumed, marking segment as consumed", initializedFormat.formatId, sequenceNumber);
             consumed = true;
         }
@@ -235,7 +235,7 @@ public class SabrProcessor {
         }
 
         TimeRange timeRange = mediaHeader.hasTimeRange() ? mediaHeader.getTimeRange() : null;
-        int startMs = mediaHeader.hasStartMs() ? mediaHeader.getStartMs()
+        long startMs = mediaHeader.hasStartMs() ? mediaHeader.getStartMs()
                 : timeRange != null && timeRange.hasStartTicks() && timeRange.hasTimescale()
                     ? Utils.ticksToMs(timeRange.getStartTicks(), timeRange.getTimescale())
                 : 0;
@@ -243,7 +243,7 @@ public class SabrProcessor {
         // Calculate duration of this segment
         // For videos, either duration_ms or time_range should be present
         // For live streams, calculate segment duration based on live metadata target segment duration
-        int actualDurationMs = mediaHeader.hasDurationMs() ? mediaHeader.getDurationMs()
+        long actualDurationMs = mediaHeader.hasDurationMs() ? mediaHeader.getDurationMs()
                 : timeRange != null && timeRange.hasDurationTicks() && timeRange.hasTimescale()
                     ? Utils.ticksToMs(timeRange.getDurationTicks(), timeRange.getTimescale())
                 : NO_VALUE;
@@ -257,7 +257,7 @@ public class SabrProcessor {
             estimatedDurationMs = 0;
         }
 
-        int durationMs = actualDurationMs != NO_VALUE ? actualDurationMs : estimatedDurationMs;
+        long durationMs = actualDurationMs != NO_VALUE ? actualDurationMs : estimatedDurationMs;
 
         // Guard: Bail out if we cannot determine the duration, which we need to progress.
         if (durationMs == NO_VALUE) {
@@ -274,7 +274,7 @@ public class SabrProcessor {
                 mediaHeader.getFormatId(),
                 isInitSegment,
                 durationMs,
-                mediaHeader.hasStartDataRange() ? mediaHeader.getStartDataRange() : NO_VALUE,
+                mediaHeader.hasStartRange() ? mediaHeader.getStartRange() : NO_VALUE,
                 sequenceNumber,
                 mediaHeader.hasContentLength() ? mediaHeader.getContentLength() : estimatedContentLength,
                 estimatedContentLength != NO_VALUE,
@@ -299,7 +299,7 @@ public class SabrProcessor {
                     segment.initializedFormat.totalSegments,
                     segment.durationMs,
                     segment.durationEstimated,
-                    segment.startDataRange,
+                    segment.startRange,
                     segment.startMs,
                     segment.isInitSegment,
                     segment.contentLength,
@@ -339,7 +339,7 @@ public class SabrProcessor {
                     segmentStartBytes
             );
         } else {
-            Log.e(TAG, "processMedia: part discarded. contentLength: %s", contentLength);
+            Log.e(TAG, "processMedia: part discarded. contentLength: %s, itag: %s", contentLength, segment.formatId.getItag());
             data.skipFully(contentLength);
         }
 

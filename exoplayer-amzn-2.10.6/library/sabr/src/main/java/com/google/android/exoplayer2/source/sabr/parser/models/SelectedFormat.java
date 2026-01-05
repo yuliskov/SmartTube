@@ -14,7 +14,7 @@ public class SelectedFormat {
     public final FormatSelector formatSelector;
     public int totalSegments;
     public final boolean discard;
-    public int sequenceLmt = -1;
+    public long sequenceLmt = -1;
     public Segment currentSegment;
     public Segment initSegment;
     public final List<ConsumedRange> consumedRanges = new ArrayList<>();

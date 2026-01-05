@@ -237,6 +237,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
+                getContext().getString(R.string.playback_notifications_fix_desc),
+                option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
+                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
         
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
                 getContext().getString(R.string.disable_network_error_fixing_desc),
@@ -312,11 +317,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.disable_stream_buffer_desc),
                 option -> mPlayerTweaksData.setBufferOnStreamsDisabled(option.isSelected()),
                 mPlayerTweaksData.isBufferOnStreamsDisabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
-        //        getContext().getString(R.string.playback_notifications_fix_desc),
-        //        option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
-        //        mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.unlock_all_formats),
                 getContext().getString(R.string.unlock_all_formats_desc),
