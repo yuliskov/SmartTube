@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "sabr/videostreaming/compression_algorithm.proto";
 import "sabr/misc/common.proto";
 import "sabr/videostreaming/time_range.proto";
 
