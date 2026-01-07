@@ -708,4 +708,5 @@
   <string name="once_a_week">Một lần một tuần</string>
   <string name="once_a_month">Một lần một tháng</string>
   <string name="play_from_start">Phát từ đầu</string>
+  <string name="typing_corrections">Vô hiệu hóa tự động sửa khi gõ văn bản</string>
 </resources>
