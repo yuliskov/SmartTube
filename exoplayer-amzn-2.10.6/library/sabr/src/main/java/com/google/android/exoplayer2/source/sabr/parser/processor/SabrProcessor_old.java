@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
-import com.google.android.exoplayer2.source.sabr.parser.models.SelectedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.Segment;
+import com.google.android.exoplayer2.source.sabr.parser.models.SelectedFormat;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSeekSabrPart;
@@ -21,21 +22,21 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSab
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
+import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
-import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.NextRequestPolicy;
-import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.SabrContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextSendingPolicy;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrContextUpdate;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus.Status;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.SabrContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
 import com.google.protobuf.ByteString;
@@ -50,8 +51,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SabrProcessor {
-    private static final String TAG = SabrProcessor.class.getSimpleName();
+public class SabrProcessor_old {
+    private static final String TAG = SabrProcessor_old.class.getSimpleName();
     private static final int NO_VALUE = -1;
     private final String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
@@ -64,7 +65,6 @@ public class SabrProcessor {
     private final String poToken;
     private final boolean postLive;
     private final String videoId;
-    private final long durationMs;
     private ClientAbrState clientAbrState;
     private final Map<Long, Segment> partialSegments;
     private final Map<String, SelectedFormat> selectedFormats;
@@ -79,7 +79,7 @@ public class SabrProcessor {
     private List<FormatId> selectedVideoFormatIds;
     private List<FormatId> selectedCaptionFormatIds;
 
-    public SabrProcessor(
+    public SabrProcessor_old(
             @NonNull String videoPlaybackUstreamerConfig,
             @NonNull ClientInfo clientInfo,
             //AudioSelector audioSelection,
@@ -90,8 +90,7 @@ public class SabrProcessor {
             long startTimeMs,
             String poToken,
             boolean postLive,
-            String videoId,
-            long durationMs
+            String videoId
     ) {
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.poToken = poToken;
@@ -109,7 +108,6 @@ public class SabrProcessor {
         this.postLive = postLive;
         isLive = false;
         this.videoId = videoId;
-        this.durationMs = durationMs;
 
         //audioFormatSelector = audioSelection;
         //videoFormatSelector = videoSelection;
@@ -174,9 +172,15 @@ public class SabrProcessor {
 
         // MOD: triggered even when no match found (probably multi thread issue?)
         // Guard. This should not happen, except if we don't clear partial segments
-        //if (partialSegments.containsKey(Utils.toLong(mediaHeader.getHeaderId()))) {
-        //    throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
-        //}
+        if (partialSegments.containsKey(Utils.toLong(mediaHeader.getHeaderId()))) {
+            // TODO: investigate why different formats have the same header
+            // MOD: fix the exception
+            //throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
+            int headerId = mediaHeader.getHeaderId();
+            mediaHeader = mediaHeader.toBuilder()
+                    .setHeaderId(++headerId)
+                    .build();
+        }
 
         SelectedFormat initializedFormat = selectedFormats.get(mediaHeader.getFormatId().toString());
 
@@ -197,6 +201,38 @@ public class SabrProcessor {
         }
 
         initializedFormat.sequenceLmt = mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE;
+
+        // Need to keep track of if we discard due to be consumed or not
+        // for processing down the line (MediaEnd)
+        boolean consumed = false;
+        boolean discard = initializedFormat.discard;
+
+        // Guard: Check if sequence number is within any existing consumed range
+        // The server should not send us any segments that are already consumed
+        // However, if retrying a request, we may get the same segment again
+        if (!isInitSegment &&
+                Helpers.findFirst(initializedFormat.consumedRanges,
+                        cr -> cr.startSequenceNumber <= sequenceNumber && sequenceNumber <= cr.endSequenceNumber) != null) {
+            Log.d(TAG, "%s segment %s already consumed, marking segment as consumed", initializedFormat.formatId, sequenceNumber);
+            consumed = true;
+        }
+
+        // Validate that the segment is in order.
+        // Note: If the format is to be discarded, we do not care about the order
+        // and can expect uncommanded seeks as the consumer does not know about it.
+        // Note: previous segment should never be an init segment.
+        Segment previousSegment = initializedFormat.currentSegment;
+        if (previousSegment != null && !isInitSegment && !previousSegment.discard && !discard
+            && !consumed && sequenceNumber != previousSegment.sequenceNumber + 1) {
+            // Bail out as the segment is not in order when it is expected to be
+            throw new MediaSegmentMismatchError(mediaHeader.getFormatId(), previousSegment.sequenceNumber + 1, sequenceNumber);
+        }
+
+        if (initializedFormat.initSegment != null && isInitSegment) {
+            Log.d(TAG, "Init segment %s already seen for format %s, marking segment as consumed",
+                    sequenceNumber, initializedFormat.formatId);
+            consumed = true;
+        }
 
         TimeRange timeRange = mediaHeader.hasTimeRange() ? mediaHeader.getTimeRange() : null;
         long startMs = mediaHeader.hasStartMs() ? mediaHeader.getStartMs()
@@ -245,8 +281,8 @@ public class SabrProcessor {
                 startMs,
                 initializedFormat,
                 actualDurationMs == 0 || actualDurationMs == NO_VALUE,
-                false,
-                false,
+                discard || consumed,
+                consumed,
                 mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE
         );
 
@@ -418,12 +454,12 @@ public class SabrProcessor {
         String poToken = this.poToken;
         PoTokenStatus resultStatus = null;
 
-        if (status == StreamProtectionStatus.Status.OK) {
-            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.OK : PoTokenStatusSabrPart.PoTokenStatus.NOT_REQUIRED;
-        } else if (status == StreamProtectionStatus.Status.ATTESTATION_PENDING) {
-            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.PENDING : PoTokenStatusSabrPart.PoTokenStatus.PENDING_MISSING;
-        } else if (status == StreamProtectionStatus.Status.ATTESTATION_REQUIRED) {
-            resultStatus = poToken != null ? PoTokenStatusSabrPart.PoTokenStatus.INVALID : PoTokenStatusSabrPart.PoTokenStatus.MISSING;
+        if (status == Status.OK) {
+            resultStatus = poToken != null ? PoTokenStatus.OK : PoTokenStatus.NOT_REQUIRED;
+        } else if (status == Status.ATTESTATION_PENDING) {
+            resultStatus = poToken != null ? PoTokenStatus.PENDING : PoTokenStatus.PENDING_MISSING;
+        } else if (status == Status.ATTESTATION_REQUIRED) {
+            resultStatus = poToken != null ? PoTokenStatus.INVALID : PoTokenStatus.MISSING;
         } else {
             Log.w(TAG, "Received an unknown StreamProtectionStatus: %s", streamProtectionStatus);
         }
@@ -683,7 +719,7 @@ public class SabrProcessor {
     //            .build();
     //}
 
-    public VideoPlaybackAbrRequest buildInitVideoPlaybackAbrRequest(int trackType) {
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType) {
         int resolution = 1080; // ???
         int bandwidthEstimate = 1350000; // ???
 
@@ -756,7 +792,7 @@ public class SabrProcessor {
                         )
                 )
                 .setPlaybackCookie(
-                        nextRequestPolicy != null ? nextRequestPolicy.getPlaybackCookie().toByteString() : ByteString.EMPTY
+                        nextRequestPolicy != null && nextRequestPolicy.hasPlaybackCookie() ? nextRequestPolicy.getPlaybackCookie().toByteString() : ByteString.EMPTY
                 )
                 .setClientInfo(clientInfo)
                 .addAllSabrContexts(createSabrContexts())
@@ -834,8 +870,8 @@ public class SabrProcessor {
                 .setFormatId(allSelectedFormatIds.get(0))
                 .setStartTimeMs(0)
                 .setDurationMs(durationMs)
-                .setStartSegmentIndex((int) durationMs)
-                .setEndSegmentIndex((int) durationMs)
+                .setStartSegmentIndex(durationMs)
+                .setEndSegmentIndex(durationMs)
                 .setTimeRange(timeRange)
                 .build();
         List<BufferedRange> bufferedRanges = new ArrayList<>();

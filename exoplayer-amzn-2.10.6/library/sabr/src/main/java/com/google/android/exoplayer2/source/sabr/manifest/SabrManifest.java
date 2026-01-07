@@ -59,11 +59,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
      */
     public final long minUpdatePeriodMs;
 
-    private final String serverAbrStreamingUrl;
-    private final String videoPlaybackUstreamerConfig;
-    private final String poToken;
     private final String videoId;
-    private final ClientInfo clientInfo;
     private final SabrStream sabrStream;
 
     public SabrManifest(
@@ -90,11 +86,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.suggestedPresentationDelayMs = suggestedPresentationDelayMs;
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
-        this.serverAbrStreamingUrl = serverAbrStreamingUrl;
-        this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
-        this.poToken = poToken;
         this.videoId = videoId;
-        this.clientInfo = clientInfo;
         this.sabrStream = new SabrStream(
                 serverAbrStreamingUrl,
                 videoPlaybackUstreamerConfig,
@@ -107,7 +99,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
                 -1,
                 poToken,
                 false,
-                videoId
+                videoId,
+                durationMs
         );
     }
     
@@ -133,22 +126,6 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     public SabrManifest copy(List<StreamKey> streamKeys) {
         return null;
     }
-
-    //public final String getServerAbrStreamingUrl() {
-    //    return serverAbrStreamingUrl;
-    //}
-    //
-    //public final String getVideoPlaybackUstreamerConfig() {
-    //    return videoPlaybackUstreamerConfig;
-    //}
-    //
-    //public final String getPoToken() {
-    //    return poToken;
-    //}
-    //
-    //public ClientInfo getClientInfo() {
-    //    return clientInfo;
-    //}
 
     public final String getVideoId() {
         return videoId;

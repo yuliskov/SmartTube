@@ -119,7 +119,6 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     private final SabrStream sabrStream;
     private final Map<String, String> sabrHeaders;
-    private int sabrRequestNumber = 0;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -496,6 +495,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             RangedUri indexUri) {
         RangedUri requestUri;
         String baseUrl = representationHolder.representation.baseUrl;
+        baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
         if (initializationUri != null) {
             // It's common for initialization and index data to be stored adjacently. Attempt to merge
             // the two requests together to request both at once.
@@ -511,12 +511,13 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
         //        requestUri.length, representationHolder.representation.getCacheKey());
         DataSpec dataSpec = new DataSpec(
-                requestUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                requestUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.buildVideoPlaybackAbrRequest(trackType).toByteArray(),
-                requestUri.start,
-                requestUri.start,
-                requestUri.length,
+                sabrStream.buildInitVideoPlaybackAbrRequest(trackType).toByteArray(),
+                0, 0, C.LENGTH_UNSET,
+                //requestUri.start,
+                //requestUri.start,
+                //requestUri.length,
                 representationHolder.representation.getCacheKey(),
                 0,
                 sabrHeaders);
@@ -538,6 +539,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
         RangedUri segmentUri = representationHolder.getSegmentUrl(firstSegmentNum);
         String baseUrl = representation.baseUrl;
+        baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
         if (representationHolder.extractorWrapper == null) {
             long endTimeUs = representationHolder.getSegmentEndTimeUs(firstSegmentNum);
             DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
@@ -566,13 +568,15 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             // MOD: add protobuf data
             //DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
             //        segmentUri.start, segmentUri.length, representation.getCacheKey());
+            int sabrRequestNumber = sabrStream.getIncSabrRequestNumber();
             DataSpec dataSpec = new DataSpec(
-                    segmentUri.resolveUri(Utils.updateQuery(baseUrl, "rn", sabrRequestNumber++)),
+                    segmentUri.resolveUri(baseUrl),
                     DataSpec.HTTP_METHOD_POST,
-                    sabrStream.buildVideoPlaybackAbrRequest(trackType).toByteArray(),
-                    segmentUri.start,
-                    segmentUri.start,
-                    segmentUri.length,
+                    sabrStream.buildInitVideoPlaybackAbrRequest(trackType).toByteArray(),
+                    0, 0, C.LENGTH_UNSET,
+                    //segmentUri.start,
+                    //segmentUri.start,
+                    //segmentUri.length,
                     representation.getCacheKey(),
                     0,
                     sabrHeaders);

@@ -87,6 +87,7 @@ public class SabrStream {
     private boolean receivedNewSegments;
     private String url;
     private List<? extends  SabrPart> multiResult = null;
+    private int sabrRequestNumber = 0;
 
     private static class NoSegmentsTracker {
         public int consecutiveRequests = 0;
@@ -120,8 +121,8 @@ public class SabrStream {
             long startTimeMs,
             String poToken,
             boolean postLive,
-            String videoId
-    ) {
+            String videoId,
+            long durationMs) {
         decoder = new UMPDecoder();
         processor = new SabrProcessor(
                 videoPlaybackUstreamerConfig,
@@ -134,7 +135,8 @@ public class SabrStream {
                 startTimeMs,
                 poToken,
                 postLive,
-                videoId
+                videoId,
+                durationMs
         );
         url = serverAbrStreamingUrl;
 
@@ -167,8 +169,8 @@ public class SabrStream {
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType) {
-        return processor.buildVideoPlaybackAbrRequest(trackType);
+    public VideoPlaybackAbrRequest buildInitVideoPlaybackAbrRequest(int trackType) {
+        return processor.buildInitVideoPlaybackAbrRequest(trackType);
     }
 
     public void setAudioSelection(AudioSelector audioFormatSelector) {
@@ -197,6 +199,14 @@ public class SabrStream {
 
     public void reset() {
         noNewSegmentsTracker.reset();
+    }
+
+    public int getSabrRequestNumber() {
+        return sabrRequestNumber;
+    }
+
+    public int getIncSabrRequestNumber() {
+        return sabrRequestNumber++;
     }
 
     private SabrPart parsePart(UMPPart part) {
@@ -484,7 +494,7 @@ public class SabrStream {
             part = decoder.decode(extractorInput);
 
             if (part == null) {
-                Log.e(TAG, "Cannot decode UMP stream. It is possibly ended.");
+                Log.d(TAG, "The UMP stream is ended.");
                 break;
             }
 

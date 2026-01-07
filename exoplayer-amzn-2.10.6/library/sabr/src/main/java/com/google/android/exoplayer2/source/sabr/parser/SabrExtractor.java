@@ -854,7 +854,7 @@ public class SabrExtractor implements Extractor {
 
         /** Initializes the track with an output. */
         public void initializeOutput(ExtractorOutput output, int trackId) throws ParserException {
-            String mimeType;
+            String mimeType = null;
             int maxInputSize = Format.NO_VALUE;
             @C.PcmEncoding int pcmEncoding = Format.NO_VALUE;
             List<byte[]> initializationData = null;
@@ -880,20 +880,20 @@ public class SabrExtractor implements Extractor {
                     break;
                 case CODEC_ID_H264:
                     mimeType = MimeTypes.VIDEO_H264;
-                    AvcConfig avcConfig = AvcConfig.parse(new ParsableByteArray(codecPrivate));
-                    initializationData = avcConfig.initializationData;
-                    nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
+                    //AvcConfig avcConfig = AvcConfig.parse(new ParsableByteArray(codecPrivate));
+                    //initializationData = avcConfig.initializationData;
+                    //nalUnitLengthFieldLength = avcConfig.nalUnitLengthFieldLength;
                     break;
                 case CODEC_ID_H265:
                     mimeType = MimeTypes.VIDEO_H265;
-                    HevcConfig hevcConfig = HevcConfig.parse(new ParsableByteArray(codecPrivate));
-                    initializationData = hevcConfig.initializationData;
-                    nalUnitLengthFieldLength = hevcConfig.nalUnitLengthFieldLength;
+                    //HevcConfig hevcConfig = HevcConfig.parse(new ParsableByteArray(codecPrivate));
+                    //initializationData = hevcConfig.initializationData;
+                    //nalUnitLengthFieldLength = hevcConfig.nalUnitLengthFieldLength;
                     break;
                 case CODEC_ID_FOURCC:
-                    Pair<String, List<byte[]>> pair = parseFourCcPrivate(new ParsableByteArray(codecPrivate));
-                    mimeType = pair.first;
-                    initializationData = pair.second;
+                    //Pair<String, List<byte[]>> pair = parseFourCcPrivate(new ParsableByteArray(codecPrivate));
+                    //mimeType = pair.first;
+                    //initializationData = pair.second;
                     break;
                 case CODEC_ID_THEORA:
                     // TODO: This can be set to the real mimeType if/when we work out what initializationData
@@ -903,21 +903,21 @@ public class SabrExtractor implements Extractor {
                 case CODEC_ID_VORBIS:
                     mimeType = MimeTypes.AUDIO_VORBIS;
                     maxInputSize = VORBIS_MAX_INPUT_SIZE;
-                    initializationData = parseVorbisCodecPrivate(codecPrivate);
+                    //initializationData = parseVorbisCodecPrivate(codecPrivate);
                     break;
                 case CODEC_ID_OPUS:
                     mimeType = MimeTypes.AUDIO_OPUS;
                     maxInputSize = OPUS_MAX_INPUT_SIZE;
-                    initializationData = new ArrayList<>(3);
-                    initializationData.add(codecPrivate);
-                    initializationData.add(
-                            ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(codecDelayNs).array());
-                    initializationData.add(
-                            ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(seekPreRollNs).array());
+                    //initializationData = new ArrayList<>(3);
+                    //initializationData.add(codecPrivate);
+                    //initializationData.add(
+                    //        ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(codecDelayNs).array());
+                    //initializationData.add(
+                    //        ByteBuffer.allocate(8).order(ByteOrder.nativeOrder()).putLong(seekPreRollNs).array());
                     break;
                 case CODEC_ID_AAC:
                     mimeType = MimeTypes.AUDIO_AAC;
-                    initializationData = Collections.singletonList(codecPrivate);
+                    //initializationData = Collections.singletonList(codecPrivate);
                     break;
                 case CODEC_ID_MP2:
                     mimeType = MimeTypes.AUDIO_MPEG_L2;

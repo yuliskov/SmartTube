@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sabr.videostreaming;
 
+import "sabr/videostreaming/playback_cookie.proto";
+
 option java_multiple_files = true;
 option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
 option optimize_for = LITE_RUNTIME;

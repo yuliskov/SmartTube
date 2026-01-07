@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package sabr.videostreaming;
 
+import "sabr/videostreaming/crypto_params.proto";
+import "sabr/videostreaming/onesie_header_type.proto";
+
 option java_multiple_files = true;
 option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
 option optimize_for = LITE_RUNTIME;
-
-import "sabr/videostreaming/crypto_params.proto";
-import "sabr/videostreaming/onesie_header_type.proto";
 
 message OnesieHeader {
   message UnknownMessage1 {
