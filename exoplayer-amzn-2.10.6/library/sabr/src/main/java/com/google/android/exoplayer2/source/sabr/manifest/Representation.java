@@ -108,7 +108,7 @@ public abstract class Representation {
     /**
      * Returns an index if the representation provides one directly, or null otherwise.
      */
-    public abstract SabrSegmentIndex getIndex();
+    //public abstract SabrSegmentIndex getIndex();
 
     /** Returns a cache key for the representation if set, or null. */
     public abstract String getCacheKey();
@@ -130,7 +130,7 @@ public abstract class Representation {
 
         private final String cacheKey;
         private final RangedUri indexUri;
-        private final SingleSegmentIndex segmentIndex;
+        //private final SingleSegmentIndex segmentIndex;
         
         public static SingleSegmentRepresentation newInstance(
                 long revisionId,
@@ -164,8 +164,8 @@ public abstract class Representation {
             this.contentLength = contentLength;
             // If we have an index uri then the index is defined externally, and we shouldn't return one
             // directly. If we don't, then we can't do better than an index defining a single segment.
-            segmentIndex = indexUri != null ? null
-                    : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
+            //segmentIndex = indexUri != null ? null
+            //        : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
         }
 
         @Override
@@ -173,10 +173,10 @@ public abstract class Representation {
             return indexUri;
         }
 
-        @Override
-        public SabrSegmentIndex getIndex() {
-            return segmentIndex;
-        }
+        //@Override
+        //public SabrSegmentIndex getIndex() {
+        //    return segmentIndex;
+        //}
 
         @Override
         public String getCacheKey() {
@@ -188,8 +188,7 @@ public abstract class Representation {
     /**
      * A DASH representation consisting of multiple segments.
      */
-    public static class MultiSegmentRepresentation extends Representation
-            implements SabrSegmentIndex {
+    public static class MultiSegmentRepresentation extends Representation {
 
         private final MultiSegmentBase segmentBase;
 
@@ -213,10 +212,10 @@ public abstract class Representation {
             return null;
         }
 
-        @Override
-        public SabrSegmentIndex getIndex() {
-            return this;
-        }
+        //@Override
+        //public SabrSegmentIndex getIndex() {
+        //    return this;
+        //}
 
         @Override
         public String getCacheKey() {
@@ -225,40 +224,40 @@ public abstract class Representation {
 
         // DashSegmentIndex implementation.
 
-        @Override
-        public RangedUri getSegmentUrl(long segmentIndex) {
-            return segmentBase.getSegmentUrl(this, segmentIndex);
-        }
-
-        @Override
-        public long getSegmentNum(long timeUs, long periodDurationUs) {
-            return segmentBase.getSegmentNum(timeUs, periodDurationUs);
-        }
-
-        @Override
-        public long getTimeUs(long segmentIndex) {
-            return segmentBase.getSegmentTimeUs(segmentIndex);
-        }
-
-        @Override
-        public long getDurationUs(long segmentIndex, long periodDurationUs) {
-            return segmentBase.getSegmentDurationUs(segmentIndex, periodDurationUs);
-        }
-
-        @Override
-        public long getFirstSegmentNum() {
-            return segmentBase.getFirstSegmentNum();
-        }
-
-        @Override
-        public int getSegmentCount(long periodDurationUs) {
-            return segmentBase.getSegmentCount(periodDurationUs);
-        }
-
-        @Override
-        public boolean isExplicit() {
-            return segmentBase.isExplicit();
-        }
+        //@Override
+        //public RangedUri getSegmentUrl(long segmentIndex) {
+        //    return segmentBase.getSegmentUrl(this, segmentIndex);
+        //}
+        //
+        //@Override
+        //public long getSegmentNum(long timeUs, long periodDurationUs) {
+        //    return segmentBase.getSegmentNum(timeUs, periodDurationUs);
+        //}
+        //
+        //@Override
+        //public long getTimeUs(long segmentIndex) {
+        //    return segmentBase.getSegmentTimeUs(segmentIndex);
+        //}
+        //
+        //@Override
+        //public long getDurationUs(long segmentIndex, long periodDurationUs) {
+        //    return segmentBase.getSegmentDurationUs(segmentIndex, periodDurationUs);
+        //}
+        //
+        //@Override
+        //public long getFirstSegmentNum() {
+        //    return segmentBase.getFirstSegmentNum();
+        //}
+        //
+        //@Override
+        //public int getSegmentCount(long periodDurationUs) {
+        //    return segmentBase.getSegmentCount(periodDurationUs);
+        //}
+        //
+        //@Override
+        //public boolean isExplicit() {
+        //    return segmentBase.isExplicit();
+        //}
 
     }
 }

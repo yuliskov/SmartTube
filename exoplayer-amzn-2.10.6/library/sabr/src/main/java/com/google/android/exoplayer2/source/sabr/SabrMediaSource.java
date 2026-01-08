@@ -527,14 +527,19 @@ public final class SabrMediaSource extends BaseMediaSource {
             }
             // If there are multiple video adaptation sets with unaligned segments, the initial time may
             // not correspond to the start of a segment in both, but this is an edge case.
-            SabrSegmentIndex snapIndex = period.adaptationSets.get(videoAdaptationSetIndex)
-                    .representations.get(0).getIndex();
-            if (snapIndex == null || snapIndex.getSegmentCount(periodDurationUs) == 0) {
-                // Video adaptation set does not include a non-empty index for snapping.
-                return windowDefaultStartPositionUs;
-            }
-            long segmentNum = snapIndex.getSegmentNum(defaultStartPositionInPeriodUs, periodDurationUs);
-            return windowDefaultStartPositionUs + snapIndex.getTimeUs(segmentNum)
+            //SabrSegmentIndex snapIndex = period.adaptationSets.get(videoAdaptationSetIndex)
+            //        .representations.get(0).getIndex();
+            //if (snapIndex == null || snapIndex.getSegmentCount(periodDurationUs) == 0) {
+            //    // Video adaptation set does not include a non-empty index for snapping.
+            //    return windowDefaultStartPositionUs;
+            //}
+            //long segmentNum = snapIndex.getSegmentNum(defaultStartPositionInPeriodUs, periodDurationUs);
+            //return windowDefaultStartPositionUs + snapIndex.getTimeUs(segmentNum)
+            //        - defaultStartPositionInPeriodUs;
+
+            long startTimeUs = 0; // TODO: calc SABR start time
+
+            return windowDefaultStartPositionUs + startTimeUs
                     - defaultStartPositionInPeriodUs;
         }
 
@@ -551,7 +556,7 @@ public final class SabrMediaSource extends BaseMediaSource {
                 com.google.android.exoplayer2.source.sabr.manifest.Period period, long durationUs) {
             int adaptationSetCount = period.adaptationSets.size();
             long availableStartTimeUs = 0;
-            long availableEndTimeUs = Long.MAX_VALUE;
+            long availableEndTimeUs = Long.MAX_VALUE; // TODO: calc SABR start time
             boolean isIndexExplicit = false;
             boolean seenEmptyIndex = false;
 
@@ -572,27 +577,27 @@ public final class SabrMediaSource extends BaseMediaSource {
                     continue;
                 }
 
-                SabrSegmentIndex index = adaptationSet.representations.get(0).getIndex();
-                if (index == null) {
-                    return new PeriodSeekInfo(true, 0, durationUs);
-                }
-                isIndexExplicit |= index.isExplicit();
-                int segmentCount = index.getSegmentCount(durationUs);
-                if (segmentCount == 0) {
-                    seenEmptyIndex = true;
-                    availableStartTimeUs = 0;
-                    availableEndTimeUs = 0;
-                } else if (!seenEmptyIndex) {
-                    long firstSegmentNum = index.getFirstSegmentNum();
-                    long adaptationSetAvailableStartTimeUs = index.getTimeUs(firstSegmentNum);
-                    availableStartTimeUs = Math.max(availableStartTimeUs, adaptationSetAvailableStartTimeUs);
-                    if (segmentCount != SabrSegmentIndex.INDEX_UNBOUNDED) {
-                        long lastSegmentNum = firstSegmentNum + segmentCount - 1;
-                        long adaptationSetAvailableEndTimeUs = index.getTimeUs(lastSegmentNum)
-                                + index.getDurationUs(lastSegmentNum, durationUs);
-                        availableEndTimeUs = Math.min(availableEndTimeUs, adaptationSetAvailableEndTimeUs);
-                    }
-                }
+                //SabrSegmentIndex index = adaptationSet.representations.get(0).getIndex();
+                //if (index == null) {
+                //    return new PeriodSeekInfo(true, 0, durationUs);
+                //}
+                //isIndexExplicit |= index.isExplicit();
+                //int segmentCount = index.getSegmentCount(durationUs);
+                //if (segmentCount == 0) {
+                //    seenEmptyIndex = true;
+                //    availableStartTimeUs = 0;
+                //    availableEndTimeUs = 0;
+                //} else if (!seenEmptyIndex) {
+                //    long firstSegmentNum = index.getFirstSegmentNum();
+                //    long adaptationSetAvailableStartTimeUs = index.getTimeUs(firstSegmentNum);
+                //    availableStartTimeUs = Math.max(availableStartTimeUs, adaptationSetAvailableStartTimeUs);
+                //    if (segmentCount != SabrSegmentIndex.INDEX_UNBOUNDED) {
+                //        long lastSegmentNum = firstSegmentNum + segmentCount - 1;
+                //        long adaptationSetAvailableEndTimeUs = index.getTimeUs(lastSegmentNum)
+                //                + index.getDurationUs(lastSegmentNum, durationUs);
+                //        availableEndTimeUs = Math.min(availableEndTimeUs, adaptationSetAvailableEndTimeUs);
+                //    }
+                //}
             }
             return new PeriodSeekInfo(isIndexExplicit, availableStartTimeUs, availableEndTimeUs);
         }
