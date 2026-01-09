@@ -16,12 +16,11 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSa
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
-import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessFormatInitializationMetadataResult;
-import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaEndResult;
-import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaHeaderResult;
-import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessMediaResult;
-import com.google.android.exoplayer2.source.sabr.parser.processor.ProcessStreamProtectionStatusResult;
-import com.google.android.exoplayer2.source.sabr.parser.processor.SabrProcessor;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessFormatInitializationMetadataResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaEndResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaHeaderResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessStreamProtectionStatusResult;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPDecoder;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPart;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPPartId;

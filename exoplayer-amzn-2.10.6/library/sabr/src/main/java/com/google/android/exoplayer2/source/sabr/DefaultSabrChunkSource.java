@@ -29,7 +29,7 @@ import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
-import com.google.android.exoplayer2.source.sabr.parser.processor.Utils;
+import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -304,7 +304,6 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             if (representationHolder.extractorWrapper.getSampleFormats() == null) {
                 pendingInitializationUri = selectedRepresentation.getInitializationUri();
             }
-            // TODO: remove segmentIndex entity (
             // No segment index in SABR
             //if (representationHolder.segmentIndex == null) {
             //    pendingIndexUri = selectedRepresentation.getIndexUri();

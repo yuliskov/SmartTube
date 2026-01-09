@@ -1,6 +1,7 @@
-package com.google.android.exoplayer2.source.sabr.parser.processor;
+package com.google.android.exoplayer2.source.sabr.parser.misc;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,5 +38,13 @@ public class Utils {
         if (baseUrl == null || key == null || value == null) return baseUrl;
         String separator = baseUrl.contains("?") ? "&" : "?";
         return baseUrl + separator + key + "=" + value;
+    }
+
+    public static int parseHeight(String displayName) {
+        if (displayName == null) {
+            return 0;
+        }
+
+        return Helpers.isNumeric(displayName) ? Helpers.parseInt(displayName) : Helpers.parseInt(displayName.replace("p", ""));
     }
 }

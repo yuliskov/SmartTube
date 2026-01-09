@@ -1,4 +1,4 @@
-package com.google.android.exoplayer2.source.sabr.parser.processor;
+package com.google.android.exoplayer2.source.sabr.parser;
 
 import android.util.Base64;
 import android.util.Pair;
@@ -22,6 +22,14 @@ import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentEndSab
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentInitSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.PoTokenStatusSabrPart.PoTokenStatus;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessFormatInitializationMetadataResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessLiveMetadataResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaEndResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaHeaderResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessSabrSeekResult;
+import com.google.android.exoplayer2.source.sabr.parser.results.ProcessStreamProtectionStatusResult;
+import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
@@ -685,7 +693,7 @@ public class SabrProcessor {
     //}
 
     public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
-        int resolution = trackType == C.TRACK_TYPE_VIDEO ? 720 : 0; // current track height (if video)
+        int resolution = trackType == C.TRACK_TYPE_VIDEO && videoFormatSelector != null ? Utils.parseHeight(videoFormatSelector.displayName) : 0;
         int bandwidthEstimate = 1350000; // ???
 
         ClientAbrState clientAbrStateTest = ClientAbrState.newBuilder()
@@ -893,7 +901,7 @@ public class SabrProcessor {
             }
 
             boolean shouldDiscard = currentFormatITag != activeFormat.getItag();
-            FormatId initializedFormat = null;
+            SelectedFormat initializedFormat = null; // TODO: not implemented
 
             BufferedRange bufferedRange = shouldDiscard ? createFullBufferRange(activeFormat) : createPartialBufferRange(initializedFormat);
 
@@ -935,7 +943,7 @@ public class SabrProcessor {
      * @param initializedFormat - The format with initialization data.
      * @return A BufferedRange object with segment information, or null if no metadata is available.
      */
-    private BufferedRange createPartialBufferRange(FormatId initializedFormat) {
+    private BufferedRange createPartialBufferRange(SelectedFormat initializedFormat) {
         if (initializedFormat == null) {
             return null;
         }
