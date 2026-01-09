@@ -9,12 +9,9 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.extractor.ChunkIndex;
 import com.google.android.exoplayer2.extractor.Extractor;
-import com.google.android.exoplayer2.extractor.SeekMap;
 import com.google.android.exoplayer2.extractor.TrackOutput;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
-import com.google.android.exoplayer2.source.chunk.BaseMediaChunkIterator;
 import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ChunkExtractorWrapper;
 import com.google.android.exoplayer2.source.chunk.ChunkHolder;
@@ -22,7 +19,6 @@ import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.source.chunk.InitializationChunk;
 import com.google.android.exoplayer2.source.chunk.MediaChunk;
 import com.google.android.exoplayer2.source.chunk.MediaChunkIterator;
-import com.google.android.exoplayer2.source.chunk.SingleSampleMediaChunk;
 import com.google.android.exoplayer2.source.sabr.PlayerEmsgHandler.PlayerTrackEmsgHandler;
 import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
 import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
@@ -38,11 +34,9 @@ import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
-import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.IOException;
@@ -315,7 +309,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //if (representationHolder.segmentIndex == null) {
             //    pendingIndexUri = selectedRepresentation.getIndexUri();
             //}
-            if (pendingInitializationUri != null || pendingIndexUri != null) {
+            //if (pendingInitializationUri != null || pendingIndexUri != null) {
+            if (pendingInitializationUri != null) {
                 // We have initialization and/or index requests to make.
                 out.chunk = newInitializationChunk(representationHolder, dataSource,
                         trackSelection.getSelectedFormat(), trackSelection.getSelectionReason(),
@@ -516,7 +511,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         DataSpec dataSpec = new DataSpec(
                 requestUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.buildInitVideoPlaybackAbrRequest(trackType).toByteArray(),
+                sabrStream.buildVideoPlaybackAbrRequest(trackType, true).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //requestUri.start,
                 //requestUri.start,
@@ -552,7 +547,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Uri.parse(baseUrl),
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.buildInitVideoPlaybackAbrRequest(trackType).toByteArray(),
+                sabrStream.buildVideoPlaybackAbrRequest(trackType, false).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,

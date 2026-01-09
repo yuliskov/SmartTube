@@ -169,8 +169,8 @@ public class SabrStream {
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
-    public VideoPlaybackAbrRequest buildInitVideoPlaybackAbrRequest(int trackType) {
-        return processor.buildInitVideoPlaybackAbrRequest(trackType);
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+        return processor.buildVideoPlaybackAbrRequest(trackType, isInit);
     }
 
     public void setAudioSelection(AudioSelector audioFormatSelector) {

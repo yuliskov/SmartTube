@@ -1,6 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.processor;
 
 import android.util.Base64;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -683,8 +684,8 @@ public class SabrProcessor {
     //            .build();
     //}
 
-    public VideoPlaybackAbrRequest buildInitVideoPlaybackAbrRequest(int trackType) {
-        int resolution = 1080; // ???
+    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+        int resolution = trackType == C.TRACK_TYPE_VIDEO ? 720 : 0; // current track height (if video)
         int bandwidthEstimate = 1350000; // ???
 
         ClientAbrState clientAbrStateTest = ClientAbrState.newBuilder()
@@ -695,14 +696,26 @@ public class SabrProcessor {
                 .setDrcEnabled(false)
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
                 .build();
-        
+
+        Pair<List<BufferedRange>, FormatId> bufferRanges = createBufferedRangesAndDiscardFormat(trackType);
+
+        List<FormatId> selectedFormats = getSelectedFormatIds(trackType);
+
+        if (isInit) {
+            selectedFormats.clear();
+        }
+
+        if (bufferRanges.second != null) {
+            selectedFormats.add(0, bufferRanges.second);
+        }
+
         return VideoPlaybackAbrRequest.newBuilder()
                 .setClientAbrState(clientAbrStateTest)
                 .addAllPreferredVideoFormatIds(videoFormatSelector.formatIds)
                 .addAllPreferredAudioFormatIds(audioFormatSelector.formatIds)
                 .addAllPreferredSubtitleFormatIds(captionFormatSelector.formatIds)
-                .addAllSelectedFormatIds(getAllSelectedFormatIds(trackType))
-                .addAllBufferedRanges(createAllBufferedRanges(trackType))
+                .addAllSelectedFormatIds(selectedFormats)
+                .addAllBufferedRanges(bufferRanges.first)
                 .setVideoPlaybackUstreamerConfig(
                         ByteString.copyFrom(
                                 Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
@@ -734,15 +747,15 @@ public class SabrProcessor {
         return 0;
     }
 
-    private List<FormatId> getAllSelectedFormatIds(int trackType) {
+    private List<FormatId> getSelectedFormatIds(int trackType) {
         List<FormatId> result = new ArrayList<>();
 
         if (!videoFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_VIDEO) {
-            return videoFormatSelector.formatIds;
+            result = videoFormatSelector.formatIds;
         } else if (!audioFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_AUDIO) {
-            return audioFormatSelector.formatIds;
+            result = audioFormatSelector.formatIds;
         } else if (!captionFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_TEXT) {
-            return captionFormatSelector.formatIds;
+            result = captionFormatSelector.formatIds;
         }
 
         return result;
@@ -820,30 +833,6 @@ public class SabrProcessor {
         return result;
     }
 
-    private List<BufferedRange> createAllBufferedRanges(int trackType) {
-        List<FormatId> allSelectedFormatIds = getAllSelectedFormatIds(trackType);
-        
-        int durationMs = 2147483647; // ???
-
-        TimeRange timeRange = TimeRange.newBuilder()
-                .setStartTicks(0)
-                .setDurationTicks(durationMs)
-                .setTimescale(1_000)
-                .build();
-        BufferedRange bufferedRange = BufferedRange.newBuilder()
-                .setFormatId(allSelectedFormatIds.get(0))
-                .setStartTimeMs(0)
-                .setDurationMs(durationMs)
-                .setStartSegmentIndex((int) durationMs)
-                .setEndSegmentIndex((int) durationMs)
-                .setTimeRange(timeRange)
-                .build();
-        List<BufferedRange> bufferedRanges = new ArrayList<>();
-        bufferedRanges.add(bufferedRange);
-
-        return bufferedRanges;
-    }
-
     private FormatSelector matchFormatSelector(FormatInitializationMetadata formatInitMetadata) {
         for (FormatSelector formatSelector : new FormatSelector[]{videoFormatSelector, audioFormatSelector, captionFormatSelector}) {
             if (formatSelector == null) {
@@ -871,5 +860,86 @@ public class SabrProcessor {
     public void setCaptionFormatSelector(CaptionSelector captionFormatSelector) {
         this.captionFormatSelector = captionFormatSelector;
         initializeClientAbrState();
+    }
+
+    /**
+     * Adds buffering information to the ABR request for all active formats.<br/><br/>
+     *
+     * NOTE:
+     * On the web, mobile, and TV clients, buffered ranges in combination to player time is what dictates the segments you get.
+     * In our case, we are cheating a bit by abusing the player time field (in clientAbrState), setting it to the exact start
+     * time value of the segment we want, while YouTube simply uses the actual player time.<br/><br/>
+     *
+     * We don't have to fully replicate this behavior for two reasons:
+     * 1. The SABR server will only send so much segments for a given player time. That means players like Shaka would
+     * not be able to buffer more than what the server thinks is enough. It would behave like YouTube's.
+     * 2. We don't have to know what segment a buffered range starts/ends at. It is easy to do in Shaka, but not in other players.
+     *
+     * @return The format to discard (if any) - typically formats that are active but not currently requested.
+     */
+    private Pair<List<BufferedRange>, FormatId> createBufferedRangesAndDiscardFormat(int trackType) {
+        FormatId audioFormat = audioFormatSelector.formatIds.isEmpty() ? null : audioFormatSelector.formatIds.get(0);
+        FormatId videoFormat = videoFormatSelector.formatIds.isEmpty() ? null : videoFormatSelector.formatIds.get(0);
+
+        FormatId formatToDiscard = null;
+        List<BufferedRange> bufferedRanges = new ArrayList<>();
+
+        FormatId currentFormat = trackType == C.TRACK_TYPE_VIDEO ? videoFormat : audioFormat;
+        int currentFormatITag = currentFormat != null ? currentFormat.getItag() : -1;
+
+        for (FormatId activeFormat : new FormatId[]{videoFormat, audioFormat}) {
+            if (activeFormat == null) {
+                continue;
+            }
+
+            boolean shouldDiscard = currentFormatITag != activeFormat.getItag();
+            FormatId initializedFormat = null;
+
+            BufferedRange bufferedRange = shouldDiscard ? createFullBufferRange(activeFormat) : createPartialBufferRange(initializedFormat);
+
+            if (bufferedRange != null) {
+                bufferedRanges.add(bufferedRange);
+
+                if (shouldDiscard) {
+                    formatToDiscard = activeFormat;
+                }
+            }
+        }
+
+        return new Pair<>(bufferedRanges, formatToDiscard);
+    }
+
+    /**
+     * Creates a bogus buffered range for a format. Used when we want to signal to the server to not send any
+     * segments for this format.
+     * @param format - The format to create a full buffer range for.
+     * @return A BufferedRange object indicating the entire format is buffered.
+     */
+    private BufferedRange createFullBufferRange(@NonNull FormatId format) {
+        return BufferedRange.newBuilder()
+                .setFormatId(format)
+                .setDurationMs(Integer.MAX_VALUE)
+                .setStartTimeMs(0)
+                .setStartSegmentIndex(Integer.MAX_VALUE)
+                .setEndSegmentIndex(Integer.MAX_VALUE)
+                .setTimeRange(TimeRange.newBuilder()
+                        .setDurationTicks(Integer.MAX_VALUE)
+                        .setStartTicks(0)
+                        .setTimescale(1_000)
+                        .build())
+                .build();
+    }
+
+    /**
+     * Creates a buffered range representing a partially buffered format.
+     * @param initializedFormat - The format with initialization data.
+     * @return A BufferedRange object with segment information, or null if no metadata is available.
+     */
+    private BufferedRange createPartialBufferRange(FormatId initializedFormat) {
+        if (initializedFormat == null) {
+            return null;
+        }
+
+        return null;
     }
 }
