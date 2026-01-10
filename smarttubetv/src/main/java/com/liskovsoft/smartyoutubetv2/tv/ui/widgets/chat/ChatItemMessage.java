@@ -130,6 +130,22 @@ public class ChatItemMessage implements IMessage {
             return MAX_LENGTH;
         }
 
+        List<String> splitNoLongLines = new ArrayList<>();
+        for (String line : split) {
+            while (line.length() > LINE_LENGTH) {
+                int breakPoint = line.lastIndexOf(' ', LINE_LENGTH);
+
+                if (breakPoint == -1) {
+                    breakPoint = LINE_LENGTH;
+                }
+
+                splitNoLongLines.add(line.substring(0, breakPoint));
+                line = line.substring(breakPoint).trim();
+            }
+            splitNoLongLines.add(line);
+        }
+        split = splitNoLongLines.toArray(new String[0]);
+
         int realCount = 0;
         int fakeCount = 0;
 
