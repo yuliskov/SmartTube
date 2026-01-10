@@ -7,12 +7,12 @@ import java.util.List;
 
 public class SelectedFormat {
     public final FormatId formatId;
-    public final int durationMs;
-    public final int endTimeMs;
+    public final long durationMs;
+    public final long endTimeMs;
     public final String mimeType;
     public final String videoId;
     public final FormatSelector formatSelector;
-    public int totalSegments;
+    public long totalSegments;
     public final boolean discard;
     public long sequenceLmt = -1;
     public Segment currentSegment;
@@ -21,12 +21,12 @@ public class SelectedFormat {
 
     public SelectedFormat(
             FormatId formatId,
-            int durationMs,
-            int endTimeMs,
+            long durationMs,
+            long endTimeMs,
             String mimeType,
             String videoId,
             FormatSelector formatSelector,
-            int totalSegments,
+            long totalSegments,
             boolean discard
     ) {
         this.formatId = formatId;

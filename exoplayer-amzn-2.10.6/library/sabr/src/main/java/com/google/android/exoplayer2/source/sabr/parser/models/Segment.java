@@ -1,8 +1,10 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
 
 public class Segment {
+    public final MediaHeader mediaHeader;
     public final FormatId formatId;
     public final boolean isInitSegment;
     public final long durationMs;
@@ -18,7 +20,8 @@ public class Segment {
     public final long sequenceLmt;
     public int receivedDataLength;
 
-    public Segment(FormatId formatId,
+    public Segment(MediaHeader mediaHeader,
+                   FormatId formatId,
                    boolean isInitSegment,
                    long durationMs,
                    long startRange,
@@ -31,6 +34,7 @@ public class Segment {
                    boolean discard,
                    boolean consumed,
                    long sequenceLmt) {
+        this.mediaHeader = mediaHeader;
         this.formatId = formatId;
         this.isInitSegment = isInitSegment;
         this.durationMs = durationMs;

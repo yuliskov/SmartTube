@@ -30,14 +30,12 @@ import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
-import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.MimeTypes;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -635,7 +633,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         Format selectedFormat = trackSelection.getSelectedFormat();
 
-        return new AudioSelector(Helpers.firstNonNull(selectedFormat.label, "selected_audio"), false, createFormatId(selectedFormat));
+        return new AudioSelector("selected_audio", false, selectedFormat);
     }
 
     private static VideoSelector createVideoSelection(int trackType, TrackSelection trackSelection) {
@@ -645,7 +643,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         Format selectedFormat = trackSelection.getSelectedFormat();
 
-        return new VideoSelector(Helpers.firstNonNull(selectedFormat.label, "selected_video"), false, createFormatId(selectedFormat));
+        return new VideoSelector("selected_video", false, selectedFormat);
     }
 
     private static CaptionSelector createCaptionSelection(int trackType, TrackSelection trackSelection) {
@@ -655,15 +653,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         Format selectedFormat = trackSelection.getSelectedFormat();
 
-        return new CaptionSelector(Helpers.firstNonNull(selectedFormat.label, "selected_caption"), false, createFormatId(selectedFormat));
-    }
-
-    private static FormatId createFormatId(Format format) {
-        FormatId formatId = FormatId.newBuilder()
-                .setItag(Helpers.parseInt(format.id))
-                .setLastModified(format.lastModified)
-                .build();
-        return formatId;
+        return new CaptionSelector("selected_caption", false, selectedFormat);
     }
 
     /** {@link MediaChunkIterator} wrapping a {@link RepresentationHolder}. */

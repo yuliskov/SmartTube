@@ -9,7 +9,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
     public final FormatId formatId;
     public final long sequenceNumber;
     public final boolean isInitSegment;
-    public final int totalSegments;
+    public final long totalSegments;
     public final long startTimeMs;
     public final ExtractorInput data;
     public final int contentLength;
@@ -20,7 +20,7 @@ public class MediaSegmentDataSabrPart implements SabrPart {
             FormatId formatId,
             long sequenceNumber,
             boolean isInitSegment,
-            int totalSegments,
+            long totalSegments,
             long startTimeMs,
             ExtractorInput data,
             int contentLength,

@@ -7,12 +7,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class Utils {
-    public static int ticksToMs(long timeTicks, int timescale) {
+    public static long ticksToMs(long timeTicks, long timescale) {
         if (timeTicks == -1 || timescale == -1) {
             return -1;
         }
 
-        return (int) Math.ceil(((double) timeTicks / timescale) * 1_000);
+        return (long) Math.ceil(((double) timeTicks / timescale) * 1_000);
     }
 
     public static byte[] readAllBytes(ByteArrayInputStream is) {

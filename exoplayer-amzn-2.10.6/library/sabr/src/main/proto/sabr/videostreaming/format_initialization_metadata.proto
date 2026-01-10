@@ -11,11 +11,12 @@ option optimize_for = LITE_RUNTIME;
 message FormatInitializationMetadata {
     optional string video_id = 1;
     optional sabr.misc.FormatId format_id = 2;
-    optional int32 end_time_ms = 3;
-    optional int32 total_segments = 4;
+    optional int64 end_time_ms = 3;
+    optional int64 end_segment_number = 4;
     optional string mime_type = 5;
     optional sabr.misc.Range init_range = 6;
     optional sabr.misc.Range index_range = 7;
-    optional int32 duration_ticks = 9;
-    optional int32 duration_timescale = 10;
+    optional int64 field8 = 8;
+    optional int64 duration_units = 9;
+    optional int64 duration_timescale = 10;
 }

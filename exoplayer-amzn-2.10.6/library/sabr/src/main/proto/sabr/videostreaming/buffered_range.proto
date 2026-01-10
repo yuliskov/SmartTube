@@ -24,11 +24,11 @@ message BufferedRange {
     optional int32 field3 = 3;
   }
 
-  optional sabr.misc.FormatId format_id = 1;
-  optional int64 start_time_ms = 2;
-  optional int64 duration_ms = 3;
-  optional int32 start_segment_index = 4;
-  optional int32 end_segment_index = 5;
+  sabr.misc.FormatId format_id = 1;
+  int64 start_time_ms = 2;
+  int64 duration_ms = 3;
+  int32 start_segment_index = 4;
+  int32 end_segment_index = 5;
   optional TimeRange time_range = 6;
   optional UnknownMessage1 field9 = 9;
   optional UnknownMessage2 field11 = 11;

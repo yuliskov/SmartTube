@@ -494,6 +494,7 @@ public class SabrStream {
 
             if (part == null) {
                 Log.d(TAG, "The UMP stream is ended.");
+                processor.handleResponse();
                 break;
             }
 

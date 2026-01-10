@@ -1,5 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 
 public class VideoSelector extends FormatSelector {
@@ -9,6 +10,10 @@ public class VideoSelector extends FormatSelector {
 
     public VideoSelector(String displayName, boolean discardMedia, FormatId... formatIds) {
         super(displayName, discardMedia, formatIds);
+    }
+
+    public VideoSelector(String displayName, boolean discardMedia, Format... selectedFormats) {
+        super(displayName, discardMedia, selectedFormats);
     }
 
     @Override
