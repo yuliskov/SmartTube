@@ -52,7 +52,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew clean assembleStbetaDebug
+          ./gradlew clean assembleStbetaRelease
 
       - name: VirusTotal Scan
         if: ${{ env.HAS_VT_KEY == 'true' }}
@@ -61,7 +61,7 @@ jobs:
         with:
           vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           files: |
-            ./smarttubetv/build/outputs/apk/stbeta/debug/*.apk
+            ./smarttubetv/build/outputs/apk/stbeta/release/*.apk
           request_rate: 3
 
       - name: VirusTotal Summary
@@ -74,7 +74,7 @@ jobs:
           echo "| Artifact Name | VirusTotal Status | Detailed Report |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
 
-          for apk in ./smarttubetv/build/outputs/apk/stbeta/debug/*.apk; do
+          for apk in ./smarttubetv/build/outputs/apk/stbeta/release/*.apk; do
             filename=$(basename "$apk")
             sha256=$(sha256sum "$apk" | awk '{print $1}')
             
@@ -89,19 +89,19 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_arm64
-          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_arm64-v8a.apk
+          path: ./smarttubetv/build/outputs/apk/stbeta/release/*_arm64-v8a.apk
           if-no-files-found: error
 
       - name: Upload ARMv7 APK
         uses: actions/upload-artifact@v6
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_armeabi-v7a
-          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_armeabi-v7a.apk
+          path: ./smarttubetv/build/outputs/apk/stbeta/release/*_armeabi-v7a.apk
           if-no-files-found: error
 
       - name: Upload x86 APK
         uses: actions/upload-artifact@v6
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_x86
-          path: ./smarttubetv/build/outputs/apk/stbeta/debug/*_x86.apk
+          path: ./smarttubetv/build/outputs/apk/stbeta/release/*_x86.apk
           if-no-files-found: error
