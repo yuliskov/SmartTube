@@ -133,7 +133,7 @@ public class PlayerUIController extends BasePlayerController {
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
                 handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode);
+                handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode) || handleUpDownSkip(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -689,15 +689,21 @@ public class PlayerUIController extends BasePlayerController {
 
         if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
             switch (getPlayerData().getOKButtonBehavior()) {
-                case PlayerData.ONLY_UI:
+                case PlayerData.OK_ONLY_UI:
                     getPlayer().showOverlay(true);
                     return true; // don't show ui
-                case PlayerData.UI_AND_PAUSE:
+                case PlayerData.OK_UI_AND_PAUSE:
                     // NOP
                     break;
-                case PlayerData.ONLY_PAUSE:
+                case PlayerData.OK_ONLY_PAUSE:
                     getPlayer().setPlayWhenReady(!getPlayer().getPlayWhenReady());
                     return true; // don't show ui
+                case PlayerData.OK_TOGGLE_SPEED:
+                    getMainController().onButtonClicked(R.id.action_video_speed,
+                            getPlayer().getButtonState(R.id.action_video_speed) == PlayerUI.BUTTON_ON ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                    float speed = getPlayerData().getSpeed();
+                    MessageHelpers.showMessage(getContext(), String.format("%sx", speed));
+                    return true;
             }
         }
 
@@ -747,6 +753,25 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            getMainController().onPreviousClicked();
+            return true; // hide ui
+        }
+
+        return false;
+    }
+
+    private boolean handleUpDownSkip(int keyCode) {
+        if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null ||
+                getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsAltEnabled()) {
+            return false;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            getMainController().onNextClicked();
+            return true; // hide ui
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
             getMainController().onPreviousClicked();
             return true; // hide ui
         }

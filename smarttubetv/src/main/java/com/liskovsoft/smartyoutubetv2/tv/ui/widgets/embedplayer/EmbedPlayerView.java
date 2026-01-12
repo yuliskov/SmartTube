@@ -147,6 +147,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public int getButtonState(int buttonId) {
+        return -1;
+    }
+
+    @Override
     public void setButtonState(int buttonId, int buttonState) {
 
     }

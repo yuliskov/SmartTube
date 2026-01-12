@@ -87,18 +87,23 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.player_only_ui),
-                option -> mPlayerData.setOKButtonBehavior(PlayerData.ONLY_UI),
-                mPlayerData.getOKButtonBehavior() == PlayerData.ONLY_UI));
+                option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_ONLY_UI),
+                mPlayerData.getOKButtonBehavior() == PlayerData.OK_ONLY_UI));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.player_ui_and_pause),
-                option -> mPlayerData.setOKButtonBehavior(PlayerData.UI_AND_PAUSE),
-                mPlayerData.getOKButtonBehavior() == PlayerData.UI_AND_PAUSE));
+                option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_UI_AND_PAUSE),
+                mPlayerData.getOKButtonBehavior() == PlayerData.OK_UI_AND_PAUSE));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.player_only_pause),
-                option -> mPlayerData.setOKButtonBehavior(PlayerData.ONLY_PAUSE),
-                mPlayerData.getOKButtonBehavior() == PlayerData.ONLY_PAUSE));
+                option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_ONLY_PAUSE),
+                mPlayerData.getOKButtonBehavior() == PlayerData.OK_ONLY_PAUSE));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.player_toggle_speed),
+                option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_TOGGLE_SPEED),
+                mPlayerData.getOKButtonBehavior() == PlayerData.OK_TOGGLE_SPEED));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ok_button_behavior), options);
     }

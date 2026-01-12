@@ -1201,6 +1201,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public int getButtonState(int buttonId) {
+        if (mPlayerGlue == null) {
+            return -1;
+        }
+
+        return mPlayerGlue.getButtonState(buttonId);
+    }
+
+    @Override
     public void setButtonState(int buttonId, int buttonState) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setButtonState(buttonId, buttonState);

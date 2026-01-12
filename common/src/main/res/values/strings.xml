@@ -81,6 +81,7 @@
     <string name="player_only_ui">Only UI</string>
     <string name="player_ui_and_pause">UI and pause</string>
     <string name="player_only_pause">Only pause</string>
+    <string name="player_toggle_speed">Toggle speed on/off</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="update_not_found">You\'re using the latest version</string>
     <string name="update_in_progress">Wait…</string>
@@ -653,6 +654,7 @@
     <string name="channel_filter_hint">Filter channels</string>
     <string name="player_loop_shorts">Loop Shorts</string>
     <string name="player_quick_shorts_skip">Skip Shorts with left/right buttons</string>
+    <string name="player_quick_shorts_skip_alt">Skip Shorts with up/down buttons</string>
     <string name="player_quick_skip_videos">Skip regular videos with left/right buttons</string>
     <string name="channels_filter">Show Filter channels field inside Channels section</string>
     <string name="channel_search_bar">Search bar inside the Channel page</string>

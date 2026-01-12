@@ -81,6 +81,7 @@
     <string name="player_only_ui">Sadece arayüz</string>
     <string name="player_ui_and_pause">Arayüz ve duraklat</string>
     <string name="player_only_pause">Sadece duraklat</string>
+    <string name="player_toggle_speed">Hızı açma/kapama</string>
     <string name="check_for_updates">Güncellemeyi kontrol et</string>
     <string name="update_not_found">En son sürümü kullanıyorsunuz</string>
     <string name="update_in_progress">Bekleyin…</string>
@@ -655,6 +656,7 @@
     <string name="channel_filter_hint">Kanalları filtrele</string>
     <string name="player_loop_shorts">Shortsları tekrarla</string>
     <string name="player_quick_shorts_skip">Shortsları sol/sağ düğmeyle atla</string>
+    <string name="player_quick_shorts_skip_alt">Shortsları yukarı/aşağı düğmeyle atla</string>
     <string name="player_quick_skip_videos">Atla Normal videolar sol/sağ düğmeyle</string>
     <string name="channels_filter">Kanallar bölümü içindeki Kanalları filtrele alanını göster</string>
     <string name="channel_search_bar">Kanal sayfasında arama çubuğu</string>

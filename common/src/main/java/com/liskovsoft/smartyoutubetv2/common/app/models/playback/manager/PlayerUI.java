@@ -26,6 +26,7 @@ public interface PlayerUI {
     boolean isSuggestionsShown();
     void showControls(boolean show);
     boolean isControlsShown();
+    int getButtonState(int buttonId);
     void setButtonState(int buttonId, int buttonState);
     void setChannelIcon(String iconUrl);
     void setSeekPreviewTitle(String title);

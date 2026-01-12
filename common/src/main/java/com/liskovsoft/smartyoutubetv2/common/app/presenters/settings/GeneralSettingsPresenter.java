@@ -321,8 +321,22 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("OK -> " + getContext().getString(R.string.player_toggle_speed),
+                option -> mPlayerData.setOKButtonBehavior(option.isSelected() ? PlayerData.OK_TOGGLE_SPEED : PlayerData.OK_ONLY_UI),
+                mPlayerData.getOKButtonBehavior() == PlayerData.OK_TOGGLE_SPEED));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip_alt),
+                option -> {
+                    mPlayerTweaksData.setQuickSkipShortsAltEnabled(option.isSelected());
+                    mGeneralData.resetDpadUpDownSettings();
+                },
+                mPlayerTweaksData.isQuickSkipShortsAltEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip),
-                option -> mPlayerTweaksData.setQuickSkipShortsEnabled(option.isSelected()),
+                option -> {
+                    mPlayerTweaksData.setQuickSkipShortsEnabled(option.isSelected());
+                    mGeneralData.resetDpadLeftRightSettings();
+                },
                 mPlayerTweaksData.isQuickSkipShortsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos),
@@ -334,15 +348,24 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.isRemapPlayToOKEnabled()));
 
         options.add(UiOptionItem.from("DPAD RIGHT/LEFT -> Volume Up/Down",
-                option -> mGeneralData.setRemapDpadLeftToVolumeEnabled(option.isSelected()),
+                option -> {
+                    mGeneralData.setRemapDpadLeftToVolumeEnabled(option.isSelected());
+                    mPlayerTweaksData.resetDpadLeftRightSettings();
+                },
                 mGeneralData.isRemapDpadLeftToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
-                option -> mGeneralData.setRemapDpadUpToVolumeEnabled(option.isSelected()),
+                option -> {
+                    mGeneralData.setRemapDpadUpToVolumeEnabled(option.isSelected());
+                    mPlayerTweaksData.resetDpadUpDownSettings();
+                },
                 mGeneralData.isRemapDpadUpToVolumeEnabled()));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
-                option -> mGeneralData.setRemapDpadUpDownToSpeedEnabled(option.isSelected()),
+                option -> {
+                    mGeneralData.setRemapDpadUpDownToSpeedEnabled(option.isSelected());
+                    mPlayerTweaksData.resetDpadUpDownSettings();
+                },
                 mGeneralData.isRemapDpadUpToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",

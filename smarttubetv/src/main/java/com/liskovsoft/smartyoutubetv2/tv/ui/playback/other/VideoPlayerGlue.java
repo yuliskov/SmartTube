@@ -305,6 +305,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
     }
 
+    public int getButtonState(int buttonId) {
+        return getActionIndex(mActions.get(buttonId));
+    }
+
     public void setButtonState(int buttonId, int buttonState) {
         setActionIndex(mActions.get(buttonId), buttonState);
     }
@@ -424,15 +428,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         return handled;
     }
 
-    private int getActionIndex(Action action) {
-        if (action instanceof PlaybackControlsRow.MultiAction) {
-            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
-            return multiAction.getIndex();
-        }
-
-        return 0;
-    }
-
     private void incrementActionIndex(Action action) {
         if (action instanceof PlaybackControlsRow.MultiAction) {
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
@@ -520,6 +515,15 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     private void putAction(Action action) {
         mActions.put((int) action.getId(), action);
+    }
+
+    private int getActionIndex(Action action) {
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
+            return multiAction.getIndex();
+        }
+
+        return 0;
     }
 
     private void setActionIndex(Action action, int actionIndex) {

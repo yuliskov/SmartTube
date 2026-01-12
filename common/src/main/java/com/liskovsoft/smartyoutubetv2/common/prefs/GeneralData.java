@@ -254,7 +254,7 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void setRemapDpadUpDownToSpeedEnabled(boolean enable) {
-        resetDpadUpSettings();
+        resetDpadUpDownSettings();
         mIsRemapDpadUpToSpeedEnabled = enable;
         persistState();
     }
@@ -264,14 +264,15 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void setRemapDpadUpToVolumeEnabled(boolean enable) {
-        resetDpadUpSettings();
+        resetDpadUpDownSettings();
         mIsRemapDpadUpToVolumeEnabled = enable;
         persistState();
     }
 
-    private void resetDpadUpSettings() {
+    public void resetDpadUpDownSettings() {
         mIsRemapDpadUpToSpeedEnabled = false;
         mIsRemapDpadUpToVolumeEnabled = false;
+        persistState();
     }
 
     public boolean isRemapDpadLeftToVolumeEnabled() {
@@ -279,7 +280,13 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public void setRemapDpadLeftToVolumeEnabled(boolean enable) {
+        resetDpadLeftRightSettings();
         mIsRemapDpadLeftToVolumeEnabled = enable;
+        persistState();
+    }
+
+    public void resetDpadLeftRightSettings() {
+        mIsRemapDpadLeftToVolumeEnabled = false;
         persistState();
     }
 
