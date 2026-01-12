@@ -202,7 +202,7 @@ public class SabrExtractor implements Extractor {
     private final SabrStream sabrStream;
     private final SparseArray<Track> tracks;
     private final boolean seekForCuesEnabled;
-    private final Format format;
+    private Format format;
     private final int trackType;
 
     // Temporary arrays.
@@ -364,6 +364,8 @@ public class SabrExtractor implements Extractor {
     private void initializeFormat(FormatInitializedSabrPart part) throws ParserException {
         //startMasterElement
         //endMasterElement
+
+        format = part.formatSelector.getSelectedFormat();
 
         initCurrentTrack();
 

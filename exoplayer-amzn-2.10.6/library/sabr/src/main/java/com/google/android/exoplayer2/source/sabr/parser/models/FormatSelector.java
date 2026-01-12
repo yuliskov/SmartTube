@@ -53,6 +53,10 @@ public class FormatSelector {
         return discardMedia;
     }
 
+    public Format getSelectedFormat() {
+        return !selectedFormats.isEmpty() ? selectedFormats.get(0) : null;
+    }
+
     private static FormatId createFormatId(Format format) {
         FormatId formatId = FormatId.newBuilder()
                 .setItag(Helpers.parseInt(format.id))

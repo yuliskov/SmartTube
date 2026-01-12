@@ -700,8 +700,8 @@ public class SabrProcessor {
     //}
 
     public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
-        Format selectedVideoFormat = getSelectedFormat(videoFormatSelector);
-        Format selectedAudioFormat = getSelectedFormat(audioFormatSelector);
+        Format selectedVideoFormat = videoFormatSelector.getSelectedFormat();
+        Format selectedAudioFormat = audioFormatSelector.getSelectedFormat();
         int height = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
                 ? selectedVideoFormat.height : -1;
         int bandwidthEstimate = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
@@ -725,11 +725,11 @@ public class SabrProcessor {
             //        .setAudioTrackId("0");
         }
 
-        ClientAbrState clientAbrStateMod = clientAbrStateBuilder.build();
+        ClientAbrState clientAbrState = clientAbrStateBuilder.build();
 
         Pair<List<BufferedRange>, FormatId> bufferRanges = addBufferingInfoToAbrRequest(trackType);
 
-        List<FormatId> selectedFormats = getSelectedFormatIds(trackType);
+        List<FormatId> selectedFormats = createSelectedFormatIds(trackType);
 
         if (isInit) {
             selectedFormats.clear();
@@ -740,7 +740,7 @@ public class SabrProcessor {
         }
 
         return VideoPlaybackAbrRequest.newBuilder()
-                .setClientAbrState(clientAbrStateMod)
+                .setClientAbrState(clientAbrState)
                 .addAllPreferredVideoFormatIds(videoFormatSelector.formatIds)
                 .addAllPreferredAudioFormatIds(audioFormatSelector.formatIds)
                 .addAllPreferredSubtitleFormatIds(captionFormatSelector.formatIds)
@@ -755,11 +755,7 @@ public class SabrProcessor {
                 .build();
     }
 
-    private static Format getSelectedFormat(FormatSelector formatSelector) {
-        return formatSelector != null && !formatSelector.selectedFormats.isEmpty() ? formatSelector.selectedFormats.get(0) : null;
-    }
-
-    private List<FormatId> getSelectedFormatIds() {
+    private List<FormatId> createSelectedFormatIds() {
         List<FormatId> result = new ArrayList<>();
 
         for (SelectedFormat selectedFormat : selectedFormats.values()) {
@@ -769,15 +765,15 @@ public class SabrProcessor {
         return result;
     }
 
-    private List<FormatId> getSelectedFormatIds(int trackType) {
+    private List<FormatId> createSelectedFormatIds(int trackType) {
         List<FormatId> result = new ArrayList<>();
 
         if (!videoFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_VIDEO) {
-            result = videoFormatSelector.formatIds;
+            result.addAll(videoFormatSelector.formatIds);
         } else if (!audioFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_AUDIO) {
-            result = audioFormatSelector.formatIds;
+            result.addAll(audioFormatSelector.formatIds);
         } else if (!captionFormatSelector.formatIds.isEmpty() && trackType == C.TRACK_TYPE_TEXT) {
-            result = captionFormatSelector.formatIds;
+            result.addAll(captionFormatSelector.formatIds);
         }
 
         return result;
