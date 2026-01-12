@@ -702,7 +702,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsUnsafeAudioFormatsEnabled = Helpers.parseBoolean(split, 42, true);
         //mIsHighBitrateFormatsEnabled = Helpers.parseBoolean(split, 43, false);
         mIsLoopShortsEnabled = Helpers.parseBoolean(split, 44, true);
-        mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, false);
+        mIsQuickSkipShortsEnabled = Helpers.parseBoolean(split, 45, true);
         mIsRememberPositionOfLiveVideosEnabled = Helpers.parseBoolean(split, 46, true);
         mIsOculusQuestFixEnabled = Helpers.parseBoolean(split, 47, Utils.isOculusQuest());
         // mPlayerDataSource was here
@@ -716,8 +716,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsAudioFocusEnabled = Helpers.parseBoolean(split, 54, true);
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
-        mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, true);
-
+        mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
 
         updateDefaultValues();
     }
