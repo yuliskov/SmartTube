@@ -56,8 +56,8 @@ android {
         applicationId "org.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2263
-        versionName "30.73"
+        versionCode 2264
+        versionName "30.74"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
