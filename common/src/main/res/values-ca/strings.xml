@@ -492,4 +492,6 @@
   <string name="card_multiline_subtitle">Subtítols multilínia</string>
   <string name="auto_frame_rate_modes">Modes compatibles</string>
   <string name="loading">S\'està carregant…</string>
+  <string name="open_comments">Obrir comentaris</string>
+  <string name="place_comments_left">Col·loca el comentaris a l\'esquerra</string>
 </resources>
