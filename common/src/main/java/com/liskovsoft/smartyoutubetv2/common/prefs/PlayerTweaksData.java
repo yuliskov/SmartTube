@@ -98,6 +98,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipShortsEnabled;
     private boolean mIsQuickSkipShortsAltEnabled;
     private boolean mIsQuickSkipVideosEnabled;
+    private boolean mIsQuickSkipVideosAltEnabled;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsAudioFocusEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
@@ -587,22 +588,40 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipShortsAltEnabled = false;
     }
 
-    public void resetDpadUpDownSettings() {
-        mIsQuickSkipShortsAltEnabled = false;
-        persistData();
-    }
-
-    public void resetDpadLeftRightSettings() {
-        mIsQuickSkipShortsEnabled = false;
-        persistData();
-    }
-
     public boolean isQuickSkipVideosEnabled() {
         return mIsQuickSkipVideosEnabled;
     }
 
     public void setQuickSkipVideosEnabled(boolean enable) {
+        resetQuickSkipVideosSettings();
         mIsQuickSkipVideosEnabled = enable;
+        persistData();
+    }
+
+    public boolean isQuickSkipVideosAltEnabled() {
+        return mIsQuickSkipVideosAltEnabled;
+    }
+
+    public void setQuickSkipVideosAltEnabled(boolean enable) {
+        resetQuickSkipVideosSettings();
+        mIsQuickSkipVideosAltEnabled = enable;
+        persistData();
+    }
+
+    private void resetQuickSkipVideosSettings() {
+        mIsQuickSkipVideosEnabled = false;
+        mIsQuickSkipVideosAltEnabled = false;
+    }
+
+    public void resetDpadLeftRightSettings() {
+        mIsQuickSkipShortsEnabled = false;
+        mIsQuickSkipVideosEnabled = false;
+        persistData();
+    }
+
+    public void resetDpadUpDownSettings() {
+        mIsQuickSkipShortsAltEnabled = false;
+        mIsQuickSkipVideosAltEnabled = false;
         persistData();
     }
 
@@ -717,6 +736,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsDontResizeVideoToFitDialogEnabled = Helpers.parseBoolean(split, 55, false);
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
         mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
+        mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
 
         updateDefaultValues();
     }
@@ -743,7 +763,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mScreenOffDimmingPercents, mIsBootScreenOffEnabled, mIsPlayerUiOnNextEnabled, mIsPlayerAutoVolumeEnabled, mIsSyncRowButtonIndexEnabled,
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
-                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled, mIsQuickSkipShortsAltEnabled
+                null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled
                 ));
     }
 

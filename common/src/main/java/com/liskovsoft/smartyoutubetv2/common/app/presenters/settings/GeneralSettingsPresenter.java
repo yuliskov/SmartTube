@@ -74,18 +74,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
-        //appendContextMenuSortingCategory(settingsPresenter);
-        //appendTopButtonsCategory(settingsPresenter);
         appendHideVideos(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
-        //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
-        //appendScreenDimmingAmountCategory(settingsPresenter);
-        //appendScreenDimmingTimeoutCategory(settingsPresenter);
-        //appendTimeFormatCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
-        //appendAppBackupCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -339,8 +332,18 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isQuickSkipShortsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos_alt),
+                option -> {
+                    mPlayerTweaksData.setQuickSkipVideosAltEnabled(option.isSelected());
+                    mGeneralData.resetDpadUpDownSettings();
+                },
+                mPlayerTweaksData.isQuickSkipVideosAltEnabled()));
+        
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos),
-                option -> mPlayerTweaksData.setQuickSkipVideosEnabled(option.isSelected()),
+                option -> {
+                    mPlayerTweaksData.setQuickSkipVideosEnabled(option.isSelected());
+                    mGeneralData.resetDpadLeftRightSettings();
+                },
                 mPlayerTweaksData.isQuickSkipVideosEnabled()));
 
         options.add(UiOptionItem.from("Play/Pause -> OK",
