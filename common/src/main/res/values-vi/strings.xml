@@ -709,4 +709,5 @@
   <string name="once_a_month">Một lần một tháng</string>
   <string name="play_from_start">Phát từ đầu</string>
   <string name="typing_corrections">Vô hiệu hóa tự động sửa khi gõ văn bản</string>
+  <string name="player_toggle_speed">Chuyển đổi tốc độ (bật/tắt)</string>
 </resources>
