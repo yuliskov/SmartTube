@@ -709,8 +709,8 @@ public class SabrProcessor {
 
         ClientAbrState.Builder clientAbrStateBuilder = getClientAbrState().toBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
-                .setPlaybackRate(1) // TODO: ???
-                .setPlayerTimeMs(0) // TODO: ???
+                .setPlaybackRate(1)
+                .setPlayerTimeMs(0) // TODO: add segment start time ms (required)
                 .setClientViewportIsFlexible(false)
                 .setBandwidthEstimate(bandwidthEstimate)
                 .setDrcEnabled(false)
@@ -720,9 +720,6 @@ public class SabrProcessor {
                 clientAbrStateBuilder
                         .setStickyResolution(height)
                         .setLastManualSelectedResolution(height);
-        } else {
-            //clientAbrStateBuilder
-            //        .setAudioTrackId("0");
         }
 
         ClientAbrState clientAbrState = clientAbrStateBuilder.build();
@@ -975,9 +972,5 @@ public class SabrProcessor {
                         .setDurationTicks(durationMs)
                         .build())
                 .build();
-    }
-
-    public void handleResponse() {
-        
     }
 }
