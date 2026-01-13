@@ -11,7 +11,7 @@ import java.util.List;
 public class FormatSelector {
     public final String displayName;
     public final List<FormatId> formatIds = new ArrayList<>();
-    public final List<Format> selectedFormats = new ArrayList<>();
+    public final List<Format> formats = new ArrayList<>();
     public final boolean discardMedia;
 
     public FormatSelector(String displayName, boolean discardMedia) {
@@ -27,15 +27,15 @@ public class FormatSelector {
         }
     }
 
-    public FormatSelector(String displayName, boolean discardMedia, Format... selectedFormats) {
+    public FormatSelector(String displayName, boolean discardMedia, Format... formats) {
         this.displayName = displayName;
         this.discardMedia = discardMedia;
 
-        if (selectedFormats != null) {
-            for (Format format : selectedFormats) {
+        if (formats != null) {
+            for (Format format : formats) {
                 this.formatIds.add(createFormatId(format));
             }
-            this.selectedFormats.addAll(Arrays.asList(selectedFormats));
+            this.formats.addAll(Arrays.asList(formats));
         }
     }
 
@@ -54,7 +54,11 @@ public class FormatSelector {
     }
 
     public Format getSelectedFormat() {
-        return !selectedFormats.isEmpty() ? selectedFormats.get(0) : null;
+        return !formats.isEmpty() ? formats.get(0) : null;
+    }
+
+    public FormatId getSelectedFormatId() {
+        return !formatIds.isEmpty() ? formatIds.get(0) : null;
     }
 
     private static FormatId createFormatId(Format format) {

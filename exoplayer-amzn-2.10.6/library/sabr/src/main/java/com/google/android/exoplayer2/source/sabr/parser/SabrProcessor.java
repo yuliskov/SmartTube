@@ -86,9 +86,6 @@ public class SabrProcessor {
     private NextRequestPolicy nextRequestPolicy;
     private final Map<Integer, SabrContextUpdate> sabrContextUpdates;
     private final Set<Integer> sabrContextsToSend;
-    private List<FormatId> selectedAudioFormatIds;
-    private List<FormatId> selectedVideoFormatIds;
-    private List<FormatId> selectedCaptionFormatIds;
     private final Map<Integer, MediaHeader> initializedFormats;
 
     public SabrProcessor(
@@ -162,10 +159,6 @@ public class SabrProcessor {
             // If audio or video is not selected, the tracks will be initialized but marked as buffered.
             enabledTrackTypesBitfield = 7;
         }
-
-        selectedAudioFormatIds = audioFormatSelector.formatIds;
-        selectedVideoFormatIds = videoFormatSelector.formatIds;
-        selectedCaptionFormatIds = captionFormatSelector.formatIds;
 
         Log.d(TAG, "Starting playback at: %sms", startTimeMs);
         clientAbrState = ClientAbrState.newBuilder()
@@ -707,10 +700,12 @@ public class SabrProcessor {
         int bandwidthEstimate = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
+        long startTimeMs = isInit ? 0 : findStartTimeMs(trackType); // TODO: add real segment start time ms (required)
+
         ClientAbrState.Builder clientAbrStateBuilder = getClientAbrState().toBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
                 .setPlaybackRate(1)
-                .setPlayerTimeMs(0) // TODO: add segment start time ms (required)
+                .setPlayerTimeMs(startTimeMs)
                 .setClientViewportIsFlexible(false)
                 .setBandwidthEstimate(bandwidthEstimate)
                 .setDrcEnabled(false)
@@ -750,6 +745,18 @@ public class SabrProcessor {
                 )
                 .setStreamerContext(createStreamerContext())
                 .build();
+    }
+
+    private long findStartTimeMs(int trackType) {
+        Format selectedVideoFormat = trackType == C.TRACK_TYPE_VIDEO ? videoFormatSelector.getSelectedFormat() : audioFormatSelector.getSelectedFormat();
+
+        long result = 0;
+
+        for (Segment segment : partialSegments.values()) {
+            // TODO: find last segment end time ms
+        }
+
+        return result;
     }
 
     private List<FormatId> createSelectedFormatIds() {
