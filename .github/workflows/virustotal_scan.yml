@@ -26,6 +26,10 @@ jobs:
             echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           fi
 
+      - name: Set report marker variable
+        run: |
+          echo -e "MARKER=\t\t\t" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -52,7 +56,7 @@ jobs:
           echo "Waiting 150s for VirusTotal engines to report..."
           sleep 150
 
-          echo "## 🛡️ VirusTotal Analysis" > vt_report.txt
+          echo -e "$MARKER\n## 🛡️ VirusTotal Analysis" > vt_report.txt
           echo "" >> vt_report.txt
 
           echo "| Build Variant | VirusTotal Status | Detailed Report |" >> vt_report.txt
@@ -79,8 +83,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release view "$TAG_NAME" --json body -q .body > current_notes.txt || echo "" > current_notes.txt
-          
-          MARKER="## 🛡️ VirusTotal Analysis"
 
           # If the header exists, delete from that line to the end
           if grep -q "$MARKER" current_notes.txt; then
