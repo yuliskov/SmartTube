@@ -14,6 +14,9 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    env:
+      HAS_VT_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY != '' }}
+
     steps:
       - name: Set tag variable
         run: |
@@ -23,74 +26,72 @@ jobs:
             echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           fi
 
-      - name: Set report marker variable
-        run: |
-          echo -e "REPORT_MARKER=\t\t\t" >> $GITHUB_ENV
-
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y jq curl
 
       - name: Download Release Assets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p release_assets
-          gh release download $TAG_NAME --dir release_assets --pattern "*.apk"
-          ls -l release_assets
+          gh release download "$TAG_NAME" --dir release_assets --pattern "*.apk"
 
-      - name: Install VirusTotal CLI
+      - name: VirusTotal Scan
+        if: ${{ env.HAS_VT_KEY == 'true' }}
+        id: vt
+        uses: crazy-max/ghaction-virustotal@v4
+        with:
+          vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          files: |
+            release_assets/*.apk
+          request_rate: 3
+
+      - name: Generate Custom Badge Report
+        if: steps.vt.outcome == 'success'
         run: |
-          curl -L https://github.com/VirusTotal/vt-cli/releases/download/1.2.0/Linux64.zip -o vt-cli.zip
-          unzip vt-cli.zip
-          sudo mv vt /usr/local/bin/
+          echo "Waiting 150s for VirusTotal engines to report..."
+          sleep 150
 
-      - name: Scan APKs and Generate Quick Report
-        env:
-          VT_API_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo -e "$REPORT_MARKER\n🛡️ VirusTotal Scan Results:" > vt_report.txt
+          echo "## 🛡️ VirusTotal Analysis" > vt_report.txt
+          echo "" >> vt_report.txt
 
-          for apk in release_assets/*.apk; do
-            filename=$(basename "$apk")
-            sha256=$(sha256sum "$apk" | head -c 64)
-            echo "Scanning $filename..."
+          echo "| Build Variant | VirusTotal Status | Detailed Report |" >> vt_report.txt
+          echo "| :--- | :--- | :--- |" >> vt_report.txt
+          
+          for file in release_assets/*.apk; do
+            [ -e "$file" ] || continue
+            filename=$(basename "$file")
+            sha256=$(sha256sum "$file" | awk '{print $1}')
+
+            vt_link="https://www.virustotal.com/gui/file/$sha256/detection"
+            badge_url="https://badges.cssnr.com/vt/id/$sha256?start=green&end=red&n=8"
+
+            echo "Purging badge cache for $filename..."
+            curl -s -X POST $badge_url
             
-            scan_id=$(vt scan file "$apk" -k $VT_API_KEY | awk '{print $2}')
-            echo "Scan ID: $scan_id"
-
-            for i in {1..15}; do
-              sleep 22
-              analysis_json=$(vt analysis report "$scan_id" -k $VT_API_KEY --format json)
-              status=$(echo "$analysis_json" | jq -r '.[0].status')
-              malicious=$(echo "$analysis_json" | jq '.[0].stats.malicious')
-              if [ "$status" == "completed" ]; then
-                break
-              fi
-            done
-
-            apk_url="https://github.com/${{ github.repository }}/releases/download/$TAG_NAME/$filename"
-
-            if [ "$status" != "completed" ]; then
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256) — BAD ❌ (analysis incomplete)" >> vt_report.txt
-            elif [ "$malicious" -gt 0 ]; then
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256) — BAD ❌" >> vt_report.txt
-            else
-              echo " - [![VT](https://badges.cssnr.com/vt/id/$sha256?end=red&n=1) $filename](https://www.virustotal.com/gui/file/$sha256)" >> vt_report.txt
-            fi
+            asset_link="https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/$filename"
+            
+            echo "| [$filename]($asset_link) | [![]($badge_url&v=$(date +%s))]($vt_link) | [View Report]($vt_link) |" >> vt_report.txt
           done
 
-      - name: Update Release with Quick Report
+      - name: Update Release Notes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # <-- mandatory
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          body=$(gh release view "$TAG_NAME" --json body -q .body || echo "")
-          body=$(echo "$body" | sed "/$REPORT_MARKER/,\$d")
-          echo -e "$body\n$(cat vt_report.txt)" > current_notes.txt
-          gh release edit "$TAG_NAME" --notes-file current_notes.txt
+          gh release view "$TAG_NAME" --json body -q .body > current_notes.txt || echo "" > current_notes.txt
+          
+          MARKER="## 🛡️ VirusTotal Analysis"
 
-      - name: Done
-        run: echo "VirusTotal quick scan finished and report added to release."
+          # If the header exists, delete from that line to the end
+          if grep -q "$MARKER" current_notes.txt; then
+            echo "Previous report found. Cleaning up..."
+            sed -i "/$MARKER/,\$d" current_notes.txt
+          fi
+          
+          {
+            cat current_notes.txt
+            echo -e "\n"
+            cat vt_report.txt
+          } > final_notes.txt
+          
+          gh release edit "$TAG_NAME" --notes-file final_notes.txt
