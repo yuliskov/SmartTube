@@ -494,4 +494,6 @@
   <string name="loading">S\'està carregant…</string>
   <string name="open_comments">Obrir comentaris</string>
   <string name="place_comments_left">Col·loca el comentaris a l\'esquerra</string>
+  <string name="search_exit_shortcut">Sortiu de l\'cerca</string>
+  <string name="player_exit_shortcut">Sortiu de l\'reproductor</string>
 </resources>
