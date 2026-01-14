@@ -677,6 +677,7 @@
     <string name="fullscreen_mode">Tam ekran modu (sistem çubukları olmadan)</string>
     <string name="player_only_mode">Video uygulama dışında açılırsa yalnızca oynatıcıyı göster</string>
     <string name="pinned_channel_rows">Sabitlenmiş kanalı satır olarak göster</string>
+    <string name="prefer_google_dns">Google DNS tercih et</string>
     <string name="prefer_ipv4">IPv4 DNS tercih et</string>
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
     <string name="long_press_for_settings">AYARLAR İÇİN UZUN BASIN</string>

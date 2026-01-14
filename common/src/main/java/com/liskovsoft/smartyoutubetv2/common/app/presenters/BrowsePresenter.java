@@ -1171,8 +1171,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
             if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
                 PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
-                if (!playerTweaksData.isIPv4DnsPreferred()) {
-                    playerTweaksData.setIPv4DnsPreferred(true);
+                if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
+                    playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
                     // Restart app to reinit okhttp internal objects
                     Utils.restartTheApp(getContext());
                 }

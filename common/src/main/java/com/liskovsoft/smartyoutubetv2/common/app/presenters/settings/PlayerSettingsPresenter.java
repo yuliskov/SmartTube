@@ -261,13 +261,21 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isOculusQuestFixEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_google_dns),
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> {
+                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_GOOGLE : PlayerTweaksData.DNS_TYPE_SYSTEM);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_GOOGLE));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
                 getContext().getString(R.string.prefer_ipv4_desc),
                 option -> {
-                    mPlayerTweaksData.setIPv4DnsPreferred(option.isSelected());
+                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_IPV4 : PlayerTweaksData.DNS_TYPE_SYSTEM);
                     mRestartApp = true;
                 },
-                mPlayerTweaksData.isIPv4DnsPreferred()));
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_IPV4));
 
         // Disable long press on buggy controllers.
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
