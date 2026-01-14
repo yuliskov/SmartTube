@@ -78,6 +78,7 @@ public class SabrProcessor {
     private final long durationMs;
     private ClientAbrState clientAbrState;
     private final Map<Long, Segment> partialSegments;
+    private final Map<FormatId, Segment> recentSegments;
     private final Map<String, SelectedFormat> selectedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
@@ -128,6 +129,7 @@ public class SabrProcessor {
         selectedFormats = new HashMap<>();
 
         partialSegments = new HashMap<>();
+        recentSegments = new HashMap<>();
         totalDurationMs = NO_VALUE;
         sabrContextsToSend = new HashSet<>();
         sabrContextUpdates = new HashMap<>();
@@ -276,6 +278,8 @@ public class SabrProcessor {
                     segment.contentLength,
                     segment.contentLengthEstimated
             );
+
+            recentSegments.put(segment.formatId, segment);
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
@@ -675,7 +679,7 @@ public class SabrProcessor {
         return liveSegmentTargetDurationSec;
     }
 
-    //public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest() {
+    //public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest() {
     //    return VideoPlaybackAbrRequest.newBuilder()
     //            .setClientAbrState(getClientAbrState())
     //            .addAllPreferredVideoFormatIds(selectedVideoFormatIds)
@@ -692,7 +696,7 @@ public class SabrProcessor {
     //            .build();
     //}
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+    public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
         Format selectedVideoFormat = videoFormatSelector.getSelectedFormat();
         Format selectedAudioFormat = audioFormatSelector.getSelectedFormat();
         int height = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
@@ -700,7 +704,7 @@ public class SabrProcessor {
         int bandwidthEstimate = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
-        long startTimeMs = isInit ? 0 : findStartTimeMs(trackType); // TODO: add real segment start time ms (required)
+        long startTimeMs = isInit ? 0 : getSegmentStartTimeMs(trackType);
 
         ClientAbrState.Builder clientAbrStateBuilder = getClientAbrState().toBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
@@ -747,16 +751,18 @@ public class SabrProcessor {
                 .build();
     }
 
-    private long findStartTimeMs(int trackType) {
-        Format selectedVideoFormat = trackType == C.TRACK_TYPE_VIDEO ? videoFormatSelector.getSelectedFormat() : audioFormatSelector.getSelectedFormat();
+    public long getSegmentStartTimeMs(int trackType) {
+        FormatId selectedFormatId = trackType == C.TRACK_TYPE_VIDEO ? videoFormatSelector.getSelectedFormatId() : audioFormatSelector.getSelectedFormatId();
 
-        long result = 0;
+        Segment segment = recentSegments.get(selectedFormatId);
+        return segment != null ? segment.startMs + segment.durationMs : 0;
+    }
 
-        for (Segment segment : partialSegments.values()) {
-            // TODO: find last segment end time ms
-        }
+    public long getSegmentDurationMs(int trackType) {
+        FormatId selectedFormatId = trackType == C.TRACK_TYPE_VIDEO ? videoFormatSelector.getSelectedFormatId() : audioFormatSelector.getSelectedFormatId();
 
-        return result;
+        Segment segment = recentSegments.get(selectedFormatId);
+        return segment != null ? segment.durationMs : 0;
     }
 
     private List<FormatId> createSelectedFormatIds() {

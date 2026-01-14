@@ -508,7 +508,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         DataSpec dataSpec = new DataSpec(
                 requestUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.buildVideoPlaybackAbrRequest(trackType, true).toByteArray(),
+                sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //requestUri.start,
                 //requestUri.start,
@@ -531,10 +531,15 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //int maxSegmentCount,
             long seekTimeUs) {
         Representation representation = representationHolder.representation;
-        long startTimeUs = C.TIME_UNSET; // TODO: replace with SABR time?
-        long endTimeUs = C.TIME_UNSET; // TODO: replace with SABR time?
-        long clippedEndTimeUs = C.TIME_UNSET; // TODO: replace with SABR time?
-        int segmentCount = 1; // TODO: replace with SABR value?
+
+        long startTimeMs = sabrStream.getSegmentStartTimeMs(trackType);
+        long durationMs = sabrStream.getSegmentDurationMs(trackType);
+        boolean isSabrTimeSet = startTimeMs > 0 && durationMs > 0;
+
+        long startTimeUs = isSabrTimeSet ? startTimeMs * 1_000L : C.TIME_UNSET;
+        long endTimeUs = isSabrTimeSet ? startTimeUs + (durationMs * 1_000L) : C.TIME_UNSET;
+        long clippedEndTimeUs = C.TIME_UNSET;
+        int segmentCount = C.INDEX_UNSET; // TODO: replace with SABR value?
         //long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
         //RangedUri segmentUri = representationHolder.getSegmentUrl(firstSegmentNum);
         String baseUrl = representation.baseUrl;
@@ -544,7 +549,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 Uri.parse(baseUrl),
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.buildVideoPlaybackAbrRequest(trackType, false).toByteArray(),
+                sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,

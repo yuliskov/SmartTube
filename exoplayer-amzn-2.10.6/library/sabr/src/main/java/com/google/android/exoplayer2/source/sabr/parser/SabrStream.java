@@ -168,8 +168,8 @@ public class SabrStream {
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
-    public VideoPlaybackAbrRequest buildVideoPlaybackAbrRequest(int trackType, boolean isInit) {
-        return processor.buildVideoPlaybackAbrRequest(trackType, isInit);
+    public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+        return processor.createVideoPlaybackAbrRequest(trackType, isInit);
     }
 
     public void setAudioSelection(AudioSelector audioFormatSelector) {
@@ -194,6 +194,14 @@ public class SabrStream {
         }
 
         processor.setCaptionFormatSelector(captionFormatSelector);
+    }
+
+    public long getSegmentStartTimeMs(int trackType) {
+        return processor.getSegmentStartTimeMs(trackType);
+    }
+
+    public long getSegmentDurationMs(int trackType) {
+        return processor.getSegmentDurationMs(trackType);
     }
 
     public void reset() {
