@@ -488,25 +488,25 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             Object trackSelectionData,
             RangedUri initializationUri,
             RangedUri indexUri) {
-        RangedUri requestUri;
-        String baseUrl = representationHolder.representation.baseUrl;
-        baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
-        if (initializationUri != null) {
-            // It's common for initialization and index data to be stored adjacently. Attempt to merge
-            // the two requests together to request both at once.
-            requestUri = initializationUri.attemptMerge(indexUri, baseUrl);
-            if (requestUri == null) {
-                requestUri = initializationUri;
-            }
-        } else {
-            requestUri = indexUri;
-        }
+        //RangedUri requestUri;
+        //String baseUrl = representationHolder.representation.baseUrl;
+        //baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
+        //if (initializationUri != null) {
+        //    // It's common for initialization and index data to be stored adjacently. Attempt to merge
+        //    // the two requests together to request both at once.
+        //    requestUri = initializationUri.attemptMerge(indexUri, baseUrl);
+        //    if (requestUri == null) {
+        //        requestUri = initializationUri;
+        //    }
+        //} else {
+        //    requestUri = indexUri;
+        //}
         // NOTE: first protobuf request (before the video start off)
         // MOD: add protobuf data
         //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
         //        requestUri.length, representationHolder.representation.getCacheKey());
         DataSpec dataSpec = new DataSpec(
-                requestUri.resolveUri(baseUrl),
+                Uri.parse(sabrStream.getRequestUrl()),
                 DataSpec.HTTP_METHOD_POST,
                 sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
@@ -542,11 +542,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         int segmentCount = C.INDEX_UNSET; // TODO: replace with SABR value?
         //long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
         //RangedUri segmentUri = representationHolder.getSegmentUrl(firstSegmentNum);
-        String baseUrl = representation.baseUrl;
-        baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
+        //String baseUrl = representation.baseUrl;
+        //baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
 
         DataSpec dataSpec = new DataSpec(
-                Uri.parse(baseUrl),
+                Uri.parse(sabrStream.getRequestUrl()),
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
                 sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),

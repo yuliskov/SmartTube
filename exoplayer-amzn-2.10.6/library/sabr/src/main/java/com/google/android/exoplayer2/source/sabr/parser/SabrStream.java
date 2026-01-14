@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
+import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
@@ -208,12 +209,8 @@ public class SabrStream {
         noNewSegmentsTracker.reset();
     }
 
-    public int getSabrRequestNumber() {
-        return sabrRequestNumber;
-    }
-
-    public int getIncSabrRequestNumber() {
-        return sabrRequestNumber++;
+    public String getRequestUrl() {
+        return Utils.updateQuery(getUrl(), "rn", sabrRequestNumber++);
     }
 
     private SabrPart parsePart(UMPPart part) {
@@ -485,7 +482,7 @@ public class SabrStream {
         return processor.processSabrSeek(sabrSeek).seekSabrParts;
     }
 
-    public static boolean contains(int[] array, int value) {
+    private static boolean contains(int[] array, int value) {
         for (int num : array) {
             if (num == value) {
                 return true;

@@ -530,7 +530,8 @@ public class SabrProcessor {
         if (!initializedFormat.discard) {
             result.sabrPart = new FormatInitializedSabrPart(
                     formatInitMetadata.hasFormatId() ? formatInitMetadata.getFormatId() : null,
-                    formatSelector
+                    formatSelector,
+                    formatInitMetadata.hasEndTimeMs() ? formatInitMetadata.getEndTimeMs() : -1
             );
         }
 

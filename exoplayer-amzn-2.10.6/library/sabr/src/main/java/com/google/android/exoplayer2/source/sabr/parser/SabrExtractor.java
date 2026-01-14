@@ -370,7 +370,7 @@ public class SabrExtractor implements Extractor {
         initCurrentTrack();
 
         // TODO: init seekMap
-        extractorOutput.seekMap(new SeekMap.Unseekable(C.TIME_UNSET));
+        extractorOutput.seekMap(new SeekMap.Unseekable(part.endTimeMs != -1 ? part.endTimeMs * 1_000L : C.TIME_UNSET));
 
         initExtractorOutput();
     }
