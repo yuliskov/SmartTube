@@ -204,6 +204,7 @@ public class SabrExtractor implements Extractor {
     private final boolean seekForCuesEnabled;
     private Format format;
     private final int trackType;
+    private int readNum;
 
     // Temporary arrays.
     private final ParsableByteArray nalStartCode;
@@ -310,7 +311,7 @@ public class SabrExtractor implements Extractor {
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
 
-        Log.e(TAG, "Starting new SABR read...");
+        Log.e(TAG, "Starting SABR read #" + readNum++ + " with track type " + trackType + "...");
 
         sampleRead = false;
         boolean continueReading = true;
