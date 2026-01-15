@@ -396,15 +396,25 @@ public class SabrExtractor implements Extractor {
         }
 
         writeSampleData(part.data, track, part.contentLength);
+
         //long sampleTimeUs = blockTimeUs
         //        + (part.sequenceNumber * track.defaultSampleDurationNs) / 1000;
-        long sampleTimeUs = part.startTimeMs * 1_000L;
-        commitSampleToOutput(track, sampleTimeUs);
+        //long sampleTimeUs = part.startTimeMs * 1_000L;
+        //commitSampleToOutput(track, sampleTimeUs);
+
+        // NOTE: Required to avoid infinite write loop inside 'writeSampleData'! This what 'commitSampleToOutput' actually does.
+        sampleRead = true;
+        resetSample();
     }
 
     private void endSegment(MediaSegmentEndSabrPart part) {
-        // TODO: not implemented full
-        extractorOutput.endTracks(); // commit all written data
+        // TODO: not fully implemented?
+        //extractorOutput.endTracks(); // commit all written data
+
+        Track track = tracks.get(1);
+        long timeUs = part.startTimeMs * 1_000L;
+        track.output.sampleMetadata(timeUs, blockFlags, sampleBytesWritten, 0, track.cryptoData);
+        //commitSampleToOutput(track, timeUs);
     }
 
     private void initCurrentTrack() {

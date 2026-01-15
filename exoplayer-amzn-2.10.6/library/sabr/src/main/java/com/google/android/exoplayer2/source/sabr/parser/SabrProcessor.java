@@ -368,7 +368,8 @@ public class SabrProcessor {
                     segment.formatId,
                     segment.sequenceNumber,
                     segment.isInitSegment,
-                    segment.initializedFormat.totalSegments
+                    segment.initializedFormat.totalSegments,
+                    segment.startMs
             );
         } else {
             Log.d(TAG, "Discarding media for %s", segment.initializedFormat.formatId);
