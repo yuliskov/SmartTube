@@ -81,6 +81,7 @@
   <string name="player_only_ui">Endast användargränssnittet</string>
   <string name="player_ui_and_pause">Användargränssnittet och pausa</string>
   <string name="player_only_pause">Endast pausa</string>
+  <string name="player_toggle_speed">Växla hastighet mellan på och av</string>
   <string name="check_for_updates">Sök efter uppdateringar</string>
   <string name="update_not_found">Du använder den senaste versionen</string>
   <string name="update_in_progress">Vänta …</string>
@@ -238,10 +239,10 @@
   <string name="pin_unpin_channel">Lägg till/ta bort kanal från sidofältet</string>
   <string name="pin_playlist">Lägg till spellistan i sidofältet</string>
   <string name="pin_channel">Lägg till kanalen i sidofältet</string>
-  <string name="pinned_to_sidebar">Lades till i sidofältet</string>
+  <string name="pinned_to_sidebar">Tillagd i sidofältet</string>
   <string name="unpin_from_sidebar">Ta bort från sidofältet</string>
   <string name="unpin_group_from_sidebar">Ta bort prenumerationsgruppen</string>
-  <string name="unpinned_from_sidebar">Togs bort från sidofältet</string>
+  <string name="unpinned_from_sidebar">Borttagen från sidofältet</string>
   <string name="dialog_select_country">Land</string>
   <string name="settings_language_country">Språk/land</string>
   <string name="share_embed_link">Dela inbäddningslänk</string>
@@ -251,8 +252,8 @@
   <string name="hide_shorts_channel">Dölj Shorts-videor i kanaler</string>
   <string name="key_remapping">Konfigurera knappar</string>
   <string name="screen_dimming">Skärmnedtoning</string>
-  <string name="removed_from_playback_queue">Togs bort från uppspelningskön</string>
-  <string name="added_to_playback_queue">Lades till i uppspelningskön</string>
+  <string name="removed_from_playback_queue">Borttagen från uppspelningskön</string>
+  <string name="added_to_playback_queue">Tillagd i uppspelningskön</string>
   <string name="add_remove_from_playback_queue">Lägg till/ta bort från uppspelningskön</string>
   <string name="add_to_playback_queue">Lägg till i uppspelningskön</string>
   <string name="remove_from_playback_queue">Ta bort från uppspelningskön</string>
@@ -282,8 +283,8 @@
   <string name="background_service_started">Bakgrundstjänst har startat</string>
   <string name="dialog_add_to">Lägg till i %s</string>
   <string name="dialog_remove_from">Ta bort från %s</string>
-  <string name="added_to">Lades till i %s</string>
-  <string name="removed_from">Togs bort från %s</string>
+  <string name="added_to">Tillagd i %s</string>
+  <string name="removed_from">Borttagen från %s</string>
   <string name="video_preset_adaptive">Adaptiv</string>
   <string name="content_block_preview_recap">Förhandstitt eller sammanfattning av videon</string>
   <string name="content_block_highlight">Intressant punkt (bokmärke)</string>
@@ -428,8 +429,8 @@
   <string name="save_playlist">Lägg till spellistan i avsnittet Spellistor</string>
   <string name="remove_playlist">Ta bort spellistan från avsnittet Spellistor permanent</string>
   <string name="remove_playlist_fmt">Ta bort %s permanent\?</string>
-  <string name="removed_from_playlists">Togs bort från avsnittet Spellistor</string>
-  <string name="saved_to_playlists">Lades till i avsnittet Spellistor</string>
+  <string name="removed_from_playlists">Borttagen från avsnittet Spellistor</string>
+  <string name="saved_to_playlists">Tillagd i avsnittet Spellistor</string>
   <string name="create_playlist">Skapa en spellista</string>
   <string name="create_playlist_note">den kommer inte att synas i YouTube-appen</string>
   <string name="add_video_to_new_playlist">Lägg till i ny spellista</string>
@@ -653,7 +654,9 @@
   <string name="channel_filter_hint">Filtrera kanaler</string>
   <string name="player_loop_shorts">Spela upp Shorts-videor i en slinga</string>
   <string name="player_quick_shorts_skip">Hoppa över Shorts-videor med vänster- och högerknapparna</string>
+  <string name="player_quick_shorts_skip_alt">Hoppa över Shorts-videor med uppåt- och nedåtknapparna</string>
   <string name="player_quick_skip_videos">Hoppa över vanliga videor med vänster- och högerknapparna</string>
+  <string name="player_quick_skip_videos_alt">Hoppa över vanliga videor med uppåt- och nedåtknapparna</string>
   <string name="channels_filter">Visa fältet Filtrera kanaler i avsnittet Kanaler</string>
   <string name="channel_search_bar">Sökfält på kanalsidan</string>
   <string name="header_sports">Sport</string>
@@ -672,7 +675,8 @@
   <string name="fullscreen_mode">Helskärmsläge (utan systembalkar)</string>
   <string name="player_only_mode">Visa endast spelaren om videon öppnas utanför appen</string>
   <string name="pinned_channel_rows">Visa fäst kanal som rader</string>
-  <string name="prefer_ipv4">Föredra IPv4 DNS</string>
+  <string name="prefer_google_dns">Föredra Google-DNS</string>
+  <string name="prefer_ipv4">Föredra IPv4-DNS</string>
   <string name="prefer_ipv4_desc">Kan åtgärda situationer där appen inte fungerar alls.\nOBS! Kan leda till att appen låser sig och krashar (särskilt på Android 8-enheter och Dune HD)</string>
   <string name="long_press_for_settings">TRYCK LÄNGE FÖR INSTÄLLNINGAR</string>
   <string name="long_press_for_options">TRYCK LÄNGE FÖR ALTERNATIV</string>
@@ -692,7 +696,7 @@
   <string name="add_to_subscriptions_group">Lägg till/ta bort från prenumerationsgrupp</string>
   <string name="new_subscriptions_group">Ny grupp</string>
   <string name="rename_group">Byt namn på prenumerationsgruppen</string>
-  <string name="screen_dimming_amount">Nedtoningsgrad för skärmen</string>
+  <string name="screen_dimming_amount">Nedtoningsgrad för skärm</string>
   <string name="screen_dimming_timeout">Tidsgräns för skärmnedtoning</string>
   <string name="playlists_rows">Visa avsnittet Spellistor som rader</string>
   <string name="import_subscriptions_group">Importera</string>
