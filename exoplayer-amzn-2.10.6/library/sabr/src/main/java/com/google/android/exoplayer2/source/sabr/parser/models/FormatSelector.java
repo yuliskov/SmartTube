@@ -1,5 +1,7 @@
 package com.google.android.exoplayer2.source.sabr.parser.models;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -53,11 +55,11 @@ public class FormatSelector {
         return discardMedia;
     }
 
-    public Format getSelectedFormat() {
+    public @Nullable Format getSelectedFormat() {
         return !formats.isEmpty() ? formats.get(0) : null;
     }
 
-    public FormatId getSelectedFormatId() {
+    public @Nullable FormatId getSelectedFormatId() {
         return !formatIds.isEmpty() ? formatIds.get(0) : null;
     }
 
