@@ -314,9 +314,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("OK -> " + getContext().getString(R.string.player_toggle_speed),
-                option -> mPlayerData.setOKButtonBehavior(option.isSelected() ? PlayerData.OK_TOGGLE_SPEED : PlayerData.OK_ONLY_UI),
-                mPlayerData.getOKButtonBehavior() == PlayerData.OK_TOGGLE_SPEED));
+        //options.add(UiOptionItem.from("OK -> " + getContext().getString(R.string.player_toggle_speed),
+        //        option -> mPlayerData.setOKButtonBehavior(option.isSelected() ? PlayerData.OK_TOGGLE_SPEED : PlayerData.OK_ONLY_UI),
+        //        mPlayerData.getOKButtonBehavior() == PlayerData.OK_TOGGLE_SPEED));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip_alt),
                 option -> {

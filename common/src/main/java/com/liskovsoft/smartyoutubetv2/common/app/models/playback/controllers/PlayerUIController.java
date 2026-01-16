@@ -685,6 +685,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleConfirmKey(int keyCode) {
+        if (getPlayer() == null) {
+            return false;
+        }
+
         boolean controlsShown = getPlayer().isOverlayShown();
 
         if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
@@ -698,12 +702,12 @@ public class PlayerUIController extends BasePlayerController {
                 case PlayerData.OK_ONLY_PAUSE:
                     getPlayer().setPlayWhenReady(!getPlayer().getPlayWhenReady());
                     return true; // don't show ui
-                case PlayerData.OK_TOGGLE_SPEED:
-                    getMainController().onButtonClicked(R.id.action_video_speed,
-                            getPlayer().getButtonState(R.id.action_video_speed) == PlayerUI.BUTTON_ON ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-                    float speed = getPlayerData().getSpeed();
-                    MessageHelpers.showMessage(getContext(), String.format("%sx", speed));
-                    return true;
+                //case PlayerData.OK_TOGGLE_SPEED:
+                //    getMainController().onButtonClicked(R.id.action_video_speed,
+                //            getPlayer().getButtonState(R.id.action_video_speed) == PlayerUI.BUTTON_ON ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+                //    float speed = getPlayerData().getSpeed();
+                //    MessageHelpers.showMessage(getContext(), String.format("%sx", speed));
+                //    return true;
             }
         }
 

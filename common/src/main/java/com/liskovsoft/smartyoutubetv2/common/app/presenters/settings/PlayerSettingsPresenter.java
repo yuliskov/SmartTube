@@ -100,11 +100,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_ONLY_PAUSE),
                 mPlayerData.getOKButtonBehavior() == PlayerData.OK_ONLY_PAUSE));
 
-        options.add(UiOptionItem.from(
-                getContext().getString(R.string.player_toggle_speed),
-                option -> mPlayerData.setOKButtonBehavior(PlayerData.OK_TOGGLE_SPEED),
-                mPlayerData.getOKButtonBehavior() == PlayerData.OK_TOGGLE_SPEED));
-
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ok_button_behavior), options);
     }
 

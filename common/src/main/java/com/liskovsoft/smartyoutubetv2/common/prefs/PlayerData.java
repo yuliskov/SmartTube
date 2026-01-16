@@ -32,7 +32,6 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     public static final int OK_ONLY_UI = 0;
     public static final int OK_UI_AND_PAUSE = 1;
     public static final int OK_ONLY_PAUSE = 2;
-    public static final int OK_TOGGLE_SPEED = 3;
     public static final int AUTO_HIDE_NEVER = 0;
     public static final int SEEK_PREVIEW_NONE = 0;
     public static final int SEEK_PREVIEW_SINGLE = 1;
