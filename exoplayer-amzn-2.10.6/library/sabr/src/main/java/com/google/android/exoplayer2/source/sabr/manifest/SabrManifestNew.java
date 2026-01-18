@@ -1,4 +1,4 @@
-package com.google.android.exoplayer2.source.sabr.parser.core;
+package com.google.android.exoplayer2.source.sabr.manifest;
 
 import android.util.Base64;
 import android.util.Pair;
@@ -10,7 +10,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
-import com.google.android.exoplayer2.source.sabr.manifest.Period;
+import com.google.android.exoplayer2.source.sabr.parser.core.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.misc.EnabledTrackTypes;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * Represents a SABR media presentation
  */
-public class SabrManifest implements FilterableManifest<SabrManifest> {
+public class SabrManifestNew implements FilterableManifest<SabrManifestNew> {
     /**
      * The {@code availabilityStartTime} value in milliseconds since epoch, or {@link C#TIME_UNSET} if
      * not present.
@@ -87,8 +87,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final ClientInfo clientInfo;
     private final Map<Integer, SabrStream> sabrStreams;
     private int sabrRequestNumber = 0;
+    private final FormatSelector emptySelector;
 
-    public SabrManifest(
+    public SabrManifestNew(
             long availabilityStartTimeMs,
             long durationMs,
             long minBufferTimeMs,
@@ -118,6 +119,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.clientInfo = clientInfo;
         this.poToken = poToken;
         this.sabrStreams = new HashMap<>();
+        this.emptySelector = new FormatSelector("ignored", true);
     }
     
     public final int getPeriodCount() {
@@ -139,7 +141,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     @Override
-    public SabrManifest copy(List<StreamKey> streamKeys) {
+    public SabrManifestNew copy(List<StreamKey> streamKeys) {
         return null;
     }
 
@@ -316,7 +318,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         SabrStream sabrStream = sabrStreams.get(trackType);
 
         if (sabrStream == null) {
-            return new FormatSelector("Track #" + trackType + " ignored", true);
+            return emptySelector;
         }
 
         return sabrStream.getProcessor().getFormatSelector();

@@ -6,6 +6,10 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
+import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSeekSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
@@ -163,6 +167,19 @@ public class SabrStream {
 
     public void reset() {
         noNewSegmentsTracker.reset();
+        processor.reset();
+    }
+
+    public void setFormatSelector(FormatSelector formatSelector) {
+        processor.setFormatSelector(formatSelector);
+    }
+
+    public long getSegmentStartTimeMs() {
+        return processor.getSegmentStartTimeMs();
+    }
+
+    public long getSegmentDurationMs() {
+        return processor.getSegmentDurationMs();
     }
 
     private SabrPart parsePart(UMPPart part) {

@@ -24,10 +24,11 @@ import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
 import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
-import com.google.android.exoplayer2.source.sabr.parser.SabrExtractor;
-import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.core.SabrExtractor;
+import com.google.android.exoplayer2.source.sabr.parser.core.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -111,6 +112,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     private final SabrStream sabrStream;
     private final Map<String, String> sabrHeaders;
+    private int nexChunkIdx = -1;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -158,10 +160,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
         liveEdgeTimeUs = C.TIME_UNSET;
         
-        this.sabrStream = manifest.getSabrStream();
-        this.sabrStream.setAudioSelection(createAudioSelection(trackType, trackSelection));
-        this.sabrStream.setVideoSelection(createVideoSelection(trackType, trackSelection));
-        this.sabrStream.setCaptionSelection(createCaptionSelection(trackType, trackSelection));
+        this.sabrStream = manifest.getSabrStream(trackType);
+        //this.sabrStream.setAudioSelection(createAudioSelection(trackType, trackSelection));
+        //this.sabrStream.setVideoSelection(createVideoSelection(trackType, trackSelection));
+        //this.sabrStream.setCaptionSelection(createCaptionSelection(trackType, trackSelection));
+        this.sabrStream.setFormatSelector(createFormatSelector(trackType, trackSelection));
 
         sabrHeaders = new HashMap<>();
         sabrHeaders.put("Content-Type", "application/x-protobuf");
@@ -506,9 +509,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
         //        requestUri.length, representationHolder.representation.getCacheKey());
         DataSpec dataSpec = new DataSpec(
-                Uri.parse(sabrStream.getRequestUrl()),
+                //Uri.parse(sabrStream.getRequestUrl()),
+                Uri.parse(manifest.getRequestUrl(trackType)),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
+                //sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
+                manifest.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //requestUri.start,
                 //requestUri.start,
@@ -532,9 +537,17 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             long seekTimeUs) {
         Representation representation = representationHolder.representation;
 
-        long startTimeMs = sabrStream.getSegmentStartTimeMs(trackType);
-        long durationMs = sabrStream.getSegmentDurationMs(trackType);
-        boolean isSabrTimeSet = startTimeMs > 0 && durationMs > 0;
+        if (nexChunkIdx == -1) {
+            sabrStream.reset();
+        }
+
+        nexChunkIdx++;
+
+        //long startTimeMs = sabrStream.getSegmentStartTimeMs(trackType);
+        //long durationMs = sabrStream.getSegmentDurationMs(trackType);
+        long startTimeMs = sabrStream.getSegmentStartTimeMs();
+        long durationMs = sabrStream.getSegmentDurationMs();
+        boolean isSabrTimeSet = startTimeMs >= 0 && durationMs > 0;
 
         long startTimeUs = isSabrTimeSet ? startTimeMs * 1_000L : C.TIME_UNSET;
         long endTimeUs = isSabrTimeSet ? startTimeUs + (durationMs * 1_000L) : C.TIME_UNSET;
@@ -546,10 +559,12 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
 
         DataSpec dataSpec = new DataSpec(
-                Uri.parse(sabrStream.getRequestUrl()),
+                //Uri.parse(sabrStream.getRequestUrl()),
+                Uri.parse(manifest.getRequestUrl(trackType)),
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
-                sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
+                //sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
+                manifest.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,
@@ -659,6 +674,21 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         Format selectedFormat = trackSelection.getSelectedFormat();
 
         return new CaptionSelector("selected_caption", false, selectedFormat);
+    }
+
+    private static FormatSelector createFormatSelector(int trackType, TrackSelection trackSelection) {
+        Format selectedFormat = trackSelection.getSelectedFormat();
+
+        switch (trackType) {
+            case C.TRACK_TYPE_AUDIO:
+                return new FormatSelector("selected_audio", false, selectedFormat);
+            case C.TRACK_TYPE_VIDEO:
+                return new FormatSelector("selected_video", false, selectedFormat);
+            case C.TRACK_TYPE_TEXT:
+                return new FormatSelector("selected_caption", false, selectedFormat);
+        }
+
+        throw new IllegalStateException("Unknown track type");
     }
 
     /** {@link MediaChunkIterator} wrapping a {@link RepresentationHolder}. */

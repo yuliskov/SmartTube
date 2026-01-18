@@ -65,6 +65,7 @@ public class SabrProcessor {
     private final long durationMs;
     private final Map<Long, Segment> partialSegments;
     private Segment recentSegment;
+    private Segment recentSegmentTmp;
     private final Map<String, SelectedFormat> selectedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
@@ -74,6 +75,7 @@ public class SabrProcessor {
     private final Map<Integer, SabrContextUpdate> sabrContextUpdates;
     private final Set<Integer> sabrContextsToSend;
     private final Map<Integer, MediaHeader> initializedFormats;
+    private final FormatSelector emptySelector;
 
     public SabrProcessor(
             @NonNull String videoPlaybackUstreamerConfig,
@@ -116,6 +118,7 @@ public class SabrProcessor {
         sabrContextsToSend = new HashSet<>();
         sabrContextUpdates = new HashMap<>();
         initializedFormats = new HashMap<>();
+        emptySelector = new FormatSelector("ignore", true);
         initializeFormatSelector();
     }
 
@@ -129,7 +132,7 @@ public class SabrProcessor {
 
     private void initializeFormatSelector() {
         if (formatSelector == null) {
-            formatSelector = new FormatSelector("ignore", true);
+            formatSelector = emptySelector;
         }
 
         //int enabledTrackTypesBitfield = 0;  // Audio+Video
@@ -262,6 +265,7 @@ public class SabrProcessor {
             );
 
             recentSegment = segment;
+            recentSegmentTmp = segment;
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
@@ -306,7 +310,7 @@ public class SabrProcessor {
     public ProcessMediaEndResult processMediaEnd(long headerId) {
         Segment segment = partialSegments.remove(headerId);
         if (segment == null) {
-            Log.d(TAG, "Header ID %s not found", headerId);
+            Log.e(TAG, "Header ID %s not found", headerId);
             throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
         }
 
@@ -656,7 +660,7 @@ public class SabrProcessor {
     }
 
     public long getSegmentDurationMs() {
-        return recentSegment != null ? recentSegment.durationMs : 0;
+        return recentSegment != null ? recentSegment.durationMs : recentSegmentTmp != null ? recentSegmentTmp.durationMs : 0;
     }
 
     //private List<FormatId> createSelectedFormatIds() {
@@ -738,5 +742,9 @@ public class SabrProcessor {
 
     public @NonNull Map<Integer, MediaHeader> getInitializedFormats() {
         return initializedFormats;
+    }
+
+    public void reset() {
+        recentSegment = null;
     }
 }
