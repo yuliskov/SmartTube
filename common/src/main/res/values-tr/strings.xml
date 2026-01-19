@@ -237,7 +237,7 @@
     <string name="pin_unpin_from_sidebar">Kenar çubuğuna Ekle/Kaldır</string>
     <string name="pin_unpin_playlist">Oynatma listesini kenar çubuğuna Ekle/Kaldır</string>
     <string name="pin_unpin_channel">Kanalı kenar çubuğuna Ekle/Kaldır</string>
-    <string name="pin_playlist">Onatma listesini kenar çubuğuna ekle</string>>
+    <string name="pin_playlist">Onatma listesini kenar çubuğuna ekle</string>
     <string name="pin_channel">Kanalı kenar çubuğuna ekle</string>
     <string name="pinned_to_sidebar">Kenar çubuğuna eklendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
@@ -469,7 +469,6 @@
     <string name="playback_starts_shortly">Canlı yayın başladığında otomatik olarak oynatılacaktır.</string>
     <string name="starting_stream">Canlı yayın başlatılıyor…</string>
     <string name="action_playlist_remove">Oynatma listesinden kaldır</string>
-    <!-- BEGIN Moved strings -->
     <string name="signin_view_title">Kullanıcı Kodu yükleniyor…</string>
     <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s\nNOT: Yalnızca Firefox ya da Chrome tarayıcılarla çalışır.</string>
     <string name="signin_view_action_text">Tamam</string>
@@ -484,7 +483,6 @@
     <string name="playback_controls_repeat_list">Tekrarla Liste</string>
     <string name="action_subscribe_off">Abone ol Kapalı</string>
     <string name="action_subscribe_on">Abone ol Açık</string>
-    <!-- END Moved strings -->
     <string name="skip_24_rate">24 fps biçimlerini atla (gerçek sinema modu düzeltmesi\?)</string>
     <string name="skip_shorts">Shortsları atla</string>
     <string name="player_disable_suggestions">Önerileri devre dışı bırak</string>
@@ -708,6 +706,9 @@
     <string name="player_audio_focus">Ses odaklama (diğer video oynatıcılar algılanırsa duraklatma)</string>
     <string name="paid_content_notification">Ücretli içerik bildirimleri</string>
     <string name="you_liked">sen beğendin</string>
+    <string name="premium_users_only">Premium users only. Fix for incomplete video format list</string>
+    <string name="playback_buffering_fix">Playback buffering fix</string>
+    <string name="oculus_quest_fix">Oculus Quest fix</string>
     <string name="card_preview_muted">Sessiz video</string>
     <string name="card_preview_full">Sesli video</string>
     <string name="card_preview">Kart önizlemesi</string>
