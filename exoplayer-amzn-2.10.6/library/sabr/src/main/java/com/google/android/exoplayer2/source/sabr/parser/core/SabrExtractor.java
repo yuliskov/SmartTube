@@ -308,7 +308,7 @@ public class SabrExtractor implements Extractor {
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
 
-        Log.e(TAG, "Starting SABR read #" + readNum++ + " with track type " + trackType + "...");
+        Log.e(TAG, "Starting SABR read #" + readNum++ + " with track #" + trackType + "...");
 
         sampleRead = false;
         boolean continueReading = true;
@@ -375,6 +375,7 @@ public class SabrExtractor implements Extractor {
 
     private void initializeSegment(MediaSegmentInitSabrPart part) {
         // TODO: not implemented
+        Log.e(TAG, "New init segment for track #" + trackType + ", startTimeMs: " + part.startTimeMs);
     }
 
     private void writeSegmentData(MediaSegmentDataSabrPart part) throws IOException, InterruptedException {

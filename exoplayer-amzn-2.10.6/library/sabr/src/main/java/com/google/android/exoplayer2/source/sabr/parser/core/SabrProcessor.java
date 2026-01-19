@@ -654,7 +654,7 @@ public class SabrProcessor {
     }
 
     public long getSegmentStartTimeMs() {
-        return recentSegment != null ? recentSegment.startMs + recentSegment.durationMs : 0;
+        return recentSegment != null && recentSegment.startMs != -1 ? recentSegment.startMs + recentSegment.durationMs : 0;
     }
 
     public long getSegmentDurationMs() {
@@ -743,6 +743,8 @@ public class SabrProcessor {
     }
 
     public void reset() {
-        recentSegment = null;
+        if (recentSegment != null) {
+            recentSegment.startMs = -1;
+        }
     }
 }

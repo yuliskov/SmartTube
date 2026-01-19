@@ -174,6 +174,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return sabrStream;
     }
 
+    public int getSabrRequestNumber() {
+        return sabrRequestNumber;
+    }
+
     public String getRequestUrl(int trackType) {
         SabrStream activeStream = sabrStreams.get(trackType);
 

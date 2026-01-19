@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.MimeTypes;
 
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     }
 
+    private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -521,6 +523,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 representationHolder.representation.getCacheKey(),
                 0,
                 sabrHeaders);
+        Log.e(TAG, "Creating init chunk for track #" + trackType + ", rn=" + manifest.getSabrRequestNumber());
         return new InitializationChunk(dataSource, dataSpec, trackFormat,
                 trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
@@ -573,6 +576,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 0,
                 sabrHeaders);
         long sampleOffsetUs = -representation.presentationTimeOffsetUs;
+        Log.e(TAG, "Creating media chunk #" + nexChunkIdx + " for track #" + trackType + ", rn=" + manifest.getSabrRequestNumber());
         return new ContainerMediaChunk(
                 dataSource,
                 dataSpec,

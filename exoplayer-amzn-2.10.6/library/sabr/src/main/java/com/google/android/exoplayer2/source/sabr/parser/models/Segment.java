@@ -12,7 +12,7 @@ public class Segment {
     public final int sequenceNumber;
     public final long contentLength;
     public final boolean contentLengthEstimated;
-    public final long startMs;
+    public long startMs;
     public final SelectedFormat initializedFormat;
     public final boolean durationEstimated;
     public final boolean discard;
