@@ -65,7 +65,6 @@ public class SabrProcessor {
     private final long durationMs;
     private final Map<Long, Segment> partialSegments;
     private Segment recentSegment;
-    private Segment recentSegmentTmp;
     private final Map<String, SelectedFormat> selectedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
@@ -265,7 +264,6 @@ public class SabrProcessor {
             );
 
             recentSegment = segment;
-            recentSegmentTmp = segment;
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
@@ -660,7 +658,7 @@ public class SabrProcessor {
     }
 
     public long getSegmentDurationMs() {
-        return recentSegment != null ? recentSegment.durationMs : recentSegmentTmp != null ? recentSegmentTmp.durationMs : 0;
+        return recentSegment != null ? recentSegment.durationMs : 0;
     }
 
     //private List<FormatId> createSelectedFormatIds() {

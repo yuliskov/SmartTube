@@ -538,7 +538,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         Representation representation = representationHolder.representation;
 
         if (nexChunkIdx == -1) {
-            sabrStream.reset();
+            //sabrStream.reset();
         }
 
         nexChunkIdx++;
