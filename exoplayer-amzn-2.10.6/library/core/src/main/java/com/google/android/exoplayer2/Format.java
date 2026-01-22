@@ -530,6 +530,38 @@ public final class Format implements Parcelable {
   }
 
   public static Format createAudioSampleFormat(
+          @Nullable String id,
+          @Nullable String sampleMimeType,
+          @Nullable String codecs,
+          int bitrate,
+          int maxInputSize,
+          int channelCount,
+          int sampleRate,
+          @Nullable List<byte[]> initializationData,
+          @Nullable DrmInitData drmInitData,
+          @C.SelectionFlags int selectionFlags,
+          @Nullable String language,
+          boolean isDrc) {
+    return createAudioSampleFormat(
+            id,
+            sampleMimeType,
+            codecs,
+            bitrate,
+            maxInputSize,
+            channelCount,
+            sampleRate,
+            /* pcmEncoding= */ NO_VALUE,
+            /* encoderDelay= */ NO_VALUE,
+            /* encoderPadding= */ NO_VALUE,
+            initializationData,
+            drmInitData,
+            selectionFlags,
+            language,
+            /* metadata= */ null,
+            isDrc);
+  }
+
+  public static Format createAudioSampleFormat(
       @Nullable String id,
       @Nullable String sampleMimeType,
       @Nullable String codecs,
@@ -561,6 +593,41 @@ public final class Format implements Parcelable {
   }
 
   public static Format createAudioSampleFormat(
+          @Nullable String id,
+          @Nullable String sampleMimeType,
+          @Nullable String codecs,
+          int bitrate,
+          int maxInputSize,
+          int channelCount,
+          int sampleRate,
+          @C.PcmEncoding int pcmEncoding,
+          int encoderDelay,
+          int encoderPadding,
+          @Nullable List<byte[]> initializationData,
+          @Nullable DrmInitData drmInitData,
+          @C.SelectionFlags int selectionFlags,
+          @Nullable String language,
+          @Nullable Metadata metadata) {
+    return createAudioSampleFormat(
+            id,
+            sampleMimeType,
+            codecs,
+            bitrate,
+            maxInputSize,
+            channelCount,
+            sampleRate,
+            pcmEncoding,
+            encoderDelay,
+            encoderPadding,
+            initializationData,
+            drmInitData,
+            selectionFlags,
+            language,
+            metadata,
+            false);
+  }
+
+  public static Format createAudioSampleFormat(
       @Nullable String id,
       @Nullable String sampleMimeType,
       @Nullable String codecs,
@@ -575,7 +642,8 @@ public final class Format implements Parcelable {
       @Nullable DrmInitData drmInitData,
       @C.SelectionFlags int selectionFlags,
       @Nullable String language,
-      @Nullable Metadata metadata) {
+      @Nullable Metadata metadata,
+      boolean isDrc) {
     return new Format(
         id,
         /* label= */ null,
@@ -604,7 +672,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        /* accessibilityChannel= */ NO_VALUE);
+        /* accessibilityChannel= */ NO_VALUE,
+        isDrc,
+        NO_VALUE);
   }
 
   // Text.

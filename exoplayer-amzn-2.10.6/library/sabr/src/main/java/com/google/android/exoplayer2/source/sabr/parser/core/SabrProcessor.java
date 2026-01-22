@@ -309,7 +309,9 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("Header ID %s not found in partial segments", headerId));
         }
 
-        initializedFormats.put(segment.mediaHeader.getItag(), segment.mediaHeader);
+        if (!segment.mediaHeader.getIsInitSeg()) {
+            initializedFormats.put(segment.mediaHeader.getItag(), segment.mediaHeader);
+        }
 
         Log.d(TAG, "MediaEnd for %s (sequence %s, data length = %s)",
                 segment.formatId, segment.sequenceNumber, segment.receivedDataLength);

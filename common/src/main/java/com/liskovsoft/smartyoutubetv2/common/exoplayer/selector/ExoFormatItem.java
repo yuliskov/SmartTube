@@ -115,6 +115,7 @@ public class ExoFormatItem implements FormatItem {
         String id = "";
         boolean isPreset = false;
         int bitrate = -1;
+        boolean isDrc = false;
 
         if (mTrack != null && mTrack.format != null) {
             id = mTrack.format.id;
@@ -126,9 +127,10 @@ public class ExoFormatItem implements FormatItem {
             language = mTrack.format.language;
             isPreset = mTrack.isPreset;
             bitrate = mTrack.format.bitrate;
+            isDrc = mTrack.format.isDrc;
         }
 
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language, isPreset, bitrate);
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language, isPreset, bitrate, isDrc);
     }
 
     @Override
@@ -161,7 +163,8 @@ public class ExoFormatItem implements FormatItem {
     }
 
     public static ExoFormatItem from(int type, int rendererIndex, String id, String codecs,
-                                     int width, int height, float frameRate, String language, boolean isPreset, int bitrate) {
+                                     int width, int height, float frameRate, String language,
+                                     boolean isPreset, int bitrate, boolean isDrc) {
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
 
         if (mediaTrack == null) {
@@ -170,19 +173,18 @@ public class ExoFormatItem implements FormatItem {
 
         mediaTrack.isPreset = isPreset;
 
+        // NOTE: Create fake format. It's used in app internal comparison routine.
         switch (type) {
             case TYPE_VIDEO:
-                // Fake format. It's used in app internal comparison routine.
                 mediaTrack.format = Format.createVideoSampleFormat(
                         id, null, codecs, -1, -1, width, height, frameRate, null, null);
                 break;
             case TYPE_AUDIO:
-                // Fake format. It's used in app internal comparison routine.
                 mediaTrack.format = Format.createAudioSampleFormat(
-                        id, null, codecs, bitrate, -1,0, 0, null, null, 0, language);
+                        id, null, codecs, bitrate, -1,0, 0,
+                        null, null, 0, language, isDrc);
                 break;
             case TYPE_SUBTITLE:
-                // Fake format. It's used in app internal comparison routine.
                 mediaTrack.format = Format.createTextSampleFormat(
                         id, null, -1, language);
                 break;
@@ -200,9 +202,11 @@ public class ExoFormatItem implements FormatItem {
 
         if (split.length == 9) {
             split = Helpers.appendArray(split, new String[]{"-1"});
+        } else if (split.length == 10) {
+            split = Helpers.appendArray(split, new String[]{"false"});
         }
 
-        if (split.length != 10) {
+        if (split.length != 11) {
             return null;
         }
 
@@ -216,8 +220,9 @@ public class ExoFormatItem implements FormatItem {
         String language = Helpers.parseStr(split[7]);
         boolean isPreset = Helpers.parseBoolean(split[8]);
         int bitrate = Helpers.parseInt(split[9]);
+        boolean isDrc = Helpers.parseBoolean(split[10]);
 
-        return from(type, rendererIndex, id, codecs, width, height, frameRate, language, isPreset, bitrate);
+        return from(type, rendererIndex, id, codecs, width, height, frameRate, language, isPreset, bitrate, isDrc);
     }
 
     /**
@@ -239,7 +244,7 @@ public class ExoFormatItem implements FormatItem {
         float frameRate = Helpers.parseFloat(split[2]);
         String codec = split[3];
 
-        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate,null, isPreset, -1);
+        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate,null, isPreset, -1, false);
     }
 
     public static FormatItem fromVideoParams(int resolution, int format, int frameRate) {
@@ -331,7 +336,7 @@ public class ExoFormatItem implements FormatItem {
         String codec = Helpers.parseStr(split[0]);
         String language = Helpers.parseStr(split[1]);
 
-        return from(TYPE_AUDIO, TrackSelectorManager.RENDERER_INDEX_AUDIO, null, codec, 0, 0, 0, language, false, -1);
+        return from(TYPE_AUDIO, TrackSelectorManager.RENDERER_INDEX_AUDIO, null, codec, 0, 0, 0, language, false, -1, false);
     }
 
     public static FormatItem fromSubtitleParams(String langCode) {
