@@ -92,7 +92,6 @@ jobs:
           
           {
             cat current_notes.txt
-            echo -e "\n"
             cat vt_report.txt
           } > final_notes.txt
           
