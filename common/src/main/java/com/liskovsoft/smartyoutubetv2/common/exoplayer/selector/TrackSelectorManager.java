@@ -590,7 +590,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     rendererIndex, renderer.trackGroups, new SelectionOverride(selectedTrack.groupIndex, selectedTrack.trackIndex)
             ));
         } else {
-            Log.e(TAG, "Something went wrong. Selected track not found for renderer #%s", rendererIndex);
+            Log.e(TAG, "Something went wrong. Selected track not found for renderer=%s", rendererIndex);
             mTrackSelector.setParameters(mTrackSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
         }
     }
