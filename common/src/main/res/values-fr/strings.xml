@@ -716,4 +716,9 @@
   <string name="once_a_day">Une fois par jour</string>
   <string name="once_a_week">Une fois par semaine</string>
   <string name="once_a_month">Une fois par mois</string>
+  <string name="player_toggle_speed">Basculer la vitesse marche/arrêt</string>
+  <string name="create_playlist_note">cela ne sera pas visible dans l’application YouTube</string>
+  <string name="player_quick_shorts_skip_alt">Naviguer entre les Shorts avec les boutons haut/bas</string>
+  <string name="player_quick_skip_videos_alt">Naviguer entre les vidéos standards avec les boutons haut/bas</string>
+  <string name="prefer_google_dns">Privilégier les DNS Google</string>
 </resources>
