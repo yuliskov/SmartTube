@@ -496,4 +496,11 @@
   <string name="place_comments_left">Col·loca el comentaris a l\'esquerra</string>
   <string name="search_exit_shortcut">Sortiu de l\'cerca</string>
   <string name="player_exit_shortcut">Sortiu de l\'reproductor</string>
+  <string name="pressing_back">prement BACK</string>
+  <string name="dearrow_status">Comproveu l\'estat de DeArrow</string>
+  <string name="suggestions">Suggeriments</string>
+  <string name="player_volume">Volum</string>
+  <string name="live_stream_fix_4k">Correcció de la reproducció en directe (4K)</string>
+  <string name="header_trending">Tendència</string>
+  <string name="hide_shorts_from_trending">Amaga els curts de la tendència</string>
 </resources>
