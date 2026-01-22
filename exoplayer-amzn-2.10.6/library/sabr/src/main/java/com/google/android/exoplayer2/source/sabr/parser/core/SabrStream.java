@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrError
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrRedirect;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -161,25 +162,36 @@ public class SabrStream {
         return result != null ? result : multiResult != null && !multiResult.isEmpty() ? multiResult.remove(0) : null;
     }
 
-    public @NonNull SabrProcessor getProcessor() {
-        return processor;
-    }
-
     public void reset() {
         noNewSegmentsTracker.reset();
-        processor.reset();
+    }
+
+    public void reset(int iTag) {
+        processor.reset(iTag);
+    }
+
+    public FormatSelector getFormatSelector() {
+        return processor.getFormatSelector();
     }
 
     public void setFormatSelector(FormatSelector formatSelector) {
         processor.setFormatSelector(formatSelector);
     }
 
-    public long getSegmentStartTimeMs() {
-        return processor.getSegmentStartTimeMs();
+    public long getSegmentStartTimeMs(int iTag) {
+        return processor.getSegmentStartTimeMs(iTag);
     }
 
-    public long getSegmentDurationMs() {
-        return processor.getSegmentDurationMs();
+    public long getSegmentDurationMs(int iTag) {
+        return processor.getSegmentDurationMs(iTag);
+    }
+
+    public MediaHeader getInitializedFormat(int iTag) {
+        return processor.getInitializedFormats().get(iTag);
+    }
+
+    public StreamerContext createStreamerContext() {
+        return processor.createStreamerContext();
     }
 
     private SabrPart parsePart(UMPPart part) {
@@ -467,10 +479,10 @@ public class SabrStream {
 
             // Normal reading: 47, 58. 52, 53, 42, 35, 20, 21, 22, 20...
             if (contains(KNOWN_PARTS, part.partId)) {
-                Log.d(TAG, "Found known part. id: %s, size: %s, position: %s", part.partId, part.size, part.data.getPosition());
+                Log.d(TAG, "Found known part: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
                 break;
             } else {
-                Log.e(TAG, "Unknown part encountered. id: %s, size: %s, position: %s", part.partId, part.size, part.data.getPosition());
+                Log.e(TAG, "Unknown part encountered: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
                 part.skip(); // an essential part to continue reading
             }
 

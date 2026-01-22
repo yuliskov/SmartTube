@@ -64,7 +64,6 @@ public class SabrProcessor {
     private final String videoId;
     private final long durationMs;
     private final Map<Long, Segment> partialSegments;
-    private Segment recentSegment;
     private final Map<String, SelectedFormat> selectedFormats;
     private Status streamProtectionStatus;
     private boolean isLive;
@@ -262,8 +261,6 @@ public class SabrProcessor {
                     segment.contentLength,
                     segment.contentLengthEstimated
             );
-
-            recentSegment = segment;
         }
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
@@ -350,7 +347,8 @@ public class SabrProcessor {
                     segment.sequenceNumber,
                     segment.isInitSegment,
                     segment.initializedFormat.totalSegments,
-                    segment.startMs
+                    segment.startMs,
+                    segment.durationMs
             );
         } else {
             Log.d(TAG, "Discarding media for %s", segment.initializedFormat.formatId);
@@ -653,12 +651,24 @@ public class SabrProcessor {
         return liveSegmentTargetDurationSec;
     }
 
-    public long getSegmentStartTimeMs() {
-        return recentSegment != null && recentSegment.startMs != -1 ? recentSegment.startMs + recentSegment.durationMs : 0;
+    public long getSegmentStartTimeMs(int iTag) {
+        MediaHeader mediaHeader = initializedFormats.get(iTag);
+
+        if (mediaHeader == null || mediaHeader.getStartMs() == -1) {
+            return 0;
+        }
+
+        return mediaHeader.getStartMs() + mediaHeader.getDurationMs();
     }
 
-    public long getSegmentDurationMs() {
-        return recentSegment != null ? recentSegment.durationMs : 0;
+    public long getSegmentDurationMs(int iTag) {
+        MediaHeader mediaHeader = initializedFormats.get(iTag);
+
+        if (mediaHeader == null) {
+            return 0;
+        }
+
+        return mediaHeader.getDurationMs();
     }
 
     //private List<FormatId> createSelectedFormatIds() {
@@ -742,9 +752,15 @@ public class SabrProcessor {
         return initializedFormats;
     }
 
-    public void reset() {
-        if (recentSegment != null) {
-            recentSegment.startMs = -1;
+    public void reset(int iTag) {
+        MediaHeader mediaHeader = initializedFormats.get(iTag);
+
+        if (mediaHeader != null) {
+            MediaHeader newHeader = mediaHeader.toBuilder()
+                    .setStartMs(-1)
+                    .setSequenceNumber(0)
+                    .build();
+            initializedFormats.put(iTag, newHeader);
         }
     }
 }

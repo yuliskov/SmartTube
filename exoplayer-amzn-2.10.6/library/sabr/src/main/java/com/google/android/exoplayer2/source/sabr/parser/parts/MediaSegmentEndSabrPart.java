@@ -10,6 +10,7 @@ public class MediaSegmentEndSabrPart implements SabrPart {
     public final boolean isInitSegment;
     public final long totalSegments;
     public final long startTimeMs;
+    public final long durationMs;
 
     public MediaSegmentEndSabrPart(
             FormatSelector formatSelector,
@@ -17,12 +18,14 @@ public class MediaSegmentEndSabrPart implements SabrPart {
             long sequenceNumber,
             boolean isInitSegment,
             long totalSegments,
-            long startTimeMs) {
+            long startTimeMs,
+            long durationMs) {
         this.formatSelector = formatSelector;
         this.formatId = formatId;
         this.sequenceNumber = sequenceNumber;
         this.isInitSegment = isInitSegment;
         this.totalSegments = totalSegments;
         this.startTimeMs = startTimeMs;
+        this.durationMs = durationMs;
     }
 }

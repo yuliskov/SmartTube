@@ -86,7 +86,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final String poToken;
     private final ClientInfo clientInfo;
     private final Map<Integer, SabrStream> sabrStreams;
-    private int sabrRequestNumber = 0;
+    private int sabrRequestNumber = -1;
     private final FormatSelector emptySelector;
 
     public SabrManifest(
@@ -185,7 +185,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
         }
 
-        return Utils.updateQuery(activeStream.getUrl(), "rn", sabrRequestNumber++);
+        return Utils.updateQuery(activeStream.getUrl(), "rn", ++sabrRequestNumber);
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
@@ -202,7 +202,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         int bandwidthEstimate = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
-        long startTimeMs = isInit ? 0 : activeStream.getProcessor().getSegmentStartTimeMs();
+        FormatId formatId = getFormatSelector(trackType).getSelectedFormatId();
+        long startTimeMs = isInit ? 0 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
 
         ClientAbrState.Builder clientAbrStateBuilder = ClientAbrState.newBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
@@ -307,7 +308,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         MediaHeader initializedFormat = null;
 
         for (SabrStream sabrStream : sabrStreams.values()) {
-            MediaHeader mediaHeader = sabrStream.getProcessor().getInitializedFormats().get(iTag);
+            MediaHeader mediaHeader = sabrStream.getInitializedFormat(iTag);
 
             if (mediaHeader != null) {
                 initializedFormat = mediaHeader;
@@ -325,7 +326,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             return emptySelector;
         }
 
-        return sabrStream.getProcessor().getFormatSelector();
+        return sabrStream.getFormatSelector();
     }
 
     /**
@@ -362,16 +363,17 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         int sequenceNumber = initializedFormat.hasSequenceNumber() ? initializedFormat.getSequenceNumber() : 1;
         TimeRange timeRange = initializedFormat.hasTimeRange() ? initializedFormat.getTimeRange() : null;
         int timeScale = timeRange != null && timeRange.hasTimescale() ? timeRange.getTimescale() : 1_000;
+        long startMs = initializedFormat.hasStartMs() ? initializedFormat.getStartMs() : 0;
         long durationMs = initializedFormat.hasDurationMs() ? initializedFormat.getDurationMs() : 0;
         return BufferedRange.newBuilder()
                 .setFormatId(initializedFormat.getFormatId())
-                .setStartSegmentIndex(sequenceNumber)
+                .setStartSegmentIndex(sequenceNumber) // should be the real start position
+                .setEndSegmentIndex(sequenceNumber) // should be the real start position
+                .setStartTimeMs(0) // not used
                 .setDurationMs(durationMs)
-                .setStartTimeMs(0)
-                .setEndSegmentIndex(sequenceNumber)
                 .setTimeRange(TimeRange.newBuilder()
                         .setTimescale(timeScale)
-                        .setStartTicks(0)
+                        .setStartTicks(0) // not used
                         .setDurationTicks(durationMs)
                         .build())
                 .build();
@@ -390,6 +392,6 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
         }
 
-        return activeStream.getProcessor().createStreamerContext();
+        return activeStream.createStreamerContext();
     }
 }

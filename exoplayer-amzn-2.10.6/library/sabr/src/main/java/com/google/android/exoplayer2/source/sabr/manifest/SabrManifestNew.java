@@ -198,7 +198,8 @@ public class SabrManifestNew implements FilterableManifest<SabrManifestNew> {
         int bandwidthEstimate = trackType == C.TRACK_TYPE_VIDEO && selectedVideoFormat != null
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
-        long startTimeMs = isInit ? 0 : activeStream.getProcessor().getSegmentStartTimeMs();
+        FormatId formatId = getFormatSelector(trackType).getSelectedFormatId();
+        long startTimeMs = isInit ? 0 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
 
         ClientAbrState.Builder clientAbrStateBuilder = ClientAbrState.newBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
@@ -303,7 +304,7 @@ public class SabrManifestNew implements FilterableManifest<SabrManifestNew> {
         MediaHeader initializedFormat = null;
 
         for (SabrStream sabrStream : sabrStreams.values()) {
-            MediaHeader mediaHeader = sabrStream.getProcessor().getInitializedFormats().get(iTag);
+            MediaHeader mediaHeader = sabrStream.getInitializedFormat(iTag);
 
             if (mediaHeader != null) {
                 initializedFormat = mediaHeader;
@@ -321,7 +322,7 @@ public class SabrManifestNew implements FilterableManifest<SabrManifestNew> {
             return emptySelector;
         }
 
-        return sabrStream.getProcessor().getFormatSelector();
+        return sabrStream.getFormatSelector();
     }
 
     /**
@@ -386,6 +387,6 @@ public class SabrManifestNew implements FilterableManifest<SabrManifestNew> {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
         }
 
-        return activeStream.getProcessor().createStreamerContext();
+        return activeStream.createStreamerContext();
     }
 }
