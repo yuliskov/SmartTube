@@ -956,7 +956,7 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onSubscribe(int buttonState) {
-        if (getVideo() == null) {
+        if (getPlayer() == null || getVideo() == null) {
             return;
         }
 
@@ -976,11 +976,17 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applySoundOff(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (buttonState == PlayerUI.BUTTON_OFF) {
             mAudioFormat = getPlayer().getAudioFormat();
             getPlayer().setFormat(FormatItem.NO_AUDIO);
+            getPlayerData().setFormat(FormatItem.NO_AUDIO);
         } else {
             getPlayer().setFormat(mAudioFormat);
+            getPlayerData().setFormat(mAudioFormat);
         }
 
         getPlayer().setButtonState(R.id.action_sound_off, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);

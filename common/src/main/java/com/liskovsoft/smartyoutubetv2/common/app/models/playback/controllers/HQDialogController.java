@@ -63,6 +63,10 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addQualityCategories() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         List<FormatItem> videoFormats = getPlayer().getVideoFormats();
         String videoFormatsTitle = getContext().getString(R.string.title_video_formats);
 
@@ -82,6 +86,10 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void selectFormatOption(OptionItem option) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         FormatItem formatItem = UiOptionItem.toFormat(option);
         getPlayer().setFormat(formatItem);
         persistFormat(formatItem);

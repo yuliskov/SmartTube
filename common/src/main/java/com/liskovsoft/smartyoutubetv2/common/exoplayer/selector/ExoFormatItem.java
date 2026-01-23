@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
@@ -117,17 +119,20 @@ public class ExoFormatItem implements FormatItem {
         int bitrate = -1;
         boolean isDrc = false;
 
-        if (mTrack != null && mTrack.format != null) {
-            id = mTrack.format.id;
+        if (mTrack != null) {
             rendererIndex = mTrack.rendererIndex;
-            codecs = mTrack.format.codecs;
-            width = mTrack.format.width;
-            height = mTrack.format.height;
-            frameRate = mTrack.format.frameRate;
-            language = mTrack.format.language;
             isPreset = mTrack.isPreset;
-            bitrate = mTrack.format.bitrate;
-            isDrc = mTrack.format.isDrc;
+            Format format = mTrack.format;
+            if (format != null) {
+                id = format.id;
+                codecs = format.codecs;
+                width = format.width;
+                height = format.height;
+                frameRate = format.frameRate;
+                language = format.language;
+                bitrate = format.bitrate;
+                isDrc = format.isDrc;
+            }
         }
 
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language, isPreset, bitrate, isDrc);
@@ -173,11 +178,17 @@ public class ExoFormatItem implements FormatItem {
 
         mediaTrack.isPreset = isPreset;
 
+        // audio/video disabled
+        if (TextUtils.isEmpty(id) && TextUtils.isEmpty(codecs)) {
+            return from(mediaTrack);
+        }
+
         // NOTE: Create fake format. It's used in app internal comparison routine.
         switch (type) {
             case TYPE_VIDEO:
                 mediaTrack.format = Format.createVideoSampleFormat(
-                        id, null, codecs, -1, -1, width, height, frameRate, null, null);
+                        id, null, codecs, -1, -1, width, height,
+                        frameRate, null, null);
                 break;
             case TYPE_AUDIO:
                 mediaTrack.format = Format.createAudioSampleFormat(
