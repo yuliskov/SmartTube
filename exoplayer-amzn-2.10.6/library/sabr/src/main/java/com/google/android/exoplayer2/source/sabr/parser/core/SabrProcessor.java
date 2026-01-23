@@ -506,7 +506,7 @@ public class SabrProcessor {
 
         if (formatInitMetadata.hasFormatId()) {
             selectedFormats.put(formatInitMetadata.getFormatId().toString(), initializedFormat);
-            Log.d(TAG, "Initialized Format: %s", initializedFormat);
+            Log.d(TAG, "Initialized Format: %s", initializedFormat.formatId);
         }
 
         if (!initializedFormat.discard) {

@@ -414,6 +414,7 @@ public class SabrExtractor implements Extractor {
         Track track = tracks.get(1);
         long timeUs = part.startTimeMs * 1_000L;
         track.output.sampleMetadata(timeUs, blockFlags, sampleBytesWritten, 0, track.cryptoData);
+        sampleBytesWritten = 0;
         //commitSampleToOutput(track, timeUs);
     }
 
@@ -486,7 +487,7 @@ public class SabrExtractor implements Extractor {
 
     private void resetSample() {
         sampleBytesRead = 0;
-        sampleBytesWritten = 0;
+        //sampleBytesWritten = 0;
         sampleCurrentNalBytesRemaining = 0;
         sampleEncodingHandled = false;
         sampleSignalByteRead = false;
