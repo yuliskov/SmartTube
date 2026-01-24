@@ -202,6 +202,7 @@ public class SabrExtractor implements Extractor {
     private Format format;
     private final int trackType;
     private int readNum;
+    private int partNum;
 
     // Temporary arrays.
     private final ParsableByteArray nalStartCode;
@@ -381,6 +382,8 @@ public class SabrExtractor implements Extractor {
     private void writeSegmentData(MediaSegmentDataSabrPart part) throws IOException, InterruptedException {
         // binaryElement
 
+        Log.e(TAG, "Received SABR part: track=" + trackType + ", partNum=" + partNum++ + ", partLength=" + part.contentLength + ", partOffset=" + part.segmentStartBytes);
+
         // TODO: init seek segment data
 
         // TODO: hardcoded blockTrackNumber is bad
@@ -474,6 +477,8 @@ public class SabrExtractor implements Extractor {
             return CODEC_ID_VP9;
         } else if (codecId.startsWith("avc")) {
             return CODEC_ID_H264;
+        } else if (codecId.startsWith("mp4a")) {
+            return CODEC_ID_AAC;
         }
 
         return codecId;
