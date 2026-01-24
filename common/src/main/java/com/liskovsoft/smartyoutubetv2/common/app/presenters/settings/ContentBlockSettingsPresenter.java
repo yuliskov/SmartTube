@@ -84,22 +84,22 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
                         List<OptionItem> nestedOptions = new ArrayList<>();
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_none),
-                                optionItem1 -> action.actionType = ContentBlockData.ACTION_DO_NOTHING,
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_DO_NOTHING),
                                 action.actionType == ContentBlockData.ACTION_DO_NOTHING));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_only_skip),
-                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SKIP_ONLY,
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SKIP_ONLY),
                                 action.actionType == ContentBlockData.ACTION_SKIP_ONLY));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_toast),
-                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SKIP_WITH_TOAST,
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SKIP_WITH_TOAST),
                                 action.actionType == ContentBlockData.ACTION_SKIP_WITH_TOAST));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_dialog),
-                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SHOW_DIALOG,
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SHOW_DIALOG),
                                 action.actionType == ContentBlockData.ACTION_SHOW_DIALOG));
 
                         String title = getContext().getString(mContentBlockData.getLocalizedRes(action.segmentCategory));
 
                         dialogPresenter.appendRadioCategory(title, nestedOptions);
-                        dialogPresenter.showDialog(title, mContentBlockData::persistActions);
+                        dialogPresenter.showDialog(title);
                     }));
         }
 

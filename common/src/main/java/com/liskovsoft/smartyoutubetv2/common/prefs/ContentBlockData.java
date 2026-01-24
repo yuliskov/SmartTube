@@ -176,16 +176,23 @@ public class ContentBlockData {
         return ACTION_UNDEFINED;
     }
 
+    public void setAction(String segmentCategory, int actionType) {
+        for (SegmentAction action : mActions) {
+            if (Helpers.equals(action.segmentCategory, segmentCategory)) {
+                action.actionType = actionType;
+                break;
+            }
+        }
+
+        persistState();
+    }
+
     public boolean isSponsorBlockEnabled() {
         return mIsSponsorBlockEnabled;
     }
 
     public void enableSponsorBlock(boolean enabled) {
         mIsSponsorBlockEnabled = enabled;
-        persistState();
-    }
-
-    public void persistActions() {
         persistState();
     }
 
