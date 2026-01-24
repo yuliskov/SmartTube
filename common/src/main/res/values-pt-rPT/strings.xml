@@ -711,4 +711,11 @@
   <string name="typing_corrections">Desativar correção automática ao escrever</string>
   <string name="player_chapter_notification2">Trocar para o capítulo seguinte ao tocar na notificação</string>
   <string name="suggestions_horizontally_scrolled">Deslocação horizontal de sugestões</string>
+  <string name="dialog_blacklist_channel">Bloquear canal</string>
+  <string name="dialog_remove_from_blacklist">Desbloquear canal</string>
+  <string name="confirm_blacklist_channel">Ocultar todo o conteúdo de %s?</string>
+  <string name="blacklisted_channel">Canal bloqueado</string>
+  <string name="removed_from_blacklist">Canal desbloqueado</string>
+  <string name="header_blacklisted_channels">Canais bloqueados</string>
+  <string name="msg_no_blacklisted_channels">Nenhum canal bloqueado</string>
 </resources>

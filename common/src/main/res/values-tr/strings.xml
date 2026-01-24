@@ -720,4 +720,11 @@
     <string name="once_a_day">Günde bir kez</string>
     <string name="once_a_week">Haftada bir kez</string>
     <string name="once_a_month">Ayda bir kez</string>
+  <string name="dialog_blacklist_channel">Kanalı engelle</string>
+  <string name="dialog_remove_from_blacklist">Engeli kaldır</string>
+  <string name="confirm_blacklist_channel">%s kanalından tüm içerik gizlensin mi?</string>
+  <string name="blacklisted_channel">Kanal engellendi</string>
+  <string name="removed_from_blacklist">Engel kaldırıldı</string>
+  <string name="header_blacklisted_channels">Engellenen kanallar</string>
+  <string name="msg_no_blacklisted_channels">Engellenen kanal yok</string>
 </resources>

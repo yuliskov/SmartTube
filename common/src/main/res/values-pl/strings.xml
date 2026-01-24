@@ -717,4 +717,11 @@
   <string name="remove_playlist_fmt">Usunąć %s na zawsze\?</string>
   <string name="play_from_start">Odtwórz od początku</string>
   <string name="player_chapter_notification2">Przejdź do następnego rozdziału, klikając powiadomienie</string>
+  <string name="dialog_blacklist_channel">Zablokuj kanał</string>
+  <string name="dialog_remove_from_blacklist">Odblokuj kanał</string>
+  <string name="confirm_blacklist_channel">Ukryć całą zawartość od %s?</string>
+  <string name="blacklisted_channel">Kanał zablokowany</string>
+  <string name="removed_from_blacklist">Kanał odblokowany</string>
+  <string name="header_blacklisted_channels">Zablokowane kanały</string>
+  <string name="msg_no_blacklisted_channels">Brak zablokowanych kanałów</string>
 </resources>

@@ -704,4 +704,11 @@
   <string name="card_preview_full">Miniatura com som</string>
   <string name="card_preview">Miniatura de prévia</string>
   <string name="card_unlocalized_titles">Não traduzir títulos dos vídeos</string>
+  <string name="dialog_blacklist_channel">Bloquear canal</string>
+  <string name="dialog_remove_from_blacklist">Desbloquear canal</string>
+  <string name="confirm_blacklist_channel">Ocultar todo o conteúdo de %s?</string>
+  <string name="blacklisted_channel">Canal bloqueado</string>
+  <string name="removed_from_blacklist">Canal desbloqueado</string>
+  <string name="header_blacklisted_channels">Canais bloqueados</string>
+  <string name="msg_no_blacklisted_channels">Nenhum canal bloqueado</string>
 </resources>
