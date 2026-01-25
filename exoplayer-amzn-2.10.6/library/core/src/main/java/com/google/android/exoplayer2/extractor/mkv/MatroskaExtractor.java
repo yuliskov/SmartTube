@@ -432,7 +432,7 @@ public class MatroskaExtractor implements Extractor {
   }
 
   @Override
-  public final int read(ExtractorInput input, PositionHolder seekPosition)
+  public int read(ExtractorInput input, PositionHolder seekPosition)
       throws IOException, InterruptedException {
     sampleRead = false;
     boolean continueReading = true;
