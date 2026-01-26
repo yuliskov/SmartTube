@@ -707,4 +707,11 @@
   <string name="card_preview">카드 미리보기</string>
   <string name="card_unlocalized_titles">현지화되지 않은 비디오 제목</string>
   <string name="dont_resize_video_to_fit_dialog">대화에 맞게 비디오 크기를 조정하지 않기</string>
+  <string name="dialog_blacklist_channel">채널 차단</string>
+  <string name="dialog_remove_from_blacklist">차단 해제</string>
+  <string name="confirm_blacklist_channel">%s의 모든 콘텐츠를 숨기시겠습니까?</string>
+  <string name="blacklisted_channel">채널이 차단됨</string>
+  <string name="removed_from_blacklist">차단 해제됨</string>
+  <string name="header_blacklisted_channels">차단된 채널</string>
+  <string name="msg_no_blacklisted_channels">차단된 채널 없음</string>
 </resources>

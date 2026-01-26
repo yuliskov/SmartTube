@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Video is an object that holds the various metadata associated with a single video.
+ * Video is an object that holds the various metadata associated with a single
+ * video.
  */
 public final class Video {
     public static final String PLAYLIST_LIKED_MUSIC = "LM";
@@ -102,7 +103,7 @@ public final class Video {
     public List<NotificationState> notificationStates;
 
     public Video() {
-       // NOP
+        // NOP
     }
 
     private Video(
@@ -223,19 +224,20 @@ public final class Video {
         video.channelId = channel.getChannelId();
         return video;
     }
-    ///**
+    /// **
     // * Don't change the logic from equality by reference!<br/>
     // * Or adapters won't work properly (same video may appear twice).
     // */
-    //@Override
-    //public boolean equals(@Nullable Object obj) {
-    //    return super.equals(obj);
-    //}
+    // @Override
+    // public boolean equals(@Nullable Object obj) {
+    // return super.equals(obj);
+    // }
 
     /**
      * Use with caution.<br/>
      * Old logic is equality by reference!<br/>
-     * Adapters may not work properly when detecting scroll position (same video may appear twice).
+     * Adapters may not work properly when detecting scroll position (same video may
+     * appear twice).
      */
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -249,22 +251,25 @@ public final class Video {
     }
 
     /**
-     * NOTE: hashCode is used generate id that should be the same if contents of items is the same
+     * NOTE: hashCode is used generate id that should be the same if contents of
+     * items is the same
      */
     @Override
     public int hashCode() {
         // NOTE: With full hash code won't jump to last known position
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, sectionId, channelGroupId, mediaItem);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, sectionId,
+                channelGroupId, mediaItem);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
 
     public static void printDebugInfo(Context context, Video item) {
         MessageHelpers.showLongMessage(context,
-                String.format("videoId=%s, playlistId=%s, reloadPageKey=%s, playlistParams=%s, channelId=%s, mediaItem=%s, extra=%s",
-                        item.videoId, item.playlistId, item.reloadPageKey, item.playlistParams, item.channelId, item.mediaItem, item.sectionId)
-        );
+                String.format(
+                        "videoId=%s, playlistId=%s, reloadPageKey=%s, playlistParams=%s, channelId=%s, mediaItem=%s, extra=%s",
+                        item.videoId, item.playlistId, item.reloadPageKey, item.playlistParams, item.channelId,
+                        item.mediaItem, item.sectionId));
     }
-    
+
     public static boolean equals(Video video1, Video video2) {
         if (video1 == null) {
             return false;
@@ -317,7 +322,8 @@ public final class Video {
 
         String mainTitle = metadataTitle != null ? metadataTitle : title;
         CharSequence subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
-        return hasVideo() ? extractAuthor(subtitle) : Helpers.toString(YouTubeHelper.createInfo(mainTitle, subtitle)); // BAD idea
+        return hasVideo() ? extractAuthor(subtitle) : Helpers.toString(YouTubeHelper.createInfo(mainTitle, subtitle)); // BAD
+                                                                                                                       // idea
     }
 
     public VideoGroup getGroup() {
@@ -347,13 +353,16 @@ public final class Video {
                 result = secondTitle;
             } else {
                 // First part may be a special label (4K, Stream, New etc)
-                // Two cases to detect label: 1) Description is long (4 items); 2) First item of info is too short (2 letters)
+                // Two cases to detect label: 1) Description is long (4 items); 2) First item of
+                // info is too short (2 letters)
                 result = split.length < 4 && split[0].trim().length() > 2 ? split[0] : split[1];
             }
         }
 
         // Skip subtitles starting with number of views (e.g. 1.4M views)
-        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1))
+                ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS)
+                : null;
     }
 
     public static List<Video> findVideosByAuthor(VideoGroup group, String author) {
@@ -383,58 +392,58 @@ public final class Video {
 
         // 'playlistParams' backward compatibility
         if (split.length == 10) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         // 'extra' backward compatibility
         if (split.length == 11) {
-            split = Helpers.appendArray(split, new String[]{"-1"});
+            split = Helpers.appendArray(split, new String[] { "-1" });
         }
 
         // 'reloadPageKey' backward compatibility
         if (split.length == 12) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         // 'type' backward compatibility
         if (split.length == 13) {
-            split = Helpers.appendArray(split, new String[]{"-1"});
+            split = Helpers.appendArray(split, new String[] { "-1" });
         }
 
         if (split.length == 14) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length == 15) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length == 16) {
-            split = Helpers.appendArray(split, new String[]{"-1"});
+            split = Helpers.appendArray(split, new String[] { "-1" });
         }
 
         if (split.length == 17) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length == 18) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length == 19) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length == 20) {
-            split = Helpers.appendArray(split, new String[]{"false"});
+            split = Helpers.appendArray(split, new String[] { "false" });
         }
 
         if (split.length == 21) {
-            split = Helpers.appendArray(split, new String[]{"-1"});
+            split = Helpers.appendArray(split, new String[] { "-1" });
         }
 
         if (split.length == 22) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[] { null });
         }
 
         if (split.length != 23) {
@@ -447,12 +456,13 @@ public final class Video {
         result.category = Helpers.parseStr(split[1]);
         result.title = Helpers.parseStr(split[2]);
         result.videoId = Helpers.parseStr(split[3]);
-        //result.videoUrl = Helpers.parseStr(split[4]);
+        // result.videoUrl = Helpers.parseStr(split[4]);
         result.playlistId = Helpers.parseStr(split[5]);
         result.channelId = Helpers.parseStr(split[6]);
         result.bgImageUrl = Helpers.parseStr(split[7]);
         result.cardImageUrl = Helpers.parseStr(split[8]);
-        //result.mediaItem = YouTubeMediaItem.deserializeMediaItem(Helpers.parseStr(split[9]));
+        // result.mediaItem =
+        // YouTubeMediaItem.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
         result.sectionId = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
@@ -492,15 +502,17 @@ public final class Video {
     }
 
     /**
-     * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
+     * NOTE: Channels section uses <em>playlistParams</em> instead of
+     * <em>playlistId</em>
      */
     public boolean hasPlaylist() {
         return playlistId != null;
     }
 
-    //public boolean hasPlaylist() {
-    //    return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
-    //}
+    // public boolean hasPlaylist() {
+    // return playlistId != null || (playlistParams != null &&
+    // !Helpers.containsAny(playlistParams, sNotPlaylistParams));
+    // }
 
     public boolean hasNextPlaylist() {
         return hasNextItem() && getPlaylistId() != null && getPlaylistId().equals(nextMediaItem.getPlaylistId());
@@ -571,8 +583,7 @@ public final class Video {
      * Persist on Channels and User playlists sections
      */
     public String getReloadPageKey() {
-        return reloadPageKey != null ? reloadPageKey :
-                getGroup() != null ? getGroup().getReloadPageKey() : null;
+        return reloadPageKey != null ? reloadPageKey : getGroup() != null ? getGroup().getReloadPageKey() : null;
     }
 
     public String getNextPageKey() {
@@ -603,7 +614,8 @@ public final class Video {
         }
 
         // Some items may not have a playlistId (e.g. movies)
-        List<Video> filtered = Helpers.filter(getGroup().getVideos(), item -> item.getPlaylistId() != null || item.playlistParams != null, 2);
+        List<Video> filtered = Helpers.filter(getGroup().getVideos(),
+                item -> item.getPlaylistId() != null || item.playlistParams != null, 2);
 
         if (filtered == null || filtered.size() < 2) {
             return false;
@@ -623,7 +635,8 @@ public final class Video {
             return false;
         }
 
-        return playlistId != null && getGroup().get(0).playlistId != null && getGroup().get(1).playlistId != null && getGroup().get(getGroup().getSize() - 1).playlistId != null;
+        return playlistId != null && getGroup().get(0).playlistId != null && getGroup().get(1).playlistId != null
+                && getGroup().get(getGroup().getSize() - 1).playlistId != null;
     }
 
     public boolean belongsToHome() {
@@ -682,6 +695,27 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_UNDEFINED);
     }
 
+    public boolean belongsToBlacklistedChannels() {
+        return belongsToGroup(MediaGroup.TYPE_BLACKLISTED_CHANNELS);
+    }
+
+    /**
+     * Get the appropriate channel ID for blacklisting.
+     * Tries channelId first, then falls back to author name.
+     * 
+     * @return The channel ID to use for blacklisting, or null if not available
+     */
+    public String getChannelIdForBlacklist() {
+        if (channelId != null && !channelId.isEmpty()) {
+            return channelId;
+        }
+
+        // Fallback: use author name if no ID available (less reliable but better than
+        // nothing)
+        String authorName = getAuthor();
+        return authorName != null && !authorName.isEmpty() ? authorName : null;
+    }
+
     private boolean belongsToGroup(int groupId) {
         return getGroup() != null && getGroup().getType() == groupId;
     }
@@ -707,11 +741,13 @@ public final class Video {
             isLiveEnd = true;
         }
 
-        // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
+        // NOTE: Skip upcoming (no media) because default title more informative (e.g.
+        // has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
         metadataTitle = metadata.getTitle();
         metadataSecondTitle = metadata.getSecondTitle();
-        // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
+        // NOTE: Upcoming videos metadata wrongly reported as live (live == true,
+        // upcoming == false)
         isLive = metadata.isLive();
         isUpcoming = metadata.isUpcoming();
 
@@ -737,7 +773,7 @@ public final class Video {
         if (formatInfo == null) {
             return;
         }
-        
+
         isLive = formatInfo.isLive();
 
         if (description == null) {
@@ -746,7 +782,8 @@ public final class Video {
 
         // Published time used on live videos only
         if (formatInfo.isLive()) {
-            startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs() : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
+            startTimeMs = formatInfo.getStartTimeMs() > 0 ? formatInfo.getStartTimeMs()
+                    : DateHelper.toUnixTimeMs(formatInfo.getStartTimestamp());
             startSegmentNum = formatInfo.getStartSegmentNum();
         }
 
@@ -821,7 +858,7 @@ public final class Video {
 
     public void markFullyViewed() {
         percentWatched = 100;
-        startTimeSeconds = (int)(getDurationMs() / 1_000);
+        startTimeSeconds = (int) (getDurationMs() / 1_000);
     }
 
     public void markNotViewed() {
@@ -858,7 +895,8 @@ public final class Video {
     }
 
     private long getPositionFromPercentWatched() {
-        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+        // Ignore up to 10% watched because the video might be opened on phone and
+        // closed immediately.
         if (percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
             return 0;
         }
@@ -877,22 +915,29 @@ public final class Video {
         }
     }
 
-    ///**
-    // * The section playlist intended (as a backup replacement) for cases when regular playlist not available
+    /// **
+    // * The section playlist intended (as a backup replacement) for cases when
+    /// regular playlist not available
     // */
-    //public boolean isSectionPlaylistEnabled(Context context) {
-    //    return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
-    //            && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId) || nextMediaItem == null
-    //                   || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists (music videos usually)
-    //            && (!isRemote || remotePlaylistId == null);
-    //}
+    // public boolean isSectionPlaylistEnabled(Context context) {
+    // return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() &&
+    /// !belongsToSuggestions()
+    // && (!checkAllVideosHasPlaylist() || PLAYLIST_LIKED_MUSIC.equals(playlistId)
+    /// || nextMediaItem == null
+    // || (!isMix() && !belongsToSamePlaylistGroup())) // skip hidden playlists
+    /// (music videos usually)
+    // && (!isRemote || remotePlaylistId == null);
+    // }
 
     /**
-     * The section playlist intended (as a backup replacement) for cases when regular playlist not available
+     * The section playlist intended (as a backup replacement) for cases when
+     * regular playlist not available
      */
     public boolean isSectionPlaylistEnabled(Context context) {
-        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions() && !belongsToPlaybackQueue()
-                && (!checkAllVideosHasPlaylist() || nextMediaItem == null || !isMix()) // skip hidden playlists (music videos usually)
+        return PlayerTweaksData.instance(context).isSectionPlaylistEnabled() && !belongsToSuggestions()
+                && !belongsToPlaybackQueue()
+                && (!checkAllVideosHasPlaylist() || nextMediaItem == null || !isMix()) // skip hidden playlists (music
+                                                                                       // videos usually)
                 && (!isRemote || remotePlaylistId == null);
     }
 
@@ -900,25 +945,29 @@ public final class Video {
         if (!hasPlaylist()) {
             return null;
         }
-        
+
         // Trying to properly format channel playlists, mixes etc
-        boolean isChannelPlaylistItem = getGroupTitle() != null && belongsToSameAuthorGroup() && belongsToSamePlaylistGroup();
+        boolean isChannelPlaylistItem = getGroupTitle() != null && belongsToSameAuthorGroup()
+                && belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = getGroupTitle() != null && belongsToSamePlaylistGroup();
         String title = isChannelPlaylistItem ? getAuthor() : isUserPlaylistItem ? null : getTitle();
-        String subtitle = isChannelPlaylistItem || isUserPlaylistItem || belongsToUserPlaylists() ? getGroupTitle() : getAuthor();
-        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
+        String subtitle = isChannelPlaylistItem || isUserPlaylistItem || belongsToUserPlaylists() ? getGroupTitle()
+                : getAuthor();
+        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle)
+                : String.format("%s", title != null ? title : subtitle);
     }
 
     public String createChannelTitle() {
         if (!hasReloadPageKey() && !hasChannel()) {
             return null;
         }
-        
+
         // Trying to properly format channel playlists, mixes etc
         boolean hasChannel = hasChannel() && !isChannel();
         boolean isUserPlaylistItem = getGroupTitle() != null && belongsToSamePlaylistGroup();
         String title = hasChannel ? getAuthor() : isUserPlaylistItem ? null : getTitle();
         String subtitle = isUserPlaylistItem ? getGroupTitle() : hasChannel || isChannel() ? null : getAuthor();
-        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
+        return title != null && subtitle != null ? String.format("%s - %s", title, subtitle)
+                : String.format("%s", title != null ? title : subtitle);
     }
 }

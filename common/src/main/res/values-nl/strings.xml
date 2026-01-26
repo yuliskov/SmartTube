@@ -703,4 +703,11 @@
   <string name="typing_corrections">Automatische correctie uitschakelen tijdens het typen van tekst</string>
   <string name="suggestions_horizontally_scrolled">Horizontaal gescrolde suggesties</string>
   <string name="stable_restore">Herstel de stable build (alle gegevens gaan verloren)</string>
+  <string name="dialog_blacklist_channel">Blokkeer kanaal</string>
+  <string name="dialog_remove_from_blacklist">Deblokkeer kanaal</string>
+  <string name="confirm_blacklist_channel">Verberg alle inhoud van %s?</string>
+  <string name="blacklisted_channel">Kanaal geblokkeerd</string>
+  <string name="removed_from_blacklist">Kanaal gedeblokkeerd</string>
+  <string name="header_blacklisted_channels">Geblokkeerde kanalen</string>
+  <string name="msg_no_blacklisted_channels">Geen geblokkeerde kanalen</string>
 </resources>

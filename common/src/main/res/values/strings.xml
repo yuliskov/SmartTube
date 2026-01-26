@@ -109,6 +109,13 @@
     <string name="not_recommend_channel">Don\'t recommend channel</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
     <string name="you_wont_see_this_channel">You won\'t see this channel in recommendations</string>
+    <string name="dialog_blacklist_channel">Blacklist Channel</string>
+    <string name="dialog_remove_from_blacklist">Remove from Blacklist</string>
+    <string name="confirm_blacklist_channel">Hide all content from %s?</string>
+    <string name="blacklisted_channel">Channel blacklisted</string>
+    <string name="removed_from_blacklist">Channel removed from blacklist</string>
+    <string name="header_blacklisted_channels">Blacklisted Channels</string>
+    <string name="msg_no_blacklisted_channels">No blacklisted channels</string>
     <string name="settings_search">Search</string>
     <string name="dialog_search">Search</string>
     <string name="instant_voice_search">Instant voice search</string>
