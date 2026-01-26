@@ -659,31 +659,63 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         Playlist playlist = Playlist.instance();
-        // Toggle between add/remove while dialog is opened
-        //boolean containsVideo = playlist.containsAfterCurrent(mVideo);
-        boolean containsVideo = playlist.contains(mVideo);
+
+        List<Video> all = playlist.getAll();
+
+        if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
+            return;
+        }
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(containsVideo ? R.string.remove_from_playback_queue : R.string.add_to_playback_queue),
+                        getContext().getString(R.string.add_to_playback_queue),
                         optionItem -> {
-                            if (containsVideo) {
-                                playlist.remove(mVideo);
-                                if (mCallback != null) {
-                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE);
-                                }
-                            } else {
-                                mVideo.fromQueue = true;
-                                playlist.add(mVideo);
-                                if (mCallback != null) {
-                                    mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_ADD_TO_QUEUE);
-                                }
+                            mVideo.fromQueue = true;
+                            playlist.add(mVideo);
+                            if (mCallback != null) {
+                                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_ADD_TO_QUEUE);
                             }
 
                             closeDialog();
                             MessageHelpers.showMessage(getContext(), String.format("%s: %s",
                                     mVideo.getAuthor(),
-                                    getContext().getString(containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue))
+                                    getContext().getString(R.string.added_to_playback_queue))
+                            );
+                        }));
+    }
+
+    private void appendRemoveFromPlaybackQueueButton() {
+        if (!mIsAddToPlaybackQueueButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
+
+        Playlist playlist = Playlist.instance();
+        // Toggle between add/remove while dialog is opened
+        //boolean containsVideo = playlist.containsAfterCurrent(mVideo);
+        boolean containsVideo = playlist.contains(mVideo);
+
+        if (!containsVideo) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.remove_from_playback_queue),
+                        optionItem -> {
+                            mVideo.fromQueue = false;
+                            playlist.remove(mVideo);
+                            if (mCallback != null) {
+                                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE);
+                            }
+
+                            closeDialog();
+                            MessageHelpers.showMessage(getContext(), String.format("%s: %s",
+                                    mVideo.getAuthor(),
+                                    getContext().getString(R.string.removed_from_playback_queue))
                             );
                         }));
     }
@@ -917,7 +949,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, new MenuAction(() -> { appendRemoveFromSubscriptionsButton(); appendRemoveFromNotificationsButton(); }, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, new MenuAction(this::appendMarkAsWatchedButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, new MenuAction(this::appendPlaylistOrderButton, true));
-        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, new MenuAction(this::appendAddToPlaybackQueueButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, new MenuAction(() -> { appendAddToPlaybackQueueButton(); appendRemoveFromPlaybackQueueButton(); }, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_NEXT, new MenuAction(this::appendPlayNextButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHOW_QUEUE, new MenuAction(this::appendShowPlaybackQueueButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, new MenuAction(this::appendOpenChannelButton, false));
