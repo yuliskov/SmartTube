@@ -34,11 +34,13 @@ public final class LimitedExtractorInput implements ExtractorInput {
 
     @Override
     public void readFully(byte[] buffer, int offset, int length) throws IOException, InterruptedException {
-        if (length > remaining) {
-            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
-        }
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
         input.readFully(buffer, offset, length);
         remaining -= length;
+        if (exceeded) {
+            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
+        }
     }
 
     @Override
@@ -47,15 +49,23 @@ public final class LimitedExtractorInput implements ExtractorInput {
             int offset,
             int length,
             boolean allowEndOfInput) throws IOException, InterruptedException {
-        length = (int) Math.min(length, remaining);
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
         boolean ok = input.readFully(buffer, offset, length, allowEndOfInput);
-        if (ok) remaining -= length;
+        remaining -= length;
+        if (exceeded) {
+            if (allowEndOfInput) {
+                ok = false;
+            } else {
+                throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
+            }
+        }
         return ok;
     }
 
     @Override
     public int skip(int length) throws IOException, InterruptedException {
-        int toSkip = (int) Math.min(length, remaining);
+        int toSkip = Math.min(length, remaining);
         int skipped = input.skip(toSkip);
         if (skipped > 0) remaining -= skipped;
         return skipped;
@@ -63,11 +73,13 @@ public final class LimitedExtractorInput implements ExtractorInput {
 
     @Override
     public void skipFully(int length) throws IOException, InterruptedException {
-        if (length > remaining) {
-            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
-        }
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
         input.skipFully(length);
         remaining -= length;
+        if (exceeded) {
+            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
+        }
     }
 
     @Override
@@ -89,17 +101,16 @@ public final class LimitedExtractorInput implements ExtractorInput {
     public boolean skipFully(
             int length,
             boolean allowEndOfInput) throws IOException, InterruptedException {
-
-        if (length > remaining) {
-            if (allowEndOfInput) {
-                return false;
-            }
-            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
-        }
-
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
         boolean ok = input.skipFully(length, allowEndOfInput);
-        if (ok) {
-            remaining -= length;
+        remaining -= length;
+        if (exceeded) {
+            if (allowEndOfInput) {
+                ok = false;
+            } else {
+                throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
+            }
         }
         return ok;
     }
@@ -110,15 +121,17 @@ public final class LimitedExtractorInput implements ExtractorInput {
             int offset,
             int length,
             boolean allowEndOfInput) throws IOException, InterruptedException {
-
-        if (length > remaining) {
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
+        boolean ok = input.peekFully(target, offset, length, allowEndOfInput);
+        if (exceeded) {
             if (allowEndOfInput) {
-                return false;
+                ok = false;
+            } else {
+                throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
             }
-            throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
         }
-
-        return input.peekFully(target, offset, length, allowEndOfInput);
+        return ok;
     }
 
     @Override
@@ -126,12 +139,12 @@ public final class LimitedExtractorInput implements ExtractorInput {
             byte[] target,
             int offset,
             int length) throws IOException, InterruptedException {
-
-        if (length > remaining) {
+        boolean exceeded = length > remaining;
+        length = Math.min(length, remaining);
+        input.peekFully(target, offset, length);
+        if (exceeded) {
             throw new EOFException("LimitedExtractorInput: chunk boundary exceeded");
         }
-
-        input.peekFully(target, offset, length);
     }
 
     @Override

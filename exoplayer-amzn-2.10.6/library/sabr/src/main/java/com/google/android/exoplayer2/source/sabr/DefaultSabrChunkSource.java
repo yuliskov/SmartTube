@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.TrackOutput;
+import com.google.android.exoplayer2.extractor.rawcc.RawCcExtractor;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ChunkExtractorWrapper;
@@ -24,13 +25,13 @@ import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
 import com.google.android.exoplayer2.source.sabr.manifest.RangedUri;
 import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
-import com.google.android.exoplayer2.source.sabr.parser.core.SabrExtractor;
+import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrFragmentedMp4Adapter;
+import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrMatroskaAdapter;
 import com.google.android.exoplayer2.source.sabr.parser.core.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
-import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -316,13 +317,13 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //    pendingIndexUri = selectedRepresentation.getIndexUri();
             //}
             //if (pendingInitializationUri != null || pendingIndexUri != null) {
-            if (pendingInitializationUri != null) {
-                // We have initialization and/or index requests to make.
-                out.chunk = newInitializationChunk(representationHolder, dataSource,
-                        trackSelection.getSelectedFormat(), trackSelection.getSelectionReason(),
-                        trackSelection.getSelectionData(), pendingInitializationUri, pendingIndexUri);
-                return;
-            }
+            //if (pendingInitializationUri != null) {
+            //    // We have initialization and/or index requests to make.
+            //    out.chunk = newInitializationChunk(representationHolder, dataSource,
+            //            trackSelection.getSelectedFormat(), trackSelection.getSelectionReason(),
+            //            trackSelection.getSelectionData(), pendingInitializationUri, pendingIndexUri);
+            //    return;
+            //}
         }
 
         long periodDurationUs = representationHolder.periodDurationUs;
@@ -543,8 +544,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             long firstSegmentNum,
             //int maxSegmentCount,
             long seekTimeUs) {
-        Representation representation = representationHolder.representation;
-
+        boolean isInit = nexChunkIdx == -1;
         FormatId formatId = formatSelector.getSelectedFormatId();
         int iTag = formatId != null ? formatId.getItag() : -1;
 
@@ -553,6 +553,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         }
 
         nexChunkIdx++;
+
+        Representation representation = representationHolder.representation;
 
         //long startTimeMs = sabrStream.getSegmentStartTimeMs(trackType);
         //long durationMs = sabrStream.getSegmentDurationMs(trackType);
@@ -575,7 +577,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
                 //sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
-                manifest.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
+                manifest.createVideoPlaybackAbrRequest(trackType, isInit).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,
@@ -936,7 +938,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 TrackOutput playerEmsgTrackOutput,
                 SabrStream sabrStream) {
             String containerMimeType = representation.format.containerMimeType;
-            if (mimeTypeIsRawText(containerMimeType)) {
+            if (containerMimeType == null || mimeTypeIsRawText(containerMimeType)) {
                 return null;
             }
 
@@ -956,7 +958,22 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //                    flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput);
             //}
 
-            Extractor extractor = new SabrExtractor(trackType, representation.format, sabrStream);
+            //Extractor extractor = new SabrExtractor(trackType, representation.format, sabrStream);
+
+            Extractor extractor;
+            if (MimeTypes.APPLICATION_RAWCC.equals(containerMimeType)) {
+                extractor = new RawCcExtractor(representation.format);
+            } else if (mimeTypeIsWebm(containerMimeType)) {
+                extractor = new SabrMatroskaAdapter(SabrMatroskaAdapter.FLAG_DISABLE_SEEK_FOR_CUES, sabrStream);
+            } else {
+                int flags = 0;
+                if (enableEventMessageTrack) {
+                    flags |= SabrFragmentedMp4Adapter.FLAG_ENABLE_EMSG_TRACK;
+                }
+                extractor =
+                        new SabrFragmentedMp4Adapter(
+                                flags, null, null, null, closedCaptionFormats, playerEmsgTrackOutput, sabrStream);
+            }
 
             // Prefer drmInitData obtained from the manifest over drmInitData obtained from the stream,
             // as per DASH IF Interoperability Recommendations V3.0, 7.5.3.
