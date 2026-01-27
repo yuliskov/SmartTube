@@ -738,9 +738,7 @@ public class VideoLoaderController extends BasePlayerController {
                 if (mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    getPlayer().setPositionMs(getPlayer().getDurationMs());
-                    getPlayer().setPlayWhenReady(false);
-                    getPlayer().showSuggestions(true);
+                    stopPlayback();
                 }
                 break;
             case PlayerConstants.PLAYBACK_MODE_LIST:
@@ -748,13 +746,24 @@ public class VideoLoaderController extends BasePlayerController {
                 if (video.hasNextPlaylist() || mPlaylist.getNext() != null) {
                     loadNext();
                 } else {
-                    restartPlaylistIfNeeded();
+                    //restartPlaylistIfNeeded();
+                    stopPlayback();
                 }
                 break;
             default:
                 Log.e(TAG, "Undetected repeat mode " + playbackMode);
                 break;
         }
+    }
+
+    private void stopPlayback() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        getPlayer().setPositionMs(getPlayer().getDurationMs());
+        getPlayer().setPlayWhenReady(false);
+        getPlayer().showSuggestions(true);
     }
 
     private void restartPlaylistIfNeeded() {
@@ -768,9 +777,7 @@ public class VideoLoaderController extends BasePlayerController {
             openVideoInt(group.get(0));
         } else {
             Log.e(TAG, "VideoGroup is null or empty. Can't restart playlist.");
-            getPlayer().setPositionMs(getPlayer().getDurationMs());
-            getPlayer().setPlayWhenReady(false);
-            getPlayer().showSuggestions(true);
+            stopPlayback();
         }
     }
 

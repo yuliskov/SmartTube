@@ -660,11 +660,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
 
-        List<Video> all = playlist.getAll();
-
-        if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
-            return;
-        }
+        //List<Video> all = playlist.getAll();
+        //
+        //if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
+        //    return;
+        //}
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
