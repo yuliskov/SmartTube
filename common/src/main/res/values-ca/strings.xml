@@ -503,4 +503,6 @@
   <string name="live_stream_fix_4k">Correcció de la reproducció en directe (4K)</string>
   <string name="header_trending">Tendència</string>
   <string name="hide_shorts_from_trending">Amaga els curts de la tendència</string>
+  <string name="disable_history">Desactiva l\'historial</string>
+  <string name="enable_history">Activeu l\'historial</string>
 </resources>
