@@ -77,7 +77,7 @@ android {
                 // Note, Android could soon start warning users when they run 32-bit apps
                 //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
                 include 'armeabi-v7a', 'x86', 'arm64-v8a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
-                universalApk false //generate an additional APK that contains all the ABIs
+                universalApk true //generate an additional APK that contains all the ABIs
             }
         }
     }
@@ -142,6 +142,7 @@ android {
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
             def arch = output.getFilter(com.android.build.OutputFile.ABI)
+            arch = arch != null ? arch : "universal"
 
             def newApkName = sprintf("%s_%s_%s_%s.apk", [project, flavor, version, arch])
 
@@ -155,6 +156,10 @@ android {
         //exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
         // Not working!
         // exclude '**/SearchOrbView.class'
+
+        // Remove unneeded arches from universal apk here because 'splits' cannot do this
+        exclude "lib/x86_64/**"
+        exclude "lib/armeabi/**"
     }
 
     lintOptions {

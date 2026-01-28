@@ -41,6 +41,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.app.models.AppInfo;
+import com.liskovsoft.youtubeapi.common.helpers.AppClient;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import org.chromium.net.ApiVersion;
@@ -381,7 +382,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendVideoInfoType() {
-        appendRow("Video info type", MediaServiceData.instance().getVideoInfoType());
+        int videoInfoType = MediaServiceData.instance().getVideoInfoType();
+        String infoName = videoInfoType != -1 && videoInfoType < AppClient.values().length ? AppClient.values()[videoInfoType].name() : "default";
+
+        appendRow("Video info type", infoName);
     }
 
     private void appendVideoInfoVersion() {

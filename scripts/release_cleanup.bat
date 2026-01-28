@@ -9,7 +9,7 @@ echo This could be helpful when you need to clean the repo after DMCA Notice.
 cd /d "%~dp0"
 
 REM Skip first 15 releases
-for /F "skip=230 tokens=*" %%a in ('hub release') do call :cleanupRelease %%a
+for /F "skip=300 tokens=*" %%a in ('hub release') do call :cleanupRelease %%a
 
 goto End
 
