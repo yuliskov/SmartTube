@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -395,7 +396,13 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void setPitch(float pitch) {
         if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+            float speed = pitch;
+            if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
+                speed = mPlayer.getPlaybackParameters().speed;
+            } else {
+                MessageHelpers.showMessage(mContext, "Enable Audio time stretching from settings to independently control the pitch");
+            }
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, pitch));
         }
     }
     
