@@ -9,7 +9,8 @@ echo This could be helpful when you need to clean the repo after DMCA Notice.
 cd /d "%~dp0"
 
 REM Skip first 15 releases
-for /F "skip=300 tokens=*" %%a in ('hub release') do call :cleanupRelease %%a
+REM https://github.com/yuliskov/SmartTube/releases?page=46
+for /F "skip=15 tokens=*" %%a in ('hub release') do call :cleanupRelease %%a
 
 goto End
 
@@ -25,7 +26,15 @@ goto End
         REM NOTE: don't add quotes around %%~nxf because there's a white space at the end.
         REM NOTE: Empty message == don't change release title
         REM Manual: https://hub.github.com/hub-release.1.html
-        for %%f in ("%%a") do hub release edit -a %%~nxf -m "" %TAG_NAME% 2>nul
+        REM for %%f in ("%%a") do hub release edit -a %%~nxf -m "" %TAG_NAME% 2>nul
+
+        for %%f in ("%%a") do (
+            hub release edit -a %%~nxf -m "" %TAG_NAME% 2>nul
+            if errorlevel 1 (
+                echo Rate limit hit. Sleeping for 5 minutes...
+                timeout /t 300 /nobreak >nul
+            )
+        )
     )
     
     :cleanupReleaseEnd  
