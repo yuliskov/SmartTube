@@ -482,7 +482,12 @@ public class SabrStream {
                 Log.d(TAG, "Found known part: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
                 break;
             } else {
-                Log.e(TAG, "Unknown part encountered: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
+                String msg = String.format("Unknown part encountered: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
+                if (part.partId > 100) {
+                    throw new IllegalStateException(msg);
+                }
+
+                Log.e(TAG, msg);
                 part.skip(); // an essential part to continue reading
             }
 

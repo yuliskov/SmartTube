@@ -270,19 +270,25 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             long advance = data.data.getPosition() - data.startPosition;
             int toRead = Math.min(data.contentLength - (int) advance, length);
-            result = data.data.read(buffer, offset, toRead);
-            if (result != C.RESULT_END_OF_INPUT) {
-                position += result;
+            int readResult = data.data.read(buffer, offset, toRead);
+            if (readResult != C.RESULT_END_OF_INPUT) {
+                position += readResult;
             }
 
-            if (result == C.RESULT_END_OF_INPUT || length <= data.contentLength || result < toRead) {
+            if (result == C.RESULT_END_OF_INPUT) {
+                result = readResult;
+            } else {
+                result += readResult;
+            }
+
+            if (readResult == C.RESULT_END_OF_INPUT || length <= data.contentLength || readResult < toRead) {
                 break;
             }
 
-            offset += result;
-            length -= result;
+            offset += readResult;
+            length -= readResult;
 
-            Log.e(TAG, "read continue: offset=%s, length=%s", offset, length);
+            Log.e(TAG, "Continue read: offset=%s, length=%s", offset, length);
         }
 
         return result;
@@ -308,7 +314,7 @@ public final class SabrExtractorInput implements ExtractorInput {
             offset += data.contentLength;
             length -= data.contentLength;
 
-            Log.e(TAG, "readFully continue: offset=%s, length=%s", offset, length);
+            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset, length);
         }
     }
 
@@ -336,7 +342,7 @@ public final class SabrExtractorInput implements ExtractorInput {
             offset += data.contentLength;
             length -= data.contentLength;
 
-            Log.e(TAG, "readFully continue: offset=%s, length=%s", offset, length);
+            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset, length);
         }
 
         return result;
@@ -354,18 +360,24 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             long advance = data.data.getPosition() - data.startPosition;
             int toRead = Math.min(data.contentLength - (int) advance, length);
-            result = data.data.skip(toRead);
-            if (result != C.RESULT_END_OF_INPUT) {
-                position += result;
+            int readResult = data.data.skip(toRead);
+            if (readResult != C.RESULT_END_OF_INPUT) {
+                position += readResult;
             }
 
-            if (result == C.RESULT_END_OF_INPUT || length <= data.contentLength || result < toRead) {
+            if (result == C.RESULT_END_OF_INPUT) {
+                result = readResult;
+            } else {
+                result += readResult;
+            }
+
+            if (readResult == C.RESULT_END_OF_INPUT || length <= data.contentLength || readResult < toRead) {
                 break;
             }
 
-            length -= result;
+            length -= readResult;
 
-            Log.e(TAG, "skip continue: length=%s", length);
+            Log.e(TAG, "Continue skip: length=%s", length);
         }
 
         return result;
@@ -390,7 +402,7 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             length -= data.contentLength;
 
-            Log.e(TAG, "skipFully continue: length=%s", length);
+            Log.e(TAG, "Continue skipFully: length=%s", length);
         }
     }
 
@@ -417,7 +429,7 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             length -= data.contentLength;
 
-            Log.e(TAG, "skipFully continue: length=%s, allowEndOfInput=%s", length, allowEndOfInput);
+            Log.e(TAG, "Continue skipFully: length=%s, allowEndOfInput=%s", length, allowEndOfInput);
         }
 
         return result;
