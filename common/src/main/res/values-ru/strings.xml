@@ -711,4 +711,5 @@
     <string name="once_a_day">Один раз в день</string>
     <string name="once_a_week">Один раз в неделю</string>
     <string name="once_a_month">Один раз в месяц</string>
+    <string name="action_debug_info">Отладочная информация</string>
 </resources>

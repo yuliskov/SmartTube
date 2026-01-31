@@ -721,4 +721,5 @@
     <string name="once_a_day">Once a day</string>
     <string name="once_a_week">Once a week</string>
     <string name="once_a_month">Once a month</string>
+    <string name="action_debug_info">Debug info</string>
 </resources>

@@ -709,4 +709,5 @@
     <string name="once_a_day">Один раз на день</string>
     <string name="once_a_week">Один раз на тиждень</string>
     <string name="once_a_month">Один раз на місяць</string>
+    <string name="action_debug_info">Налагоджувальна інформація</string>
 </resources>

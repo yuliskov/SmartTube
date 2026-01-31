@@ -721,4 +721,5 @@
     <string name="once_a_day">Günde bir kez</string>
     <string name="once_a_week">Haftada bir kez</string>
     <string name="once_a_month">Ayda bir kez</string>
+    <string name="action_debug_info">Hata ayıklama bilgileri</string>
 </resources>
