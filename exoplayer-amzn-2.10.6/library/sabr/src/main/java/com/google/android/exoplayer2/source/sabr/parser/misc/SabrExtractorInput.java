@@ -30,6 +30,12 @@ public final class SabrExtractorInput implements ExtractorInput {
     }
 
     public void dispose() {
+        if (data != null) {
+            if (getAdvance() != data.contentLength) {
+                throw new IllegalStateException("The SABR read isn't finished yet");
+            }
+        }
+
         input = null;
         data = null;
         position = C.POSITION_UNSET;
@@ -229,11 +235,14 @@ public final class SabrExtractorInput implements ExtractorInput {
     private void fetchData() {
         while (true) {
             if (data != null) {
-                long advance = data.data.getPosition() - data.startPosition;
-                if (advance < data.contentLength) {
+                long advance = getAdvance();
+                int length = data.contentLength;
+                if (advance < length) {
                     break;
-                } else {
+                } else if (advance == length) {
                     data = null;
+                } else {
+                    throw new IllegalStateException("Reading past the SABR part boundaries");
                 }
             }
 
@@ -268,8 +277,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             int readResult = data.data.read(buffer, offset, toRead);
             if (readResult != C.RESULT_END_OF_INPUT) {
                 position += readResult;
@@ -302,8 +310,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             data.data.readFully(buffer, offset, toRead);
             position += toRead;
 
@@ -328,8 +335,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             result = data.data.readFully(buffer, offset, toRead, allowEndOfInput);
             if (result) {
                 position += toRead;
@@ -358,8 +364,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             int readResult = data.data.skip(toRead);
             if (readResult != C.RESULT_END_OF_INPUT) {
                 position += readResult;
@@ -391,8 +396,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             data.data.skipFully(toRead);
             position += toRead;
 
@@ -416,8 +420,7 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            long advance = data.data.getPosition() - data.startPosition;
-            int toRead = Math.min(data.contentLength - (int) advance, length);
+            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
             result = data.data.skipFully(toRead, allowEndOfInput);
             if (result) {
                 position += toRead;
@@ -437,6 +440,10 @@ public final class SabrExtractorInput implements ExtractorInput {
 
     private long getPositionInt() {
         return position;
+    }
+
+    private long getAdvance() {
+        return data.data.getPosition() - data.startPosition;
     }
 
     // NOTE: The below methods not used!

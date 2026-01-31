@@ -12,11 +12,13 @@ import com.google.android.exoplayer2.extractor.mp4.Track;
 import com.google.android.exoplayer2.source.sabr.parser.core.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.misc.SabrExtractorInput;
 import com.google.android.exoplayer2.util.TimestampAdjuster;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.IOException;
 import java.util.List;
 
 public class SabrFragmentedMp4Adapter2 extends FragmentedMp4Extractor {
+    private static final String TAG = SabrFragmentedMp4Adapter2.class.getSimpleName();
     private final SabrExtractorInput extractorInput;
 
     public SabrFragmentedMp4Adapter2(SabrStream sabrStream) {
@@ -72,13 +74,16 @@ public class SabrFragmentedMp4Adapter2 extends FragmentedMp4Extractor {
     @Override
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
-        int result;
+        int result = RESULT_END_OF_INPUT;
 
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
         } finally {
-            extractorInput.dispose();
+            if (result != RESULT_CONTINUE) {
+                Log.e(TAG, "Mp4Adapter: disposing, result=%s", result);
+                extractorInput.dispose();
+            }
         }
 
         return result;

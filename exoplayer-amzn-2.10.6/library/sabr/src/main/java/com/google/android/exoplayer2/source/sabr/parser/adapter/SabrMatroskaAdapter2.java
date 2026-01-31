@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.extractor.PositionHolder;
 import com.google.android.exoplayer2.extractor.mkv.MatroskaExtractor;
 import com.google.android.exoplayer2.source.sabr.parser.core.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.misc.SabrExtractorInput;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.IOException;
 
@@ -24,13 +25,16 @@ public class SabrMatroskaAdapter2 extends MatroskaExtractor {
     @Override
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
-        int result;
+        int result = RESULT_END_OF_INPUT;
 
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
         } finally {
-            extractorInput.dispose();
+            if (result != RESULT_CONTINUE) {
+                Log.e(TAG, "MatroskaAdapter: disposing, result=%s", result);
+                extractorInput.dispose();
+            }
         }
 
         return result;
