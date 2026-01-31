@@ -292,15 +292,15 @@ public class AppDialogUtil {
                     isPresetSelection && preset.format.equals(selectedFormat)));
         }
 
-        FormatItem noVideo = ExoFormatItem.from(MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO), true);
-        result.add(0, UiOptionItem.from(
-                context.getString(R.string.video_disabled),
-                optionItem ->
-                        setFormat(noVideo, playerData, onFormatSelected),
-                isPresetSelection && Helpers.equals(noVideo, selectedFormat)));
+        //FormatItem noVideo = ExoFormatItem.from(MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO), true);
+        //result.add(0, UiOptionItem.from(
+        //        context.getString(R.string.video_disabled),
+        //        optionItem ->
+        //                setFormat(noVideo, playerData, onFormatSelected),
+        //        isPresetSelection && Helpers.equals(noVideo, selectedFormat)));
 
         result.add(0, UiOptionItem.from(
-                context.getString(R.string.video_preset_disabled),
+                context.getString(R.string.option_disabled),
                 optionItem -> setFormat(playerData.getDefaultVideoFormat(), playerData, onFormatSelected),
                 !isPresetSelection));
 
