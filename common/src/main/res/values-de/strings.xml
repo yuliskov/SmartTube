@@ -642,7 +642,7 @@
     <string name="play_next">Als Nächstes abspielen</string>
     <string name="hide_watched_from_subscriptions">Gesehene Videos in Abos ausblenden</string>
     <string name="hide_watched_from_notifications">Gesehene Videos in Benachrichtigungen ausblenden</string>
-    <string name="hide_unwanted_content">Inhalt ausblenden</string>
+    <string name="hide_unwanted_content">Inhalte ausblenden</string>
     <string name="hide_watched_from_home">Gesehene Videos in Start ausblenden</string>
     <string name="hide_watched_from_watch_later">Gesehene Videos in Wiedergabeliste Später ansehen ausblenden</string>
     <string name="remote_control_permission">Hintergrund-Fernsteuerung benötigt Overlay-Berechtigung</string>
