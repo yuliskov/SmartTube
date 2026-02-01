@@ -642,7 +642,7 @@
     <string name="play_next">Play next</string>
     <string name="hide_watched_from_subscriptions">Hide watched videos from Subscriptions</string>
     <string name="hide_watched_from_notifications">Hide watched videos from Notifications</string>
-    <string name="hide_unwanted_content">Hide videos</string>
+    <string name="hide_unwanted_content">Hide content</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
     <string name="hide_watched_from_watch_later">Hide watched videos from Watch later playlist</string>
     <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
