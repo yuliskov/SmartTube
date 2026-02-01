@@ -11,21 +11,14 @@ buildscript {
         // These docs use an open ended version so that our plugin
         // can be updated quickly in response to Android tooling updates
 
-        // The first letter of the flavor name must be in uppercase
-        def isCrashlyticsEnabled = new File("${projectDir}/google-services.json").exists() &&
-                (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
-                        getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))
+        // Check that you have the Google Services Gradle plugin v4.3.2 or later
+        // (if not, add it).
+        classpath 'com.google.gms:google-services:4.3.10'
 
-        if (isCrashlyticsEnabled) {
-            // Check that you have the Google Services Gradle plugin v4.3.2 or later
-            // (if not, add it).
-            classpath 'com.google.gms:google-services:4.3.10'
-
-            // Add the Crashlytics Gradle plugin.
-            // https://firebase.google.com/docs/crashlytics/get-started?platform=android
-            // https://firebase.google.com/docs/android/setup
-            classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
-        }
+        // Add the Crashlytics Gradle plugin.
+        // https://firebase.google.com/docs/crashlytics/get-started?platform=android
+        // https://firebase.google.com/docs/android/setup
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
     }
 }
 
@@ -38,11 +31,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 // The first letter of the flavor name must be in uppercase
-def isCrashlyticsEnabled = new File("${projectDir}/google-services.json").exists() &&
-        (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
-                getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))
-
-if (isCrashlyticsEnabled) {
+if (new File("${projectDir}/google-services.json").exists() && (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
+        getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
