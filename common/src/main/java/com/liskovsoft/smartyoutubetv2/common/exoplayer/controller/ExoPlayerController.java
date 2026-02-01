@@ -396,13 +396,12 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void setPitch(float pitch) {
         if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
-            float speed = pitch;
             if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
-                speed = mPlayer.getPlaybackParameters().speed;
+                mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
             } else {
                 MessageHelpers.showMessage(mContext, "Enable Audio time stretching from settings to independently control the pitch");
+                setSpeed(pitch);
             }
-            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, pitch));
         }
     }
     
