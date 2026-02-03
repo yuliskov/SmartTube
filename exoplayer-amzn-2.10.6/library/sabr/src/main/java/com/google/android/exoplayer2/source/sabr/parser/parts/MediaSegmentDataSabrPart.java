@@ -14,7 +14,6 @@ public class MediaSegmentDataSabrPart implements SabrPart {
     public final ExtractorInput data;
     public final int contentLength;
     public final int segmentStartBytes;
-    public final long startPosition;
 
     public MediaSegmentDataSabrPart(
             FormatSelector formatSelector,
@@ -35,7 +34,5 @@ public class MediaSegmentDataSabrPart implements SabrPart {
         this.data = data;
         this.contentLength = contentLength;
         this.segmentStartBytes = segmentStartBytes;
-
-        this.startPosition = data.getPosition();
     }
 }

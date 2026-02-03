@@ -15,6 +15,7 @@ public final class SabrExtractorInput implements ExtractorInput {
     private final SabrStream sabrStream;
     private ExtractorInput input;
     private long position;
+    private long startPosition;
     private int remaining;
     private MediaSegmentDataSabrPart data;
 
@@ -262,177 +263,172 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             if (sabrPart instanceof MediaSegmentDataSabrPart) {
                 data = (MediaSegmentDataSabrPart) sabrPart;
+                startPosition = position;
                 break;
             }
         }
     }
 
     private int readInt(byte[] buffer, int offset, int length) throws IOException, InterruptedException {
-        int result = C.RESULT_END_OF_INPUT;
+        int read = C.RESULT_END_OF_INPUT;
 
-        while (true) {
-            fetchData();
+        fetchData();
 
-            if (data == null) {
-                break;
-            }
-
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
-            int readResult = data.data.read(buffer, offset, toRead);
-            if (readResult != C.RESULT_END_OF_INPUT) {
-                position += readResult;
-            }
-
-            if (result == C.RESULT_END_OF_INPUT) {
-                result = readResult;
-            } else {
-                result += readResult;
-            }
-
-            if (readResult == C.RESULT_END_OF_INPUT || length <= data.contentLength || readResult < toRead) {
-                break;
-            }
-
-            offset += readResult;
-            length -= readResult;
-
-            Log.e(TAG, "Continue read: offset=%s, length=%s", offset, length);
+        if (data == null) {
+            return read;
         }
 
-        return result;
+        int toRead = Math.min(getRemaining(), length);
+        read = data.data.read(buffer, offset, toRead);
+
+        if (read > 0) {
+            position += read;
+        }
+
+        return read;
     }
 
     private void readFullyInt(byte[] buffer, int offset, int length) throws IOException, InterruptedException {
+        int total = 0;
+
         while (true) {
             fetchData();
 
             if (data == null) {
+                if (total > 0) {
+                    throwEOFException();
+                }
                 break;
             }
 
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
-            data.data.readFully(buffer, offset, toRead);
+            int toRead = Math.min(getRemaining(), length - total);
+            data.data.readFully(buffer, offset + total, toRead);
+
             position += toRead;
 
-            if (length <= data.contentLength) {
+            if (toRead == length - total) {
                 break;
             }
 
-            offset += data.contentLength;
-            length -= data.contentLength;
+            total += toRead;
 
-            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset, length);
+            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset + total, length - total);
         }
     }
 
     private boolean readFullyInt(byte[] buffer, int offset, int length, boolean allowEndOfInput) throws IOException, InterruptedException {
         boolean result = false;
+        int total = 0;
 
         while (true) {
             fetchData();
 
             if (data == null) {
+                if (total > 0) {
+                    throwEOFException();
+                }
+
                 break;
             }
 
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
-            result = data.data.readFully(buffer, offset, toRead, allowEndOfInput);
-            if (result) {
-                position += toRead;
+            int toRead = Math.min(getRemaining(), length - total);
+            result = data.data.readFully(buffer, offset + total, toRead, allowEndOfInput);
+
+            if (!result) {
+                throwEOFException();
             }
 
-            if (!result || length <= data.contentLength) {
+            position += toRead;
+
+            if (toRead == length - total) {
                 break;
             }
 
-            offset += data.contentLength;
-            length -= data.contentLength;
+            total += toRead;
 
-            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset, length);
+            Log.e(TAG, "Continue readFully: offset=%s, length=%s", offset + total, length - total);
         }
 
         return result;
     }
 
     private int skipInt(int length) throws IOException, InterruptedException {
-        int result = C.RESULT_END_OF_INPUT;
+        int skip = C.RESULT_END_OF_INPUT;
 
-        while (true) {
-            fetchData();
+        fetchData();
 
-            if (data == null) {
-                break;
-            }
-
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
-            int readResult = data.data.skip(toRead);
-            if (readResult != C.RESULT_END_OF_INPUT) {
-                position += readResult;
-            }
-
-            if (result == C.RESULT_END_OF_INPUT) {
-                result = readResult;
-            } else {
-                result += readResult;
-            }
-
-            if (readResult == C.RESULT_END_OF_INPUT || length <= data.contentLength || readResult < toRead) {
-                break;
-            }
-
-            length -= readResult;
-
-            Log.e(TAG, "Continue skip: length=%s", length);
+        if (data == null) {
+            return skip;
         }
 
-        return result;
+        int toRead = Math.min(getRemaining(), length);
+        skip = data.data.skip(toRead);
+
+        if (skip > 0) {
+            position += skip;
+        }
+
+        return skip;
     }
 
     private void skipFullyInt(int length) throws IOException, InterruptedException {
+        int total = 0;
+
         while (true) {
             fetchData();
 
             if (data == null) {
+                if (total > 0) {
+                    throwEOFException();
+                }
                 break;
             }
 
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
+            int toRead = Math.min(getRemaining(), length - total);
             data.data.skipFully(toRead);
+
             position += toRead;
 
-            if (length <= data.contentLength) {
+            if (toRead == length - total) {
                 break;
             }
 
-            length -= data.contentLength;
+            total += toRead;
 
-            Log.e(TAG, "Continue skipFully: length=%s", length);
+            Log.e(TAG, "Continue skipFully: length=%s", length - total);
         }
     }
 
     private boolean skipFullyInt(int length, boolean allowEndOfInput) throws IOException, InterruptedException {
         boolean result = false;
+        int total = 0;
 
         while (true) {
             fetchData();
 
             if (data == null) {
+                if (total > 0) {
+                    throwEOFException();
+                }
                 break;
             }
 
-            int toRead = Math.min(data.contentLength - (int) getAdvance(), length);
+            int toRead = Math.min(getRemaining(), length - total);
             result = data.data.skipFully(toRead, allowEndOfInput);
-            if (result) {
-                position += toRead;
+
+            if (!result) {
+                throwEOFException();
             }
 
-            if (!result || length <= data.contentLength) {
+            position += toRead;
+
+            if (toRead == length - total) {
                 break;
             }
 
-            length -= data.contentLength;
+            total += toRead;
 
-            Log.e(TAG, "Continue skipFully: length=%s, allowEndOfInput=%s", length, allowEndOfInput);
+            Log.e(TAG, "Continue skipFully: length=%s, allowEndOfInput=%s", length - total, allowEndOfInput);
         }
 
         return result;
@@ -442,8 +438,16 @@ public final class SabrExtractorInput implements ExtractorInput {
         return position;
     }
 
+    private int getRemaining() {
+        return data.contentLength - (int) getAdvance();
+    }
+
     private long getAdvance() {
-        return data.data.getPosition() - data.startPosition;
+        return position - startPosition;
+    }
+
+    private static void throwEOFException() throws EOFException {
+        throw new EOFException("EOF should never happened when reading SABR part");
     }
 
     // NOTE: The below methods not used!
