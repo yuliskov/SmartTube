@@ -384,16 +384,16 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            int toRead = Math.min(getRemaining(), length - total);
-            data.data.skipFully(toRead);
+            int toSkip = Math.min(getRemaining(), length - total);
+            data.data.skipFully(toSkip);
 
-            position += toRead;
+            position += toSkip;
 
-            if (toRead == length - total) {
+            if (toSkip == length - total) {
                 break;
             }
 
-            total += toRead;
+            total += toSkip;
 
             Log.e(TAG, "Continue skipFully: length=%s", length - total);
         }
@@ -413,20 +413,20 @@ public final class SabrExtractorInput implements ExtractorInput {
                 break;
             }
 
-            int toRead = Math.min(getRemaining(), length - total);
-            result = data.data.skipFully(toRead, allowEndOfInput);
+            int toSkip = Math.min(getRemaining(), length - total);
+            result = data.data.skipFully(toSkip, allowEndOfInput);
 
             if (!result) {
                 throwEOFException();
             }
 
-            position += toRead;
+            position += toSkip;
 
-            if (toRead == length - total) {
+            if (toSkip == length - total) {
                 break;
             }
 
-            total += toRead;
+            total += toSkip;
 
             Log.e(TAG, "Continue skipFully: length=%s, allowEndOfInput=%s", length - total, allowEndOfInput);
         }
