@@ -37,6 +37,7 @@ public final class SabrExtractorInput implements ExtractorInput {
             }
         }
 
+        startPosition = 0;
         input = null;
         data = null;
         position = C.POSITION_UNSET;
