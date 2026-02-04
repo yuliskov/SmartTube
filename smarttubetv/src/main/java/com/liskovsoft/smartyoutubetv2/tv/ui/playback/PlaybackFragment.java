@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -118,6 +120,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
     private String mSelectedVideoId;
+    private float mOriginalSpeed = 1.0f;
+    private boolean mIsPlayHoldSpeedActive = false;
+    private boolean mIsPlayButtonHeld = false;
+    private static final long HOLD_SPEED_DELAY_MS = 300; // Delay before activating 2x speed
+    private final Handler mHoldSpeedHandler = new Handler(Looper.getMainLooper());
+    private final Runnable mActivateHoldSpeedRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mIsPlayButtonHeld && !mIsPlayHoldSpeedActive) {
+                mOriginalSpeed = getSpeed();
+                Log.d(TAG, "Hold-to-speed: Activating 2x speed after hold, original speed=" + mOriginalSpeed);
+                setSpeed(2.0f);
+                mIsPlayHoldSpeedActive = true;
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -243,7 +261,38 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        // NOP
+        int keyCode = event.getKeyCode();
+        int action = event.getAction();
+        
+        // Log all key events for debugging
+        Log.d(TAG, "onDispatchKeyEvent: keyCode=" + keyCode + ", action=" + (action == KeyEvent.ACTION_DOWN ? "DOWN" : "UP") + ", repeat=" + event.getRepeatCount());
+        
+        // Handle hold-to-speed feature for play button
+        boolean isPlayButton = keyCode == KeyEvent.KEYCODE_MEDIA_PLAY 
+                || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+        
+        if (isPlayButton) {
+            if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+                // Button first pressed - start timer for hold detection
+                mIsPlayButtonHeld = true;
+                mHoldSpeedHandler.postDelayed(mActivateHoldSpeedRunnable, HOLD_SPEED_DELAY_MS);
+                Log.d(TAG, "Hold-to-speed: Button pressed, waiting " + HOLD_SPEED_DELAY_MS + "ms for hold");
+            } else if (action == KeyEvent.ACTION_UP) {
+                // Button released
+                mIsPlayButtonHeld = false;
+                mHoldSpeedHandler.removeCallbacks(mActivateHoldSpeedRunnable);
+                
+                if (mIsPlayHoldSpeedActive) {
+                    // Was holding - restore original speed
+                    Log.d(TAG, "Hold-to-speed: Restoring speed to " + mOriginalSpeed);
+                    setSpeed(mOriginalSpeed);
+                    mIsPlayHoldSpeedActive = false;
+                } else {
+                    // Was just a quick tap - do nothing (normal play/pause will happen)
+                    Log.d(TAG, "Hold-to-speed: Quick tap detected, no speed change");
+                }
+            }
+        }
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
