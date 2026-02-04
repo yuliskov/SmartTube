@@ -391,6 +391,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.setRemapFastForwardToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapFastForwardToSpeedEnabled()));
 
+        options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Toggle",
+                option -> mGeneralData.setRemapFastForwardToSpeedToggleEnabled(option.isSelected()),
+                mGeneralData.isRemapFastForwardToSpeedToggleEnabled()));
+
+        options.add(UiOptionItem.from("S -> Speed Toggle",
+                option -> mGeneralData.setRemapSToSpeedToggleEnabled(option.isSelected()),
+                mGeneralData.isRemapSToSpeedToggleEnabled()));
+
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
                 option -> mGeneralData.setRemapPageUpToNextEnabled(option.isSelected()),
                 mGeneralData.isRemapPageUpToNextEnabled()));
