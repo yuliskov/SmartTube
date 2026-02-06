@@ -1,3 +1,6 @@
+-keepclassmembers class com.bumptech.glide.load.resource.bitmap.VideoDecoder {
+    com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool bitmapPool;
+}
 -keepclassmembers class com.bumptech.glide.Glide {
     <init>(...);
     void registerRequestManager(com.bumptech.glide.RequestManager);
@@ -77,10 +80,10 @@
     boolean mIsTimeEnabled;
 }
 -keepclassmembers class com.liskovsoft.sharedutils.helpers.Helpers {
-    long sCachedRamSize;
     java.lang.String ARRAY_DELIM;
     java.lang.String DATA_DELIM;
     java.lang.String LEGACY_ARRAY_DELIM;
+    java.lang.Object findFirst(java.util.Collection, com.liskovsoft.sharedutils.helpers.Helpers$Filter);
 }
 -keepclassmembers class com.google.android.exoplayer2.PlaybackParameters {
     <init>(...);
