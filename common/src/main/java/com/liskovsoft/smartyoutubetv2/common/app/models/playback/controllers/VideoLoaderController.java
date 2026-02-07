@@ -133,7 +133,8 @@ public class VideoLoaderController extends BasePlayerController {
             getMainController().onPlayEnd();
         } else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
-            YouTubeServiceManager.instance().invalidateCache();
+            //YouTubeServiceManager.instance().invalidateCache();
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
             // Faster source is different among devices. Try them one by one.
             switchNextEngine();
             restartEngine();

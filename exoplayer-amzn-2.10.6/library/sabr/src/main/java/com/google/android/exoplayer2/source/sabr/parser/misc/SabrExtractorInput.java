@@ -25,9 +25,18 @@ public final class SabrExtractorInput implements ExtractorInput {
 
     /** Should be called before passing the extractor to a handler */
     public void init(ExtractorInput input) {
+        if (this.input == input) {
+            return;
+        }
+
+        if (this.input != null) {
+            throw new IllegalStateException("The input should be disposed before initializing");
+        }
+
         this.input = input;
-        this.position = input.getPosition();
-        this.remaining = C.LENGTH_UNSET;
+        position = input.getPosition();
+        startPosition = position;
+        remaining = C.LENGTH_UNSET;
     }
 
     public void dispose() {
