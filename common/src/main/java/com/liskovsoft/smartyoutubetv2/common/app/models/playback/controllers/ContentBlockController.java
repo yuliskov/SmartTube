@@ -34,9 +34,11 @@ public class ContentBlockController extends BasePlayerController {
     private static final String TAG = ContentBlockController.class.getSimpleName();
     private static final long POLL_INTERVAL_MS = 1_000;
     private static final int CONTENT_BLOCK_ID = 144;
+    private static final int UPCOMING_TIME_MS = 5_000;
     private MediaItemService mMediaItemService;
     private List<SponsorSegment> mOriginalSegments;
     private List<SponsorSegment> mActiveSegments;
+    private List<SponsorSegment> mUpcomingSegmentsAnnounced;
     private long mLastSkipPosMs;
     private boolean mSkipExclude;
     private Disposable mSegmentsAction;
@@ -157,7 +159,7 @@ public class ContentBlockController extends BasePlayerController {
 
     private void updateSponsorSegmentsAndWatch(Video item) {
         if (item == null || item.videoId == null || item.isLive || getContentBlockData().getEnabledCategories().isEmpty()) {
-            mActiveSegments = mOriginalSegments = null;
+            mActiveSegments = mOriginalSegments = mUpcomingSegmentsAnnounced = null;
             mCachedSegmentsAction = null;
             return;
         }
@@ -180,13 +182,14 @@ public class ContentBlockController extends BasePlayerController {
 
     private Observable<Long> startSponsorWatcher(List<SponsorSegment> segments) {
         if (segments == null || segments.isEmpty()) {
-            mActiveSegments = mOriginalSegments = null;
+            mActiveSegments = mOriginalSegments = mUpcomingSegmentsAnnounced = null;
             return Observable.empty();
         }
 
         mOriginalSegments = segments;
 
         mActiveSegments = new ArrayList<>(segments);
+        mUpcomingSegmentsAnnounced = new ArrayList<>();
 
         if (getContentBlockData().isColorMarkersEnabled()) {
             getPlayer().setSeekBarSegments(toSeekBarSegments(segments));
@@ -226,6 +229,17 @@ public class ContentBlockController extends BasePlayerController {
         List<SponsorSegment> foundSegments = findMatchedSegments(positionMs, mActiveSegments, false);
 
         applyActions(foundSegments);
+
+        // Announce upcoming segments for sponsorings and self promos
+        // only within the next 5 seconds to show a message like "Sponsor segment in 5 seconds..."
+        SponsorSegment upcomingSegment = findUpcomingSponsorSegment(positionMs, UPCOMING_TIME_MS, mActiveSegments);
+
+        if (upcomingSegment != null && !mUpcomingSegmentsAnnounced.contains(upcomingSegment)) {
+            Integer resId = getContentBlockData().getLocalizedRes(upcomingSegment.getCategory());
+            String message = getContext().getString(resId) + " in " + UPCOMING_TIME_MS / 1000 + " seconds..."; // TODO: localize, do proper time formatting based on language etc.
+            MessageHelpers.showMessage(getContext(), message);
+            mUpcomingSegmentsAnnounced.add(upcomingSegment);
+        }
 
         // Skip each segment only once
         if (foundSegments != null && getContentBlockData().isDontSkipSegmentAgainEnabled()) {
@@ -366,6 +380,38 @@ public class ContentBlockController extends BasePlayerController {
         }
 
         return foundSegment;
+    }
+
+    /**
+     * Returns the upcoming sponsor segment within the specified time window.
+     * @param upcomingTimeMs Time window in milliseconds to look ahead for upcoming segments
+     */
+    private SponsorSegment findUpcomingSponsorSegment(long positionMs, long upcomingTimeMs, List<SponsorSegment> segments) {
+        if (segments == null) {
+            return null;
+        }
+
+        for (int i = 0; i < segments.size(); i++) {
+            SponsorSegment segment = segments.get(i);
+
+            // Only sponsor and self promo segments are considered for upcoming message
+            if (!segment.getCategory().equals(SponsorSegment.CATEGORY_SPONSOR) &&
+                    !segment.getCategory().equals(SponsorSegment.CATEGORY_SELF_PROMO)) {
+                continue;
+            }
+
+            int action = getContentBlockData().getAction(segment.getCategory());
+
+            boolean isSkipAction = action == ContentBlockData.ACTION_SKIP_ONLY ||
+                    action == ContentBlockData.ACTION_SKIP_WITH_TOAST;
+
+            if (isSkipAction && segment.getStartMs() > positionMs &&
+                    segment.getStartMs() - positionMs <= upcomingTimeMs) {
+                return segment;
+            }
+        }
+
+        return null;
     }
 
     private void applyActions(List<SponsorSegment> foundSegments) {
