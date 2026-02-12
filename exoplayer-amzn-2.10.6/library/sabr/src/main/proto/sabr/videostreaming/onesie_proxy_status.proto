@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+enum OnesieProxyStatus {
+  UNKNOWN = 0;
+  OK = 1;
+  DECRYPTION_FAILED = 2;
+  PARSING_FAILED = 3;
+  MISSING_X_FORWARDED_FOR = 4;
+  INVALID_X_FORWARDED_FOR = 5;
+  INVALID_CONTENT_TYPE = 6;
+  BACKEND_ERROR = 7;
+  CLIENT_ERROR = 8;
+  MISSING_CRYPTER = 9;
+  RESPONSE_JSON_SERIALIZATION_FAILED = 10;
+  DECOMPRESSION_FAILED = 11;
+  JSON_PARSING_FAILED = 12;
+  UNKNOWN_COMPRESSION_TYPE = 13;
+}

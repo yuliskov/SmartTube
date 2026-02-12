@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feedback">
+        <item>Telegram|https://t.me/SmartTubeEN</item>
+        <item>Discord|https://discord.gg/Wt8HDDej5z</item>
+        <!--<item>Email|firsthash@gmail.com</item>-->
+    </string-array>
+</resources>

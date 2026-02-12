@@ -1,0 +1,5 @@
+<resources>
+    <string name="header_subscriptions">Suscripciones</string>
+    <string name="header_history">Historial</string>
+    <string name="recommended">Recomendados</string>
+</resources>

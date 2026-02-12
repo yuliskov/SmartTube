@@ -1,0 +1,37 @@
+WEBVTT
+
+STYLE
+::cue {
+  background-color: green;
+  color: papayawhip;
+}
+/* Style blocks cannot use blank lines nor "dash dash greater than" */
+
+NOTE comment blocks can be used between style blocks.
+
+STYLE
+::cue(#id2) {
+  color: peachpuff;
+}
+::cue(v[voice="LaGord"]) { background-color: lime }
+
+STYLE
+::cue(v[voice="The Frog"]) { font-weight: bold }
+
+STYLE
+::cue(v){text-decoration:underline}
+
+id1
+00:00.000 --> 00:01.234
+This is the first subtitle.
+
+id2
+00:02.345 --> 00:03.456
+This is the second subtitle.
+
+00:20.000 --> 00:21.000
+This is a <v.clazz Mary>reference by element</v>
+
+00:25.000 --> 00:28.000
+<v  LaGord>You are an idiot</v>
+<v  The Frog>You don't have the guts</v>

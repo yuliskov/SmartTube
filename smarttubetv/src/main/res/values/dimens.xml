@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default, same as xhdpi -->
+    <!-- 320dpi, Amazon Fire TV Stick -->
+
+    <dimen name="card_width">200dp</dimen>
+    <dimen name="card_height">110dp</dimen>
+
+    <dimen name="shorts_card_width">120dp</dimen>
+    <dimen name="shorts_card_height">200dp</dimen>
+
+    <dimen name="tiny_card_width">150dp</dimen>
+    <dimen name="tiny_card_height">25dp</dimen>
+
+    <dimen name="channel_card_width">200dp</dimen>
+    <dimen name="channel_card_height">30dp</dimen>
+    <dimen name="channel_card_text_width">140dp</dimen>
+
+    <dimen name="settings_image_size">70dp</dimen>
+    <!-- Old value: 15dp -->
+    <dimen name="settings_image_padding">25dp</dimen>
+    <!-- Old value: 100dp -->
+    <dimen name="settings_card_width">128dp</dimen>
+    <dimen name="settings_card_height">100dp</dimen>
+
+    <dimen name="pip_title_max_width">370dp</dimen>
+    <dimen name="pip_title_size">24sp</dimen>
+    <dimen name="pip_title_date_size">12sp</dimen>
+    <dimen name="browse_global_time_size">30sp</dimen>
+
+    <!-- Card view default size -->
+    <!--
+    <dimen name="lb_basic_card_title_text_size">14sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    -->
+
+    <!-- Search items left margin (except first one). Original value: 70dp -->
+    <!-- Problems here: external search dialog won't overlap correctly -->
+    <!--<dimen name="lb_search_bar_items_margin_start">20dp</dimen>-->
+
+    <!-- Margin for items from the right side of search field. -->
+    <dimen name="search_bar_right_items_margin">20dp</dimen>
+
+    <!-- Margin for items from the right side of search field. -->
+    <dimen name="search_bar_global_time_margin">120dp</dimen>
+
+    <!-- Decrease Browse fragment content top padding. -->
+    <!-- Old value: 167dp -->
+    <dimen name="lb_browse_rows_margin_top">130dp</dimen>
+
+    <!-- Increase this value to hide left strip from Browse fragment (when headers collapsed) -->
+    <!-- Old value: 238dp -->
+    <dimen name="lb_browse_rows_margin_start">265dp</dimen>
+
+    <!-- Make search bar more compact so more buttons could be added after it. -->
+    <dimen name="lb_search_bar_items_width">600dp</dimen>
+
+    <!-- Increase player time text size -->
+    <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
+
+    <!-- Multiline description in the player -->
+    <integer name="lb_details_description_subtitle_max_lines">2</integer>
+    <integer name="lb_details_description_title_max_lines">2</integer>
+
+    <!-- App Dialog title tweaks -->
+    <dimen name="lb_preference_decor_title_margin_top">10dp</dimen>
+    <dimen name="lb_preference_decor_title_margin_bottom">10dp</dimen>
+    <dimen name="lb_preference_decor_title_margin_end">24dp</dimen>
+
+    <!-- Make in-app logo smaller -->
+    <dimen name="lb_browse_title_icon_height">50dp</dimen>
+    <dimen name="lb_browse_title_height">50dp</dimen>
+
+    <!--
+    Making my card's corner rounded. More info:
+    https://stackoverflow.com/questions/42623677/android-tv-verticalgridfragment-shadow-dimension-and-color
+    https://developer.android.com/reference/androidx/leanback/widget/ShadowOverlayHelper
+    https://developer.android.com/reference/kotlin/androidx/leanback/widget/ListRowPresenter#arechildroundedcornersenabled
+    You can also override ShadowOverlayHelper.Options createShadowOverlayOptions() in
+    ListRowPresenter which gives you some ability to change corner radius and focused and unfocused z.
+    -->
+    <!--<dimen name="lb_rounded_rect_corner_radius">5dp</dimen>-->
+
+    <!--
+    Space between cards. Origin: 8dp More info:
+    https://stackoverflow.com/questions/32402209/set-margins-between-items-on-browsefragment
+    -->
+    <!--<dimen name="lb_browse_item_horizontal_spacing">15dp</dimen>-->
+    <!--<dimen name="lb_browse_item_vertical_spacing">15dp</dimen>-->
+    <dimen name="grid_item_horizontal_spacing">15dp</dimen>
+    <dimen name="grid_item_vertical_spacing">15dp</dimen>
+    <dimen name="grid_horizontal_margin">25dp</dimen>
+
+    <!-- Browse headers spacing. Origin: 21dp -->
+    <!--<dimen name="lb_browse_headers_vertical_spacing">10dp</dimen>-->
+    <dimen name="browse_headers_vertical_spacing">10dp</dimen>
+
+    <!-- Vine card widget values -->
+    <dimen name="lb_basic_card_main_width">140dp</dimen>
+    <dimen name="lb_basic_card_main_height">188dp</dimen>
+    <dimen name="lb_basic_card_info_height">52dp</dimen>
+    <dimen name="lb_basic_card_info_padding">6dp</dimen>
+    <dimen name="lb_basic_card_info_text_margin">2dp</dimen>
+    <dimen name="lb_basic_card_title_text_size">16sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    <dimen name="lb_basic_card_info_badge_size">16dp</dimen>
+
+    <!-- Elements below aren't used in the app -->
+    <dimen name="spinner_width">50dp</dimen>
+    <dimen name="spinner_height">50dp</dimen>
+    <dimen name="detail_thumb_width">274dp</dimen>
+    <dimen name="detail_thumb_height">274dp</dimen>
+    <dimen name="playback_overlay_width">240dp</dimen>
+    <dimen name="playback_overlay_height">240dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Tooltip mod: extracted private values -->
+    <dimen name="tooltip_corner_radius_mod">20dp</dimen>
+    <dimen name="tooltip_horizontal_padding_mod">16dp</dimen>
+    <dimen name="tooltip_margin_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_extra_offset_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_threshold_mod">96dp</dimen>
+    <dimen name="tooltip_vertical_padding_mod">6.5dp</dimen>
+    <dimen name="tooltip_y_offset_non_touch_mod">0dp</dimen>
+    <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
+</resources>

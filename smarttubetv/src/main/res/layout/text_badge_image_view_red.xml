@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/main_image"
+        tools:ignore="ContentDescription"
+        style="?attr/imageCardViewImageStyle"/>
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/preview_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+                    android:id="@+id/clip_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical"
+                    tools:ignore="RtlHardcoded" >
+        <TextView android:visibility="invisible"
+                  android:id="@+id/extra_text_badge"
+                  android:layout_marginEnd="@dimen/lb_basic_card_info_badge_margin"
+                  android:background="@color/black"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:maxLines="1"
+                  android:ellipsize="end"
+                  android:includeFontPadding="false"
+                  android:layout_gravity="end"
+                  android:paddingStart="@dimen/lb_details_description_title_padding_adjust_bottom"
+                  android:paddingEnd="@dimen/lb_details_description_title_padding_adjust_bottom"
+                  style="@style/TextAppearance.Leanback.ImageCardView.Content" />
+        <ProgressBar
+            android:id="@+id/clip_progress"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lb_basic_card_info_badge_margin"
+            android:max="100"
+            android:progress="45"
+            style="@style/ProgressBarHorizontal.Dark"/>
+    </LinearLayout>
+</merge>

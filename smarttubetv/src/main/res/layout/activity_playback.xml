@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextureView
+        android:id="@+id/texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <fragment
+        android:id="@+id/playback_controls_fragment"
+        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackFragment"
+        android:tag="@string/playback_tag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</merge>

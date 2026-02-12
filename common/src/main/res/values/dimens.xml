@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="exo_media_button_height">60dp</dimen>
+    <dimen name="exo_media_button_width">60dp</dimen>
+    <dimen name="exo_media_button_margin">8dp</dimen>
+    <dimen name="exo_media_button_padding">4dp</dimen>
+    <dimen name="player_main_padding">50dp</dimen>
+    <dimen name="player_second_padding">25dp</dimen>
+    <dimen name="player_top_bar_text_size">20sp</dimen>
+    <dimen name="player_top_bar_text_size2">14sp</dimen>
+    <dimen name="player_time_bar_height">4dp</dimen>
+    <dimen name="player_time_bar_text_size">14sp</dimen>
+    <dimen name="player_time_bar_scrubber_size">12dp</dimen>
+    <dimen name="player_time_bar_scrubber_dragged_size">16dp</dimen>
+    <dimen name="progress_bar_size">70dp</dimen>
+    <dimen name="debug_text_size">12sp</dimen>
+    <dimen name="player_suggestions_height">50dp</dimen>
+    <dimen name="subtitle_text_size">30sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+</resources>

@@ -1,0 +1,42 @@
+// Copyright (C) 2016 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.novoda:bintray-release:0.9.1'
+        classpath 'com.google.android.gms:strict-version-matcher-plugin:1.2.0'
+    }
+}
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+    project.ext {
+        exoplayerPublishEnabled = false
+    }
+    if (it.hasProperty('externalBuildDir')) {
+        if (!new File(externalBuildDir).isAbsolute()) {
+            externalBuildDir = new File(rootDir, externalBuildDir)
+        }
+        buildDir = "${externalBuildDir}/${project.name}"
+    }
+    group = 'com.google.android.exoplayer'
+}
+
+apply from: 'javadoc_combined.gradle'

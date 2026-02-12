@@ -1,0 +1,88 @@
+name: Bug Report
+description: Create a bug report to help us improve
+title: "[BUG]: "
+labels: [bug]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping to make SmartTube better by reporting a bug.
+
+        Please fill in as much information as possible about your bug.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "I made sure that there are *no existing issues* - [open](https://github.com/yuliskov/SmartTube/issues) or [closed](https://github.com/yuliskov/SmartTube/issues?q=is%3Aissue+is%3Aclosed) - which I could contribute my information to."
+          required: true
+        - label: "I have read the [FAQ](https://github.com/yuliskov/SmartTube#faq) and my problem isn't listed."
+          required: true
+        - label: "I have taken the time to fill in all the required details. I understand that the bug report will be dismissed otherwise."
+          required: true
+        - label: "This issue contains only one bug."
+          required: true
+
+  - type: input
+    id: app-version
+    attributes:
+     label: Affected version
+     description: "In which SmartTube version did you encounter the bug?"
+     placeholder: "x.xx.x - Can be seen in the app from the 'About' section in Settings"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: Device Type
+      description: Is it Smart TV/Box or Phone
+      options:
+        - "Smart TV/Box"
+        - "Phone/Tablet"
+    validations:
+      required: true
+
+  - type: input
+    id: device-os-info
+    attributes:
+     label: Affected Android
+     description: |
+      With what operating system (+ version) did you encounter the bug?
+     placeholder: "Example: Android TV 10"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce the bug
+      description: |
+        What did you do for the bug to show up?
+
+        If you can't cause the bug to show up again reliably (and hence don't have a proper set of steps to give us), please still try to give as many details as possible on how you think you encountered the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Press on '....'
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description: |
+        Tell us what happens with the steps given above.
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional information
+      description: |
+        Any other information you'd like to include, for instance that
+        * Device (NVIDIA Shield, Xiaomi Mi Box, etc)
+        * screenshot
+        * your cat disabled your network connection
+        * ...

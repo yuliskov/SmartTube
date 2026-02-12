@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+import "sabr/misc/common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message CryptoParams {
+  optional bytes hmac = 4;
+  optional bytes iv = 5;
+  optional sabr.misc.CompressionType compression_type = 6;
+}

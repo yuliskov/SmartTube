@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2015 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<!-- Library: androidx:leanback:leanback-preference:1.0.0 -->
+<!-- MOD: make dialog title multiline -->
+<!-- MOD: only has effect on root dialog -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lb_preference_decor_list_background"
+    android:orientation="vertical"
+    android:transitionGroup="false"
+    >
+
+    <FrameLayout
+        android:id="@+id/decor_title_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/defaultBrandColor"
+        android:elevation="@dimen/lb_preference_decor_title_container_elevation"
+        android:transitionGroup="false"
+        >
+        <TextView
+            android:id="@+id/decor_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lb_preference_decor_title_text_height"
+            android:layout_marginTop="@dimen/lb_preference_decor_title_margin_top"
+            android:layout_marginBottom="@dimen/lb_preference_decor_title_margin_bottom"
+            android:layout_marginStart="@dimen/lb_preference_decor_title_margin_start"
+            android:layout_marginEnd="@dimen/lb_preference_decor_title_margin_end"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/lb_preference_decor_title_text_size"
+            android:textColor="?android:attr/textColorPrimary"
+
+            android:singleLine="false"
+            android:maxLines="2"
+            android:ellipsize="end"
+            />
+    </FrameLayout>
+
+</LinearLayout>

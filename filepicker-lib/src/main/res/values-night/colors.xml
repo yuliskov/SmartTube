@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default Colors -->
+    <color name="textColorPrimary">#FFFFFFFF</color>
+    <color name="colorControlHighlight">#33ffffff</color>
+
+    <color name="empty_directory_hint">#c7c7c7</color>
+
+    <color name="compatibility_pressed_color">#1a000000</color>
+    <color name="compatibility_focus_color">#48000000</color>
+    <color name="transparent">#00000000</color>
+
+</resources>

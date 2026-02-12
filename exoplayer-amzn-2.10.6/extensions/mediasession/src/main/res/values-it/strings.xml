@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Non ripetere nulla</string>
+  <string name="exo_media_action_repeat_one_description">Ripeti uno</string>
+  <string name="exo_media_action_repeat_all_description">Ripeti tutto</string>
+</resources>

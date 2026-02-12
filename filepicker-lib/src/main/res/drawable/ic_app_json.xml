@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="16.933"
+    android:viewportHeight="16.933">
+    <path
+        android:fillColor="#fbc02d"
+        android:fillType="evenOdd"
+        android:pathData="m3.4395,1.0583c-0.7329,0 -1.3229,0.59 -1.3229,1.3229v12.171c0,0.7328 0.59,1.3229 1.3229,1.3229h10.054c0.7329,0 1.3229,-0.59 1.3229,-1.3229V4.2332L11.6415,1.0585Z"
+        android:strokeWidth="0.99998" />
+    <path
+        android:fillAlpha="0.35"
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:pathData="M14.816,4.2331 L11.6411,1.0582v1.852c0,0.7329 0.59,1.3229 1.3229,1.3229z"
+        android:strokeAlpha="0.35" />
+    <path
+        android:fillAlpha="0.1"
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd"
+        android:pathData="m11.641,2.9104v0.1545c0,0.794 0.59,1.433 1.3229,1.433h1.852l0.0001,-0.2646 -1.8522,0c-0.7329,0 -1.3229,-0.59 -1.3229,-1.3229z"
+        android:strokeWidth="1.0408"
+        android:strokeAlpha="0.1" />
+    <path
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:pathData="m8.4665,5.1593c-1.7832,0 -3.3072,1.4074 -3.3072,3.3072 0,1.6536 1.1011,2.8948 2.2785,3.3072 -0.783,-0.5704 -1.5012,-1.6536 -1.5012,-2.8928 0,-1.43 0.9735,-2.4825 2.1051,-2.4825 1.0573,0 1.7832,1.071 1.787,2.068 0,0.6996 -0.541,1.2761 -0.9735,1.6536 0.7792,0 1.7508,-0.6852 1.7508,-2.066C10.6059,6.8129 9.6343,5.1593 8.4665,5.1593ZM8.4665,5.1593" />
+    <path
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:pathData="m8.4665,11.7737c1.7832,0 3.3072,-1.4074 3.3072,-3.3072 0,-1.6536 -1.1011,-2.8948 -2.2785,-3.3072 0.783,0.5704 1.5012,1.6536 1.5012,2.8948 0,1.4279 -0.9735,2.4784 -2.1051,2.4784 -1.0573,0 -1.7832,-1.0689 -1.787,-2.066 0,-0.6996 0.541,-1.2761 0.9735,-1.6536 -0.7792,0 -1.7508,0.6852 -1.7508,2.066 0,1.2412 0.9716,2.8948 2.1394,2.8948zM8.4665,11.7737" />
+</vector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Καμία επανάληψη</string>
+  <string name="exo_media_action_repeat_one_description">Επανάληψη ενός κομματιού</string>
+  <string name="exo_media_action_repeat_all_description">Επανάληψη όλων</string>
+</resources>

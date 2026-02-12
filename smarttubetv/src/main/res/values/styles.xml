@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <attr name="brandColor" format="reference"/>
+    <attr name="brandAccentColor" format="reference"/>
+    <attr name="shelfBackground" format="reference"/>
+    <attr name="cardDefaultBackground" format="reference"/>
+    <attr name="cardSelectedBackground" format="reference"/>
+    <attr name="cardProgressStyle" format="reference"/>
+    <attr name="appLogo" format="reference"/>
+
+    <!-- Increase spacing between items in GridView -->
+    <style name="GridViewStyle" parent="Widget.Leanback.GridItems.VerticalGridView">
+        <item name="android:horizontalSpacing">@dimen/grid_item_horizontal_spacing</item>
+        <item name="android:verticalSpacing">@dimen/grid_item_vertical_spacing</item>
+    </style>
+
+    <!-- Increase spacing between items in RowView -->
+    <style name="RowViewStyle" parent="Widget.Leanback.Row.HorizontalGridView">
+        <item name="android:horizontalSpacing">@dimen/grid_item_horizontal_spacing</item>
+    </style>
+
+    <!-- Decrease header spacing in BrowseView -->
+    <style name="BrowseHeaderStyle" parent="Widget.Leanback.Headers.VerticalGridView">
+        <item name="android:verticalSpacing">@dimen/browse_headers_vertical_spacing</item>
+    </style>
+
+    <!-- Color scheme: Teal (Default) -->
+    <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
+        <!-- <item name="android:windowBackground">@null</item> -->
+        <!-- NOTE: don't use transparency because the BackgroundManager won't work (BackgroundManager:778) -->
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="cardSelectedBackground">@color/card_selected_background_white</item>
+        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
+        <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
+        <!-- Fix 'screen off' mode on some devices? -->
+        <item tools:targetApi="18" name="android:windowOverscan">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/shelf_background_dark</item>
+        <item name="brandColor">@color/fastlane_background_dark</item>
+        <item name="brandAccentColor">@color/fastlane_background</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="cardSelectedBackground">@color/card_selected_background_white</item>
+        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="appLogo">@mipmap/app_logo</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
+        <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
+        <item name="headersVerticalGridStyle">@style/BrowseHeaderStyle</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
+        <!-- Fix 'screen off' mode on some devices? -->
+        <item tools:targetApi="18" name="android:windowOverscan">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
+        <item name="android:windowBackground">@color/shelf_background_dark</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
+    </style>
+    <!-- AppDialogFragment style -->
+    <style name="App.Theme.Leanback.Preferences.Base" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- AppDialogFragment background dimming -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
+    </style>
+    <!-- Give ability to override style for different api -->
+    <style name="App.Theme.Leanback.Preferences" parent="App.Theme.Leanback.Preferences.Base" />
+    <!-- End Color scheme: Teal (Default) -->
+
+    <!--  Color scheme: Dark Grey  -->
+    <style name="App.Theme.DarkGrey.Player" parent="App.Theme.Leanback.Player">
+        <item name="playbackProgressPrimaryColor">@color/red</item>
+        <item name="playbackProgressSecondaryColor">@color/light_red</item>
+        <item name="playbackControlsIconHighlightColor">@color/red</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Dark</item>
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
+    </style>
+    <style name="App.Theme.DarkGrey.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_grey_background_dark</item>
+        <item name="brandAccentColor">@color/semi_red</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Dark</item>
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
+        <item name="appLogo">@mipmap/app_logo_semi_red</item>
+    </style>
+    <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
+    </style>
+    <style name="App.Theme.DarkGrey.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_grey_background</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
+    </style>
+    <style name="App.Theme.DarkGrey.GuidedStep" parent="App.Theme.Leanback.GuidedStep">
+        <item name="android:windowBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+    </style>
+    <!--  End Color scheme: Dark Grey  -->
+
+    <!--  Color scheme: Red -->
+    <style name="App.Theme.Red.Player" parent="App.Theme.Leanback.Player">
+        <item name="playbackProgressPrimaryColor">@color/semi_red</item>
+        <item name="playbackProgressSecondaryColor">@color/light_red</item>
+        <item name="playbackControlsIconHighlightColor">@color/semi_red</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_red_card_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
+    </style>
+    <style name="App.Theme.Red.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_red_background_dark</item>
+        <item name="brandAccentColor">@color/semi_red</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_red_card_background_dark</item>
+        <item name="appLogo">@mipmap/app_logo_semi_red</item>
+    </style>
+    <style name="App.Theme.Red.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_red_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
+    </style>
+    <style name="App.Theme.Red.GuidedStep" parent="App.Theme.Leanback.GuidedStep">
+        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+    </style>
+    <style name="ProgressBarHorizontal.Red" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_semi_red</item>
+    </style>
+    <!--  End Color scheme: Red -->
+
+    <!--  Color scheme: Dark Grey (OLED)  -->
+    <style name="App.Theme.DarkGrey.OLED.Browse" parent="App.Theme.DarkGrey.Browse">
+        <item name="brandAccentColor">@color/semi_transparent</item>
+        <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
+        <item name="appLogo">@null</item>
+    </style>
+    <style name="App.Theme.DarkGrey.OLED.Player" parent="App.Theme.DarkGrey.Player">
+        <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
+    </style>
+    <!--  End Color scheme: Dark Grey (OLED)  -->
+
+    <!--  Color scheme: Teal (OLED)  -->
+    <style name="App.Theme.Leanback.OLED.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="appLogo">@null</item>
+    </style>
+    <style name="App.Theme.Leanback.OLED.Player" parent="App.Theme.Leanback.Player">
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+    </style>
+    <!--  End Color scheme: Teal (OLED)  -->
+
+    <!--  Color scheme: Dark Grey (monochrome)  -->
+    <style name="App.Theme.DarkGrey2.OLED.Browse" parent="App.Theme.DarkGrey.OLED.Browse">
+        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="appLogo">@mipmap/app_logo_semi_grey</item>
+        <item name="brandColor">@color/grey</item>
+        <item name="brandAccentColor">@color/grey</item>
+        <item name="cardDefaultBackground">@color/grey</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Grey</item>
+    </style>
+    <style name="App.Theme.DarkGrey2.OLED.Player" parent="App.Theme.DarkGrey.OLED.Player">
+        <item name="playbackProgressPrimaryColor">@color/semi_grey</item>
+        <item name="playbackProgressSecondaryColor">@color/light_grey</item>
+        <item name="playbackControlsIconHighlightColor">@color/grey</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/grey</item>
+        <item name="brandColor">@color/grey</item>
+        <item name="cardDefaultBackground">@color/grey</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Grey</item>
+    </style>
+    <style name="ProgressBarHorizontal.Grey" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_grey</item>
+    </style>
+    <!--  End Color scheme: Dark Grey (monochrome)  -->
+
+    <!--  Color scheme: Dark (Blue)  -->
+    <style name="App.Theme.Leanback.Blue.Browse" parent="App.Theme.Leanback.Browse">
+        <!--<item name="brandColor">@color/scheme_blue_background_dark</item>-->
+        <item name="brandAccentColor">@color/scheme_blue_background</item>
+        <!--<item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>-->
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+        <item name="android:windowBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_grey_background_dark</item>
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
+    </style>
+    <style name="App.Theme.Leanback.Blue.Player" parent="App.Theme.Leanback.Player">
+        <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
+        <!--<item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>-->
+        <!--<item name="cardDefaultBackground">@color/scheme_blue_background_dark</item>-->
+        <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+    </style>
+    <style name="App.Theme.Leanback.Blue.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="android:colorAccent" tools:targetApi="21">@color/scheme_blue_background</item>
+        <!--<item name="android:colorPrimary" tools:targetApi="21">@color/scheme_blue_background_dark</item>-->
+        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_grey_background</item>
+    </style>
+    <!--  End Color scheme: Teal (Blue)  -->
+</resources>

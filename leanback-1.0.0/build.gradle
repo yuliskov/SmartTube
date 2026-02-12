@@ -1,0 +1,45 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'com.android.library'
+
+android {
+    // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+    testOptions.unitTests.includeAndroidResources = true
+
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 10
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
+    implementation 'androidx.core:core:' + coreXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
+    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
+    implementation 'androidx.media:media:' + mediaXLibraryVersion
+    implementation 'androidx.interpolator:interpolator:' + leanbackXLibraryVersion
+
+    implementation project(':fragment-1.1.0')
+    implementation project(':sharedutils')
+}

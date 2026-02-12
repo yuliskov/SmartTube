@@ -1,0 +1,56 @@
+name: Cleanup old workflow runs
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const KEEP = 0;
+            const workflowNames = ["VirusTotal Scan", "Cleanup old workflow runs"];
+
+            // Get workflow ID
+            const workflows = await github.rest.actions.listRepoWorkflows({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            for (const name of workflowNames) {
+              const wf = workflows.data.workflows.find(w => w.name === name);
+              if (!wf) {
+                core.info(`Workflow "${name}" not found, skipping`);
+                continue;
+              }
+
+              // List runs
+              const runs = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: wf.id,
+                per_page: 100
+              });
+
+              const toDelete = runs.data.workflow_runs.slice(KEEP);
+              core.info(`Deleting ${toDelete.length} old runs`);
+
+              for (const run of toDelete) {
+                try {
+                  await github.rest.actions.deleteWorkflowRun({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    run_id: run.id
+                  });
+                } catch (e) {
+                  core.info(`Skip run ${run.id}: ${e.message}`);
+                }
+              } 
+            }
+

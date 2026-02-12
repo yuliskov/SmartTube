@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liskovsoft.smartyoutubetv2.tv">
+
+    <!-- Shield on Android 11 speech recognizer not working fix? -->
+    <!-- https://stackoverflow.com/questions/64319117/speechrecognizer-not-available-when-targeting-android-11 -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <permission
+        android:name="${applicationId}.ACCESS_VIDEO_DATA"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="${applicationId}.ACCESS_VIDEO_DATA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-sdk tools:overrideLibrary="
+        androidx.leanback.preference,
+        androidx.recommendation,
+        androidx.leanback, 
+        androidx.tvprovider,
+        com.google.android.exoplayer2.ext.leanback,
+        com.google.android.exoplayer2.ext.vp9,
+        com.google.android.exoplayer2.testutil,
+        com.google.android.exoplayer2.ext.okhttp,
+        com.google.firebase.crashlytics,
+        com.google.firebase.iid"/>
+
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+
+    <!-- android:usesCleartextTraffic - allow HTTP traffic -->
+    <!-- Alt cleartext options: https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted -->
+    <application
+        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:banner="@mipmap/app_banner"
+        android:logo="@mipmap/app_logo"
+        android:icon="@mipmap/app_icon"
+        android:label="@string/app_name"
+        android:theme="@style/App.Theme.Leanback.Browse"
+        tools:node="merge"
+        tools:replace="android:theme,android:allowBackup"
+        tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
+
+        <!-- Screen Mirror (e.g. DIAL) for Amazon TV -->
+        <!-- Not implemented yet( -->
+        <!--<meta-data android:name="whisperplay" android:resource="@xml/whisperplay"/>-->
+
+        <!-- This activity's name used inside atv channels -->
+        <!-- More info: com.liskovsoft.leanbackassistant.utils.AppUtil -->
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <!-- Process intents from other apps -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:host="youtube.com"/>
+                <data android:host="www.youtube.com"/>
+                <data android:host="m.youtube.com"/>
+                <data android:host="youtu.be"/>
+                <data android:pathPattern=".*"/>
+                <data android:host="search" android:scheme="youtube"/>
+                <data android:host="play" android:scheme="youtube"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="vnd.youtube"/>
+                <data android:scheme="vnd.youtube.launch"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Alt app launcher icon -->
+        <activity-alias android:label="@string/app_name"
+                        android:icon="@mipmap/app_icon_alt"
+                        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivityAlt"
+                        android:exported="true"
+                        android:enabled="false"
+                        android:targetActivity="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
+        <!-- behind is important too. This fix crashes on Android 8 (api 26) and above. -->
+        <!-- More info about behind: https://stackoverflow.com/a/52426009/1279056 -->
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity"
+                  android:noHistory="true"
+                  android:excludeFromRecents="true"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="behind"
+                  android:theme="@style/App.Theme.Leanback.Preferences"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <!-- Remove to fix Sony wake up bug? android:turnScreenOn="true" -->
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:screenOrientation="unspecified"
+            android:showWhenLocked="true"
+            android:theme="@style/App.Theme.Leanback.Player"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="unspecified"
+                  android:theme="@style/App.Theme.Leanback.GuidedStep"/>
+
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="unspecified"
+                  android:theme="@style/App.Theme.Leanback.GuidedStep"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <!-- BEGIN Launchers (used inside tvQuickActions. Don't rename them or move!) -->
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.HomeLauncherActivity"
+            android:logo="@drawable/icon_home"
+            android:icon="@drawable/icon_home"
+            android:label="@string/header_home"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.NewsLauncherActivity"
+            android:logo="@drawable/icon_news"
+            android:icon="@drawable/icon_news"
+            android:label="@string/header_news"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.MusicLauncherActivity"
+            android:logo="@drawable/icon_music"
+            android:icon="@drawable/icon_music"
+            android:label="@string/header_music"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.GamesLauncherActivity"
+            android:logo="@drawable/icon_gaming"
+            android:icon="@drawable/icon_gaming"
+            android:label="@string/header_gaming"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.ChannelsLauncherActivity"
+            android:logo="@drawable/icon_channels"
+            android:icon="@drawable/icon_channels"
+            android:label="@string/header_channels"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.SubscriptionsLauncherActivity"
+            android:logo="@drawable/icon_subscriptions"
+            android:icon="@drawable/icon_subscriptions"
+            android:label="@string/header_subscriptions"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.HistoryLauncherActivity"
+            android:logo="@drawable/icon_history"
+            android:icon="@drawable/icon_history"
+            android:label="@string/header_history"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.PlaylistsLauncherActivity"
+            android:logo="@drawable/icon_playlist"
+            android:icon="@drawable/icon_playlist"
+            android:label="@string/header_playlists"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.launchers.SearchLauncherActivity"
+            android:logo="@drawable/action_search"
+            android:icon="@drawable/action_search"
+            android:label="@string/action_search"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <!-- END Launchers -->
+    </application>
+
+</manifest>

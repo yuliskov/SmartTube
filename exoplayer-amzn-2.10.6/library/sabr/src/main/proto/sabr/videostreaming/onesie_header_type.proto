@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+enum OnesieHeaderType {
+  ONESIE_PLAYER_RESPONSE = 0;
+  MEDIA = 1;
+  MEDIA_DECRYPTION_KEY = 2;
+  CLEAR_MEDIA = 3;
+  CLEAR_INIT_SEGMENT = 4;
+  ACK = 5;
+  MEDIA_STREAMER_HOSTNAME = 6;
+  MEDIA_SIZE_HINT = 7;
+  PLAYER_SERVICE_RESPONSE_PUSH_URL = 8;
+  LAST_HIGH_PRIORITY_HINT = 9;
+  STREAM_METADATA = 16;
+  ENCRYPTED_INNERTUBE_RESPONSE_PART = 25;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: add image wrapper, move layout_viewType attr from the main image -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- NOTE: layout_viewType moved from the nested main image -->
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView
+        android:id="@+id/main_image_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_viewType="main">
+    </com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView>
+
+    <androidx.leanback.widget.NonOverlappingRelativeLayout
+        android:id="@+id/info_field"
+        style="?attr/imageCardViewInfoAreaStyle">
+    </androidx.leanback.widget.NonOverlappingRelativeLayout>
+
+</merge>

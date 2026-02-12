@@ -1,0 +1,35 @@
+seekMap:
+  isSeekable = true
+  duration = 2741000
+  getPosition(0) = [[timeUs=0, position=8407]]
+numberOfTracks = 1
+track 0:
+  format:
+    bitrate = -1
+    id = null
+    containerMimeType = null
+    sampleMimeType = audio/flac
+    maxInputSize = 768000
+    width = -1
+    height = -1
+    frameRate = -1.0
+    rotationDegrees = 0
+    pixelWidthHeightRatio = 1.0
+    channelCount = 2
+    sampleRate = 48000
+    pcmEncoding = -1
+    encoderDelay = 0
+    encoderPadding = 0
+    subsampleOffsetUs = 9223372036854775807
+    selectionFlags = 0
+    language = null
+    drmInitData = -
+    initializationData:
+      data = length 42, hash 83F6895
+  total output bytes = 445
+  sample count = 1
+  sample 0:
+    time = 2730666
+    flags = 1
+    data = length 445, hash A388E3D6
+tracksEnded = true

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Vorige snit</string>
+  <string name="exo_controls_next_description">Volgende snit</string>
+  <string name="exo_controls_pause_description">Onderbreek</string>
+  <string name="exo_controls_play_description">Speel</string>
+  <string name="exo_controls_stop_description">Stop</string>
+  <string name="exo_controls_rewind_description">Spoel terug</string>
+  <string name="exo_controls_fastforward_description">Spoel vorentoe</string>
+  <string name="exo_controls_repeat_off_description">Herhaal niks</string>
+  <string name="exo_controls_repeat_one_description">Herhaal een</string>
+  <string name="exo_controls_repeat_all_description">Herhaal alles</string>
+  <string name="exo_controls_shuffle_on_description">Skommel is aan</string>
+  <string name="exo_controls_shuffle_off_description">Skommel is af</string>
+  <string name="exo_controls_fullscreen_description">Volskermmodus</string>
+  <string name="exo_controls_vr_description">VR-modus</string>
+  <string name="exo_download_description">Aflaai</string>
+  <string name="exo_download_notification_channel_name">Aflaaie</string>
+  <string name="exo_download_downloading">Laai tans af</string>
+  <string name="exo_download_completed">Aflaai is voltooi</string>
+  <string name="exo_download_failed">Kon nie aflaai nie</string>
+  <string name="exo_download_removing">Verwyder tans aflaaie</string>
+  <string name="exo_track_selection_title_video">Video</string>
+  <string name="exo_track_selection_title_audio">Oudio</string>
+  <string name="exo_track_selection_title_text">Teks</string>
+  <string name="exo_track_selection_none">Geen</string>
+  <string name="exo_track_selection_auto">Outo</string>
+  <string name="exo_track_unknown">Onbekend</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Stereo</string>
+  <string name="exo_track_surround">Omringklank</string>
+  <string name="exo_track_surround_5_point_1">5.1-omringklank</string>
+  <string name="exo_track_surround_7_point_1">7.1-omringklank</string>
+  <string name="exo_track_role_alternate">Afwisselend</string>
+  <string name="exo_track_role_supplementary">Aanvullend</string>
+  <string name="exo_track_role_commentary">Kommentaar</string>
+  <string name="exo_track_role_closed_captions">Onderskrifte</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

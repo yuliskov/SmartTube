@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="supported_countries">
+        <item>United States|US</item>
+        <item>Great Britain|GB</item>
+        <item>Croatia|HR</item>
+        <item>Scotland|GB-SCT</item>
+        <item>Canada|CA</item>
+        <item>Україна|UA</item>
+        <item>Россия|RU</item>
+        <item>Беларусь|BY</item>
+        <item>Қазақстан|KZ</item>
+        <item>Azerbaijan|AZ</item>
+        <item>Armenia|HY</item>
+        <item>Serbia|RS</item>
+        <item>Eesti|EE</item>
+        <item>България|BG</item>
+        <item>Deutschland|DE</item>
+        <item>România|RO</item>
+        <item>España|ES</item>
+        <item>Polska|PL</item>
+        <item>Finland|FI</item>
+        <item>Latvija|LV</item>
+        <item>France|FR</item>
+        <item>Hungary|HU</item>
+        <item>Nederland|NL</item>
+        <item>België|BE</item>
+        <item>België (dutch)|nl_BE</item>
+        <item>België (french)|fr_BE</item>
+        <item>Noreg|NO</item>
+        <item>Czech|CZ</item>
+        <item>Italia|IT</item>
+        <item>Ελληνικά|GR</item>
+        <item>Denmark|DK</item>
+        <item>Lietuva|LT</item>
+        <item>Moldova|MD</item>
+        <item>Slovakia|SK</item>
+        <item>Slovenia|SI</item>
+        <item>Sweden|SE</item>
+        <item>Singapore|SG</item>
+        <item>New Zealand|NZ</item>
+        <item>Nigeria|NG</item>
+        <item>Australia|AU</item>
+        <item>Switzerland|CH</item>
+        <item>Israel|IL</item>
+        <item>Saudi Arabia|SA</item>
+        <item>Morocco|MA</item>
+        <item>Bangladesh|BD</item>
+        <item>Brasil|BR</item>
+        <item>Portugalia|PT</item>
+        <item>Argentina|AR</item>
+        <item>México|MX</item>
+        <item>Hong Kong|HK</item>
+        <item>Malaysia|MY</item>
+        <item>Japan|JP</item>
+        <item>India|IN</item>
+        <item>Kenya|KE</item>
+        <item>Türkiye|TR</item>
+        <item>Egypt|EG</item>
+        <item>Việt Nam|VN</item>
+        <item>China|CN</item>
+        <item>Taiwan|TW</item>
+        <item>Indonesia|ID</item>
+        <item>South Korea|KR</item>
+        <item>Pakistan|PK</item>
+        <item>Bolivia|BO</item>
+        <item>Chile|CL</item>
+        <item>Colombia|CO</item>
+        <item>Costa Rica|CR</item>
+        <item>Ecuador|EC</item>
+        <item>El Salvador|SV</item>
+        <item>Guatemala|GT</item>
+        <item>Honduras|HN</item>
+        <item>Nicaragua|NI</item>
+        <item>Panamá|PA</item>
+        <item>Puerto Rico|PR</item>
+        <item>Paraguay|PY</item>
+        <item>Perú|PE</item>
+        <item>República Dominicana|DO</item>
+        <item>Uruguay|UY</item>
+        <item>Venezuela|VE</item>
+        <item>Ireland|IE</item>
+        <item>Philippines|PH</item>
+        <item>Iraq|IQ</item>
+        <item>Österreich|AT</item>
+        <item>Tanzania|TZ</item>
+        <item>Nepal|NP</item>
+        <item>South Africa|ZA</item>
+        <item>Zimbabwe|ZW</item>
+        <item>Algeria|DZ</item>
+        <item>Thailand|TH</item>
+        <item>North Macedonia|MK</item>
+        <item>Tunisia|TN</item>
+        <item>Sri Lanka|LK</item>
+        <item>Jordan|JO</item>
+    </string-array>
+</resources>

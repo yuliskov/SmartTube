@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+  <!-- Must be kept in sync with AspectRatioFrameLayout -->
+  <attr name="resize_mode" format="enum">
+    <enum name="fit" value="0"/>
+    <enum name="fixed_width" value="1"/>
+    <enum name="fixed_height" value="2"/>
+    <enum name="fill" value="3"/>
+    <enum name="zoom" value="4"/>
+  </attr>
+
+  <!-- Must be kept in sync with PlayerView -->
+  <attr name="surface_type" format="enum">
+    <enum name="none" value="0"/>
+    <enum name="surface_view" value="1"/>
+    <enum name="texture_view" value="2"/>
+    <enum name="spherical_view" value="3"/>
+  </attr>
+
+  <!-- Must be kept in sync with RepeatModeUtil -->
+  <attr name="repeat_toggle_modes">
+    <flag name="none" value="0"/>
+    <flag name="one" value="1"/>
+    <flag name="all" value="2"/>
+  </attr>
+
+  <!-- PlayerControlView attributes -->
+  <attr name="show_timeout" format="integer"/>
+  <attr name="rewind_increment" format="integer"/>
+  <attr name="fastforward_increment" format="integer"/>
+  <attr name="show_shuffle_button" format="boolean"/>
+  <attr name="time_bar_min_update_interval" format="integer"/>
+  <attr name="controller_layout_id" format="reference"/>
+
+  <!-- DefaultTimeBar attributes -->
+  <attr name="bar_height" format="dimension"/>
+  <attr name="touch_target_height" format="dimension"/>
+  <attr name="ad_marker_width" format="dimension"/>
+  <attr name="scrubber_enabled_size" format="dimension"/>
+  <attr name="scrubber_disabled_size" format="dimension"/>
+  <attr name="scrubber_dragged_size" format="dimension"/>
+  <attr name="scrubber_drawable" format="reference"/>
+  <attr name="played_color" format="color"/>
+  <attr name="scrubber_color" format="color"/>
+  <attr name="buffered_color" format="color"/>
+  <attr name="unplayed_color" format="color"/>
+  <attr name="ad_marker_color" format="color"/>
+  <attr name="played_ad_marker_color" format="color"/>
+
+  <declare-styleable name="PlayerView">
+    <attr name="use_artwork" format="boolean"/>
+    <attr name="shutter_background_color" format="color"/>
+    <attr name="default_artwork" format="reference"/>
+    <attr name="use_controller" format="boolean"/>
+    <attr name="hide_on_touch" format="boolean"/>
+    <attr name="hide_during_ads" format="boolean"/>
+    <attr name="auto_show" format="boolean"/>
+    <attr name="show_buffering" format="enum">
+      <enum name="never" value="0"/>
+      <enum name="when_playing" value="1"/>
+      <enum name="always" value="2"/>
+    </attr>
+    <attr name="keep_content_on_player_reset" format="boolean"/>
+    <attr name="player_layout_id" format="reference"/>
+
+    <attr name="surface_type"/>
+    <!-- AspectRatioFrameLayout attributes -->
+    <attr name="resize_mode"/>
+    <!-- PlayerControlView attributes -->
+    <attr name="show_timeout"/>
+    <attr name="rewind_increment"/>
+    <attr name="fastforward_increment"/>
+    <attr name="repeat_toggle_modes"/>
+    <attr name="show_shuffle_button"/>
+    <attr name="time_bar_min_update_interval"/>
+    <attr name="controller_layout_id"/>
+    <!-- DefaultTimeBar attributes -->
+    <attr name="bar_height"/>
+    <attr name="touch_target_height"/>
+    <attr name="ad_marker_width"/>
+    <attr name="scrubber_enabled_size"/>
+    <attr name="scrubber_disabled_size"/>
+    <attr name="scrubber_dragged_size"/>
+    <attr name="scrubber_drawable"/>
+    <attr name="played_color"/>
+    <attr name="scrubber_color"/>
+    <attr name="buffered_color" />
+    <attr name="unplayed_color"/>
+    <attr name="ad_marker_color"/>
+    <attr name="played_ad_marker_color"/>
+  </declare-styleable>
+
+  <declare-styleable name="AspectRatioFrameLayout">
+    <attr name="resize_mode"/>
+  </declare-styleable>
+
+  <declare-styleable name="PlayerControlView">
+    <attr name="show_timeout"/>
+    <attr name="rewind_increment"/>
+    <attr name="fastforward_increment"/>
+    <attr name="repeat_toggle_modes"/>
+    <attr name="show_shuffle_button"/>
+    <attr name="time_bar_min_update_interval"/>
+    <attr name="controller_layout_id"/>
+    <!-- DefaultTimeBar attributes -->
+    <attr name="bar_height"/>
+    <attr name="touch_target_height"/>
+    <attr name="ad_marker_width"/>
+    <attr name="scrubber_enabled_size"/>
+    <attr name="scrubber_disabled_size"/>
+    <attr name="scrubber_dragged_size"/>
+    <attr name="scrubber_drawable"/>
+    <attr name="played_color"/>
+    <attr name="scrubber_color"/>
+    <attr name="buffered_color" />
+    <attr name="unplayed_color"/>
+    <attr name="ad_marker_color"/>
+    <attr name="played_ad_marker_color"/>
+  </declare-styleable>
+
+  <declare-styleable name="DefaultTimeBar">
+    <attr name="bar_height"/>
+    <attr name="touch_target_height"/>
+    <attr name="ad_marker_width"/>
+    <attr name="scrubber_enabled_size"/>
+    <attr name="scrubber_disabled_size"/>
+    <attr name="scrubber_dragged_size"/>
+    <attr name="scrubber_drawable"/>
+    <attr name="played_color"/>
+    <attr name="scrubber_color"/>
+    <attr name="buffered_color" />
+    <attr name="unplayed_color"/>
+    <attr name="ad_marker_color"/>
+    <attr name="played_ad_marker_color"/>
+  </declare-styleable>
+
+</resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: intention to add subtitle/debug view -->
+<!-- More info: https://github.com/google/ExoPlayer/issues/6587 -->
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/playback_fragment_root"
+        android:transitionGroup="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UnusedAttribute, RtlHardcoded">
+
+    <!-- Original place for VideoSurfaceView -->
+
+    <!-- Add subtitle view. Hides all views behind them. Should be placed at the top. -->
+    <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        android:id="@+id/surface_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+        <!-- Modified place for VideoSurfaceView -->
+    </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <!-- MOD: fix subs width issues on vertical videos by placing subs outside of the aspect layout -->
+    <!-- MOD: add subtitle padding -->
+    <com.google.android.exoplayer2.ui.SubtitleView
+        android:id="@+id/leanback_subtitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="150sp"
+        android:paddingRight="150sp"/>
+
+    <LinearLayout
+        android:id="@+id/live_chat_wrapper"
+        android:layout_width="300sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView
+            android:id="@+id/live_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:showIncomingTime="false"
+            app:isMessageFocusable="false"
+            app:incomingDefaultBubbleColor="@color/live_chat_bg"
+            app:incomingTextColor="@color/white"
+            app:incomingBubblePaddingLeft="10sp"
+            app:incomingBubblePaddingRight="10sp"
+            app:incomingBubblePaddingTop="0sp"
+            app:incomingBubblePaddingBottom="0sp"
+            app:incomingAvatarHeight="20dp"
+            app:incomingAvatarWidth="20dp"
+            android:visibility="gone"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/player_overlay_wrapper"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:gravity="right"
+        android:padding="10sp">
+        <!-- Global clock -->
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/global_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
+            style="?attr/playbackControlsTimeStyle"/>
+        <!-- Global ending time -->
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView
+            android:id="@+id/global_ending_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6"
+            android:textStyle="bold"
+            style="?attr/playbackControlsTimeStyle"/>
+    </LinearLayout>
+
+    <!-- Add debug view -->
+    <FrameLayout android:id="@+id/debug_view_group"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:padding="4sp"
+                 android:visibility="gone"
+                 android:layout_gravity="top|right"
+                 android:background="#70000000"/>
+
+    <androidx.leanback.widget.NonOverlappingFrameLayout
+        android:id="@+id/playback_fragment_background"
+        android:transitionGroup="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.leanback.widget.NonOverlappingFrameLayout
+            android:id="@+id/playback_controls_dock"
+            android:transitionGroup="true"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+</FrameLayout>

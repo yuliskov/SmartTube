@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="44 825 466 88" width="466pt" height="88pt" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata> Produced by OmniGraffle 7.4 
+    <dc:date>2017-07-19 14:26:00 +0000</dc:date>
+  </metadata>
+  <defs>
+    <font-face font-family="Helvetica" font-size="10" units-per-em="1000" underline-position="-75.68359" underline-thickness="49.316406" slope="0" x-height="522.9492" cap-height="717.28516" ascent="770.0195" descent="-229.98047" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Helvetica"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <title>Canvas 1</title>
+    <rect fill="white" width="836" height="2e3"/>
+    <g>
+      <title>Layer 1</title>
+      <rect x="50" y="826" width="445" height="25" fill="black" fill-opacity="0"/>
+      <rect x="50" y="826" width="445" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+      <text transform="translate(55 832.5)" fill="black">
+        <tspan font-family="Helvetica" font-size="10" font-weight="500" x="200.82031" y="10" textLength="33.359375">period1</tspan>
+      </text>
+      <rect x="50" y="856" width="445" height="25" fill="black" fill-opacity="0"/>
+      <rect x="50" y="856" width="445" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="miter" stroke-width="1"/>
+      <text transform="translate(55 862.5)" fill="black">
+        <tspan font-family="Helvetica" font-size="10" font-weight="500" x="198.04443" y="10" textLength="38.911133">window1</tspan>
+      </text>
+      <circle cx="50" cy="868.5" r="5.000008" fill="black"/>
+      <circle cx="50" cy="868.5" r="5.000008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="51" y1="892" x2="486.1" y2="892" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="454.41325" y="890.4195" width="29" height="22" fill="white" fill-opacity="0"/>
+      <text transform="translate(459.41325 895.4195)" fill="black">
+        <tspan font-family="Helvetica" font-size="10" font-weight="500" x=".05419922" y="10" textLength="18.891602">time</tspan>
+      </text>
+      <rect x="139.5" y="826" width="6" height="25" fill="#ccc"/>
+      <rect x="139.5" y="826" width="6" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="226.16667" y="826" width="6" height="25" fill="#ccc"/>
+      <rect x="226.16667" y="826" width="6" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="312.83333" y="826" width="6" height="25" fill="#ccc"/>
+      <rect x="312.83333" y="826" width="6" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <rect x="399.5" y="826" width="6" height="25" fill="#ccc"/>
+      <rect x="399.5" y="826" width="6" height="25" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

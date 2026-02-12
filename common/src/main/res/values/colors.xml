@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="white_70">#B2FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="semi_red">#E52D27</color>
+    <color name="light_red">#FF8080</color>
+    <color name="dark_red">#B31217</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="light_blue">#2793E6</color>
+    <color name="electric_violet">#7300ff</color>
+    <color name="orange_peel">#ff9900</color>
+    <!--<color name="yellow">#CDDC39</color>-->
+    <color name="light_grey">#E4E4E4</color>
+    <color name="light_grey2">#7A7A7A</color>
+    <color name="leanback">#0096A6</color>
+    <color name="semi_transparent">#64000000</color>
+    <color name="live_chat_bg">#90000000</color>
+    <color name="live_chat_bg_pressed">#52C2DCF2</color>
+    <color name="comments_bg">#303030</color>
+    <color name="comments_bg_pressed">#17C2DCF2</color>
+    <color name="semi_grey">#64282828</color>
+    <color name="grey">#282828</color>
+    <color name="dimming">#D0000000</color>
+    <color name="green">#00FF00</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="brown">#964B00</color>
+    <color name="light_pink">#FF1684</color>
+</resources>

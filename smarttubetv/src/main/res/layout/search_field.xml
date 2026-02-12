@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/simple_edit_config"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/simple_edit_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/channel_filter_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:textColor="@color/dialog_text_color"
+        android:textCursorDrawable="@null"
+        android:backgroundTint="@color/dialog_text_color"
+        android:textColorHint="@color/white_50" />
+</LinearLayout>

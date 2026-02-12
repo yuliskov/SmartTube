@@ -1,0 +1,9 @@
+<resources>
+    <string name="search_hint">Videolarda Ara</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube Videoları</string>
+    <string name="cant_play_video">Bu Video Oynatılamıyor</string>
+    <string name="header_subscriptions">Abonenelikler</string>
+    <string name="header_history">Geçmiş Videolar</string>
+    <string name="recommended">Önerilen Videolar</string>
+</resources>

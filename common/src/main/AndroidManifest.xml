@@ -1,0 +1,69 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.liskovsoft.smartyoutubetv2.common">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14 (API 34) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!-- API level 34 -->
+    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" /> -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Android 10 and up. Start from background permission. Settings/Apps/Draw over other apps (disabled by default) -->
+    <!-- https://developer.android.com/guide/components/activities/background-starts -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    <!-- <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" /> -->
+    <!-- Android 9+: needed to run package uninstaller (ATV, Amazon bride) -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
+
+    <!-- Android 11+: fix access package info -->
+    <queries>
+        <package android:name="com.google.android.youtube.tv" />
+        <package android:name="com.amazon.firetv.youtube" />
+    </queries>
+
+    <!-- Add requestLegacyExternalStorage to fix unavailable storage on Android 10 (doesn't work on Android 11) -->
+    <!-- More info: https://stackoverflow.com/questions/63364476/requestlegacyexternalstorage-is-not-working-in-android-11-api-30 -->
+    <application android:requestLegacyExternalStorage="true">
+        <receiver
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <!-- Fix: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED -->
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <!-- Autostart fix on some devices? -->
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <!-- Nvidia Shield autostart fix? -->
+                <action android:name="android.intent.action.REBOOT" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService"
+            android:enabled="true"
+            android:foregroundServiceType="connectedDevice"/>
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService"
+            android:enabled="true"/>
+
+        <activity android:name=".misc.BackupReceiverActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/zip"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

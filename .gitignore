@@ -1,0 +1,72 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+
+# Android Studio
+.idea
+*.iml
+
+#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
+.gradle
+.google
+build/
+
+# my other stuff
+/smartyoutubetv2/release
+/smarttube/release
+/smarttubetv/release
+# gradle 6 fix
+/smarttube/output
+/smarttubetv/output
+/smarttubemobile/release
+# google-services.json
+*.hprof
+log.txt
+android.keystore
+android-upd2.keystore
+build.log
+notes.txt
+out.txt
+out1.txt
+deps.txt
+logcat.txt
+/releases
+/files
+/misc
+/other
+/TODO.txt
+tmp/
+*_bak*
+*_tmp
+*.bak*
+*.tmp
+*.7z
+.DS_Store
+/captures
+.externalNativeBuild
+fabric.properties
+*BAK.java
+hs_err_pid*.log

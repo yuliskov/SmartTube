@@ -1,0 +1,59 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+    testOptions.unitTests.includeAndroidResources = true
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode 2
+        versionName "0.2"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    productFlavors {
+        stbeta {}
+        ststable {}
+        stfdroid {}
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // MOD: add custom lib
+    implementation project(':leanback-1.0.0')
+    implementation project(':sharedutils')
+    implementation project(':mediaserviceinterfaces')
+    implementation project(':youtubeapi')
+
+    //implementation 'com.android.support:leanback-v17:' + supportLibraryVersion
+    implementation 'androidx.leanback:leanback:' + leanbackXLibraryVersion
+    implementation 'androidx.tvprovider:tvprovider:' + leanbackXLibraryVersion
+    implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
+    implementation 'com.github.bumptech.glide:glide:' + glideVersion
+
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+    implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
+    implementation 'androidx.work:work-runtime:' + workVersion
+    implementation 'com.google.guava:guava:' + guavaVersion
+}

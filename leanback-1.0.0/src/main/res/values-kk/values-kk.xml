@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="2721825378927619928" name="lb_control_display_fast_forward_multiplier">"%1$dX"</string>
+    <string msgid="6173753802428649303" name="lb_control_display_rewind_multiplier">"%1$dX"</string>
+    <string msgid="1122271825827282965" name="lb_guidedaction_continue_title">"Жалғастыру"</string>
+    <string msgid="7747913934287176843" name="lb_guidedaction_finish_title">"Аяқтау"</string>
+    <string msgid="8748646000835486516" name="lb_media_player_error">"MediaPlayer қате коды: %1$d, қосымша: %2$d"</string>
+    <string msgid="8126335323963415494" name="lb_navigation_menu_contentDescription">"Навигация мәзірі"</string>
+    <string msgid="4213611627196077555" name="lb_onboarding_accessibility_next">"Келесі"</string>
+    <string msgid="7674487829030291492" name="lb_onboarding_get_started">"БАСТАУ"</string>
+    <string msgid="5508271941331836786" name="lb_playback_controls_closed_captioning_disable">"Cубтитрлерді өшіру"</string>
+    <string msgid="3934392140182327163" name="lb_playback_controls_closed_captioning_enable">"Субтитрлерді қосу"</string>
+    <string msgid="8966769845721269304" name="lb_playback_controls_fast_forward">"Алға айналдыру"</string>
+    <string msgid="801276177839339511" name="lb_playback_controls_fast_forward_multiplier">"%1$dX алға айналдыру"</string>
+    <string msgid="619396299825306757" name="lb_playback_controls_hidden">"Мультимедианы басқару элементтері жасырылған, оларды көрсету үшін бағыт пернесін басыңыз"</string>
+    <string msgid="3000046054608531995" name="lb_playback_controls_high_quality_disable">"Жоғары сапаны өшіру"</string>
+    <string msgid="1862669142355962638" name="lb_playback_controls_high_quality_enable">"Жоғары сапаны қосу"</string>
+    <string msgid="2827883329510404797" name="lb_playback_controls_more_actions">"Қосымша әрекеттер"</string>
+    <string msgid="1769131316742618433" name="lb_playback_controls_pause">"Кідірту"</string>
+    <string msgid="8800305194045609275" name="lb_playback_controls_picture_in_picture">"\"Сурет ішіндегі сурет\" режиміне кіру"</string>
+    <string msgid="1590369760862605402" name="lb_playback_controls_play">"Ойнату"</string>
+    <string msgid="5164826436271322261" name="lb_playback_controls_repeat_all">"Барлығын қайталау"</string>
+    <string msgid="5812341701962930499" name="lb_playback_controls_repeat_none">"Ешқайсысын қайталамау"</string>
+    <string msgid="7675097479246139440" name="lb_playback_controls_repeat_one">"Біреуін қайталау"</string>
+    <string msgid="1412664391757869774" name="lb_playback_controls_rewind">"Артқа айналдыру"</string>
+    <string msgid="8651612807713092781" name="lb_playback_controls_rewind_multiplier">"%1$dX артқа айналдыру"</string>
+    <string msgid="7794717158616536936" name="lb_playback_controls_shown">"Мультимедианы басқару элементтері көрсетілген"</string>
+    <string msgid="8182435535948303910" name="lb_playback_controls_shuffle_disable">"Еркін ойнатуды өшіру"</string>
+    <string msgid="7809089255981448519" name="lb_playback_controls_shuffle_enable">"Еркін ойнатуды қосу"</string>
+    <string msgid="4877009494447817003" name="lb_playback_controls_skip_next">"Келесіге өту"</string>
+    <string msgid="3147124289285911980" name="lb_playback_controls_skip_previous">"Алдыңғыға өту"</string>
+    <string msgid="5075744418630733006" name="lb_playback_controls_thumb_down">"\"Ұнамайды\" белгісін алу"</string>
+    <string msgid="2847309435442474470" name="lb_playback_controls_thumb_down_outline">"\"Ұнамайды\" белгісін қою"</string>
+    <string msgid="8332816524260995892" name="lb_playback_controls_thumb_up">"\"Ұнайды\" белгісін алу"</string>
+    <string msgid="1038344559734334272" name="lb_playback_controls_thumb_up_outline">"\"Ұнайды\" белгісін қою"</string>
+    <string msgid="6549544638083578695" name="lb_playback_time_separator">"/"</string>
+    <string msgid="4819380969103509861" name="lb_search_bar_hint">"Іздеу"</string>
+    <string msgid="2795474673510974502" name="lb_search_bar_hint_speech">"Іздеу үшін сөйлеңіз"</string>
+    <string msgid="7453744869467668159" name="lb_search_bar_hint_with_title">"<ns1:g id="SEARCH_CONTEXT">%1$s</ns1:g> іздеу"</string>
+    <string msgid="5851694095153624617" name="lb_search_bar_hint_with_title_speech">"<ns1:g id="SEARCH_CONTEXT">%1$s</ns1:g> іздеу үшін сөйлеңіз"</string>
+    <string msgid="7534843523462177008" name="orb_search_action">"Іздеу әрекеті"</string>
+</resources>

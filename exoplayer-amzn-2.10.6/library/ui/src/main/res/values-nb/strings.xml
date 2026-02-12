@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Forrige spor</string>
+  <string name="exo_controls_next_description">Neste spor</string>
+  <string name="exo_controls_pause_description">Sett på pause</string>
+  <string name="exo_controls_play_description">Spill av</string>
+  <string name="exo_controls_stop_description">Stopp</string>
+  <string name="exo_controls_rewind_description">Spol tilbake</string>
+  <string name="exo_controls_fastforward_description">Spol forover</string>
+  <string name="exo_controls_repeat_off_description">Ikke gjenta noen</string>
+  <string name="exo_controls_repeat_one_description">Gjenta én</string>
+  <string name="exo_controls_repeat_all_description">Gjenta alle</string>
+  <string name="exo_controls_shuffle_on_description">Tilfeldig rekkefølge er på</string>
+  <string name="exo_controls_shuffle_off_description">Tilfeldig rekkefølge er av</string>
+  <string name="exo_controls_fullscreen_description">Fullskjermmodus</string>
+  <string name="exo_controls_vr_description">VR-modus</string>
+  <string name="exo_download_description">Last ned</string>
+  <string name="exo_download_notification_channel_name">Nedlastinger</string>
+  <string name="exo_download_downloading">Laster ned</string>
+  <string name="exo_download_completed">Nedlastingen er fullført</string>
+  <string name="exo_download_failed">Nedlastingen mislyktes</string>
+  <string name="exo_download_removing">Fjerner nedlastinger</string>
+  <string name="exo_track_selection_title_video">Video</string>
+  <string name="exo_track_selection_title_audio">Lyd</string>
+  <string name="exo_track_selection_title_text">Tekst</string>
+  <string name="exo_track_selection_none">Ingen</string>
+  <string name="exo_track_selection_auto">Automatisk</string>
+  <string name="exo_track_unknown">Ukjent</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Stereo</string>
+  <string name="exo_track_surround">Surround-lyd</string>
+  <string name="exo_track_surround_5_point_1">5.1 surround-lyd</string>
+  <string name="exo_track_surround_7_point_1">7.1 surround-lyd</string>
+  <string name="exo_track_role_alternate">Alternativt spor</string>
+  <string name="exo_track_role_supplementary">Tilleggsspor</string>
+  <string name="exo_track_role_commentary">Kommentarer</string>
+  <string name="exo_track_role_closed_captions">Teksting</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

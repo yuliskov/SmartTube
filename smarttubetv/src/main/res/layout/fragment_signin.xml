@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/signin_root"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"/>
+<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:id="@+id/signin_fragment"-->
+<!--    android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInFragment"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent" />-->

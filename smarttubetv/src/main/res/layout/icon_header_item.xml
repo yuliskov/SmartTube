@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.leanback.widget.NonOverlappingLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/header_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/header_icon" />
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.HeaderMarqueeTextView
+        android:id="@+id/header_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="10dp"
+
+        android:singleLine="true"
+        android:maxWidth="150sp"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+
+        style="@style/TextAppearance.Leanback.Header"/>
+</androidx.leanback.widget.NonOverlappingLinearLayout>

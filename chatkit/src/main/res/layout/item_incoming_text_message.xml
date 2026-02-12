@@ -1,0 +1,67 @@
+<!-- MODIFIED -->
+<!-- Android 9 message focused bug fix: RelativeLayout focusable="false" -->
+<!-- Decrease space between messages: RelativeLayout android:layout_marginBottom="8dp"->"3dp" android:layout_marginTop="8dp"->"0dp" -->
+<!-- Margins: android:layout_marginRight="16dp"->"3dp" -->
+<com.stfalcon.chatkit.commons.widgets.FocusFixRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="3dp"
+    android:layout_marginTop="0dp"
+    android:focusable="false">
+
+    <!-- Move author icon to the top android:layout_alignParentBottom="true"->android:layout_alignParentTop="true", add new android:layout_marginTop="2dp" -->
+    <com.stfalcon.chatkit.utils.ShapeImageView
+        android:id="@id/messageUserAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp" />
+
+    <!-- Stretch bubble: android:layout_width="wrap_content"->"match_parent" -->
+    <!-- Stretch bubble: app:justifyContent="flex_end"->"flex_start" -->
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@id/bubble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/message_incoming_bubble_margin_right"
+        android:layout_marginRight="@dimen/message_incoming_bubble_margin_right"
+        android:layout_toEndOf="@id/messageUserAvatar"
+        android:layout_toRightOf="@id/messageUserAvatar"
+        android:orientation="vertical"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start">
+
+        <!-- Tweaks from video info dialog: leanback_list_preference_fragment.xml:26 -->
+        <!-- More info: com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.LeanbackListPreferenceDialogFragment -->
+        <!-- Text: add android:fontFamily="sans-serif-condensed" -->
+        <!-- Text: add android:lineSpacingMultiplier="0.9" -->
+        <!-- Messages exceeding certain length cause crashes. RecycleView bug? -->
+        <!-- add android:maxLines="130" (max 130, optimal for reading 50) -->
+        <TextView
+            android:id="@id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:lineSpacingMultiplier="0.9"
+            android:maxLines="50" />
+
+        <TextView
+            android:id="@id/messageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/messageText"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_alignSelf="center" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</com.stfalcon.chatkit.commons.widgets.FocusFixRelativeLayout>

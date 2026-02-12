@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">रीपीट करू नका</string>
+  <string name="exo_media_action_repeat_one_description">एक रीपीट करा</string>
+  <string name="exo_media_action_repeat_all_description">सर्व रीपीट करा</string>
+</resources>

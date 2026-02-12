@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Ne rien lire en boucle</string>
+  <string name="exo_media_action_repeat_one_description">Lire une chanson en boucle</string>
+  <string name="exo_media_action_repeat_all_description">Tout lire en boucle</string>
+</resources>

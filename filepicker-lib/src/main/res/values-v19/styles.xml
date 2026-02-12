@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="MaterialFileTheme" parent="MaterialFileTheme.Base">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

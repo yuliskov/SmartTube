@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">No en repeteixis cap</string>
+  <string name="exo_media_action_repeat_one_description">Repeteix una</string>
+  <string name="exo_media_action_repeat_all_description">Repeteix tot</string>
+</resources>

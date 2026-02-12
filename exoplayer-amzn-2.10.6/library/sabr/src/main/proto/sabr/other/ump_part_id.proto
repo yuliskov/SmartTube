@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package sabr.other;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.other";
+option optimize_for = LITE_RUNTIME;
+
+enum UmpPartId {
+  UNKNOWN = 0;
+  ONESIE_HEADER = 10;
+  ONESIE_DATA = 11;
+  ONESIE_ENCRYPTED_MEDIA = 12;
+  // Header for a media segment; includes sequence and timing information.
+  MEDIA_HEADER = 20;
+  // Chunk of media segment data.
+  MEDIA = 21;
+  // Indicates end of media segment; finalizes segment processing.
+  MEDIA_END = 22;
+  CONFIG = 30;
+  LIVE_METADATA = 31;
+  HOSTNAME_CHANGE_HINT_DEPRECATED = 32;
+  LIVE_METADATA_PROMISE = 33;
+  LIVE_METADATA_PROMISE_CANCELLATION = 34;
+  // Server's policy for the next request; includes backoff time and playback cookie.
+  NEXT_REQUEST_POLICY = 35;
+  USTREAMER_VIDEO_AND_FORMAT_METADATA = 36;
+  FORMAT_SELECTION_CONFIG = 37;
+  USTREAMER_SELECTED_MEDIA_STREAM = 38;
+  // Metadata for format initialization; contains total number of segments, duration, etc.
+  FORMAT_INITIALIZATION_METADATA = 42;
+  // Indicates a redirect to a different streaming URL.
+  SABR_REDIRECT = 43;
+  // Indicates a SABR error; happens when the payload is invalid or the server cannot process the request.
+  SABR_ERROR = 44;
+  SABR_SEEK = 45;
+  // Directive to reload the player with new parameters.
+  RELOAD_PLAYER_RESPONSE = 46;
+  PLAYBACK_START_POLICY = 47;
+  ALLOWED_CACHED_FORMATS = 48;
+  START_BW_SAMPLING_HINT = 49;
+  PAUSE_BW_SAMPLING_HINT = 50;
+  SELECTABLE_FORMATS = 51;
+  REQUEST_IDENTIFIER = 52;
+  REQUEST_CANCELLATION_POLICY = 53;
+  ONESIE_PREFETCH_REJECTION = 54;
+  TIMELINE_CONTEXT = 55;
+  REQUEST_PIPELINING = 56;
+  // Updates SABR context data; usually used for ads.
+  SABR_CONTEXT_UPDATE = 57;
+  // Status of stream protection; indicates whether attestation is required.
+  STREAM_PROTECTION_STATUS = 58;
+  // Policy indicating which SABR contexts to send or discard in future requests.
+  SABR_CONTEXT_SENDING_POLICY = 59;
+  LAWNMOWER_POLICY = 60;
+  SABR_ACK = 61;
+  END_OF_TRACK = 62;
+  CACHE_LOAD_POLICY = 63;
+  LAWNMOWER_MESSAGING_POLICY = 64;
+  PREWARM_CONNECTION = 65;
+  PLAYBACK_DEBUG_INFO = 66;
+  // Directive to show the user a notification message.
+  SNACKBAR_MESSAGE = 67;
+}

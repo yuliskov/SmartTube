@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="8dp">
+
+    <com.stfalcon.chatkit.utils.ShapeImageView
+        android:id="@id/messageUserAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/messageTime"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp" />
+
+    <com.stfalcon.chatkit.utils.RoundedImageView
+        android:id="@id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="@dimen/message_incoming_bubble_margin_right"
+        android:layout_marginRight="@dimen/message_incoming_bubble_margin_right"
+        android:layout_toEndOf="@id/messageUserAvatar"
+        android:layout_toRightOf="@id/messageUserAvatar" />
+
+    <View
+        android:id="@id/imageOverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/image"
+        android:layout_alignEnd="@id/image"
+        android:layout_alignLeft="@id/image"
+        android:layout_alignRight="@id/image"
+        android:layout_alignStart="@id/image"
+        android:layout_alignTop="@id/image" />
+
+    <TextView
+        android:id="@id/messageTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/image"
+        android:layout_alignRight="@id/image"
+        android:layout_below="@id/image" />
+
+</RelativeLayout>

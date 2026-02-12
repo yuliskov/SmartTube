@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Предыдущий трек</string>
+  <string name="exo_controls_next_description">Следующий трек</string>
+  <string name="exo_controls_pause_description">Приостановить</string>
+  <string name="exo_controls_play_description">Воспроизвести</string>
+  <string name="exo_controls_stop_description">Остановить</string>
+  <string name="exo_controls_rewind_description">Перемотать назад</string>
+  <string name="exo_controls_fastforward_description">Перемотать вперед</string>
+  <string name="exo_controls_repeat_off_description">Не повторять</string>
+  <string name="exo_controls_repeat_one_description">Повторять трек</string>
+  <string name="exo_controls_repeat_all_description">Повторять все</string>
+  <string name="exo_controls_shuffle_on_description">Перемешивание включено</string>
+  <string name="exo_controls_shuffle_off_description">Перемешивание отключено</string>
+  <string name="exo_controls_fullscreen_description">Полноэкранный режим</string>
+  <string name="exo_controls_vr_description">VR-режим</string>
+  <string name="exo_download_description">Скачать</string>
+  <string name="exo_download_notification_channel_name">Скачивания</string>
+  <string name="exo_download_downloading">Скачивание…</string>
+  <string name="exo_download_completed">Скачивание завершено</string>
+  <string name="exo_download_failed">Ошибка скачивания</string>
+  <string name="exo_download_removing">Удаление скачанных файлов…</string>
+  <string name="exo_track_selection_title_video">Видео</string>
+  <string name="exo_track_selection_title_audio">Аудио</string>
+  <string name="exo_track_selection_title_text">Текст</string>
+  <string name="exo_track_selection_none">Нет</string>
+  <string name="exo_track_selection_auto">Авто</string>
+  <string name="exo_track_unknown">Неизвестный трек</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Моно</string>
+  <string name="exo_track_stereo">Стерео</string>
+  <string name="exo_track_surround">Объемный звук</string>
+  <string name="exo_track_surround_5_point_1">Система объемного звука 5.1</string>
+  <string name="exo_track_surround_7_point_1">Система объемного звука 7.1</string>
+  <string name="exo_track_role_alternate">Другая запись</string>
+  <string name="exo_track_role_supplementary">Дополнительные материалы</string>
+  <string name="exo_track_role_commentary">Комментарии</string>
+  <string name="exo_track_role_closed_captions">Субтитры</string>
+  <string name="exo_track_bitrate">%1$.2f Мбит/сек</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

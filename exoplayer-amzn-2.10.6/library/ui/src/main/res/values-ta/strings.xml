@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">முந்தைய டிராக்</string>
+  <string name="exo_controls_next_description">அடுத்த டிராக்</string>
+  <string name="exo_controls_pause_description">இடைநிறுத்து</string>
+  <string name="exo_controls_play_description">இயக்கு</string>
+  <string name="exo_controls_stop_description">நிறுத்து</string>
+  <string name="exo_controls_rewind_description">பின்செல்</string>
+  <string name="exo_controls_fastforward_description">வேகமாக முன்செல்</string>
+  <string name="exo_controls_repeat_off_description">எதையும் மீண்டும் இயக்காதே</string>
+  <string name="exo_controls_repeat_one_description">இதை மட்டும் மீண்டும் இயக்கு</string>
+  <string name="exo_controls_repeat_all_description">அனைத்தையும் மீண்டும் இயக்கு</string>
+  <string name="exo_controls_shuffle_on_description">கலைத்துப் போடுதல்: ஆன்</string>
+  <string name="exo_controls_shuffle_off_description">கலைத்துப் போடுதல்: ஆஃப்</string>
+  <string name="exo_controls_fullscreen_description">முழுத்திரைப் பயன்முறை</string>
+  <string name="exo_controls_vr_description">VR பயன்முறை</string>
+  <string name="exo_download_description">பதிவிறக்கும் பட்டன்</string>
+  <string name="exo_download_notification_channel_name">பதிவிறக்கங்கள்</string>
+  <string name="exo_download_downloading">பதிவிறக்குகிறது</string>
+  <string name="exo_download_completed">பதிவிறக்கப்பட்டது</string>
+  <string name="exo_download_failed">பதிவிறக்க முடியவில்லை</string>
+  <string name="exo_download_removing">பதிவிறக்கங்கள் அகற்றப்படுகின்றன</string>
+  <string name="exo_track_selection_title_video">வீடியோ</string>
+  <string name="exo_track_selection_title_audio">ஆடியோ</string>
+  <string name="exo_track_selection_title_text">உரை</string>
+  <string name="exo_track_selection_none">ஏதுமில்லை</string>
+  <string name="exo_track_selection_auto">தானியங்கு</string>
+  <string name="exo_track_unknown">தெரியாதவை</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">மோனோ</string>
+  <string name="exo_track_stereo">ஸ்டீரியோ</string>
+  <string name="exo_track_surround">சரவுண்ட் சவுண்ட்</string>
+  <string name="exo_track_surround_5_point_1">5.1 சரவுண்ட் சவுண்ட்</string>
+  <string name="exo_track_surround_7_point_1">7.1 சரவுண்ட் சவுண்ட்</string>
+  <string name="exo_track_role_alternate">மாற்று டிராக்</string>
+  <string name="exo_track_role_supplementary">துணை டிராக்</string>
+  <string name="exo_track_role_commentary">வர்ணனை</string>
+  <string name="exo_track_role_closed_captions">வசனம்</string>
+  <string name="exo_track_bitrate">%1$.2f மெ.பை./வி</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

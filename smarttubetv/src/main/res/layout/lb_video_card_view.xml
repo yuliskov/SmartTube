@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lb="http://schemas.android.com/apk/res-auto">
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.videoview.PreviewCardView
+        android:id="@+id/layout_preview_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        lb:layout_viewType="main" />
+
+    <androidx.leanback.widget.NonOverlappingFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        lb:layout_viewType="info">
+
+        <RelativeLayout
+            android:id="@+id/info_field"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lb_basic_card_info_height"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/lb_basic_card_info_padding">
+
+            <!-- Content below will be replaced. Real locations: -->
+            <!-- lb_image_card_view_themed_title.xml -->
+            <!-- lb_image_card_view_themed_content.xml -->
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/lb_basic_card_info_text_margin"
+                android:layout_marginTop="@dimen/lb_basic_card_info_text_margin"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-condensed"
+                android:maxLines="1"
+                android:textColor="@color/lb_basic_card_title_text_color"
+                android:textSize="@dimen/lb_basic_card_title_text_size" />
+
+            <TextView
+                android:id="@+id/content_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="@dimen/lb_basic_card_info_text_margin"
+                android:layout_marginLeft="@dimen/lb_basic_card_info_text_margin"
+                android:ellipsize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:maxLines="1"
+                android:textColor="@color/lb_basic_card_content_text_color"
+                android:textSize="@dimen/lb_basic_card_content_text_size" />
+
+            <ImageView
+                android:id="@+id/extra_badge"
+                android:layout_width="@dimen/lb_basic_card_info_badge_size"
+                android:layout_height="@dimen/lb_basic_card_info_badge_size"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/fade_mask"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/lb_basic_card_info_badge_size"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@id/extra_badge"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </androidx.leanback.widget.NonOverlappingFrameLayout>
+</merge>

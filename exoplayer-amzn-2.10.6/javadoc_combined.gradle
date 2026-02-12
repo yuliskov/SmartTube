@@ -1,0 +1,75 @@
+// Copyright (C) 2017 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+apply from: "${buildscript.sourceFile.parentFile}/javadoc_util.gradle"
+
+class CombinedJavadocPlugin implements Plugin<Project> {
+
+  static final String TASK_NAME = "generateCombinedJavadoc"
+
+  @Override
+  void apply(Project project) {
+    project.gradle.projectsEvaluated {
+      Set<Project> libraryModules = getLibraryModules(project)
+      if (!libraryModules.isEmpty()) {
+        project.task(TASK_NAME, type: Javadoc) {
+          description = "Generates combined Javadoc."
+          title = "ExoPlayer library"
+          source = libraryModules.generateJavadoc.source
+          classpath = project.files([])
+          destinationDir = project.file("$project.buildDir/docs/javadoc")
+          options {
+            links "https://docs.oracle.com/javase/7/docs/api/",
+                "https://developer.android.com/reference"
+            encoding = "UTF-8"
+          }
+          exclude "**/BuildConfig.java"
+          exclude "**/R.java"
+          doFirst {
+            libraryModules.each { libraryModule ->
+              libraryModule.android.libraryVariants.all { variant ->
+                def name = variant.buildType.name
+                if (name == "release") {
+                  classpath +=
+                      libraryModule.project.files(
+                          variant.javaCompileProvider.get().classpath.files,
+                          libraryModule.project.android.getBootClasspath())
+                }
+              }
+            }
+          }
+          doLast {
+            libraryModules.each { libraryModule ->
+              project.copy {
+                from "${libraryModule.projectDir}/src/main/javadoc"
+                into "${project.buildDir}/docs/javadoc"
+              }
+            }
+            project.fixJavadoc()
+          }
+        }
+      }
+    }
+  }
+
+  // Returns Android library modules that declare a generateJavadoc task.
+  private static Set<Project> getLibraryModules(Project project) {
+    project.subprojects.findAll {
+      it.plugins.findPlugin("com.android.library") &&
+      it.tasks.findByName("generateJavadoc")
+    }
+  }
+
+}
+
+apply plugin: CombinedJavadocPlugin

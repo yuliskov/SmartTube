@@ -1,0 +1,10 @@
+WEBVTT # This comment is allowed
+
+00:00.000 --> 00:01.234
+This is the first subtitle.
+
+00:02.badbadbadbadbadbad --> 00:03.456
+This is the second subtitle.
+
+00:04.000 --> 00:05.000
+This is the third subtitle.

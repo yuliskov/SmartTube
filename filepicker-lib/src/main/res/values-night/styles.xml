@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="MaterialFileTheme" parent="MaterialFileTheme.Base" />
+
+    <style name="MaterialFileTheme.Base" parent="Theme.Material3.Dark.NoActionBar">
+
+    </style>
+
+    <style name="MaterialFileTheme.AppBar" parent="@style/ThemeOverlay.Material3" >
+        <item name="colorSurface">@android:color/transparent</item>
+    </style>
+
+    <style name="MaterialFileTheme.Toolbar" parent="@style/ThemeOverlay.Material3.Light" />
+
+</resources>

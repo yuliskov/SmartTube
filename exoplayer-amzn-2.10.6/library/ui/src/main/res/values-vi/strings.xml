@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Bản nhạc trước</string>
+  <string name="exo_controls_next_description">Bản nhạc tiếp theo</string>
+  <string name="exo_controls_pause_description">Tạm dừng</string>
+  <string name="exo_controls_play_description">Phát</string>
+  <string name="exo_controls_stop_description">Dừng</string>
+  <string name="exo_controls_rewind_description">Tua lại</string>
+  <string name="exo_controls_fastforward_description">Tua đi</string>
+  <string name="exo_controls_repeat_off_description">Không lặp lại</string>
+  <string name="exo_controls_repeat_one_description">Lặp lại một</string>
+  <string name="exo_controls_repeat_all_description">Lặp lại tất cả</string>
+  <string name="exo_controls_shuffle_on_description">Chế độ trộn bài đang bật</string>
+  <string name="exo_controls_shuffle_off_description">Chế độ trộn bài đang tắt</string>
+  <string name="exo_controls_fullscreen_description">Chế độ toàn màn hình</string>
+  <string name="exo_controls_vr_description">Chế độ thực tế ảo</string>
+  <string name="exo_download_description">Tải xuống</string>
+  <string name="exo_download_notification_channel_name">Tài nguyên đã tải xuống</string>
+  <string name="exo_download_downloading">Đang tải xuống</string>
+  <string name="exo_download_completed">Đã hoàn tất tải xuống</string>
+  <string name="exo_download_failed">Không tải xuống được</string>
+  <string name="exo_download_removing">Đang xóa các mục đã tải xuống</string>
+  <string name="exo_track_selection_title_video">Video</string>
+  <string name="exo_track_selection_title_audio">Âm thanh</string>
+  <string name="exo_track_selection_title_text">Văn bản</string>
+  <string name="exo_track_selection_none">Không</string>
+  <string name="exo_track_selection_auto">Tự động</string>
+  <string name="exo_track_unknown">Không xác định</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Đơn âm</string>
+  <string name="exo_track_stereo">Âm thanh nổi</string>
+  <string name="exo_track_surround">Âm thanh vòm</string>
+  <string name="exo_track_surround_5_point_1">Âm thanh vòm 5.1</string>
+  <string name="exo_track_surround_7_point_1">Âm thanh vòm 7.1</string>
+  <string name="exo_track_role_alternate">Thay thế</string>
+  <string name="exo_track_role_supplementary">Bổ sung</string>
+  <string name="exo_track_role_commentary">Bình luận</string>
+  <string name="exo_track_role_closed_captions">Phụ đề</string>
+  <string name="exo_track_bitrate">%1$.2f Mb/giây</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

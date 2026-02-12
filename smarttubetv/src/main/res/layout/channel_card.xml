@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NOTE: You can't set layout dimension for Presenter's container -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:focusableInTouchMode="true"
+             android:focusable="true"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
+    <LinearLayout
+                  android:id="@+id/channel_card_wrapper"
+                  android:orientation="horizontal"
+                  android:layout_width="@dimen/channel_card_width"
+                  android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/channel_image"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:id="@+id/channel_title"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_gravity="start|center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/lb_basic_card_info_padding"
+            android:textAlignment="textStart"/>
+    </LinearLayout>
+</FrameLayout>

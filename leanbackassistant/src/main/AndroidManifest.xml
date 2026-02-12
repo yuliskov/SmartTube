@@ -1,0 +1,92 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liskovsoft.leanbackassistant">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
+    <uses-permission android:name="com.android.providers.tv.permission.WRITE_EPG_DATA" />
+
+    <uses-sdk tools:overrideLibrary="
+        androidx.leanback,
+        androidx.tvprovider,
+        androidx.recommendation"/>
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true"
+                 android:theme="@style/AppTheme"
+                 tools:ignore="MissingTvBanner">
+
+        <!--    SEARCH    -->
+
+        <activity
+            android:name=".search.SearchableActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <provider android:name=".search.VideoContentProvider"
+                  android:authorities="org.smarttube"
+                  android:exported="true"
+                  android:initOrder="1999999999"
+                  tools:ignore="ExportedContentProvider" />
+
+        <!--  END  SEARCH    -->
+
+
+        <!--    CHANNELS    -->
+
+        <!-- Old channel updater -->
+
+        <!--
+
+        <service
+            android:name=".channels.UpdateChannelsJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
+            android:exported="true"/>
+
+        -->
+
+        <!-- END Old channel updater -->
+
+        <receiver
+            android:name=".channels.UpdateChannelsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <!-- Fix: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED -->
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <!-- Called one time after app is installed -->
+                <!-- <action android:name="android.media.tv.action.INITIALIZE_PROGRAMS" />-->
+            </intent-filter>
+        </receiver>
+
+        <!--    END CHANNELS    -->
+
+    </application>
+
+</manifest>

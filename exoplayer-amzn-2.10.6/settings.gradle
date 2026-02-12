@@ -1,0 +1,30 @@
+// Copyright (C) 2016 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+gradle.ext.exoplayerRoot = settingsDir
+
+def modulePrefix = ':'
+if (gradle.ext.has('exoplayerModulePrefix')) {
+    modulePrefix += gradle.ext.exoplayerModulePrefix
+}
+
+include modulePrefix + 'demo'
+include modulePrefix + 'demo-cast'
+include modulePrefix + 'demo-ima'
+include modulePrefix + 'playbacktests'
+project(modulePrefix + 'demo').projectDir = new File(rootDir, 'demos/main')
+project(modulePrefix + 'demo-cast').projectDir = new File(rootDir, 'demos/cast')
+project(modulePrefix + 'demo-ima').projectDir = new File(rootDir, 'demos/ima')
+project(modulePrefix + 'playbacktests').projectDir = new File(rootDir, 'playbacktests')
+
+apply from: 'core_settings.gradle'

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.LeanbackBase" parent="android:TextAppearance.Material"/>
+    <style name="Theme.Leanback.Browse" parent="Theme.Leanback">
+        <item name="android:windowEnterTransition">@transition/lb_browse_enter_transition</item>
+        <item name="android:windowReturnTransition">@transition/lb_browse_return_transition</item>
+    </style>
+    <style name="Theme.Leanback.Details" parent="Theme.Leanback">
+        <item name="android:windowEnterTransition">@transition/lb_details_enter_transition</item>
+        <item name="android:windowReturnTransition">@transition/lb_details_return_transition</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/lb_shared_element_enter_transition</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/lb_shared_element_return_transition</item>
+    </style>
+    <style name="Theme.Leanback.Details.NoSharedElementTransition">
+        <item name="android:windowSharedElementEnterTransition">@null</item>
+        <item name="android:windowSharedElementReturnTransition">@null</item>
+    </style>
+    <style name="Theme.Leanback.GuidedStep.HalfBase" parent="Theme.Leanback.GuidedStep">
+        <item name="android:windowEnterTransition">@transition/lb_guidedstep_activity_enter_bottom</item>
+    </style>
+    <style name="Theme.Leanback.GuidedStepBase" parent="Theme.LeanbackBase">
+        <item name="guidedActionsSelectorDrawable">@drawable/lb_selectable_item_rounded_rect</item>
+        <item name="android:windowEnterTransition">@transition/lb_guidedstep_activity_enter</item>
+        <item name="android:windowTransitionBackgroundFadeDuration">@integer/lb_guidedstep_activity_background_fade_duration_ms</item>
+    </style>
+    <style name="Theme.Leanback.VerticalGrid" parent="Theme.Leanback">
+        <item name="android:windowEnterTransition">@transition/lb_vertical_grid_enter_transition</item>
+        <item name="android:windowReturnTransition">@transition/lb_vertical_grid_return_transition</item>
+    </style>
+    <style name="Theme.LeanbackBase" parent="android:Theme.Material.NoActionBar">
+        <item name="playbackProgressPrimaryColor">?android:attr/colorAccent</item>
+        <item name="playbackControlsIconHighlightColor">?android:attr/colorAccent</item>
+        <item name="defaultBrandColor">?android:attr/colorPrimary</item>
+        <item name="android:colorPrimary">@color/lb_default_brand_color</item>
+        <item name="defaultBrandColorDark">?android:attr/colorPrimaryDark</item>
+        <item name="android:colorPrimaryDark">@color/lb_default_brand_color_dark</item>
+
+        <item name="android:colorAccent">@color/lb_preference_item_category_text_color</item>
+        <item name="android:windowOverscan">true</item>
+        <item name="guidedStepTheme">@style/Theme.Leanback.GuidedStep</item>
+
+        <!-- android:windowSharedElementEnterTransition is kept for backward compatibility for apps still refer
+        to Theme.Leanback, app should use Theme.Leanback.Details instead -->
+        <item name="android:windowSharedElementEnterTransition">@transition/lb_shared_element_enter_transition</item>
+        <!-- android:windowSharedElementReturnTransition is kept for backward compatibility for apps still refer
+        to Theme.Leanback, app should use Theme.Leanback.Details instead -->
+        <item name="android:windowSharedElementReturnTransition">@transition/lb_shared_element_return_transition</item>
+        <item name="android:windowEnterTransition">@transition/lb_enter_transition</item>
+        <item name="android:windowReturnTransition">@transition/lb_return_transition</item>
+        <item name="android:windowTransitionBackgroundFadeDuration">350</item>
+
+    </style>
+    <style name="Widget.Leanback.DetailsActionButtonStyleBase" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:background">@drawable/lb_action_bg</item>
+    </style>
+    <style name="Widget.Leanback.OnboardingStartButtonStyleBase">
+        <item name="android:elevation">1.5dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+    <style name="Widget.LeanbackBase" parent="android:Widget.Material"/>
+</resources>

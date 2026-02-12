@@ -1,0 +1,237 @@
+apply from: gradle.ext.sharedModulesConstants
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // Check that you have the Google Services Gradle plugin v4.3.2 or later
+        // (if not, add it).
+        classpath 'com.google.gms:google-services:4.3.10'
+
+        // Add the Crashlytics Gradle plugin.
+        // https://firebase.google.com/docs/crashlytics/get-started?platform=android
+        // https://firebase.google.com/docs/android/setup
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+// The first letter of the flavor name must be in uppercase
+if (new File("${projectDir}/google-services.json").exists() && (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
+        getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))) {
+    // Google Services Gradle plugin (transforms google-services.json file)
+    apply plugin: 'com.google.gms.google-services'
+
+    // Apply the Crashlytics Gradle plugin
+    apply plugin: 'com.google.firebase.crashlytics'
+}
+
+android {
+    // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+    testOptions.unitTests.includeAndroidResources = true
+    
+    defaultConfig {
+        // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
+        applicationId "org.smarttube"
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 2274
+        versionName "30.84"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
+
+        // More info: http://myhexaville.com/2017/03/10/android-multidex/
+        // Additionally, you should extend your application from MultiDexApplication
+        multiDexEnabled = true
+
+        // Trying to fix VerifyError/ClassNotFoundException
+        multiDexKeepProguard file("multidex-keep.pro")
+
+        // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
+        // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
+        splits {
+            abi {
+                enable true
+                reset()
+                // Note, Android could soon start warning users when they run 32-bit apps
+                //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
+                include 'armeabi-v7a', 'x86', 'arm64-v8a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
+                universalApk true //generate an additional APK that contains all the ABIs
+            }
+        }
+    }
+
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                storeFile = file(keystoreProperties['storeFile'])
+                storePassword = keystoreProperties['storePassword']
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+            }
+        }
+    }
+    
+    buildTypes {
+        release {
+            // Enable minification
+            // shrinkResources true
+            // minifyEnabled true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+        // Use same key for release and debug for testing
+        debug {
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
+    productFlavors {
+        stbeta {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".beta"
+        }
+        ststable {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".stable"
+        }
+        stfdroid {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".fdroid"
+            targetSdkVersion project.properties.compileSdkVersion
+        }
+    }
+
+    // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
+    // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def project = "SmartTube"
+            def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
+            def buildType = variant.buildType.name.take(1)
+            def version = variant.versionName
+            def arch = output.getFilter(com.android.build.OutputFile.ABI)
+            arch = arch != null ? arch : "universal"
+
+            def newApkName = sprintf("%s_%s_%s_%s.apk", [project, flavor, version, arch])
+
+            // gradle 4.6 migration
+            output.outputFileName = new File(newApkName)
+        }
+    }
+
+    packagingOptions {
+        // openvpn module fix: More than one file was found with OS independent path 'META-INF/com.android.tools/proguard/coroutines.pro'
+        //exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
+        // Not working!
+        // exclude '**/SearchOrbView.class'
+
+        // Remove unneeded arches from universal apk here because 'splits' cannot do this
+        exclude "lib/x86_64/**"
+        exclude "lib/armeabi/**"
+    }
+
+    lintOptions {
+        checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation 'androidx.leanback:leanback:' + leanbackXLibraryVersion
+    implementation 'androidx.leanback:leanback-preference:' + leanbackXLibraryVersion
+    implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
+    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion // exoplayer 2.12.1 fix
+    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
+
+    implementation 'com.github.bumptech.glide:glide:' + glideVersion
+    implementation 'com.github.bumptech.glide:annotations:' + glideVersion
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
+    implementation 'com.github.zjupure:webpdecoder:' + webpDecoderVersion
+    implementation 'androidx.multidex:multidex:' + multiDexVersion
+
+    //////// BEGIN EXOPLAYER /////////
+
+    implementation project(':exoplayer-library')
+    implementation project(':exoplayer-extension-leanback')
+    implementation project(':exoplayer-extension-mediasession')
+
+    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
+
+    // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
+    // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
+    // implementation 'com.google.android.exoplayer:extension-mediasession:' + exoplayerVersion
+
+    // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
+
+    //////// END EXOPLAYER //////////
+
+    testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.robolectric:robolectric:' + robolectricVersion
+    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
+
+    implementation project(':fragment-1.1.0')
+    implementation project(':leanback-1.0.0')
+    implementation project(':common')
+    implementation project(':sharedutils')
+    implementation project(':mediaserviceinterfaces')
+    implementation project(':youtubeapi')
+    implementation project(':chatkit')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+
+    // Add the Firebase Crashlytics SDK.
+
+    stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
+        transitive = true
+    }
+
+    ststableImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
+        transitive = true
+    }
+
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+
+    implementation 'net.gotev:speech:' + gotevSpeechVersion
+}

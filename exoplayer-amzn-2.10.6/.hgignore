@@ -1,0 +1,78 @@
+# Mercurial's .hgignore files can only be used in the root directory.
+# You can still apply these rules by adding
+# include:path/to/this/directory/.hgignore to the top-level .hgignore file.
+
+# Ensure same syntax as in .gitignore can be used
+syntax:glob
+
+# Android generated
+bin
+gen
+libs
+obj
+lint.xml
+
+# IntelliJ IDEA & Android Studio
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+gen-external-apklibs
+*.li
+
+# Eclipse
+.project
+.classpath
+.settings
+.checkstyle
+.cproject
+
+# Gradle
+.gradle
+build
+buildout
+out
+
+# Maven
+target
+release.properties
+pom.xml.*
+
+# Ant
+ant.properties
+local.properties
+proguard.cfg
+proguard-project.txt
+
+# Bazel
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-testlogs
+
+# Other
+.DS_Store
+cmake-build-debug
+dist
+tmp
+
+# VP9 extension
+extensions/vp9/src/main/jni/libvpx
+extensions/vp9/src/main/jni/libvpx_android_configs
+extensions/vp9/src/main/jni/libyuv
+
+# Opus extension
+extensions/opus/src/main/jni/libopus
+
+# FLAC extension
+extensions/flac/src/main/jni/flac
+
+# FFmpeg extension
+extensions/ffmpeg/src/main/jni/ffmpeg
+
+# Cronet extension
+extensions/cronet/jniLibs/*
+!extensions/cronet/jniLibs/README.md
+extensions/cronet/libs/*
+!extensions/cronet/libs/README.md

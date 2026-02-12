@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Prejšnja skladba</string>
+  <string name="exo_controls_next_description">Naslednja skladba</string>
+  <string name="exo_controls_pause_description">Zaustavitev</string>
+  <string name="exo_controls_play_description">Predvajanje</string>
+  <string name="exo_controls_stop_description">Ustavitev</string>
+  <string name="exo_controls_rewind_description">Previjanje nazaj</string>
+  <string name="exo_controls_fastforward_description">Previjanje naprej</string>
+  <string name="exo_controls_repeat_off_description">Brez ponavljanja</string>
+  <string name="exo_controls_repeat_one_description">Ponavljanje ene</string>
+  <string name="exo_controls_repeat_all_description">Ponavljanje vseh</string>
+  <string name="exo_controls_shuffle_on_description">Naklj. predvajanje vklopljeno</string>
+  <string name="exo_controls_shuffle_off_description">Naklj. predvajanje izklopljeno</string>
+  <string name="exo_controls_fullscreen_description">Celozaslonski način</string>
+  <string name="exo_controls_vr_description">Način VR</string>
+  <string name="exo_download_description">Prenos</string>
+  <string name="exo_download_notification_channel_name">Prenosi</string>
+  <string name="exo_download_downloading">Prenašanje</string>
+  <string name="exo_download_completed">Prenos je končan</string>
+  <string name="exo_download_failed">Prenos ni uspel</string>
+  <string name="exo_download_removing">Odstranjevanje prenosov</string>
+  <string name="exo_track_selection_title_video">Videoposnetki</string>
+  <string name="exo_track_selection_title_audio">Zvočni posnetki</string>
+  <string name="exo_track_selection_title_text">Podnapisi</string>
+  <string name="exo_track_selection_none">Nič</string>
+  <string name="exo_track_selection_auto">Samodejno</string>
+  <string name="exo_track_unknown">Neznano</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Stereo</string>
+  <string name="exo_track_surround">Prostorski zvok</string>
+  <string name="exo_track_surround_5_point_1">Prostorski zvok 5.1</string>
+  <string name="exo_track_surround_7_point_1">Prostorski zvok 7.1</string>
+  <string name="exo_track_role_alternate">Dodatni posnetek</string>
+  <string name="exo_track_role_supplementary">Dodatek</string>
+  <string name="exo_track_role_commentary">Komentar</string>
+  <string name="exo_track_role_closed_captions">Podnapisi</string>
+  <string name="exo_track_bitrate">%1$.2f Mb/s</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

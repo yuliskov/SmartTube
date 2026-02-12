@@ -1,0 +1,12 @@
+<resources>
+    <string translatable="false" name="app_name">LeanbackAssistant</string>
+    <string translatable="false" name="search_authority">org.smarttube</string>
+
+    <string name="search_hint">Search for Videos</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube Videos</string>
+    <string name="cant_play_video">Can\'t play this video</string>
+    <string name="header_subscriptions">Subscriptions</string>
+    <string name="header_history">History</string>
+    <string name="recommended">Recommended</string>
+</resources>

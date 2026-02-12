@@ -1,0 +1,70 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: gradle.ext.sharedModulesConstants
+
+// NOT working
+// Running 'gradle wrapper' will generate gradlew
+wrapper {
+    gradleVersion = gradleVersion
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+buildscript {
+    apply from: gradle.ext.sharedModulesConstants
+
+    repositories {
+        google()
+        mavenCentral()
+        // IntelliJ 'Read timed out' (error 403)
+        // https://stackoverflow.com/questions/74258160/is-jcenter-down-permanently-31-oct
+        //jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.0+'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + kotlinVersion
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        //flatDir { dirs 'libs' } // include duktape-my to all subprojects
+        // IntelliJ 'Read timed out' (error 403)
+        // https://stackoverflow.com/questions/74258160/is-jcenter-down-permanently-31-oct
+        //jcenter()
+    }
+    configurations.all {
+        // WorkManager conflict resolution
+        resolutionStrategy.force 'androidx.lifecycle:lifecycle-livedata-core:' + liveDataVersion
+        resolutionStrategy.force 'androidx.lifecycle:lifecycle-livedata:' + liveDataVersion
+        resolutionStrategy.force 'androidx.lifecycle:lifecycle-runtime:' + liveDataVersion
+        // Force Android 4 compatible okHttp version
+        resolutionStrategy.force 'com.squareup.okhttp3:okhttp:' + okhttpVersion
+        // Downgrade kotlin version for WorkManager
+        resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:' + kotlinVersion
+        resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
+        resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion
+        resolutionStrategy.force 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
+        resolutionStrategy.force 'androidx.core:core-ktx:' + kotlinCoreXVersion
+        resolutionStrategy.force 'androidx.core:core:' + coreXLibraryVersion
+        resolutionStrategy.force 'androidx.annotation:annotation:' + annotationXLibraryVersion
+        // Downgrade Cronet version for cronet-okhttp
+        resolutionStrategy.force 'org.chromium.net:cronet-api:' + cronetApiVersion
+        resolutionStrategy.force 'androidx.multidex:multidex:' + multiDexVersion
+
+        // Replace with modded library (leanback-1.0.0)
+        exclude group: 'androidx.leanback', module: 'leanback'
+        // Replace with modded library (fragment-1.1.0)
+        exclude group: 'androidx.fragment', module: 'fragment'
+
+        // Don't work! Replace with modded library (leanback-1.0.0)
+        // resolutionStrategy.dependencySubstitution {
+        //     // substitute remote dependency with local module
+        //     substitute module('androidx.leanback:leanback') using project(':leanback-1.0.0')
+        // }
+    }
+}

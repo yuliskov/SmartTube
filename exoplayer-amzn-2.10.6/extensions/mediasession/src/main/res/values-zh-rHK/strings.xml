@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">不重複播放</string>
+  <string name="exo_media_action_repeat_one_description">重複播放一個</string>
+  <string name="exo_media_action_repeat_all_description">全部重複播放</string>
+</resources>

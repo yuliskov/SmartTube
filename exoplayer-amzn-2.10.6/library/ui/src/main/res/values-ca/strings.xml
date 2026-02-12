@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2019 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="exo_controls_previous_description">Pista anterior</string>
+  <string name="exo_controls_next_description">Pista següent</string>
+  <string name="exo_controls_pause_description">Posa en pausa</string>
+  <string name="exo_controls_play_description">Reprodueix</string>
+  <string name="exo_controls_stop_description">Atura</string>
+  <string name="exo_controls_rewind_description">Rebobina</string>
+  <string name="exo_controls_fastforward_description">Avança ràpidament</string>
+  <string name="exo_controls_repeat_off_description">No en repeteixis cap</string>
+  <string name="exo_controls_repeat_one_description">Repeteix una</string>
+  <string name="exo_controls_repeat_all_description">Repeteix tot</string>
+  <string name="exo_controls_shuffle_on_description">Activa reproducció aleatòria</string>
+  <string name="exo_controls_shuffle_off_description">Desactiva reproducció aleatòria</string>
+  <string name="exo_controls_fullscreen_description">Mode de pantalla completa</string>
+  <string name="exo_controls_vr_description">Mode RV</string>
+  <string name="exo_download_description">Baixa</string>
+  <string name="exo_download_notification_channel_name">Baixades</string>
+  <string name="exo_download_downloading">S\'està baixant</string>
+  <string name="exo_download_completed">S\'ha completat la baixada</string>
+  <string name="exo_download_failed">No s\'ha pogut baixar</string>
+  <string name="exo_download_removing">S\'estan suprimint les baixades</string>
+  <string name="exo_track_selection_title_video">Vídeo</string>
+  <string name="exo_track_selection_title_audio">Àudio</string>
+  <string name="exo_track_selection_title_text">Text</string>
+  <string name="exo_track_selection_none">Cap</string>
+  <string name="exo_track_selection_auto">Automàtica</string>
+  <string name="exo_track_unknown">Desconegut</string>
+  <string name="exo_track_resolution">%1$d × %2$d</string>
+  <string name="exo_track_mono">Mono</string>
+  <string name="exo_track_stereo">Estèreo</string>
+  <string name="exo_track_surround">So envoltant</string>
+  <string name="exo_track_surround_5_point_1">So envoltant 5.1</string>
+  <string name="exo_track_surround_7_point_1">So envoltant 7.1</string>
+  <string name="exo_track_role_alternate">Alternativa</string>
+  <string name="exo_track_role_supplementary">Complementària</string>
+  <string name="exo_track_role_commentary">Comentaris</string>
+  <string name="exo_track_role_closed_captions">Subtítols</string>
+  <string name="exo_track_bitrate">%1$.2f Mbps</string>
+  <string name="exo_item_list">%1$s, %2$s</string>
+</resources>

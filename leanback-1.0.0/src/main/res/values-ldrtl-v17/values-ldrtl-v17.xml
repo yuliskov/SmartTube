@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="lb_onboarding_start_button_translation_offset">-16dp</dimen>
+    <integer name="slideEdgeEnd">3</integer>
+    <integer name="slideEdgeStart">5</integer>
+</resources>

@@ -1,0 +1,20 @@
+WEBVTT
+
+NOTE
+This is a comment block
+with multiple lines
+
+1
+00:00.000 --> 00:01.234
+This is the first subtitle.
+
+NOTE Single line comment with a space
+
+NOTE	Single line comment with a tab
+
+2
+00:02.345 --> 00:03.456
+This is the second subtitle.
+
+NOTE
+File ending with a comment

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/compatibility_pressed_color" android:state_pressed="true" />
+    <item android:drawable="@color/compatibility_focus_color" android:state_focused="true" />
+    <item android:drawable="@color/transparent" />
+</selector>

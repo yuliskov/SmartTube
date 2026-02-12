@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message StreamProtectionStatus {
+  enum Status {
+    UNKNOWN = 0;
+    OK = 1;
+    ATTESTATION_PENDING = 2;
+    ATTESTATION_REQUIRED = 3;
+  }
+  optional Status status = 1;
+  optional int32 max_retries = 2;
+}

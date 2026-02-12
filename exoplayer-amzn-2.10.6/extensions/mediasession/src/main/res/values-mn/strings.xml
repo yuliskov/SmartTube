@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">Алийг нь ч дахин тоглуулахгүй</string>
+  <string name="exo_media_action_repeat_one_description">Одоогийн тоглуулж буй медиаг дахин тоглуулах</string>
+  <string name="exo_media_action_repeat_all_description">Бүгдийг нь дахин тоглуулах</string>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="supported_languages">
+        <item>English|en_US</item>
+        <item>Croatian|hr</item>
+        <item>Українська|uk_UA</item>
+        <item>Русский|ru_RU</item>
+        <item>Azerbaijani|az_AZ</item>
+        <item>Armenian|hy</item>
+        <item>Serbian|sr</item>
+        <item>Polski|pl</item>
+        <item>Eesti keel|et_EE</item>
+        <item>Deutsch|de_DE</item>
+        <item>Български|bg</item>
+        <item>Romanian|ro</item>
+        <item>Swedish|sv</item>
+        <item>Finnish|fi</item>
+        <item>Latviešu|lv</item>
+        <item>Français|fr</item>
+        <item>Hungarian|hu</item>
+        <item>Nederlands|nl</item>
+        <item>Norsk|nb</item>
+        <item>Czech|cs</item>
+        <item>Italiano|it</item>
+        <item>Danish|da</item>
+        <item>Lithuanian|lt</item>
+        <item>Moldovan|mo</item>
+        <item>Slovak|sk</item>
+        <item>Slovenian|sl</item>
+        <item>English (New Zealand)|en_NZ</item>
+        <item>Español|es</item>
+        <item>Ελληνικά|el_GR</item>
+        <item>Português|pt_PT</item>
+        <item>Português (Brasileiro)|pt_BR</item>
+        <item>Arabic|ar</item>
+        <item>Turkish|tr</item>
+        <item>Hindi|hi</item>
+        <item>Bengali|bn</item>
+        <item>Tai|tjl</item>
+        <item>עברית|he</item>
+        <item>Tiếng Việt|vi_VN</item>
+        <!-- Telugu - indian lang -->
+        <item>Telugu|te</item>
+        <item>简体中文|zh_CN</item>
+        <item>中文 (繁體)|zh_TW</item>
+        <item>Indonesian|in</item>
+        <item>日本語|ja</item>
+        <item>한국어|ko</item>
+        <item>Catalan|ca_ES</item>
+        <item>Galician|gl_ES</item>
+        <item>Shqip|sq</item>
+    </string-array>
+</resources>

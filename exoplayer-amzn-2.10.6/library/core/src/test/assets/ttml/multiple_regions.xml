@@ -1,0 +1,29 @@
+<tt xmlns="http://www.w3.org/ns/ttml"
+    xmlns="http://www.w3.org/2006/10/ttaf1"
+    xmlns:id="http://www.w3.org/XML/1998/namespace"
+    xmlns:ttp="http://www.w3.org/ns/ttml#parameter"
+    xmlns:tts="http://www.w3.org/ns/ttml#styling"
+    xmlns:ttm="http://www.w3.org/ns/ttml#metadata">
+    <head>
+        <layout>
+            <region xml:id="region1" ttm:origin="10% 10%" extent="20% 20%"/>
+            <region xml:id="region2" ttm:origin="40% 40%" extent="20% 20%"/>
+            <region xml:id="region3" ttm:origin="10% 80%"/>
+            <region xml:id="region4" ttm:origin="60% 10%" extent="20% 20%"/>
+            <region xml:id="ultimate" ttm:origin="45% 45%" extent="35% 35%"/>
+        </layout>
+    </head>
+    <body>
+        <div>
+            <p begin="1s" end="4s" region="region1">lorem</p>
+            <p begin="5s" end="8s" region="region2">ipsum</p>
+            <p begin="9s" end="18s" region="region3">dolor</p>
+            <p begin="1s" end="4s" region="region4">amet</p>
+        </div>
+        <div region="ultimate">
+            <p begin="21s" end="34s">She first said this</p>
+            <p begin="25s" end="34s">Then this</p>
+            <p begin="29s" end="34s">Finally this</p>
+        </div>
+    </body>
+</tt>

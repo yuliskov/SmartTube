@@ -1,0 +1,98 @@
+name: VirusTotal Scan
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to scan'
+        required: true
+
+jobs:
+  virustotal_scan:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    env:
+      HAS_VT_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY != '' }}
+
+    steps:
+      - name: Set tag variable
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG_NAME=${{ github.event.inputs.release_tag }}" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set report marker variable
+        run: |
+          echo -e "MARKER=\t\t\t" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Release Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p release_assets
+          gh release download "$TAG_NAME" --dir release_assets --pattern "*.apk"
+
+      - name: VirusTotal Scan
+        if: ${{ env.HAS_VT_KEY == 'true' }}
+        id: vt
+        uses: crazy-max/ghaction-virustotal@v4
+        with:
+          vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
+          files: |
+            release_assets/*.apk
+          request_rate: 3
+
+      - name: Generate Custom Badge Report
+        if: steps.vt.outcome == 'success'
+        run: |
+          echo "Waiting 150s for VirusTotal engines to report..."
+          sleep 150
+
+          echo -e "$MARKER\n## 🛡️ VirusTotal Analysis" > vt_report.txt
+          echo "" >> vt_report.txt
+
+          echo "| Build Variant | VirusTotal Status | Detailed Report |" >> vt_report.txt
+          echo "| :--- | :--- | :--- |" >> vt_report.txt
+          
+          for file in release_assets/*.apk; do
+            [ -e "$file" ] || continue
+            filename=$(basename "$file")
+            sha256=$(sha256sum "$file" | awk '{print $1}')
+
+            vt_link="https://www.virustotal.com/gui/file/$sha256/detection"
+            badge_url="https://badges.cssnr.com/vt/id/$sha256?start=green&end=red&n=8"
+
+            echo "Purging badge cache for $filename..."
+            curl -s -X POST $badge_url
+            
+            asset_link="https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/$filename"
+            
+            echo "| [$filename]($asset_link) | [![]($badge_url&v=$(date +%s))]($vt_link) | [View Report]($vt_link) |" >> vt_report.txt
+          done
+
+      - name: Update Release Notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "$TAG_NAME" --json body -q .body > current_notes.txt || echo "" > current_notes.txt
+
+          # If the header exists, delete from that line to the end
+          if grep -q "$MARKER" current_notes.txt; then
+            echo "Previous report found. Cleaning up..."
+            sed -i "/$MARKER/,\$d" current_notes.txt
+          fi
+          
+          {
+            cat current_notes.txt
+            cat vt_report.txt
+          } > final_notes.txt
+          
+          gh release edit "$TAG_NAME" --notes-file final_notes.txt

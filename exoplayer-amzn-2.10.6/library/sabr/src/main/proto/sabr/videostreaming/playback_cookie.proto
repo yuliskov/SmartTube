@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sabr.videostreaming;
+
+import "sabr/misc/common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.exoplayer2.source.sabr.protos.videostreaming";
+option optimize_for = LITE_RUNTIME;
+
+message PlaybackCookie {
+  optional int32 resolution = 1; // Always 999999 when resolution is set manually, or if the auto selected one is the max available resolution.
+  optional int32 field2 = 2;
+  optional sabr.misc.FormatId video_fmt = 7;
+  optional sabr.misc.FormatId audio_fmt = 8;
+}

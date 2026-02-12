@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">কোনও আইটেম আবার চালাবেন না</string>
+  <string name="exo_media_action_repeat_one_description">একটি আইটেম আবার চালান</string>
+  <string name="exo_media_action_repeat_all_description">সবগুলি আইটেম আবার চালান</string>
+</resources>

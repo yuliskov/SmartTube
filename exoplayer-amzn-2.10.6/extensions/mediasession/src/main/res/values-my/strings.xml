@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="exo_media_action_repeat_off_description">မည်သည်ကိုမျှ ပြန်မကျော့ရန်</string>
+  <string name="exo_media_action_repeat_one_description">တစ်ခုကို ပြန်ကျော့ရန်</string>
+  <string name="exo_media_action_repeat_all_description">အားလုံး ပြန်ကျော့ရန်</string>
+</resources>

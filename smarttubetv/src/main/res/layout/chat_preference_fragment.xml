@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/main_frame"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/lb_preference_decor_list_background"
+              android:elevation="@dimen/lb_preference_decor_elevation"
+              android:orientation="vertical"
+              android:transitionGroup="false"
+>
+
+    <FrameLayout
+        android:id="@+id/decor_title_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/defaultBrandColor"
+        android:elevation="@dimen/lb_preference_decor_title_container_elevation"
+        android:transitionGroup="false"
+        >
+        <TextView
+            android:id="@+id/decor_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lb_preference_decor_title_text_height"
+            android:layout_marginTop="@dimen/lb_preference_decor_title_margin_top"
+            android:layout_marginStart="@dimen/lb_preference_decor_title_margin_start"
+            android:layout_marginEnd="@dimen/lb_preference_decor_title_margin_end"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textSize="@dimen/lb_preference_decor_title_text_size"
+            android:textColor="?android:attr/textColorPrimary"
+            />
+    </FrameLayout>
+
+    <!--<TextView-->
+    <!--    android:id="@android:id/message"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:fontFamily="sans-serif-condensed"-->
+    <!--    android:paddingTop="14dp"-->
+    <!--    android:paddingBottom="14dp"-->
+    <!--    android:paddingStart="24dp"-->
+    <!--    android:paddingEnd="56dp"-->
+    <!--    android:visibility="gone" />-->
+
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/messagesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:textAutoLink="web"
+        app:showIncomingTime="false"
+        app:isMessageFocusable="true"
+        app:incomingBubblePaddingLeft="10sp"
+        app:incomingBubblePaddingRight="10sp"
+        app:incomingBubblePaddingTop="0sp"
+        app:incomingBubblePaddingBottom="0sp"
+        app:incomingAvatarWidth="30dp"
+        app:incomingAvatarHeight="30dp"
+        app:incomingDefaultBubbleColor="@color/comments_bg"
+        app:incomingDefaultBubbleSelectedColor="@color/comments_bg_pressed"
+        app:incomingDefaultBubblePressedColor="@color/comments_bg_pressed"
+        app:incomingTextColor="@color/white"
+        />
+
+</LinearLayout>

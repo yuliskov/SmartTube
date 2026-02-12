@@ -1,0 +1,10 @@
+<tt xmlns:ttm="http://www.w3.org/2006/10/ttaf1#metadata" xmlns:ttp="http://www.w3.org/2006/10/ttaf1#parameter"
+  xmlns:tts="http://www.w3.org/2006/10/ttaf1#style"
+  xmlns="http://www.w3.org/ns/ttml"
+  xmlns="http://www.w3.org/2006/10/ttaf1">
+  <body>
+    <div>
+      <p begin="10s" end="18s" tts:fontSize="">empty</p>
+    </div>
+  </body>
+</tt>

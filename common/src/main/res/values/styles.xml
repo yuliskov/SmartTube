@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Other fullscreen params are set here: leanback-1.0.0\src\main\res\values-v19\values-v19.xml:3 -->
+    <style name="FitSystemWindows" parent="TransparentStatus">
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+    <style name="BehindSystemWindows" parent="TransparentStatus">
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+    <style name="TransparentStatus">
+        <!-- Make status and nav bars same color as the app -->
+        <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="19">true</item>
+    </style>
+</resources>
