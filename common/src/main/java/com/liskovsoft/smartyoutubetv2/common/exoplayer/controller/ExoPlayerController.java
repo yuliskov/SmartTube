@@ -373,7 +373,11 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
+            float pitch = speed;
+            if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
+                pitch = mPlayer.getPlaybackParameters().pitch;
+            }
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, pitch));
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
