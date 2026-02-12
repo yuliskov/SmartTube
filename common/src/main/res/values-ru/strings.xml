@@ -637,7 +637,7 @@
     <string name="play_next">Воспроизвести следующим</string>
     <string name="hide_watched_from_subscriptions">Скрывать просмотренные видео из Подписок</string>
     <string name="hide_watched_from_notifications">Скрывать просмотренные видео из Уведомлений</string>
-    <string name="hide_unwanted_content">Скрывать содержимое</string>
+    <string name="hide_unwanted_content">Скрывать видео</string>
     <string name="hide_watched_from_home">Скрывать просмотренные видео из Домашнего раздела</string>
     <string name="hide_watched_from_watch_later">Скрывать просмотренные видео из плейлиста Смотреть позже</string>
     <string name="remote_control_permission">Фоновое Дистанционное управление требует разрешения Перекрывать другие окна</string>
@@ -711,5 +711,11 @@
     <string name="once_a_day">Один раз в день</string>
     <string name="once_a_week">Один раз в неделю</string>
     <string name="once_a_month">Один раз в месяц</string>
-    <string name="action_debug_info">Отладочная информация</string>
+  <string name="dialog_blacklist_channel">В черный список</string>
+  <string name="dialog_remove_from_blacklist">Убрать из черного списка</string>
+  <string name="confirm_blacklist_channel">Скрыть весь контент от %s?</string>
+  <string name="blacklisted_channel">Канал добавлен в черный список</string>
+  <string name="removed_from_blacklist">Канал убран из черного списка</string>
+  <string name="header_blacklisted_channels">Черный список</string>
+  <string name="msg_no_blacklisted_channels">Черный список пуст</string>
 </resources>

@@ -637,7 +637,7 @@
     <string name="play_next">Відтворити наступним</string>
     <string name="hide_watched_from_subscriptions">Приховати переглянуті відео з Підписок</string>
     <string name="hide_watched_from_notifications">Приховати переглянуті відео з Повідомлень</string>
-    <string name="hide_unwanted_content">Приховати вміст</string>
+    <string name="hide_unwanted_content">Приховати відео</string>
     <string name="hide_watched_from_home">Приховати переглянуті відео з Головного розділу</string>
     <string name="hide_watched_from_watch_later">Приховати переглянуті відео зі списку Переглянути пізніше</string>
     <string name="remote_control_permission">Фонове Дистанційне керування вимагає дозволу на Перекривання інших вікон</string>
@@ -709,5 +709,11 @@
     <string name="once_a_day">Один раз на день</string>
     <string name="once_a_week">Один раз на тиждень</string>
     <string name="once_a_month">Один раз на місяць</string>
-    <string name="action_debug_info">Налагоджувальна інформація</string>
+  <string name="dialog_blacklist_channel">Додати до чорного списку</string>
+  <string name="dialog_remove_from_blacklist">Видалити з чорного списку</string>
+  <string name="confirm_blacklist_channel">Приховати весь контент від %s?</string>
+  <string name="blacklisted_channel">Канал у чорному списку</string>
+  <string name="removed_from_blacklist">Канал видалено з чорного списку</string>
+  <string name="header_blacklisted_channels">Чорний список</string>
+  <string name="msg_no_blacklisted_channels">Чорний список порожній</string>
 </resources>

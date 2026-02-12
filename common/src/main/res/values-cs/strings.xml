@@ -81,7 +81,6 @@
     <string name="player_only_ui">Pouze ovládání</string>
     <string name="player_ui_and_pause">Ovládání a pozastavení</string>
     <string name="player_only_pause">Pouze pozastavení</string>
-    <string name="player_toggle_speed">Zapnout/Vypnout rychlost</string>
     <string name="check_for_updates">Zkontrolovat aktualizace</string>
     <string name="update_not_found">Používáte poslední verzi</string>
     <string name="update_in_progress">Čekejte…</string>
@@ -642,7 +641,7 @@
     <string name="play_next">Přehrát další</string>
     <string name="hide_watched_from_subscriptions">Skrýt zhlédnutá videa v Odběrech</string>
     <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
-    <string name="hide_unwanted_content">Skrýt obsah</string>
+    <string name="hide_unwanted_content">Skrýt videa</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
     <string name="hide_watched_from_watch_later">Skrýt zhlédnutá videa ze seznamu Přehrát později</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
@@ -654,9 +653,7 @@
     <string name="channel_filter_hint">Filtrovat kanály</string>
     <string name="player_loop_shorts">Opakovat Shorts</string>
     <string name="player_quick_shorts_skip">Přeskakovat Shorts tlačítky vlevo/vpravo</string>
-    <string name="player_quick_shorts_skip_alt">Přeskakovat Shorts tlačítky nahoru/dolů</string>
     <string name="player_quick_skip_videos">Přeskakovat běžná videa tlačítky doleva/doprava</string>
-    <string name="player_quick_skip_videos_alt">Přeskakovat běžná videa tlačítky nahoru/dolů</string>
     <string name="channels_filter">Zobrazit pole Filtrovat kanály v sekci Kanály</string>
     <string name="channel_search_bar">Vyhledávací panel na stránce kanálu</string>
     <string name="header_sports">Sporty</string>
@@ -675,7 +672,6 @@
     <string name="fullscreen_mode">Režim celé obrazovky (bez systémových lišt)</string>
     <string name="player_only_mode">Zobrazit pouze přehrávač, pokud je video otevřeno mimo aplikaci</string>
     <string name="pinned_channel_rows">Zobrazit připnutý kanál jako řádky</string>
-    <string name="prefer_google_dns">Preferovat DNS od Google</string>
     <string name="prefer_ipv4">Preferovat IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Může vyřešit situace, kdy aplikace vůbec nefunguje\nPozn. Může způsobit zamrznutí a pády (především na zařízeních s Android 8 nebo Dune HD)</string>
     <string name="long_press_for_settings">DLOUZE STISKNĚTE PRO NASTAVENÍ</string>
@@ -721,9 +717,14 @@
     <string name="once_a_day">Jednou denně</string>
     <string name="once_a_week">Jednou týdně</string>
     <string name="once_a_month">Jednou měsíčně</string>
-    <string name="action_debug_info">Debug informace</string>
+  <string name="dialog_blacklist_channel">Blokovat kanál</string>
+  <string name="dialog_remove_from_blacklist">Odblokovat kanál</string>
+  <string name="confirm_blacklist_channel">Skrýt veškerý obsah od %s?</string>
+  <string name="blacklisted_channel">Kanál zablokován</string>
+  <string name="removed_from_blacklist">Kanál odblokován</string>
+  <string name="header_blacklisted_channels">Blokované kanály</string>
+  <string name="msg_no_blacklisted_channels">Žádné blokované kanály</string>
 </resources>
-
 
 
 
