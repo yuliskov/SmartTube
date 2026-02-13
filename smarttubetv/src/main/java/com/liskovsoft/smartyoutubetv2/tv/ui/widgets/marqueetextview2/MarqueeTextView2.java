@@ -2,9 +2,14 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview2;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.text.Layout;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
@@ -54,12 +59,12 @@ public class MarqueeTextView2 extends TextView {
         }
     };
 
-    private float mLeftX = 0f;
+    protected float mLeftX = 0f;
 
     /**
      * Minimum spacing distance between head and tail when scrolling text
      */
-    private int mSpace = DEFAULT_SPACE;
+    protected int mSpace = DEFAULT_SPACE;
 
     /**
      * Text scrolling speed
@@ -98,8 +103,10 @@ public class MarqueeTextView2 extends TextView {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
-        mTextView.setMaxLines(1);
-        setMaxLines(1);
+        mTextView.setMaxLines(getMaxLines());
+        setEllipsize(TruncateAt.END);
+        //mTextView.setMaxLines(1);
+        //setMaxLines(1);
 
         mTextView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
@@ -144,7 +151,7 @@ public class MarqueeTextView2 extends TextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mTextView.measure(View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
+        mTextView.measure(isStaticMode() ? widthMeasureSpec : View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
     }
 
     @Override
@@ -160,7 +167,7 @@ public class MarqueeTextView2 extends TextView {
             return;
         }
 
-        if (mTextView.getMeasuredWidth() <= getWidth()) {
+        if (isTextFullyVisible()) {
             // When text width is smaller than view width, do not scroll
             mTextView.draw(canvas);
         } else {
@@ -186,7 +193,7 @@ public class MarqueeTextView2 extends TextView {
     }
 
     private void onDrawRTL(Canvas canvas) {
-        if (mTextView.getMeasuredWidth() <= getWidth()) {
+        if (isTextFullyVisible()) {
             // When text width is smaller than view width, do not scroll
             int save = canvas.save();
             canvas.translate((getWidth() - mTextView.getMeasuredWidth()), 0f);
@@ -233,16 +240,61 @@ public class MarqueeTextView2 extends TextView {
         Choreographer.getInstance().removeFrameCallback(mFrameCallback);
     }
 
-    private void startScroll() {
+    @Override
+    public void setBackgroundColor(int color) {
+        super.setBackgroundColor(color);
+        mTextView.setBackgroundColor(color);
+    }
+
+    @Override
+    public void setTextColor(int color) {
+        super.setTextColor(color);
+        mTextView.setTextColor(color);
+    }
+
+    @Override
+    public void setEllipsize(TextUtils.TruncateAt where) {
+        // NOP
+    }
+
+    @Override
+    public void setMarqueeRepeatLimit(int marqueeLimit) {
+        // NOP
+    }
+
+    @Override
+    public void setHorizontallyScrolling(boolean whether) {
+        // NOP
+    }
+
+    @Override
+    public void setTextDirection(int textDirection) {
+        super.setTextDirection(textDirection);
+        mTextView.setTextDirection(textDirection);
+    }
+
+    @Override
+    public void setTextAlignment(int textAlignment) {
+        super.setTextAlignment(textAlignment);
+        mTextView.setTextAlignment(textAlignment);
+    }
+
+    @Override
+    public void setGravity(int gravity) {
+        super.setGravity(gravity);
+        mTextView.setGravity(gravity);
+    }
+
+    protected void startScroll() {
         updateFps();
         Choreographer.getInstance().postFrameCallback(mFrameCallback);
     }
 
-    public void pauseScroll() {
+    private void pauseScroll() {
         Choreographer.getInstance().removeFrameCallback(mFrameCallback);
     }
 
-    private void stopScroll() {
+    protected void stopScroll() {
         mLeftX = 0f;
         Choreographer.getInstance().removeFrameCallback(mFrameCallback);
     }
@@ -256,5 +308,28 @@ public class MarqueeTextView2 extends TextView {
     private float dpToPx(float dp, Context context) {
         float density = context.getResources().getDisplayMetrics().density;
         return dp * density;
+    }
+    
+    protected int getTextViewWidth() {
+        return mTextView != null ? mTextView.getMeasuredWidth() : 0;
+    }
+
+    private boolean isStaticMode() {
+        return isTextFullyVisible() || !(isFocused() || isSelected());
+    }
+
+    protected boolean isTextFullyVisible() {
+        // mTextView.getMeasuredWidth() <= getWidth()
+
+        Layout layout = getLayout();
+        if (layout == null) return false;
+
+        int lines = layout.getLineCount();
+        for (int i = 0; i < lines; i++) {
+            if (layout.getEllipsisCount(i) > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
