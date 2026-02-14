@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MarqueeTextViewCompatBase">
+    <declare-styleable name="MarqueeTextViewCompat">
         <attr name="space" format="dimension" />
         <attr name="speed" format="float" />
     </declare-styleable>

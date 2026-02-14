@@ -63,10 +63,8 @@
     android.widget.TextView mTagNameText;
     android.widget.ImageView mResultImage;
 }
--keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView {
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat {
     <init>(...);
-    float mDefaultMarqueeSpeed;
-    float mMarqueeSpeedFactor;
 }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView {
     <init>(...);
