@@ -1,14 +1,11 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview2;
+package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.Layout;
-import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.view.Choreographer;
@@ -23,7 +20,7 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 @SuppressLint("AppCompatCustomView")
-public class MarqueeTextView2 extends TextView {
+class MarqueeTextViewCompatBase extends TextView {
     /**
      * Unit: PX
      */
@@ -32,7 +29,8 @@ public class MarqueeTextView2 extends TextView {
     /**
      * Unit: DP
      */
-    private static final float DEFAULT_SPEED = 0.5f;
+    private static final float ORIGINAL_SPEED = 0.5f; // Don't change. The original marquee speed.
+    private static final float DEFAULT_SPEED = ORIGINAL_SPEED * 2;
     private static final float BASE_FPS = 60f;
 
     private int mFps = 60;
@@ -69,28 +67,27 @@ public class MarqueeTextView2 extends TextView {
     /**
      * Text scrolling speed
      */
-    private float mSpeed = DEFAULT_SPEED * 2;
+    private float mSpeed = ORIGINAL_SPEED * 2;
 
-    public MarqueeTextView2(Context context) {
+    public MarqueeTextViewCompatBase(Context context) {
         super(context);
         init(null);
     }
 
-    public MarqueeTextView2(Context context, @Nullable AttributeSet attrs) {
+    public MarqueeTextViewCompatBase(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
     private void init(@Nullable AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MarqueeTextView2);
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MarqueeTextViewCompatBase);
             mSpace = typedArray.getDimensionPixelSize(
-                    R.styleable.MarqueeTextView2_space,
+                    R.styleable.MarqueeTextViewCompatBase_space,
                     DEFAULT_SPACE
             );
             float speedDp = typedArray.getFloat(
-                    R.styleable.MarqueeTextView2_speed,
-                    DEFAULT_SPEED
+                    R.styleable.MarqueeTextViewCompatBase_speed, DEFAULT_SPEED
             );
             mSpeed = dpToPx(speedDp, getContext());
             typedArray.recycle();
@@ -104,9 +101,8 @@ public class MarqueeTextView2 extends TextView {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         mTextView.setMaxLines(getMaxLines());
-        setEllipsize(TruncateAt.END);
-        //mTextView.setMaxLines(1);
-        //setMaxLines(1);
+        mTextView.setTextAlignment(getTextAlignment());
+        super.setEllipsize(TruncateAt.END);
 
         mTextView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
@@ -128,99 +124,106 @@ public class MarqueeTextView2 extends TextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        super.setText(text, type);
         // When executing the parent constructor, if AttributeSet contains text,
         // setText will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setText(text);
-            requestLayout();
         }
+
+        super.setText(text, type);
+
+        // When executing the parent constructor, if AttributeSet contains text,
+        // setText will be called first, and mTextView is not initialized yet
+        //if (mTextView != null) {
+        //    mTextView.setText(text);
+        //    requestLayout();
+        //}
     }
 
     @Override
     public void setTextSize(int unit, float size) {
-        super.setTextSize(unit, size);
         // When executing the parent constructor, if AttributeSet contains textSize,
         // setTextSize will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setTextSize(size);
-            requestLayout();
         }
+
+        super.setTextSize(unit, size);
+
+        // When executing the parent constructor, if AttributeSet contains textSize,
+        // setTextSize will be called first, and mTextView is not initialized yet
+        //if (mTextView != null) {
+        //    mTextView.setTextSize(size);
+        //    requestLayout();
+        //}
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mTextView.measure(isStaticMode() ? widthMeasureSpec : View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
         mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
-            onDrawRTL(canvas);
-            return;
-        }
-
         if (isTextFullyVisible()) {
             // When text width is smaller than view width, do not scroll
-            mTextView.draw(canvas);
+            super.onDraw(canvas);
+        } else if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
+            onDrawRTL(canvas);
         } else {
-            // When left shift exceeds actual text length + space, reset mLeftX to create loop scrolling
-            if (mLeftX < -mTextView.getMeasuredWidth() - mSpace) {
-                mLeftX += (mTextView.getMeasuredWidth() + mSpace);
-            }
+            onDrawLTR(canvas);
+        }
+    }
 
-            int save = canvas.save();
-            canvas.translate(mLeftX, 0f);
+    private void onDrawLTR(Canvas canvas) {
+        // When left shift exceeds actual text length + space, reset mLeftX to create loop scrolling
+        if (mLeftX < -mTextView.getMeasuredWidth() - mSpace) {
+            mLeftX += (mTextView.getMeasuredWidth() + mSpace);
+        }
+
+        int save = canvas.save();
+        canvas.translate(mLeftX, 0f);
+        mTextView.draw(canvas);
+        canvas.restoreToCount(save);
+
+        // When text is fully displayed, draw second copy on the right side of visible area
+        // to create continuous scrolling effect
+        if (mLeftX + (mTextView.getMeasuredWidth() - getWidth()) < 0) {
+            int save2 = canvas.save();
+            canvas.translate(mTextView.getMeasuredWidth() + mLeftX + mSpace, 0f);
             mTextView.draw(canvas);
-            canvas.restoreToCount(save);
-
-            // When text is fully displayed, draw second copy on the right side of visible area
-            // to create continuous scrolling effect
-            if (mLeftX + (mTextView.getMeasuredWidth() - getWidth()) < 0) {
-                int save2 = canvas.save();
-                canvas.translate(mTextView.getMeasuredWidth() + mLeftX + mSpace, 0f);
-                mTextView.draw(canvas);
-                canvas.restoreToCount(save2);
-            }
+            canvas.restoreToCount(save2);
         }
     }
 
     private void onDrawRTL(Canvas canvas) {
-        if (isTextFullyVisible()) {
-            // When text width is smaller than view width, do not scroll
-            int save = canvas.save();
-            canvas.translate((getWidth() - mTextView.getMeasuredWidth()), 0f);
-            mTextView.draw(canvas);
-            canvas.restoreToCount(save);
-        } else {
-            // When right shift exceeds actual text length + space, reset mLeftX to create loop scrolling
-            if (mLeftX > mTextView.getMeasuredWidth() + mSpace) {
-                mLeftX -= (mTextView.getMeasuredWidth() + mSpace);
-            }
+        // When right shift exceeds actual text length + space, reset mLeftX to create loop scrolling
+        if (mLeftX > mTextView.getMeasuredWidth() + mSpace) {
+            mLeftX -= (mTextView.getMeasuredWidth() + mSpace);
+        }
 
-            int save = canvas.save();
-            canvas.translate(-(mTextView.getMeasuredWidth() - getWidth()) + mLeftX, 0f);
-            mTextView.draw(canvas);
-            canvas.restoreToCount(save);
+        int save = canvas.save();
+        canvas.translate(-(mTextView.getMeasuredWidth() - getWidth()) + mLeftX, 0f);
+        mTextView.draw(canvas);
+        canvas.restoreToCount(save);
 
-            // When text is fully displayed, draw second copy on the left side of visible area
-            // to create continuous scrolling effect
-            if (mLeftX - (mTextView.getMeasuredWidth() - getWidth()) > 0) {
-                int save2 = canvas.save();
-                canvas.translate(
-                        -mTextView.getMeasuredWidth() - mSpace + mLeftX - (mTextView.getMeasuredWidth() - getWidth()),
-                        0f
-                );
-                mTextView.draw(canvas);
-                canvas.restoreToCount(save2);
-            }
+        // When text is fully displayed, draw second copy on the left side of visible area
+        // to create continuous scrolling effect
+        if (mLeftX - (mTextView.getMeasuredWidth() - getWidth()) > 0) {
+            int save2 = canvas.save();
+            canvas.translate(
+                    -mTextView.getMeasuredWidth() - mSpace + mLeftX - (mTextView.getMeasuredWidth() - getWidth()),
+                    0f
+            );
+            mTextView.draw(canvas);
+            canvas.restoreToCount(save2);
         }
     }
 
@@ -236,24 +239,43 @@ public class MarqueeTextView2 extends TextView {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        super.onDetachedFromWindow();
     }
+
 
     @Override
     public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
         mTextView.setBackgroundColor(color);
+        super.setBackgroundColor(color);
     }
 
     @Override
     public void setTextColor(int color) {
-        super.setTextColor(color);
         mTextView.setTextColor(color);
+        super.setTextColor(color);
     }
 
     @Override
-    public void setEllipsize(TextUtils.TruncateAt where) {
+    public void setTextDirection(int textDirection) {
+        mTextView.setTextDirection(textDirection);
+        super.setTextDirection(textDirection);
+    }
+
+    @Override
+    public void setTextAlignment(int textAlignment) {
+        mTextView.setTextAlignment(textAlignment);
+        super.setTextAlignment(textAlignment);
+    }
+
+    @Override
+    public void setGravity(int gravity) {
+        mTextView.setGravity(gravity);
+        super.setGravity(gravity);
+    }
+
+    @Override
+    public void setEllipsize(TruncateAt where) {
         // NOP
     }
 
@@ -267,22 +289,8 @@ public class MarqueeTextView2 extends TextView {
         // NOP
     }
 
-    @Override
-    public void setTextDirection(int textDirection) {
-        super.setTextDirection(textDirection);
-        mTextView.setTextDirection(textDirection);
-    }
-
-    @Override
-    public void setTextAlignment(int textAlignment) {
-        super.setTextAlignment(textAlignment);
-        mTextView.setTextAlignment(textAlignment);
-    }
-
-    @Override
-    public void setGravity(int gravity) {
-        super.setGravity(gravity);
-        mTextView.setGravity(gravity);
+    public void setMarqueeSpeedFactor(float factor) {
+        mSpeed = dpToPx(ORIGINAL_SPEED * factor, getContext());
     }
 
     protected void startScroll() {
@@ -309,18 +317,12 @@ public class MarqueeTextView2 extends TextView {
         float density = context.getResources().getDisplayMetrics().density;
         return dp * density;
     }
-    
-    protected int getTextViewWidth() {
-        return mTextView != null ? mTextView.getMeasuredWidth() : 0;
-    }
 
     private boolean isStaticMode() {
         return isTextFullyVisible() || !(isFocused() || isSelected());
     }
 
     protected boolean isTextFullyVisible() {
-        // mTextView.getMeasuredWidth() <= getWidth()
-
         Layout layout = getLayout();
         if (layout == null) return false;
 

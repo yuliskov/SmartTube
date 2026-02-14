@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="MarqueeTextView2">
-        <attr name="space" format="dimension" />
-        <attr name="speed" format="float" />
-    </declare-styleable>
-</resources>
