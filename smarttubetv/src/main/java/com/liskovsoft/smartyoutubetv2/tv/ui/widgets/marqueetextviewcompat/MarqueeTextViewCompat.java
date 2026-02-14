@@ -116,7 +116,9 @@ public class MarqueeTextViewCompat extends TextView {
         ));
         mTextView.setMaxLines(getMaxLines());
         mTextView.setTextAlignment(getTextAlignment());
-        mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
+        if (getEllipsize() != null) {
+            mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
+        }
         super.setEllipsize(TruncateAt.END);
 
         // Android 4: Broken grid layout fix
