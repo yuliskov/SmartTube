@@ -76,6 +76,7 @@ public class MarqueeTextViewCompat extends TextView {
     private boolean mAttached;
     private boolean mWindowFocused = true;
     private boolean mLaidOut;
+    private boolean mIsMarqueeEnabled = true;
 
     public MarqueeTextViewCompat(Context context) {
         super(context);
@@ -115,6 +116,7 @@ public class MarqueeTextViewCompat extends TextView {
         ));
         mTextView.setMaxLines(getMaxLines());
         mTextView.setTextAlignment(getTextAlignment());
+        mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
         super.setEllipsize(TruncateAt.END);
 
         // Android 4: Broken grid layout fix
@@ -176,7 +178,7 @@ public class MarqueeTextViewCompat extends TextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (isTextFullyVisible()) {
+        if (isStaticMode() || mLeftX == 0f) {
             // When text width is smaller than view width, do not scroll
             super.onDraw(canvas);
         } else if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
@@ -309,7 +311,9 @@ public class MarqueeTextViewCompat extends TextView {
 
     @Override
     public void setEllipsize(TruncateAt where) {
-        // NOP
+        mIsMarqueeEnabled = where == TruncateAt.MARQUEE;
+
+        updateMarquee();
     }
 
     @Override
@@ -326,19 +330,25 @@ public class MarqueeTextViewCompat extends TextView {
         mSpeed = dpToPx(ORIGINAL_SPEED * factor, getContext());
     }
 
-    protected void startScroll() {
+    private void startScroll() {
         updateFps();
         updateTextFullyVisible();
-        Choreographer.getInstance().postFrameCallback(mFrameCallback);
+        if (mFrameCallback != null) {
+            Choreographer.getInstance().postFrameCallbackDelayed(mFrameCallback, 500);
+        }
     }
 
     private void pauseScroll() {
-        Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        if (mFrameCallback != null) {
+            Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        }
     }
 
-    protected void stopScroll() {
+    private void stopScroll() {
         mLeftX = 0f;
-        Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        if (mFrameCallback != null) {
+            Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        }
     }
 
     private void restartScroll() {
@@ -353,23 +363,20 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     private boolean isStaticMode() {
-        return isTextFullyVisible() || !(isFocused() || isSelected());
+        return !mIsMarqueeEnabled
+                || isTextFullyVisible()
+                || !(isFocused() || isSelected())
+                || (!mAttached || !mWindowFocused || !mLaidOut || !isShown());
     }
 
-    protected boolean isTextFullyVisible() {
+    private boolean isTextFullyVisible() {
         return mIsTextFullyVisible;
     }
 
     // Focus handling methods
 
-    private boolean shouldMarquee() {
-        if (!mAttached || !mWindowFocused || !mLaidOut || !isShown()) return false;
-        if (!(isFocused() || isSelected())) return false;
-        return !isTextFullyVisible();
-    }
-
     private void updateMarquee() {
-        if (!shouldMarquee()) {
+        if (isStaticMode()) {
             stopScroll();
         }
 
