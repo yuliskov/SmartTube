@@ -15,7 +15,7 @@
         android:layout_margin="@dimen/settings_image_padding"
         android:visibility="invisible"
         tools:ignore="ContentDescription"/>
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat
         android:id="@+id/settings_title"
         android:singleLine="true"
         android:ellipsize="end"

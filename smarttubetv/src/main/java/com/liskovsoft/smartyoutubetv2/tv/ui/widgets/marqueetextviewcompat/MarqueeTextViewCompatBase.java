@@ -35,6 +35,8 @@ class MarqueeTextViewCompatBase extends TextView {
 
     private int mFps = 60;
 
+    private boolean mIsTextFullyVisible = true;
+
     /*
      * Create an internal TextView to ensure the actual text occupies the same space
      * as displayed in TextView. Calculating text length using paint may not match
@@ -57,12 +59,12 @@ class MarqueeTextViewCompatBase extends TextView {
         }
     };
 
-    protected float mLeftX = 0f;
+    private float mLeftX = 0f;
 
     /**
      * Minimum spacing distance between head and tail when scrolling text
      */
-    protected int mSpace = DEFAULT_SPACE;
+    private int mSpace = DEFAULT_SPACE;
 
     /**
      * Text scrolling speed
@@ -104,6 +106,10 @@ class MarqueeTextViewCompatBase extends TextView {
         mTextView.setTextAlignment(getTextAlignment());
         super.setEllipsize(TruncateAt.END);
 
+        // Android 4: Broken grid layout fix
+        if (Build.VERSION.SDK_INT <= 19)
+            super.setHorizontallyScrolling(true);
+
         mTextView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(
@@ -131,13 +137,6 @@ class MarqueeTextViewCompatBase extends TextView {
         }
 
         super.setText(text, type);
-
-        // When executing the parent constructor, if AttributeSet contains text,
-        // setText will be called first, and mTextView is not initialized yet
-        //if (mTextView != null) {
-        //    mTextView.setText(text);
-        //    requestLayout();
-        //}
     }
 
     @Override
@@ -149,13 +148,6 @@ class MarqueeTextViewCompatBase extends TextView {
         }
 
         super.setTextSize(unit, size);
-
-        // When executing the parent constructor, if AttributeSet contains textSize,
-        // setTextSize will be called first, and mTextView is not initialized yet
-        //if (mTextView != null) {
-        //    mTextView.setTextSize(size);
-        //    requestLayout();
-        //}
     }
 
     @Override
@@ -228,12 +220,30 @@ class MarqueeTextViewCompatBase extends TextView {
     }
 
     private void updateFps() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= 30) {
             mFps = (int) getContext().getDisplay().getRefreshRate();
         } else {
             WindowManager windowManager =
                     (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             mFps = (int) windowManager.getDefaultDisplay().getRefreshRate();
+        }
+    }
+
+    private void updateTextFullyVisible() {
+        mIsTextFullyVisible = true;
+
+        // Android 4: Broken grid layout fix
+        if (Build.VERSION.SDK_INT <= 19) return;
+
+        Layout layout = getLayout();
+        if (layout == null) return;
+
+        int lines = layout.getLineCount();
+        for (int i = 0; i < lines; i++) {
+            if (layout.getEllipsisCount(i) > 0) {
+                mIsTextFullyVisible = false;
+                break;
+            }
         }
     }
 
@@ -295,6 +305,7 @@ class MarqueeTextViewCompatBase extends TextView {
 
     protected void startScroll() {
         updateFps();
+        updateTextFullyVisible();
         Choreographer.getInstance().postFrameCallback(mFrameCallback);
     }
 
@@ -323,15 +334,6 @@ class MarqueeTextViewCompatBase extends TextView {
     }
 
     protected boolean isTextFullyVisible() {
-        Layout layout = getLayout();
-        if (layout == null) return false;
-
-        int lines = layout.getLineCount();
-        for (int i = 0; i < lines; i++) {
-            if (layout.getEllipsisCount(i) > 0) {
-                return false;
-            }
-        }
-        return true;
+        return mIsTextFullyVisible;
     }
 }
