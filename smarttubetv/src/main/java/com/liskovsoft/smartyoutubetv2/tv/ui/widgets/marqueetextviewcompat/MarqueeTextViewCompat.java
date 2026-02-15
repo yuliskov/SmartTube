@@ -115,7 +115,7 @@ public class MarqueeTextViewCompat extends TextView {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         mTextView.setMaxLines(getMaxLines());
-        mTextView.setTextAlignment(getTextAlignment());
+        mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         if (getEllipsize() != null) {
             mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
         }
@@ -180,7 +180,7 @@ public class MarqueeTextViewCompat extends TextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (isStaticMode() || mLeftX == 0f) {
+        if (isStaticMode()) {
             // When text width is smaller than view width, do not scroll
             super.onDraw(canvas);
         } else if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
@@ -336,7 +336,7 @@ public class MarqueeTextViewCompat extends TextView {
         updateFps();
         updateTextFullyVisible();
         if (mFrameCallback != null) {
-            Choreographer.getInstance().postFrameCallbackDelayed(mFrameCallback, 500);
+            Choreographer.getInstance().postFrameCallback(mFrameCallback);
         }
     }
 
@@ -347,7 +347,7 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     private void stopScroll() {
-        mLeftX = 0f;
+        //mLeftX = 0f;
         if (mFrameCallback != null) {
             Choreographer.getInstance().removeFrameCallback(mFrameCallback);
         }
@@ -379,6 +379,7 @@ public class MarqueeTextViewCompat extends TextView {
 
     private void updateMarquee() {
         if (isStaticMode()) {
+            mLeftX = 0f;
             stopScroll();
         }
 
@@ -390,7 +391,7 @@ public class MarqueeTextViewCompat extends TextView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mAttached = true;
-        updateMarquee();
+        //updateMarquee();
     }
 
     @Override
