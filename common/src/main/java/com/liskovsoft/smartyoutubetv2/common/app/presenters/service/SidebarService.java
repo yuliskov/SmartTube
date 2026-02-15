@@ -67,12 +67,12 @@ public class SidebarService implements ProfileChangeListener {
                 mIsSettingsSectionEnabled = true; // prevent Settings lock
             }
 
-            //Video item = new Video();
-            //item.sectionId = sectionId;
+            // Video item = new Video();
+            // item.sectionId = sectionId;
             //
-            //if (mPinnedItems.contains(item)) { // don't reorder if item already exists
-            //    return;
-            //}
+            // if (mPinnedItems.contains(item)) { // don't reorder if item already exists
+            // return;
+            // }
 
             Video section = Helpers.findFirst(mPinnedItems, item -> item != null && item.sectionId == sectionId);
 
@@ -162,7 +162,7 @@ public class SidebarService implements ProfileChangeListener {
         int index = findPinnedItemIndex(sectionId);
 
         if (index != -1) {
-            return  index + shift >= 0 && index + shift < mPinnedItems.size();
+            return index + shift >= 0 && index + shift < mPinnedItems.size();
         }
 
         return false;
@@ -240,6 +240,7 @@ public class SidebarService implements ProfileChangeListener {
         mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mDefaultSections.put(R.string.header_blacklisted_channels, MediaGroup.TYPE_BLACKLISTED_CHANNELS);
         mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
         mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
         mDefaultSections.put(R.string.playback_queue_category_title, MediaGroup.TYPE_PLAYBACK_QUEUE);
@@ -249,7 +250,8 @@ public class SidebarService implements ProfileChangeListener {
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
             // Broken sections
-            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[]{MediaGroup.TYPE_NOTIFICATIONS, MediaGroup.TYPE_PLAYBACK_QUEUE, MediaGroup.TYPE_TRENDING}));
+            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[] { MediaGroup.TYPE_NOTIFICATIONS,
+                    MediaGroup.TYPE_PLAYBACK_QUEUE, MediaGroup.TYPE_TRENDING }));
         }
     }
 
@@ -268,7 +270,8 @@ public class SidebarService implements ProfileChangeListener {
                 return true;
             }
 
-            return !item.hasPlaylist() && item.channelId == null && item.sectionId == -1 && item.channelGroupId == null && !item.hasReloadPageKey();
+            return !item.hasPlaylist() && item.channelId == null && item.sectionId == -1 && item.channelGroupId == null
+                    && !item.hasReloadPageKey();
         });
     }
 
