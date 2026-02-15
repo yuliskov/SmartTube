@@ -274,6 +274,12 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         return mIsOverlay;
     }
 
+    public boolean isCommentsDialogShown() {
+        Fragment activeDialog =
+                getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+        return activeDialog instanceof CommentsPreferenceDialogFragment;
+    }
+
     @Override
     public boolean isPaused() {
         return mIsPaused;
