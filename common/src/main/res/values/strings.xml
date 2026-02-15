@@ -274,6 +274,7 @@
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="disable_ok_long_press_desc">Intended for buggy controllers where OK button does not function properly</string>
     <string name="player_time_correction">Show the time with speed correction</string>
+    <string name="player_time_stretching">Audio time stretching</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
     <string name="refresh_section">Refresh section</string>
     <string name="option_disabled">Disabled</string>
