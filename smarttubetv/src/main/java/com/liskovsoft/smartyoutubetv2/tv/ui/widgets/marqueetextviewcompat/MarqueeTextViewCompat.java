@@ -55,7 +55,8 @@ public class MarqueeTextViewCompat extends TextView {
                 mLeftX -= BASE_FPS / mFps * mSpeed;
             }
 
-            invalidate();
+            //invalidate();
+            postInvalidateOnAnimation();
             Choreographer.getInstance().postFrameCallback(this);
         }
     };
@@ -115,10 +116,12 @@ public class MarqueeTextViewCompat extends TextView {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         mTextView.setMaxLines(getMaxLines());
+        mTextView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         if (getEllipsize() != null) {
             mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
         }
+        mTextView.setEllipsize(TruncateAt.END);
         super.setEllipsize(TruncateAt.END);
 
         // Android 4: Broken grid layout fix
