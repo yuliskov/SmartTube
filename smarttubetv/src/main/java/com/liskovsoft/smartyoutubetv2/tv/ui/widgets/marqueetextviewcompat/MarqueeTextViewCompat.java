@@ -75,7 +75,6 @@ public class MarqueeTextViewCompat extends TextView {
 
     // Focus handling vars
     private boolean mAttached;
-    private boolean mWindowFocused = true;
     private boolean mLaidOut;
     private boolean mIsMarqueeEnabled = true;
 
@@ -111,12 +110,13 @@ public class MarqueeTextViewCompat extends TextView {
         }
 
         mTextView = new TextView(getContext(), attrs);
+        mTextView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mTextView.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
-        mTextView.setMaxLines(getMaxLines());
-        mTextView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        mTextView.setMaxLines(1);
+        mTextView.setMaxWidth(Integer.MAX_VALUE);
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         if (getEllipsize() != null) {
             mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
@@ -371,7 +371,7 @@ public class MarqueeTextViewCompat extends TextView {
         return !mIsMarqueeEnabled
                 || isTextFullyVisible()
                 || !(isFocused() || isSelected())
-                || (!mAttached || !mWindowFocused || !mLaidOut || !isShown());
+                || (!mAttached || !mLaidOut || !isShown());
     }
 
     private boolean isTextFullyVisible() {
@@ -394,21 +394,20 @@ public class MarqueeTextViewCompat extends TextView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mAttached = true;
-        //updateMarquee();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasWindowFocus) {
-        super.onWindowFocusChanged(hasWindowFocus);
-        mWindowFocused = hasWindowFocus;
-        updateMarquee();
-    }
-
-    @Override
-    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
-        super.onFocusChanged(focused, direction, previouslyFocusedRect);
-        updateMarquee();
-    }
+    //@Override
+    //public void onWindowFocusChanged(boolean hasWindowFocus) {
+    //    super.onWindowFocusChanged(hasWindowFocus);
+    //    mWindowFocused = hasWindowFocus;
+    //    updateMarquee();
+    //}
+    //
+    //@Override
+    //protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+    //    super.onFocusChanged(focused, direction, previouslyFocusedRect);
+    //    updateMarquee();
+    //}
 
     @Override
     public void setSelected(boolean selected) {
