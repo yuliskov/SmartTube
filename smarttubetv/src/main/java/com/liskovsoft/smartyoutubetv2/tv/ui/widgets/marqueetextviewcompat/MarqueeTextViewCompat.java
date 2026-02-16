@@ -76,7 +76,7 @@ public class MarqueeTextViewCompat extends TextView {
     // Focus handling vars
     private boolean mAttached;
     private boolean mLaidOut;
-    private boolean mIsMarqueeEnabled = true;
+    private boolean mIsMarqueeEnabled;
 
     public MarqueeTextViewCompat(Context context) {
         super(context);
@@ -178,7 +178,7 @@ public class MarqueeTextViewCompat extends TextView {
         super.onLayout(changed, left, top, right, bottom);
 
         mLaidOut = true;
-        updateMarquee();
+        //updateMarquee();
     }
 
     @Override
