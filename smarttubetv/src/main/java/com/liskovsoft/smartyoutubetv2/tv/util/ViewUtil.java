@@ -95,7 +95,7 @@ public class ViewUtil {
                 textView.setHorizontallyScrolling(true);
 
                 // App dialog title fix.
-                textView.setSelected(true);
+                //textView.setSelected(true);
 
                 applyMarqueeRtlParams(textView, true);
             }

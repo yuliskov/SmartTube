@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.os.Build;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
@@ -141,34 +140,38 @@ public class MarqueeTextViewCompat extends TextView {
                     int oldRight,
                     int oldBottom
             ) {
-                restartScroll();
+                updateFps();
+                updateTextFullyVisible();
+                updateMarquee();
             }
         });
     }
 
     @Override
     public void setText(CharSequence text, BufferType type) {
+        super.setText(text, type);
         // When executing the parent constructor, if AttributeSet contains text,
         // setText will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setText(text);
+            requestLayout();
         }
-        super.setText(text, type);
     }
 
     @Override
     public void setTextSize(int unit, float size) {
+        super.setTextSize(unit, size);
         // When executing the parent constructor, if AttributeSet contains textSize,
         // setTextSize will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setTextSize(size);
+            requestLayout();
         }
-        super.setTextSize(unit, size);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mTextView.measure(isStaticMode() ? widthMeasureSpec : View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
+        mTextView.measure(View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -178,7 +181,6 @@ public class MarqueeTextViewCompat extends TextView {
         super.onLayout(changed, left, top, right, bottom);
 
         mLaidOut = true;
-        //updateMarquee();
     }
 
     @Override
@@ -335,24 +337,15 @@ public class MarqueeTextViewCompat extends TextView {
         mSpeed = dpToPx(ORIGINAL_SPEED * factor, getContext());
     }
 
+    private void stopScroll() {
+        if (mFrameCallback != null) {
+            Choreographer.getInstance().removeFrameCallback(mFrameCallback);
+        }
+    }
+
     private void startScroll() {
-        updateFps();
-        updateTextFullyVisible();
         if (mFrameCallback != null) {
             Choreographer.getInstance().postFrameCallback(mFrameCallback);
-        }
-    }
-
-    private void pauseScroll() {
-        if (mFrameCallback != null) {
-            Choreographer.getInstance().removeFrameCallback(mFrameCallback);
-        }
-    }
-
-    private void stopScroll() {
-        //mLeftX = 0f;
-        if (mFrameCallback != null) {
-            Choreographer.getInstance().removeFrameCallback(mFrameCallback);
         }
     }
 
@@ -384,10 +377,9 @@ public class MarqueeTextViewCompat extends TextView {
         if (isStaticMode()) {
             mLeftX = 0f;
             stopScroll();
+        } else {
+            restartScroll();
         }
-
-        // Force call onMeasure after focus change
-        requestLayout();
     }
     
     @Override
