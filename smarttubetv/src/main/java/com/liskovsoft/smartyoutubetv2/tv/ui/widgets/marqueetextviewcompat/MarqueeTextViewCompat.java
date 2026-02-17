@@ -171,14 +171,14 @@ public class MarqueeTextViewCompat extends TextView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        mTextView.measure(View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mTextView.measure(View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
         super.onLayout(changed, left, top, right, bottom);
+        mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
 
         mLaidOut = true;
     }
