@@ -432,7 +432,7 @@
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
-    <string name="create_playlist_note">YouTube uygulamasında görünmeyecek</string>
+    <string name="create_playlist_note">NOT: YouTube uygulamasında görünmeyecek</string>
     <string name="add_video_to_new_playlist">Videoyu yeni oynatma listesine ekle</string>
     <string name="cant_delete_empty_playlist">Boş oynatma listesi silinemiyor</string>
     <string name="playlist">Oynatma listesi</string>

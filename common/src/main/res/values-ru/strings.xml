@@ -428,7 +428,7 @@
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Добавлено в раздел Плейлисты</string>
     <string name="create_playlist">Создать плейлист</string>
-    <string name="create_playlist_note">его не будет видно в приложении YouTube</string>
+    <string name="create_playlist_note">ВНИМАНИЕ: Его не будет видно в приложении YouTube</string>
     <string name="add_video_to_new_playlist">Добавить в новый плейлист</string>
     <string name="cant_delete_empty_playlist">Невозможно удалить пустой плейлист</string>
     <string name="playlist">Плейлист</string>
