@@ -36,6 +36,7 @@
         android:elevation="@dimen/lb_preference_decor_title_container_elevation"
         android:transitionGroup="false"
         >
+        <!-- Change this to TitleMarqueeTextViewCompat with ellipsize="marquee" if you need scrolled header in dialogs -->
         <TextView
             android:id="@+id/decor_title"
             android:layout_width="match_parent"

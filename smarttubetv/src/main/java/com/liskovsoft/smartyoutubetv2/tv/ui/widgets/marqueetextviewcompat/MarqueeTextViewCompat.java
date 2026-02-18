@@ -127,7 +127,7 @@ public class MarqueeTextViewCompat extends TextView {
         if (Build.VERSION.SDK_INT <= 19)
             super.setHorizontallyScrolling(true);
 
-        mTextView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+        addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(
                     View v,
@@ -154,7 +154,9 @@ public class MarqueeTextViewCompat extends TextView {
         // setText will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setText(text);
-            requestLayout();
+            if (!isLayoutRequested()) {
+                requestLayout();
+            }
         }
     }
 
@@ -165,7 +167,9 @@ public class MarqueeTextViewCompat extends TextView {
         // setTextSize will be called first, and mTextView is not initialized yet
         if (mTextView != null) {
             mTextView.setTextSize(size);
-            requestLayout();
+            if (!isLayoutRequested()) {
+                requestLayout();
+            }
         }
     }
 
@@ -278,42 +282,42 @@ public class MarqueeTextViewCompat extends TextView {
     
     @Override
     public void setBackgroundColor(int color) {
+        super.setBackgroundColor(color);
         if (mTextView != null) {
             mTextView.setBackgroundColor(color);
         }
-        super.setBackgroundColor(color);
     }
 
     @Override
     public void setTextColor(int color) {
+        super.setTextColor(color);
         if (mTextView != null) {
             mTextView.setTextColor(color);
         }
-        super.setTextColor(color);
     }
 
     @Override
     public void setTextDirection(int textDirection) {
+        super.setTextDirection(textDirection);
         if (mTextView != null) {
             mTextView.setTextDirection(textDirection);
         }
-        super.setTextDirection(textDirection);
     }
 
     @Override
     public void setTextAlignment(int textAlignment) {
+        super.setTextAlignment(textAlignment);
         if (mTextView != null) {
             mTextView.setTextAlignment(textAlignment);
         }
-        super.setTextAlignment(textAlignment);
     }
 
     @Override
     public void setGravity(int gravity) {
+        super.setGravity(gravity);
         if (mTextView != null) {
             mTextView.setGravity(gravity);
         }
-        super.setGravity(gravity);
     }
 
     @Override
@@ -371,8 +375,6 @@ public class MarqueeTextViewCompat extends TextView {
         return mIsTextFullyVisible;
     }
 
-    // Focus handling methods
-
     private void updateMarquee() {
         if (isStaticMode()) {
             mLeftX = 0f;
@@ -388,19 +390,6 @@ public class MarqueeTextViewCompat extends TextView {
         mAttached = true;
     }
 
-    //@Override
-    //public void onWindowFocusChanged(boolean hasWindowFocus) {
-    //    super.onWindowFocusChanged(hasWindowFocus);
-    //    mWindowFocused = hasWindowFocus;
-    //    updateMarquee();
-    //}
-    //
-    //@Override
-    //protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
-    //    super.onFocusChanged(focused, direction, previouslyFocusedRect);
-    //    updateMarquee();
-    //}
-
     @Override
     public void setSelected(boolean selected) {
         boolean old = isSelected();
@@ -409,6 +398,4 @@ public class MarqueeTextViewCompat extends TextView {
             updateMarquee();
         }
     }
-
-    // End Focus handling methods
 }
