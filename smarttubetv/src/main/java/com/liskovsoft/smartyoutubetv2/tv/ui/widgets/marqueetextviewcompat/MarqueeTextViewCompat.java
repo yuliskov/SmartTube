@@ -127,24 +127,24 @@ public class MarqueeTextViewCompat extends TextView {
         if (Build.VERSION.SDK_INT <= 19)
             super.setHorizontallyScrolling(true);
 
-        addOnLayoutChangeListener(new OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(
-                    View v,
-                    int left,
-                    int top,
-                    int right,
-                    int bottom,
-                    int oldLeft,
-                    int oldTop,
-                    int oldRight,
-                    int oldBottom
-            ) {
-                updateFps();
-                updateTextFullyVisible();
-                updateMarquee();
-            }
-        });
+        //addOnLayoutChangeListener(new OnLayoutChangeListener() {
+        //    @Override
+        //    public void onLayoutChange(
+        //            View v,
+        //            int left,
+        //            int top,
+        //            int right,
+        //            int bottom,
+        //            int oldLeft,
+        //            int oldTop,
+        //            int oldRight,
+        //            int oldBottom
+        //    ) {
+        //        updateFps();
+        //        updateTextFullyVisible();
+        //        updateMarquee();
+        //    }
+        //});
     }
 
     @Override
@@ -185,6 +185,10 @@ public class MarqueeTextViewCompat extends TextView {
         mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
 
         mLaidOut = true;
+
+        updateFps();
+        updateTextFullyVisible();
+        updateMarquee();
     }
 
     @Override
@@ -375,7 +379,7 @@ public class MarqueeTextViewCompat extends TextView {
         return mIsTextFullyVisible;
     }
 
-    private void updateMarquee() {
+    protected void updateMarquee() {
         if (isStaticMode()) {
             mLeftX = 0f;
             stopScroll();
