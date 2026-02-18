@@ -991,11 +991,6 @@ public class AppDialogUtil {
     }
 
     public static void showAddToPlaylistDialog(Context context, Video video, VideoMenuCallback callback) {
-        //if (!YouTubeSignInService.instance().isSigned()) {
-        //    MessageHelpers.showMessage(context, R.string.msg_signed_users_only);
-        //    return;
-        //}
-
         if (video == null) {
             return;
         }
@@ -1008,6 +1003,7 @@ public class AppDialogUtil {
                         error -> {
                             // Fallback to something on error
                             Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                            MessageHelpers.showMessage(context, R.string.section_is_empty);
                         }
                 );
     }
