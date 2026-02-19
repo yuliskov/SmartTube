@@ -427,10 +427,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }
                         mDialogPresenter.closeDialog();
                     } else {
-                        // Show confirmation dialog before blacklisting
+                        // Show confirmation dialog before blocking
                         String channelName = mVideo.getAuthor();
-                        String confirmMessage =
-                                getContext().getString(R.string.confirm_block_channel, channelName != null ? channelName : "this channel");
+                        String confirmMessage = getContext().getString(R.string.confirm_block_channel, channelName);
 
                         AppDialogUtil.showConfirmationDialog(
                                 getContext(),
