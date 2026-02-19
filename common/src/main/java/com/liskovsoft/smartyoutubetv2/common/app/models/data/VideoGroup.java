@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
@@ -475,7 +476,7 @@ public class VideoGroup {
         String channelId = video.getChannelIdOrName();
         if (channelId != null) {
             try {
-                BlockedChannelData blockedChannelData = BlockedChannelData.instance(null);
+                BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
                 return blockedChannelData != null && blockedChannelData.containsChannel(channelId);
             } catch (Exception e) {
                 // If BlockedChannelData isn't initialized yet, allow the video through

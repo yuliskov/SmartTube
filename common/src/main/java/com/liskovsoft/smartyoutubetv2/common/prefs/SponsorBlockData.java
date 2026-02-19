@@ -7,7 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController.SegmentAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController.SegmentAction;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,15 +17,15 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ContentBlockData {
+public class SponsorBlockData {
     public static final int ACTION_UNDEFINED = -1;
     public static final int ACTION_SKIP_ONLY = 0;
     public static final int ACTION_SKIP_WITH_TOAST = 1;
     public static final int ACTION_SHOW_DIALOG = 2;
     public static final int ACTION_DO_NOTHING = 3;
-    private static final String CONTENT_BLOCK_DATA = "content_block_data";
+    private static final String SPONSOR_BLOCK_DATA = "content_block_data";
     @SuppressLint("StaticFieldLeak")
-    private static ContentBlockData sInstance;
+    private static SponsorBlockData sInstance;
     private final AppPrefs mAppPrefs;
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mColorCategories = new LinkedHashSet<>();
@@ -37,7 +37,7 @@ public class ContentBlockData {
     private Map<String, Integer> mSegmentColorMapping;
     private Set<String> mAllCategories;
 
-    private ContentBlockData(Context context) {
+    private SponsorBlockData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
         initLocalizedMapping();
         initColorMapping();
@@ -45,9 +45,9 @@ public class ContentBlockData {
         restoreState();
     }
 
-    public static ContentBlockData instance(Context context) {
+    public static SponsorBlockData instance(Context context) {
         if (sInstance == null) {
-            sInstance = new ContentBlockData(context.getApplicationContext());
+            sInstance = new SponsorBlockData(context.getApplicationContext());
         }
 
         return sInstance;
@@ -233,7 +233,7 @@ public class ContentBlockData {
     }
 
     private void restoreState() {
-        String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
+        String data = mAppPrefs.getData(SPONSOR_BLOCK_DATA);
 
         String[] split = Helpers.splitData(data);
 
@@ -298,7 +298,7 @@ public class ContentBlockData {
         String actions = Helpers.mergeArray(mActions.toArray());
         String excludedChannels = Helpers.mergeArray(mExcludedChannels.toArray());
 
-        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeData(
+        mAppPrefs.setData(SPONSOR_BLOCK_DATA, Helpers.mergeData(
                 mIsSponsorBlockEnabled, null, null, null,
                 null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
                 excludedChannels, mIsPaidContentNotificationEnabled

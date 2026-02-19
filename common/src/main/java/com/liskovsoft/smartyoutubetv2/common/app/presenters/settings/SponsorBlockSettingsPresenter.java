@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController.SegmentAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController.SegmentAction;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -13,7 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SponsorBlockData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
-    private final ContentBlockData mContentBlockData;
+public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
+    private final SponsorBlockData mContentBlockData;
 
-    public ContentBlockSettingsPresenter(Context context) {
+    public SponsorBlockSettingsPresenter(Context context) {
         super(context);
-        mContentBlockData = ContentBlockData.instance(context);
+        mContentBlockData = SponsorBlockData.instance(context);
     }
 
-    public static ContentBlockSettingsPresenter instance(Context context) {
-        return new ContentBlockSettingsPresenter(context);
+    public static SponsorBlockSettingsPresenter instance(Context context) {
+        return new SponsorBlockSettingsPresenter(context);
     }
 
     public void show(Runnable onFinish) {
@@ -58,12 +58,12 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         }
 
         final String channelId = video != null ? video.channelId : null;
-        boolean isChannelExcluded = ContentBlockData.instance(getContext()).isChannelExcluded(channelId);
+        boolean isChannelExcluded = SponsorBlockData.instance(getContext()).isChannelExcluded(channelId);
 
         OptionItem sponsorBlockOption = UiOptionItem.from(getContext().getString(R.string.enable),
                 option -> {
                     mContentBlockData.enableSponsorBlock(option.isSelected());
-                    ContentBlockData.instance(getContext()).stopExcludingChannel(channelId);
+                    SponsorBlockData.instance(getContext()).stopExcludingChannel(channelId);
                 },
                 !isChannelExcluded && mContentBlockData.isSponsorBlockEnabled()
         );
@@ -84,17 +84,17 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
                         List<OptionItem> nestedOptions = new ArrayList<>();
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_none),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_DO_NOTHING),
-                                action.actionType == ContentBlockData.ACTION_DO_NOTHING));
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_DO_NOTHING),
+                                action.actionType == SponsorBlockData.ACTION_DO_NOTHING));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_only_skip),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SKIP_ONLY),
-                                action.actionType == ContentBlockData.ACTION_SKIP_ONLY));
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_ONLY),
+                                action.actionType == SponsorBlockData.ACTION_SKIP_ONLY));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_toast),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SKIP_WITH_TOAST),
-                                action.actionType == ContentBlockData.ACTION_SKIP_WITH_TOAST));
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_WITH_TOAST),
+                                action.actionType == SponsorBlockData.ACTION_SKIP_WITH_TOAST));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_dialog),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, ContentBlockData.ACTION_SHOW_DIALOG),
-                                action.actionType == ContentBlockData.ACTION_SHOW_DIALOG));
+                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SHOW_DIALOG),
+                                action.actionType == SponsorBlockData.ACTION_SHOW_DIALOG));
 
                         String title = getContext().getString(mContentBlockData.getLocalizedRes(action.segmentCategory));
 

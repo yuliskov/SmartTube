@@ -365,7 +365,7 @@ public class VideoLoaderController extends BasePlayerController {
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
         applyAspectRatio(formatInfo);
 
-        if (formatInfo.getPaidContentText() != null && getContentBlockData().isPaidContentNotificationEnabled()) {
+        if (formatInfo.getPaidContentText() != null && getSponsorBlockData().isPaidContentNotificationEnabled()) {
             MessageHelpers.showMessage(getContext(), formatInfo.getPaidContentText());
         }
 

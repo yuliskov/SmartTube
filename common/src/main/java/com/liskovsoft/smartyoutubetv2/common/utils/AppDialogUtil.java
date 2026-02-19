@@ -34,15 +34,12 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupServiceWrapper;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SponsorBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -705,12 +702,12 @@ public class AppDialogUtil {
             Context context,  Video video, MediaServiceManager serviceManager, Runnable onClose) {
         return UiOptionItem.from(
                 context.getString(
-                        ContentBlockData.instance(context).isChannelExcluded(video.channelId) ?
+                        SponsorBlockData.instance(context).isChannelExcluded(video.channelId) ?
                                 R.string.content_block_stop_excluding_channel :
                                 R.string.content_block_exclude_channel),
                 optionItem -> {
                     if (video.hasChannel()) {
-                        ContentBlockData.instance(context).toggleExcludeChannel(video.channelId);
+                        SponsorBlockData.instance(context).toggleExcludeChannel(video.channelId);
                         if (onClose != null) {
                             onClose.run();
                         }
@@ -721,7 +718,7 @@ public class AppDialogUtil {
                                 video,
                                 metadata -> {
                                     video.sync(metadata);
-                                    ContentBlockData.instance(context).excludeChannel(video.channelId);
+                                    SponsorBlockData.instance(context).excludeChannel(video.channelId);
                                     if (onClose != null) {
                                         onClose.run();
                                     }

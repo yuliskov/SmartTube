@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerContr
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.AutoFrameRateController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ChatController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ContentBlockController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.HQDialogController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.PlayerUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.RemoteController;
@@ -59,7 +59,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mEventListeners.add(new PlayerUIController());
         mEventListeners.add(new VideoLoaderController());
         mEventListeners.add(new RemoteController(context));
-        mEventListeners.add(new ContentBlockController());
+        mEventListeners.add(new SponsorBlockController());
         mEventListeners.add(new AutoFrameRateController());
         mEventListeners.add(new HQDialogController());
         mEventListeners.add(new ChatController());
