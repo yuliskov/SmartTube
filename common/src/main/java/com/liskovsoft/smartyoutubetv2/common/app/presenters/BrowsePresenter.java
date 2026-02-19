@@ -40,6 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.BlacklistData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -94,6 +95,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initSectionMappings();
         updateChannelSorting();
         updatePlaylistsStyle();
+
+        // Listen for blacklist changes to auto-refresh
+        BlacklistData.instance(context).addListener(this::onBlacklistChanged);
+    }
+
+    private void onBlacklistChanged() {
+        // Refresh current section when blacklist changes
+        if (mCurrentSection != null) {
+            Utils.postDelayed(mRefreshSection, 500); // Small delay to ensure data is persisted
+        }
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -199,6 +210,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, false));
         mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, false));
         mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
+        mSectionsMapping.put(MediaGroup.TYPE_BLACKLISTED_CHANNELS,
+                new BrowseSection(MediaGroup.TYPE_BLACKLISTED_CHANNELS, getContext().getString(R.string.header_blacklisted_channels), BrowseSection.TYPE_GRID, R.drawable.icon_channels, false));
         mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, false));
         mSectionsMapping.put(MediaGroup.TYPE_NOTIFICATIONS, new BrowseSection(MediaGroup.TYPE_NOTIFICATIONS, getContext().getString(R.string.header_notifications), BrowseSection.TYPE_GRID, R.drawable.icon_notification, false));
         mSectionsMapping.put(MediaGroup.TYPE_PLAYBACK_QUEUE, new BrowseSection(MediaGroup.TYPE_PLAYBACK_QUEUE, getContext().getString(R.string.playback_queue_category_title), BrowseSection.TYPE_GRID, R.drawable.icon_queue, false));
@@ -264,6 +277,23 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initLocalGridMapping() {
         mLocalGridMappings.put(MediaGroup.TYPE_PLAYBACK_QUEUE, () -> Playlist.instance().getAll());
+        mLocalGridMappings.put(MediaGroup.TYPE_BLACKLISTED_CHANNELS, this::getBlacklistedChannelsVideos);
+    }
+
+    private List<Video> getBlacklistedChannelsVideos() {
+        BlacklistData blacklistData = BlacklistData.instance(getContext());
+        List<Video> videos = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : blacklistData.getBlacklistedChannelsWithNames().entrySet()) {
+            Video video = new Video();
+            video.videoId = entry.getKey(); // Using channel ID as video ID
+            video.channelId = entry.getKey();
+            video.title = entry.getValue() != null ? entry.getValue() : entry.getKey();
+            video.author = entry.getValue() != null ? entry.getValue() : entry.getKey();
+            videos.add(video);
+        }
+
+        return videos;
     }
 
     public void updateSections() {

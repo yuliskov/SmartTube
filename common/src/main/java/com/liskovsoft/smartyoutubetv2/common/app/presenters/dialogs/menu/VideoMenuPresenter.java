@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
+import com.liskovsoft.smartyoutubetv2.common.prefs.BlacklistData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
@@ -52,6 +53,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsNotRecommendChannelEnabled;
+    private boolean mIsBlacklistChannelEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsRemoveFromSubscriptionsButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -394,6 +396,53 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                     }
                             );
                     mDialogPresenter.closeDialog();
+                }));
+    }
+
+    private void appendBlacklistChannelButton() {
+        if (mVideo == null || !mIsBlacklistChannelEnabled) {
+            return;
+        }
+
+        String channelId = mVideo.getChannelIdForBlacklist();
+        if (channelId == null || channelId.isEmpty()) {
+            return;
+        }
+
+        BlacklistData blacklistData = BlacklistData.instance(getContext());
+        boolean isBlacklisted = blacklistData.isChannelBlacklisted(channelId);
+
+        String buttonText = isBlacklisted
+                ? getContext().getString(R.string.dialog_remove_from_blacklist)
+                : getContext().getString(R.string.dialog_blacklist_channel);
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(buttonText, optionItem -> {
+                    if (isBlacklisted) {
+                        // Remove from blacklist
+                        blacklistData.removeBlacklistedChannel(channelId);
+                        MessageHelpers.showMessage(getContext(), R.string.removed_from_blacklist);
+                        mDialogPresenter.closeDialog();
+                    } else {
+                        // Show confirmation dialog before blacklisting
+                        String channelName = mVideo.getAuthor();
+                        String confirmMessage = String.format(
+                                getContext().getString(R.string.confirm_blacklist_channel),
+                                channelName != null ? channelName : "this channel");
+
+                        AppDialogUtil.showConfirmationDialog(
+                                getContext(),
+                                confirmMessage,
+                                () -> {
+                                    blacklistData.addBlacklistedChannel(channelId, channelName);
+                                    MessageHelpers.showMessage(getContext(), R.string.blacklisted_channel);
+
+                                    if (mCallback != null) {
+                                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                    }
+                                    mDialogPresenter.closeDialog();
+                                });
+                    }
                 }));
     }
 
@@ -917,6 +966,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsShareEmbedLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_EMBED_LINK);
         mIsNotInterestedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED);
         mIsNotRecommendChannelEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_RECOMMEND_CHANNEL);
+        mIsBlacklistChannelEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_BLACKLIST_CHANNEL);
         mIsRemoveFromHistoryButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY);
         mIsRemoveFromSubscriptionsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS);
         mIsOpenDescriptionButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION);
@@ -947,6 +997,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_NOT_INTERESTED, new MenuAction(this::appendNotInterestedButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_NOT_RECOMMEND_CHANNEL, new MenuAction(this::appendNotRecommendChannelButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_SUBSCRIPTIONS, new MenuAction(() -> { appendRemoveFromSubscriptionsButton(); appendRemoveFromNotificationsButton(); }, true));
+        mMenuMapping.put(MainUIData.MENU_ITEM_BLACKLIST_CHANNEL, new MenuAction(this::appendBlacklistChannelButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_MARK_AS_WATCHED, new MenuAction(this::appendMarkAsWatchedButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PLAYLIST_ORDER, new MenuAction(this::appendPlaylistOrderButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_QUEUE, new MenuAction(() -> { appendAddToPlaybackQueueButton(); appendRemoveFromPlaybackQueueButton(); }, false));
