@@ -721,11 +721,11 @@
     <string name="once_a_day">Uma vez por dia</string>
     <string name="once_a_week">Uma vez por semana</string>
     <string name="once_a_month">Uma vez por mês</string>
-    <string name="dialog_blacklist_channel">Bloquear canal</string>
-    <string name="dialog_remove_from_blacklist">Desbloquear canal</string>
-    <string name="confirm_blacklist_channel">Ocultar todo o conteúdo de %s?</string>
-    <string name="blacklisted_channel">Canal bloqueado</string>
-    <string name="removed_from_blacklist">Canal desbloqueado</string>
-    <string name="header_blacklisted_channels">Canais bloqueados</string>
-    <string name="msg_no_blacklisted_channels">Nenhum canal bloqueado</string>
+    <string name="dialog_block_channel">Bloquear canal</string>
+    <string name="dialog_unblock_channel">Desbloquear canal</string>
+    <string name="confirm_block_channel">Ocultar todo o conteúdo de %s?</string>
+    <string name="channel_blocked">Canal bloqueado</string>
+    <string name="channel_unblocked">Canal desbloqueado</string>
+    <string name="header_blocked_channels">Canais bloqueados</string>
+    <string name="msg_no_blocked_channels">Nenhum canal bloqueado</string>
 </resources>

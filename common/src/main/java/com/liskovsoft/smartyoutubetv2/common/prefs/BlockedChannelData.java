@@ -9,37 +9,34 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class BlacklistData implements ProfileChangeListener {
-    private static final String BLACKLIST_DATA = "blacklist_data";
+public class BlockedChannelData implements ProfileChangeListener {
+    private static final String BLOCKED_CHANNEL_DATA = "blocked_channel_data";
     @SuppressLint("StaticFieldLeak")
-    private static BlacklistData sInstance;
-    private final Context mContext;
+    private static BlockedChannelData sInstance;
     private final AppPrefs mPrefs;
-    private Set<String> mBlacklistedChannelIds;
-    private Map<String, String> mBlacklistedChannelNames; // channelId -> channel name
+    private Set<String> mChannelIds;
+    private Map<String, String> mChannelIdsWithNames;
     private final Runnable mPersistStateInt = this::persistStateInt;
-    private final List<BlacklistChangeListener> mListeners = new ArrayList<>();
+    private final List<BlockedChannelListener> mListeners = new ArrayList<>();
 
-    public interface BlacklistChangeListener {
-        void onBlacklistChanged();
+    public interface BlockedChannelListener {
+        void onChanged();
     }
 
-    private BlacklistData(Context context) {
-        mContext = context;
+    private BlockedChannelData(Context context) {
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
         restoreState();
     }
 
-    public static BlacklistData instance(Context context) {
+    public static BlockedChannelData instance(Context context) {
         if (sInstance == null) {
-            sInstance = new BlacklistData(context.getApplicationContext());
+            sInstance = new BlockedChannelData(context.getApplicationContext());
         }
 
         return sInstance;
@@ -51,14 +48,14 @@ public class BlacklistData implements ProfileChangeListener {
      * @param channelId   The channel ID to blacklist
      * @param channelName The channel name (optional, for display purposes)
      */
-    public void addBlacklistedChannel(String channelId, String channelName) {
+    public void addChannel(String channelId, String channelName) {
         if (channelId == null || channelId.isEmpty()) {
             return;
         }
 
-        mBlacklistedChannelIds.add(channelId);
+        mChannelIds.add(channelId);
         if (channelName != null && !channelName.isEmpty()) {
-            mBlacklistedChannelNames.put(channelId, channelName);
+            mChannelIdsWithNames.put(channelId, channelName);
         }
         persistState();
         notifyListeners();
@@ -69,13 +66,13 @@ public class BlacklistData implements ProfileChangeListener {
      *
      * @param channelId The channel ID to remove
      */
-    public void removeBlacklistedChannel(String channelId) {
+    public void removeChannel(String channelId) {
         if (channelId == null || channelId.isEmpty()) {
             return;
         }
 
-        mBlacklistedChannelIds.remove(channelId);
-        mBlacklistedChannelNames.remove(channelId);
+        mChannelIds.remove(channelId);
+        mChannelIdsWithNames.remove(channelId);
         persistState();
         notifyListeners();
     }
@@ -86,12 +83,12 @@ public class BlacklistData implements ProfileChangeListener {
      * @param channelId The channel ID to check
      * @return true if the channel is blacklisted
      */
-    public boolean isChannelBlacklisted(String channelId) {
+    public boolean containsChannel(String channelId) {
         if (channelId == null || channelId.isEmpty()) {
             return false;
         }
 
-        return mBlacklistedChannelIds.contains(channelId);
+        return mChannelIds.contains(channelId);
     }
 
     /**
@@ -99,8 +96,8 @@ public class BlacklistData implements ProfileChangeListener {
      *
      * @return Unmodifiable set of blacklisted channel IDs
      */
-    public Set<String> getBlacklistedChannels() {
-        return Collections.unmodifiableSet(mBlacklistedChannelIds);
+    public Set<String> getChannelIds() {
+        return Collections.unmodifiableSet(mChannelIds);
     }
 
     /**
@@ -109,8 +106,8 @@ public class BlacklistData implements ProfileChangeListener {
      * @param channelId The channel ID
      * @return The channel name, or null if not available
      */
-    public String getBlacklistedChannelName(String channelId) {
-        return mBlacklistedChannelNames.get(channelId);
+    public String getChannelName(String channelId) {
+        return mChannelIdsWithNames.get(channelId);
     }
 
     /**
@@ -118,8 +115,8 @@ public class BlacklistData implements ProfileChangeListener {
      *
      * @return Unmodifiable map of channelId -> channel name
      */
-    public Map<String, String> getBlacklistedChannelsWithNames() {
-        return Collections.unmodifiableMap(mBlacklistedChannelNames);
+    public Map<String, String> getChannelIdsWithNames() {
+        return Collections.unmodifiableMap(mChannelIdsWithNames);
     }
 
     /**
@@ -127,36 +124,28 @@ public class BlacklistData implements ProfileChangeListener {
      *
      * @return Number of blacklisted channels
      */
-    public int getBlacklistedChannelCount() {
-        return mBlacklistedChannelIds.size();
+    public int getChannelCount() {
+        return mChannelIds.size();
     }
 
     /**
      * Clear all blacklisted channels
      */
-    public void clearBlacklist() {
-        mBlacklistedChannelIds.clear();
-        mBlacklistedChannelNames.clear();
+    public void clear() {
+        mChannelIds.clear();
+        mChannelIdsWithNames.clear();
         persistState();
     }
 
     private synchronized void restoreState() {
-        String data = mPrefs.getProfileData(BLACKLIST_DATA);
+        String data = mPrefs.getProfileData(BLOCKED_CHANNEL_DATA);
 
         String[] split = Helpers.splitData(data);
 
         List<String> channelIdList = Helpers.parseStrList(split, 0);
-        mBlacklistedChannelNames = Helpers.parseMap(split, 1, Helpers::parseStr, Helpers::parseStr);
+        mChannelIdsWithNames = Helpers.parseMap(split, 1, Helpers::parseStr, Helpers::parseStr);
 
-        if (channelIdList == null) {
-            mBlacklistedChannelIds = new HashSet<>();
-        } else {
-            mBlacklistedChannelIds = new HashSet<>(channelIdList);
-        }
-
-        if (mBlacklistedChannelNames == null) {
-            mBlacklistedChannelNames = new HashMap<>();
-        }
+        mChannelIds = new HashSet<>(channelIdList);
     }
 
     public void persistNow() {
@@ -169,25 +158,24 @@ public class BlacklistData implements ProfileChangeListener {
 
     private void persistStateInt() {
         // Convert Set to List for persistence
-        List<String> channelIdList = new ArrayList<>(mBlacklistedChannelIds);
-        mPrefs.setProfileData(BLACKLIST_DATA, Helpers.mergeData(
-                channelIdList,
-                mBlacklistedChannelNames));
+        List<String> channelIdList = new ArrayList<>(mChannelIds);
+        mPrefs.setProfileData(BLOCKED_CHANNEL_DATA, Helpers.mergeData(
+                channelIdList, mChannelIdsWithNames));
     }
 
-    public void addListener(BlacklistChangeListener listener) {
+    public void addListener(BlockedChannelListener listener) {
         if (!mListeners.contains(listener)) {
             mListeners.add(listener);
         }
     }
 
-    public void removeListener(BlacklistChangeListener listener) {
+    public void removeListener(BlockedChannelListener listener) {
         mListeners.remove(listener);
     }
 
     private void notifyListeners() {
-        for (BlacklistChangeListener listener : mListeners) {
-            listener.onBlacklistChanged();
+        for (BlockedChannelListener listener : mListeners) {
+            listener.onChanged();
         }
     }
 

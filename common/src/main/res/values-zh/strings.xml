@@ -702,11 +702,11 @@
   <string name="player_global_focus_desc">此功能会影响在播放牵牛劣质见到兰是，那个播放牵牛回去的焦点</string>
   <string name="repeat_mode_reverse_list">一项反顺序播放播放清单货品倒影篇</string>
   <string name="calm_msg">我们正在解决问题。情不是检查更新</string>
-  <string name="dialog_blacklist_channel">拉黑频道</string>
-  <string name="dialog_remove_from_blacklist">移除拉黑</string>
-  <string name="confirm_blacklist_channel">隐藏 %s 的所有内容？</string>
-  <string name="blacklisted_channel">频道已拉黑</string>
-  <string name="removed_from_blacklist">已从黑名单移除</string>
-  <string name="header_blacklisted_channels">黑名单频道</string>
-  <string name="msg_no_blacklisted_channels">没有拉黑的频道</string>
+  <string name="dialog_block_channel">拉黑频道</string>
+  <string name="dialog_unblock_channel">移除拉黑</string>
+  <string name="confirm_block_channel">隐藏 %s 的所有内容？</string>
+  <string name="channel_blocked">频道已拉黑</string>
+  <string name="channel_unblocked">已从黑名单移除</string>
+  <string name="header_blocked_channels">黑名单频道</string>
+  <string name="msg_no_blocked_channels">没有拉黑的频道</string>
 </resources>

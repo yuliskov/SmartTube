@@ -722,11 +722,11 @@
     <string name="once_a_week">Haftada bir kez</string>
     <string name="once_a_month">Ayda bir kez</string>
     <string name="action_debug_info">Hata ayıklama bilgileri</string>
-    <string name="dialog_blacklist_channel">Kanalı engelle</string>
-    <string name="dialog_remove_from_blacklist">Engeli kaldır</string>
-    <string name="confirm_blacklist_channel">%s kanalından tüm içerik gizlensin mi?</string>
-    <string name="blacklisted_channel">Kanal engellendi</string>
-    <string name="removed_from_blacklist">Engel kaldırıldı</string>
-    <string name="header_blacklisted_channels">Engellenen kanallar</string>
-    <string name="msg_no_blacklisted_channels">Engellenen kanal yok</string>
+    <string name="dialog_block_channel">Kanalı engelle</string>
+    <string name="dialog_unblock_channel">Kanalın engelini kaldır</string>
+    <string name="confirm_block_channel">%s adlı kanaldaki tüm içerik gizlensin mi?</string>
+    <string name="channel_blocked">Kanal engellendi</string>
+    <string name="channel_unblocked">Kanalın engeli kaldırıldı</string>
+    <string name="header_blocked_channels">Engellenen Kanallar</string>
+    <string name="msg_no_blocked_channels">Engellenmiş kanal yok</string>
 </resources>

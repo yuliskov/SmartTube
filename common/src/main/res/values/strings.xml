@@ -722,11 +722,11 @@
     <string name="once_a_week">Once a week</string>
     <string name="once_a_month">Once a month</string>
     <string name="action_debug_info">Debug info</string>
-    <string name="dialog_blacklist_channel">Blacklist Channel</string>
-    <string name="dialog_remove_from_blacklist">Remove from Blacklist</string>
-    <string name="confirm_blacklist_channel">Hide all content from %s?</string>
-    <string name="blacklisted_channel">Channel blacklisted</string>
-    <string name="removed_from_blacklist">Channel removed from blacklist</string>
-    <string name="header_blacklisted_channels">Blacklisted Channels</string>
-    <string name="msg_no_blacklisted_channels">No blacklisted channels</string>
+    <string name="dialog_block_channel">Block the channel</string>
+    <string name="dialog_unblock_channel">Unblock the channel</string>
+    <string name="confirm_block_channel">Hide all content from %s?</string>
+    <string name="channel_blocked">Channel blocked</string>
+    <string name="channel_unblocked">Channel unblocked</string>
+    <string name="header_blocked_channels">Blocked Channels</string>
+    <string name="msg_no_blocked_channels">No blocked channels</string>
 </resources>

@@ -712,11 +712,11 @@
     <string name="typing_corrections">テキストの入力時に自動修正を無効にする</string>
     <string name="suggestions_horizontally_scrolled">水平スクロールの提案</string>
     <string name="stable_restore">Stable ビルドに復元 (すべてのデータが失われます)</string>
-    <string name="dialog_blacklist_channel">チャンネルをブロック</string>
-    <string name="dialog_remove_from_blacklist">ブロックを解除</string>
-    <string name="confirm_blacklist_channel">%s のすべてのコンテンツを非表示にしますか？</string>
-    <string name="blacklisted_channel">チャンネルをブロックしました</string>
-    <string name="removed_from_blacklist">ブロックを解除しました</string>
-    <string name="header_blacklisted_channels">ブロックしたチャンネル</string>
-    <string name="msg_no_blacklisted_channels">ブロックしたチャンネルはありません</string>
+    <string name="dialog_block_channel">チャンネルをブロック</string>
+    <string name="dialog_unblock_channel">ブロックを解除</string>
+    <string name="confirm_block_channel">%s のすべてのコンテンツを非表示にしますか？</string>
+    <string name="channel_blocked">チャンネルをブロックしました</string>
+    <string name="channel_unblocked">ブロックを解除しました</string>
+    <string name="header_blocked_channels">ブロックしたチャンネル</string>
+    <string name="msg_no_blocked_channels">ブロックしたチャンネルはありません</string>
 </resources>

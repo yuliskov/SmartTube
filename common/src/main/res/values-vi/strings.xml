@@ -713,11 +713,11 @@
   <string name="player_quick_shorts_skip_alt">Bỏ qua Shorts với nút lên/xuống</string>
   <string name="player_quick_skip_videos_alt">Bỏ qua video bình thường với nút lên/xuống</string>
   <string name="prefer_google_dns">Ưu tiên DNS Google</string>
-  <string name="dialog_blacklist_channel">Chặn kênh</string>
-  <string name="dialog_remove_from_blacklist">Bỏ chặn kênh</string>
-  <string name="confirm_blacklist_channel">Ẩn tất cả nội dung từ %s?</string>
-  <string name="blacklisted_channel">Đã chặn kênh</string>
-  <string name="removed_from_blacklist">Đã bỏ chặn kênh</string>
-  <string name="header_blacklisted_channels">Kênh đã chặn</string>
-  <string name="msg_no_blacklisted_channels">Không có kênh nào bị chặn</string>
+  <string name="dialog_block_channel">Chặn kênh</string>
+  <string name="dialog_unblock_channel">Bỏ chặn kênh</string>
+  <string name="confirm_block_channel">Ẩn tất cả nội dung từ %s?</string>
+  <string name="channel_blocked">Đã chặn kênh</string>
+  <string name="channel_unblocked">Đã bỏ chặn kênh</string>
+  <string name="header_blocked_channels">Kênh đã chặn</string>
+  <string name="msg_no_blocked_channels">Không có kênh nào bị chặn</string>
 </resources>

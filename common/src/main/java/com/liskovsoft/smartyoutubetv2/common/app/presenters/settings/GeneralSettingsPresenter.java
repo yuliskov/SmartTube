@@ -804,7 +804,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, R.string.open_comments);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
-        menuNames.put(MainUIData.MENU_ITEM_BLACKLIST_CHANNEL, R.string.dialog_blacklist_channel);
+        menuNames.put(MainUIData.MENU_ITEM_BLOCK_CHANNEL, R.string.dialog_block_channel);
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
             menuNames.put(provider.getId(), provider.getTitleResId());

@@ -722,13 +722,13 @@
     <string name="once_a_week">Jednou týdně</string>
     <string name="once_a_month">Jednou měsíčně</string>
     <string name="action_debug_info">Debug informace</string>
-    <string name="dialog_blacklist_channel">Blokovat kanál</string>
-    <string name="dialog_remove_from_blacklist">Odblokovat kanál</string>
-    <string name="confirm_blacklist_channel">Skrýt veškerý obsah od %s?</string>
-    <string name="blacklisted_channel">Kanál zablokován</string>
-    <string name="removed_from_blacklist">Kanál odblokován</string>
-    <string name="header_blacklisted_channels">Blokované kanály</string>
-    <string name="msg_no_blacklisted_channels">Žádné blokované kanály</string>
+    <string name="dialog_block_channel">Blokovat kanál</string>
+    <string name="dialog_unblock_channel">Odblokovat kanál</string>
+    <string name="confirm_block_channel">Skrýt veškerý obsah od %s?</string>
+    <string name="channel_blocked">Kanál zablokován</string>
+    <string name="channel_unblocked">Kanál odblokován</string>
+    <string name="header_blocked_channels">Blokované kanály</string>
+    <string name="msg_no_blocked_channels">Žádné blokované kanály</string>
 </resources>
 
 

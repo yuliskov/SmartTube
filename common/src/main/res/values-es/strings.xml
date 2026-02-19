@@ -710,11 +710,11 @@
   <string name="dont_resize_video_to_fit_dialog">No redimensione el video para ajustar al cuadro de diálogo</string>
   <string name="typing_corrections">Desactivar auto corrección mientras ingresa texto</string>
   <string name="suggestions_horizontally_scrolled">Desplazamiento horizontal de Sugerencias </string>
-  <string name="dialog_blacklist_channel">Bloquear canal</string>
-  <string name="dialog_remove_from_blacklist">Desbloquear canal</string>
-  <string name="confirm_blacklist_channel">¿Ocultar todo el contenido de %s?</string>
-  <string name="blacklisted_channel">Canal bloqueado</string>
-  <string name="removed_from_blacklist">Canal desbloqueado</string>
-  <string name="header_blacklisted_channels">Canales bloqueados</string>
-  <string name="msg_no_blacklisted_channels">No hay canales bloqueados</string>
+  <string name="dialog_block_channel">Bloquear canal</string>
+  <string name="dialog_unblock_channel">Desbloquear canal</string>
+  <string name="confirm_block_channel">¿Ocultar todo el contenido de %s?</string>
+  <string name="channel_blocked">Canal bloqueado</string>
+  <string name="channel_unblocked">Canal desbloqueado</string>
+  <string name="header_blocked_channels">Canales bloqueados</string>
+  <string name="msg_no_blocked_channels">No hay canales bloqueados</string>
 </resources>

@@ -682,17 +682,17 @@ public final class Video {
         return belongsToGroup(MediaGroup.TYPE_UNDEFINED);
     }
 
-    public boolean belongsToBlacklistedChannels() {
-        return belongsToGroup(MediaGroup.TYPE_BLACKLISTED_CHANNELS);
+    public boolean belongsToBlockedChannels() {
+        return belongsToGroup(MediaGroup.TYPE_BLOCKED_CHANNELS);
     }
 
     /**
-     * Get the appropriate channel ID for blacklisting.
+     * Get the appropriate channel ID for blocking.
      * Tries channelId first, then falls back to author name.
      *
-     * @return The channel ID to use for blacklisting, or null if not available
+     * @return The channel ID to use for blocking, or null if not available
      */
-    public String getChannelIdForBlacklist() {
+    public String getChannelIdOrName() {
         if (channelId != null && !channelId.isEmpty()) {
             return channelId;
         }
