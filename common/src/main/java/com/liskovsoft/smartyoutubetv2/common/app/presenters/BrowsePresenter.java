@@ -276,10 +276,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (Map.Entry<String, String> entry : blockedChannelData.getChannelIdsWithNames().entrySet()) {
             Video video = new Video();
-            video.videoId = entry.getKey(); // Using channel ID as video ID
             video.channelId = entry.getKey();
             video.title = entry.getValue() != null ? entry.getValue() : entry.getKey();
-            video.author = entry.getValue() != null ? entry.getValue() : entry.getKey();
             videos.add(video);
         }
 
