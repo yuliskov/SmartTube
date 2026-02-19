@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.prefs.BlacklistData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -448,7 +449,7 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty()) {
+        if (video == null || video.isEmpty() || isChannelBlacklisted(video)) {
             return;
         }
 
@@ -467,5 +468,23 @@ public class VideoGroup {
         }
 
         mVideos.add(idx, video);
+    }
+
+    private boolean isChannelBlacklisted(Video video) {
+        // Filter out videos from blacklisted channels
+        String channelId = video.getChannelIdForBlacklist();
+        if (channelId != null) {
+            try {
+                BlacklistData blacklistData = BlacklistData.instance(null);
+                if (blacklistData != null && blacklistData.isChannelBlacklisted(channelId)) {
+                    return true; // Skip this video - it's from a blacklisted channel
+                }
+            } catch (Exception e) {
+                // If BlacklistData isn't initialized yet, allow the video through
+                // This can happen during early app startup
+            }
+        }
+
+        return false;
     }
 }

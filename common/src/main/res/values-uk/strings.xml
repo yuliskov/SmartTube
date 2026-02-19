@@ -710,4 +710,11 @@
     <string name="once_a_week">Один раз на тиждень</string>
     <string name="once_a_month">Один раз на місяць</string>
     <string name="action_debug_info">Налагоджувальна інформація</string>
+    <string name="dialog_blacklist_channel">Додати до чорного списку</string>
+    <string name="dialog_remove_from_blacklist">Видалити з чорного списку</string>
+    <string name="confirm_blacklist_channel">Приховати весь контент від %s?</string>
+    <string name="blacklisted_channel">Канал у чорному списку</string>
+    <string name="removed_from_blacklist">Канал видалено з чорного списку</string>
+    <string name="header_blacklisted_channels">Чорний список</string>
+    <string name="msg_no_blacklisted_channels">Чорний список порожній</string>
 </resources>

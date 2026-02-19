@@ -722,4 +722,11 @@
     <string name="once_a_week">Einmal pro Woche</string>
     <string name="once_a_month">Einmal pro Monat</string>
     <string name="action_debug_info">Debug-Info</string>
+    <string name="dialog_blacklist_channel">Kanal blockieren</string>
+    <string name="dialog_remove_from_blacklist">Blockierung aufheben</string>
+    <string name="confirm_blacklist_channel">Alle Inhalte von %s ausblenden?</string>
+    <string name="blacklisted_channel">Kanal blockiert</string>
+    <string name="removed_from_blacklist">Blockierung aufgehoben</string>
+    <string name="header_blacklisted_channels">Blockierte Kanäle</string>
+    <string name="msg_no_blacklisted_channels">Keine blockierten Kanäle</string>
 </resources>

@@ -722,4 +722,11 @@
   <string name="once_a_month">一個月一次</string>
   <string name="action_debug_info">除錯資訊</string>
   <string name="stable_restore">還原使用穩定版（將失去現有資料）</string>
+  <string name="dialog_blacklist_channel">封鎖頻道</string>
+  <string name="dialog_remove_from_blacklist">解除封鎖</string>
+  <string name="confirm_blacklist_channel">隱藏 %s 的所有內容？</string>
+  <string name="blacklisted_channel">頻道已封鎖</string>
+  <string name="removed_from_blacklist">已解除封鎖</string>
+  <string name="header_blacklisted_channels">封鎖的頻道</string>
+  <string name="msg_no_blacklisted_channels">沒有封鎖的頻道</string>
 </resources>

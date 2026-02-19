@@ -240,6 +240,7 @@ public class SidebarService implements ProfileChangeListener {
         mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mDefaultSections.put(R.string.header_blacklisted_channels, MediaGroup.TYPE_BLACKLISTED_CHANNELS);
         mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
         mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
         mDefaultSections.put(R.string.playback_queue_category_title, MediaGroup.TYPE_PLAYBACK_QUEUE);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="header_home">Home</string>
     <string name="title_search">Search</string>
     <string name="header_subscriptions">Subscriptions</string>
@@ -722,4 +722,11 @@
     <string name="once_a_week">Once a week</string>
     <string name="once_a_month">Once a month</string>
     <string name="action_debug_info">Debug info</string>
+    <string name="dialog_blacklist_channel">Blacklist Channel</string>
+    <string name="dialog_remove_from_blacklist">Remove from Blacklist</string>
+    <string name="confirm_blacklist_channel">Hide all content from %s?</string>
+    <string name="blacklisted_channel">Channel blacklisted</string>
+    <string name="removed_from_blacklist">Channel removed from blacklist</string>
+    <string name="header_blacklisted_channels">Blacklisted Channels</string>
+    <string name="msg_no_blacklisted_channels">No blacklisted channels</string>
 </resources>

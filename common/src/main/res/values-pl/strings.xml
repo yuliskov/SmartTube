@@ -722,4 +722,11 @@
   <string name="player_quick_skip_videos_alt">Pomijaj zwykłe wideo przyciskami w góra/dół</string>
   <string name="prefer_google_dns">Preferuj Google DNS</string>
   <string name="action_debug_info">Informacje debugowania</string>
+  <string name="dialog_blacklist_channel">Zablokuj kanał</string>
+  <string name="dialog_remove_from_blacklist">Odblokuj kanał</string>
+  <string name="confirm_blacklist_channel">Ukryć całą zawartość od %s?</string>
+  <string name="blacklisted_channel">Kanał zablokowany</string>
+  <string name="removed_from_blacklist">Kanał odblokowany</string>
+  <string name="header_blacklisted_channels">Zablokowane kanały</string>
+  <string name="msg_no_blacklisted_channels">Brak zablokowanych kanałów</string>
 </resources>
