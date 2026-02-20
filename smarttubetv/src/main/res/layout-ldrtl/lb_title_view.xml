@@ -77,7 +77,6 @@
             app:searchOrbIconColor="@color/orb_icon_color"
             android:visibility="gone" />
 
-        <!-- Add android:ellipsize="marquee" to horizontal scrolling -->
         <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.TitleMarqueeTextViewCompat
             android:id="@+id/pip_title"
             android:layout_width="wrap_content"
