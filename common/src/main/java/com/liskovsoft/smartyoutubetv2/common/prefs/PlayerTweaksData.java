@@ -78,7 +78,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsRealChannelIconEnabled;
     private float mPixelRatio;
     private boolean mIsQualityInfoBitrateEnabled;
-    private boolean mIsAudioTimeStretchingEnabled;
     private boolean mIsSpeedButtonOldBehaviorEnabled;
     private boolean mIsButtonLongClickEnabled;
     private boolean mIsLongSpeedListEnabled;
@@ -381,15 +380,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void setQualityInfoBitrateEnabled(boolean enable) {
         mIsQualityInfoBitrateEnabled = enable;
-        persistData();
-    }
-
-    public boolean isAudioTimeStretchingEnabled() {
-        return mIsAudioTimeStretchingEnabled;
-    }
-
-    public void setAudioTimeStretchingEnabled(boolean enable) {
-        mIsAudioTimeStretchingEnabled = enable;
         persistData();
     }
 
@@ -750,7 +740,6 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
         mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
-        mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
 
         updateDefaultValues();
     }
@@ -778,7 +767,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled
                 ));
     }
 

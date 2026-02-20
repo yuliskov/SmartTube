@@ -584,10 +584,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setRememberPositionOfLiveVideosEnabled(option.isSelected()),
                 mPlayerTweaksData.isRememberPositionOfLiveVideosEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_time_stretching),
-                option -> mPlayerTweaksData.setAudioTimeStretchingEnabled(option.isSelected()),
-                mPlayerTweaksData.isAudioTimeStretchingEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
                 option -> mPlayerTweaksData.setRememberPositionOfShortVideosEnabled(option.isSelected()),
                 mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
