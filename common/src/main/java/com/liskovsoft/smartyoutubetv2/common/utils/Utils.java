@@ -92,6 +92,14 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
+    public static final String[] KNOWN_PACKAGES = {
+            "com.liskovsoft.smarttubetv.beta",
+            "com.teamsmart.videomanager.tv",
+            "org.smarttube.beta",
+            "org.smarttube.stable",
+            "org.smarttube.fdroid",
+            "app.smarttube.fdroid",
+    };
     private static final String SUPER_PASSWD = "smarttube";
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";

@@ -11,7 +11,7 @@
 
         <!-- NOTE: Don't change authorities to allow further updates of the apk -->
         <provider android:name=".search.VideoContentProvider"
-                  android:authorities="org.smarttube.fdroid"
+                  android:authorities="app.smarttube.fdroid"
                   android:exported="true"
                   android:initOrder="1999999999"
                   tools:ignore="ExportedContentProvider"

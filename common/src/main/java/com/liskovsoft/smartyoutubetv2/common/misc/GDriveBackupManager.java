@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.GoogleSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -257,13 +258,7 @@ public class GDriveBackupManager {
     }
 
     private String getAltPackageName() {
-        String[] altPackages = new String[] {
-                "com.liskovsoft.smarttubetv.beta",
-                "com.teamsmart.videomanager.tv",
-                "org.smarttube.beta",
-                "org.smarttube.stable",
-                "org.smarttube.fdroid"
-        };
+        String[] altPackages = Utils.KNOWN_PACKAGES;
         // TODO: don't hard code ids. show all existed.
         return mContext.getPackageName().equals(altPackages[0]) ? altPackages[1] : altPackages[0];
     }

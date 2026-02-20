@@ -19,18 +19,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteContr
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppDataSourceManager {
     private static AppDataSourceManager sInstance;
-    private static final String[] KNOWN_PACKAGES = {
-            "org.smarttube.beta",
-            "org.smarttube.stable",
-            "com.liskovsoft.smarttubetv.beta",
-            "com.teamsmart.videomanager.tv"
-    };
 
     private AppDataSourceManager() {
     }
@@ -73,7 +68,7 @@ public class AppDataSourceManager {
         settingItems.add(new SettingsItem(
                 context.getString(R.string.app_backup_restore), () -> BackupSettingsPresenter.instance(context).show(), R.drawable.settings_backup));
 
-        if (Helpers.equalsAny(context.getPackageName(), KNOWN_PACKAGES)) {
+        if (Helpers.equalsAny(context.getPackageName(), Utils.KNOWN_PACKAGES)) {
             settingItems.add(new SettingsItem(
                     context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
         } else {

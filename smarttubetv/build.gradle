@@ -126,7 +126,7 @@ android {
             applicationId "org.smarttube.stable"
         }
         stfdroid {
-            applicationId "org.smarttube.fdroid"
+            applicationId "app.smarttube.fdroid"
             targetSdkVersion project.properties.compileSdkVersion + 2
         }
     }
