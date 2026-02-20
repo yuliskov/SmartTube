@@ -81,6 +81,7 @@
     <string name="player_only_ui">Iba rozhranie</string>
     <string name="player_ui_and_pause">Rozhranie a pozastavenie</string>
     <string name="player_only_pause">Iba pozastavenie</string>
+    <string name="player_toggle_speed">Prepnúť rýchlosť zap/vyp</string>
     <string name="check_for_updates">Skontrolovať aktualizácie</string>
     <string name="update_not_found">Používate najnovšiu verziu</string>
     <string name="update_in_progress">Počkajte…</string>
@@ -431,7 +432,7 @@
     <string name="removed_from_playlists">Zmazané zo sekcie Playlisty</string>
     <string name="saved_to_playlists">Pridané do sekcie Playlisty</string>
     <string name="create_playlist">Vytvoriť playlist</string>
-    <string name="create_playlist_note">nebude viditeľný v aplikácii YouTube</string>
+    <string name="create_playlist_note">POZNÁMKA: Nebude viditeľný v aplikácii YouTube</string>
     <string name="add_video_to_new_playlist">Pridať do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nemožno zmazať prázdny playlist</string>
     <string name="playlist">Playlist</string>
@@ -653,7 +654,9 @@
     <string name="channel_filter_hint">Filtrovať kanály</string>
     <string name="player_loop_shorts">Shorts v slučke</string>
     <string name="player_quick_shorts_skip">Preskočiť Shorts s tlačidlami vľavo/vpravo</string>
+    <string name="player_quick_shorts_skip_alt">Preskočiť Shorts s tlačidlami hore/dolu</string>
     <string name="player_quick_skip_videos">Preskočiť videá s tlačidlami vľavo/vpravo</string>
+    <string name="player_quick_skip_videos_alt">Preskočiť videá s tlačidlami hore/dolu</string>
     <string name="channels_filter">Zobraziť pole filtrovania kanálov v sekcii Kanály</string>
     <string name="channel_search_bar">Vyhľadávací panel v sekcii Kanály</string>
     <string name="header_sports">Šport</string>
@@ -672,6 +675,7 @@
     <string name="fullscreen_mode">Režim celej obrazovky (bez systémových líšt)</string>
     <string name="player_only_mode">Zobraziť iba prehrávač, ak je video otvorené mimo aplikácie</string>
     <string name="pinned_channel_rows">Zobraziť pripnutý kanál ako riadky</string>
+    <string name="prefer_google_dns">Uprednostniť Google DNS</string>
     <string name="prefer_ipv4">Uprednostniť IPv4 DNS protokol</string>
     <string name="prefer_ipv4_desc">Mohlo by to vyriešiť situácie, keď aplikácia vôbec nefunguje.\nPoznámka. Môže spôsobiť mrznutie a pády (najmä na zariadeniach so systémom Android 8 alebo Dune HD)</string>
     <string name="long_press_for_settings">STLAČTE DLHO PRE NASTAVENIA</string>
@@ -717,4 +721,12 @@
     <string name="once_a_day">Raz denne</string>
     <string name="once_a_week">Raz týždenne</string>
     <string name="once_a_month">Raz mesačne</string>
+    <string name="action_debug_info">Diagnostické informácie</string>
+    <string name="dialog_block_channel">Zablokovať kanál</string>
+    <string name="dialog_unblock_channel">Odblokovať kanál</string>
+    <string name="confirm_block_channel">Skryť všetok obsah od %s?</string>
+    <string name="channel_blocked">Kanál zablokovaný</string>
+    <string name="channel_unblocked">Kanál odblokovaný</string>
+    <string name="header_blocked_channels">Zablokované kanály</string>
+    <string name="msg_no_blocked_channels">Žiadne zablokované kanály</string>
 </resources>
