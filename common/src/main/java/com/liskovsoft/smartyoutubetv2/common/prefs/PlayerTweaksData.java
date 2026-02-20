@@ -750,7 +750,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsSuggestionsHorizontallyScrolled = Helpers.parseBoolean(split, 56, false);
         mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
-        mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, false);
+        mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
 
         updateDefaultValues();
     }
