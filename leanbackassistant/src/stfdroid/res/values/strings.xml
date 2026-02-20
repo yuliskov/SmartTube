@@ -1,5 +1,5 @@
-<resources>
+<resources translatable="false">
     <string name="search_label">SmartTube</string>
     <string name="settings_description">SmartTube Videos</string>
-    <string translatable="false" name="search_authority">app.smarttube.fdroid</string>
+    <string name="search_authority">app.smarttube.fdroid.search_provider</string>
 </resources>
