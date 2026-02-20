@@ -729,4 +729,6 @@
     <string name="channel_unblocked">Kanalın engeli kaldırıldı</string>
     <string name="header_blocked_channels">Engellenen Kanallar</string>
     <string name="msg_no_blocked_channels">Engellenmiş kanal yok</string>
+    <string name="player_time_stretching">Ses zaman esnetme</string>
+    <string name="player_time_stretching_desc">Hız değiştirildiğinde sesi doğal tutar. Bazı cihazlarda performansı önemli ölçüde düşürebilir.</string>
 </resources>

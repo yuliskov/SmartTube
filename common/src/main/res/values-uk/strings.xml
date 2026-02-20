@@ -717,4 +717,6 @@
     <string name="channel_unblocked">Канал розблоковано</string>
     <string name="header_blocked_channels">Заблоковані канали</string>
     <string name="msg_no_blocked_channels">Немає заблокованих каналів</string>
+    <string name="player_time_stretching">Розтягування аудіо в часі</string>
+    <string name="player_time_stretching_desc">Зберігає природний голос при зміні швидкості. Може суттєво знизити продуктивність на деяких пристроях.</string>
 </resources>

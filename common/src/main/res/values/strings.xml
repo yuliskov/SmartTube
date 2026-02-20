@@ -729,4 +729,6 @@
     <string name="channel_unblocked">Channel unblocked</string>
     <string name="header_blocked_channels">Blocked Channels</string>
     <string name="msg_no_blocked_channels">No blocked channels</string>
+    <string name="player_time_stretching">Audio time stretching</string>
+    <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
 </resources>
