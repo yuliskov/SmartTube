@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="header_home">Ana Sayfa</string>
     <string name="title_search">Arama</string>
     <string name="header_subscriptions">Abonelikler</string>
@@ -432,7 +432,7 @@
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne eklendi</string>
     <string name="create_playlist">Oynatma listesi oluştur</string>
-    <string name="create_playlist_note">NOT: YouTube uygulamasında görünmeyecek</string>
+    <string name="create_playlist_note">NOTE: It won\'t be seen in the YouTube app</string>
     <string name="add_video_to_new_playlist">Videoyu yeni oynatma listesine ekle</string>
     <string name="cant_delete_empty_playlist">Boş oynatma listesi silinemiyor</string>
     <string name="playlist">Oynatma listesi</string>
@@ -722,13 +722,13 @@
     <string name="once_a_week">Haftada bir kez</string>
     <string name="once_a_month">Ayda bir kez</string>
     <string name="action_debug_info">Hata ayıklama bilgileri</string>
-    <string name="dialog_block_channel">Kanalı engelle</string>
-    <string name="dialog_unblock_channel">Kanalın engelini kaldır</string>
-    <string name="confirm_block_channel">%s adlı kanaldaki tüm içerik gizlensin mi?</string>
-    <string name="channel_blocked">Kanal engellendi</string>
-    <string name="channel_unblocked">Kanalın engeli kaldırıldı</string>
-    <string name="header_blocked_channels">Engellenen Kanallar</string>
-    <string name="msg_no_blocked_channels">Engellenmiş kanal yok</string>
-    <string name="player_time_stretching">Ses zaman esnetme</string>
-    <string name="player_time_stretching_desc">Hız değiştirildiğinde sesi doğal tutar. Bazı cihazlarda performansı önemli ölçüde düşürebilir.</string>
+    <string name="dialog_block_channel">Block the channel</string>
+    <string name="dialog_unblock_channel">Unblock the channel</string>
+    <string name="confirm_block_channel">Hide all content from %s?</string>
+    <string name="channel_blocked">Channel blocked</string>
+    <string name="channel_unblocked">Channel unblocked</string>
+    <string name="header_blocked_channels">Blocked Channels</string>
+    <string name="msg_no_blocked_channels">No blocked channels</string>
+    <string name="player_time_stretching">Audio time stretching</string>
+    <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
 </resources>
