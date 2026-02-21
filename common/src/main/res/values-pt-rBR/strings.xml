@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="header_home">Início</string>
     <string name="title_search">Pesquisar</string>
     <string name="header_subscriptions">Inscrições</string>
@@ -432,7 +432,7 @@
     <string name="removed_from_playlists">Removida da seção \"Biblioteca\"</string>
     <string name="saved_to_playlists">Salva na seção \"Biblioteca\"</string>
     <string name="create_playlist">Criar nova lista de reprodução (playlist) </string>
-    <string name="create_playlist_note">it won\'t be seen in the YouTube app</string>
+    <string name="create_playlist_note">NOTE: It won\'t be seen in the YouTube app</string>
     <string name="add_video_to_new_playlist">Adicionar à nova lista de reprodução (playlist)</string>
     <string name="cant_delete_empty_playlist">Não é possível excluir uma lista de reprodução (playlist) vazia</string>
     <string name="playlist">Lista de reprodução (playlist)</string>
@@ -721,11 +721,14 @@
     <string name="once_a_day">Once a day</string>
     <string name="once_a_week">Once a week</string>
     <string name="once_a_month">Once a month</string>
-    <string name="dialog_block_channel">Bloquear canal</string>
-    <string name="dialog_unblock_channel">Desbloquear canal</string>
-    <string name="confirm_block_channel">Ocultar todo o conteúdo de %s?</string>
-    <string name="channel_blocked">Canal bloqueado</string>
-    <string name="channel_unblocked">Canal desbloqueado</string>
-    <string name="header_blocked_channels">Canais bloqueados</string>
-    <string name="msg_no_blocked_channels">Nenhum canal bloqueado</string>
+    <string name="action_debug_info">Debug info</string>
+    <string name="dialog_block_channel">Block the channel</string>
+    <string name="dialog_unblock_channel">Unblock the channel</string>
+    <string name="confirm_block_channel">Hide all content from %s?</string>
+    <string name="channel_blocked">Channel blocked</string>
+    <string name="channel_unblocked">Channel unblocked</string>
+    <string name="header_blocked_channels">Blocked Channels</string>
+    <string name="msg_no_blocked_channels">No blocked channels</string>
+    <string name="player_time_stretching">Audio time stretching</string>
+    <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
 </resources>
