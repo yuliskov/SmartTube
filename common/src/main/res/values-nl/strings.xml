@@ -705,9 +705,16 @@
   <string name="stable_restore">Herstel de stable build (alle gegevens gaan verloren)</string>
   <string name="dialog_block_channel">Blokkeer kanaal</string>
   <string name="dialog_unblock_channel">Deblokkeer kanaal</string>
-  <string name="confirm_block_channel">Verberg alle inhoud van %s?</string>
+  <string name="confirm_block_channel">Verberg alle inhoud van %s\?</string>
   <string name="channel_blocked">Kanaal geblokkeerd</string>
   <string name="channel_unblocked">Kanaal gedeblokkeerd</string>
   <string name="header_blocked_channels">Geblokkeerde kanalen</string>
   <string name="msg_no_blocked_channels">Geen geblokkeerde kanalen</string>
+  <string name="auto_backup_category">Automatische backup</string>
+  <string name="once_a_day">Eenmaal per dag</string>
+  <string name="once_a_week">Eenmaal per week</string>
+  <string name="once_a_month">Eenmaal per maand</string>
+  <string name="action_debug_info">Foutopsporingsinformatie</string>
+  <string name="player_time_stretching">Audio-tijdverlenging</string>
+  <string name="player_time_stretching_desc">Behoudt de natuurlijke stem bij het veranderen van de snelheid. Kan de prestaties op sommige apparaten aanzienlijk verminderen.</string>
 </resources>
