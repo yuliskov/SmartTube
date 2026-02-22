@@ -710,7 +710,17 @@
   <string name="suggestions_horizontally_scrolled">Vaakasuunnassa vieritettävät ehdotukset</string>
   <string name="stable_restore">Palauta vakaa versio (kaikki SmartTuben tiedot menetetään)</string>
   <string name="auto_backup_category">Automaattinen asetusten tallentaminen</string>
-  <string name="once_a_day">Kerrän päivässä</string>
+  <string name="once_a_day">Kerran päivässä</string>
   <string name="once_a_week">Kerran viikossa</string>
   <string name="once_a_month">Kerran kuukaudessa</string>
+  <string name="action_debug_info">Virheenkorjaustiedot</string>
+  <string name="dialog_block_channel">Estä kanava</string>
+  <string name="dialog_unblock_channel">Poista kanavan esto</string>
+  <string name="confirm_block_channel">Piilota kaikki sisältö käyttäjältä %s</string>
+  <string name="channel_blocked">Kanava estetty</string>
+  <string name="channel_unblocked">Kanavan esto poistettu</string>
+  <string name="header_blocked_channels">Estetyt kanavat</string>
+  <string name="msg_no_blocked_channels">Ei estettyjä kanavia</string>
+  <string name="player_time_stretching">Äänen keston venytys</string>
+  <string name="player_time_stretching_desc">Pitää äänen luonnollisena nopeutta vaihdettaessa. Saattaa heikentää suorituskykyä merkittävästi joillakin laitteilla.</string>
 </resources>
