@@ -344,7 +344,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void onSearchSettingsClicked() {
-        Observable<List<MediaGroup>> sorting = getContentService().getChannelSortingObserve(getChannelId());
+        Observable<List<MediaGroup>> sorting = getContentService().getChannelSortingOptionsObserve(getChannelId());
         Disposable result = sorting.subscribe(
                 items -> {
                     AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
