@@ -1,8 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Handler;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -12,7 +16,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,6 +104,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private static final String SELECTED_VIDEO_ID = "SelectedVideoId";
     private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
+    private static final float PLAY_HOLD_SPEED = 2.0f;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
@@ -118,6 +127,25 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
     private String mSelectedVideoId;
+    private final Handler mPlayHoldHandler = new Handler(Looper.getMainLooper());
+    private boolean mIsPlayHoldSpeedApplied;
+    private boolean mIsPlayKeyPressed;
+    private float mPlayHoldPrevSpeed = 1.0f;
+    private TextView mPlayHoldSpeedBadge;
+    private final Runnable mApplyPlayHoldSpeedRunnable = () -> {
+        if (!mIsPlayKeyPressed || mIsPlayHoldSpeedApplied || !isPlaying()) {
+            return;
+        }
+
+        mPlayHoldPrevSpeed = getSpeed();
+        mIsPlayHoldSpeedApplied = true;
+
+        if (!Helpers.floatEquals(mPlayHoldPrevSpeed, PLAY_HOLD_SPEED)) {
+            setSpeed(PLAY_HOLD_SPEED);
+        }
+
+        showPlayHoldSpeedBadge();
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -231,6 +259,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void onPause() {
         super.onPause();
 
+        stopPlayHoldSpeed();
+
         // NOTE: don't move this into another place! Multiple components rely on it.
         mPlaybackPresenter.onViewPaused();
 
@@ -242,8 +272,137 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         //ExoPlayerInitializer.enableAudioFocus(mPlayer, false); // Disable focus in PIP
     }
 
-    public void onDispatchKeyEvent(KeyEvent event) {
-        // NOP
+    public boolean onDispatchKeyEvent(KeyEvent event) {
+        if (event == null) {
+            return false;
+        }
+
+        int keyCode = event.getKeyCode();
+        boolean isPlayKey = keyCode == KeyEvent.KEYCODE_MEDIA_PLAY || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+
+        if (!isPlayKey) {
+            return false;
+        }
+
+        int action = event.getAction();
+
+        if (action == KeyEvent.ACTION_DOWN) {
+            if (event.getRepeatCount() == 0) {
+                mIsPlayKeyPressed = true;
+                mPlayHoldHandler.removeCallbacks(mApplyPlayHoldSpeedRunnable);
+                mPlayHoldHandler.postDelayed(mApplyPlayHoldSpeedRunnable, ViewConfiguration.getLongPressTimeout());
+                return true; // wait until UP to decide short press vs long press
+            }
+
+            // Prevent repeated media key downs from firing extra play/pause actions while the button is held.
+            return true;
+        }
+
+        if (action == KeyEvent.ACTION_UP) {
+            mIsPlayKeyPressed = false;
+            mPlayHoldHandler.removeCallbacks(mApplyPlayHoldSpeedRunnable);
+
+            if (mIsPlayHoldSpeedApplied) {
+                stopPlayHoldSpeed();
+                return true;
+            }
+
+            // Emulate the original short press behavior after we intercepted DOWN.
+            if (mPlaybackPresenter != null) {
+                mPlaybackPresenter.onKeyDown(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private void stopPlayHoldSpeed() {
+        mPlayHoldHandler.removeCallbacks(mApplyPlayHoldSpeedRunnable);
+
+        if (!mIsPlayHoldSpeedApplied) {
+            return;
+        }
+
+        mIsPlayHoldSpeedApplied = false;
+        hidePlayHoldSpeedBadge();
+
+        if (!Helpers.floatEquals(getSpeed(), mPlayHoldPrevSpeed)) {
+            setSpeed(mPlayHoldPrevSpeed);
+        }
+    }
+
+    private void showPlayHoldSpeedBadge() {
+        TextView badgeView = ensurePlayHoldSpeedBadge();
+
+        if (badgeView != null) {
+            badgeView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hidePlayHoldSpeedBadge() {
+        if (mPlayHoldSpeedBadge != null) {
+            mPlayHoldSpeedBadge.setVisibility(View.GONE);
+        }
+    }
+
+    private TextView ensurePlayHoldSpeedBadge() {
+        if (mPlayHoldSpeedBadge != null) {
+            return mPlayHoldSpeedBadge;
+        }
+
+        Activity activity = getActivity();
+
+        if (activity == null) {
+            return null;
+        }
+
+        FrameLayout rootView = activity.findViewById(android.R.id.content);
+
+        if (rootView == null) {
+            return null;
+        }
+
+        float density = activity.getResources().getDisplayMetrics().density;
+        int paddingHorizontal = (int) (12 * density);
+        int paddingVertical = (int) (6 * density);
+        int topMargin = (int) (32 * density);
+        int rightMargin = (int) (32 * density);
+
+        TextView badgeView = new TextView(activity);
+        badgeView.setText("2x");
+        badgeView.setTextColor(Color.WHITE);
+        badgeView.setTypeface(Typeface.DEFAULT_BOLD);
+        badgeView.setTextSize(18);
+        badgeView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+        badgeView.setBackgroundColor(0x99000000);
+        badgeView.setVisibility(View.GONE);
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.TOP | Gravity.END;
+        layoutParams.topMargin = topMargin;
+        layoutParams.rightMargin = rightMargin;
+
+        rootView.addView(badgeView, layoutParams);
+        mPlayHoldSpeedBadge = badgeView;
+
+        return mPlayHoldSpeedBadge;
+    }
+
+    private void removePlayHoldSpeedBadge() {
+        if (mPlayHoldSpeedBadge == null) {
+            return;
+        }
+
+        ViewGroup parent = (ViewGroup) mPlayHoldSpeedBadge.getParent();
+
+        if (parent != null) {
+            parent.removeView(mPlayHoldSpeedBadge);
+        }
+
+        mPlayHoldSpeedBadge = null;
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
@@ -1059,6 +1218,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        stopPlayHoldSpeed();
+        removePlayHoldSpeedBadge();
 
         Log.d(TAG, "Destroying PlaybackFragment...");
 
