@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -13,7 +13,7 @@ buildscript {
 
         // Check that you have the Google Services Gradle plugin v4.3.2 or later
         // (if not, add it).
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.3.15'
 
         // Add the Crashlytics Gradle plugin.
         // https://firebase.google.com/docs/crashlytics/get-started?platform=android
@@ -134,7 +134,7 @@ android {
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
+        variant.outputs.all { output ->
             def project = "SmartTube"
             def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
             def buildType = variant.buildType.name.take(1)

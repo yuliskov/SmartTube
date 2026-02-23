@@ -14,18 +14,17 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
-        classpath 'com.novoda:bintray-release:0.9.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath 'com.google.android.gms:strict-version-matcher-plugin:1.2.0'
     }
 }
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     project.ext {
         exoplayerPublishEnabled = false
