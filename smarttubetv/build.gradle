@@ -127,6 +127,7 @@ android {
     productFlavors {
         stbeta {
             applicationId "org.smarttube.beta"
+            targetSdkVersion project.properties.compileSdkVersion
         }
         ststable {
             applicationId "org.smarttube.stable"
