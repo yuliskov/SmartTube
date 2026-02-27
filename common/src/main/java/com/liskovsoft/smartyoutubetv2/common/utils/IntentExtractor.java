@@ -225,7 +225,8 @@ public class IntentExtractor {
     }
 
     public static boolean hasFinishOnEndedFlag(Intent intent) {
-        return intent != null && intent.getBooleanExtra("finish_on_ended", false);
+        return intent != null && (intent.getBooleanExtra("finish_on_ended", false)
+                || "true".equals(intent.getStringExtra("finish_on_ended")));
     }
 
     public static long extractVideoTimeMs(Intent intent) {
