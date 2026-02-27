@@ -110,6 +110,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendHideVideos(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
+                option -> {
+                    mMediaServiceData.setContentHidden(MediaServiceData.CONTENT_SHORTS_ALL, option.isSelected());
+                    BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SHORTS, !option.isSelected());
+                },
+                mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_ALL)));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_mixes),
                 option -> mMediaServiceData.setContentHidden(MediaServiceData.CONTENT_MIXES, option.isSelected()),
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_MIXES)));
