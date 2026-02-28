@@ -176,7 +176,9 @@ public class SliderPanel extends FrameLayout {
 
             }else if(xvel == 0){
                 if(left > leftThreshold){
-                    settleLeft = screenWidth;
+                    // MOD: don't full slide
+                    //settleLeft = screenWidth;
+                    settleLeft = left;
                 }
             }
 

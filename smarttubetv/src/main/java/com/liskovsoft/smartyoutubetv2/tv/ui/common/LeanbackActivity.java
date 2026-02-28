@@ -6,6 +6,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
@@ -49,7 +50,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     }
 
     private void initBackSlide() {
-        if (VERSION.SDK_INT < 21) {
+        if (VERSION.SDK_INT < 21 || !Helpers.isTouchSupported(this)) {
             return;
         }
 
