@@ -594,4 +594,5 @@
   <string name="disable_search_history">Деактивиране на историята на търсенето</string>
   <string name="unlock_high_bitrate_formats">Отключване на формати с висок битрейт 1080p vp9</string>
   <string name="unlock_high_bitrate_audio_formats">Отключване на формати mp4a с висок битрейт</string>
+    <string name="new_video_counter">Показване на брояч за нови видеоклипове на закачени канали</string>
 </resources>

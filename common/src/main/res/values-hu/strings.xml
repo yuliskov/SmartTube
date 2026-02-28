@@ -712,4 +712,5 @@
   <string name="typing_corrections">Az automatikus javítás letiltása szöveg beírása közben</string>
   <string name="suggestions_horizontally_scrolled">Vízszintesen görgetett Javaslatok</string>
   <string name="stable_restore">Minden beállítás törlése!</string>
+    <string name="new_video_counter">Új videók számlálójának megjelenítése a rögzített csatornákon</string>
 </resources>

@@ -692,4 +692,5 @@
     <string name="import_subscriptions_group">Daxil et</string>
     <string name="lb_playback_controls_closed_captioning_disable">Qapalı Altyazıları deaktiv edin</string>
     <string name="lb_playback_controls_closed_captioning_enable">Qapalı Altyazıları aktivləşdirin</string>
+    <string name="new_video_counter">Saxlanmış kanallarda yeni video sayğacını göstər</string>
 </resources>

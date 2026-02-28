@@ -723,4 +723,5 @@
   <string name="msg_no_blocked_channels">Ei estettyjä kanavia</string>
   <string name="player_time_stretching">Äänen keston venytys</string>
   <string name="player_time_stretching_desc">Pitää äänen luonnollisena nopeutta vaihdettaessa. Saattaa heikentää suorituskykyä merkittävästi joillakin laitteilla.</string>
+    <string name="new_video_counter">Näytä uusien videoiden laskuri kiinnitetyissä kanavissa</string>
 </resources>

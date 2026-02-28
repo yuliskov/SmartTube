@@ -694,4 +694,5 @@
   <string name="context_menu_sorting">مرتب‌سازی منوی زمینه</string>
   <string name="player_audio_focus">تمرکز صوتی (مکث در صورت شناسایی سایر پخش‌کننده‌ها)</string>
   <string name="paid_content_notification">اعلان محتوای پولی</string>
+    <string name="new_video_counter">نمایش شمارنده ویدیوهای جدید در کانال‌های ثابت شده</string>
 </resources>

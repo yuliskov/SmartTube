@@ -14,6 +14,7 @@ public interface BrowseView {
     void updateSection(VideoGroup group);
     void updateSection(SettingsGroup group);
     void clearSection(BrowseSection section);
+    void updateSectionTitle(BrowseSection section);
     void selectSectionItem(int index);
     void selectSectionItem(Video item);
     void showError(ErrorFragmentData data);

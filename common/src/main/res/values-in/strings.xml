@@ -683,4 +683,5 @@
     <string name="card_preview_muted">Vidio tanpa suara</string>
     <string name="card_preview_full">Vidio dengan suara</string>
     <string name="card_preview">Pratinjau kartu</string>
+    <string name="new_video_counter">Tampilkan penghitung video baru di channel yang disematkan</string>
 </resources>

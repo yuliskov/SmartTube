@@ -2,12 +2,15 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -42,6 +45,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountCha
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.NewVideoCounterData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -76,6 +80,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs = -1;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
+    // New video counter fields
+    private final Handler mCounterResetHandler = new Handler(Looper.getMainLooper());
+    private Runnable mCounterResetRunnable;
+    private Runnable mCounterRefreshRunnable;
+    // Map: sectionId -> newest known video data (String: timestamp_videoId) from RSS feed
+    private final Map<Integer, String> mCurrentNewestVideoData = new HashMap<>();
+    private final Map<Integer, String> mPinnedChannelIds = new HashMap<>(); // sectionId -> channelId
+    private final Map<Integer, String> mOriginalTitles = new HashMap<>(); // sectionId -> original title (without counter)
+    private final List<Disposable> mCounterActions = new ArrayList<>();
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -125,6 +138,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : mBootstrapSectionId);
         mBootstrapSectionId = -1;
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
+        
+        // Start recurring 20-minute counter fetch
+        if (mCounterRefreshRunnable == null) {
+            mCounterRefreshRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    fetchNewVideoCounts();
+                    mCounterResetHandler.postDelayed(this, 20 * 60 * 1_000);
+                }
+            };
+            mCounterResetHandler.postDelayed(mCounterRefreshRunnable, 20 * 60 * 1_000);
+        }
     }
 
     @Override
@@ -292,6 +317,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         initPinnedData();
 
         refreshSections();
+
+        fetchNewVideoCounts();
     }
 
     private void refreshSections() {
@@ -407,6 +434,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     @Override
     public void onViewDestroyed() {
         super.onViewDestroyed();
+        RxHelper.disposeActions(mCounterActions);
+        if (mCounterRefreshRunnable != null) {
+            mCounterResetHandler.removeCallbacks(mCounterRefreshRunnable);
+            mCounterRefreshRunnable = null;
+        }
         disposeActions();
         saveSelectedItems();
     }
@@ -496,6 +528,24 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mCurrentVideo = null; // fast scroll through the sections (fix empty selected item)
         updateCurrentSection();
         restoreSelectedItems(); // Don't place anywhere else
+
+        // Cancel any pending counter reset
+        if (mCounterResetRunnable != null) {
+            mCounterResetHandler.removeCallbacks(mCounterResetRunnable);
+            mCounterResetRunnable = null;
+        }
+
+        // Start counter reset timer for pinned channel sections
+        if (getMainUIData().isNewVideoCounterEnabled() && mCurrentSection != null && isPinnedId(mCurrentSection.getId())) {
+            final int focusedSectionId = sectionId;
+            mCounterResetRunnable = () -> {
+                // Only reset if still on the same section
+                if (mCurrentSection != null && mCurrentSection.getId() == focusedSectionId) {
+                    resetNewVideoCounter(focusedSectionId);
+                }
+            };
+            mCounterResetHandler.postDelayed(mCounterResetRunnable, 5_000);
+        }
     }
 
     @Override
@@ -575,6 +625,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             mSections.add(newSection);
         }
         getView().addSection(-1, newSection);
+        
+        // Immediately fetch baseline or counter for the newly pinned channel
+        fetchNewVideoCounts();
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
@@ -1223,5 +1276,173 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         for (State state : stateService.getStates()) {
             videoGroup.add(0, state.video);
         }
+    }
+
+    // ==================== New Video Counter ====================
+
+    private void fetchNewVideoCounts() {
+        if (getContext() == null) {
+            return;
+        }
+        
+        boolean isEnabled = getMainUIData().isNewVideoCounterEnabled();
+
+        if (!isEnabled) {
+            return;
+        }
+        
+        // Stop any currently running background counters so we don't duplicate
+        RxHelper.disposeActions(mCounterActions);
+
+        NewVideoCounterData counterData = NewVideoCounterData.instance(getContext());
+
+        // Collect pinned channel sections and their channel IDs
+        mPinnedChannelIds.clear();
+        mOriginalTitles.clear();
+        mCurrentNewestVideoData.clear();
+
+        for (BrowseSection section : mSections) {
+            boolean isPinned = isPinnedId(section.getId());
+            boolean isVideo = section.getData() instanceof Video;
+            if (isPinned && isVideo) {
+                Video item = (Video) section.getData();
+                boolean hasChan = item.hasChannel();
+                
+                String cleanTitle = section.getTitle();
+                if (cleanTitle != null) {
+                    cleanTitle = cleanTitle.replaceFirst("^\\(\\d+\\)\\s+", "");
+                }
+                
+                if (hasChan) {
+                    mPinnedChannelIds.put(section.getId(), item.channelId);
+                    mOriginalTitles.put(section.getId(), cleanTitle);
+                } else if (item.channelId != null && !item.channelId.isEmpty()) {
+                    // Fallback just in case hasChannel() requires something else
+                    mPinnedChannelIds.put(section.getId(), item.channelId);
+                    mOriginalTitles.put(section.getId(), cleanTitle);
+                }
+            }
+        }
+
+        if (mPinnedChannelIds.isEmpty()) {
+            return;
+        }
+
+        // Fetch RSS for each pinned channel sequentially to avoid rate limiting
+        for (Map.Entry<Integer, String> entry : mPinnedChannelIds.entrySet()) {
+            int sectionId = entry.getKey();
+            String channelId = entry.getValue();
+
+            Disposable action = getContentService().getRssFeedObserve(channelId)
+                    .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                    .subscribe(
+                        mediaGroup -> {
+                            if (mediaGroup == null || getView() == null) {
+                                return;
+                            }
+
+                            List<MediaItem> items = mediaGroup.getMediaItems();
+                            if (items == null || items.isEmpty()) {
+                                return;
+                            }
+
+                            String newestFetchedData = items.get(0).getPublishedDate() + "_" + items.get(0).getVideoId();
+                            mCurrentNewestVideoData.put(sectionId, newestFetchedData);
+
+                            String lastKnownData = counterData.getLastKnownVideoData(sectionId);
+
+                            if (lastKnownData == null) {
+                                // First time: store baseline, no counter shown
+                                counterData.setLastKnownVideoData(sectionId, newestFetchedData);
+                            } else {
+                                int underscoreIdx = lastKnownData.indexOf('_');
+                                long lastDate = 0;
+                                String lastId = "";
+                                
+                                if (underscoreIdx > 0) {
+                                    try { lastDate = Long.parseLong(lastKnownData.substring(0, underscoreIdx)); } catch (Exception ignored) {}
+                                    lastId = lastKnownData.substring(underscoreIdx + 1);
+                                } else {
+                                    lastId = lastKnownData; // Fallback for backward compatibility
+                                }
+                                
+                                int newVideoCount = 0;
+                                boolean found = false;
+                                for (int i = 0; i < items.size(); i++) {
+                                    if (lastId.equals(items.get(i).getVideoId())) {
+                                        newVideoCount = i;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                // If previous newest video is not in the feed at all (e.g., deleted or 16+ new videos),
+                                // fallback to counting videos with a newer timestamp.
+                                if (!found) {
+                                    newVideoCount = 0;
+                                    for (MediaItem item : items) {
+                                        if (item.getPublishedDate() > lastDate) {
+                                            newVideoCount++;
+                                        }
+                                    }
+                                    
+                                    // If timestamp is missing/broken, default to max items
+                                    if (newVideoCount == 0 && lastDate > 0) {
+                                         // It wasn't found, but timestamps are older? Probably a deleted video that was 
+                                         // the only new one. So it should be 0.
+                                    } else if (newVideoCount == 0) {
+                                         newVideoCount = items.size();
+                                    }
+                                }
+
+                                updateSectionTitleWithCounter(sectionId, newVideoCount);
+                            }
+                        },
+                        error -> Log.e(TAG, "onError fetching RSS for counter " + channelId, error)
+                );
+
+            mCounterActions.add(action);
+        }
+    }
+
+    private void updateSectionTitleWithCounter(int sectionId, int newCount) {
+        if (getView() == null) {
+            return;
+        }
+
+        BrowseSection section = findSectionById(sectionId);
+
+        if (section == null) {
+            return;
+        }
+
+        String originalTitle = mOriginalTitles.get(sectionId);
+        if (originalTitle == null) {
+            originalTitle = section.getTitle();
+        }
+
+        if (newCount > 0) {
+            section.setTitle("(" + newCount + ") " + originalTitle);
+        } else {
+            section.setTitle(originalTitle);
+        }
+
+        getView().updateSectionTitle(section);
+    }
+
+    private void resetNewVideoCounter(int sectionId) {
+        if (getContext() == null) {
+            return;
+        }
+
+        NewVideoCounterData counterData = NewVideoCounterData.instance(getContext());
+        String currentNewestData = mCurrentNewestVideoData.get(sectionId);
+
+        if (currentNewestData != null) {
+            counterData.setLastKnownVideoData(sectionId, currentNewestData);
+        }
+
+        updateSectionTitleWithCounter(sectionId, 0);
     }
 }

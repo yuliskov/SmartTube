@@ -728,4 +728,5 @@
   <string name="channel_unblocked">Retiré de la liste noire</string>
   <string name="header_blocked_channels">Chaînes sur liste noire</string>
   <string name="msg_no_blocked_channels">Aucune chaîne sur liste noire</string>
+    <string name="new_video_counter">Afficher le compteur de nouvelles vidéos sur les chaînes épinglées</string>
 </resources>

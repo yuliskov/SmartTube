@@ -729,4 +729,5 @@
   <string name="channel_unblocked">已解除封鎖</string>
   <string name="header_blocked_channels">封鎖的頻道</string>
   <string name="msg_no_blocked_channels">沒有封鎖的頻道</string>
+    <string name="new_video_counter">在釘選頻道上顯示新影片計數器</string>
 </resources>

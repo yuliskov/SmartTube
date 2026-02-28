@@ -721,4 +721,5 @@
   <string name="once_a_day">En gång om dagen</string>
   <string name="once_a_week">En gång i veckan</string>
   <string name="once_a_month">En gång i månaden</string>
+    <string name="new_video_counter">Visa räknare för nya videor på fästa kanaler</string>
 </resources>

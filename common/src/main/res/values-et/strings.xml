@@ -618,4 +618,5 @@
   <string name="disable_remote_history">Keela ajalugu kaugjuhtimise kasutamisel</string>
   <string name="keyboard_fix">Klaviatuuri kuvamise parandamine klahvivajutusega OK (G20s ja teised)</string>
   <string name="nothing_found">Midagi ei leitud</string>
+    <string name="new_video_counter">Kuva kinnitatud kanalite uute videote loendur</string>
 </resources>

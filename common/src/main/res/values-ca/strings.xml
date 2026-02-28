@@ -505,4 +505,5 @@
   <string name="hide_shorts_from_trending">Amaga els curts de la tendència</string>
   <string name="disable_history">Desactiva l\'historial</string>
   <string name="enable_history">Activeu l\'historial</string>
+    <string name="new_video_counter">Mostra el comptador de vídeos nous als canals fixats</string>
 </resources>

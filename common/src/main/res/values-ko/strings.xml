@@ -714,4 +714,5 @@
   <string name="channel_unblocked">차단 해제됨</string>
   <string name="header_blocked_channels">차단된 채널</string>
   <string name="msg_no_blocked_channels">차단된 채널 없음</string>
+    <string name="new_video_counter">고정된 채널에 새 동영상 카운터 표시</string>
 </resources>

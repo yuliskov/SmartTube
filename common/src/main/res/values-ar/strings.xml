@@ -717,4 +717,5 @@
   <string name="once_a_day">مرة واحدة يوميًا</string>
   <string name="once_a_week">مرة واحدة أسبوعيًا</string>
   <string name="once_a_month">مرة واحدة شهريًا</string>
+    <string name="new_video_counter">عرض عداد الفيديوهات الجديدة على القنوات المثبتة</string>
 </resources>
