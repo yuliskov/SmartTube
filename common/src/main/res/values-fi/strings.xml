@@ -746,4 +746,5 @@
   <string name="network_settings">Verkkoasetukset</string>
   <string name="comments_disabled">Kommentit on poistettu käytöstä tässä videossa</string>
   <string name="enable_conscrypt">Ota Conscrypt käyttöön</string>
+    <string name="new_video_counter">Näytä uusien videoiden laskuri kiinnitetyissä kanavissa</string>
 </resources>

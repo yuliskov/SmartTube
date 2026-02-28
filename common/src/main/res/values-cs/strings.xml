@@ -756,6 +756,7 @@
         <item quantity="one">%s sekunda</item>
         <item quantity="other">%s sekund</item>
     </plurals>
+    <string name="new_video_counter">Zobrazit počítadlo nových videí u připnutých kanálů</string>
 </resources>
 
 

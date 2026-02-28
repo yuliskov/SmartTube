@@ -22,7 +22,7 @@ import static androidx.leanback.widget.ObjectAdapter.NO_ID;
 public class HeaderItem {
 
     private final long mId;
-    private final String mName;
+    private String mName;
     private CharSequence mDescription;
     private CharSequence mContentDescription;
 
@@ -53,6 +53,13 @@ public class HeaderItem {
      */
     public final String getName() {
         return mName;
+    }
+
+    /**
+     * Sets the name of this header item.
+     */
+    public void setName(String name) {
+        mName = name;
     }
 
     /**

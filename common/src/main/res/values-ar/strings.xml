@@ -748,4 +748,5 @@
         <item quantity="one">%s ثانية</item>
         <item quantity="other">%s ثانية</item>
     </plurals>
+    <string name="new_video_counter">عرض عداد الفيديوهات الجديدة على القنوات المثبتة</string>
 </resources>

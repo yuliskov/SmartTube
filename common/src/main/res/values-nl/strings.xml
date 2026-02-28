@@ -721,4 +721,5 @@
   <string name="install_bridge">Installeer ATV/Amazon bridge</string>
   <string name="fix_empty_subs_and_channels">Fix lege Abonnementen en Kanalen</string>
   <string name="local_backup_not_supported">Automatische back-up op Android TV 11+ wordt niet ondersteund door systeem restricties. Gebruik in plaats van Gdrive hiervoor.</string>
+    <string name="new_video_counter">Toon teller voor nieuwe video\u2019s op vastgezette kanalen</string>
 </resources>

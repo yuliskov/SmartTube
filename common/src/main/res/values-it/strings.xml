@@ -756,4 +756,5 @@
         <item quantity="one">%s secondo</item>
         <item quantity="other">%s secondi</item>
     </plurals>
+    <string name="new_video_counter">Mostra contatore nuovi video sui canali bloccati</string>
 </resources>
