@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
@@ -16,6 +18,10 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager2;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrListener;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
@@ -38,6 +44,44 @@ public abstract class LeanbackActivity extends MotherActivity {
                 new PlayerKeyTranslator(this) :
                 new GlobalKeyTranslator(this);
         mGlobalKeyTranslator.apply();
+
+        initBackSlide();
+    }
+
+    private void initBackSlide() {
+        if (VERSION.SDK_INT < 21) {
+            return;
+        }
+
+        SlidrConfig config = new SlidrConfig.Builder()
+                .position(SlidrPosition.LEFT) // Swipe from the left
+                .edge(true)                   // Only trigger from the screen edge
+                .edgeSize(0.18f)              // Grab 18% of the screen (good for cars)
+                .scrimColor(Color.BLACK)      // Shadow color
+                .scrimStartAlpha(0.8f)        // Dim the background screen
+                .scrimEndAlpha(0f)            // Background clear when finished
+                .distanceThreshold(0.1f)
+                .listener(new SlidrListener() {
+                    @Override
+                    public void onSlideStateChanged(int state) {}
+
+                    @Override
+                    public void onSlideChange(float percent) {}
+
+                    @Override
+                    public void onSlideOpened() {}
+
+                    @Override
+                    public boolean onSlideClosed() {
+                        // This replaces the default finish() with your back logic
+                        onBackPressed();
+                        return true; // Tells the library we handled the close
+                    }
+                })
+                .build();
+
+        // Attach to this activity
+        Slidr.attach(this, config);
     }
 
     @Override

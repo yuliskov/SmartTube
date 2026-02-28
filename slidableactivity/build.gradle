@@ -1,0 +1,42 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.properties.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 11
+        versionName '2.1.0'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.legacy:legacy-support-v4:' + legacySupportV4XVersion
+    implementation 'androidx.appcompat:appcompat:' + appCompatXVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion
+    implementation 'androidx.cardview:cardview:' + cardviewXVersion
+    implementation 'com.52inc:52Kit-core:0.6.2'
+
+    implementation project(':fragment-1.1.0')
+    
+    testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.mockito:mockito-core:' + mockitoVersion
+    testImplementation 'org.hamcrest:hamcrest-library:' + hamcrestVersion
+    testImplementation 'org.powermock:powermock-api-mockito:' + powermockVersion
+    testImplementation 'org.powermock:powermock-module-junit4:' + powermockVersion
+}
+

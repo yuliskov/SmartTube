@@ -50,8 +50,8 @@ allprojects {
         resolutionStrategy.force 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion
         resolutionStrategy.force 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinxVersion
         resolutionStrategy.force 'androidx.core:core-ktx:' + kotlinCoreXVersion
-        resolutionStrategy.force 'androidx.core:core:' + coreXLibraryVersion
-        resolutionStrategy.force 'androidx.annotation:annotation:' + annotationXLibraryVersion
+        resolutionStrategy.force 'androidx.core:core:' + coreXVersion
+        resolutionStrategy.force 'androidx.annotation:annotation:' + annotationXVersion
         // Downgrade Cronet version for cronet-okhttp
         resolutionStrategy.force 'org.chromium.net:cronet-api:' + cronetApiVersion
         resolutionStrategy.force 'androidx.multidex:multidex:' + multiDexVersion

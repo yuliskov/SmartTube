@@ -176,12 +176,12 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'androidx.leanback:leanback:' + leanbackXLibraryVersion
-    implementation 'androidx.leanback:leanback-preference:' + leanbackXLibraryVersion
-    implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
-    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion // exoplayer 2.12.1 fix
-    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
+    implementation 'androidx.leanback:leanback:' + leanbackXVersion
+    implementation 'androidx.leanback:leanback-preference:' + leanbackXVersion
+    implementation 'androidx.recommendation:recommendation:' + leanbackXVersion
+    implementation 'androidx.annotation:annotation:' + annotationXVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion // exoplayer 2.12.1 fix
+    implementation 'androidx.media:media:' + mediaXVersion // exoplayer fix
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     implementation 'com.github.bumptech.glide:annotations:' + glideVersion
@@ -210,10 +210,10 @@ dependencies {
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
-    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportVersion
+    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportVersion
+    androidTestImplementation 'androidx.test:runner:' + testXSupportVersion
+    androidTestImplementation 'androidx.test:rules:' + testXSupportVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
     implementation project(':fragment-1.1.0')
@@ -224,6 +224,7 @@ dependencies {
     implementation project(':youtubeapi')
     implementation project(':chatkit')
     implementation project(':doubletapplayerview')
+    implementation project(':slidableactivity') // https://github.com/r0adkll/Slidr
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion

@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.r0adkll.slidr">
+
+    <!-- Override min API 21 -->
+    <uses-sdk tools:overrideLibrary="
+        com.ftinc.kit"/>
+
+    <application />
+</manifest>

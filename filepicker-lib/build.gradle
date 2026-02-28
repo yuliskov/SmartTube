@@ -30,9 +30,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion
     implementation 'com.google.android.material:material:' + materialVersion
-    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
+    implementation 'androidx.fragment:fragment:' + annotationXVersion
 
     implementation project(':fragment-1.1.0')
 }

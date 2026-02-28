@@ -132,7 +132,9 @@ public class VideoLoaderController extends BasePlayerController {
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else if (!getVideo().isLive && !getVideo().isLiveEnd) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            //YouTubeServiceManager.instance().applyNoPlaybackFix();
+            // Long loading subtitles cause hangs
+            disableSubtitles();
             reloadVideo();
         }
         //} else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
