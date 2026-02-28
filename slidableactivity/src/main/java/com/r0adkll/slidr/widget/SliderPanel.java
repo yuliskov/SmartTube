@@ -176,10 +176,13 @@ public class SliderPanel extends FrameLayout {
 
             }else if(xvel == 0){
                 if(left > leftThreshold){
-                    // MOD: don't full slide
-                    //settleLeft = screenWidth;
-                    settleLeft = left;
+                    settleLeft = screenWidth;
                 }
+            }
+
+            // MOD: don't full slide (remove whole if block to revert original)
+            if (settleLeft == screenWidth) {
+                settleLeft = left;
             }
 
             dragHelper.settleCapturedViewAt(settleLeft, releasedChild.getTop());
