@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/cardSelectedBackground" />
+            <corners android:radius="@dimen/lb_rounded_rect_corner_radius" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/cardDefaultBackground" />
+            <corners android:radius="@dimen/lb_rounded_rect_corner_radius" />
+        </shape>
+    </item>
+</selector>

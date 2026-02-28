@@ -18,10 +18,13 @@
 
     <dimen name="settings_image_size">70dp</dimen>
     <!-- Old value: 15dp -->
-    <dimen name="settings_image_padding">25dp</dimen>
+    <dimen name="settings_image_padding">20dp</dimen>
     <!-- Old value: 100dp -->
     <dimen name="settings_card_width">128dp</dimen>
     <dimen name="settings_card_height">100dp</dimen>
+
+    <dimen name="settings_title_padding">8dp</dimen>
+    <dimen name="settings_title_text_size">14sp</dimen>
 
     <dimen name="pip_title_max_width">370dp</dimen>
     <dimen name="pip_title_size">24sp</dimen>
@@ -79,7 +82,7 @@
     You can also override ShadowOverlayHelper.Options createShadowOverlayOptions() in
     ListRowPresenter which gives you some ability to change corner radius and focused and unfocused z.
     -->
-    <!--<dimen name="lb_rounded_rect_corner_radius">5dp</dimen>-->
+    <dimen name="lb_rounded_rect_corner_radius">8dp</dimen>
 
     <!--
     Space between cards. Origin: 8dp More info:

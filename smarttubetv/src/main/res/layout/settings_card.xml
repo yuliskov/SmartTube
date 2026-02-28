@@ -4,6 +4,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:focusableInTouchMode="true"
               android:focusable="true"
+              android:background="@drawable/settings_card_background"
+              android:clipToOutline="true"
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
@@ -19,9 +21,12 @@
         android:id="@+id/settings_title"
         android:singleLine="true"
         android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
         android:layout_gravity="center"
         android:layout_width="@dimen/settings_card_width"
         android:layout_height="wrap_content"
-        android:padding="@dimen/lb_basic_card_info_padding"
-        android:textAlignment="center"/>
+        android:padding="@dimen/settings_title_padding"
+        android:textAlignment="center"
+        android:textColor="@color/settings_card_title_color"
+        android:textSize="@dimen/settings_title_text_size"/>
 </LinearLayout>
