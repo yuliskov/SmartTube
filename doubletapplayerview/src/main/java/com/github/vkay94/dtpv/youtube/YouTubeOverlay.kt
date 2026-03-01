@@ -506,10 +506,10 @@ class YouTubeOverlay(context: Context, private val attrs: AttributeSet?) :
                 return null
             }
 
-            if (player.currentPosition > 500 && posX < playerView.width * 0.35)
+            if (player.currentPosition > 500 && posX < playerView.playerWidth * 0.35)
                 return false
 
-            if (player.currentPosition < player.duration && posX > playerView.width * 0.65)
+            if (player.currentPosition < player.duration && posX > playerView.playerWidth * 0.65)
                 return true
 
             return null

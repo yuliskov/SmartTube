@@ -112,4 +112,10 @@
             android:transitionGroup="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
+
+    <com.github.vkay94.dtpv.youtube.YouTubeOverlay
+        android:id="@+id/youtube_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>
 </FrameLayout>

@@ -1,21 +1,27 @@
 package com.github.vkay94.dtpv
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import com.google.android.exoplayer2.ui.PlayerView
+import androidx.core.content.withStyledAttributes
 
 /**
  * Custom player class for Double-Tapping listening
  */
-class DoubleTapDelegate(context: Context, playerView: View) {
+open class DoubleTapPlayerViewImpl @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : PlayerView(context, attrs, defStyleAttr), DoubleTapPlayerView {
+
     private val gestureDetector: GestureDetectorCompat
-    private val gestureListener: DoubleTapGestureListener = DoubleTapGestureListener(playerView.rootView)
+    private val gestureListener: DoubleTapGestureListener = DoubleTapGestureListener(rootView)
 
     private var controller: PlayerDoubleTapListener? = null
         get() = gestureListener.controls
@@ -24,21 +30,33 @@ class DoubleTapDelegate(context: Context, playerView: View) {
             field = value
         }
 
+    private var controllerRef: Int = -1
+
     init {
         gestureDetector = GestureDetectorCompat(context, gestureListener)
+
+        // Check whether controller is set through XML
+        attrs?.let {
+            context.withStyledAttributes(attrs, R.styleable.DoubleTapPlayerView, 0, 0) {
+                controllerRef = getResourceId(R.styleable.DoubleTapPlayerView_dtpv_controller, -1)
+            }
+        }
     }
+
+    override val playerWidth: Int
+        get() = width
 
     /**
      * If this field is set to `true` this view will handle double tapping, otherwise it will
      * handle touches the same way as the original [PlayerView][com.google.android.exoplayer2.ui.PlayerView] does
      */
-    var isDoubleTapEnabled = true
+    override var isDoubleTapEnabled = true
 
     /**
      * Time window a double tap is active, so a followed tap is calling a gesture detector
      * method instead of normal tap (see [PlayerView.onTouchEvent])
      */
-    var doubleTapDelay: Long = 700
+    override var doubleTapDelay: Long = 700
         get() = gestureListener.doubleTapDelay
         set(value) {
             gestureListener.doubleTapDelay = value
@@ -50,12 +68,12 @@ class DoubleTapDelegate(context: Context, playerView: View) {
      *
      * Primarily used for [YouTubeOverlay][com.github.vkay94.dtpv.youtube.YouTubeOverlay]
      */
-    fun controller(controller: PlayerDoubleTapListener) = apply { this.controller = controller }
+    override fun controller(controller: PlayerDoubleTapListener) = apply { this.controller = controller }
 
     /**
      * Returns the current state of double tapping.
      */
-    fun isInDoubleTapMode(): Boolean = gestureListener.isDoubleTapping
+    override fun isInDoubleTapMode(): Boolean = gestureListener.isDoubleTapping
 
     /**
      * Resets the timeout to keep in double tap mode.
@@ -63,18 +81,19 @@ class DoubleTapDelegate(context: Context, playerView: View) {
      * Called once in [PlayerDoubleTapListener.onDoubleTapStarted]. Needs to be called
      * from outside if the double tap is customized / overridden to detect ongoing taps
      */
-    fun keepInDoubleTapMode() {
+    override fun keepInDoubleTapMode() {
         gestureListener.keepInDoubleTapMode()
     }
 
     /**
      * Cancels double tap mode instantly by calling [PlayerDoubleTapListener.onDoubleTapFinished]
      */
-    fun cancelInDoubleTapMode() {
+    override fun cancelInDoubleTapMode() {
         gestureListener.cancelInDoubleTapMode()
     }
 
-    fun onTouchEvent(ev: MotionEvent): Boolean {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(ev: MotionEvent): Boolean {
         if (isDoubleTapEnabled) {
             gestureDetector.onTouchEvent(ev)
 
@@ -82,7 +101,26 @@ class DoubleTapDelegate(context: Context, playerView: View) {
             // otherwise the controller would show/hide - it would flack
             return true
         }
-        return false
+        return super.onTouchEvent(ev)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        // If the PlayerView is set by XML then call the corresponding setter method
+        if (controllerRef != -1) {
+            try {
+                val view = (this.parent as View).findViewById(controllerRef) as View
+                if (view is PlayerDoubleTapListener) {
+                    controller(view)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("DoubleTapPlayerView",
+                    "controllerRef is either invalid or not PlayerDoubleTapListener: ${e.message}")
+            }
+        }
+
     }
 
     /**
