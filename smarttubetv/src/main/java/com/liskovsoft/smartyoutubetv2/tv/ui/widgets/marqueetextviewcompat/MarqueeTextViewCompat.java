@@ -108,6 +108,15 @@ public class MarqueeTextViewCompat extends TextView {
             mSpeed = dpToPx(DEFAULT_SPEED, getContext());
         }
 
+        initTextView(attrs);
+    }
+
+    private void initTextView(@Nullable AttributeSet attrs) {
+        if (Build.VERSION.SDK_INT <= 19) {
+            super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
+            return;
+        }
+
         mTextView = new TextView(getContext(), attrs);
         mTextView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mTextView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -117,34 +126,12 @@ public class MarqueeTextViewCompat extends TextView {
         mTextView.setMaxLines(1);
         mTextView.setMaxWidth(Integer.MAX_VALUE);
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        mTextView.setEllipsize(TruncateAt.END);
+
         if (getEllipsize() != null) {
             mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
         }
-        mTextView.setEllipsize(TruncateAt.END);
-        super.setEllipsize(TruncateAt.END);
-
-        // Android 4: Broken grid layout fix
-        if (Build.VERSION.SDK_INT <= 19)
-            super.setHorizontallyScrolling(true);
-
-        //addOnLayoutChangeListener(new OnLayoutChangeListener() {
-        //    @Override
-        //    public void onLayoutChange(
-        //            View v,
-        //            int left,
-        //            int top,
-        //            int right,
-        //            int bottom,
-        //            int oldLeft,
-        //            int oldTop,
-        //            int oldRight,
-        //            int oldBottom
-        //    ) {
-        //        updateFps();
-        //        updateTextFullyVisible();
-        //        updateMarquee();
-        //    }
-        //});
+        super.setEllipsize(TruncateAt.END); // Important: disable marquee on the container view
     }
 
     @Override
@@ -176,19 +163,23 @@ public class MarqueeTextViewCompat extends TextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mTextView.measure(View.MeasureSpec.UNSPECIFIED, heightMeasureSpec);
+        if (mTextView != null) {
+            mTextView.measure(MeasureSpec.UNSPECIFIED, heightMeasureSpec);
+        }
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
+        if (mTextView != null) {
+            mTextView.layout(left, top, left + mTextView.getMeasuredWidth(), bottom);
 
-        mLaidOut = true;
+            mLaidOut = true;
 
-        updateFps();
-        updateTextFullyVisible();
-        updateMarquee();
+            updateFps();
+            updateTextFullyVisible();
+            updateMarquee();
+        }
     }
 
     @Override
@@ -377,7 +368,8 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     private boolean isStaticMode() {
-        return !mIsMarqueeEnabled
+        return mTextView == null
+                || !mIsMarqueeEnabled
                 || isTextFullyVisible()
                 || !(isFocused() || isSelected())
                 || (!mAttached || !mLaidOut || !isShown());
