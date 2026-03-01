@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="header_home">Home</string>
     <string name="title_search">Ricerca</string>
     <string name="header_subscriptions">Iscrizioni</string>
@@ -81,6 +81,7 @@
     <string name="player_only_ui">Solo interfaccia utente</string>
     <string name="player_ui_and_pause">Interfaccia utente e pausa</string>
     <string name="player_only_pause">Fai solo una pausa</string>
+    <string name="player_toggle_speed">Attiva/Disattiva la velocità</string>
     <string name="check_for_updates">Controlla aggiornamenti</string>
     <string name="update_not_found">Stai usando l\'ultima versione</string>
     <string name="update_in_progress">Attesa…</string>
@@ -425,19 +426,19 @@
     <string name="pressing_back">premendo INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
     <string name="save_remove_playlist">Aggiungi/Rimuovi playlist dalla sezione Playlist</string>
-    <string name="save_playlist">Aggiungi playlist alla sezione Playlist</string>
+    <string name="save_playlist">Aggiungi la playlist alla sezione Playlist</string>
     <string name="remove_playlist">Rimuovi definitivamente la playlist dalla sezione Playlist</string>
     <string name="remove_playlist_fmt">Rimuovere %s definitivamente?</string>
     <string name="removed_from_playlists">Rimossa dalla sezione Playlist</string>
     <string name="saved_to_playlists">Aggiunta alla sezione Playlist</string>
     <string name="create_playlist">Crea playlist</string>
-    <string name="create_playlist_note">non sarà visibile nell\'app di YouTube</string>
-    <string name="add_video_to_new_playlist">Aggiungi a nuova playlist</string>
-    <string name="cant_delete_empty_playlist">Impossibile eliminare una playlist vuota</string>
+    <string name="create_playlist_note">NOTA: non verrà visualizzato nell\'app YouTube</string>
+	<string name="add_video_to_new_playlist">Aggiungi a nuova playlist</string>
+    <string name="cant_delete_empty_playlist">Impossibile eliminare la playlist vuota</string>
     <string name="playlist">Playlist</string>
     <string name="rename_playlist">Rinomina playlist</string>
     <string name="cant_rename_empty_playlist">Non posso rinominare una playlist vuota</string>
-    <string name="cant_rename_foreign_playlist">Impossibile rinominare una playlist esterna</string>
+    <string name="cant_rename_foreign_playlist">Non posso rinominare una playlist esterna</string>
     <string name="cant_save_playlist">Questa playlist non può essere aggiunta</string>
     <string name="enter_value">Immetti un valore non vuoto</string>
     <string name="dialog_add_remove_from">Aggiungi/Rimuovi da %s</string>
@@ -641,7 +642,7 @@
     <string name="play_next">Riproduci successivo</string>
     <string name="hide_watched_from_subscriptions">Nascondi i video già visti dalle Iscrizioni</string>
     <string name="hide_watched_from_notifications">Nascondi i video già visti dalle Notifiche</string>
-    <string name="hide_unwanted_content">Nascondi i video</string>
+    <string name="hide_unwanted_content">Nascondi il contenuto</string>
     <string name="hide_watched_from_home">Nascondi i video già visti dalla Home</string>
     <string name="hide_watched_from_watch_later">Nascondi i video già visti dalla playlist Guarda più tardi</string>
     <string name="remote_control_permission">Il controllo remoto in background richiede l\'autorizzazione alla sovrapposizione</string>
@@ -653,8 +654,10 @@
     <string name="channel_filter_hint">Filtra canali</string>
     <string name="player_loop_shorts">Ripeti continuamente i video brevi</string>
     <string name="player_quick_shorts_skip">Salta i video brevi con il tasto sinistro/destro</string>
+	<string name="player_quick_shorts_skip_alt">Salta i video brevi con il tasto su/giù</string>
     <string name="player_quick_skip_videos">Salta i video normali con il tasto sinistro/destro</string>
-    <string name="channels_filter">Mostra il campo Filtra canali nella sezione Canali</string>
+    <string name="player_quick_skip_videos_alt">Salta i video normali con il tasto su/giù</string>
+	<string name="channels_filter">Mostra il campo Filtra canali nella sezione Canali</string>
     <string name="channel_search_bar">Barra di ricerca all\'interno della pagina del Canale</string>
     <string name="header_sports">Sport</string>
     <string name="keep_finished_activities">Mantieni le attività terminate</string>
@@ -672,6 +675,7 @@
     <string name="fullscreen_mode">Modalità a schermo intero (senza barre di sistema)</string>
     <string name="player_only_mode">Mostra solo il lettore se il video viene aperto all\'esterno dell\'app</string>
     <string name="pinned_channel_rows">Mostra il canale bloccato come righe</string>
+    <string name="prefer_google_dns">Preferisci DNS di Google</string>
     <string name="prefer_ipv4">Preferisci DNS IPv4</string>
     <string name="prefer_ipv4_desc">Potrebbe risolvere situazioni in cui l\'app non funziona affatto.\nNota: potrebbe causare blocchi e arresti anomali (specialmente su dispositivi Android 8 o Dune HD)</string>
     <string name="long_press_for_settings">PREMI A LUNGO PER LE IMPOSTAZIONI</string>
@@ -717,11 +721,14 @@
     <string name="once_a_day">Una volta al giorno</string>
     <string name="once_a_week">Una volta alla settimana</string>
     <string name="once_a_month">Una volta al mese</string>
-    <string name="dialog_block_channel">Blocca canale</string>
-    <string name="dialog_unblock_channel">Sblocca canale</string>
-    <string name="confirm_block_channel">Nascondere tutti i contenuti di %s?</string>
+    <string name="action_debug_info">Info di debug</string>
+    <string name="dialog_block_channel">Blocca il canale</string>
+    <string name="dialog_unblock_channel">Sblocca il canale</string>
+    <string name="confirm_block_channel">Nascondere tutto il contenuto da %s?</string>
     <string name="channel_blocked">Canale bloccato</string>
     <string name="channel_unblocked">Canale sbloccato</string>
     <string name="header_blocked_channels">Canali bloccati</string>
     <string name="msg_no_blocked_channels">Nessun canale bloccato</string>
+    <string name="player_time_stretching">Dilatazione del tempo audio</string>
+    <string name="player_time_stretching_desc">Mantiene la voce naturale quando si cambia velocità. Potrebbe ridurre significativamente le prestazioni su alcuni dispositivi.</string>
 </resources>
