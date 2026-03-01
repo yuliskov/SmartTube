@@ -711,4 +711,5 @@
     <string name="dont_resize_video_to_fit_dialog">Не мењај величину видеа да би се уклопио у дијалог</string>
     <string name="typing_corrections">Онемогући аутоматско исправљање приликом куцања текста</string>
     <string name="suggestions_horizontally_scrolled">Хоризонтално померани предлози</string>
+    <string name="new_video_counter">Прикажи бројач нових видео снимака на закаченим каналима</string>
 </resources>

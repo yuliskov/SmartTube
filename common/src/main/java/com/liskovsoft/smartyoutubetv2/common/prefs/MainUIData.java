@@ -114,6 +114,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private int mCardPreviewType;
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsUnlocalizedTitlesEnabled;
+    private boolean mIsNewVideoCounterEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -354,6 +355,15 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
+    public boolean isNewVideoCounterEnabled() {
+        return mIsNewVideoCounterEnabled;
+    }
+
+    public void setNewVideoCounterEnabled(boolean enabled) {
+        mIsNewVideoCounterEnabled = enabled;
+        persistState();
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -427,6 +437,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
         mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
+        mIsNewVideoCounterEnabled = Helpers.parseBoolean(split, 23, false);
 
         int idx = -1;
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
@@ -470,7 +481,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType,
-                mIsUnlocalizedTitlesEnabled));
+                mIsUnlocalizedTitlesEnabled, mIsNewVideoCounterEnabled));
     }
 
     public static class ColorScheme {

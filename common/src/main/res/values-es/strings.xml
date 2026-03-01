@@ -717,4 +717,5 @@
   <string name="channel_unblocked">Canal desbloqueado</string>
   <string name="header_blocked_channels">Canales bloqueados</string>
   <string name="msg_no_blocked_channels">No hay canales bloqueados</string>
+    <string name="new_video_counter">Mostrar contador de vídeos nuevos en canales fijados</string>
 </resources>

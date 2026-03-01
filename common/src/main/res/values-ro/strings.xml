@@ -665,4 +665,5 @@
   <string name="local_backup">Copie de rezervă locală</string>
   <string name="auto_backup">Copie de rezervă automată (o dată pe zi)</string>
   <string name="repeat_mode_reverse_list">Redă lista de redare sau videoclipurile canalului în ordine inversă</string>
+    <string name="new_video_counter">Afișare contor videoclipuri noi pe canalele fixate</string>
 </resources>

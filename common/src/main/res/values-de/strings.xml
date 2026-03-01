@@ -729,4 +729,5 @@
     <string name="channel_unblocked">Blockierung aufgehoben</string>
     <string name="header_blocked_channels">Blockierte Kanäle</string>
     <string name="msg_no_blocked_channels">Keine blockierten Kanäle</string>
+    <string name="new_video_counter">Zähler für neue Videos bei angehefteten Kanälen anzeigen</string>
 </resources>

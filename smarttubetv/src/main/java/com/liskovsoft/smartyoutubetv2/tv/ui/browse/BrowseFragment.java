@@ -23,6 +23,7 @@ import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.TitleHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.SectionHeaderItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -433,6 +434,22 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void clearSection(BrowseSection section) {
         mSectionFragmentFactory.clearCurrentFragment();
+    }
+
+    @Override
+    public void updateSectionTitle(BrowseSection section) {
+        if (section == null) {
+            return;
+        }
+
+        for (int i = 0; i < mSectionRowAdapter.size(); i++) {
+            PageRow row = (PageRow) mSectionRowAdapter.get(i);
+            if (row.getHeaderItem().getId() == section.getId()) {
+                row.getHeaderItem().setName(section.getTitle());
+                mSectionRowAdapter.notifyArrayItemRangeChanged(i, 1);
+                break;
+            }
+        }
     }
 
     @Override

@@ -710,4 +710,5 @@
   <string name="dont_resize_video_to_fit_dialog">Non redimensionar o vídeo para axustalo ao diálogo</string>
   <string name="typing_corrections">Desactivar a autocorrección ao escribir texto</string>
   <string name="suggestions_horizontally_scrolled">Suxestións desprazables horizontalmente</string>
+    <string name="new_video_counter">Amosar o contador de vídeos novos nas canles fixadas</string>
 </resources>

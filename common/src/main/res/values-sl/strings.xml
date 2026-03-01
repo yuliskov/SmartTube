@@ -296,4 +296,5 @@
   <string name="content_block_outro"></string>
   <string name="action_playlist_add">Dodaj na seznam predvajanja</string>
   <string name="keyboard_auto_show">Samodejno prikaži tipkovnico</string>
+    <string name="new_video_counter">Prikaži števec novih videoposnetkov na pripetih kanalih</string>
 </resources>

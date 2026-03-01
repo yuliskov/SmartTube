@@ -721,4 +721,5 @@
     <string name="msg_no_blocked_channels">Нет заблокированных каналов</string>
     <string name="player_time_stretching">Растяжение аудио во времени</string>
     <string name="player_time_stretching_desc">Сохраняет естественное звучание голоса при изменении скорости. Может значительно снизить производительность на некоторых устройствах.</string>
+    <string name="new_video_counter">Показывать счётчик новых видео на закреплённых каналах</string>
 </resources>

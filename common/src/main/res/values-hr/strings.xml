@@ -495,4 +495,5 @@
     <string name="auto_frame_rate_modes">Podržani načini</string>
     <string name="loading">Učitavanje…</string>
     <string name="hide_streams">Sakrij strujanja iz Pretplata</string>
+    <string name="new_video_counter">Prikaži brojač novih videa na prikvačenim kanalima</string>
 </resources>

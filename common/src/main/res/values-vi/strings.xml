@@ -720,4 +720,5 @@
   <string name="channel_unblocked">Đã bỏ chặn kênh</string>
   <string name="header_blocked_channels">Kênh đã chặn</string>
   <string name="msg_no_blocked_channels">Không có kênh nào bị chặn</string>
+    <string name="new_video_counter">Hiển thị bộ đếm video mới trên kênh được ghim</string>
 </resources>

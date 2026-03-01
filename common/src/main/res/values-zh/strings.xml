@@ -709,4 +709,5 @@
   <string name="channel_unblocked">已从黑名单移除</string>
   <string name="header_blocked_channels">黑名单频道</string>
   <string name="msg_no_blocked_channels">没有拉黑的频道</string>
+    <string name="new_video_counter">在置顶频道上显示新视频计数器</string>
 </resources>

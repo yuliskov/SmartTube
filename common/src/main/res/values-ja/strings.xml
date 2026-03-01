@@ -719,4 +719,5 @@
     <string name="channel_unblocked">ブロックを解除しました</string>
     <string name="header_blocked_channels">ブロックしたチャンネル</string>
     <string name="msg_no_blocked_channels">ブロックしたチャンネルはありません</string>
+    <string name="new_video_counter">固定されたチャンネルに新しい動画のカウンターを表示</string>
 </resources>

@@ -710,4 +710,5 @@
   <string name="remove_playlist_fmt">Do ta fshish %s përgjithmonë?</string>
   <string name="player_chapter_notification2">Kalo te kapitulli tjetër duke klikuar mbi njoftimin</string>
   <string name="suggestions_horizontally_scrolled">Sugjerime të lëvizura horizontalisht</string>
+    <string name="new_video_counter">Shfaq numëruesin e videove të reja në kanalet e gozhduara</string>
 </resources>

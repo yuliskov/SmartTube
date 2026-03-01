@@ -729,6 +729,7 @@
     <string name="channel_unblocked">Kanál odblokován</string>
     <string name="header_blocked_channels">Blokované kanály</string>
     <string name="msg_no_blocked_channels">Žádné blokované kanály</string>
+    <string name="new_video_counter">Zobrazit počítadlo nových videí u připnutých kanálů</string>
 </resources>
 
 

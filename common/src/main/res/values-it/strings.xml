@@ -724,4 +724,5 @@
     <string name="channel_unblocked">Canale sbloccato</string>
     <string name="header_blocked_channels">Canali bloccati</string>
     <string name="msg_no_blocked_channels">Nessun canale bloccato</string>
+    <string name="new_video_counter">Mostra contatore nuovi video sui canali bloccati</string>
 </resources>

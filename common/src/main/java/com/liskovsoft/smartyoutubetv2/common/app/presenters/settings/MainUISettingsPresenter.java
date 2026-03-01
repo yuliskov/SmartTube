@@ -341,6 +341,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 },
                 mMainUIData.isPinnedChannelRowsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.new_video_counter),
+                optionItem -> {
+                    mMainUIData.setNewVideoCounterEnabled(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isNewVideoCounterEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.playlists_rows),
                 optionItem -> {
                     mMainUIData.setPlaylistsStyle(optionItem.isSelected() ? MainUIData.PLAYLISTS_STYLE_ROWS : MainUIData.PLAYLISTS_STYLE_GRID);
