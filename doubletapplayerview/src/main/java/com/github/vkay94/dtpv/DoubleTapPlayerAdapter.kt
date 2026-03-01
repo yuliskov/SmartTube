@@ -13,7 +13,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 /**
  * Custom player class for Double-Tapping listening
  */
-class DoubleTapPlayerViewDelegate(context: Context, private val playerView: View): DoubleTapPlayerView {
+class DoubleTapPlayerAdapter(context: Context, private val playerView: View): DoubleTapPlayerView {
     private val gestureDetector: GestureDetectorCompat
     private val gestureListener: DoubleTapGestureListener = DoubleTapGestureListener(playerView.rootView)
 

@@ -182,6 +182,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:' + annotationXVersion
     implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion // exoplayer 2.12.1 fix
     implementation 'androidx.media:media:' + mediaXVersion // exoplayer fix
+    implementation 'androidx.constraintlayout:constraintlayout:' + constraintLayoutXVersion
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     implementation 'com.github.bumptech.glide:annotations:' + glideVersion

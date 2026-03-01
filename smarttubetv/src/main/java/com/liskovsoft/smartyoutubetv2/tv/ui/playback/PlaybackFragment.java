@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.Activity;
+import android.media.session.PlaybackState;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
@@ -31,6 +32,10 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 
+import com.github.vkay94.dtpv.DoubleTapPlayerAdapter;
+import com.github.vkay94.dtpv.DoubleTapPlayerView;
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay;
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay.PerformListener;
 import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -114,6 +119,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private boolean mIsEngineBlocked;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private DoubleTapPlayerAdapter mDoubleTapPlayerAdapter;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
@@ -247,6 +253,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
+        if (mDoubleTapPlayerAdapter != null) {
+            boolean handled = mDoubleTapPlayerAdapter.onTouchEvent(event);
+
+            if (handled)
+                return;
+        }
+
         applyTickle(event);
     }
 
@@ -435,6 +448,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         initializeGlobalEndingTime();
 
         initializePixelRatio();
+
+        //initializeDoubleTapHandler();
     }
 
     private void createPlayer() {
@@ -492,6 +507,48 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     private void initializePixelRatio() {
         setPixelRatio(PlayerTweaksData.instance(getContext()).getPixelRatio());
+    }
+
+    private void initializeDoubleTapHandler() {
+        if (getActivity() == null || getContext() == null || getView() == null || !Helpers.isTouchSupported(getContext())) {
+            return;
+        }
+
+        YouTubeOverlay youtubeOverlay = getActivity().findViewById(R.id.youtube_overlay);
+        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getContext(), getView());
+        mDoubleTapPlayerAdapter.controller(youtubeOverlay);
+        youtubeOverlay.player(mPlayer).playerView(mDoubleTapPlayerAdapter);
+
+        youtubeOverlay.performListener(new PerformListener() {
+            @Override
+            public void onAnimationStart() {
+                youtubeOverlay.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                youtubeOverlay.setVisibility(View.GONE);
+            }
+
+            @Override
+            public Boolean shouldForward(@NonNull Player player, @NonNull DoubleTapPlayerView playerView, float posX) {
+                if (player.getPlaybackState() == PlaybackState.STATE_ERROR ||
+                        player.getPlaybackState() == PlaybackState.STATE_NONE ||
+                        player.getPlaybackState() == PlaybackState.STATE_STOPPED) {
+
+                    playerView.cancelInDoubleTapMode();
+                    return false;
+                }
+
+                if (player.getCurrentPosition() > 500 && posX < playerView.getPlayerWidth() * 0.35)
+                    return false;
+
+                if (player.getCurrentPosition() < player.getDuration() && posX > playerView.getPlayerWidth() * 0.65)
+                    return true;
+
+                return false;
+            }
+        });
     }
 
     private void createMediaSession() {
