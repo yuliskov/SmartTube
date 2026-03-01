@@ -93,6 +93,12 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     private void init(@Nullable AttributeSet attrs) {
+        if (Build.VERSION.SDK_INT <= 19) {
+            super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
+            super.setEllipsize(TruncateAt.END);
+            return;
+        }
+
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MarqueeTextViewCompat);
             mSpace = typedArray.getDimensionPixelSize(
@@ -106,16 +112,6 @@ public class MarqueeTextViewCompat extends TextView {
             typedArray.recycle();
         } else {
             mSpeed = dpToPx(DEFAULT_SPEED, getContext());
-        }
-
-        initTextView(attrs);
-    }
-
-    private void initTextView(@Nullable AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT <= 19) {
-            super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
-            super.setEllipsize(TruncateAt.END);
-            return;
         }
 
         mTextView = new TextView(getContext(), attrs);
