@@ -1208,6 +1208,23 @@ public class Utils {
         return original.equals(typed);
     }
 
+    @SuppressLint("DiscouragedApi")
+    public static boolean isSystemGestureArrowEnabled(Context context) {
+        Resources res = context.getResources();
+        // This is the internal Android constant for navigation mode
+        int resourceId = res.getIdentifier("config_navBarInteractionMode", "integer", "android");
+
+        if (resourceId > 0) {
+            int navMode = res.getInteger(resourceId);
+            // 0: 3-button navigation (Back, Home, Recents)
+            // 1: 2-button navigation (Android P style)
+            // 2: Full Gesture Navigation (Android 10+ Arrow)
+            return navMode == 2;
+        }
+        
+        return false;
+    }
+
     private static void persistData(Context context) {
         VideoStateService.instance(context).persistNow();
         PlayerData.instance(context).persistNow();

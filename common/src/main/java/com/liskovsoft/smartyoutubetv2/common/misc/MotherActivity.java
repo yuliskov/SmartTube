@@ -27,7 +27,12 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrListener;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +97,8 @@ public class MotherActivity extends FragmentActivity {
         mScreensaverManager = new ScreensaverManager(this); // moved below the theme to fix side effects
 
         //Helpers.addFullscreenListener(this);
+
+        initEdgeSlide();
     }
 
     @Override
@@ -434,5 +441,40 @@ public class MotherActivity extends FragmentActivity {
 
     protected MediaServiceData getMediaServiceData() {
         return MediaServiceData.instance();
+    }
+
+    private void initEdgeSlide() {
+        if (VERSION.SDK_INT < 21 || !Helpers.isTouchSupported(this) || Utils.isSystemGestureArrowEnabled(this)) {
+            return;
+        }
+
+        SlidrConfig config = new SlidrConfig.Builder()
+                .position(SlidrPosition.LEFT) // Swipe from the left
+                .edge(true)              // Only trigger from the screen edge
+                .edgeSize(0.18f)              // Grab 18% of the screen (good for cars)
+                .scrimStartAlpha(0f)          // Don't dim the background screen
+                .scrimEndAlpha(0f)            // Background clear when finished
+                .distanceThreshold(0.1f)      // Set drag distance to minimum
+                .listener(new SlidrListener() {
+                    @Override
+                    public void onSlideStateChanged(int state) {}
+
+                    @Override
+                    public void onSlideChange(float percent) {}
+
+                    @Override
+                    public void onSlideOpened() {}
+
+                    @Override
+                    public boolean onSlideClosed() {
+                        // This replaces the default finish() with your back logic
+                        onBackPressed();
+                        return true; // Tells the library we handled the close
+                    }
+                })
+                .build();
+
+        // Attach to this activity
+        Slidr.attach(this, config);
     }
 }
