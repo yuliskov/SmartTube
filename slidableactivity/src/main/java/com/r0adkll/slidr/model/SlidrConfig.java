@@ -24,6 +24,7 @@ public class SlidrConfig {
     private float distanceThreshold = 0.25f;
     private boolean edgeOnly = false;
     private float edgeSize = 0.18f;
+    private boolean partialSlide = false;
 
     private SlidrPosition position = SlidrPosition.LEFT;
     private SlidrListener listener;
@@ -179,6 +180,10 @@ public class SlidrConfig {
         return edgeSize * size;
     }
 
+    // MOD: do partial slide
+    public boolean isPartialSlide() {
+        return partialSlide;
+    }
 
     /***********************************************************************************************
      *
@@ -301,6 +306,12 @@ public class SlidrConfig {
 
         public Builder edgeSize(@FloatRange(from = 0f, to = 1f) float edgeSize){
             config.edgeSize = edgeSize;
+            return this;
+        }
+
+        // MOD: do partial slide
+        public Builder partial(boolean flag){
+            config.partialSlide = flag;
             return this;
         }
 

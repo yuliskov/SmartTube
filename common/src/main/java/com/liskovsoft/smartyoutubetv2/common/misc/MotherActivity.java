@@ -455,6 +455,7 @@ public class MotherActivity extends FragmentActivity {
                 .scrimStartAlpha(0f)          // Don't dim the background screen
                 .scrimEndAlpha(0f)            // Background clear when finished
                 .distanceThreshold(0.1f)      // Set drag distance to minimum
+                .partial(true)           // Don't do full slide animation
                 .listener(new SlidrListener() {
                     @Override
                     public void onSlideStateChanged(int state) {}

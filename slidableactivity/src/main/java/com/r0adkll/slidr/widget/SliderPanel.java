@@ -181,7 +181,7 @@ public class SliderPanel extends FrameLayout {
             }
 
             // MOD: do partial slide (remove this block to revert original)
-            if (settleLeft == screenWidth) {
+            if (config.isPartialSlide() && settleLeft == screenWidth) {
                 settleLeft = left;
             }
 
