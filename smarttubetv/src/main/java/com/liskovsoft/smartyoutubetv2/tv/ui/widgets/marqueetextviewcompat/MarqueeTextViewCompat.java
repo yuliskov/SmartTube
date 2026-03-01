@@ -114,6 +114,7 @@ public class MarqueeTextViewCompat extends TextView {
     private void initTextView(@Nullable AttributeSet attrs) {
         if (Build.VERSION.SDK_INT <= 19) {
             super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
+            super.setEllipsize(TruncateAt.END);
             return;
         }
 
@@ -325,6 +326,9 @@ public class MarqueeTextViewCompat extends TextView {
 
     @Override
     public void setEllipsize(TruncateAt where) {
+        if (Build.VERSION.SDK_INT <= 19)
+            return;
+
         mIsMarqueeEnabled = where == TruncateAt.MARQUEE;
 
         updateMarquee();
@@ -368,8 +372,7 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     private boolean isStaticMode() {
-        return mTextView == null
-                || !mIsMarqueeEnabled
+        return !mIsMarqueeEnabled
                 || isTextFullyVisible()
                 || !(isFocused() || isSelected())
                 || (!mAttached || !mLaidOut || !isShown());
