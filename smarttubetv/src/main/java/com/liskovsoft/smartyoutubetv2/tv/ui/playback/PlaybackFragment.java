@@ -444,9 +444,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         createPlayerGlue();
 
-        createSubtitleManager();
+        //createSubtitleManager();
 
-        createDebugManager();
+        //createDebugManager();
 
         createMediaSession();
 
@@ -489,15 +489,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createSubtitleManager() {
-        if (getView() == null) {
+        if (getView() == null || mPlayer == null) {
             return;
         }
 
-        mSubtitleManager = new SubtitleManager(getView(), R.id.leanback_subtitles);
+        if (mSubtitleManager == null) {
+            mSubtitleManager = new SubtitleManager(getView().findViewById(R.id.leanback_subtitles));
 
-        // subs renderer
-        if (mPlayer.getTextComponent() != null) {
-            mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
+            // subs renderer
+            if (mPlayer.getTextComponent() != null) {
+                mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
+            }
         }
     }
 
@@ -506,7 +508,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        mDebugInfoManager = new DebugInfoManager(getView(), R.id.debug_view_group, mPlayer);
+        if (mDebugInfoManager == null) {
+            mDebugInfoManager = new DebugInfoManager(getView().findViewById(R.id.debug_view_group), mPlayer);
+        }
     }
 
     private void initializeGlobalClock() {
@@ -1326,6 +1330,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showDebugInfo(boolean show) {
+        createDebugManager();
         if (mDebugInfoManager != null) {
             mDebugInfoManager.show(show);
         }
@@ -1333,12 +1338,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showSubtitles(boolean show) {
+        createSubtitleManager();
         if (mSubtitleManager != null) {
             mSubtitleManager.show(show);
         }
     }
 
     public boolean isDebugInfoShown() {
+        createDebugManager();
         return mDebugInfoManager != null && mDebugInfoManager.isShown();
     }
 

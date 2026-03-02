@@ -75,14 +75,13 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final String mAppVersion;
 
     /**
-     * @param root        root view
-     * @param resLayoutId The {@link TextView} that should be updated to display the information.
+     * @param debugViewGroup The container that should be updated to display the information.
      * @param player      The {@link SimpleExoPlayer} from which debug information should be obtained.
      */
-    public DebugInfoManager(View root, int resLayoutId, SimpleExoPlayer player) {
+    public DebugInfoManager(ViewGroup debugViewGroup, SimpleExoPlayer player) {
+        mContext = debugViewGroup.getContext();
+        mDebugViewGroup = debugViewGroup;
         mPlayer = player;
-        mDebugViewGroup = root.findViewById(resLayoutId);
-        mContext = root.getContext();
         mTextSize = mContext.getResources().getDimension(R.dimen.debug_text_size);
         mAppVersion = String.format("%s version", mContext.getString(R.string.app_name));
         inflate();
