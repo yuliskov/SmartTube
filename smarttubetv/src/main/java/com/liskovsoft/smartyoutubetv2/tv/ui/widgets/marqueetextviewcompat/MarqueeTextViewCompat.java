@@ -94,7 +94,7 @@ public class MarqueeTextViewCompat extends TextView {
 
     private void init(@Nullable AttributeSet attrs) {
         if (Build.VERSION.SDK_INT <= 19) {
-            //super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
+            super.setHorizontallyScrolling(true); // Android 4: Broken grid layout fix
             super.setEllipsize(TruncateAt.END);
             return;
         }
@@ -125,7 +125,9 @@ public class MarqueeTextViewCompat extends TextView {
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         mTextView.setEllipsize(TruncateAt.END);
 
-        mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
+        if (getEllipsize() != null) {
+            mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
+        }
         super.setEllipsize(TruncateAt.END); // Important: disable marquee on the container view
     }
 
@@ -334,10 +336,10 @@ public class MarqueeTextViewCompat extends TextView {
     }
 
     // Don't uncomment. Android 4: Broken grid layout fix
-    //@Override
-    //public void setHorizontallyScrolling(boolean whether) {
-    //    // NOP
-    //}
+    @Override
+    public void setHorizontallyScrolling(boolean whether) {
+        // NOP
+    }
 
     public void setMarqueeSpeedFactor(float factor) {
         mSpeed = dpToPx(ORIGINAL_SPEED * factor, getContext());
