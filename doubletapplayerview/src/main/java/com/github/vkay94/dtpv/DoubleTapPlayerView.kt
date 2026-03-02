@@ -22,7 +22,7 @@ interface DoubleTapPlayerView {
      *
      * Primarily used for [YouTubeOverlay][com.github.vkay94.dtpv.youtube.YouTubeOverlay]
      */
-    fun controller(controller: PlayerDoubleTapListener): DoubleTapPlayerView
+    fun controller(controller: PlayerDoubleTapListener?): DoubleTapPlayerView
     /**
      * Returns the current state of double tapping.
      */

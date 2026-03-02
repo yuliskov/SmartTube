@@ -253,7 +253,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
-        if (mDoubleTapPlayerAdapter != null) {
+        if (mDoubleTapPlayerAdapter != null && !isOverlayShown()) {
             boolean handled = mDoubleTapPlayerAdapter.onTouchEvent(event);
 
             if (handled)
@@ -546,6 +546,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
+        mDoubleTapPlayerAdapter.onSingleTap(this::applyTickle);
         mDoubleTapPlayerAdapter.controller(mYouTubeOverlay);
         mYouTubeOverlay
                 .player(mPlayer)

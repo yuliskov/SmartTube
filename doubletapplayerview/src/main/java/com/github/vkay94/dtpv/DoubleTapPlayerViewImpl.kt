@@ -68,7 +68,7 @@ open class DoubleTapPlayerViewImpl @JvmOverloads constructor(
      *
      * Primarily used for [YouTubeOverlay][com.github.vkay94.dtpv.youtube.YouTubeOverlay]
      */
-    override fun controller(controller: PlayerDoubleTapListener) = apply { this.controller = controller }
+    override fun controller(controller: PlayerDoubleTapListener?) = apply { this.controller = controller }
 
     /**
      * Returns the current state of double tapping.

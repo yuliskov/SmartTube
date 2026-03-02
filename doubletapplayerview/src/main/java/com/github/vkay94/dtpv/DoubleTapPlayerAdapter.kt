@@ -23,6 +23,10 @@ class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView 
             field = value
         }
 
+    interface OnSingleTap {
+        fun onSingleTap(event: MotionEvent)
+    }
+
     init {
         gestureDetector = GestureDetectorCompat(playerView.context, gestureListener)
     }
@@ -52,7 +56,7 @@ class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView 
      *
      * Primarily used for [YouTubeOverlay][com.github.vkay94.dtpv.youtube.YouTubeOverlay]
      */
-    override fun controller(controller: PlayerDoubleTapListener) = apply { this.controller = controller }
+    override fun controller(controller: PlayerDoubleTapListener?) = apply { this.controller = controller }
 
     /**
      * Returns the current state of double tapping.
@@ -87,6 +91,8 @@ class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView 
         return false
     }
 
+    fun onSingleTap(singleTap: OnSingleTap?) = apply { gestureListener.onSingleTap = singleTap }
+
     /**
      * Gesture Listener for double tapping
      *
@@ -106,6 +112,7 @@ class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView 
         var controls: PlayerDoubleTapListener? = null
         var isDoubleTapping = false
         var doubleTapDelay: Long = 650
+        var onSingleTap: OnSingleTap? = null
 
         /**
          * Resets the timeout to keep in double tap mode.
@@ -153,6 +160,7 @@ class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView 
             // to hide and show on single tap
             if (isDoubleTapping) return true
             if (DEBUG) Log.d(TAG, "onSingleTapConfirmed: isDoubleTap = false")
+            onSingleTap?.onSingleTap(e)
             return rootView.performClick()
         }
 
