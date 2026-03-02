@@ -154,7 +154,7 @@ class YouTubeOverlay(context: Context, private val attrs: AttributeSet?) :
      *
      * @param playerView PlayerView which triggers the event
      */
-    fun playerView(playerView: DoubleTapPlayerView) = apply {
+    fun playerView(playerView: DoubleTapPlayerView?) = apply {
         this.playerView = playerView
     }
 
@@ -165,7 +165,7 @@ class YouTubeOverlay(context: Context, private val attrs: AttributeSet?) :
      *
      * @param player PlayerView which triggers the event
      */
-    fun player(player: Player) = apply {
+    fun player(player: Player?) = apply {
         this.player = player
     }
 
@@ -178,7 +178,7 @@ class YouTubeOverlay(context: Context, private val attrs: AttributeSet?) :
     /**
      * Optional: Sets a listener to observe whether double tap reached the start / end of the video
      */
-    fun seekListener(listener: SeekListener) = apply {
+    fun seekListener(listener: SeekListener?) = apply {
         seekListener = listener
     }
 
@@ -188,7 +188,7 @@ class YouTubeOverlay(context: Context, private val attrs: AttributeSet?) :
      * Sets a listener to execute some code before and after the animation
      * (for example UI changes (hide and show views etc.))
      */
-    fun performListener(listener: PerformListener) = apply {
+    fun performListener(listener: PerformListener?) = apply {
         performListener = listener
     }
 

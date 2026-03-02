@@ -119,6 +119,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private DoubleTapPlayerAdapter mDoubleTapPlayerAdapter;
+    private YouTubeOverlay mYouTubeOverlay;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
@@ -425,6 +426,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mDebugInfoManager = null;
         mMediaSessionConnector = null;
         mMediaSession = null;
+        if (mYouTubeOverlay != null) {
+            mYouTubeOverlay
+                    .player(null)
+                    .playerView(null)
+                    .performListener(null);
+        }
+        if (mDoubleTapPlayerAdapter != null) {
+            mDoubleTapPlayerAdapter = null;
+        }
     }
 
     private void createPlayerObjects() {
@@ -448,7 +458,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         initializePixelRatio();
 
-        //initializeDoubleTapHandler();
+        initializeDoubleTapHandler();
     }
 
     private void createPlayer() {
@@ -527,20 +537,24 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        YouTubeOverlay youtubeOverlay = getView().findViewById(R.id.youtube_overlay);
-        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
-        mDoubleTapPlayerAdapter.controller(youtubeOverlay);
-        youtubeOverlay.player(mPlayer).playerView(mDoubleTapPlayerAdapter);
+        if (mYouTubeOverlay == null) {
+            mYouTubeOverlay = getView().findViewById(R.id.youtube_overlay);
+        }
 
-        youtubeOverlay.performListener(new PerformListener() {
+        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
+        mDoubleTapPlayerAdapter.controller(mYouTubeOverlay);
+        mYouTubeOverlay
+                .player(mPlayer)
+                .playerView(mDoubleTapPlayerAdapter)
+                .performListener(new PerformListener() {
             @Override
             public void onAnimationStart() {
-                youtubeOverlay.setVisibility(View.VISIBLE);
+                mYouTubeOverlay.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd() {
-                youtubeOverlay.setVisibility(View.GONE);
+                mYouTubeOverlay.setVisibility(View.GONE);
             }
 
             @Override
