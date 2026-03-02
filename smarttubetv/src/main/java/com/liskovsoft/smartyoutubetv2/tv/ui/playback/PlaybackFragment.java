@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
-import android.app.Activity;
 import android.media.session.PlaybackState;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -453,8 +452,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createPlayer() {
-        //mExoPlayerController.setEventListener(mPlaybackPresenter);
-
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -482,7 +479,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createSubtitleManager() {
-        mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
+        if (getView() == null) {
+            return;
+        }
+
+        mSubtitleManager = new SubtitleManager(getView(), R.id.leanback_subtitles);
 
         // subs renderer
         if (mPlayer.getTextComponent() != null) {
@@ -491,17 +492,29 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createDebugManager() {
-        mDebugInfoManager = new DebugInfoManager(getActivity(), mPlayer, R.id.debug_view_group);
+        if (getView() == null) {
+            return;
+        }
+
+        mDebugInfoManager = new DebugInfoManager(getView(), R.id.debug_view_group, mPlayer);
     }
 
     private void initializeGlobalClock() {
-        DateTimeView clock = getActivity().findViewById(R.id.global_time);
+        if (getView() == null) {
+            return;
+        }
+
+        DateTimeView clock = getView().findViewById(R.id.global_time);
         clock.showDate(false);
         clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void initializeGlobalEndingTime() {
-        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        if (getView() == null) {
+            return;
+        }
+
+        EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
         endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
     }
 
@@ -510,12 +523,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void initializeDoubleTapHandler() {
-        if (getActivity() == null || getContext() == null || getView() == null || !Helpers.isTouchSupported(getContext())) {
+        if (getContext() == null || getView() == null || !Helpers.isTouchSupported(getContext())) {
             return;
         }
 
-        YouTubeOverlay youtubeOverlay = getActivity().findViewById(R.id.youtube_overlay);
-        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getContext(), getView());
+        YouTubeOverlay youtubeOverlay = getView().findViewById(R.id.youtube_overlay);
+        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
         mDoubleTapPlayerAdapter.controller(youtubeOverlay);
         youtubeOverlay.player(mPlayer).playerView(mDoubleTapPlayerAdapter);
 
@@ -875,16 +888,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void updateEndingTime() {
-        if (getActivity() != null) {
-            EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        if (getView() != null) {
+            EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
             endingTime.update();
         }
     }
 
     @Override
     public void setChatReceiver(ChatReceiver chatReceiver) {
-        if (getActivity() != null) {
-            LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
+        if (getView() != null) {
+            LiveChatView liveChat = getView().findViewById(R.id.live_chat);
             liveChat.setChatReceiver(chatReceiver);
         }
     }
@@ -1562,16 +1575,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * PIP mode fix
      */
     private void showHideWidgets(boolean show) {
-        Activity activity = getActivity();
+        View root = getView();
 
-        if (activity != null) {
-            View overlay = activity.findViewById(R.id.player_overlay_wrapper);
+        if (root != null) {
+            View overlay = root.findViewById(R.id.player_overlay_wrapper);
 
             if (overlay != null) {
                 overlay.setVisibility(show ? View.VISIBLE : View.GONE);
             }
 
-            View liveChat = activity.findViewById(R.id.live_chat_wrapper);
+            View liveChat = root.findViewById(R.id.live_chat_wrapper);
 
             if (liveChat != null) {
                 liveChat.setVisibility(show ? View.VISIBLE : View.GONE);

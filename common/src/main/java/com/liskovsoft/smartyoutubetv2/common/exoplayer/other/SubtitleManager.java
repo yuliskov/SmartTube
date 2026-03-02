@@ -56,11 +56,11 @@ public class SubtitleManager implements TextOutput, OnDataChange {
         }
     }
 
-    public SubtitleManager(Activity activity, int subViewId) {
-        mContext = activity;
-        mSubtitleView = activity.findViewById(subViewId);
-        mPrefs = AppPrefs.instance(activity);
-        mPlayerData = PlayerData.instance(activity);
+    public SubtitleManager(View root, int subViewId) {
+        mContext = root.getContext();
+        mSubtitleView = root.findViewById(subViewId);
+        mPrefs = AppPrefs.instance(mContext);
+        mPlayerData = PlayerData.instance(mContext);
         mPlayerData.setOnChange(this);
         configureSubtitleView();
     }

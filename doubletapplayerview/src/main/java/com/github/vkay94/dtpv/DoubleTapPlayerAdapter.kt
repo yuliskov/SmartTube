@@ -1,6 +1,5 @@
 package com.github.vkay94.dtpv
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -13,7 +12,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 /**
  * Custom player class for Double-Tapping listening
  */
-class DoubleTapPlayerAdapter(context: Context, private val playerView: View): DoubleTapPlayerView {
+class DoubleTapPlayerAdapter(private val playerView: View): DoubleTapPlayerView {
     private val gestureDetector: GestureDetectorCompat
     private val gestureListener: DoubleTapGestureListener = DoubleTapGestureListener(playerView.rootView)
 
@@ -25,7 +24,7 @@ class DoubleTapPlayerAdapter(context: Context, private val playerView: View): Do
         }
 
     init {
-        gestureDetector = GestureDetectorCompat(context, gestureListener)
+        gestureDetector = GestureDetectorCompat(playerView.context, gestureListener)
     }
 
     override val playerWidth: Int

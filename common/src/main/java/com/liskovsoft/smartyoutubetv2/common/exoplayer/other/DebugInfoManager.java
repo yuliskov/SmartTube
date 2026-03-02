@@ -1,13 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +63,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private final SimpleExoPlayer mPlayer;
     private final ViewGroup mDebugViewGroup;
-    private final Activity mContext;
+    private final Context mContext;
 
     private boolean mStarted;
     private LinearLayout column1;
@@ -77,15 +75,15 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final String mAppVersion;
 
     /**
-     * @param activity context
-     * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
+     * @param root        root view
      * @param resLayoutId The {@link TextView} that should be updated to display the information.
+     * @param player      The {@link SimpleExoPlayer} from which debug information should be obtained.
      */
-    public DebugInfoManager(Activity activity, SimpleExoPlayer player, int resLayoutId) {
+    public DebugInfoManager(View root, int resLayoutId, SimpleExoPlayer player) {
         mPlayer = player;
-        mDebugViewGroup = activity.findViewById(resLayoutId);
-        mContext = activity;
-        mTextSize = activity.getResources().getDimension(R.dimen.debug_text_size);
+        mDebugViewGroup = root.findViewById(resLayoutId);
+        mContext = root.getContext();
+        mTextSize = mContext.getResources().getDimension(R.dimen.debug_text_size);
         mAppVersion = String.format("%s version", mContext.getString(R.string.app_name));
         inflate();
     }
@@ -525,26 +523,5 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             default:
                 return NOT_AVAILABLE;
         }
-    }
-
-    private String getRawDisplayResolution() {
-        Display display = mContext.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getRealSize(size);
-        float refreshRate = display.getRefreshRate();
-
-        return String.format("%sx%s@%s", size.x, size.y, refreshRate);
-    }
-
-    /**
-     * Override to hardcoded physical resolution
-     */
-    private String overrideResolution(String resolution) {
-        switch (Helpers.getDeviceName()) {
-            case "BRAVIA 4K UR3 (BRAVIA_UR3_EU)":
-                return "3840x2160@120";
-        }
-
-        return resolution;
     }
 }
