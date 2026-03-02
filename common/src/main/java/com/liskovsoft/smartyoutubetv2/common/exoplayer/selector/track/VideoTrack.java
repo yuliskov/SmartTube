@@ -99,9 +99,10 @@ public class VideoTrack extends MediaTrack {
 
         if (isPreset) {
             // Overcome non-standard aspect ratio by getting resolution label
+            //boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
+            //        sizeEquals(format.height, TrackSelectorUtil.getOriginHeight(track2.format.height));
             boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
-                    sizeEquals(format.height, TrackSelectorUtil.getOriginHeight(track2.format.height));
-            //return compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
+                    sizeEquals(TrackSelectorUtil.getRealHeight(format), TrackSelectorUtil.getRealHeight(track2.format));
             return compare(track2, isMultiFpsFormat || respectPresetsFps ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS);
         } else {
             return compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
@@ -125,19 +126,11 @@ public class VideoTrack extends MediaTrack {
         int size1;
         int size2;
 
-        //// Proper non-widescreen (4:3) format handling.
-        //// 4:3 example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
-        //if (isWideScreen(format) && isWideScreen(track2.format)) {
-        //    size1 = format.width;
-        //    size2 = track2.format.width;
-        //} else {
-        //    size1 = format.height;
-        //    size2 = track2.format.height;
-        //}
-
         // MOD: Mimic official behavior (handle low res shorts etc)
-        size1 = TrackSelectorUtil.isWideScreen(format) || exceedHeightLimit(format) ? format.height : format.width;
-        size2 = TrackSelectorUtil.isWideScreen(track2.format) || exceedHeightLimit(track2.format) ? track2.format.height : track2.format.width;
+        //size1 = TrackSelectorUtil.isWideScreen(format) || exceedHeightLimit(format) ? format.height : format.width;
+        //size2 = TrackSelectorUtil.isWideScreen(track2.format) || exceedHeightLimit(track2.format) ? track2.format.height : track2.format.width;
+        size1 = TrackSelectorUtil.getRealHeight(format);
+        size2 = TrackSelectorUtil.getRealHeight(track2.format);
 
         String id1 = format.id;
         String id2 = track2.format.id;

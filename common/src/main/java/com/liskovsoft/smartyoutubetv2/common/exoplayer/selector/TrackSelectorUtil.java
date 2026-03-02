@@ -302,12 +302,13 @@ public class TrackSelectorUtil {
         return labels.first != null ? labels.first : labels.second;
     }
 
-    public static int getOriginHeight(int height) {
+    private static int getOriginHeight(int height) {
         int originHeight = height;
 
         // Non-regular examples
         // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ! - 2560x1182
-        // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088 
+        // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088
+        // Dream Theater - Night Terror (Official Video) - 2560x1066
 
         if (height < 160) { // 256x144
             originHeight = 144;
@@ -332,7 +333,7 @@ public class TrackSelectorUtil {
         return originHeight;
     }
 
-    public static int getHeightByWidth(int width) {
+    private static int getHeightByWidth(int width) {
         int originHeight = -1;
 
         if (width < 280) { // 256x144
@@ -374,11 +375,10 @@ public class TrackSelectorUtil {
         }
 
         // Make resolution calculation of the vertical videos more closer to the official app.
-        boolean isUltraWide = (float) width/height >= 2.1; // maybe 2.3???
-        int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(Math.min(height, width));
-
-        // Ignore vertical videos completely. Only height matters.
-        //int originHeight = getOriginHeight(height);
+        //boolean isUltraWide = (float) width/height >= 2.1; // maybe 2.3???
+        //int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(Math.min(height, width));
+        boolean isUltraWide = (float) width/height >= 2; // maybe 2.1
+        int originHeight = isUltraWide ? getHeightByWidth(width) : getOriginHeight(height);
 
         return originHeight;
     }
