@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.media.session.PlaybackState;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Looper;
@@ -39,6 +40,10 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 
+import com.github.vkay94.dtpv.DoubleTapPlayerAdapter;
+import com.github.vkay94.dtpv.DoubleTapPlayerView;
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay;
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay.PerformListener;
 import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -123,6 +128,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private boolean mIsEngineBlocked;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private DoubleTapPlayerAdapter mDoubleTapPlayerAdapter;
+    private YouTubeOverlay mYouTubeOverlay;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private long mProgressShowTimeMs;
@@ -406,6 +413,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
+        if (mDoubleTapPlayerAdapter != null && !isOverlayShown()) {
+            boolean handled = mDoubleTapPlayerAdapter.onTouchEvent(event);
+
+            if (handled)
+                return;
+        }
+
         applyTickle(event);
     }
 
@@ -572,6 +586,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mDebugInfoManager = null;
         mMediaSessionConnector = null;
         mMediaSession = null;
+        if (mYouTubeOverlay != null) {
+            mYouTubeOverlay
+                    .player(null)
+                    .playerView(null)
+                    .performListener(null);
+        }
+        if (mDoubleTapPlayerAdapter != null) {
+            mDoubleTapPlayerAdapter = null;
+        }
     }
 
     private void createPlayerObjects() {
@@ -581,9 +604,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         createPlayerGlue();
 
-        createSubtitleManager();
+        //createSubtitleManager();
 
-        createDebugManager();
+        //createDebugManager();
 
         createMediaSession();
 
@@ -594,11 +617,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         initializeGlobalEndingTime();
 
         initializePixelRatio();
+
+        initializeDoubleTapHandler();
     }
 
     private void createPlayer() {
-        //mExoPlayerController.setEventListener(mPlaybackPresenter);
-
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -626,31 +649,98 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createSubtitleManager() {
-        mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
+        if (getView() == null || mPlayer == null) {
+            return;
+        }
 
-        // subs renderer
-        if (mPlayer.getTextComponent() != null) {
-            mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
+        if (mSubtitleManager == null) {
+            mSubtitleManager = new SubtitleManager(getView().findViewById(R.id.leanback_subtitles));
+
+            // subs renderer
+            if (mPlayer.getTextComponent() != null) {
+                mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
+            }
         }
     }
 
     private void createDebugManager() {
-        mDebugInfoManager = new DebugInfoManager(getActivity(), mPlayer, R.id.debug_view_group);
+        if (getView() == null) {
+            return;
+        }
+
+        if (mDebugInfoManager == null) {
+            mDebugInfoManager = new DebugInfoManager(getView().findViewById(R.id.debug_view_group), mPlayer);
+        }
     }
 
     private void initializeGlobalClock() {
-        DateTimeView clock = getActivity().findViewById(R.id.global_time);
+        if (getView() == null) {
+            return;
+        }
+
+        DateTimeView clock = getView().findViewById(R.id.global_time);
         clock.showDate(false);
         clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void initializeGlobalEndingTime() {
-        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        if (getView() == null) {
+            return;
+        }
+
+        EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
         endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void initializePixelRatio() {
         setPixelRatio(PlayerTweaksData.instance(getContext()).getPixelRatio());
+    }
+
+    private void initializeDoubleTapHandler() {
+        if (getContext() == null || getView() == null || !Helpers.isTouchSupported(getContext())) {
+            return;
+        }
+
+        if (mYouTubeOverlay == null) {
+            mYouTubeOverlay = getView().findViewById(R.id.youtube_overlay);
+        }
+
+        mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
+        mDoubleTapPlayerAdapter.onSingleTap(this::applyTickle);
+        mDoubleTapPlayerAdapter.controller(mYouTubeOverlay);
+        mYouTubeOverlay
+                .player(mPlayer)
+                .playerView(mDoubleTapPlayerAdapter)
+                .performListener(new PerformListener() {
+            @Override
+            public void onAnimationStart() {
+                mYouTubeOverlay.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                mYouTubeOverlay.setVisibility(View.GONE);
+            }
+
+            @Override
+            public Boolean shouldForward(@NonNull Player player, @NonNull DoubleTapPlayerView playerView, float posX) {
+                if (player.getPlaybackState() == PlaybackState.STATE_ERROR ||
+                        player.getPlaybackState() == PlaybackState.STATE_NONE ||
+                        player.getPlaybackState() == PlaybackState.STATE_STOPPED) {
+
+                    playerView.cancelInDoubleTapMode();
+                    return false;
+                }
+
+                if (player.getCurrentPosition() > 500 && posX < playerView.getPlayerWidth() * 0.35)
+                    return false;
+
+                if (player.getCurrentPosition() < player.getDuration() && posX > playerView.getPlayerWidth() * 0.65)
+                    return true;
+
+                return false;
+            }
+        });
     }
 
     private void createMediaSession() {
@@ -977,16 +1067,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void updateEndingTime() {
-        if (getActivity() != null) {
-            EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        if (getView() != null) {
+            EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
             endingTime.update();
         }
     }
 
     @Override
     public void setChatReceiver(ChatReceiver chatReceiver) {
-        if (getActivity() != null) {
-            LiveChatView liveChat = getActivity().findViewById(R.id.live_chat);
+        if (getView() != null) {
+            LiveChatView liveChat = getView().findViewById(R.id.live_chat);
             liveChat.setChatReceiver(chatReceiver);
         }
     }
@@ -1404,6 +1494,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showDebugInfo(boolean show) {
+        createDebugManager();
         if (mDebugInfoManager != null) {
             mDebugInfoManager.show(show);
         }
@@ -1411,12 +1502,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showSubtitles(boolean show) {
+        createSubtitleManager();
         if (mSubtitleManager != null) {
             mSubtitleManager.show(show);
         }
     }
 
     public boolean isDebugInfoShown() {
+        createDebugManager();
         return mDebugInfoManager != null && mDebugInfoManager.isShown();
     }
 
@@ -1667,16 +1760,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * PIP mode fix
      */
     private void showHideWidgets(boolean show) {
-        Activity activity = getActivity();
+        View root = getView();
 
-        if (activity != null) {
-            View overlay = activity.findViewById(R.id.player_overlay_wrapper);
+        if (root != null) {
+            View overlay = root.findViewById(R.id.player_overlay_wrapper);
 
             if (overlay != null) {
                 overlay.setVisibility(show ? View.VISIBLE : View.GONE);
             }
 
-            View liveChat = activity.findViewById(R.id.live_chat_wrapper);
+            View liveChat = root.findViewById(R.id.live_chat_wrapper);
 
             if (liveChat != null) {
                 liveChat.setVisibility(show ? View.VISIBLE : View.GONE);

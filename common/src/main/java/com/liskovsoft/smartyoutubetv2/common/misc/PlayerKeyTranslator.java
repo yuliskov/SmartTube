@@ -39,6 +39,13 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final Runnable speedDownAction = () -> speedUp(false);
     private final Runnable volumeUpAction = () -> volumeUp(true);
     private final Runnable volumeDownAction = () -> volumeUp(false);
+    private final Runnable speedToggleAction = () -> {
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
+        if (playbackPresenter != null && playbackPresenter.getView() != null) {
+            float currentSpeed = playbackPresenter.getView().getSpeed();
+            playbackPresenter.onButtonClicked(R.id.action_video_speed, currentSpeed != 1.0f ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        }
+    };
 
     public PlayerKeyTranslator(Context context) {
         super(context);
@@ -96,6 +103,10 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
+        if (mGeneralData.isRemapSToSpeedToggleEnabled()) { // New mapping check
+            actionMapping.put(KeyEvent.KEYCODE_S, speedToggleAction);
+        }
+
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
@@ -121,7 +132,10 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, speedDownAction);
         }
 
-        if (mGeneralData.isRemapFastForwardToSpeedEnabled()) {
+        if (mGeneralData.isRemapFastForwardToSpeedToggleEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedToggleAction);
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedToggleAction);
+        } else if (mGeneralData.isRemapFastForwardToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
         }

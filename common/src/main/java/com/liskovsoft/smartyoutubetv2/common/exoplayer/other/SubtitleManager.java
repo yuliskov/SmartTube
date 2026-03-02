@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -56,11 +55,11 @@ public class SubtitleManager implements TextOutput, OnDataChange {
         }
     }
 
-    public SubtitleManager(Activity activity, int subViewId) {
-        mContext = activity;
-        mSubtitleView = activity.findViewById(subViewId);
-        mPrefs = AppPrefs.instance(activity);
-        mPlayerData = PlayerData.instance(activity);
+    public SubtitleManager(SubtitleView subtitleView) {
+        mContext = subtitleView.getContext();
+        mSubtitleView = subtitleView;
+        mPrefs = AppPrefs.instance(mContext);
+        mPlayerData = PlayerData.instance(mContext);
         mPlayerData.setOnChange(this);
         configureSubtitleView();
     }

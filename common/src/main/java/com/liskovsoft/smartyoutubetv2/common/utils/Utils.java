@@ -92,6 +92,14 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
+    public static final String[] KNOWN_PACKAGES = {
+            "com.liskovsoft.smarttubetv.beta",
+            "com.teamsmart.videomanager.tv",
+            "org.smarttube.beta",
+            "org.smarttube.stable",
+            "org.smarttube.fdroid",
+            "app.smarttube.fdroid",
+    };
     private static final String SUPER_PASSWD = "smarttube";
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";
@@ -112,35 +120,34 @@ public class Utils {
     private static int sCurrentVolume = -1;
     private static final Runnable sForceFinishTheApp = () -> Runtime.getRuntime().exit(0);
 
-    @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
         displayShareVideoDialog(context, videoId, 0);
     }
 
-    @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId, int posSec) {
         Uri videoUrl = convertToFullVideoUrl(videoId, posSec);
         showMultiChooser(context, videoUrl);
     }
 
-    @TargetApi(17)
     public static void displayShareEmbedVideoDialog(Context context, String videoId) {
         displayShareEmbedVideoDialog(context, videoId, 0);
     }
 
-    @TargetApi(17)
     public static void displayShareEmbedVideoDialog(Context context, String videoId, int posSec) {
         Uri videoUrl = convertToEmbedVideoUrl(videoId, posSec);
         showMultiChooser(context, videoUrl);
     }
 
-    @TargetApi(17)
     public static void displayShareChannelDialog(Context context, String channelId) {
         Uri channelUrl = convertToFullChannelUrl(channelId);
         showMultiChooser(context, channelUrl);
     }
 
-    @TargetApi(17)
+    public static void displaySharePlaylistDialog(Context context, String playlistId) {
+        Uri playlistUrl = convertToPlaylistUrl(playlistId);
+        showMultiChooser(context, playlistUrl);
+    }
+
     public static void openUrlInternally(Context context, Uri url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(url);
@@ -156,7 +163,6 @@ public class Utils {
         }
     }
 
-    @TargetApi(17)
     public static void showMultiChooser(Context context, Uri url) {
         Intent primaryIntent = new Intent(Intent.ACTION_VIEW);
         Intent secondaryIntent = new Intent(Intent.ACTION_SEND);
@@ -192,6 +198,11 @@ public class Utils {
 
     public static Uri convertToFullChannelUrl(String channelId) {
         String url = String.format("https://www.youtube.com/channel/%s", channelId);
+        return Uri.parse(url);
+    }
+
+    public static Uri convertToPlaylistUrl(String playlistId) {
+        String url = String.format("https://www.youtube.com/playlist?list=%s", playlistId);
         return Uri.parse(url);
     }
 
@@ -1195,6 +1206,23 @@ public class Utils {
         }
 
         return original.equals(typed);
+    }
+
+    @SuppressLint("DiscouragedApi")
+    public static boolean isSystemGestureArrowEnabled(Context context) {
+        Resources res = context.getResources();
+        // This is the internal Android constant for navigation mode
+        int resourceId = res.getIdentifier("config_navBarInteractionMode", "integer", "android");
+
+        if (resourceId > 0) {
+            int navMode = res.getInteger(resourceId);
+            // 0: 3-button navigation (Back, Home, Recents)
+            // 1: 2-button navigation (Android P style)
+            // 2: Full Gesture Navigation (Android 10+ Arrow)
+            return navMode == 2;
+        }
+        
+        return false;
     }
 
     private static void persistData(Context context) {

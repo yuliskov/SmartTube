@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager.BadTokenException;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
@@ -17,11 +16,15 @@ public class SimpleEditDialog {
     }
 
     public static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
-        show(context, dialogTitle, defaultValue, onChange, null);
+        show(context, dialogTitle, dialogTitle, defaultValue, onChange, null);
     }
 
-    public static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss) {
-        show(context, dialogTitle, defaultValue, onChange, onDismiss, false);
+    public static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange) {
+        show(context, dialogTitle, dialogHint, defaultValue, onChange, null);
+    }
+
+    public static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss) {
+        show(context, dialogTitle, dialogHint, defaultValue, onChange, onDismiss, false);
     }
 
     public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
@@ -29,10 +32,10 @@ public class SimpleEditDialog {
     }
 
     public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss) {
-        show(context, dialogTitle, defaultValue, onChange, onDismiss, true);
+        show(context, dialogTitle, dialogTitle, defaultValue, onChange, onDismiss, true);
     }
 
-    private static void show(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
+    private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
@@ -44,7 +47,7 @@ public class SimpleEditDialog {
         KeyHelpers.fixShowKeyboard(editField);
 
         editField.setText(defaultValue);
-        editField.setHint(dialogTitle);
+        editField.setHint(dialogHint);
         editField.setNextFocusDownId(android.R.id.button1); // OK button
 
         if (defaultValue != null) { // move cursor to the end

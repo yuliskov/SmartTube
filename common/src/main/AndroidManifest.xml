@@ -2,7 +2,7 @@
           package="com.liskovsoft.smartyoutubetv2.common">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- Android 14 (API 34) -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" /> -->
     <!-- API level 34 -->
     <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" /> -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -16,6 +16,9 @@
     <!-- <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" /> -->
     <!-- Android 9+: needed to run package uninstaller (ATV, Amazon bride) -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
+    <!-- Starting targetSDK 33+, foreground services require explicit permissions in the manifest. -->
+    <!-- NOTE: only works with 'mediaPlayback' type service. Others types will fail. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
     <!-- Android 11+: fix access package info -->
     <queries>
@@ -49,10 +52,12 @@
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
             </intent-filter>
         </receiver>
+        <!-- NOTE: Starting from Android 12 (api 31) foreground service with type 'connectedDevice' not supported -->
+        <!-- Use 'mediaPlayback' type instead -->
         <service
             android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService"
             android:enabled="true"
-            android:foregroundServiceType="connectedDevice"/>
+            android:foregroundServiceType="mediaPlayback"/>
         <service
             android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService"
             android:enabled="true"/>

@@ -28,14 +28,14 @@ project.ext {
     // MOD: use versions from sharedutils
     // robolectricVersion = '4.2'
     robolectricVersion = project.properties.robolectricVersion
-    annotationXLibraryVersion = project.properties.annotationXLibraryVersion
+    annotationXVersion = project.properties.annotationXVersion
     autoValueVersion = '1.6'
     checkerframeworkVersion = '2.5.0'
     // MOD: use versions from sharedutils
     // androidXTestVersion = '1.1.0'
     //protobufVersion = '4.32.1'
     protobufVersion = '3.17.3' // the latest for Android 4
-    androidXTestVersion = project.properties.testXSupportLibraryVersion
+    androidXTestVersion = project.properties.testXSupportVersion
     modulePrefix = ':'
     if (gradle.ext.has('exoplayerModulePrefix')) {
         modulePrefix += gradle.ext.exoplayerModulePrefix

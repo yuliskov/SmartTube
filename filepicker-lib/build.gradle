@@ -1,25 +1,5 @@
 apply from: gradle.ext.sharedModulesConstants
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-
-def _group = 'arte.programar'
-def _version = '3.0.1'
-def _versioncode = 19
-def _artifact = 'materialfile'
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                // Applies the component for the release build variant.
-                //from components.release
-                groupId = _group
-                artifactId = _artifact
-                version = _version
-            }
-        }
-    }
-}
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -32,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode _versioncode
-        versionName _version
+        versionCode 19
+        versionName '3.0.1'
     }
     buildTypes {
         release {
@@ -50,10 +30,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion
     implementation 'com.google.android.material:material:' + materialVersion
-    //implementation 'androidx.activity:activity:1.0.0'
-    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
+    implementation 'androidx.fragment:fragment:' + annotationXVersion
 
     implementation project(':fragment-1.1.0')
 }

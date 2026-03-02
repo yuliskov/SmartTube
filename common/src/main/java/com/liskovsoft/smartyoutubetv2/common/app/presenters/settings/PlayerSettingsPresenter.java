@@ -524,6 +524,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setPlayerAutoVolumeEnabled(option.isSelected()),
                 mPlayerTweaksData.isPlayerAutoVolumeEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_time_stretching),
+                getContext().getString(R.string.player_time_stretching_desc),
+                option -> mPlayerTweaksData.setAudioTimeStretchingEnabled(option.isSelected()),
+                mPlayerTweaksData.isAudioTimeStretchingEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_section_playlist),
                 option -> mPlayerTweaksData.setSectionPlaylistEnabled(option.isSelected()),
                 mPlayerTweaksData.isSectionPlaylistEnabled()));

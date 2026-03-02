@@ -1,0 +1,26 @@
+name: "Close stale issues"
+on:
+  workflow_dispatch:
+    branches:
+    - master
+     
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+      issues: write
+    steps:
+    - uses: actions/stale@v10.2.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        operations-per-run: 3000 # This may result in rate limiting, could we reduce and run in batches?
+        days-before-stale: 420 # 1st Jan 2025, as of 25th Feb 2026
+        days-before-close: 0
+        ignore-updates: true
+        stale-issue-message: ''
+        close-issue-message: | 
+          **Due to a high volume of stale issues, all issues older than January 1st 2025 are being closed automatically.**
+          
+          Please feel free to resubmit your issue if you believe it has not been appropriately dealt with, and tag this issue in the "Additional Information" section.

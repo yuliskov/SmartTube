@@ -74,7 +74,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
-        appendHideVideos(settingsPresenter);
+        appendHideContent(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
@@ -107,8 +107,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
     }
 
-    private void appendHideVideos(AppDialogPresenter settingsPresenter) {
+    private void appendHideContent(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_everywhere),
+                option -> {
+                    mMediaServiceData.setContentHidden(MediaServiceData.CONTENT_SHORTS_ALL, option.isSelected());
+                    BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_SHORTS, !option.isSelected());
+                },
+                mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_SHORTS_ALL)));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_mixes),
                 option -> mMediaServiceData.setContentHidden(MediaServiceData.CONTENT_MIXES, option.isSelected()),
@@ -390,6 +397,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Up/Down",
                 option -> mGeneralData.setRemapFastForwardToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapFastForwardToSpeedEnabled()));
+
+        options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Toggle",
+                option -> mGeneralData.setRemapFastForwardToSpeedToggleEnabled(option.isSelected()),
+                mGeneralData.isRemapFastForwardToSpeedToggleEnabled()));
+
+        options.add(UiOptionItem.from("S -> Speed Toggle",
+                option -> mGeneralData.setRemapSToSpeedToggleEnabled(option.isSelected()),
+                mGeneralData.isRemapSToSpeedToggleEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
                 option -> mGeneralData.setRemapPageUpToNextEnabled(option.isSelected()),
@@ -804,6 +819,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         menuNames.put(MainUIData.MENU_ITEM_OPEN_DESCRIPTION, R.string.action_video_info);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, R.string.open_comments);
         menuNames.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, R.string.open_playlist);
+        menuNames.put(MainUIData.MENU_ITEM_BLOCK_CHANNEL, R.string.dialog_block_channel);
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
             menuNames.put(provider.getId(), provider.getTitleResId());

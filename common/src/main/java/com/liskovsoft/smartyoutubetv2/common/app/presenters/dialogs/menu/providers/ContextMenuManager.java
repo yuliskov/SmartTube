@@ -11,11 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class ContextMenuManager {
-    private final Context mContext;
     private final ArrayList<ContextMenuProvider> mProviders;
 
     public ContextMenuManager(Context context) {
-        mContext = context;
         mProviders = new ArrayList<>();
         // NOTE: don't change idx after release
         mProviders.add(new ChannelGroupMenuProvider(context, 0));

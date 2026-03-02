@@ -33,9 +33,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'androidx.activity:activity:' + leanbackXLibraryVersion // used inside other app modules
-    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.core:core:' + coreXLibraryVersion
-    implementation 'androidx.viewpager:viewpager:' + leanbackXLibraryVersion
-    implementation 'androidx.loader:loader:' + leanbackXLibraryVersion
+    api 'androidx.activity:activity:' + activityXVersion // used inside other app modules
+    implementation 'androidx.annotation:annotation:' + annotationXVersion
+    implementation 'androidx.core:core:' + coreXVersion
+    implementation 'androidx.viewpager:viewpager:' + viewpagerXVersion
+    implementation 'androidx.loader:loader:' + loaderXVersion
 }

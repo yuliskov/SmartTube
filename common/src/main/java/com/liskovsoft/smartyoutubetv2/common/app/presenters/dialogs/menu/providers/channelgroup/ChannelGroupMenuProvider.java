@@ -30,7 +30,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
     public ChannelGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
-        mContext = context;
+        mContext = context.getApplicationContext();
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 

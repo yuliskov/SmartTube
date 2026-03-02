@@ -370,17 +370,7 @@ public class ExoPlayerController implements Player.EventListener {
     public void onSeekProcessed() {
         mEventListener.onSeekEnd();
     }
-    
-    public void setSpeed(float speed) {
-        if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
 
-            mTrackFormatter.setSpeed(speed);
-            setQualityInfo(mTrackFormatter.getQualityLabel());
-            mEventListener.onSpeedChanged(speed);
-        }
-    }
-    
     public float getSpeed() {
         if (mPlayer != null) {
             return mPlayer.getPlaybackParameters().speed;
@@ -388,13 +378,21 @@ public class ExoPlayerController implements Player.EventListener {
             return -1;
         }
     }
-    
-    public void setPitch(float pitch) {
-        if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+
+    public void setSpeed(float speed) {
+        if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
+            if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
+                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
+            } else {
+                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, speed));
+            }
+
+            mTrackFormatter.setSpeed(speed);
+            setQualityInfo(mTrackFormatter.getQualityLabel());
+            mEventListener.onSpeedChanged(speed);
         }
     }
-    
+
     public float getPitch() {
         if (mPlayer != null) {
             return mPlayer.getPlaybackParameters().pitch;
@@ -402,7 +400,13 @@ public class ExoPlayerController implements Player.EventListener {
             return -1;
         }
     }
-    
+
+    public void setPitch(float pitch) {
+        if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
+            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+        }
+    }
+
     public void setVolume(float volume) {
         if (mPlayer != null && volume >= 0) {
             mPlayer.setVolume(Math.min(volume, 1f));

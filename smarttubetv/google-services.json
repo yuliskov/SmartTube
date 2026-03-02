@@ -8,6 +8,38 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:431299132531:android:142c1f934017b678cd7e06",
+        "android_client_info": {
+          "package_name": "app.smarttube.stable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431299132531-hfd0kvpr6nkeuvkbr37kf1sbau626mr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNXymxUj6ZzmY7WtuhPsWreRHmvMGCVSM"
+        },
+        {
+          "current_key": "AIzaSyDGtSwgX8rNR8wpQXRRCTDUs4kehsRvfEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431299132531-hfd0kvpr6nkeuvkbr37kf1sbau626mr1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:431299132531:android:0c0bc4ac02047b30cd7e06",
         "android_client_info": {
           "package_name": "org.smarttube.beta"

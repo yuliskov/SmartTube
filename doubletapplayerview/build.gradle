@@ -1,0 +1,47 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'kotlin-android'
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 40001
+        versionName '1.0.4'
+
+        vectorDrawables.useSupportLibrary = true
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // kotlinOptions {
+    //     jvmTarget = JavaVersion.VERSION_1_8
+    // }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
+    implementation 'androidx.appcompat:appcompat:' + appCompatXVersion
+    implementation 'androidx.core:core-ktx:' + kotlinCoreXVersion
+    implementation 'androidx.constraintlayout:constraintlayout:' + constraintLayoutXVersion
+
+    implementation project(':exoplayer-library-core')
+    implementation project(':exoplayer-library-ui')
+}

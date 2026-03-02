@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -17,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.CrashRestorer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ShortsCardPresenter;
@@ -40,11 +43,13 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private ShortsCardPresenter mShortsPresenter;
     private SearchData mSearchData;
     private boolean mIsFragmentCreated;
+    private CrashRestorer mCrashRestorer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null); // Real restore takes place in the presenter
 
+        mCrashRestorer = new CrashRestorer(getContext(), savedInstanceState);
         mIsFragmentCreated = true;
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
@@ -67,10 +72,21 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Called when the activity is paused
+        mCrashRestorer.persistVideo(outState, mSearchPresenter.getCurrentVideo());
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mSearchPresenter.onViewInitialized();
+
+        // Restore state after crash
+        mCrashRestorer.restorePlayback();
     }
 
     @Override
@@ -221,6 +237,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     @Override
     protected void onItemViewSelected(Object item) {
         if (item instanceof Video) {
+            mSearchPresenter.onVideoItemSelected((Video) item);
             checkScrollEnd((Video) item);
         }
     }

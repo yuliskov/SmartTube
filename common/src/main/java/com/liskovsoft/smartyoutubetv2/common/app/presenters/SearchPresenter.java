@@ -43,6 +43,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private int mTypeOptions;
     private int mFeatureOptions;
     private int mSortingOptions;
+    private Video mCurrentVideo;
 
     private SearchPresenter(Context context) {
         super(context);
@@ -92,7 +93,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onVideoItemSelected(Video item) {
-        // NOP
+        mCurrentVideo = item;
     }
 
     @Override
@@ -248,6 +249,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     public void startPlay(String searchText) {
         startSearch(searchText, false, true);
+    }
+
+    public Video getCurrentVideo() {
+        return mCurrentVideo;
     }
 
     private void startSearch(String searchText, boolean isVoice, boolean startPlay) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="YouTubeOverlay">
+        <attr name="yt_playerView" format="reference" />
+        <attr name="yt_seekSeconds" format="integer" />
+        <attr name="yt_animationDuration" format="integer" />
+        <attr name="yt_iconAnimationDuration" format="integer" />
+        <attr name="yt_arcSize" format="dimension" />
+        <attr name="yt_tapCircleColor" format="color" />
+        <attr name="yt_backgroundCircleColor" format="color" />
+
+        <attr name="yt_textAppearance" format="reference" />
+        <attr name="yt_icon" format="reference" />
+    </declare-styleable>
+
+    <color name="dtpv_yt_tap_circle_color">#18FFFFFF</color>
+    <color name="dtpv_yt_background_circle_color">#20EEEEEE</color>
+    <dimen name="dtpv_yt_arc_size">40dp</dimen>
+
+    <style name="YTOSecondsTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>

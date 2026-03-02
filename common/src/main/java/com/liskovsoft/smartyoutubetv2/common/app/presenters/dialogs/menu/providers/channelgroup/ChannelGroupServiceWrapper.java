@@ -19,15 +19,12 @@ import io.reactivex.Observable;
 public class ChannelGroupServiceWrapper implements ProfileChangeListener {
     @SuppressLint("StaticFieldLeak")
     private static ChannelGroupServiceWrapper sInstance;
-    private final Context mContext;
-    private final ChannelGroupService mService;
     private final AppPrefs mPrefs;
+    private ChannelGroupService mService;
 
     private ChannelGroupServiceWrapper(Context context) {
-        mContext = context.getApplicationContext();
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
-        mService = YouTubeServiceManager.instance().getChannelGroupService();
         restoreState();
     }
 
@@ -40,63 +37,71 @@ public class ChannelGroupServiceWrapper implements ProfileChangeListener {
     }
 
     public List<ItemGroup> getChannelGroups() {
-        return mService.getChannelGroups();
+        return getService().getChannelGroups();
     }
 
     public void addChannelGroup(ItemGroup group) {
-        mService.addChannelGroup(group);
+        getService().addChannelGroup(group);
     }
 
     public void removeChannelGroup(ItemGroup group) {
-        mService.removeChannelGroup(group);
+        getService().removeChannelGroup(group);
     }
 
     public String[] findChannelIdsForGroup(String channelGroupId) {
-        return mService.findChannelIdsForGroup(channelGroupId);
+        return getService().findChannelIdsForGroup(channelGroupId);
     }
 
     public ItemGroup findChannelGroupById(String channelGroupId) {
-        return mService.findChannelGroupById(channelGroupId);
+        return getService().findChannelGroupById(channelGroupId);
     }
 
     public ItemGroup findChannelGroupByTitle(String title) {
-        return mService.findChannelGroupByTitle(title);
+        return getService().findChannelGroupByTitle(title);
     }
 
     public ItemGroup createChannelGroup(String title, String iconUrl, List<Item> channels) {
-        return mService.createChannelGroup(title, iconUrl, channels);
+        return getService().createChannelGroup(title, iconUrl, channels);
     }
 
     public Item createChannel(String title, String iconUrl, String channelId) {
-        return mService.createChannel(channelId, title, iconUrl);
+        return getService().createChannel(channelId, title, iconUrl);
     }
 
     public void renameChannelGroup(ItemGroup channelGroup, String title) {
-        mService.renameChannelGroup(channelGroup, title);
+        getService().renameChannelGroup(channelGroup, title);
     }
 
     public Observable<List<ItemGroup>> importGroupsObserve(Uri uri) {
-        return mService.importGroupsObserve(uri);
+        return getService().importGroupsObserve(uri);
     }
 
     public Observable<List<ItemGroup>> importGroupsObserve(File file) {
-        return mService.importGroupsObserve(file);
+        return getService().importGroupsObserve(file);
     }
 
     public boolean isEmpty() {
-        return mService.isEmpty();
+        return getService().isEmpty();
     }
 
     private void restoreState() {
         String data = mPrefs.getChannelGroupData();
         if (data != null) {
             mPrefs.setChannelGroupData(null);
-            mService.exportData(data);
+            getService().exportData(data);
         }
     }
 
     @Override
     public void onProfileChanged() {
         restoreState();
+    }
+
+    private ChannelGroupService getService() {
+        if (mService == null) {
+            mService = YouTubeServiceManager.instance().getChannelGroupService();
+        }
+
+        return mService;
     }
 }

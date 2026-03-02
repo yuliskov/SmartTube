@@ -13,7 +13,7 @@ buildscript {
 
         // Check that you have the Google Services Gradle plugin v4.3.2 or later
         // (if not, add it).
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.3.15'
 
         // Add the Crashlytics Gradle plugin.
         // https://firebase.google.com/docs/crashlytics/get-started?platform=android
@@ -50,14 +50,15 @@ android {
     compileSdkVersion project.properties.compileSdkVersion
     buildToolsVersion project.properties.buildToolsVersion
     testOptions.unitTests.includeAndroidResources = true
+    ndkVersion "21.0.6113669" // reduce size of the *.so files (stripping debug symbols)
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "org.smarttube"
+        applicationId "app.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2274
-        versionName "30.84"
+        versionCode 2287
+        versionName "30.97"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -68,17 +69,22 @@ android {
         // Trying to fix VerifyError/ClassNotFoundException
         multiDexKeepProguard file("multidex-keep.pro")
 
-        // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
-        // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
-        splits {
-            abi {
-                enable true
-                reset()
-                // Note, Android could soon start warning users when they run 32-bit apps
-                //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
-                include 'armeabi-v7a', 'x86', 'arm64-v8a' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
-                universalApk true //generate an additional APK that contains all the ABIs
-            }
+        // The content of Universal apk
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    // https://stackoverflow.com/questions/37382057/android-apk-how-to-exclude-a-so-file-from-a-3rd-party-dependency-using-gradle
+    // armeabi-v7a backward compatible with arm64-v8a, x86 -> x86_64 etc
+    splits {
+        abi {
+            enable true
+            reset()
+            // Note, Android could soon start warning users when they run 32-bit apps
+            //include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a' //select ABIs to build APKs for
+            include 'armeabi-v7a', 'arm64-v8a', 'x86' // v7a main build, x86 for WSL, v8a for Pixel Tablet (no 32 bit support)
+            universalApk true //generate an additional APK that contains all the ABIs
         }
     }
 
@@ -120,16 +126,15 @@ android {
     // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
     productFlavors {
         stbeta {
-            // matchingFallbacks = ['lite']
-            applicationIdSuffix ".beta"
+            applicationId "org.smarttube.beta"
+            //targetSdkVersion project.properties.compileSdkVersion
         }
         ststable {
-            // matchingFallbacks = ['lite']
-            applicationIdSuffix ".stable"
+            applicationId "org.smarttube.stable"
+            //targetSdkVersion project.properties.compileSdkVersion
         }
         stfdroid {
-            // matchingFallbacks = ['lite']
-            applicationIdSuffix ".fdroid"
+            applicationId "app.smarttube.fdroid"
             targetSdkVersion project.properties.compileSdkVersion
         }
     }
@@ -137,7 +142,7 @@ android {
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
+        variant.outputs.all { output ->
             def project = "SmartTube"
             def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
             def buildType = variant.buildType.name.take(1)
@@ -159,8 +164,8 @@ android {
         // exclude '**/SearchOrbView.class'
 
         // Remove unneeded arches from universal apk here because 'splits' cannot do this
-        exclude "lib/x86_64/**"
-        exclude "lib/armeabi/**"
+        // exclude "lib/x86_64/**"
+        // exclude "lib/armeabi/**"
     }
 
     lintOptions {
@@ -171,12 +176,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'androidx.leanback:leanback:' + leanbackXLibraryVersion
-    implementation 'androidx.leanback:leanback-preference:' + leanbackXLibraryVersion
-    implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
-    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion // exoplayer 2.12.1 fix
-    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
+    implementation 'androidx.leanback:leanback:' + leanbackXVersion
+    implementation 'androidx.leanback:leanback-preference:' + leanbackXVersion
+    implementation 'androidx.recommendation:recommendation:' + leanbackXVersion
+    implementation 'androidx.annotation:annotation:' + annotationXVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion // exoplayer 2.12.1 fix
+    implementation 'androidx.media:media:' + mediaXVersion // exoplayer fix
+    implementation 'androidx.constraintlayout:constraintlayout:' + constraintLayoutXVersion
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     implementation 'com.github.bumptech.glide:annotations:' + glideVersion
@@ -186,7 +192,8 @@ dependencies {
 
     //////// BEGIN EXOPLAYER /////////
 
-    implementation project(':exoplayer-library')
+    implementation project(':exoplayer-library-core')
+    implementation project(':exoplayer-library-ui')
     implementation project(':exoplayer-extension-leanback')
     implementation project(':exoplayer-extension-mediasession')
 
@@ -204,10 +211,10 @@ dependencies {
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
-    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
-    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportVersion
+    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportVersion
+    androidTestImplementation 'androidx.test:runner:' + testXSupportVersion
+    androidTestImplementation 'androidx.test:rules:' + testXSupportVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
     implementation project(':fragment-1.1.0')
@@ -217,6 +224,7 @@ dependencies {
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
     implementation project(':chatkit')
+    implementation project(':doubletapplayerview')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion

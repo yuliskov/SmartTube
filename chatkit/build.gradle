@@ -1,23 +1,5 @@
 apply from: gradle.ext.sharedModulesConstants
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                // Applies the component for the release build variant.
-                //from components.release
-
-                // You can then customize attributes of the publication as shown below.
-                groupId = 'com.github.stfalcon'
-                artifactId = 'chatkit'
-                version = '0.4.1'
-            }
-        }
-    }
-}
 
 android {
     compileSdkVersion project.properties.compileSdkVersion
@@ -47,8 +29,8 @@ dependencies {
 
     implementation project(':sharedutils')
 
-    implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+    implementation 'androidx.appcompat:appcompat:' + appCompatXVersion
     implementation 'com.google.android.material:material:' + materialVersion
     implementation "com.google.android.flexbox:flexbox:" + flexboxVersion
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion
 }

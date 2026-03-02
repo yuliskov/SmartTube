@@ -25,6 +25,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.speedmarquee.SpeedMarquee;
 
 public class ViewUtil {
@@ -94,7 +95,7 @@ public class ViewUtil {
                 textView.setHorizontallyScrolling(true);
 
                 // App dialog title fix.
-                textView.setSelected(true);
+                //textView.setSelected(true);
 
                 applyMarqueeRtlParams(textView, true);
             }
@@ -102,19 +103,12 @@ public class ViewUtil {
     }
 
     public static void applyMarqueeRtlParams(TextView textView, boolean scroll) {
-        //if (VERSION.SDK_INT <= 17) {
-        //    return;
-        //}
-
-        //if (!BidiFormatter.getInstance().isRtlContext()) {
-        //    return;
-        //}
-
         if (!Helpers.isTextRTL(textView.getText())) {
             // TextView may be reused from rtl context. Do reset.
             // NOTE: don't enable commented options because Setting item's text won't be centered.
             //textView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-            textView.setTextDirection(TextView.TEXT_DIRECTION_FIRST_STRONG);
+            textView.setTextDirection(View.TEXT_DIRECTION_LTR);
+            textView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             //textView.setGravity(Gravity.TOP | Gravity.START);
             return;
         }
@@ -123,7 +117,8 @@ public class ViewUtil {
             // Fix: right scrolling on rtl languages
             // Fix: text disappear on rtl languages
             textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
-            textView.setTextDirection(TextView.TEXT_DIRECTION_RTL);
+            textView.setTextDirection(View.TEXT_DIRECTION_RTL);
+            textView.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             textView.setGravity(Gravity.START);
         } else {
             // Fix: text disappear on rtl languages
@@ -136,7 +131,9 @@ public class ViewUtil {
             return;
         }
 
-        if (textView instanceof MarqueeTextView) {
+        if (textView instanceof MarqueeTextViewCompat) {
+            ((MarqueeTextViewCompat) textView).setMarqueeSpeedFactor(speed);
+        } else if (textView instanceof MarqueeTextView) {
             ((MarqueeTextView) textView).setMarqueeSpeedFactor(speed);
         } else if (textView instanceof SpeedMarquee) {
             ((SpeedMarquee) textView).setSpeed(speed);

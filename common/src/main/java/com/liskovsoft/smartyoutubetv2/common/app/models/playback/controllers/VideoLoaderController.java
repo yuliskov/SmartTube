@@ -132,7 +132,9 @@ public class VideoLoaderController extends BasePlayerController {
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else if (!getVideo().isLive && !getVideo().isLiveEnd) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            //YouTubeServiceManager.instance().applyNoPlaybackFix();
+            // Long loading subtitles cause hangs
+            disableSubtitles();
             reloadVideo();
         }
         //} else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
@@ -365,7 +367,7 @@ public class VideoLoaderController extends BasePlayerController {
         // Fix stretched video for a couple milliseconds (before the onVideoSizeChanged gets called)
         applyAspectRatio(formatInfo);
 
-        if (formatInfo.getPaidContentText() != null && getContentBlockData().isPaidContentNotificationEnabled()) {
+        if (formatInfo.getPaidContentText() != null && getSponsorBlockData().isPaidContentNotificationEnabled()) {
             MessageHelpers.showMessage(getContext(), formatInfo.getPaidContentText());
         }
 

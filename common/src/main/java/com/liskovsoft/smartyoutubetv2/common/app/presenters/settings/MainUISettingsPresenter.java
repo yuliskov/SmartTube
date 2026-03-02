@@ -50,13 +50,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         appendTopButtonsCategory(settingsPresenter);
         appendColorScheme(settingsPresenter);
+        if (Build.VERSION.SDK_INT > 19) {
+            appendCardTextScrollSpeed(settingsPresenter);
+        }
         appendCardPreviews(settingsPresenter);
         appendCardStyle(settingsPresenter);
         appendThumbSource(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
-        if (Build.VERSION.SDK_INT > 19) {
-            appendCardTextScrollSpeed(settingsPresenter);
-        }
         appendChannelSortingCategory(settingsPresenter);
         //appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);

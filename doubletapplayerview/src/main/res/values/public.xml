@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public />
+
+    <public name="YouTubeOverlay_yt_playerView" type="attr" />
+    <public name="YouTubeOverlay_yt_seekSeconds" type="attr" />
+    <public name="YouTubeOverlay_yt_animationDuration" type="attr" />
+    <public name="YouTubeOverlay_yt_arcSize" type="attr" />
+    <public name="YouTubeOverlay_yt_tapCircleColor" type="attr" />
+    <public name="YouTubeOverlay_yt_backgroundCircleColor" type="attr" />
+    <public name="YouTubeOverlay_yt_textAppearance" type="attr" />
+    <public name="YouTubeOverlay_yt_iconAnimationDuration" type="attr" />
+    <public name="YouTubeOverlay_yt_icon" type="attr" />
+
+    <public name="DoubleTapPlayerView_dtpv_controller" type="attr" />
+</resources>

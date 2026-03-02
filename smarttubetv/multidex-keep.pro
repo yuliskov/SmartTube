@@ -1,3 +1,10 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity {
+    <init>(...);
+    public void onCreate(android.os.Bundle);
+}
+-keepclassmembers class org.slf4j.LoggerFactory {
+    public static org.slf4j.Logger getLogger(java.lang.Class);
+}
 -keepclassmembers class com.bumptech.glide.load.resource.bitmap.VideoDecoder {
     com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool bitmapPool;
 }
@@ -63,10 +70,8 @@
     android.widget.TextView mTagNameText;
     android.widget.ImageView mResultImage;
 }
--keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView {
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat {
     <init>(...);
-    float mDefaultMarqueeSpeed;
-    float mMarqueeSpeedFactor;
 }
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView {
     <init>(...);

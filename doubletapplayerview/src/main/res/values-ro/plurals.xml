@@ -1,0 +1,7 @@
+<resources>
+    <plurals name="quick_seek_x_second">
+        <item quantity="other">%d de secunde</item>
+        <item quantity="one">%d secundă</item>
+        <item quantity="few">%d secunde</item>
+    </plurals>
+</resources>

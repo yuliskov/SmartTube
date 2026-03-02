@@ -3,9 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build.VERSION;
 
-import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -14,13 +12,12 @@ public class RemoteControlReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Starting from Android 12 foreground service not supported
-        if (AppInfoHelpers.getTargetSdkVersion(context) < 31) {
-            Log.d(TAG, "Initializing remote control listener...");
+        Log.d(TAG, "Initializing remote control listener...");
 
-            // Fix unload from the memory on some devices?
-            Utils.updateRemoteControlService(context);
-        }
+        // Fix unload from the memory on some devices?
+        // NOTE: Starting from Android 12 (api 31) foreground service with type 'connectedDevice' not supported
+        // Use 'mediaPlayback' type instead
+        Utils.updateRemoteControlService(context);
 
         //Utils.startRemoteControlWorkRequest(context);
 

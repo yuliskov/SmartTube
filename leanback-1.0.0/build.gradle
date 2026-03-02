@@ -33,12 +33,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.annotation:annotation:' + annotationXLibraryVersion
-    implementation 'androidx.core:core:' + coreXLibraryVersion
-    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXLibraryVersion
-    implementation 'androidx.fragment:fragment:' + annotationXLibraryVersion
-    implementation 'androidx.media:media:' + mediaXLibraryVersion
-    implementation 'androidx.interpolator:interpolator:' + leanbackXLibraryVersion
+    implementation 'androidx.annotation:annotation:' + annotationXVersion
+    implementation 'androidx.core:core:' + coreXVersion
+    implementation 'androidx.recyclerview:recyclerview:' + recyclerviewXVersion
+    implementation 'androidx.media:media:' + mediaXVersion
+    implementation 'androidx.interpolator:interpolator:' + interpolatorXVersion
 
     implementation project(':fragment-1.1.0')
     implementation project(':sharedutils')

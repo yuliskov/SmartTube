@@ -428,7 +428,7 @@
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Добавлено в раздел Плейлисты</string>
     <string name="create_playlist">Создать плейлист</string>
-    <string name="create_playlist_note">его не будет видно в приложении YouTube</string>
+    <string name="create_playlist_note">ВНИМАНИЕ: Его не будет видно в приложении YouTube</string>
     <string name="add_video_to_new_playlist">Добавить в новый плейлист</string>
     <string name="cant_delete_empty_playlist">Невозможно удалить пустой плейлист</string>
     <string name="playlist">Плейлист</string>
@@ -712,4 +712,13 @@
     <string name="once_a_week">Один раз в неделю</string>
     <string name="once_a_month">Один раз в месяц</string>
     <string name="action_debug_info">Отладочная информация</string>
+    <string name="dialog_block_channel">Заблокировать канал</string>
+    <string name="dialog_unblock_channel">Разблокировать канал</string>
+    <string name="confirm_block_channel">Скрыть весь контент от %s?</string>
+    <string name="channel_blocked">Канал заблокирован</string>
+    <string name="channel_unblocked">Канал разблокирован</string>
+    <string name="header_blocked_channels">Заблокированные каналы</string>
+    <string name="msg_no_blocked_channels">Нет заблокированных каналов</string>
+    <string name="player_time_stretching">Растяжение аудио во времени</string>
+    <string name="player_time_stretching_desc">Сохраняет естественное звучание голоса при изменении скорости. Может значительно снизить производительность на некоторых устройствах.</string>
 </resources>

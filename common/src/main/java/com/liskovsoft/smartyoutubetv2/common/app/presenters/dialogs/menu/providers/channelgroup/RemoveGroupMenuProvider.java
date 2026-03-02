@@ -18,7 +18,7 @@ public class RemoveGroupMenuProvider extends ContextMenuProvider {
 
     public RemoveGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
-        mContext = context;
+        mContext = context.getApplicationContext();
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 

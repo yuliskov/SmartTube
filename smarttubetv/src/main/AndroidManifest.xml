@@ -46,7 +46,8 @@
     <application
         android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
         android:usesCleartextTraffic="true"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:allowAudioPlaybackCapture="true"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:banner="@mipmap/app_banner"

@@ -5,8 +5,10 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -448,7 +450,7 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty()) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video)) {
             return;
         }
 
@@ -467,5 +469,21 @@ public class VideoGroup {
         }
 
         mVideos.add(idx, video);
+    }
+
+    private boolean isChannelBlocked(Video video) {
+        // Filter out videos from blacklisted channels
+        String channelId = video.getChannelIdOrName();
+        if (channelId != null) {
+            try {
+                BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
+                return blockedChannelData != null && blockedChannelData.containsChannel(channelId);
+            } catch (Exception e) {
+                // If BlockedChannelData isn't initialized yet, allow the video through
+                // This can happen during early app startup
+            }
+        }
+
+        return false;
     }
 }

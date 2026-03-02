@@ -1,0 +1,6 @@
+<resources>
+    <plurals name="quick_seek_x_second">
+        <item quantity="other">%d 秒</item>
+        <item quantity="one">%d 秒</item>
+    </plurals>
+</resources>

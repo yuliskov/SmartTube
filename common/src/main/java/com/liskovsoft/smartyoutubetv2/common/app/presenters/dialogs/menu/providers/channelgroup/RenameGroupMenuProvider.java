@@ -19,7 +19,7 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
 
     public RenameGroupMenuProvider(@NonNull Context context, int idx) {
         super(idx);
-        mContext = context;
+        mContext = context.getApplicationContext();
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 

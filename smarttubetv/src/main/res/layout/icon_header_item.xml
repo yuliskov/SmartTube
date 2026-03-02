@@ -11,7 +11,7 @@
         android:layout_height="32dp"
         android:contentDescription="@string/header_icon" />
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.HeaderMarqueeTextView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
         android:id="@+id/header_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

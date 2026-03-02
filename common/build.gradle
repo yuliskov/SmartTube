@@ -48,7 +48,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+    implementation 'androidx.appcompat:appcompat:' + appCompatXVersion
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
 
@@ -77,7 +77,7 @@ dependencies {
 
     //////// END EXOPLAYER //////////
 
-    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
+    implementation 'androidx.media:media:' + mediaXVersion // exoplayer fix
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
@@ -95,4 +95,6 @@ dependencies {
     implementation project(':leanbackassistant')
 
     implementation project(':appupdatechecker2')
+
+    implementation project(':slidableactivity') // https://github.com/r0adkll/Slidr
 }
