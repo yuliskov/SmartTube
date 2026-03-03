@@ -975,7 +975,7 @@ public class AppDialogUtil {
         for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 7_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
             options.add(UiOptionItem.from(context.getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
                     optionItem -> {
-                        playerData.setStartSeekIncrementMs(intervalMs);
+                        playerData.setSeekIncrementMs(intervalMs);
                         if (playerData.getSeekPreviewMode() == PlayerData.SEEK_PREVIEW_CAROUSEL_SLOW) {
                             Utils.showNotCompatibleMessage(context, R.string.player_seek_preview_carousel_slow);
                         }
@@ -983,7 +983,7 @@ public class AppDialogUtil {
                             dialogPresenter.closeDialog();
                         }
                     },
-                    intervalMs == playerData.getStartSeekIncrementMs()));
+                    intervalMs == playerData.getSeekIncrementMs()));
         }
 
         dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);

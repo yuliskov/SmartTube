@@ -551,6 +551,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mYouTubeOverlay
                 .player(mPlayer)
                 .playerView(mDoubleTapPlayerAdapter)
+                .seekSeconds(PlayerData.instance(getContext()).getSeekIncrementMs() / 1_000)
                 .performListener(new PerformListener() {
             @Override
             public void onAnimationStart() {

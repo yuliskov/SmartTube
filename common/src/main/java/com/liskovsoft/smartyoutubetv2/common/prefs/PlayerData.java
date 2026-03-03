@@ -80,7 +80,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private boolean mIsEndingTimeEnabled;
     private boolean mIsDoubleRefreshRateEnabled;
     private boolean mIsSeekConfirmPlayEnabled;
-    private int mStartSeekIncrementMs;
+    private int mSeekIncrementMs;
     private float mSubtitleScale;
     private float mPlayerVolume;
     private boolean mIsTooltipsEnabled;
@@ -728,12 +728,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return FormatItem.SUBTITLE_NONE;
     }
 
-    public int getStartSeekIncrementMs() {
-        return mStartSeekIncrementMs;
+    public int getSeekIncrementMs() {
+        return mSeekIncrementMs;
     }
 
-    public void setStartSeekIncrementMs(int startSeekIncrementMs) {
-        mStartSeekIncrementMs = startSeekIncrementMs;
+    public void setSeekIncrementMs(int seekIncrementMs) {
+        mSeekIncrementMs = seekIncrementMs;
         persistState();
     }
 
@@ -809,7 +809,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
         mIsSeekConfirmPlayEnabled = Helpers.parseBoolean(split, 36, false);
-        mStartSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
+        mSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
         // old subs size px
         mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
         mPlayerVolume = Helpers.parseFloat(split, 40, 1.0f);
@@ -865,8 +865,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
                 mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
                 mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle, mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
