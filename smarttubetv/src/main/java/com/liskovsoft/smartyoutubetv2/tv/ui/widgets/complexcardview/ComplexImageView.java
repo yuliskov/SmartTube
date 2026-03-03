@@ -34,7 +34,7 @@ public class ComplexImageView extends RelativeLayout {
     private int mPreviewHeight;
     private Runnable mCreateAndStartPlayer;
     private WeakReference<Video> mVideo;
-    private boolean mPreferSimplePreview;
+    private boolean mIsPreviewUrlEnabled;
     private boolean mMute;
 
     public ComplexImageView(Context context) {
@@ -127,6 +127,10 @@ public class ComplexImageView extends RelativeLayout {
         }
     }
 
+    public void setPreviewUrlEnabled(boolean enabled) {
+        mIsPreviewUrlEnabled = enabled;
+    }
+
     public void setPreview(Video video) {
         if (video != null) {
             mVideo = new WeakReference<>(video);
@@ -142,7 +146,10 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        if (getVideo().previewUrl != null && mPreferSimplePreview) {
+        if (mIsPreviewUrlEnabled) {
+            if (getVideo().previewUrl == null)
+                return;
+
             if (mPreviewImage == null) {
                 mPreviewImage = new ImageView(getContext());
                 mPreviewImage.setScaleType(ScaleType.CENTER_CROP);
@@ -165,7 +172,7 @@ public class ComplexImageView extends RelativeLayout {
     }
 
     private void createAndStartPlayer() {
-        if (getVideo() == null) {
+        if (getVideo() == null || !Utils.isAppInForegroundFixed()) { // Fix Android TV 12 playing on Home
             return;
         }
 
@@ -191,7 +198,10 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        if (getVideo().previewUrl != null && mPreferSimplePreview) {
+        if (mIsPreviewUrlEnabled) {
+            if (getVideo().previewUrl == null)
+                return;
+
             if (mPreviewImage != null) {
                 mPreviewContainer.removeView(mPreviewImage);
                 mPreviewContainer.setVisibility(View.GONE);
