@@ -865,8 +865,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
                 mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle, mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled, mSeekIncrementMs,
+                null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
+                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
+                mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
     }
