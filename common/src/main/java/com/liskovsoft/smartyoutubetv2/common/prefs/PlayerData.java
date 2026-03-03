@@ -858,16 +858,13 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     private void persistStateInt() {
         mPrefs.setProfileData(VIDEO_PLAYER_DATA, Helpers.mergeData(mOKButtonBehavior, mUiHideTimeoutSec, null,
-                mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
-                mVideoFormat, mAudioFormat, mSubtitleFormat,
-                mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
+                mSeekPreviewMode, mIsSeekConfirmPauseEnabled, mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null,
+                mVideoFormat, mAudioFormat, mSubtitleFormat, mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
-                mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled, mSeekIncrementMs,
-                null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition, mIsNumberKeySeekEnabled,
-                mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
+                mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio,
+                mIsGlobalClockEnabled, mIsTimeCorrectionEnabled, mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled,
+                mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition,
+                mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
         ));
