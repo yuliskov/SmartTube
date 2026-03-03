@@ -207,7 +207,7 @@ public class Utils {
     }
 
     public static boolean isAppInForegroundFixed() {
-        // Skip situation when the splash presenter still running
+        // Skip the situation when the splash presenter still running
         return Helpers.isAppInForeground() && SplashPresenter.instance(null).getView() == null;
     }
 
