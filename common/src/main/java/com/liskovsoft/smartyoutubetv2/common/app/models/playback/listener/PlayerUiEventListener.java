@@ -14,4 +14,5 @@ public interface PlayerUiEventListener {
     void onButtonClicked(int buttonId, int buttonState);
     void onButtonLongClicked(int buttonId, int buttonState);
     void onControlsShown(boolean shown);
+    void onButtonState(int buttonId, int buttonState);
 }

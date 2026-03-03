@@ -246,6 +246,11 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
+    public void onButtonState(int buttonId, int buttonState) {
+        // NOP
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode) {
         // NOP
         return false;

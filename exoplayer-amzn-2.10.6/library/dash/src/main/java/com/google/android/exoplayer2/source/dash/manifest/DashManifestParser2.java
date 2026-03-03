@@ -403,7 +403,8 @@ public class DashManifestParser2 {
     private RepresentationInfo parseRepresentation(MediaSubtitle sub) {
         int roleFlags = C.ROLE_FLAG_SUBTITLE;
         int selectionFlags = 0;
-        String id = String.valueOf(mId++);
+        // keep mId incrementing, but use vssId as id to make it unique and more meaningful
+        mId++;
         int bandwidth = 268;
         String mimeType = sub.getMimeType();
         String codecs = sub.getCodecs();
@@ -422,7 +423,8 @@ public class DashManifestParser2 {
 
         Format format =
                 buildFormat(
-                        id,
+                        // use vssId as id to make it unique
+                        sub.getVssId(),
                         label,
                         mimeType,
                         width,

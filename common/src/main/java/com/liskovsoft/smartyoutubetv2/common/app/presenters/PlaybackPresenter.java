@@ -415,6 +415,11 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
     }
 
     @Override
+    public void onButtonState(int buttonId, int buttonState) {
+        process(listener -> listener.onButtonState(buttonId, buttonState));
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
     }
