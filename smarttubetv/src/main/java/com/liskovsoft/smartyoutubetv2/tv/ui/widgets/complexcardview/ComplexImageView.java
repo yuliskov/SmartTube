@@ -172,7 +172,7 @@ public class ComplexImageView extends RelativeLayout {
     }
 
     private void createAndStartPlayer() {
-        if (getVideo() == null || !Utils.isAppInForegroundFixed()) { // Fix Android TV 12 playing on Home
+        if (getVideo() == null) {
             return;
         }
 
