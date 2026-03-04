@@ -728,4 +728,7 @@
   <string name="channel_unblocked">Retiré de la liste noire</string>
   <string name="header_blocked_channels">Chaînes sur liste noire</string>
   <string name="msg_no_blocked_channels">Aucune chaîne sur liste noire</string>
+  <string name="action_debug_info">Informations de débogage</string>
+  <string name="player_time_stretching">Étirement temporel audio</string>
+  <string name="player_time_stretching_desc">Conserve une voix naturelle lors du changement de vitesse. Peut réduire significativement les performances sur certains appareils.</string>
 </resources>
