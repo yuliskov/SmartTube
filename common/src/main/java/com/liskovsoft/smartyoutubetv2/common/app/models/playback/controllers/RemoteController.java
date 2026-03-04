@@ -94,21 +94,23 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     @Override
     public void onPlay() {
-        postPlay(RemoteControlService.STATE_PLAYING);
+        postPlayState(RemoteControlService.STATE_PLAYING);
     }
 
     @Override
     public void onPause() {
-        postPlay(RemoteControlService.STATE_PAUSED);
+        postPlayState(RemoteControlService.STATE_PAUSED);
     }
 
     @Override
     public void onPlayEnd() {
         switch (getPlayerData().getPlaybackMode()) {
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
+                postPlayState(RemoteControlService.STATE_IDLE);
+                break;
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
             case PlayerConstants.PLAYBACK_MODE_ALL:
-                postPlay(RemoteControlService.STATE_PAUSED);
+                postPlayState(RemoteControlService.STATE_PAUSED);
                 break;
             case PlayerConstants.PLAYBACK_MODE_ONE:
                 postStartPlaying(getVideo(), RemoteControlService.STATE_PLAYING);
@@ -117,8 +119,38 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     @Override
+    public void onTrackSelected(FormatItem track) {
+        if (track.getType() == FormatItem.TYPE_SUBTITLE) {
+            if (getPlayer() == null) {
+                return;
+            }
+            // Post subtitle change immediately when user select subtitle track.
+            int currentState = getPlayer().getButtonState(R.id.lb_control_closed_captioning);
+            if (currentState == PlayerUI.BUTTON_ON) {
+                postSubtitleChange(track.getFormatId(), track.getLanguage());
+            }
+        }
+    }
+
+    @Override
+    public void onButtonState(int buttonId, int buttonState) {
+        if (buttonId == R.id.lb_control_closed_captioning) {
+            if (buttonState == PlayerUI.BUTTON_ON) {
+                FormatItem selected = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
+                if (selected != null) {
+                    postSubtitleChange(selected.getFormatId(), selected.getLanguage());
+                } else {
+                    postSubtitleChange(null, null);
+                }
+            } else if (buttonState == PlayerUI.BUTTON_OFF) {
+                postSubtitleChange(null, null);
+            }
+        }
+    }
+
+    @Override
     public void onEngineReleased() {
-        postPlay(RemoteControlService.STATE_PAUSED);
+        postPlayState(RemoteControlService.STATE_IDLE);
         // Below doesn't work on Vanced
         //postStartPlaying(null);
     }
@@ -183,7 +215,18 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         );
     }
 
-    private void postPlay(int state) {
+    private void postSubtitleChange(String vssId, String languageCode) {
+        if (isRemoteDisabled()) {
+            return;
+        }
+
+        RxHelper.disposeActions(mPostStateAction);
+        mPostStateAction = RxHelper.execute(
+                mRemoteControlService.postSubtitleChangeObserve(vssId, languageCode)
+        );
+    }
+
+    private void postPlayState(int state) {
         if (getPlayer() == null) {
             return;
         }
@@ -301,11 +344,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                             getPlayer().setFormat(selected);
                         }
                     }
-                    getPlayer().showSubtitles(true);
-                    getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
+                    getPlaybackPresenter().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
                  } else if (getPlayer() != null) {
-                    getPlayer().showSubtitles(false);
-                    getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
+                    getPlaybackPresenter().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
                  }
                  openNewVideo(newVideo2);
                  break;
@@ -336,7 +377,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     movePlayerToForeground();
                     getPlayer().setPlayWhenReady(true);
                     //postStartPlaying(getController().getVideo(), true);
-                    postPlay(RemoteControlService.STATE_PLAYING);
+                    postPlayState(RemoteControlService.STATE_PLAYING);
                 } else {
                     // Already connected
                     openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());
@@ -347,7 +388,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     movePlayerToForeground();
                     getPlayer().setPlayWhenReady(false);
                     //postStartPlaying(getController().getVideo(), false);
-                    postPlay(RemoteControlService.STATE_PAUSED);
+                    postPlayState(RemoteControlService.STATE_PAUSED);
                 } else {
                     // Already connected
                     openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());

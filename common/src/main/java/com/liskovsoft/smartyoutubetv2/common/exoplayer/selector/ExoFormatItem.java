@@ -375,6 +375,11 @@ public class ExoFormatItem implements FormatItem {
     }
 
     @Override
+    public String getFormatId() {
+        return mFormatId;
+    }
+
+    @Override
     public CharSequence getTitle() {
         return mTitle;
     }

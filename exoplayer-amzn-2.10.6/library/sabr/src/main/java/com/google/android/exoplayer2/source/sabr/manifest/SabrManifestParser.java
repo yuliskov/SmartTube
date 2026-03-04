@@ -407,7 +407,9 @@ public class SabrManifestParser {
     private RepresentationInfo parseRepresentation(MediaSubtitle sub) {
         int roleFlags = C.ROLE_FLAG_SUBTITLE;
         int selectionFlags = 0;
-        String id = String.valueOf(mId++);
+        //String id = String.valueOf(mId++);
+        // keep mId incrementing, but use vssId as id to make it unique and more meaningful
+        mId++;
         int bandwidth = 268;
         String mimeType = sub.getMimeType();
         String codecs = sub.getCodecs();
@@ -426,7 +428,9 @@ public class SabrManifestParser {
 
         Format format =
                 buildFormat(
-                        id,
+                        //id,
+                        // use vssId as id to make it unique
+                        sub.getVssId(),
                         label,
                         mimeType,
                         width,

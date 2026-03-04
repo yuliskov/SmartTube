@@ -24,6 +24,7 @@ public interface FormatItem {
     int TYPE_AUDIO = 1;
     int TYPE_SUBTITLE = 2;
     int getId();
+    String getFormatId();
     CharSequence getTitle();
     boolean isDefault();
     boolean isSelected();
