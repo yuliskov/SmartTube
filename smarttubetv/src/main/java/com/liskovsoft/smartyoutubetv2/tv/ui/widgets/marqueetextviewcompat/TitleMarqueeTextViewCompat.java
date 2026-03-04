@@ -32,16 +32,6 @@ public class TitleMarqueeTextViewCompat extends MarqueeTextViewCompat {
         return true;
     }
 
-    //@Override
-    //public void setMaxLines(int maxLines) {
-    //    super.setMaxLines(1);
-    //}
-
-    @Override
-    public void setEllipsize(TruncateAt where) {
-        super.setEllipsize(TruncateAt.MARQUEE);
-    }
-
     @Override
     protected void updateMarquee() {
         Utils.postDelayed(mUpdateMarquee, 1_000);

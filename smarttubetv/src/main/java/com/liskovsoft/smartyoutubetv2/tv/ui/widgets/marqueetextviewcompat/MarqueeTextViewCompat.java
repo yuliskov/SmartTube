@@ -125,9 +125,6 @@ public class MarqueeTextViewCompat extends TextView {
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         mTextView.setEllipsize(TruncateAt.END);
 
-        if (getEllipsize() != null) {
-            mIsMarqueeEnabled = getEllipsize() == TruncateAt.MARQUEE;
-        }
         super.setEllipsize(TruncateAt.END); // Important: disable marquee on the container view
     }
 
