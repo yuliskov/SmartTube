@@ -317,42 +317,6 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
-    /**
-     * NOTE: When enabled, you could face IllegalStateException: Can not perform this action after onSaveInstanceState<br/>
-     * https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa<br/>
-     * https://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit?page=1&tab=scoredesc#tab-top
-     */
-    //@Override
-    //protected void onSaveInstanceState(@NonNull Bundle outState) {
-    //    // No call for super(). Bug on API Level > 11.
-    //    //if (Utils.checkActivity(this)) {
-    //    //    super.onSaveInstanceState(outState);
-    //    //}
-    //
-    //    // Workaround is to override onSaveInstanceState and add something to the bundle prior to calling the super
-    //    // https://stackoverflow.com/questions/7469082/getting-exception-illegalstateexception-can-not-perform-this-action-after-onsa
-    //    outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
-    //    super.onSaveInstanceState(outState);
-    //}
-
-    /**
-     * Fatal Exception: java.lang.IllegalStateException <br/>
-     * Can not perform this action after onSaveInstanceState <br/>
-     * <a href="https://issuetracker.google.com/issues/37094575#comment28">More info</a>
-     */
-    //@Override
-    //protected void onSaveInstanceState(@NonNull Bundle outState) {
-    //    super.onSaveInstanceState(outState);
-    //
-    //    // Bug on Android 4, 5, 6
-    //    if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 23) {
-    //        final View rootView = findViewById(android.R.id.content);
-    //        if (rootView != null) {
-    //            rootView.cancelPendingInputEvents();
-    //        }
-    //    }
-    //}
-
     public void addOnPermissions(OnPermissions onPermissions) {
         if (mOnPermissions == null) {
             mOnPermissions = new ArrayList<>();
