@@ -86,7 +86,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             mNewVideoPositionMs = 0;
         }
 
-        postStartPlaying(item, getPlayer().getPlayWhenReady());
+        postStartPlaying(item, getPlayer().getPlayWhenReady() ? RemoteControlService.STATE_PLAYING : RemoteControlService.STATE_PAUSED);
         if (mConnected) {
             mRemoteControlData.setLastVideo(item);
         }
@@ -94,12 +94,12 @@ public class RemoteController extends BasePlayerController implements OnDataChan
 
     @Override
     public void onPlay() {
-        postPlay(true);
+        postPlay(RemoteControlService.STATE_PLAYING);
     }
 
     @Override
     public void onPause() {
-        postPlay(false);
+        postPlay(RemoteControlService.STATE_PAUSED);
     }
 
     @Override
@@ -108,17 +108,17 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
             case PlayerConstants.PLAYBACK_MODE_ALL:
-                postPlay(false);
+                postPlay(RemoteControlService.STATE_PAUSED);
                 break;
             case PlayerConstants.PLAYBACK_MODE_ONE:
-                postStartPlaying(getVideo(), true);
+                postStartPlaying(getVideo(), RemoteControlService.STATE_PLAYING);
                 break;
         }
     }
 
     @Override
     public void onEngineReleased() {
-        postPlay(false);
+        postPlay(RemoteControlService.STATE_PAUSED);
         // Below doesn't work on Vanced
         //postStartPlaying(null);
     }
@@ -129,7 +129,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         mConnected = false;
     }
 
-    private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
+    private void postStartPlaying(@Nullable Video item, int state) {
         if (isRemoteDisabled()) {
             return;
         }
@@ -144,10 +144,10 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             durationMs = getPlayer().getDurationMs();
         }
 
-        postStartPlaying(videoId, positionMs, durationMs, isPlaying);
+        postStartPlaying(videoId, positionMs, durationMs, state);
     }
 
-    private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
+    private void postStartPlaying(String videoId, long positionMs, long durationMs, int state) {
         if (isRemoteDisabled()) {
             return;
         }
@@ -155,11 +155,11 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         RxHelper.disposeActions(mPostStartPlayAction);
 
         mPostStartPlayAction = RxHelper.execute(
-                mRemoteControlService.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
+                mRemoteControlService.postStartPlayingObserve(videoId, positionMs, durationMs, state)
         );
     }
 
-    private void postState(long positionMs, long durationMs, boolean isPlaying) {
+    private void postState(long positionMs, long durationMs, int state) {
         if (isRemoteDisabled()) {
             return;
         }
@@ -167,7 +167,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         RxHelper.disposeActions(mPostStateAction);
 
         mPostStateAction = RxHelper.execute(
-                mRemoteControlService.postStateChangeObserve(positionMs, durationMs, isPlaying)
+                mRemoteControlService.postStateChangeObserve(positionMs, durationMs, state)
         );
     }
 
@@ -183,20 +183,20 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         );
     }
 
-    private void postPlay(boolean isPlaying) {
+    private void postPlay(int state) {
         if (getPlayer() == null) {
             return;
         }
 
-        postState(getPlayer().getPositionMs(), getPlayer().getDurationMs(), isPlaying);
+        postState(getPlayer().getPositionMs(), getPlayer().getDurationMs(), state);
     }
 
     private void postSeek(long positionMs) {
-        postState(positionMs, getPlayer().getDurationMs(), getPlayer().isPlaying());
+        postState(positionMs, getPlayer().getDurationMs(), getPlayer().isPlaying() ? RemoteControlService.STATE_PLAYING : RemoteControlService.STATE_PAUSED);
     }
 
     private void postIdle() {
-        postState(-1, -1, false);
+        postState(-1, -1, RemoteControlService.STATE_IDLE);
     }
 
     private void tryListening() {
@@ -336,7 +336,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     movePlayerToForeground();
                     getPlayer().setPlayWhenReady(true);
                     //postStartPlaying(getController().getVideo(), true);
-                    postPlay(true);
+                    postPlay(RemoteControlService.STATE_PLAYING);
                 } else {
                     // Already connected
                     openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());
@@ -347,7 +347,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     movePlayerToForeground();
                     getPlayer().setPlayWhenReady(false);
                     //postStartPlaying(getController().getVideo(), false);
-                    postPlay(false);
+                    postPlay(RemoteControlService.STATE_PAUSED);
                 } else {
                     // Already connected
                     openNewVideo(getVideo() != null ? getVideo() : mRemoteControlData.getLastVideo());
@@ -373,9 +373,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             case Command.TYPE_GET_STATE:
                 if (getPlayer() != null) {
                     getViewManager().moveAppToForeground();
-                    postStartPlaying(getVideo(), getPlayer().isPlaying());
+                    postStartPlaying(getVideo(), getPlayer().isPlaying() ? RemoteControlService.STATE_PLAYING : RemoteControlService.STATE_PAUSED);
                 } else {
-                    postStartPlaying(null, false);
+                    postStartPlaying(null, RemoteControlService.STATE_PAUSED);
                 }
                 break;
             case Command.TYPE_VOLUME:
@@ -496,7 +496,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                 getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
             }
-            postStartPlaying(getVideo(), getPlayer().isPlaying());
+            postStartPlaying(getVideo(), getPlayer().isPlaying() ? RemoteControlService.STATE_PLAYING : RemoteControlService.STATE_PAUSED);
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             getPlaybackPresenter().openVideo(newVideo);
