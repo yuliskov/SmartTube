@@ -133,16 +133,16 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     @Override
-    public void onButtonClicked(int buttonId, int buttonState) {
+    public void onButtonState(int buttonId, int buttonState) {
         if (buttonId == R.id.lb_control_closed_captioning) {
-            if (buttonState == PlayerUI.BUTTON_OFF) {
+            if (buttonState == PlayerUI.BUTTON_ON) {
                 FormatItem selected = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
                 if (selected != null) {
                     postSubtitleChange(selected.getFormatId(), selected.getLanguage());
                 } else {
                     postSubtitleChange(null, null);
                 }
-            } else if (buttonState == PlayerUI.BUTTON_ON) {
+            } else if (buttonState == PlayerUI.BUTTON_OFF) {
                 postSubtitleChange(null, null);
             }
         }

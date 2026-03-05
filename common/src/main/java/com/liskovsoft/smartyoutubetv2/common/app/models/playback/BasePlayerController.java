@@ -257,6 +257,11 @@ public abstract class BasePlayerController implements PlayerEventListener {
     }
 
     @Override
+    public void onButtonState(int buttonId, int buttonState) {
+        // NOP
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         // NOP
     }
