@@ -344,9 +344,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                             getPlayer().setFormat(selected);
                         }
                     }
-                    getController(PlayerUIController.class).onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
+                    getMainController().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
                  } else if (getPlayer() != null) {
-                    getController(PlayerUIController.class).onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
+                    getMainController().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
                  }
                  openNewVideo(newVideo2);
                  break;

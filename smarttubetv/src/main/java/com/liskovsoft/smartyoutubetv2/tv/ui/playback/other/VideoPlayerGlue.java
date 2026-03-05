@@ -310,10 +310,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     }
 
     public void setButtonState(int buttonId, int buttonState) {
-        if (getButtonState(buttonId) != buttonState) {
-            mActionListener.onButtonState(buttonId, buttonState);
-            setActionIndex(mActions.get(buttonId), buttonState);
-        }
+        mActionListener.onButtonState(buttonId, buttonState);
+        setActionIndex(mActions.get(buttonId), buttonState);
     }
 
     public void setChannelIcon(String iconUrl) {
