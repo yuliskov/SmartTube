@@ -706,12 +706,11 @@ public class PlayerUIController extends BasePlayerController {
                 case PlayerData.OK_ONLY_PAUSE:
                     getPlayer().setPlayWhenReady(!getPlayer().getPlayWhenReady());
                     return true; // don't show ui
-                //case PlayerData.OK_TOGGLE_SPEED:
-                //    getMainController().onButtonClicked(R.id.action_video_speed,
-                //            getPlayer().getButtonState(R.id.action_video_speed) == PlayerUI.BUTTON_ON ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-                //    float speed = getPlayerData().getSpeed();
-                //    MessageHelpers.showMessage(getContext(), String.format("%sx", speed));
-                //    return true;
+                case PlayerData.OK_TOGGLE_SPEED:
+                    getMainController().onButtonClicked(R.id.action_video_speed, getPlayer().getButtonState(R.id.action_video_speed));
+                    float speed = getPlayerData().getSpeed();
+                    MessageHelpers.showMessage(getContext(), String.format("%sx", speed));
+                    return true;
             }
         }
 
@@ -720,8 +719,10 @@ public class PlayerUIController extends BasePlayerController {
 
     private boolean handleStopKey(int keyCode) {
         if (KeyHelpers.isStopKey(keyCode)) {
-            getPlayer().finish();
-            return true;
+            if (getPlayer() != null) {
+                getPlayer().finish();
+                return true;
+            }
         }
 
         return false;
