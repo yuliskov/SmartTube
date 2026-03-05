@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Playlist {
     private static final int LOW_RAM_PLAYLIST_MAX_SIZE = 50;
-    private static final int HIGH_RAM_PLAYLIST_MAX_SIZE = 200;
+    private static final int HIGH_RAM_PLAYLIST_MAX_SIZE = 300;
     private final int mPlaylistMaxSize;
     private final List<Video> mPlaylist;
     private final List<Video> mSyncedItems;

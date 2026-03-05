@@ -250,8 +250,8 @@ public class ExoPlayerController implements Player.EventListener {
             MediaTrack mediaTrack = FormatItem.toMediaTrack(formatItem);
             MediaTrack selectedTrack = mTrackSelectorManager.getTrack(mediaTrack.rendererIndex);
             if (!mediaTrack.equals(selectedTrack)) {
-                mEventListener.onTrackSelected(formatItem);
                 mTrackSelectorManager.selectTrack(mediaTrack);
+                mEventListener.onTrackSelected(formatItem);
             }
         }
     }
