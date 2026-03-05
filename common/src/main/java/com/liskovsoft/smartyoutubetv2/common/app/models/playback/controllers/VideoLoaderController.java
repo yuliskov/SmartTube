@@ -132,19 +132,16 @@ public class VideoLoaderController extends BasePlayerController {
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
             getMainController().onPlayEnd();
         } else if (!getVideo().isLive && !getVideo().isLiveEnd) {
-            //YouTubeServiceManager.instance().applyNoPlaybackFix();
-            // Long loading subtitles cause hangs
-            disableSubtitles();
-            reloadVideo();
+            if (isSubtitlesEnabled()) {
+                // Long loading subtitles cause hangs
+                disableSubtitles();
+                reloadVideo();
+            } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                // Faster source may differ across a devices. Try them one by one.
+                switchNextEngine();
+                restartEngine();
+            }
         }
-        //} else if (!getVideo().isLive && !getVideo().isLiveEnd && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-        //    MessageHelpers.showLongMessage(getContext(), R.string.playback_buffering_fix);
-        //    //YouTubeServiceManager.instance().invalidateCache();
-        //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-        //    // Faster source is different among devices. Try them one by one.
-        //    switchNextEngine();
-        //    restartEngine();
-        //}
     }
 
     @Override
@@ -587,7 +584,7 @@ public class VideoLoaderController extends BasePlayerController {
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
             if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
                 YouTubeServiceManager.instance().applyNoPlaybackFix();
-            } else if (getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat())) {
+            } else if (isSubtitlesEnabled()) {
                 disableSubtitles(); // Response code: 429
             } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
@@ -995,6 +992,10 @@ public class VideoLoaderController extends BasePlayerController {
         if (getPlayer().getDurationMs() - getPlayer().getPositionMs() < 50_000) {
             MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
         }
+    }
+
+    private boolean isSubtitlesEnabled() {
+        return getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat());
     }
 
     private void disableSubtitles() {
