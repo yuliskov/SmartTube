@@ -843,7 +843,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
     }
 
-    private MediaTrack getTrack(int rendererIndex) {
+    public MediaTrack getTrack(int rendererIndex) {
         initRenderer(rendererIndex);
 
         Renderer renderer = mRenderers[rendererIndex];

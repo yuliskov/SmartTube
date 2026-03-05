@@ -310,7 +310,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     }
 
     public void setButtonState(int buttonId, int buttonState) {
-        mActionListener.onButtonState(buttonId, buttonState);
         setActionIndex(mActions.get(buttonId), buttonState);
     }
 
@@ -593,7 +592,5 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         void onTopEdgeFocused();
 
         boolean onKeyDown(int keyCode);
-
-        void onButtonState(int buttonId, int buttonState);
     }
 }

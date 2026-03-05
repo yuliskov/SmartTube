@@ -1002,7 +1002,8 @@ public class VideoLoaderController extends BasePlayerController {
         //if (getVideo() != null) {
         //    getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
         //}
-        //getPlayerData().setSubtitlesPerChannelEnabled(false);
+
+        getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
     }
 }

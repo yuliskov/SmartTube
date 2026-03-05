@@ -247,8 +247,12 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void selectFormat(FormatItem formatItem) {
         if (formatItem != null) {
-            mEventListener.onTrackSelected(formatItem);
-            mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(formatItem));
+            MediaTrack mediaTrack = FormatItem.toMediaTrack(formatItem);
+            MediaTrack selectedTrack = mTrackSelectorManager.getTrack(mediaTrack.rendererIndex);
+            if (!mediaTrack.equals(selectedTrack)) {
+                mEventListener.onTrackSelected(formatItem);
+                mTrackSelectorManager.selectTrack(mediaTrack);
+            }
         }
     }
     

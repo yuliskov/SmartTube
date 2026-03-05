@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +10,9 @@ import java.util.List;
  * Manages a playlist of videos.
  */
 public class Playlist {
-    private static final int PLAYLIST_MAX_SIZE = 100;
+    private static final int LOW_RAM_PLAYLIST_MAX_SIZE = 50;
+    private static final int HIGH_RAM_PLAYLIST_MAX_SIZE = 200;
+    private final int mPlaylistMaxSize;
     private final List<Video> mPlaylist;
     private final List<Video> mSyncedItems;
     private int mCurrentIndex;
@@ -18,6 +22,7 @@ public class Playlist {
         mPlaylist = new ArrayList<>();
         mSyncedItems = new ArrayList<>();
         mCurrentIndex = -1;
+        mPlaylistMaxSize = Utils.isEnoughRam() ? HIGH_RAM_PLAYLIST_MAX_SIZE : LOW_RAM_PLAYLIST_MAX_SIZE;
     }
 
     public static Playlist instance() {
@@ -269,13 +274,10 @@ public class Playlist {
      */
     private void trimPlaylist() {
         int size = mPlaylist.size();
-        boolean playlistTooBig = size > PLAYLIST_MAX_SIZE;
+        boolean playlistTooBig = size > mPlaylistMaxSize;
 
         if (playlistTooBig) {
-            //int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
-            //int toIndex = mPlaylist.size();
-            //mPlaylist = mPlaylist.subList(fromIndex, toIndex);
-            int toIndex = size - PLAYLIST_MAX_SIZE;
+            int toIndex = size - mPlaylistMaxSize;
             mPlaylist.subList(0, toIndex).clear();
             mCurrentIndex -= toIndex;
         }

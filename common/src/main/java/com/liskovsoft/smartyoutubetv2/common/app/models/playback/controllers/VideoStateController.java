@@ -402,14 +402,23 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreAudioFormat() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().setFormat(getPlayerData().getFormat(FormatItem.TYPE_AUDIO));
     }
 
     private void restoreSubtitleFormat() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         FormatItem result = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
 
         if (getPlayerData().isSubtitlesPerChannelEnabled()) {
-            result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId) ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+            result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId)
+                    ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
         }
 
         getPlayer().setFormat(result);

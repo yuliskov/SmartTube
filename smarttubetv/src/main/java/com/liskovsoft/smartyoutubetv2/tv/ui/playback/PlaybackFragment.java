@@ -805,11 +805,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         public boolean onKeyDown(int keyCode) {
             return mPlaybackPresenter.onKeyDown(keyCode);
         }
-
-        @Override
-        public void onButtonState(int buttonId, int buttonState) {
-            mPlaybackPresenter.onButtonState(buttonId, buttonState);
-        }
     }
 
     // Begin Ui events
@@ -1030,9 +1025,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public void setFormat(FormatItem option) {
+    public void setFormat(FormatItem formatItem) {
         // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
-        mExoPlayerController.selectFormat(option);
+        mExoPlayerController.selectFormat(formatItem);
     }
 
     @Override

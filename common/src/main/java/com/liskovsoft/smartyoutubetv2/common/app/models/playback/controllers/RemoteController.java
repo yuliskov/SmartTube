@@ -105,9 +105,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     @Override
     public void onPlayEnd() {
         switch (getPlayerData().getPlaybackMode()) {
+            // The IDLE state just hangs phone's current video (spinning circle)
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
-                postPlayState(RemoteControlService.STATE_IDLE);
-                break;
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
             case PlayerConstants.PLAYBACK_MODE_ALL:
                 postPlayState(RemoteControlService.STATE_PAUSED);
@@ -124,33 +123,16 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             if (getPlayer() == null) {
                 return;
             }
+            Log.d(TAG, "Subtitle track changed, %s", track);
             // Post subtitle change immediately when user select subtitle track.
-            int currentState = getPlayer().getButtonState(R.id.lb_control_closed_captioning);
-            if (currentState == PlayerUI.BUTTON_ON) {
-                postSubtitleChange(track.getFormatId(), track.getLanguage());
-            }
-        }
-    }
-
-    @Override
-    public void onButtonState(int buttonId, int buttonState) {
-        if (buttonId == R.id.lb_control_closed_captioning) {
-            if (buttonState == PlayerUI.BUTTON_ON) {
-                FormatItem selected = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
-                if (selected != null) {
-                    postSubtitleChange(selected.getFormatId(), selected.getLanguage());
-                } else {
-                    postSubtitleChange(null, null);
-                }
-            } else if (buttonState == PlayerUI.BUTTON_OFF) {
-                postSubtitleChange(null, null);
-            }
+            postSubtitleChange(track.getFormatId(), track.getLanguage());
         }
     }
 
     @Override
     public void onEngineReleased() {
-        postPlayState(RemoteControlService.STATE_IDLE);
+        // The IDLE state just hangs phone's current video (spinning circle)
+        postPlayState(RemoteControlService.STATE_PAUSED);
         // Below doesn't work on Vanced
         //postStartPlaying(null);
     }
@@ -529,10 +511,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void openNewVideo(Video newVideo) {
-        if (Video.equals(getVideo(), newVideo) && getViewManager().isPlayerInForeground()) { // same video already playing
-            //getVideo().playlistId = newVideo.playlistId;
-            //getVideo().playlistIndex = newVideo.playlistIndex;
-            //getVideo().playlistParams = newVideo.playlistParams;
+        if (Video.equals(getVideo(), newVideo) && getViewManager().isPlayerInForeground() && getPlayer() != null) { // same video already playing
             if (mNewVideoPositionMs > 0) {
                 getPlayer().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
@@ -548,7 +527,8 @@ public class RemoteController extends BasePlayerController implements OnDataChan
         getViewManager().movePlayerToForeground();
         // Device wake fix when player isn't started yet or been closed
         if (getPlayer() == null || !Utils.checkActivity(getActivity())) {
-            new Handler(Looper.myLooper()).postDelayed(() -> getViewManager().movePlayerToForeground(), 5_000);
+            //new Handler(Looper.myLooper()).postDelayed(() -> getViewManager().movePlayerToForeground(), 5_000);
+            Utils.postDelayed(() -> getViewManager().movePlayerToForeground(), 5_000);
         }
     }
 

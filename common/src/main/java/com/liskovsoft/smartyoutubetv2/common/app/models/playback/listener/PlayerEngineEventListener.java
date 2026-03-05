@@ -44,5 +44,4 @@ public interface PlayerEngineEventListener {
     void onEngineError(int type, int rendererIndex, Throwable error);
     void onTrackChanged(FormatItem track);
     void onTrackSelected(FormatItem track);
-    void onButtonState(int buttonId, int buttonState);
 }
