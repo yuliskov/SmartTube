@@ -108,6 +108,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsNetworkErrorFixingDisabled;
     private boolean mIsDontResizeVideoToFitDialogEnabled;
     private boolean mIsSuggestionsHorizontallyScrolled;
+    private boolean mIsPauseOrStopAfterEachVideoInQueueEnabled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -681,6 +682,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isPauseOrStopAfterEachVideoInQueueEnabled() {
+        return mIsPauseOrStopAfterEachVideoInQueueEnabled;
+    }
+
+    public void setPauseOrStopAfterEachVideoInQueueEnabled(boolean enable) {
+        mIsPauseOrStopAfterEachVideoInQueueEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -751,6 +761,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
         mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
+        mIsPauseOrStopAfterEachVideoInQueueEnabled = Helpers.parseBoolean(split, 60, false);
 
         updateDefaultValues();
     }
@@ -778,7 +789,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsPauseOrStopAfterEachVideoInQueueEnabled
                 ));
     }
 
