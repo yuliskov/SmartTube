@@ -731,5 +731,5 @@
     <string name="msg_no_blocked_channels">No blocked channels</string>
     <string name="player_time_stretching">Audio time stretching</string>
     <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
-    <string name="pause_or_stop_after_each_video_in_queue">Override queue exception for pause &amp; stop after each video</string>
+    <string name="queue_respects_playback_mode">Queue respects playback mode</string>
 </resources>

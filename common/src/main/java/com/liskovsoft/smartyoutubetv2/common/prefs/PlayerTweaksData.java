@@ -108,7 +108,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsNetworkErrorFixingDisabled;
     private boolean mIsDontResizeVideoToFitDialogEnabled;
     private boolean mIsSuggestionsHorizontallyScrolled;
-    private boolean mIsPauseOrStopAfterEachVideoInQueueEnabled;
+    private boolean mIsQueueRespectsPlaybackMode;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -682,12 +682,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
-    public boolean isPauseOrStopAfterEachVideoInQueueEnabled() {
-        return mIsPauseOrStopAfterEachVideoInQueueEnabled;
+    public boolean isQueueRespectsPlaybackMode() {
+        return mIsQueueRespectsPlaybackMode;
     }
 
-    public void setPauseOrStopAfterEachVideoInQueueEnabled(boolean enable) {
-        mIsPauseOrStopAfterEachVideoInQueueEnabled = enable;
+    public void setQueueRespectsPlaybackMode(boolean enable) {
+        mIsQueueRespectsPlaybackMode = enable;
         persistData();
     }
 
@@ -761,7 +761,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipShortsAltEnabled = Helpers.parseBoolean(split, 57, false);
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
         mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
-        mIsPauseOrStopAfterEachVideoInQueueEnabled = Helpers.parseBoolean(split, 60, false);
+        mIsQueueRespectsPlaybackMode = Helpers.parseBoolean(split, 60, false);
 
         updateDefaultValues();
     }
@@ -789,7 +789,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsPauseOrStopAfterEachVideoInQueueEnabled
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode
                 ));
     }
 
