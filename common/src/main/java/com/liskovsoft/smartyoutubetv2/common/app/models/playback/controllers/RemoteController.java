@@ -133,16 +133,16 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     @Override
-    public void onButtonState(int buttonId, int buttonState) {
+    public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.lb_control_closed_captioning) {
-            if (buttonState == PlayerUI.BUTTON_ON) {
+            if (buttonState == PlayerUI.BUTTON_OFF) {
                 FormatItem selected = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
                 if (selected != null) {
                     postSubtitleChange(selected.getFormatId(), selected.getLanguage());
                 } else {
                     postSubtitleChange(null, null);
                 }
-            } else if (buttonState == PlayerUI.BUTTON_OFF) {
+            } else if (buttonState == PlayerUI.BUTTON_ON) {
                 postSubtitleChange(null, null);
             }
         }
@@ -344,9 +344,9 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                             getPlayer().setFormat(selected);
                         }
                     }
-                    getPlaybackPresenter().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
+                    getController(PlayerUIController.class).onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
                  } else if (getPlayer() != null) {
-                    getPlaybackPresenter().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
+                    getController(PlayerUIController.class).onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
                  }
                  openNewVideo(newVideo2);
                  break;

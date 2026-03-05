@@ -145,6 +145,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onSubtitleClicked(boolean enabled) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         fitVideoIntoDialog();
 
         // First run

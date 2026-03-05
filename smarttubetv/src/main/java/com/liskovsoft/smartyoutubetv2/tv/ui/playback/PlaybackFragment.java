@@ -805,11 +805,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         public boolean onKeyDown(int keyCode) {
             return mPlaybackPresenter.onKeyDown(keyCode);
         }
-
-        @Override
-        public void onButtonState(int buttonId, int buttonState) {
-            mPlaybackPresenter.onButtonState(buttonId, buttonState);
-        }
     }
 
     // Begin Ui events
