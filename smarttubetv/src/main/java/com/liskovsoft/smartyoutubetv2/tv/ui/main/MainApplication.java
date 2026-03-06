@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
@@ -108,10 +109,15 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
             Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
             if (view == PlaybackView.class) {
                 PlayerTweaksData tweaksData = PlayerTweaksData.instance(getApplicationContext());
+                PlayerData playerData = PlayerData.instance(getApplicationContext());
                 int playerDataSource = tweaksData.getPlayerDataSource();
+                int videoBufferType = playerData.getVideoBufferType();
                 if (playerDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
                     tweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
                     tweaksData.persistNow();
+                } else if (videoBufferType == PlayerData.BUFFER_HIGH || videoBufferType == PlayerData.BUFFER_HIGHEST) {
+                    playerData.setVideoBufferType(PlayerData.BUFFER_MEDIUM);
+                    playerData.persistNow();
                 }
             }
         }
