@@ -710,8 +710,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
 
-        // Toggle between add/remove while dialog is opened
-        if (playlist.contains(mVideo)) {
+        // Remain ability to reorder already added video (e.g. move to the top)
+        List<Video> all = playlist.getAll();
+        if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
             return;
         }
 
@@ -744,7 +745,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
 
-        // Toggle between add/remove while dialog is opened
         if (!playlist.contains(mVideo)) {
             return;
         }
