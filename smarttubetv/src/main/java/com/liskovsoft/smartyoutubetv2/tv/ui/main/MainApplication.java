@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity;
@@ -79,20 +80,40 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         }
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            if (Helpers.equalsAny(e.getMessage(),
-                    "parameter must be a descendant of this view",
-                    "Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference")) {
-                Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
-                BrowseSection section = null;
-
-                if (view == BrowseView.class) {
-                    section = BrowsePresenter.instance(getApplicationContext()).getCurrentSection();
-                }
-
-                e = new RuntimeException("A crash in the view " + view.getSimpleName() + ", section id " + (section != null ? section.getId() : "-1"), e);
-            }
+            applyFixes(e);
+            //e = wrapWithAdditionalInfo(e);
 
             defaultHandler.uncaughtException(t, e);
         });
+    }
+
+    private Throwable wrapWithAdditionalInfo(Throwable e) {
+        if (Helpers.equalsAny(e.getMessage(),
+                "parameter must be a descendant of this view",
+                "Attempt to invoke virtual method 'android.view.ViewGroup$LayoutParams android.view.View.getLayoutParams()' on a null object reference")) {
+            Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
+            BrowseSection section = null;
+
+            if (view == BrowseView.class) {
+                section = BrowsePresenter.instance(getApplicationContext()).getCurrentSection();
+            }
+
+            e = new RuntimeException("A crash in the view " + view.getSimpleName() + ", section id " + (section != null ? section.getId() : "-1"), e);
+        }
+        return e;
+    }
+
+    private void applyFixes(Throwable e) {
+        if (e instanceof OutOfMemoryError) {
+            Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
+            if (view == PlaybackView.class) {
+                PlayerTweaksData tweaksData = PlayerTweaksData.instance(getApplicationContext());
+                int playerDataSource = tweaksData.getPlayerDataSource();
+                if (playerDataSource == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
+                    tweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
+                    tweaksData.persistNow();
+                }
+            }
+        }
     }
 }
