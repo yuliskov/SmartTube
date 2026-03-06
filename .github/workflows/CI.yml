@@ -29,7 +29,8 @@ jobs:
         id: get_version
         run: |
           BASE_VERSION_CODE=$(grep "versionCode" smarttubetv/build.gradle | head -n 1 | grep -o '[0-9]\+')
-          echo "VERSION_CODE=$((BASE_VERSION_CODE * 100000 + ${{ github.run_number }}))" >> $GITHUB_OUTPUT
+          # echo "VERSION_CODE=$((BASE_VERSION_CODE * 100000 + ${{ github.run_number }}))" >> $GITHUB_OUTPUT
+          echo "VERSION_CODE=$BASE_VERSION_CODE" >> $GITHUB_OUTPUT
           BASE_VERSION_NAME=$(grep "versionName" smarttubetv/build.gradle | head -n 1 | awk '{print $2}' | tr -d '"' | tr -d "'")
           echo "VERSION_NAME=${BASE_VERSION_NAME}-beta-${{ github.run_number }}" >> $GITHUB_OUTPUT
 
