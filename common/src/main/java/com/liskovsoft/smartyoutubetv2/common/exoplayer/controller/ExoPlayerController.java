@@ -246,26 +246,29 @@ public class ExoPlayerController implements Player.EventListener {
     }
     
     public void selectFormat(FormatItem formatItem) {
-        if (formatItem != null) {
-            MediaTrack mediaTrack = FormatItem.toMediaTrack(formatItem);
-            MediaTrack selectedTrack = mTrackSelectorManager.getTrack(mediaTrack.rendererIndex);
-            if (!mediaTrack.equals(selectedTrack)) {
-                mTrackSelectorManager.selectTrack(mediaTrack);
+        if (formatItem != null && formatItem.getTrack() != null) {
+            FormatItem selectedFormatItem = getSelectedFormat(formatItem.getTrack().rendererIndex);
+            if (!formatItem.equals(selectedFormatItem)) {
+                mTrackSelectorManager.selectTrack(formatItem.getTrack());
                 mEventListener.onTrackSelected(formatItem);
             }
         }
     }
-    
+
     public FormatItem getVideoFormat() {
-        return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
+        return getSelectedFormat(TrackSelectorManager.RENDERER_INDEX_VIDEO);
     }
-    
+
     public FormatItem getAudioFormat() {
-        return ExoFormatItem.from(mTrackSelectorManager.getAudioTrack());
+        return getSelectedFormat(TrackSelectorManager.RENDERER_INDEX_AUDIO);
     }
-    
+
     public FormatItem getSubtitleFormat() {
-        return ExoFormatItem.from(mTrackSelectorManager.getSubtitleTrack());
+        return getSelectedFormat(TrackSelectorManager.RENDERER_INDEX_SUBTITLE);
+    }
+
+    private FormatItem getSelectedFormat(int rendererIndex) {
+        return ExoFormatItem.from(mTrackSelectorManager.getSelectedTrack(rendererIndex));
     }
 
     @Override

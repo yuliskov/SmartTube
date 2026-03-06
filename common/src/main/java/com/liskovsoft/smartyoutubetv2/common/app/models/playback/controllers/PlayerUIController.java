@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
+
+import com.liskovsoft.googlecommon.common.helpers.ServiceHelper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -732,7 +734,9 @@ public class PlayerUIController extends BasePlayerController {
         if (getPlayerData().isNumberKeySeekEnabled() && keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
             if (getPlayer() != null && getPlayer().getDurationMs() > 0) {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
-                getPlayer().setPositionMs((long)(getPlayer().getDurationMs() * seekPercent));
+                long positionMs = (long) (getPlayer().getDurationMs() * seekPercent);
+                getPlayer().setPositionMs(positionMs);
+                MessageHelpers.showMessage(getContext(), ServiceHelper.millisToTimeText(positionMs));
             }
         }
 

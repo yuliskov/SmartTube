@@ -421,18 +421,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         applyOverride(rendererIndex);
     }
 
-    public MediaTrack getVideoTrack() {
-        return getTrack(RENDERER_INDEX_VIDEO);
-    }
-
-    public MediaTrack getAudioTrack() {
-        return getTrack(RENDERER_INDEX_AUDIO);
-    }
-
-    public MediaTrack getSubtitleTrack() {
-        return getTrack(RENDERER_INDEX_SUBTITLE);
-    }
-
     /**
      *  Video/audio tracks should be selected at this point.<br/>
      *  Reselect if not done yet.
@@ -843,7 +831,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
     }
 
-    public MediaTrack getTrack(int rendererIndex) {
+    public MediaTrack getSelectedTrack(int rendererIndex) {
         initRenderer(rendererIndex);
 
         Renderer renderer = mRenderers[rendererIndex];
