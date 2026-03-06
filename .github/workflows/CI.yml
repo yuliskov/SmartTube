@@ -25,22 +25,12 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Extract and Calculate Version
+      - name: Update Version Name
         id: get_version
         run: |
-          BASE_VERSION_CODE=$(grep "versionCode" smarttubetv/build.gradle | head -n 1 | grep -o '[0-9]\+')
-          # echo "VERSION_CODE=$((BASE_VERSION_CODE * 100000 + ${{ github.run_number }}))" >> $GITHUB_OUTPUT
           # Keep the original code to make the nightly and original builds interchangeable
-          echo "VERSION_CODE=$BASE_VERSION_CODE" >> $GITHUB_OUTPUT
-          BASE_VERSION_NAME=$(grep "versionName" smarttubetv/build.gradle | head -n 1 | awk '{print $2}' | tr -d '"' | tr -d "'")
-          echo "VERSION_NAME=${BASE_VERSION_NAME}-beta-${{ github.run_number }}" >> $GITHUB_OUTPUT
-
-      - name: Bump Version
-        uses: chkfung/android-version-actions@v1.2.3
-        with:
-          gradlePath: smarttubetv/build.gradle
-          versionCode: ${{ steps.get_version.outputs.VERSION_CODE }}
-          versionName: ${{ steps.get_version.outputs.VERSION_NAME }}
+          sed -i "s/versionName \"\(.*\)\"/versionName \"\1-nightly-${{ github.run_number }}\"/" smarttubetv/build.gradle
+          echo "VERSION_NAME=$(grep "versionName" smarttubetv/build.gradle | head -n 1 | awk -F'"' '{print $2}')" >> $GITHUB_OUTPUT
 
       - name: Configure Build Signing
         if: ${{ env.HAS_SIGNING_KEY == 'true' }}
