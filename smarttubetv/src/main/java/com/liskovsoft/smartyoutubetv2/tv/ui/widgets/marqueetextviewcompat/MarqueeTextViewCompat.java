@@ -335,8 +335,7 @@ public class MarqueeTextViewCompat extends TextView {
     @Override
     public void setHorizontallyScrolling(boolean whether) {
         // Android 4: Broken grid layout fix
-        // Subscriptions layout fix?
-        if (Build.VERSION.SDK_INT <= 19 || getLineCount() > 1)
+        if (Build.VERSION.SDK_INT <= 19)
             super.setHorizontallyScrolling(whether);
         // NOP
     }
