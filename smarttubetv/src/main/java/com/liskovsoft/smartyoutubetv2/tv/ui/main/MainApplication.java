@@ -80,7 +80,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         }
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            applyFixes(e);
+            applyCrashFixes(e);
             //e = wrapWithAdditionalInfo(e);
 
             defaultHandler.uncaughtException(t, e);
@@ -103,7 +103,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         return e;
     }
 
-    private void applyFixes(Throwable e) {
+    private void applyCrashFixes(Throwable e) {
         if (e instanceof OutOfMemoryError) {
             Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
             if (view == PlaybackView.class) {
