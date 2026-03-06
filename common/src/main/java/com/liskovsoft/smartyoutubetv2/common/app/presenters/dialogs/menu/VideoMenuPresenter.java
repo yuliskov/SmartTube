@@ -710,6 +710,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         Playlist playlist = Playlist.instance();
 
+        // Toggle between add/remove while dialog is opened
+        if (playlist.contains(mVideo)) {
+            return;
+        }
+
         //List<Video> all = playlist.getAll();
         //
         //if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
@@ -746,9 +751,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         Playlist playlist = Playlist.instance();
         // Toggle between add/remove while dialog is opened
         //boolean containsVideo = playlist.containsAfterCurrent(mVideo);
-        boolean containsVideo = playlist.contains(mVideo);
-
-        if (!containsVideo) {
+        if (!playlist.contains(mVideo)) {
             return;
         }
 
