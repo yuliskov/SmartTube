@@ -715,12 +715,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        //List<Video> all = playlist.getAll();
-        //
-        //if (!all.isEmpty() && mVideo.equals(all.get(all.size() - 1))) {
-        //    return;
-        //}
-
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
                         getContext().getString(R.string.add_to_playback_queue),
@@ -749,8 +743,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         Playlist playlist = Playlist.instance();
+
         // Toggle between add/remove while dialog is opened
-        //boolean containsVideo = playlist.containsAfterCurrent(mVideo);
         if (!playlist.contains(mVideo)) {
             return;
         }
