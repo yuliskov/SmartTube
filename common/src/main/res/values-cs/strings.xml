@@ -432,7 +432,7 @@
     <string name="removed_from_playlists">Odstraněno ze sekce Playlisty</string>
     <string name="saved_to_playlists">Přidáno do sekce Playlisty</string>
     <string name="create_playlist">Vytvořit playlist</string>
-    <string name="create_playlist_note">nebude to viditelné v YouTube aplikaci</string>
+    <string name="create_playlist_note">POZNÁMKA: Nebude to viditelné v YouTube aplikaci</string>
     <string name="add_video_to_new_playlist">Přidat do nového playlistu</string>
     <string name="cant_delete_empty_playlist">Nelze smazat prázdný playlist</string>
     <string name="playlist">Playlist</string>
@@ -729,7 +729,11 @@
     <string name="channel_unblocked">Kanál odblokován</string>
     <string name="header_blocked_channels">Blokované kanály</string>
     <string name="msg_no_blocked_channels">Žádné blokované kanály</string>
+    <string name="player_time_stretching">Protahování času zvuku</string>
+    <string name="player_time_stretching_desc">Zachovává přirozený hlas i při změně rychlosti. Na některých zařízeních může výrazně snížit výkon.</string>
+    <string name="queue_respects_playback_mode">Fronta respektuje režim přehrávání</string>
 </resources>
+
 
 
 
