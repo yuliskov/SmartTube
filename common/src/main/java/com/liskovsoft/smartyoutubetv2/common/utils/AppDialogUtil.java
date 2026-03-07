@@ -457,9 +457,7 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         addPitches(context, options, Helpers.range(0.025f, 0.975f, 0.025f));
-        //addPitches(context, options, new float[]{ 0.985f, 0.990f, 0.995f }); // Custom pitches
-        addPitches(context, options, new float[]{ 0.985f }); // Custom pitches
-        addPitches(context, options, Helpers.range(0.990f, 0.997f, 0.001f));
+        addPitches(context, options, new float[]{ 0.985f, 0.990f, 0.995f }); // Custom pitches
         addPitches(context, options, Helpers.range(1f, 2f, 0.025f));
 
         return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
