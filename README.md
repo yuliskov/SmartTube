@@ -49,9 +49,12 @@ Give it a try!
 
 ## Device support
 
-![Device support image](images/new/upload_f6ab10668ea7793f099108f2b2230406.png)
-* **Supported:** all Android TVs and TV boxes (incl. FireTV, NVIDIA Shield & Google Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
-* **Not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, iOS, etc.
+![Device support image](images/new/compatibility.png)
+* **Supported:** all Android TVs and TV boxes (incl. All FireTV devices released before Oct. 2025, NVIDIA Shield & Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
+* **Not supported:** Smartphones, non-Android platforms like Samsung Tizen, LG webOS, Apple TV, etc.
+
+> [!IMPORTANT]  
+> Starting in October 2025 new Amazon FireTV devices no longer run Android under the hood. SmartTube will **not** be compatibile with the Fire Stick 4k Select and newer devices which run Amazon's own VegaOS.
 
 
 ## Installation
