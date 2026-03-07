@@ -122,11 +122,17 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addVideoBufferCategory() {
+        if (getPlayer() == null) {
+            return;
+        }
         addCategoryInt(AppDialogUtil.createVideoBufferCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
     private void addAudioDelayCategory() {
+        if (getPlayer() == null) {
+            return;
+        }
         addCategoryInt(AppDialogUtil.createAudioShiftCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
@@ -136,11 +142,17 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addAudioLanguage() {
+        if (getPlayer() == null) {
+            return;
+        }
         addCategoryInt(AppDialogUtil.createAudioLanguageCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 
     private void addNetworkEngine() {
+        if (getPlayer() == null) {
+            return;
+        }
         addCategoryInt(AppDialogUtil.createNetworkEngineCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }

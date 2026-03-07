@@ -456,18 +456,10 @@ public class AppDialogUtil {
 
         List<OptionItem> options = new ArrayList<>();
 
-        //for (int pitchRaw : Helpers.range(1, 20 * 4, 1)) {
-        //    float pitch = pitchRaw / (10f * 4);
-        //    options.add(UiOptionItem.from(Helpers.toString(pitch),
-        //            optionItem -> {
-        //                playerManager.setPitch(pitch);
-        //                playerData.setPitch(pitch);
-        //            },
-        //            Helpers.floatEquals(pitch, playerManager.getPitch())));
-        //}
-
         addPitches(context, options, Helpers.range(0.025f, 0.975f, 0.025f));
-        addPitches(context, options, new float[]{ 0.985f, 0.990f, 0.995f }); // Custom pitches
+        //addPitches(context, options, new float[]{ 0.985f, 0.990f, 0.995f }); // Custom pitches
+        addPitches(context, options, new float[]{ 0.985f }); // Custom pitches
+        addPitches(context, options, Helpers.range(0.990f, 0.997f, 0.001f));
         addPitches(context, options, Helpers.range(1f, 2f, 0.025f));
 
         return OptionCategory.from(PITCH_EFFECT_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
