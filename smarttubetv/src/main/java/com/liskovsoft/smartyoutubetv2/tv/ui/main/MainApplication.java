@@ -105,7 +105,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private void applyCrashFixes(Throwable e) {
-        if (e instanceof OutOfMemoryError) {
+        if (e instanceof OutOfMemoryError || e.getCause() instanceof OutOfMemoryError) {
             Class<?> view = ViewManager.instance(getApplicationContext()).getTopView();
             if (view == PlaybackView.class) {
                 PlayerTweaksData tweaksData = PlayerTweaksData.instance(getApplicationContext());

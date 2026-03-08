@@ -158,7 +158,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mDataDir.isDirectory() && !FileHelpers.isEmpty(mDataDir)) {
             File destination = new File(currentBackup, mDataDir.getName());
-            FileHelpers.copy(mDataDir, destination);
+            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), mBackupPatterns));
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
