@@ -39,13 +39,13 @@ public class GDriveBackupManager {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
+    private final BackupAndRestoreHelper mHelper;
     private final String mDataDir;
     private final String mBackupDir;
     private final String mRootBackupDir;
     private final GeneralData mGeneralData;
     private Disposable mBackupAction;
     private Disposable mRestoreAction;
-    private final String[] mBackupNames;
     private boolean mIsBlocking;
 
     private GDriveBackupManager(Context context) {
@@ -55,12 +55,7 @@ public class GDriveBackupManager {
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mRootBackupDir = "SmartTubeBackup";
         mSignInService = GoogleSignInService.instance();
-        mBackupNames = new String[] {
-                "yt_service_prefs.xml",
-                "com.liskovsoft.appupdatechecker2.preferences.xml",
-                "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
-                "_preferences.xml" // before _ should be the app package name
-        };
+        mHelper = new BackupAndRestoreHelper(context);
     }
 
     public static GDriveBackupManager instance(Context context) {
@@ -156,7 +151,7 @@ public class GDriveBackupManager {
     private void startBackup(String backupDir, String dataDir) {
         File source = new File(dataDir);
         File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
-        ZipHelper.zipFolder(source, zipFile, mBackupNames);
+        ZipHelper.zipFolder(source, zipFile, mHelper.getBackupPatterns());
 
         Observable<Void> uploadFile = DriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
 
@@ -249,7 +244,7 @@ public class GDriveBackupManager {
     }
 
     private boolean checkFileName(String name) {
-        return Helpers.endsWithAny(name, mBackupNames);
+        return Helpers.endsWithAny(name, mHelper.getBackupPatterns());
     }
 
     private String fixAltPackageName(String name) {

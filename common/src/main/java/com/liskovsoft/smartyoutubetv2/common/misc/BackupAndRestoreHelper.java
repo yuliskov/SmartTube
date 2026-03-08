@@ -17,18 +17,20 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSetti
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 public class BackupAndRestoreHelper implements OnResult {
     private static final int REQ_PICK_FILES = 1001;
     private final Context mContext;
     private Runnable mOnSuccess;
+    private final String[] mBackupPatterns = new String[] {
+            "yt_service_prefs.xml",
+            "com.liskovsoft.appupdatechecker2.preferences.xml",
+            "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
+            "_preferences.xml" // before _ should be the app package name
+    };
 
     public BackupAndRestoreHelper(Context context) {
         mContext = context;
@@ -44,7 +46,7 @@ public class BackupAndRestoreHelper implements OnResult {
         if (!dataDir.exists()) return;
 
         File zipFile = new File(mediaDir,  "backup_" + mContext.getPackageName() + ".zip");
-        zipDirectory(dataDir, zipFile);
+        ZipHelper2.zipDirectory(dataDir, zipFile);
 
         Uri uri = FileProvider.getUriForFile(
                 mContext,
@@ -99,7 +101,7 @@ public class BackupAndRestoreHelper implements OnResult {
             deleteRecursive(dataDir);
             dataDir.mkdirs();
 
-            unzip(zipFile, mediaDir);
+            ZipHelper2.unzip(zipFile, mediaDir);
 
             zipFile.delete();
 
@@ -129,11 +131,11 @@ public class BackupAndRestoreHelper implements OnResult {
             copyUriToFile(zipUri, tempZip);
 
             // Unpack ZIP with data folder
-            unzip(tempZip, mediaDir);
+            ZipHelper2.unzip(tempZip, mediaDir);
 
             if (FileHelpers.isEmpty(dataDir)) {
                 // Seems we've packed the contents of the data dir not data itself
-                unzip(tempZip, dataDir);
+                ZipHelper2.unzip(tempZip, dataDir);
             }
 
             // Delete the temporary ZIP
@@ -148,6 +150,10 @@ public class BackupAndRestoreHelper implements OnResult {
             e.printStackTrace();
             Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String[] getBackupPatterns() {
+        return mBackupPatterns;
     }
 
     private void copyUriToDir(Uri uri, File targetDir) {
@@ -220,56 +226,6 @@ public class BackupAndRestoreHelper implements OnResult {
         }
 
         return result;
-    }
-
-    private void zipDirectory(File sourceDir, File zipFile) {
-        try {
-            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
-            zipFileRecursive(zos, sourceDir, "data/");
-            zos.close();
-        } catch (Exception e) { e.printStackTrace(); }
-    }
-
-    private void zipFileRecursive(ZipOutputStream zos, File file, String base) throws Exception {
-        if (file.isDirectory()) {
-            File[] children = file.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    zipFileRecursive(zos, child, base + child.getName() + "/");
-                }
-            }
-        } else {
-            FileInputStream fis = new FileInputStream(file);
-            zos.putNextEntry(new ZipEntry(base.substring(0, base.length() -1))); // strip "/" at the end to mark as file
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = fis.read(buf)) > 0) zos.write(buf, 0, len);
-            fis.close();
-            zos.closeEntry();
-        }
-    }
-
-    private void unzip(File zipFile, File targetRoot) {
-        try {
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry entry;
-            byte[] buffer = new byte[8192];
-
-            while ((entry = zis.getNextEntry()) != null) {
-                File out = new File(targetRoot, entry.getName());
-                if (entry.isDirectory()) {
-                    out.mkdirs();
-                } else {
-                    out.getParentFile().mkdirs();
-                    FileOutputStream fos = new FileOutputStream(out);
-                    int len;
-                    while ((len = zis.read(buffer)) > 0) fos.write(buffer, 0, len);
-                    fos.close();
-                }
-                zis.closeEntry();
-            }
-            zis.close();
-        } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void deleteRecursive(File f) {

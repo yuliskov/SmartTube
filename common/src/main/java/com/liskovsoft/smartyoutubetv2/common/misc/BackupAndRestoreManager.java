@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 
@@ -19,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String TAG = BackupAndRestoreManager.class.getSimpleName();
@@ -29,13 +32,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
     private final boolean mForceApi30;
-    private final String[] mBackupPatterns = new String[] {
-            "yt_service_prefs.xml",
-            "com.liskovsoft.appupdatechecker2.preferences.xml",
-            "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
-            "_preferences.xml" // before _ should be the app package name
-    };
     private Runnable mPendingHandler;
+    private Disposable mZipAction;
 
     public interface OnBackupNames {
         void onBackupNames(List<String> backupNames);
@@ -90,7 +88,6 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         return new File(appDir, BACKUP_DIR_NAME);
     }
 
-    @SuppressWarnings("deprecation")
     private File getExternalStorageDirectory() {
         File result;
 
@@ -158,7 +155,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mDataDir.isDirectory() && !FileHelpers.isEmpty(mDataDir)) {
             File destination = new File(currentBackup, mDataDir.getName());
-            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), mBackupPatterns));
+            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), mHelper.getBackupPatterns()));
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
@@ -166,6 +163,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (hasAccessOnlyToAppFolders()) {
             mHelper.exportAppMediaFolder();
+        } else {
+            RxHelper.disposeActions(mZipAction);
+            mZipAction = RxHelper.runAsync(this::saveDataToZip);
         }
     }
 
@@ -186,7 +186,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(mDataDir);
         }
 
-        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), mBackupPatterns));
+        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), mHelper.getBackupPatterns()));
         fixFileNames(mDataDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);
@@ -341,5 +341,14 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     // Android 11+: only backup through the file manager (no shared dir)
     private boolean hasAccessOnlyToAppFolders() {
         return AppInfoHelpers.getTargetSdkVersion(mContext) > 29 || mForceApi30;
+    }
+
+    private void saveDataToZip() {
+        File mediaDir = getExternalStorageDirectory();
+        File dataDir = new File(mediaDir, "data");
+        if (dataDir.exists()) {
+            File zipFile = new File(mediaDir,  "SmartTubeBackup.zip");
+            ZipHelper2.zipDirectory(dataDir, zipFile);
+        }
     }
 }
