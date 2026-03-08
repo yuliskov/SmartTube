@@ -41,7 +41,7 @@ public class BackupAndRestoreHelper implements OnResult {
             return;
         }
 
-        File mediaDir = getExternalStorageDirectory();
+        File mediaDir = getExternalMediaDirectory();
         File dataDir = new File(mediaDir, "data");
         if (!dataDir.exists()) return;
 
@@ -83,7 +83,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
             if (data == null) return;
 
-            File mediaDir = getExternalStorageDirectory();
+            File mediaDir = getExternalMediaDirectory();
             File dataDir = new File(mediaDir, "data");
 
             if (!mediaDir.exists()) mediaDir.mkdirs();
@@ -120,7 +120,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
         try {
             // Target folder: /Android/media/<package>/data
-            File mediaDir = getExternalStorageDirectory();
+            File mediaDir = getExternalMediaDirectory();
             File dataDir = new File(mediaDir, "data");
 
             // Remove old data
@@ -223,6 +223,30 @@ public class BackupAndRestoreHelper implements OnResult {
             }
         } else {
             result = Environment.getExternalStorageDirectory();
+        }
+
+        return result;
+    }
+
+    private File getExternalMediaDirectory() {
+        File result = null;
+
+        if (VERSION.SDK_INT >= 21) {
+            File[] dirs = mContext.getExternalMediaDirs();
+            if (dirs != null && dirs.length > 0) {
+                result = dirs[0];
+            }
+        }
+
+        if (result == null) {
+            result = new File(
+                    Environment.getExternalStorageDirectory(),
+                    "Android/media/" + mContext.getPackageName()
+            );
+        }
+
+        if (!result.exists()) {
+            result.mkdirs();
         }
 
         return result;
