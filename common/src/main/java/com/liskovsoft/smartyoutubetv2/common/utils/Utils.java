@@ -37,9 +37,9 @@ import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.text.style.LineHeightSpan;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -579,18 +579,10 @@ public class Utils {
         return spannable;
     }
 
-    public static CharSequence extraPadding(CharSequence string) {
-        if (string == null || string.length() == 0) return string;
-
-        SpannableString spannable = new SpannableString(string);
-        final int extra = 10; // extra pixels between lines
-
-        // Apply LineHeightSpan to the entire text
-        spannable.setSpan((LineHeightSpan) (text, start, end, vstart, v, fm) -> {
-            fm.descent += extra;
-            fm.bottom += extra;
-        }, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+    public static CharSequence createSmallNewLine() {
+        SpannableString spannable = new SpannableString("\n");
+        // Make this line smaller by setting a smaller font size
+        spannable.setSpan(new AbsoluteSizeSpan(6, true), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
     }
 

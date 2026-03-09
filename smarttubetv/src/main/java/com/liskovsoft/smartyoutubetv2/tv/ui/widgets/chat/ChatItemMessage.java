@@ -49,7 +49,7 @@ public class ChatItemMessage implements IMessage {
                     commentItem.getPublishedDate(),
                     commentItem.getReplyCount(),
                     commentItem.isLiked() ? String.format("(%s)", context.getString(R.string.you_liked)) : null);
-            message.mText = TextUtils.concat(Utils.extraPadding(Utils.bold(header)), "\n", commentItem.getMessage());
+            message.mText = TextUtils.concat(Utils.bold(header), "\n", Utils.createSmallNewLine(), commentItem.getMessage());
         }
         message.mAuthor = ChatItemAuthor.from(commentItem);
         message.mCreatedAt = new Date();
