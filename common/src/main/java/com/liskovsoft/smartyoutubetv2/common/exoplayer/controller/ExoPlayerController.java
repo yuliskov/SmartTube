@@ -387,7 +387,7 @@ public class ExoPlayerController implements Player.EventListener {
     }
 
     public void setSpeed(float speed) {
-        if (mPlayer != null && speed > 0 && !Helpers.floatEquals(speed, getSpeed())) {
+        if (mPlayer != null && speed > 0) {
             if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
                 mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
             } else {
@@ -409,7 +409,7 @@ public class ExoPlayerController implements Player.EventListener {
     }
 
     public void setPitch(float pitch) {
-        if (mPlayer != null && pitch > 0 && !Helpers.floatEquals(pitch, getPitch())) {
+        if (mPlayer != null && pitch > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
         }
     }
