@@ -678,7 +678,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     /** @deprecated Use {@link #setSleepTimerHours(int)} instead */
     @Deprecated
     public void setSleepTimerEnabled(boolean enable) {
-        mSleepTimerHours = enable ? SLEEP_TIMER_1_HOUR : SLEEP_TIMER_OFF;
+        mSleepTimerHours = enable ? SLEEP_TIMER_2_HOUR : SLEEP_TIMER_OFF;
         persistState();
     }
 
