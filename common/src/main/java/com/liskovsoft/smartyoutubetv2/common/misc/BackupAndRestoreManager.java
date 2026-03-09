@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mDataDir.isDirectory() && !FileHelpers.isEmpty(mDataDir)) {
             File destination = new File(currentBackup, mDataDir.getName());
-            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), mHelper.getBackupPatterns()));
+            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
@@ -186,7 +187,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(mDataDir);
         }
 
-        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), mHelper.getBackupPatterns()));
+        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
         fixFileNames(mDataDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);

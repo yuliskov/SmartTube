@@ -39,7 +39,6 @@ public class GDriveBackupManager {
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
-    private final BackupAndRestoreHelper mHelper;
     private final String mDataDir;
     private final String mBackupDir;
     private final String mRootBackupDir;
@@ -55,7 +54,6 @@ public class GDriveBackupManager {
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mRootBackupDir = "SmartTubeBackup";
         mSignInService = GoogleSignInService.instance();
-        mHelper = new BackupAndRestoreHelper(context);
     }
 
     public static GDriveBackupManager instance(Context context) {
@@ -151,7 +149,7 @@ public class GDriveBackupManager {
     private void startBackup(String backupDir, String dataDir) {
         File source = new File(dataDir);
         File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
-        ZipHelper.zipFolder(source, zipFile, mHelper.getBackupPatterns());
+        ZipHelper.zipFolder(source, zipFile, Utils.BACKUP_PATTERNS);
 
         Observable<Void> uploadFile = DriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
 
@@ -244,7 +242,7 @@ public class GDriveBackupManager {
     }
 
     private boolean checkFileName(String name) {
-        return Helpers.endsWithAny(name, mHelper.getBackupPatterns());
+        return Helpers.endsWithAny(name, Utils.BACKUP_PATTERNS);
     }
 
     private String fixAltPackageName(String name) {

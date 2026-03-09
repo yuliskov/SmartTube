@@ -101,6 +101,12 @@ public class Utils {
             "org.smarttube.fdroid",
             "app.smarttube.fdroid",
     };
+    public static final String[] BACKUP_PATTERNS = new String[] {
+            "yt_service_prefs.xml",
+            "com.liskovsoft.appupdatechecker2.preferences.xml",
+            "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
+            "_preferences.xml" // before _ should be the app package name
+    };
     private static final String SUPER_PASSWD = "smarttube";
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";

@@ -25,12 +25,6 @@ public class BackupAndRestoreHelper implements OnResult {
     private static final int REQ_PICK_FILES = 1001;
     private final Context mContext;
     private Runnable mOnSuccess;
-    private final String[] mBackupPatterns = new String[] {
-            "yt_service_prefs.xml",
-            "com.liskovsoft.appupdatechecker2.preferences.xml",
-            "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
-            "_preferences.xml" // before _ should be the app package name
-    };
 
     public BackupAndRestoreHelper(Context context) {
         mContext = context;
@@ -150,10 +144,6 @@ public class BackupAndRestoreHelper implements OnResult {
             e.printStackTrace();
             Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public String[] getBackupPatterns() {
-        return mBackupPatterns;
     }
 
     private void copyUriToDir(Uri uri, File targetDir) {
