@@ -80,7 +80,7 @@ public class BackupAndRestoreHelper implements OnResult {
     }
 
     public void importAppMediaFolder(Runnable onSuccess) {
-        if (VERSION.SDK_INT < 30 || onSuccess == null) {
+        if (VERSION.SDK_INT < 19 || onSuccess == null) {
             return;
         }
 
@@ -89,6 +89,11 @@ public class BackupAndRestoreHelper implements OnResult {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+        //        "application/zip",
+        //        "application/x-zip-compressed"
+        //});
 
         ((MotherActivity) mContext).addOnResult(this);
 
@@ -119,7 +124,11 @@ public class BackupAndRestoreHelper implements OnResult {
             deleteRecursive(dataDir);
             dataDir.mkdirs();
 
-            ZipHelper2.unzip(zipFile, mediaDir);
+            if (ZipHelper2.hasRootDir(zipFile, "data")) {
+                ZipHelper2.unzip(zipFile, mediaDir);
+            } else {
+                ZipHelper2.unzip(zipFile, dataDir);
+            }
 
             zipFile.delete();
 
