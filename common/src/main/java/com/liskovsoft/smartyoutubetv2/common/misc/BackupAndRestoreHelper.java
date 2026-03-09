@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
@@ -149,10 +148,10 @@ public class BackupAndRestoreHelper implements OnResult {
             File tempZip = new File(mediaDir, "imported_backup.zip");
             copyUriToFile(zipUri, tempZip);
 
-            // Unpack ZIP with data folder
-            ZipHelper2.unzip(tempZip, mediaDir);
-
-            if (FileHelpers.isEmpty(dataDir)) {
+            if (ZipHelper2.hasRootDir(tempZip, "data")) {
+                // Unpack ZIP with data folder
+                ZipHelper2.unzip(tempZip, mediaDir);
+            } else {
                 // Seems we've packed the contents of the data dir not data itself
                 ZipHelper2.unzip(tempZip, dataDir);
             }

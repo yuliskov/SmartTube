@@ -57,4 +57,27 @@ public class ZipHelper2 {
             zis.close();
         } catch (Exception e) { e.printStackTrace(); }
     }
+
+    public static boolean hasRootDir(File zipFile, String rootDir) {
+        boolean result = false;
+
+        try {
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            ZipEntry entry;
+
+            String prefix = rootDir + "/";
+
+            while ((entry = zis.getNextEntry()) != null) {
+                if (entry.getName().startsWith(prefix)) {
+                    zis.closeEntry();
+                    result = true;
+                    break;
+                }
+                zis.closeEntry();
+            }
+            zis.close();
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return result;
+    }
 }
