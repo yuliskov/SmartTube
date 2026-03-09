@@ -40,11 +40,15 @@ jobs:
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> keystore.properties
           echo "storeFile=${{ github.workspace }}/key.jks" >> keystore.properties
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ${{ github.workspace }}/key.jks
+    
+      - name: Grant Gradle permissions
+        run: chmod +x gradlew
+
+      - name: Lint with Gradle
+        run: ./gradlew lintStbetaRelease
 
       - name: Build with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew clean assembleStbetaRelease
+        run: ./gradlew clean assembleStbetaRelease
 
       - name: VirusTotal Scan
         if: ${{ env.HAS_VT_KEY == 'true' }}
