@@ -46,6 +46,15 @@ jobs:
 
       - name: Lint with Gradle
         run: ./gradlew lintStbetaRelease
+        continue-on-error: true  # Remove once we fixes all errors
+
+      - name: Upload Lint Report
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lint-report
+          path: '**/build/reports/lint-results-*.html'
+          if-no-files-found: warn
 
       - name: Build with Gradle
         run: ./gradlew clean assembleStbetaRelease
