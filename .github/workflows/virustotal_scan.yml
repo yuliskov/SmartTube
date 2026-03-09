@@ -31,7 +31,7 @@ jobs:
           echo -e "MARKER=\t\t\t" >> $GITHUB_ENV
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download Release Assets
         env:
@@ -43,12 +43,12 @@ jobs:
       - name: VirusTotal Scan
         if: ${{ env.HAS_VT_KEY == 'true' }}
         id: vt
-        uses: crazy-max/ghaction-virustotal@v4
+        uses: crazy-max/ghaction-virustotal@v5
         with:
           vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           files: |
             release_assets/*.apk
-          request_rate: 3
+          request_rate: 4
 
       - name: Generate Custom Badge Report
         if: steps.vt.outcome == 'success'

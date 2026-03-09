@@ -11,7 +11,7 @@ jobs:
     env:
       HAS_SIGNING_KEY: ${{ secrets.SIGNING_KEY != '' }}
       HAS_VT_KEY: ${{ secrets.VIRUS_TOTAL_API_KEY != '' }}
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -49,19 +49,19 @@ jobs:
       - name: VirusTotal Scan
         if: ${{ env.HAS_VT_KEY == 'true' }}
         id: vt
-        uses: crazy-max/ghaction-virustotal@v4
+        uses: crazy-max/ghaction-virustotal@v5
         with:
           vt_api_key: ${{ secrets.VIRUS_TOTAL_API_KEY }}
           files: |
             ./smarttubetv/build/outputs/apk/stbeta/release/*.apk
-          request_rate: 3
+          request_rate: 4
 
       - name: VirusTotal Summary
         if: steps.vt.outcome == 'success'
         run: |
           echo "Waiting 150s for VirusTotal engines to report..."
           sleep 150
-          
+
           echo "### Security Scan Results" >> $GITHUB_STEP_SUMMARY
           echo "| Artifact Name | VirusTotal Status | Detailed Report |" >> $GITHUB_STEP_SUMMARY
           echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
@@ -69,7 +69,7 @@ jobs:
           for apk in ./smarttubetv/build/outputs/apk/stbeta/release/*.apk; do
             filename=$(basename "$apk")
             sha256=$(sha256sum "$apk" | awk '{print $1}')
-            
+
             # Construct the dynamic badge URL using the hash
             badge_url="https://badges.cssnr.com/vt/id/$sha256?start=green&end=red&n=8"
             vt_link="https://www.virustotal.com/gui/file/$sha256"
@@ -78,28 +78,28 @@ jobs:
           done
 
       - name: Upload ARM64 APK
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_arm64
           path: ./smarttubetv/build/outputs/apk/stbeta/release/*_arm64-v8a.apk
           if-no-files-found: error
 
       - name: Upload ARMv7 APK
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_armeabi-v7a
           path: ./smarttubetv/build/outputs/apk/stbeta/release/*_armeabi-v7a.apk
           if-no-files-found: error
 
       - name: Upload Universal APK
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_universal
           path: ./smarttubetv/build/outputs/apk/stbeta/release/*_universal.apk
           if-no-files-found: error
 
       - name: Upload x86 APK
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: SmartTube_${{ steps.get_version.outputs.VERSION_NAME }}_x86
           path: ./smarttubetv/build/outputs/apk/stbeta/release/*_x86.apk
