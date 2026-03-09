@@ -101,7 +101,7 @@ public class Utils {
             "org.smarttube.fdroid",
             "app.smarttube.fdroid",
     };
-    public static final String[] BACKUP_PATTERNS = new String[] {
+    public static final String[] BACKUP_PATTERNS = {
             "yt_service_prefs.xml",
             "com.liskovsoft.appupdatechecker2.preferences.xml",
             "com.liskovsoft.sharedutils.prefs.GlobalPreferences.xml",
