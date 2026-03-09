@@ -262,7 +262,7 @@ public class VideoLoaderController extends BasePlayerController {
         mSleepTimerStartMs = System.currentTimeMillis();
 
         // Remove error msg if needed
-        if (getPlayerData().isSleepTimerEnabled()) {
+        if (getPlayerData().getSleepTimerHours() > 0) {
             getPlayer().setVideo(getVideo());
         }
 
@@ -281,7 +281,8 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (getPlayerData().isSleepTimerEnabled() && System.currentTimeMillis() - mSleepTimerStartMs > 2 * 60 * 60 * 1_000) {
+        int sleepHours = getPlayerData().getSleepTimerHours();
+        if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > (long) sleepHours * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
             getPlayer().showOverlay(true);

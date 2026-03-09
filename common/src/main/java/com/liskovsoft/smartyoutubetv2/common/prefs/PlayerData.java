@@ -73,7 +73,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private String mSubtitleLanguage;
     private boolean mIsAllSpeedEnabled;
     private int mPlaybackMode;
-    private boolean mIsSleepTimerEnabled;
+    private int mSleepTimerHours;
+    public static final int SLEEP_TIMER_OFF = 0;
+    public static final int SLEEP_TIMER_1_HOUR = 1;
+    public static final int SLEEP_TIMER_2_HOURS = 2;
+    public static final int SLEEP_TIMER_3_HOURS = 3;
+    public static final int SLEEP_TIMER_4_HOURS = 4;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsSpeedPerVideoEnabled;
     private boolean mIsTimeCorrectionEnabled;
@@ -655,12 +660,25 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
-    public boolean isSleepTimerEnabled() {
-        return mIsSleepTimerEnabled;
+    public int getSleepTimerHours() {
+        return mSleepTimerHours;
     }
 
+    public void setSleepTimerHours(int hours) {
+        mSleepTimerHours = hours;
+        persistState();
+    }
+
+    /** @deprecated Use {@link #getSleepTimerHours()} instead */
+    @Deprecated
+    public boolean isSleepTimerEnabled() {
+        return mSleepTimerHours > 0;
+    }
+
+    /** @deprecated Use {@link #setSleepTimerHours(int)} instead */
+    @Deprecated
     public void setSleepTimerEnabled(boolean enable) {
-        mIsSleepTimerEnabled = enable;
+        mSleepTimerHours = enable ? SLEEP_TIMER_1_HOUR : SLEEP_TIMER_OFF;
         persistState();
     }
 
@@ -799,7 +817,14 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         // repeat mode was here
         // didn't remember what was there
         mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
-        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
+        // Backward compat: old persisted value was a boolean (true=1h). Parse as int; if it
+        // looks like a boolean string ("true"/"false"), map accordingly.
+        String sleepRaw = Helpers.parseStr(split, 25);
+        if ("true".equalsIgnoreCase(sleepRaw)) {
+            mSleepTimerHours = SLEEP_TIMER_1_HOUR;
+        } else {
+            mSleepTimerHours = Helpers.parseInt(split, 25, SLEEP_TIMER_OFF);
+        }
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsSpeedPerVideoEnabled = Helpers.parseBoolean(split, 29, false);
@@ -862,7 +887,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled, mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null,
                 mVideoFormat, mAudioFormat, mSubtitleFormat, mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
-                mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio,
+                mIsLegacyCodecsForced, mSleepTimerHours, null, null, mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio,
                 mIsGlobalClockEnabled, mIsTimeCorrectionEnabled, mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled,
                 mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition,
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
