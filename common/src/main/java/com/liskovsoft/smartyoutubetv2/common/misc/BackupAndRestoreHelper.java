@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
 
@@ -25,15 +27,21 @@ public class BackupAndRestoreHelper implements OnResult {
     private static final int REQ_PICK_FILES = 1001;
     private final Context mContext;
     private Runnable mOnSuccess;
+    private final String[] mPreferredFileManagers = {
+            "com.lonelycatgames.Xplore",
+            "com.ghisler.android.TotalCommander",
+            "com.alphainventor.filemanager",
+            "pl.solidexplorer2"
+    };
 
     public BackupAndRestoreHelper(Context context) {
         mContext = context;
     }
 
     public void exportAppMediaFolder() {
-        if (VERSION.SDK_INT < 30) {
-            return;
-        }
+        //if (VERSION.SDK_INT < 30) {
+        //    return;
+        //}
 
         File mediaDir = getExternalMediaDirectory();
         File dataDir = new File(mediaDir, "data");
@@ -48,11 +56,28 @@ public class BackupAndRestoreHelper implements OnResult {
                 zipFile
         );
 
+        openFileManager(uri);
+    }
+
+    private void openFileManager(Uri uri) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*");
+        intent.setType("*/*"); // intent.setType("application/zip");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        mContext.startActivity(Intent.createChooser(intent, "Send to Total Commander"));
+
+        PackageManager pm = mContext.getPackageManager();
+
+        for (String pkg : mPreferredFileManagers) {
+            Intent targeted = new Intent(intent);
+            targeted.setPackage(pkg);
+            if (targeted.resolveActivity(pm) != null) {
+                mContext.grantUriPermission(pkg, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                mContext.startActivity(targeted);
+                return;
+            }
+        }
+
+        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.app_backup)));
     }
 
     public void importAppMediaFolder(Runnable onSuccess) {
