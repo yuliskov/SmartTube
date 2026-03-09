@@ -583,7 +583,7 @@ public class Utils {
         if (string == null || string.length() == 0) return string;
 
         SpannableString spannable = new SpannableString(string);
-        final int extra = 5; // extra pixels between lines
+        final int extra = 10; // extra pixels between lines
 
         // Apply LineHeightSpan to the entire text
         spannable.setSpan((LineHeightSpan) (text, start, end, vstart, v, fm) -> {
