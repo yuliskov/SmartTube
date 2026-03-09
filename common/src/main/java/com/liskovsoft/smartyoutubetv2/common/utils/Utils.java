@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -37,8 +36,10 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.LineHeightSpan;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -575,6 +576,21 @@ public class Utils {
     public static CharSequence bold(CharSequence string) {
         SpannableString spannable = new SpannableString(string);
         spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
+    public static CharSequence extraPadding(CharSequence string) {
+        if (string == null || string.length() == 0) return string;
+
+        SpannableString spannable = new SpannableString(string);
+        final int extra = 5; // extra pixels between lines
+
+        // Apply LineHeightSpan to the entire text
+        spannable.setSpan((LineHeightSpan) (text, start, end, vstart, v, fm) -> {
+            fm.descent += extra;
+            fm.bottom += extra;
+        }, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         return spannable;
     }
 
