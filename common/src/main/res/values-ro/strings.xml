@@ -665,4 +665,7 @@
   <string name="local_backup">Copie de rezervă locală</string>
   <string name="auto_backup">Copie de rezervă automată (o dată pe zi)</string>
   <string name="repeat_mode_reverse_list">Redă lista de redare sau videoclipurile canalului în ordine inversă</string>
+    <string name="search_in_settings">Caută în setări</string>
+    <string name="search_in_settings_hint">Introduceți numele setării...</string>
+
 </resources>

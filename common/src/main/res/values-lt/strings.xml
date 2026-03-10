@@ -411,4 +411,7 @@
     <string name="skip_codec_profile_check_desc">Pradedant leisti vaizdo įrašą netikrinti, ar kodekas yra palaikomas. Gali padėti, jei programinėje įrangoje yra klaidų.</string>
     <string name="force_sw_codec">Naudoti programinį vaizdo dekoderį</string>
     <string name="force_sw_codec_desc">Gali atkurti beveik bet kurį vaizdo įrašą, bet atkūrimo sparta yra labai maža.</string>
+    <string name="search_in_settings">Ieškoti nustatymuose</string>
+    <string name="search_in_settings_hint">Įveskite nustatymo pavadinimą...</string>
+
 </resources>

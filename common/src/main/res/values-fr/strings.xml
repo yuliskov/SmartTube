@@ -731,4 +731,7 @@
   <string name="action_debug_info">Informations de débogage</string>
   <string name="player_time_stretching">Étirement temporel audio</string>
   <string name="player_time_stretching_desc">Conserve une voix naturelle lors du changement de vitesse. Peut réduire significativement les performances sur certains appareils.</string>
+    <string name="search_in_settings">Rechercher dans les paramètres</string>
+    <string name="search_in_settings_hint">Entrez le nom du paramètre...</string>
+
 </resources>

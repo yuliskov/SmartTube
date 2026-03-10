@@ -683,4 +683,7 @@
     <string name="card_preview_muted">Vidio tanpa suara</string>
     <string name="card_preview_full">Vidio dengan suara</string>
     <string name="card_preview">Pratinjau kartu</string>
+    <string name="search_in_settings">Cari di pengaturan</string>
+    <string name="search_in_settings_hint">Ketik nama pengaturan...</string>
+
 </resources>

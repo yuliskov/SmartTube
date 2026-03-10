@@ -721,4 +721,7 @@
   <string name="card_unlocalized_titles">Μη μεταφρασμένοι τίτλοι</string>
   <string name="dont_resize_video_to_fit_dialog">Διάλογος \"μη γίνεται προασαρμογή βίντεο για ταίριασμα\"</string>
   <string name="typing_corrections">Απενεργοποίηση αυτόματης διόρθωσης κατά την πληκτρολόγηση κειμένου</string>
+    <string name="search_in_settings">Αναζήτηση στις ρυθμίσεις</string>
+    <string name="search_in_settings_hint">Πληκτρολογήστε όνομα ρύθμισης...</string>
+
 </resources>

@@ -732,6 +732,9 @@
     <string name="player_time_stretching">Protahování času zvuku</string>
     <string name="player_time_stretching_desc">Zachovává přirozený hlas i při změně rychlosti. Na některých zařízeních může výrazně snížit výkon.</string>
     <string name="queue_respects_playback_mode">Fronta respektuje režim přehrávání</string>
+    <string name="search_in_settings">Hledat v nastavení</string>
+    <string name="search_in_settings_hint">Zadejte název nastavení...</string>
+
 </resources>
 
 

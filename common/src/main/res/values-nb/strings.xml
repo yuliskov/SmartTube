@@ -707,4 +707,7 @@
     <string name="card_preview">Forhåndsvisning av kort</string>
     <string name="card_unlocalized_titles">Ikke-lokaliserte videotitler</string>
     <string name="dont_resize_video_to_fit_dialog">Ikke endre størrelsen på videoen for å passe i dialogboksen</string>
+    <string name="search_in_settings">Søk i innstillinger</string>
+    <string name="search_in_settings_hint">Skriv innstillingsnavn...</string>
+
 </resources>

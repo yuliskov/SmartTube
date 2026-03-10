@@ -729,4 +729,7 @@
   <string name="channel_unblocked">已解除封鎖</string>
   <string name="header_blocked_channels">封鎖的頻道</string>
   <string name="msg_no_blocked_channels">沒有封鎖的頻道</string>
+    <string name="search_in_settings">在設定中搜尋</string>
+    <string name="search_in_settings_hint">輸入設定名稱...</string>
+
 </resources>

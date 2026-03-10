@@ -732,4 +732,7 @@
   <string name="player_time_stretching">音频时间拉伸</string>
   <string name="player_time_stretching_desc">变速时保持语音自然。可能会显著降低某些设备的性能。</string>
   <string name="queue_respects_playback_mode">队列遵循播放模式</string>
+    <string name="search_in_settings">在设置中搜索</string>
+    <string name="search_in_settings_hint">输入设置名称...</string>
+
 </resources>

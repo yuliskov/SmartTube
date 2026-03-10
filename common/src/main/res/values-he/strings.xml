@@ -698,4 +698,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="my_videos">הסרטונים שלי</string>
     <string name="player_audio_focus">מיקוד שמע (השהה אם זוהו נגנים אחרים)</string>
     <string name="paid_content_notification">התראת תוכן בתשלום</string>
+    <string name="search_in_settings">חפש בהגדרות</string>
+    <string name="search_in_settings_hint">הקלד שם הגדרה...</string>
+
 </resources>

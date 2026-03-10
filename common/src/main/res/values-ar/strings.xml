@@ -717,4 +717,7 @@
   <string name="once_a_day">مرة واحدة يوميًا</string>
   <string name="once_a_week">مرة واحدة أسبوعيًا</string>
   <string name="once_a_month">مرة واحدة شهريًا</string>
+    <string name="search_in_settings">البحث في الإعدادات</string>
+    <string name="search_in_settings_hint">أدخل اسم الإعداد...</string>
+
 </resources>
