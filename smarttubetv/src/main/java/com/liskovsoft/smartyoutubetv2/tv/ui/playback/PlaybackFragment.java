@@ -268,23 +268,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
-        int gestureAreaWidthPx = 100;
-
-        // Reserve left area for gestures
-        if (event.getAxisValue(MotionEvent.AXIS_X) < gestureAreaWidthPx) {
-            return;
-        }
-
-        // Reserve right area for gestures
-        if (getActivity() != null) {
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-            if (event.getAxisValue(MotionEvent.AXIS_X) > (displayMetrics.widthPixels - gestureAreaWidthPx)) {
-                return;
-            }
-        }
-
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
