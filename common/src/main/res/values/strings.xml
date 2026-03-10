@@ -756,4 +756,7 @@
         <item quantity="one">%s second</item>
         <item quantity="other">%s seconds</item>
     </plurals>
+    <string name="search_in_settings">Search in settings</string>
+    <string name="search_in_settings_hint">Type to search…</string>
+
 </resources>

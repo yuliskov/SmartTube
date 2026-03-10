@@ -756,6 +756,9 @@
         <item quantity="one">%s sekunda</item>
         <item quantity="other">%s sekund</item>
     </plurals>
+    <string name="search_in_settings">Hledat v nastavení</string>
+    <string name="search_in_settings_hint">Zadejte název nastavení...</string>
+
 </resources>
 
 

@@ -145,4 +145,7 @@
     <string name="player_seek_preview_carousel_slow">Կարուսել (դանդաղ)</string>
     <string name="player_seek_preview_carousel_fast">Կարուսել (արագ)</string>
     <string name="unsubscribe_from_channel">Ապաբաժանորդագրվել ալիքից</string>
+    <string name="search_in_settings">Որոնել կարգավորումներում</string>
+    <string name="search_in_settings_hint">Մուտքագրեք կարգավորման անունը...</string>
+
 </resources>

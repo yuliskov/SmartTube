@@ -56,6 +56,12 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_player), mOnFinish);
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
         appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
@@ -79,8 +85,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendSleepTimerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_player), mOnFinish);
     }
 
     private void appendOKButtonCategory(AppDialogPresenter settingsPresenter) {

@@ -748,4 +748,7 @@
         <item quantity="many">%s секунд</item>
         <item quantity="other">%s секунды</item>
     </plurals>
+    <string name="search_in_settings">Поиск в настройках</string>
+    <string name="search_in_settings_hint">Введите название настройки...</string>
+
 </resources>
