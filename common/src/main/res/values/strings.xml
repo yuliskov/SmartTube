@@ -446,8 +446,12 @@
     <string name="lb_playback_controls_skip_previous">Skip Previous/Rewind to start position</string>
     <string name="alt_presets_behavior">Alt presets behavior (limit bandwidth)</string>
     <string name="alt_presets_behavior_desc">The app will try to maintain bandwidth corresponding to selected preset instead of matching between resolution, fps and codec.</string>
-    <string name="sleep_timer">Sleep timer (if remote isn\'t used for one hour)</string>
-    <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote for one hour</string>
+    <string name="sleep_timer">Sleep timer (if remote isn\'t used)</string>
+    <string name="sleep_timer_desc">Pause the playback if user didn\'t use the remote for the selected duration</string>
+    <string name="sleep_timer_1h">1 hour</string>
+    <string name="sleep_timer_2h">2 hours</string>
+    <string name="sleep_timer_3h">3 hours</string>
+    <string name="sleep_timer_4h">4 hours</string>
     <string name="disable_vsync">Disable snap to vsync</string>
     <string name="disable_vsync_desc">This option disables aligning frames with the display\'s vertical sync signal. This could improve performance on low-end devices by releasing CPU resources.</string>
     <string name="skip_codec_profile_check">Skip codec profile level check</string>
