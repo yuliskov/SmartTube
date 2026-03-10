@@ -21,4 +21,5 @@ public interface BrowseView {
     boolean isProgressBarShowing();
     void focusOnContent();
     boolean isEmpty();
+    void updateBadge();
 }

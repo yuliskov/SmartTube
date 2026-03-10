@@ -20,10 +20,14 @@
     <!-- NOTE: only works with 'mediaPlayback' type service. Others types will fail. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
-    <!-- Android 11+: fix access package info -->
     <queries>
+        <!-- Android 11+: access package info (works only for specified apps) -->
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.amazon.firetv.youtube" />
+        <!-- Android 11+: access the main icon (works for all apps) -->
+        <intent>
+            <action android:name="android.intent.action.MAIN"/>
+        </intent>
     </queries>
 
     <!-- Add requestLegacyExternalStorage to fix unavailable storage on Android 10 (doesn't work on Android 11) -->

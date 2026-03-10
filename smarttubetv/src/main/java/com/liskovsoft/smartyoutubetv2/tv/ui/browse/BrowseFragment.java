@@ -60,6 +60,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+
+        if (getContext() == null) {
+            return;
+        }
         
         mCrashRestorer = new CrashRestorer(getContext(), savedInstanceState);
         mIsFragmentCreated = true;
@@ -143,7 +147,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 }
         );
 
-        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
+        setOnSearchClickedListener(view -> SearchPresenter.instance(getContext()).startSearch(null));
     }
 
     private void setupFragmentFactory() {
@@ -177,26 +181,26 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupUi() {
+        if (getContext() == null) {
+            return;
+        }
+
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
-        int brandColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandColor);
-        int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
-        int appLogoRes = Helpers.getThemeAttr(getActivity(), R.attr.appLogo);
+        int brandColorRes = Helpers.getThemeAttr(getContext(), R.attr.brandColor);
+        int brandAccentColorRes = Helpers.getThemeAttr(getContext(), R.attr.brandAccentColor);
 
-        Drawable bridgeIcon = Utils.getDrawable(getActivity(), SplashPresenter.instance(getActivity()).getBridgePackageName(), "app_icon");
-
-        // Top right corner logo
-        setBadgeDrawable(bridgeIcon != null ? bridgeIcon : appLogoRes > 0 ? ContextCompat.getDrawable(getActivity(), appLogoRes) : null);
+        updateBadge();
 
         // This title replaces badge in case one is null
         //setTitle(getString(R.string.browse_title));
 
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), brandColorRes));
+        setBrandColor(ContextCompat.getColor(getContext(), brandColorRes));
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
+        setSearchAffordanceColor(ContextCompat.getColor(getContext(), brandAccentColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             private final Map<Integer, Presenter> mPresenterMap = new HashMap<>();
@@ -501,5 +505,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public boolean isEmpty() {
         return mSectionFragmentFactory == null || mSectionFragmentFactory.isEmpty();
+    }
+
+    @Override
+    public void updateBadge() {
+        if (getContext() == null) {
+            return;
+        }
+
+        int appLogoRes = Helpers.getThemeAttr(getContext(), R.attr.appLogo);
+
+        Drawable bridgeIcon = Utils.getDrawable(getContext(), SplashPresenter.instance(getContext()).getBridgePackageName(), "app_icon");
+
+        // Top right corner logo
+        setBadgeDrawable(bridgeIcon != null ? bridgeIcon : appLogoRes > 0 ? ContextCompat.getDrawable(getContext(), appLogoRes) : null);
     }
 }
