@@ -150,7 +150,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             File dataDir = new File(mediaDir, "data");
             FileHelpers.delete(dataDir);
         } else if (currentBackup.isDirectory()) { // plain sdcard storage
-            // remove old backup <app_id>
+            // remove old backup <app_id>/Backup
             FileHelpers.delete(currentBackup);
         }
 
@@ -347,6 +347,16 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         if (dataDir.exists()) {
             File zipFile = new File(mediaDir,  "SmartTubeBackup.zip");
             ZipHelper2.zipDirectory(dataDir, zipFile);
+        }
+    }
+
+    private void saveDataToZip(File currentBackup) { // /data/<app_id>/Backup
+        if (!FileHelpers.isEmpty(currentBackup)) {
+            File source = currentBackup.getParentFile();
+            if (source != null) {
+                File zipFile = new File(source.getParentFile(), source.getName() + ".zip");
+                ZipHelper2.zipDirectory(source, zipFile);
+            }
         }
     }
 }
