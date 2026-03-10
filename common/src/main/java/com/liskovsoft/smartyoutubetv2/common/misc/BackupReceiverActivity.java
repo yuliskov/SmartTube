@@ -18,6 +18,8 @@ public class BackupReceiverActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRestoreHelper = new BackupAndRestoreHelper(this);
+
         // Android 11+ (API 30+) removed the need for storage permission
         // when accessing files via content:// URIs. Apps are granted temporary
         // access to the URI by the sender, so you can read the file without
@@ -52,7 +54,6 @@ public class BackupReceiverActivity extends Activity {
     }
 
     private void restoreData() {
-        mRestoreHelper = new BackupAndRestoreHelper(this);
         mRestoreHelper.handleIncomingZip(getIntent());
     }
 }
