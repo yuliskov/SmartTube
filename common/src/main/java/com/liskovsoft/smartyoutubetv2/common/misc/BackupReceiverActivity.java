@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 
 public class BackupReceiverActivity extends Activity {
@@ -24,7 +25,7 @@ public class BackupReceiverActivity extends Activity {
         // when accessing files via content:// URIs. Apps are granted temporary
         // access to the URI by the sender, so you can read the file without
         // READ_EXTERNAL_STORAGE.
-        if (PermissionHelpers.hasStoragePermissions(this) || VERSION.SDK_INT > 29) {
+        if (PermissionHelpers.hasStoragePermissions(this) || AppInfoHelpers.getRealSdkVersion(this) > 29) {
             restoreData();
             finish();
         } else {

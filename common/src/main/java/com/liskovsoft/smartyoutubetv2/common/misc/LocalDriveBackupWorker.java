@@ -34,10 +34,10 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (AppInfoHelpers.getTargetSdkVersion(context) > 29) {
-            // Android 11+: only backup through the file manager (no shared dir)
-            return;
-        }
+        //if (AppInfoHelpers.getTargetSdkVersion(context) > 29) {
+        //    // Android 11+: only backup through the file manager (no shared dir)
+        //    return;
+        //}
 
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
             WorkManager workManager = WorkManager.getInstance(context);

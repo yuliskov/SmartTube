@@ -38,13 +38,9 @@ public class BackupAndRestoreHelper implements OnResult {
     }
 
     public void exportAppMediaFolder() {
-        //if (VERSION.SDK_INT < 30) {
-        //    return;
-        //}
-
         File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
         File dataDir = new File(mediaDir, "data");
-        if (!dataDir.exists()) return;
+        if (!dataDir.exists() || FileHelpers.isEmpty(dataDir)) return;
 
         File zipFile = new File(mediaDir,  "backup_" + mContext.getPackageName() + ".zip");
         ZipHelper2.zipDirectory(dataDir, zipFile);
@@ -55,7 +51,12 @@ public class BackupAndRestoreHelper implements OnResult {
                 zipFile
         );
 
-        openFileManager(uri);
+        try {
+            openFileManager(uri);
+        } catch (Exception e) {
+            // Activity launch may fail if called from background (e.g. WorkManager)
+            e.printStackTrace();
+        }
     }
 
     private void openFileManager(Uri uri) {
@@ -64,6 +65,7 @@ public class BackupAndRestoreHelper implements OnResult {
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PackageManager pm = mContext.getPackageManager();
 

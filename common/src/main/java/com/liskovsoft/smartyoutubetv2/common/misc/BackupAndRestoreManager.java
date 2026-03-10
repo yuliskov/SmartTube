@@ -338,7 +338,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     // Android 11+: only backup through the file manager (no shared dir)
     private boolean hasAccessOnlyToAppFolders() {
-        return AppInfoHelpers.getTargetSdkVersion(mContext) > 29 || mForceApi30;
+        return AppInfoHelpers.getRealSdkVersion(mContext) > 29 || mForceApi30;
     }
 
     private void saveDataToZip() {
