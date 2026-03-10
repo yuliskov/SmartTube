@@ -7,12 +7,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
@@ -27,8 +27,8 @@ public class BackupAndRestoreHelper implements OnResult {
     private final Context mContext;
     private Runnable mOnSuccess;
     private final String[] mPreferredFileManagers = {
-            "com.lonelycatgames.Xplore",
             "com.ghisler.android.TotalCommander",
+            "com.lonelycatgames.Xplore",
             "com.alphainventor.filemanager",
             "pl.solidexplorer2"
     };
@@ -42,7 +42,7 @@ public class BackupAndRestoreHelper implements OnResult {
         //    return;
         //}
 
-        File mediaDir = getExternalMediaDirectory();
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
         File dataDir = new File(mediaDir, "data");
         if (!dataDir.exists()) return;
 
@@ -60,7 +60,8 @@ public class BackupAndRestoreHelper implements OnResult {
 
     private void openFileManager(Uri uri) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*"); // intent.setType("application/zip");
+        //intent.setType("application/zip");
+        intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
@@ -111,7 +112,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
             if (data == null) return;
 
-            File mediaDir = getExternalMediaDirectory();
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
             File dataDir = new File(mediaDir, "data");
 
             if (!mediaDir.exists()) mediaDir.mkdirs();
@@ -126,7 +127,8 @@ public class BackupAndRestoreHelper implements OnResult {
             copyUriToDir(uri, zipFile);
 
             // Cleanup previous data
-            deleteRecursive(dataDir);
+            //deleteRecursive(dataDir);
+            FileHelpers.delete(dataDir);
             dataDir.mkdirs();
 
             if (ZipHelper2.hasRootDir(zipFile, "data")) {
@@ -152,11 +154,12 @@ public class BackupAndRestoreHelper implements OnResult {
 
         try {
             // Target folder: /Android/media/<package>/data
-            File mediaDir = getExternalMediaDirectory();
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
             File dataDir = new File(mediaDir, "data");
 
             // Remove old data
-            if (dataDir.exists()) deleteRecursive(dataDir);
+            //if (dataDir.exists()) deleteRecursive(dataDir);
+            if (dataDir.exists()) FileHelpers.delete(dataDir);
 
             // Copy ZIP from URI to temporary file
             File tempZip = new File(mediaDir, "imported_backup.zip");
@@ -237,57 +240,5 @@ public class BackupAndRestoreHelper implements OnResult {
             return name;
         }
         return null;
-    }
-
-    @SuppressWarnings("deprecation")
-    private File getExternalStorageDirectory() {
-        File result;
-
-        if (VERSION.SDK_INT > 29) {
-            result = mContext.getExternalMediaDirs()[0];
-
-            if (!result.exists()) {
-                result.mkdirs();
-            }
-        } else {
-            result = Environment.getExternalStorageDirectory();
-        }
-
-        return result;
-    }
-
-    private File getExternalMediaDirectory() {
-        File result = null;
-
-        if (VERSION.SDK_INT >= 21) {
-            File[] dirs = mContext.getExternalMediaDirs();
-            if (dirs != null && dirs.length > 0) {
-                result = dirs[0];
-            }
-        }
-
-        if (result == null) {
-            result = new File(
-                    Environment.getExternalStorageDirectory(),
-                    "Android/media/" + mContext.getPackageName()
-            );
-        }
-
-        if (!result.exists()) {
-            result.mkdirs();
-        }
-
-        return result;
-    }
-
-    private void deleteRecursive(File f) {
-        if (!f.exists()) return;
-        if (f.isDirectory()) {
-            File[] children = f.listFiles();
-            if (children != null) {
-                for (File c : children) deleteRecursive(c);
-            }
-        }
-        f.delete();
     }
 }

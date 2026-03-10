@@ -92,12 +92,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private File getExternalStorageDirectory() {
         File result;
 
-        if (hasAccessOnlyToAppFolders() && VERSION.SDK_INT >= 21) {
-            result = mContext.getExternalMediaDirs()[0];
-
-            if (!result.exists()) {
-                result.mkdirs();
-            }
+        if (hasAccessOnlyToAppFolders()) {
+            result = FileHelpers.getExternalMediaDirectory(mContext);
         } else {
             result = Environment.getExternalStorageDirectory();
         }
@@ -149,8 +145,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             return;
         }
 
-        // remove old backup
-        if (currentBackup.isDirectory()) {
+        if (hasAccessOnlyToAppFolders()) {
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+            File dataDir = new File(mediaDir, "data");
+            FileHelpers.delete(dataDir);
+        } else if (currentBackup.isDirectory()) { // plain sdcard storage
+            // remove old backup <app_id>
             FileHelpers.delete(currentBackup);
         }
 
@@ -283,10 +283,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     public String getBackupRootPath() {
-        if (hasAccessOnlyToAppFolders()) {
-            return null; // Android 11+: only backup through the file manager (no shared dir)
-        }
-
+        // NOTE: Android 11+ only backup through the file manager (no shared dir)
         return String.format("%s/data", getExternalStorageDirectory());
     }
 
