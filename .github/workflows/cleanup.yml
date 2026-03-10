@@ -8,10 +8,11 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    if: github.event.repository.fork == false
     permissions:
       actions: write
     steps:
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v8
         with:
           script: |
             const KEEP = 0;
@@ -53,4 +54,3 @@ jobs:
                 }
               } 
             }
-
