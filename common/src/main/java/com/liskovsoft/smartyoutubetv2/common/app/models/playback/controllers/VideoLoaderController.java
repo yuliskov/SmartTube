@@ -48,7 +48,6 @@ public class VideoLoaderController extends BasePlayerController {
     private SuggestionsController mSuggestionsController;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
-    private Disposable mMpdStreamAction;
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -255,14 +254,10 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public boolean onKeyDown(int keyCode) {
-        if (getPlayer() == null) {
-            return false;
-        }
-
         mSleepTimerStartMs = System.currentTimeMillis();
 
         // Remove error msg if needed
-        if (getPlayerData().isSleepTimerEnabled()) {
+        if (getPlayer() != null && getPlayerData().isSleepTimerEnabled()) {
             getPlayer().setVideo(getVideo());
         }
 
@@ -477,13 +472,13 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private boolean isActionsRunning() {
-        return RxHelper.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
+        return RxHelper.isAnyActionRunning(mFormatInfoAction);
     }
 
     private void disposeActions() {
         mBufferingCount = null;
         MediaServiceManager.instance().disposeActions();
-        RxHelper.disposeActions(mFormatInfoAction, mMpdStreamAction);
+        RxHelper.disposeActions(mFormatInfoAction);
         Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mOnLongBuffering, mRebootApp);
     }
 
