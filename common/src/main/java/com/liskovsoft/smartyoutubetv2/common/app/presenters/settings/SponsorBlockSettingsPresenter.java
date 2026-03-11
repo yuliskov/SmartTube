@@ -36,14 +36,18 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
     public void show(Runnable onFinish) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
         appendSponsorBlockSwitch(settingsPresenter);
         appendExcludeChannelButton(settingsPresenter);
         appendActionsSection(settingsPresenter);
         appendColorMarkersSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
         appendLinks(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
     }
 
     public void show() {

@@ -720,4 +720,7 @@
   <string name="channel_unblocked">Đã bỏ chặn kênh</string>
   <string name="header_blocked_channels">Kênh đã chặn</string>
   <string name="msg_no_blocked_channels">Không có kênh nào bị chặn</string>
+    <string name="search_in_settings">Tìm kiếm trong cài đặt</string>
+    <string name="search_in_settings_hint">Nhập tên cài đặt...</string>
+
 </resources>

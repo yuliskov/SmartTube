@@ -495,4 +495,7 @@
     <string name="auto_frame_rate_modes">Podržani načini</string>
     <string name="loading">Učitavanje…</string>
     <string name="hide_streams">Sakrij strujanja iz Pretplata</string>
+    <string name="search_in_settings">Pretraži u postavkama</string>
+    <string name="search_in_settings_hint">Upišite naziv postavke...</string>
+
 </resources>

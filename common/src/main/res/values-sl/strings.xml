@@ -296,4 +296,7 @@
   <string name="content_block_outro"></string>
   <string name="action_playlist_add">Dodaj na seznam predvajanja</string>
   <string name="keyboard_auto_show">Samodejno prikaži tipkovnico</string>
+    <string name="search_in_settings">Iskanje v nastavitvah</string>
+    <string name="search_in_settings_hint">Vnesite ime nastavitve...</string>
+
 </resources>

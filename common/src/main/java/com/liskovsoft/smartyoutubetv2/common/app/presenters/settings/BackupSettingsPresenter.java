@@ -64,13 +64,17 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     private void createAndShowDialog() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
         appendLocalBackupCategory(settingsPresenter);
 
         appendDriveBackupCategory(settingsPresenter);
 
         appendSubscriptionsBackupButton(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
     }
 
     private void appendDriveBackupCategory(AppDialogPresenter settingsPresenter) {

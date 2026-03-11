@@ -71,6 +71,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_general), mOnFinish);
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
@@ -82,8 +88,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendInternetCensorship(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_general), mOnFinish);
     }
 
     private void appendEnabledSections(AppDialogPresenter settingsPresenter) {

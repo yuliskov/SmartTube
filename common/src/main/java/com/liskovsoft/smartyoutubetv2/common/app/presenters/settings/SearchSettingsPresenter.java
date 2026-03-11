@@ -30,14 +30,18 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
-        appendSpeechRecognizerCategory(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+        appendCategories(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_search), () -> {
             if (mSearchData.isSearchHistoryDisabled()) {
                 MediaServiceManager.instance().clearSearchHistory();
             }
         });
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
+        appendSpeechRecognizerCategory(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
     }
 
     private void appendSpeechRecognizerCategory(AppDialogPresenter settingsPresenter) {

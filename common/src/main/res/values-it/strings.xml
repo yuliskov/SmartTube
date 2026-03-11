@@ -731,4 +731,7 @@
     <string name="msg_no_blocked_channels">Nessun canale bloccato</string>
     <string name="player_time_stretching">Dilatazione del tempo audio</string>
     <string name="player_time_stretching_desc">Mantiene la voce naturale quando si cambia velocità. Potrebbe ridurre significativamente le prestazioni su alcuni dispositivi.</string>
+    <string name="search_in_settings">Cerca nelle impostazioni</string>
+    <string name="search_in_settings_hint">Digita il nome dell'impostazione...</string>
+
 </resources>

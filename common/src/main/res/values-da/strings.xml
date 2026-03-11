@@ -710,4 +710,7 @@
   <string name="card_unlocalized_titles">Ikke-lokaliserede videotitler</string>
   <string name="dont_resize_video_to_fit_dialog">Skaler ikke video til at passe dialog</string>
   <string name="typing_corrections">Deaktiver autokorrektion under indtastning</string>
+    <string name="search_in_settings">Søg i indstillinger</string>
+    <string name="search_in_settings_hint">Skriv indstillingsnavn...</string>
+
 </resources>

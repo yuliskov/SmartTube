@@ -48,6 +48,12 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), mOnFinish);
+    }
+
+    public void appendCategories(AppDialogPresenter settingsPresenter) {
         appendTopButtonsCategory(settingsPresenter);
         appendColorScheme(settingsPresenter);
         if (Build.VERSION.SDK_INT > 19) {
@@ -65,8 +71,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
         //appendTimeFormatCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
-
-        settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), mOnFinish);
     }
 
     private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {

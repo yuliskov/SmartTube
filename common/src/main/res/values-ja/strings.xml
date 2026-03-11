@@ -719,4 +719,7 @@
     <string name="channel_unblocked">ブロックを解除しました</string>
     <string name="header_blocked_channels">ブロックしたチャンネル</string>
     <string name="msg_no_blocked_channels">ブロックしたチャンネルはありません</string>
+    <string name="search_in_settings">設定を検索</string>
+    <string name="search_in_settings_hint">設定名を入力...</string>
+
 </resources>

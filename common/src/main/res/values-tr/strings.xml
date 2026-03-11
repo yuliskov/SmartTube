@@ -732,4 +732,7 @@
     <string name="player_time_stretching">Ses zaman esnetme</string>
     <string name="player_time_stretching_desc">Hız değiştirildiğinde sesi doğal tutar. Bazı cihazlarda performansı önemli ölçüde düşürebilir.</string>
     <string name="queue_respects_playback_mode">Kuyruk oynatma modunu dikkate alır</string>
+    <string name="search_in_settings">Ayarlarda ara</string>
+    <string name="search_in_settings_hint">Ayar adını yazın...</string>
+
 </resources>

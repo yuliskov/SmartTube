@@ -729,4 +729,7 @@
     <string name="channel_unblocked">Kanál odblokovaný</string>
     <string name="header_blocked_channels">Zablokované kanály</string>
     <string name="msg_no_blocked_channels">Žiadne zablokované kanály</string>
+    <string name="search_in_settings">Hľadať v nastaveniach</string>
+    <string name="search_in_settings_hint">Zadajte názov nastavenia...</string>
+
 </resources>

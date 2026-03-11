@@ -164,6 +164,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         return isDialogShown() && isTypeComments();
     }
 
+    public List<OptionCategory> getCategories() {
+        return mCategories;
+    }
+
     public void appendCategory(OptionCategory category) {
         mCategories.add(category);
     }

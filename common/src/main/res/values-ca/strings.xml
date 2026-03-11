@@ -505,4 +505,7 @@
   <string name="hide_shorts_from_trending">Amaga els curts de la tendència</string>
   <string name="disable_history">Desactiva l\'historial</string>
   <string name="enable_history">Activeu l\'historial</string>
+    <string name="search_in_settings">Cerca a la configuració</string>
+    <string name="search_in_settings_hint">Escriviu el nom de la configuració...</string>
+
 </resources>

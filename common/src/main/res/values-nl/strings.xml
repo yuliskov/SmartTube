@@ -717,4 +717,7 @@
   <string name="action_debug_info">Foutopsporingsinformatie</string>
   <string name="player_time_stretching">Audio-tijdverlenging</string>
   <string name="player_time_stretching_desc">Behoudt de natuurlijke stem bij het veranderen van de snelheid. Kan de prestaties op sommige apparaten aanzienlijk verminderen.</string>
+    <string name="search_in_settings">Zoeken in instellingen</string>
+    <string name="search_in_settings_hint">Typ instellingsnaam...</string>
+
 </resources>

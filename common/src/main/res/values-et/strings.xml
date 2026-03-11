@@ -618,4 +618,7 @@
   <string name="disable_remote_history">Keela ajalugu kaugjuhtimise kasutamisel</string>
   <string name="keyboard_fix">Klaviatuuri kuvamise parandamine klahvivajutusega OK (G20s ja teised)</string>
   <string name="nothing_found">Midagi ei leitud</string>
+    <string name="search_in_settings">Otsi seadetest</string>
+    <string name="search_in_settings_hint">Sisesta seade nimi...</string>
+
 </resources>

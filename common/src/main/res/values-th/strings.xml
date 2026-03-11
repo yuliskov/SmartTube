@@ -323,4 +323,7 @@
     <string name="update_error">อัปเดตข้อผิดพลาด</string>
     <string name="hide_shorts_from_history">ซ่อน shorts จากประวัติการเข้าชม</string>
     <string name="disable_screensaver">Disable screensaver</string>
+    <string name="search_in_settings">ค้นหาในการตั้งค่า</string>
+    <string name="search_in_settings_hint">พิมพ์ชื่อการตั้งค่า...</string>
+
 </resources>

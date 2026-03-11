@@ -714,4 +714,7 @@
   <string name="channel_unblocked">차단 해제됨</string>
   <string name="header_blocked_channels">차단된 채널</string>
   <string name="msg_no_blocked_channels">차단된 채널 없음</string>
+    <string name="search_in_settings">설정에서 검색</string>
+    <string name="search_in_settings_hint">설정 이름 입력...</string>
+
 </resources>

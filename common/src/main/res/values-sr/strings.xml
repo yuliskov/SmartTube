@@ -711,4 +711,7 @@
     <string name="dont_resize_video_to_fit_dialog">Не мењај величину видеа да би се уклопио у дијалог</string>
     <string name="typing_corrections">Онемогући аутоматско исправљање приликом куцања текста</string>
     <string name="suggestions_horizontally_scrolled">Хоризонтално померани предлози</string>
+    <string name="search_in_settings">Претражи у подешавањима</string>
+    <string name="search_in_settings_hint">Унесите назив подешавања...</string>
+
 </resources>

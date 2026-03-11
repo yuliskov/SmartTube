@@ -710,4 +710,7 @@
   <string name="dont_resize_video_to_fit_dialog">Non redimensionar o vídeo para axustalo ao diálogo</string>
   <string name="typing_corrections">Desactivar a autocorrección ao escribir texto</string>
   <string name="suggestions_horizontally_scrolled">Suxestións desprazables horizontalmente</string>
+    <string name="search_in_settings">Buscar na configuración</string>
+    <string name="search_in_settings_hint">Escriba o nome do axuste...</string>
+
 </resources>

@@ -721,4 +721,7 @@
     <string name="msg_no_blocked_channels">Bloklanmış kanal yoxdur</string>
     <string name="player_time_stretching">Audio vaxtını uzatmaq</string>
     <string name="player_time_stretching_desc">Sürəti dəyişdirərkən səsi təbii saxlayır. Bəzi cihazlarda məhsuldarlığı əhəmiyyətli dərəcədə azalda bilər.</string>
+    <string name="search_in_settings">Ayarlarda axtar</string>
+    <string name="search_in_settings_hint">Ayar adını yazın...</string>
+
 </resources>
