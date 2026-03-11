@@ -115,9 +115,6 @@ public class BackupAndRestoreHelper implements OnResult {
             if (data == null) return;
 
             File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
-            File dataDir = new File(mediaDir, "data");
-
-            if (!mediaDir.exists()) mediaDir.mkdirs();
 
             Uri uri = data.getData();
             if (uri == null && data.getClipData() != null) {
@@ -128,18 +125,7 @@ public class BackupAndRestoreHelper implements OnResult {
             File zipFile = new File(mediaDir, "restore.zip");
             copyUriToDir(uri, zipFile);
 
-            // Cleanup previous data
-            //deleteRecursive(dataDir);
-            FileHelpers.delete(dataDir);
-            dataDir.mkdirs();
-
-            if (ZipHelper2.hasRootDir(zipFile, "data")) {
-                ZipHelper2.unzip(zipFile, mediaDir);
-            } else {
-                ZipHelper2.unzip(zipFile, dataDir);
-            }
-
-            zipFile.delete();
+            unpackTempZip(zipFile);
 
             mOnSuccess.run();
         }
@@ -155,38 +141,43 @@ public class BackupAndRestoreHelper implements OnResult {
         }
 
         try {
-            // Target folder: /Android/media/<package>/data
             File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
-            File dataDir = new File(mediaDir, "data");
-
-            // Remove old data
-            //if (dataDir.exists()) deleteRecursive(dataDir);
-            if (dataDir.exists()) FileHelpers.delete(dataDir);
 
             // Copy ZIP from URI to temporary file
             File tempZip = new File(mediaDir, "imported_backup.zip");
             copyUriToFile(zipUri, tempZip);
 
-            if (ZipHelper2.hasRootDir(tempZip, "data")) {
-                // Unpack ZIP with data folder
-                ZipHelper2.unzip(tempZip, mediaDir);
-            } else {
-                // Seems we've packed the contents of the data dir not data itself
-                ZipHelper2.unzip(tempZip, dataDir);
-            }
-
-            // Delete the temporary ZIP
-            tempZip.delete();
+            unpackTempZip(tempZip);
 
             BackupSettingsPresenter.instance(mContext).showLocalRestoreDialogApi30();
-
-            //Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
-
-            // TODO: possibly launch restore dialog
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void unpackTempZip(File tempZip) {
+        if (!tempZip.exists()) {
+            return;
+        }
+
+        // Target folder: /Android/media/<package>/data
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+        File dataDir = new File(mediaDir, "data");
+
+        // Remove old data
+        if (dataDir.exists()) FileHelpers.delete(dataDir);
+
+        if (ZipHelper2.hasRootDir(tempZip, "data")) {
+            // Unpack ZIP with data folder
+            ZipHelper2.unzip(tempZip, mediaDir);
+        } else {
+            // Seems we've packed the contents of the data dir not data itself
+            ZipHelper2.unzip(tempZip, dataDir);
+        }
+
+        // Delete the temporary ZIP
+        tempZip.delete();
     }
 
     private void copyUriToDir(Uri uri, File targetDir) {
