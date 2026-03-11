@@ -1220,7 +1220,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         for (State state : stateService.getStates()) {
-            videoGroup.add(0, state.video);
+            if (state.timestamp > stateService.getSessionStartTimeMs()) {
+                videoGroup.add(0, state.video);
+            }
         }
     }
 }
