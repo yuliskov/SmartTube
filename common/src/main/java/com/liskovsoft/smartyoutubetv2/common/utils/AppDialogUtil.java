@@ -77,6 +77,7 @@ public class AppDialogUtil {
     private static final int AUDIO_VOLUME_ID = 145;
     private static final int PLAYER_REPEAT_ID = 146;
     private static final int PLAYER_ENGINE_ID = 147;
+    private static final int QUIET_DURATION_ID = 148;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -861,6 +862,28 @@ public class AppDialogUtil {
                 context.getString(R.string.player_network_stack),
                 options
         );
+    }
+
+    public static OptionCategory createQuietDurationCategory(Context context) {
+        return createQuietDurationCategory(context, () -> {});
+    }
+
+    public static OptionCategory createQuietDurationCategory(Context context, Runnable onSetCallback) {
+        SponsorBlockData sponsorBlockData = SponsorBlockData.instance(context);
+        String title = context.getString(R.string.dont_skip_short_segments);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int durationMs : Helpers.range(0, 20_000, 500)) {
+            options.add(UiOptionItem.from(context.getString(R.string.audio_shift_sec, Helpers.toString(durationMs / 1_000f)),
+                    optionItem -> {
+                        sponsorBlockData.setQuietDurationMs(durationMs);
+                        onSetCallback.run();
+                    },
+                    durationMs == sponsorBlockData.getQuietDurationMs()));
+        }
+
+        return OptionCategory.from(QUIET_DURATION_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
     public static OptionItem createSubscriptionsBackupButton(Context context) {

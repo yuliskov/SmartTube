@@ -127,11 +127,11 @@ android {
     productFlavors {
         stbeta {
             applicationId "org.smarttube.beta"
-            targetSdkVersion project.properties.compileSdkVersion
+            targetSdkVersion 27 // Since 28+ GridLayoutManager navigation is totally broken
         }
         ststable {
             applicationId "org.smarttube.stable"
-            targetSdkVersion project.properties.compileSdkVersion
+            targetSdkVersion 27 // Since 28+ GridLayoutManager navigation is totally broken
         }
         stfdroid {
             applicationId "app.smarttube.fdroid"

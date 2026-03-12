@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController.SegmentAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -40,6 +41,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         appendExcludeChannelButton(settingsPresenter);
         appendActionsSection(settingsPresenter);
         appendColorMarkersSection(settingsPresenter);
+        appendQuietDurationSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
         appendLinks(settingsPresenter);
 
@@ -124,6 +126,11 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
     }
 
+    private void appendQuietDurationSection(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createQuietDurationCategory(getContext());
+        settingsPresenter.appendCategory(category);
+    }
+
     private void appendLinks(AppDialogPresenter settingsPresenter) {
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_status_url)));
@@ -137,10 +144,6 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.dont_skip_short_segements),
-                optionItem -> mContentBlockData.setStayQuietEnabled(optionItem.isSelected()),
-                mContentBlockData.isStayQuietEnabled()));
         
         options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),
                 optionItem -> mContentBlockData.setPaidContentNotificationEnabled(optionItem.isSelected()),

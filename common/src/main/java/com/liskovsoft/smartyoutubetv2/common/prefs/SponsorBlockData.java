@@ -33,7 +33,7 @@ public class SponsorBlockData {
     private final Set<String> mExcludedChannels = new LinkedHashSet<>();
     private boolean mIsDontSkipSegmentAgainEnabled;
     private boolean mIsPaidContentNotificationEnabled;
-    private boolean mIsStayQuietEnabled;
+    private long mQuietDurationMs;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
     private Set<String> mAllCategories;
@@ -225,12 +225,12 @@ public class SponsorBlockData {
         persistState();
     }
 
-    public boolean isStayQuietEnabled() {
-        return mIsStayQuietEnabled;
+    public long getQuietDurationMs() {
+        return mQuietDurationMs;
     }
 
-    public void setStayQuietEnabled(boolean enable) {
-        mIsStayQuietEnabled = enable;
+    public void setQuietDurationMs(long durationMs) {
+        mQuietDurationMs = durationMs;
         persistState();
     }
 
@@ -256,7 +256,7 @@ public class SponsorBlockData {
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, false);
         String excludedChannels = Helpers.parseStr(split, 9);
         mIsPaidContentNotificationEnabled = Helpers.parseBoolean(split, 10, false);
-        mIsStayQuietEnabled = Helpers.parseBoolean(split, 11, true);
+        mQuietDurationMs = Helpers.parseLong(split, 11, 10_000);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
@@ -312,7 +312,7 @@ public class SponsorBlockData {
         mAppPrefs.setData(SPONSOR_BLOCK_DATA, Helpers.mergeData(
                 mIsSponsorBlockEnabled, null, null, null,
                 null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
-                excludedChannels, mIsPaidContentNotificationEnabled, mIsStayQuietEnabled
+                excludedChannels, mIsPaidContentNotificationEnabled, mQuietDurationMs
         ));
     }
 }

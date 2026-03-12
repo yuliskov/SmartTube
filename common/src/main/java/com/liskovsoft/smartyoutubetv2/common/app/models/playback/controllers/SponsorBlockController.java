@@ -383,7 +383,8 @@ public class SponsorBlockController extends BasePlayerController {
         long skipPosMs = lastSegment.getEndMs();
         // Fix infinite skip loop by ignoring short segments. TextureView has a seek bug.
         long skipDurationMs = Math.min(skipPosMs, getPlayer().getDurationMs()) - getPlayer().getPositionMs();
-        boolean stayQuiet = skipDurationMs < 10_000 && (getPlayerTweaksData().isTextureViewEnabled() || getSponsorBlockData().isStayQuietEnabled());
+        boolean stayQuiet = (skipDurationMs < 10_000 && getPlayerTweaksData().isTextureViewEnabled())
+                || (skipDurationMs < getSponsorBlockData().getQuietDurationMs());
 
         if (!stayQuiet) {
             if (type == SponsorBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext()) || isEmbedPlayer()) {

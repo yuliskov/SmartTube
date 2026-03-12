@@ -720,5 +720,5 @@
     <string name="player_time_stretching">Розтягування аудіо в часі</string>
     <string name="player_time_stretching_desc">Зберігає природний голос при зміні швидкості. Може суттєво знизити продуктивність на деяких пристроях.</string>
     <string name="queue_respects_playback_mode">Черга враховує режим відтворення</string>
-    <string name="dont_skip_short_segements">Не пропускати короткі сегменти (&lt; 10 с)</string>
+    <string name="dont_skip_short_segments">Не пропускати короткі сегменти</string>
 </resources>
