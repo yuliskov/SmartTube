@@ -39,10 +39,10 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
 
         appendSponsorBlockSwitch(settingsPresenter);
         appendExcludeChannelButton(settingsPresenter);
-        appendActionsSection(settingsPresenter);
-        appendColorMarkersSection(settingsPresenter);
-        appendQuietDurationSection(settingsPresenter);
-        appendMiscSection(settingsPresenter);
+        appendActionsCategory(settingsPresenter);
+        appendColorMarkersCategory(settingsPresenter);
+        appendIgnoreShortSegmentsCategory(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
         appendLinks(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
@@ -73,7 +73,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
-    private void appendActionsSection(AppDialogPresenter settingsPresenter) {
+    private void appendActionsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Set<SegmentAction> actions = mContentBlockData.getActions();
@@ -108,7 +108,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
     }
 
-    private void appendColorMarkersSection(AppDialogPresenter settingsPresenter) {
+    private void appendColorMarkersCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (String segmentCategory : mContentBlockData.getAllCategories()) {
@@ -126,8 +126,8 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
     }
 
-    private void appendQuietDurationSection(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createQuietDurationCategory(getContext());
+    private void appendIgnoreShortSegmentsCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createIgnoreShortSegmentsCategory(getContext());
         settingsPresenter.appendCategory(category);
     }
 
@@ -142,7 +142,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(webSiteOption);
     }
 
-    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
         
         options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),

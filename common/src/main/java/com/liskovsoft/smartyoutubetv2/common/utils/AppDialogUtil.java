@@ -864,23 +864,23 @@ public class AppDialogUtil {
         );
     }
 
-    public static OptionCategory createQuietDurationCategory(Context context) {
-        return createQuietDurationCategory(context, () -> {});
+    public static OptionCategory createIgnoreShortSegmentsCategory(Context context) {
+        return createIgnoreShortSegmentsCategory(context, () -> {});
     }
 
-    public static OptionCategory createQuietDurationCategory(Context context, Runnable onSetCallback) {
+    public static OptionCategory createIgnoreShortSegmentsCategory(Context context, Runnable onSetCallback) {
         SponsorBlockData sponsorBlockData = SponsorBlockData.instance(context);
-        String title = context.getString(R.string.dont_skip_short_segments);
+        String title = context.getString(R.string.ignore_short_segments);
 
         List<OptionItem> options = new ArrayList<>();
 
         for (int durationMs : Helpers.range(0, 20_000, 500)) {
             options.add(UiOptionItem.from(context.getString(R.string.audio_shift_sec, Helpers.toString(durationMs / 1_000f)),
                     optionItem -> {
-                        sponsorBlockData.setQuietDurationMs(durationMs);
+                        sponsorBlockData.setIgnoredDurationMs(durationMs);
                         onSetCallback.run();
                     },
-                    durationMs == sponsorBlockData.getQuietDurationMs()));
+                    durationMs == sponsorBlockData.getIgnoredDurationMs()));
         }
 
         return OptionCategory.from(QUIET_DURATION_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
