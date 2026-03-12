@@ -33,6 +33,7 @@ public class SponsorBlockData {
     private final Set<String> mExcludedChannels = new LinkedHashSet<>();
     private boolean mIsDontSkipSegmentAgainEnabled;
     private boolean mIsPaidContentNotificationEnabled;
+    private boolean mIsStayQuietEnabled;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
     private Set<String> mAllCategories;
@@ -191,7 +192,7 @@ public class SponsorBlockData {
         return mIsSponsorBlockEnabled;
     }
 
-    public void enableSponsorBlock(boolean enabled) {
+    public void setSponsorBlockEnabled(boolean enabled) {
         mIsSponsorBlockEnabled = enabled;
         persistState();
     }
@@ -210,7 +211,7 @@ public class SponsorBlockData {
         return mIsDontSkipSegmentAgainEnabled;
     }
 
-    public void enableDontSkipSegmentAgain(boolean enabled) {
+    public void setDontSkipSegmentAgainEnabled(boolean enabled) {
         mIsDontSkipSegmentAgainEnabled = enabled;
         persistState();
     }
@@ -219,8 +220,17 @@ public class SponsorBlockData {
         return mIsPaidContentNotificationEnabled;
     }
 
-    public void enablePaidContentNotification(boolean enabled) {
+    public void setPaidContentNotificationEnabled(boolean enabled) {
         mIsPaidContentNotificationEnabled = enabled;
+        persistState();
+    }
+
+    public boolean isStayQuietEnabled() {
+        return mIsStayQuietEnabled;
+    }
+
+    public void setStayQuietEnabled(boolean enable) {
+        mIsStayQuietEnabled = enable;
         persistState();
     }
 
@@ -246,6 +256,7 @@ public class SponsorBlockData {
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, false);
         String excludedChannels = Helpers.parseStr(split, 9);
         mIsPaidContentNotificationEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsStayQuietEnabled = Helpers.parseBoolean(split, 11, true);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
@@ -301,7 +312,7 @@ public class SponsorBlockData {
         mAppPrefs.setData(SPONSOR_BLOCK_DATA, Helpers.mergeData(
                 mIsSponsorBlockEnabled, null, null, null,
                 null, null, actions, colorCategories, mIsDontSkipSegmentAgainEnabled,
-                excludedChannels, mIsPaidContentNotificationEnabled
+                excludedChannels, mIsPaidContentNotificationEnabled, mIsStayQuietEnabled
         ));
     }
 }

@@ -20,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SponsorBlockSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SponsorBlockData;
 import com.liskovsoft.sharedutils.rx.RxHelper;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
@@ -369,7 +368,7 @@ public class SponsorBlockController extends BasePlayerController {
     }
 
     private void applyActions(List<SponsorSegment> foundSegments) {
-        if (foundSegments == null) {
+        if (getPlayer() == null || foundSegments == null) {
             mLastSkipPosMs = 0;
             return;
         }
@@ -384,7 +383,7 @@ public class SponsorBlockController extends BasePlayerController {
         long skipPosMs = lastSegment.getEndMs();
         // Fix infinite skip loop by ignoring short segments. TextureView has a seek bug.
         long skipDurationMs = Math.min(skipPosMs, getPlayer().getDurationMs()) - getPlayer().getPositionMs();
-        boolean stayQuiet = skipDurationMs < 10_000 && PlayerTweaksData.instance(getContext()).isTextureViewEnabled();
+        boolean stayQuiet = skipDurationMs < 10_000 && (getPlayerTweaksData().isTextureViewEnabled() || getSponsorBlockData().isStayQuietEnabled());
 
         if (!stayQuiet) {
             if (type == SponsorBlockData.ACTION_SKIP_ONLY || getPlayer().isInPIPMode() || Utils.isScreenOff(getContext()) || isEmbedPlayer()) {

@@ -732,4 +732,5 @@
     <string name="player_time_stretching">Audio time stretching</string>
     <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
     <string name="queue_respects_playback_mode">Queue respects playback mode</string>
+    <string name="dont_skip_short_segements">Don\'t skip short segments (&lt; 10sec)</string>
 </resources>
