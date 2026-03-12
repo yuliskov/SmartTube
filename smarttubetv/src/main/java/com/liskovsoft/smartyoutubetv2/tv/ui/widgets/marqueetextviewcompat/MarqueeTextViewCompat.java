@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -317,6 +318,31 @@ public class MarqueeTextViewCompat extends TextView {
         super.setGravity(gravity);
         if (mTextView != null) {
             mTextView.setGravity(gravity);
+        }
+    }
+
+    @RequiresApi(28)
+    @Override
+    public void setFallbackLineSpacing(boolean enabled) {
+        super.setFallbackLineSpacing(enabled);
+        if (mTextView != null) {
+            mTextView.setFallbackLineSpacing(enabled);
+        }
+    }
+
+    @Override
+    public void setIncludeFontPadding(boolean includepad) {
+        super.setIncludeFontPadding(includepad);
+        if (mTextView != null) {
+            mTextView.setIncludeFontPadding(includepad);
+        }
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        super.setPadding(left, top, right, bottom);
+        if (mTextView != null) {
+            mTextView.setPadding(left, top, right, bottom);
         }
     }
 
