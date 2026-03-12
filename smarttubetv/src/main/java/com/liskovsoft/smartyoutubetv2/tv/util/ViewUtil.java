@@ -244,4 +244,21 @@ public class ViewUtil {
             frameLayout.setLayoutParams(flp);
         }
     }
+
+    /**
+     * Fix SDK 28+ GridLayoutManager broken navigation when using Japanese fonts
+     */
+    public static void fixApi28BrokenGridNavigation(TextView textView) {
+        if (VERSION.SDK_INT >= 28) {
+            // 1. Disable dynamic line spacing for special characters (prevents expansion for CJK glyphs)
+            textView.setFallbackLineSpacing(false);
+        }
+
+        // 2. Remove system font padding to ensure consistent baseline and height
+        textView.setIncludeFontPadding(false);
+
+        // 3. Add fixed internal padding to create a "safe zone" for both Latin and Japanese text
+        int paddingExtra = (int) (4 * textView.getResources().getDisplayMetrics().density);
+        textView.setPadding(textView.getPaddingLeft(), paddingExtra, textView.getPaddingRight(), paddingExtra);
+    }
 }

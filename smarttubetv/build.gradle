@@ -57,8 +57,8 @@ android {
         applicationId "app.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2293
-        versionName "31.03"
+        versionCode 2296
+        versionName "31.06"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -127,11 +127,11 @@ android {
     productFlavors {
         stbeta {
             applicationId "org.smarttube.beta"
-            targetSdkVersion 27 // Since 28+ GridLayoutManager navigation is totally broken
+            targetSdkVersion project.properties.compileSdkVersion
         }
         ststable {
             applicationId "org.smarttube.stable"
-            targetSdkVersion 27 // Since 28+ GridLayoutManager navigation is totally broken
+            targetSdkVersion project.properties.compileSdkVersion
         }
         stfdroid {
             applicationId "app.smarttube.fdroid"

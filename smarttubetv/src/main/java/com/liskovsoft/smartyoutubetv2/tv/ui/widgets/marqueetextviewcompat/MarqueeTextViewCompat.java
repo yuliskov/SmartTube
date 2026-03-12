@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 @SuppressLint("AppCompatCustomView")
 public class MarqueeTextViewCompat extends TextView {
@@ -126,6 +127,8 @@ public class MarqueeTextViewCompat extends TextView {
         mTextView.setEllipsize(TruncateAt.END);
 
         super.setEllipsize(TruncateAt.END); // Important: disable marquee on the container view
+
+        ViewUtil.fixApi28BrokenGridNavigation(this);
     }
 
     @Override
