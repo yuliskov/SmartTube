@@ -256,7 +256,7 @@ public class SponsorBlockData {
         mIsDontSkipSegmentAgainEnabled = Helpers.parseBoolean(split, 8, false);
         String excludedChannels = Helpers.parseStr(split, 9);
         mIsPaidContentNotificationEnabled = Helpers.parseBoolean(split, 10, false);
-        mIgnoredDurationMs = Helpers.parseLong(split, 11, 10_000);
+        mIgnoredDurationMs = Helpers.parseLong(split, 11, 5_000);
 
         if (colorCategories != null) {
             String[] categoriesArr = Helpers.splitArray(colorCategories);
