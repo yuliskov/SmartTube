@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.Handler;
 
@@ -29,7 +28,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String BACKUP_DIR_NAME = "Backup";
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
-    private final File mDataDir;
+    private final File mSharedPrefsDir;
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
     private final boolean mForceApi30;
@@ -50,7 +49,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         mHelper = new BackupAndRestoreHelper(context);
 
-        mDataDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
+        mSharedPrefsDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
 
         mBackupDirs = new ArrayList<>();
     }
@@ -92,12 +91,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private File getExternalStorageDirectory() {
         File result;
 
-        if (hasAccessOnlyToAppFolders() && VERSION.SDK_INT >= 21) {
-            result = mContext.getExternalMediaDirs()[0];
-
-            if (!result.exists()) {
-                result.mkdirs();
-            }
+        if (hasAccessOnlyToAppFolders()) {
+            result = FileHelpers.getExternalMediaDirectory(mContext);
         } else {
             result = Environment.getExternalStorageDirectory();
         }
@@ -149,14 +144,18 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             return;
         }
 
-        // remove old backup
-        if (currentBackup.isDirectory()) {
+        if (hasAccessOnlyToAppFolders()) {
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+            File dataDir = new File(mediaDir, "data");
+            FileHelpers.delete(dataDir);
+        } else if (currentBackup.isDirectory()) { // plain sdcard storage
+            // remove old backup <app_id>/Backup
             FileHelpers.delete(currentBackup);
         }
 
-        if (mDataDir.isDirectory() && !FileHelpers.isEmpty(mDataDir)) {
-            File destination = new File(currentBackup, mDataDir.getName());
-            FileHelpers.copy(mDataDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
+        if (mSharedPrefsDir.isDirectory() && !FileHelpers.isEmpty(mSharedPrefsDir)) {
+            File destination = new File(currentBackup, mSharedPrefsDir.getName());
+            FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
@@ -182,13 +181,13 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             return;
         }
 
-        if (mDataDir.isDirectory()) {
+        if (mSharedPrefsDir.isDirectory()) {
             // remove old data
-            FileHelpers.delete(mDataDir);
+            FileHelpers.delete(mSharedPrefsDir);
         }
 
-        FileHelpers.copy(sourceBackupDir, mDataDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
-        fixFileNames(mDataDir);
+        FileHelpers.copy(sourceBackupDir, mSharedPrefsDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
+        fixFileNames(mSharedPrefsDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);
 
@@ -283,10 +282,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     public String getBackupRootPath() {
-        if (hasAccessOnlyToAppFolders()) {
-            return null; // Android 11+: only backup through the file manager (no shared dir)
-        }
-
+        // NOTE: Android 11+ only backup through the file manager (no shared dir)
         return String.format("%s/data", getExternalStorageDirectory());
     }
 
@@ -299,6 +295,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     public void getBackupNames(OnBackupNames callback) {
         if (FileHelpers.isExternalStorageReadable()) {
             if (hasStoragePermissions(mContext)) {
+                if (hasAccessOnlyToAppFolders()) {
+                    // Try to restore externally copied backup zip (if any)
+                    unpackBackupZip();
+                }
                 callback.onBackupNames(getBackupNames());
             } else {
                 mPendingHandler = () -> callback.onBackupNames(getBackupNames());
@@ -341,7 +341,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     // Android 11+: only backup through the file manager (no shared dir)
     private boolean hasAccessOnlyToAppFolders() {
-        return AppInfoHelpers.getTargetSdkVersion(mContext) > 29 || mForceApi30;
+        return AppInfoHelpers.getRealSdkVersion(mContext) > 29 || mForceApi30;
     }
 
     private void saveDataToZip() {
@@ -350,6 +350,28 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         if (dataDir.exists()) {
             File zipFile = new File(mediaDir,  "SmartTubeBackup.zip");
             ZipHelper2.zipDirectory(dataDir, zipFile);
+        }
+    }
+
+    private void saveDataToZip(File currentBackup) { // /data/<app_id>/Backup
+        if (!FileHelpers.isEmpty(currentBackup)) {
+            File source = currentBackup.getParentFile();
+            if (source != null) {
+                File zipFile = new File(source.getParentFile(), source.getName() + ".zip");
+                ZipHelper2.zipDirectory(source, zipFile);
+            }
+        }
+    }
+
+    private void unpackBackupZip() {
+        File[] files = FileHelpers.getExternalMediaDirectory(mContext).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.getName().endsWith(".zip")) {
+                    mHelper.unpackTempZip(file);
+                    break;
+                }
+            }
         }
     }
 }

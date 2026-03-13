@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoSt
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GDriveBackupWorker;
@@ -314,7 +315,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     public void applyNewIntent(Intent intent) {
         if (intent != null) {
+            String oldBridgeName = mBridgePackageName;
             mBridgePackageName = intent.getStringExtra("bridge_package_name");
+            if (!Helpers.equals(oldBridgeName, mBridgePackageName)) {
+                updateBadgeIcon();
+            }
         }
 
         for (IntentProcessor processor : mIntentChain) {
@@ -357,5 +362,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         boolean isExternalIntent = !isRestartIntent && !isATVIntent && !viewManager.isTopViewVisible();
 
         viewManager.enablePlayerOnlyMode((isATVIntent && GeneralData.instance(getContext()).isReturnToLauncherEnabled()) || isExternalIntent);
+    }
+
+    private void updateBadgeIcon() {
+        BrowseView browseView = BrowsePresenter.instance(getContext()).getView();
+
+        if (browseView != null) {
+            browseView.updateBadge();
+        }
     }
 }

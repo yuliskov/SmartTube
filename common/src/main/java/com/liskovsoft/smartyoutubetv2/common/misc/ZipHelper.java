@@ -57,9 +57,17 @@ public class ZipHelper {
         }
 
         try (ZipInputStream zipIn = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)))) {
+            String canonicalOutputPath = outputFolder.getCanonicalPath() + File.separator;
             ZipEntry entry;
             while ((entry = zipIn.getNextEntry()) != null) {
                 File filePath = new File(outputFolder, entry.getName());
+
+                String canonicalFilePath = filePath.getCanonicalPath();
+
+                // Zip Slip protection
+                if (!canonicalFilePath.startsWith(canonicalOutputPath)) {
+                    throw new IOException("Blocked Zip Slip entry: " + entry.getName());
+                }
 
                 if (entry.isDirectory()) {
                     filePath.mkdirs();

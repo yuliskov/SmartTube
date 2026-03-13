@@ -27,6 +27,7 @@ public class VideoStateService implements ProfileChangeListener {
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
     private final Runnable mPersistStateInt = this::persistStateInt;
+    private long mSessionStartTimeMs;
 
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -93,6 +94,10 @@ public class VideoStateService implements ProfileChangeListener {
         return mIsHistoryBroken;
     }
 
+    public long getSessionStartTimeMs() {
+        return mSessionStartTimeMs;
+    }
+
     private void restoreState() {
         mStates.clear();
         String data = mPrefs.getStateUpdaterData();
@@ -101,6 +106,7 @@ public class VideoStateService implements ProfileChangeListener {
 
         setStateData(Helpers.parseStr(split, 0));
         mIsHistoryBroken = Helpers.parseBoolean(split, 1);
+        mSessionStartTimeMs = System.currentTimeMillis();
     }
 
     private void persistStateInt() {

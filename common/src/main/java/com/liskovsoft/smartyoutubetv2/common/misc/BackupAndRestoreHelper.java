@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
@@ -28,8 +27,8 @@ public class BackupAndRestoreHelper implements OnResult {
     private final Context mContext;
     private Runnable mOnSuccess;
     private final String[] mPreferredFileManagers = {
-            "com.lonelycatgames.Xplore",
             "com.ghisler.android.TotalCommander",
+            "com.lonelycatgames.Xplore",
             "com.alphainventor.filemanager",
             "pl.solidexplorer2"
     };
@@ -39,13 +38,9 @@ public class BackupAndRestoreHelper implements OnResult {
     }
 
     public void exportAppMediaFolder() {
-        //if (VERSION.SDK_INT < 30) {
-        //    return;
-        //}
-
-        File mediaDir = getExternalMediaDirectory();
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
         File dataDir = new File(mediaDir, "data");
-        if (!dataDir.exists()) return;
+        if (!dataDir.exists() || FileHelpers.isEmpty(dataDir)) return;
 
         File zipFile = new File(mediaDir,  "backup_" + mContext.getPackageName() + ".zip");
         ZipHelper2.zipDirectory(dataDir, zipFile);
@@ -56,14 +51,21 @@ public class BackupAndRestoreHelper implements OnResult {
                 zipFile
         );
 
-        openFileManager(uri);
+        try {
+            openFileManager(uri);
+        } catch (Exception e) {
+            // Activity launch may fail if called from background (e.g. WorkManager)
+            e.printStackTrace();
+        }
     }
 
     private void openFileManager(Uri uri) {
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*"); // intent.setType("application/zip");
+        //intent.setType("application/zip");
+        intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PackageManager pm = mContext.getPackageManager();
 
@@ -80,8 +82,13 @@ public class BackupAndRestoreHelper implements OnResult {
         mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.app_backup)));
     }
 
+    /**
+     * NOTE: The file picker relies on apps that support the Storage Access Framework (SAF).
+     * At the moment, no known third-party file manager properly supports selecting ZIP
+     * archives through this API, so the backup file may not appear in the picker.
+     */
     public void importAppMediaFolder(Runnable onSuccess) {
-        if (VERSION.SDK_INT < 30 || onSuccess == null) {
+        if (VERSION.SDK_INT < 19 || onSuccess == null) {
             return;
         }
 
@@ -90,6 +97,11 @@ public class BackupAndRestoreHelper implements OnResult {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+        //        "application/zip",
+        //        "application/x-zip-compressed"
+        //});
 
         ((MotherActivity) mContext).addOnResult(this);
 
@@ -102,10 +114,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
             if (data == null) return;
 
-            File mediaDir = getExternalMediaDirectory();
-            File dataDir = new File(mediaDir, "data");
-
-            if (!mediaDir.exists()) mediaDir.mkdirs();
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
 
             Uri uri = data.getData();
             if (uri == null && data.getClipData() != null) {
@@ -116,13 +125,7 @@ public class BackupAndRestoreHelper implements OnResult {
             File zipFile = new File(mediaDir, "restore.zip");
             copyUriToDir(uri, zipFile);
 
-            // Cleanup previous data
-            deleteRecursive(dataDir);
-            dataDir.mkdirs();
-
-            ZipHelper2.unzip(zipFile, mediaDir);
-
-            zipFile.delete();
+            unpackTempZip(zipFile);
 
             mOnSuccess.run();
         }
@@ -138,37 +141,43 @@ public class BackupAndRestoreHelper implements OnResult {
         }
 
         try {
-            // Target folder: /Android/media/<package>/data
-            File mediaDir = getExternalMediaDirectory();
-            File dataDir = new File(mediaDir, "data");
-
-            // Remove old data
-            if (dataDir.exists()) deleteRecursive(dataDir);
+            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
 
             // Copy ZIP from URI to temporary file
             File tempZip = new File(mediaDir, "imported_backup.zip");
             copyUriToFile(zipUri, tempZip);
 
-            // Unpack ZIP with data folder
-            ZipHelper2.unzip(tempZip, mediaDir);
-
-            if (FileHelpers.isEmpty(dataDir)) {
-                // Seems we've packed the contents of the data dir not data itself
-                ZipHelper2.unzip(tempZip, dataDir);
-            }
-
-            // Delete the temporary ZIP
-            tempZip.delete();
+            unpackTempZip(tempZip);
 
             BackupSettingsPresenter.instance(mContext).showLocalRestoreDialogApi30();
-
-            //Toast.makeText(mContext, "Backup restored successfully", Toast.LENGTH_SHORT).show();
-
-            // TODO: possibly launch restore dialog
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void unpackTempZip(File tempZip) {
+        if (!tempZip.exists()) {
+            return;
+        }
+
+        // Target folder: /Android/media/<package>/data
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+        File dataDir = new File(mediaDir, "data");
+
+        // Remove old data
+        if (dataDir.exists()) FileHelpers.delete(dataDir);
+
+        if (ZipHelper2.hasRootDir(tempZip, "data")) {
+            // Unpack ZIP with data folder
+            ZipHelper2.unzip(tempZip, mediaDir);
+        } else {
+            // Seems we've packed the contents of the data dir not data itself
+            ZipHelper2.unzip(tempZip, dataDir);
+        }
+
+        // Delete the temporary ZIP
+        tempZip.delete();
     }
 
     private void copyUriToDir(Uri uri, File targetDir) {
@@ -224,57 +233,5 @@ public class BackupAndRestoreHelper implements OnResult {
             return name;
         }
         return null;
-    }
-
-    @SuppressWarnings("deprecation")
-    private File getExternalStorageDirectory() {
-        File result;
-
-        if (VERSION.SDK_INT > 29) {
-            result = mContext.getExternalMediaDirs()[0];
-
-            if (!result.exists()) {
-                result.mkdirs();
-            }
-        } else {
-            result = Environment.getExternalStorageDirectory();
-        }
-
-        return result;
-    }
-
-    private File getExternalMediaDirectory() {
-        File result = null;
-
-        if (VERSION.SDK_INT >= 21) {
-            File[] dirs = mContext.getExternalMediaDirs();
-            if (dirs != null && dirs.length > 0) {
-                result = dirs[0];
-            }
-        }
-
-        if (result == null) {
-            result = new File(
-                    Environment.getExternalStorageDirectory(),
-                    "Android/media/" + mContext.getPackageName()
-            );
-        }
-
-        if (!result.exists()) {
-            result.mkdirs();
-        }
-
-        return result;
-    }
-
-    private void deleteRecursive(File f) {
-        if (!f.exists()) return;
-        if (f.isDirectory()) {
-            File[] children = f.listFiles();
-            if (children != null) {
-                for (File c : children) deleteRecursive(c);
-            }
-        }
-        f.delete();
     }
 }

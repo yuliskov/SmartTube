@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController.SegmentAction;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -38,9 +39,10 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
 
         appendSponsorBlockSwitch(settingsPresenter);
         appendExcludeChannelButton(settingsPresenter);
-        appendActionsSection(settingsPresenter);
-        appendColorMarkersSection(settingsPresenter);
-        appendMiscSection(settingsPresenter);
+        appendActionsCategory(settingsPresenter);
+        appendColorMarkersCategory(settingsPresenter);
+        appendIgnoreShortSegmentsCategory(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
         appendLinks(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.content_block_provider), onFinish);
@@ -62,7 +64,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
 
         OptionItem sponsorBlockOption = UiOptionItem.from(getContext().getString(R.string.enable),
                 option -> {
-                    mContentBlockData.enableSponsorBlock(option.isSelected());
+                    mContentBlockData.setSponsorBlockEnabled(option.isSelected());
                     SponsorBlockData.instance(getContext()).stopExcludingChannel(channelId);
                 },
                 !isChannelExcluded && mContentBlockData.isSponsorBlockEnabled()
@@ -71,7 +73,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
-    private void appendActionsSection(AppDialogPresenter settingsPresenter) {
+    private void appendActionsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Set<SegmentAction> actions = mContentBlockData.getActions();
@@ -106,7 +108,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
     }
 
-    private void appendColorMarkersSection(AppDialogPresenter settingsPresenter) {
+    private void appendColorMarkersCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (String segmentCategory : mContentBlockData.getAllCategories()) {
@@ -124,6 +126,11 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
     }
 
+    private void appendIgnoreShortSegmentsCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createIgnoreShortSegmentsCategory(getContext());
+        settingsPresenter.appendCategory(category);
+    }
+
     private void appendLinks(AppDialogPresenter settingsPresenter) {
         OptionItem statsCheckOption = UiOptionItem.from(getContext().getString(R.string.content_block_status),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.content_block_status_url)));
@@ -135,15 +142,15 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(webSiteOption);
     }
 
-    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
-
+        
         options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),
-                optionItem -> mContentBlockData.enablePaidContentNotification(optionItem.isSelected()),
+                optionItem -> mContentBlockData.setPaidContentNotificationEnabled(optionItem.isSelected()),
                 mContentBlockData.isPaidContentNotificationEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
-                optionItem -> mContentBlockData.enableDontSkipSegmentAgain(optionItem.isSelected()),
+                optionItem -> mContentBlockData.setDontSkipSegmentAgainEnabled(optionItem.isSelected()),
                 mContentBlockData.isDontSkipSegmentAgainEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.content_block_alt_server),
