@@ -59,7 +59,12 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
         mDeviceCodeAction = mService.getRemoteControlService().getPairingCodeObserve()
                 .subscribe(
                         deviceCode -> getView().showCode(deviceCode),
-                        error -> Log.e(TAG, "Get pairing code error: %s", error.getMessage())
+                        error -> {
+                            Log.e(TAG, "Get pairing code error: %s", error.getMessage());
+                            if (getView() != null) {
+                                getView().showCode(error.getMessage());
+                            }
+                        }
                 );
     }
 
