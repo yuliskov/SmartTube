@@ -15,6 +15,9 @@ import android.os.Message;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.core.content.ContextCompat;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 
@@ -399,7 +402,8 @@ public class UhdHelper {
         mIsSetModeInProgress.set(true);
         //Let the handler know what modeId onDisplayChanged callback event to look for
         mWorkHandler.setExpectedMode(modeId);
-        mContext.registerReceiver(overlayStateChangeReceiver, new IntentFilter(MODESWITCH_OVERLAY_STATE_CHANGED));
+        //mContext.registerReceiver(overlayStateChangeReceiver, new IntentFilter(MODESWITCH_OVERLAY_STATE_CHANGED));
+        ContextCompat.registerReceiver(mContext, overlayStateChangeReceiver, new IntentFilter(MODESWITCH_OVERLAY_STATE_CHANGED), ContextCompat.RECEIVER_NOT_EXPORTED);
         mDisplayListener = new DisplayManager.DisplayListener() {
             @Override
             public void onDisplayAdded(int displayId) {
