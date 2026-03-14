@@ -1,9 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat;
 
 import android.content.Context;
-import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 /**
@@ -14,14 +15,17 @@ public class TitleMarqueeTextViewCompat extends MarqueeTextViewCompat {
 
     public TitleMarqueeTextViewCompat(Context context) {
         super(context);
+        init();
     }
 
     public TitleMarqueeTextViewCompat(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public TitleMarqueeTextViewCompat(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     /**
@@ -35,5 +39,17 @@ public class TitleMarqueeTextViewCompat extends MarqueeTextViewCompat {
     @Override
     protected void updateMarquee() {
         Utils.postDelayed(mUpdateMarquee, 1_000);
+    }
+
+    private void init() {
+        int maxWidth = getMaxWidth();
+
+        if (maxWidth != -1) {
+            float uiScale = MainUIData.instance(getContext()).getUIScale();
+
+            if (!Helpers.floatEquals(uiScale, 1.0f)) {
+                setMaxWidth((int) (maxWidth / uiScale / uiScale));
+            }
+        }
     }
 }
