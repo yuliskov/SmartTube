@@ -73,7 +73,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private String mSubtitleLanguage;
     private boolean mIsAllSpeedEnabled;
     private int mPlaybackMode;
-    private boolean mIsSleepTimerEnabled;
+    private float mSleepTimerHours;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsSpeedPerVideoEnabled;
     private boolean mIsTimeCorrectionEnabled;
@@ -655,12 +655,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
-    public boolean isSleepTimerEnabled() {
-        return mIsSleepTimerEnabled;
+    public float getSleepTimerHours() {
+        return mSleepTimerHours;
     }
 
-    public void setSleepTimerEnabled(boolean enable) {
-        mIsSleepTimerEnabled = enable;
+    public void setSleepTimerHours(float hours) {
+        mSleepTimerHours = hours;
         persistState();
     }
 
@@ -799,7 +799,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         // repeat mode was here
         // didn't remember what was there
         mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, false);
-        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
+        mSleepTimerHours = Helpers.parseFloat(split, 25, 0);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsSpeedPerVideoEnabled = Helpers.parseBoolean(split, 29, false);
@@ -862,7 +862,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mSeekPreviewMode, mIsSeekConfirmPauseEnabled, mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null,
                 mVideoFormat, mAudioFormat, mSubtitleFormat, mVideoBufferType, mSubtitleStyleIndex, mResizeMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, null, mAudioDelayMs, mIsAllSpeedEnabled, null, null,
-                mIsLegacyCodecsForced, mIsSleepTimerEnabled, null, null, mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio,
+                mIsLegacyCodecsForced, mSleepTimerHours, null, null, mIsQualityInfoEnabled, mIsSpeedPerVideoEnabled, mAspectRatio,
                 mIsGlobalClockEnabled, mIsTimeCorrectionEnabled, mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled,
                 mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition,
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,

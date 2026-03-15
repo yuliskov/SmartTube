@@ -733,4 +733,12 @@
     <string name="player_time_stretching_desc">Keeps voice natural when changing speed. May significantly reduce performance on some devices.</string>
     <string name="queue_respects_playback_mode">Queue respects playback mode</string>
     <string name="ignore_short_segments">Ignore short segments</string>
+    <plurals name="hours">
+        <item quantity="one">%s hour</item>
+        <item quantity="other">%s hours</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s second</item>
+        <item quantity="other">%s seconds</item>
+    </plurals>
 </resources>

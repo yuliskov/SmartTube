@@ -723,4 +723,16 @@
     <string name="player_time_stretching_desc">Сохраняет естественное звучание голоса при изменении скорости. Может значительно снизить производительность на некоторых устройствах.</string>
     <string name="queue_respects_playback_mode">Очередь учитывает режим воспроизведения</string>
     <string name="ignore_short_segments">Игнорировать короткие сегменты</string>
+    <plurals name="hours">
+        <item quantity="one">%s час</item>
+        <item quantity="few">%s часа</item>
+        <item quantity="many">%s часов</item>
+        <item quantity="other">%s часа</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s секунда</item>
+        <item quantity="few">%s секунды</item>
+        <item quantity="many">%s секунд</item>
+        <item quantity="other">%s секунды</item>
+    </plurals>
 </resources>

@@ -721,4 +721,16 @@
     <string name="player_time_stretching_desc">Зберігає природний голос при зміні швидкості. Може суттєво знизити продуктивність на деяких пристроях.</string>
     <string name="queue_respects_playback_mode">Черга враховує режим відтворення</string>
     <string name="ignore_short_segments">Ігнорувати короткі сегменти</string>
+    <plurals name="hours">
+        <item quantity="one">%s година</item>
+        <item quantity="few">%s години</item>
+        <item quantity="many">%s годин</item>
+        <item quantity="other">%s години</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s секунда</item>
+        <item quantity="few">%s секунди</item>
+        <item quantity="many">%s секунд</item>
+        <item quantity="other">%s секунди</item>
+    </plurals>
 </resources>

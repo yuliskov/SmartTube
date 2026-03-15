@@ -875,7 +875,10 @@ public class AppDialogUtil {
         List<OptionItem> options = new ArrayList<>();
 
         for (int durationMs : Helpers.range(0, 20_000, 500)) {
-            options.add(UiOptionItem.from(context.getString(R.string.audio_shift_sec, Helpers.toString(durationMs / 1_000f)),
+            float sec = durationMs / 1_000f;
+            options.add(UiOptionItem.from(
+                    durationMs == 0 ? context.getString(R.string.option_disabled)
+                            : context.getResources().getQuantityString(R.plurals.seconds, (int) sec, Helpers.toString(sec)),
                     optionItem -> {
                         sponsorBlockData.setIgnoredDurationMs(durationMs);
                         onSetCallback.run();

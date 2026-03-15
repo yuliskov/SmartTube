@@ -76,6 +76,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendEndingTimeCategory(settingsPresenter);
         appendPixelRatioCategory(settingsPresenter);
         //appendPlayerExitCategory(settingsPresenter);
+        appendSleepTimerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
@@ -510,6 +511,20 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCategory(category);
     }
 
+    private void appendSleepTimerCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (float sleepHours : Helpers.range(0, 10, 0.5f)) {
+            options.add(UiOptionItem.from(
+                    sleepHours == 0 ? getContext().getString(R.string.option_disabled)
+                            : getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)),
+                    option -> mPlayerData.setSleepTimerHours(sleepHours),
+                    Helpers.floatEquals(mPlayerData.getSleepTimerHours(), sleepHours)));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_sleep_timer), options);
+    }
+
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -541,11 +556,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_chapter_notification2),
                 option -> mPlayerTweaksData.setChapterNotificationEnabled(option.isSelected()),
                 mPlayerTweaksData.isChapterNotificationEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.sleep_timer),
-                //getContext().getString(R.string.sleep_timer_desc),
-                option -> mPlayerData.setSleepTimerEnabled(option.isSelected()),
-                mPlayerData.isSleepTimerEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.search_background_playback),
                 option -> mSearchData.setTempBackgroundModeEnabled(option.isSelected()),
