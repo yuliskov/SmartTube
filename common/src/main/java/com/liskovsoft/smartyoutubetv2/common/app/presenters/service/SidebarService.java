@@ -47,13 +47,21 @@ public class SidebarService implements ProfileChangeListener {
         return Collections.unmodifiableList(mPinnedItems);
     }
 
-    public void addPinnedItem(Video item) {
+    public int addPinnedItem(Video item) {
         if (mPinnedItems.contains(item)) {
-            return;
+            return -1;
         }
 
-        mPinnedItems.add(item);
+        int idx = Helpers.indexOfFirst(mPinnedItems, obj -> obj.getId() > 100);
+
+        if (idx != -1) {
+            mPinnedItems.add(idx, item);
+        } else {
+            mPinnedItems.add(item);
+        }
         persistState();
+
+        return idx;
     }
 
     public void removePinnedItem(Video item) {

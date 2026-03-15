@@ -565,16 +565,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        getSidebarService().addPinnedItem(item);
+        int idx = getSidebarService().addPinnedItem(item);
 
         createPinnedMapping(item);
 
         BrowseSection newSection = createPinnedSection(item);
-        //Helpers.removeIf(mSections, section -> section.getId() == newSection.getId());
         if (!mSections.contains(newSection)) {
-            mSections.add(newSection);
+            if (idx != -1) {
+                mSections.add(idx, newSection);
+            } else {
+                mSections.add(newSection);
+            }
         }
-        getView().addSection(-1, newSection);
+        getView().addSection(idx, newSection);
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {

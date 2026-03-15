@@ -708,7 +708,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsHlsStreamsForced = Helpers.parseBoolean(split, 10, false);
-        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTVLauncher(mPrefs.getContext()));
+        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, false);
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
         // Buffering fix was there.
