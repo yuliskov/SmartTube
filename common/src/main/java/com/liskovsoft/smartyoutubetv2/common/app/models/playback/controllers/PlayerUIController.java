@@ -146,12 +146,12 @@ public class PlayerUIController extends BasePlayerController {
         return false;
     }
 
-    private void onSubtitleClicked(boolean enabled) {
+    private void onSubtitleClicked(int buttonState) {
         if (getPlayer() == null) {
             return;
         }
 
-        fitVideoIntoDialog();
+        boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
         // First run
         if (FormatItem.SUBTITLE_NONE.equals(getPlayerData().getLastSubtitleFormat())) {
@@ -258,7 +258,13 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    private void onDebugInfoClicked(boolean enabled) {
+    private void onDebugInfoClicked(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        boolean enabled = buttonState == PlayerUI.BUTTON_ON;
+
         mDebugViewEnabled = !enabled;
         getPlayer().showDebugInfo(mDebugViewEnabled);
         getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
@@ -266,6 +272,10 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onEngineInitialized() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mEngineReady = true;
 
         if (isEmbedPlayer()) {
@@ -407,9 +417,11 @@ public class PlayerUIController extends BasePlayerController {
         });
     }
 
-    private void onDislikeClicked(boolean dislike) {
+    private void onDislikeClicked(int buttonState) {
         if (getPlayer() == null)
             return;
+
+        boolean dislike = buttonState == PlayerUI.BUTTON_ON;
 
         getPlayer().setButtonState(R.id.action_thumbs_down, !dislike ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
@@ -431,7 +443,13 @@ public class PlayerUIController extends BasePlayerController {
         }
     }
 
-    private void onLikeClicked(boolean like) {
+    private void onLikeClicked(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        boolean like = buttonState == PlayerUI.BUTTON_ON;
+
         getPlayer().setButtonState(R.id.action_thumbs_up, !like ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
 
         if (!mIsMetadataLoaded) {
@@ -517,6 +535,10 @@ public class PlayerUIController extends BasePlayerController {
     }
     
     private void onVideoZoom() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         OptionCategory videoZoomCategory = AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
                     getPlayer().setResizeMode(getPlayerData().getResizeMode());
@@ -538,6 +560,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void onPipClicked() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayer().showOverlay(false);
         getPlayer().blockEngine(true);
         getPlayer().finish();
@@ -545,6 +571,10 @@ public class PlayerUIController extends BasePlayerController {
 
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
+        if (getPlayer() == null || getPlayer().getButtonState(buttonId) != buttonState) {
+            return;
+        }
+
         if (buttonId == R.id.action_rotate) {
             onRotate();
         } else if (buttonId == R.id.action_flip) {
@@ -578,15 +608,15 @@ public class PlayerUIController extends BasePlayerController {
         } else if (buttonId == R.id.action_search) {
             onSearchClicked();
         } else if (buttonId == R.id.action_video_stats) {
-            onDebugInfoClicked(buttonState == PlayerUI.BUTTON_ON);
+            onDebugInfoClicked(buttonState);
         } else if (buttonId == R.id.action_playlist_add) {
             onPlaylistAddClicked();
         } else if (buttonId == R.id.lb_control_closed_captioning) {
-            onSubtitleClicked(buttonState == PlayerUI.BUTTON_ON);
+            onSubtitleClicked(buttonState);
         } else if (buttonId == R.id.action_thumbs_down) {
-            onDislikeClicked(buttonState == PlayerUI.BUTTON_ON);
+            onDislikeClicked(buttonState);
         } else if (buttonId == R.id.action_thumbs_up) {
-            onLikeClicked(buttonState == PlayerUI.BUTTON_ON);
+            onLikeClicked(buttonState);
         }
     }
 
@@ -595,13 +625,13 @@ public class PlayerUIController extends BasePlayerController {
         if (buttonId == R.id.action_screen_dimming) {
             showScreenOffDialog();
         } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
-            showNotificationsDialog(buttonState);
+            showNotificationsDialog();
         } else if (buttonId == R.id.action_sound_off) {
             showSoundOffDialog();
         } else if (buttonId == R.id.action_afr) {
             AutoFrameRateSettingsPresenter.instance(getContext()).show(() -> applyAfr(getPlayerData().isAfrEnabled() ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON));
         } else if (buttonId == R.id.action_repeat) {
-            showPlaybackModeDialog(buttonState);
+            showPlaybackModeDialog();
         } else if (buttonId == R.id.lb_control_closed_captioning) {
             onSubtitleLongClicked();
         }
@@ -1009,19 +1039,31 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void applyAfr(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         getPlayerData().setAfrEnabled(buttonState == PlayerUI.BUTTON_OFF);
         getController(AutoFrameRateController.class).applyAfr();
         getPlayer().setButtonState(R.id.action_afr, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 
     private void applyRepeatMode(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         int nextMode = getNextRepeatMode(buttonState);
 
         getPlayerData().setPlaybackMode(nextMode);
         getPlayer().setButtonState(R.id.action_repeat, nextMode);
     }
 
-    private void showPlaybackModeDialog(int buttonState) {
+    private void showPlaybackModeDialog() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
                 getContext(), () -> {
                     getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
@@ -1062,8 +1104,8 @@ public class PlayerUIController extends BasePlayerController {
         subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
     }
 
-    private void showNotificationsDialog(int buttonState) {
-        if (getVideo() == null || getVideo().notificationStates == null) {
+    private void showNotificationsDialog() {
+        if (getPlayer() == null || getVideo() == null || getVideo().notificationStates == null) {
             return;
         }
 
