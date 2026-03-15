@@ -26,6 +26,7 @@ public class SidebarService implements ProfileChangeListener {
     private final AppPrefs mPrefs;
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
+    private final static int RESERVED_ID = 100;
 
     private SidebarService(Context context) {
         mContext = context.getApplicationContext();
@@ -52,7 +53,7 @@ public class SidebarService implements ProfileChangeListener {
             return -1;
         }
 
-        int idx = Helpers.indexOfFirst(mPinnedItems, obj -> obj.getId() > 100);
+        int idx = Helpers.indexOfFirst(mPinnedItems, obj -> obj.getId() > RESERVED_ID);
 
         if (idx != -1) {
             mPinnedItems.add(idx, item);
@@ -273,7 +274,7 @@ public class SidebarService implements ProfileChangeListener {
             item.videoId = null;
 
             // Fix id collision between pinned and default sections
-            if (item.getId() < 100 && item.getId() >= -1 && item.sectionId == -1) {
+            if (item.getId() < RESERVED_ID && item.getId() >= -1 && item.sectionId == -1) {
                 return true;
             }
 
