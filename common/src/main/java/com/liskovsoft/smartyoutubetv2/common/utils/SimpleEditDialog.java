@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
 public class SimpleEditDialog {
@@ -85,6 +86,8 @@ public class SimpleEditDialog {
             // BadTokenException: Unable to add window -- token null is not for an application
             // RuntimeException: InputChannel is not initialized
             e.printStackTrace();
+            MessageHelpers.showMessage(context, e.getMessage());
+            return;
         }
 
         configDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {

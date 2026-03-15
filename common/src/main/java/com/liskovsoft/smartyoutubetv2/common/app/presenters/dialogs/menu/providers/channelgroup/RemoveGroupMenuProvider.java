@@ -13,12 +13,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provide
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 public class RemoveGroupMenuProvider extends ContextMenuProvider {
-    private final Context mContext;
     private final ChannelGroupServiceWrapper mService;
 
     public RemoveGroupMenuProvider(@NonNull Context context, int idx) {
-        super(idx);
-        mContext = context.getApplicationContext();
+        super(context, idx);
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 
@@ -29,12 +27,12 @@ public class RemoveGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public void onClicked(Video item, VideoMenuCallback callback) {
-        AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.unpin_group_from_sidebar), () -> {
+        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.unpin_group_from_sidebar), () -> {
             mService.removeChannelGroup(
                     mService.findChannelGroupById(item.channelGroupId)
             );
-            BrowsePresenter.instance(mContext).unpinItem(item);
-            AppDialogPresenter.instance(mContext).closeDialog();
+            BrowsePresenter.instance(getContext()).unpinItem(item);
+            AppDialogPresenter.instance(getContext()).closeDialog();
         });
     }
 

@@ -25,12 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class ChannelGroupMenuProvider extends ContextMenuProvider {
-    private final Context mContext;
     private final ChannelGroupServiceWrapper mService;
 
     public ChannelGroupMenuProvider(@NonNull Context context, int idx) {
-        super(idx);
-        mContext = context.getApplicationContext();
+        super(context, idx);
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 
@@ -58,7 +56,7 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         if (item.hasChannel()) {
             showGroupDialog(item, callback);
         } else {
-            MessageHelpers.showMessage(mContext, R.string.wait_data_loading);
+            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
             MediaServiceManager.instance().loadMetadata(item, metadata -> {
                 item.sync(metadata);
@@ -68,17 +66,17 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
     }
 
     private void showGroupDialog(Video item, VideoMenuCallback callback) {
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(mContext);
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         List<ItemGroup> groups = mService.getChannelGroups();
 
         List<OptionItem> options = new ArrayList<>();
 
         // Create new group or enter url
-        String editDialogTitle = mContext.getString(R.string.new_subscriptions_group);
+        String editDialogTitle = getContext().getString(R.string.new_subscriptions_group);
         options.add(UiOptionItem.from(editDialogTitle, optionItem -> {
             dialogPresenter.closeDialog();
-            SimpleEditDialog.show(mContext, editDialogTitle,
+            SimpleEditDialog.show(getContext(), editDialogTitle,
                     null,
                     newValue -> {
                         if (mService.findChannelGroupByTitle(newValue) != null) {
@@ -91,23 +89,23 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
 
                         if (Helpers.startsWith(newValue, "http")) {
                             RxHelper.execute(mService.importGroupsObserve(Uri.parse(newValue)), this::pinGroups,
-                                    error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+                                    error -> MessageHelpers.showLongMessage(getContext(), error.getMessage()));
                         } else {
                             ItemGroup group = mService.createChannelGroup(newValue, null,
                                     Collections.singletonList(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId)));
                             mService.addChannelGroup(group);
-                            BrowsePresenter.instance(mContext).pinItem(Video.from(group));
-                            MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
+                            BrowsePresenter.instance(getContext()).pinItem(Video.from(group));
+                            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.pinned_to_sidebar));
                         }
                         return true;
                     });
         }, false));
 
-        //options.add(AppDialogUtil.createSubscriptionsBackupButton(mContext));
+        //options.add(AppDialogUtil.createSubscriptionsBackupButton(getContext()));
 
         for (ItemGroup group : groups) {
             options.add(UiOptionItem.from(group.getTitle(), optionItem -> {
-                BrowsePresenter presenter = BrowsePresenter.instance(mContext);
+                BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
                 if (optionItem.isSelected()) {
                     group.add(mService.createChannel(item.getAuthor(), item.cardImageUrl, item.channelId));
@@ -129,8 +127,8 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
             }, group.contains(item.channelId)));
         }
 
-        dialogPresenter.appendCheckedCategory(mContext.getString(getTitleResId()), options);
-        dialogPresenter.showDialog(mContext.getString(getTitleResId()));
+        dialogPresenter.appendCheckedCategory(getContext().getString(getTitleResId()), options);
+        dialogPresenter.showDialog(getContext().getString(getTitleResId()));
     }
 
     private void pinGroups(@NonNull List<ItemGroup> newGroups) {
@@ -139,8 +137,8 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
         }
 
         for (ItemGroup group : newGroups) {
-            BrowsePresenter.instance(mContext).pinItem(Video.from(group));
+            BrowsePresenter.instance(getContext()).pinItem(Video.from(group));
         }
-        MessageHelpers.showMessage(mContext, mContext.getString(R.string.pinned_to_sidebar));
+        MessageHelpers.showMessage(getContext(), getContext().getString(R.string.pinned_to_sidebar));
     }
 }

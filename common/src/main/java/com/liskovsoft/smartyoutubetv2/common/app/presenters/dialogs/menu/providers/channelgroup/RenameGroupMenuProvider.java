@@ -14,12 +14,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provide
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 public class RenameGroupMenuProvider extends ContextMenuProvider {
-    private final Context mContext;
     private final ChannelGroupServiceWrapper mService;
 
     public RenameGroupMenuProvider(@NonNull Context context, int idx) {
-        super(idx);
-        mContext = context.getApplicationContext();
+        super(context, idx);
         mService = ChannelGroupServiceWrapper.instance(context);
     }
 
@@ -30,14 +28,14 @@ public class RenameGroupMenuProvider extends ContextMenuProvider {
 
     @Override
     public void onClicked(Video item, VideoMenuCallback callback) {
-        AppDialogPresenter.instance(mContext).closeDialog();
+        AppDialogPresenter.instance(getContext()).closeDialog();
         SimpleEditDialog.show(
-                mContext,
-                mContext.getString(R.string.rename_group),
+                getContext(),
+                getContext().getString(R.string.rename_group),
                 item.title,
                 newValue -> {
                     item.title = newValue;
-                    BrowsePresenter.instance(mContext).renameSection(item);
+                    BrowsePresenter.instance(getContext()).renameSection(item);
 
                     ItemGroup channelGroup = mService.findChannelGroupById(item.channelGroupId);
 
