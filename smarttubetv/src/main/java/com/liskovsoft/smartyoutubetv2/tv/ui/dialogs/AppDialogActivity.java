@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackFragment;
 
 public class AppDialogActivity extends MotherActivity {
     private static final String TAG = AppDialogActivity.class.getSimpleName();
@@ -62,7 +63,47 @@ public class AppDialogActivity extends MotherActivity {
 
         //return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
         KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
-        return handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
+        return handleCommentsDialogMediaControls(newEvent) || handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
+    }
+
+    private boolean handleCommentsDialogMediaControls(KeyEvent event) {
+        if (event == null || mFragment == null || !mFragment.isCommentsDialogShown()) {
+            return false;
+        }
+
+        PlaybackView view = PlaybackPresenter.instance(this).getView();
+        if (!(view instanceof Fragment)) {
+            return false;
+        }
+
+        Fragment playbackView = (Fragment) view;
+        int keyCode = event.getKeyCode();
+
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_REWIND) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && playbackView instanceof PlaybackFragment) {
+                ((PlaybackFragment) playbackView).rewind();
+            }
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && playbackView instanceof PlaybackFragment) {
+                ((PlaybackFragment) playbackView).fastForward();
+            }
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PLAY ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE) {
+            Activity activity = playbackView.getActivity();
+            if (activity != null) {
+                activity.dispatchKeyEvent(event);
+            }
+            return true;
+        }
+
+        return false;
     }
     
     private boolean handleNavigation(KeyEvent event) {
