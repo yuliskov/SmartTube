@@ -631,7 +631,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 if (mediaTrack != null && mediaTrack.format != null) {
-                    if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // format language: en-us
+                    if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }
@@ -668,11 +668,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         return trackGroupList;
     }
-
-    //private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
-    //    TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
-    //    mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
-    //}
 
     // Track array manipulation.
     private static int[] getTracksAdding(SelectionOverride override, int addedTrack) {
