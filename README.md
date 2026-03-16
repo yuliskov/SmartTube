@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://f-droid.org/packages/app.smarttube.fdroid/">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" width="206" style="max-width:100%; height:auto;"/>
+  </a>
+</p>
+
 # Important announcement about the app
 
 My development environment was infected by unknown malicious software, as a result of which a few builds may have been affected. Once the issue was detected, I secured everything with a full disk wipe, restored a clean setup, and now all builds are scanned with VirusTotal. The F-Droid version will also be verified before release.
