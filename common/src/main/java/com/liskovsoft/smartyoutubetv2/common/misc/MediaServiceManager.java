@@ -94,6 +94,10 @@ public class MediaServiceManager implements OnAccountChange {
         void onError(Throwable error);
     }
 
+    public interface OnComplete {
+        void onComplete();
+    }
+
     private MediaServiceManager() {
         ServiceManager service = YouTubeServiceManager.instance();
         mItemService = service.getMediaItemService();
@@ -198,11 +202,11 @@ public class MediaServiceManager implements OnAccountChange {
                 );
     }
 
-    public void loadChannelRows(Video item, OnMediaGroupList onMediaGroupList) {
-        loadChannelRows(item, onMediaGroupList, null);
+    private void loadChannelRows(Video item, OnMediaGroupList onMediaGroupList) {
+        loadChannelRows(item, onMediaGroupList, null, null);
     }
 
-    public void loadChannelRows(Video item, OnMediaGroupList onMediaGroupList, OnError onError) {
+    private void loadChannelRows(Video item, OnMediaGroupList onMediaGroupList, OnError onError, OnComplete onComplete) {
         if (item == null) {
             return;
         }
@@ -219,6 +223,11 @@ public class MediaServiceManager implements OnAccountChange {
                             Log.e(TAG, "loadChannelRows error: %s", error.getMessage());
                             if (onError != null) {
                                 onError.onError(error);
+                            }
+                        },
+                        () -> {
+                            if (onComplete != null) {
+                                onComplete.onComplete();
                             }
                         }
                 );
@@ -297,26 +306,6 @@ public class MediaServiceManager implements OnAccountChange {
 
     public void disposeActions() {
         RxHelper.disposeActions(mMetadataAction, mUploadsAction, mRowsAction, mSubscribedChannelsAction);
-    }
-
-    /**
-     * Most tiny ui has 8 cards in a row or 24 in grid.
-     */
-    public void shouldContinueGridGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
-        shouldContinueTheGroup(context, group, onNeedContinue, true);
-    }
-
-    public void shouldContinueRowGroup(Context context, VideoGroup group, Runnable onNeedContinue) {
-        shouldContinueTheGroup(context, group, onNeedContinue, false);
-    }
-
-    /**
-     * Most tiny ui has 8 cards in a row or 24 in grid.
-     */
-    public void shouldContinueTheGroup(Context context, VideoGroup group, Runnable onNeedContinue, boolean isGrid) {
-        if (shouldContinueTheGroup(context, group, isGrid) && onNeedContinue != null) {
-            onNeedContinue.run();
-        }
     }
 
     /**
@@ -508,7 +497,7 @@ public class MediaServiceManager implements OnAccountChange {
             } else {
                 MessageHelpers.showMessage(context, "Unknown type of channel");
             }
-        }, error -> LoadingManager.showLoading(context, false));
+        }, error -> LoadingManager.showLoading(context, false), () -> LoadingManager.showLoading(context, false));
     }
 
     private void setHistoryBroken(boolean isBroken) {
