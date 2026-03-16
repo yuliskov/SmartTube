@@ -135,6 +135,7 @@ android {
         }
         stfdroid {
             applicationId "app.smarttube.fdroid"
+            minSdkVersion 21
             targetSdkVersion project.properties.compileSdkVersion
         }
     }
