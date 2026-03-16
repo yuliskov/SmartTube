@@ -540,7 +540,10 @@ public final class Video {
         return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
-    public boolean isPlaylistInChannel() {
+    /**
+     * A single playlist item inside a channel. Usually has a badge (e.g. 20 videos)
+     */
+    public boolean isBadgePlaylistInChannel() {
         return belongsToChannel() && hasPlaylist() && !belongsToSamePlaylistGroup();
     }
 

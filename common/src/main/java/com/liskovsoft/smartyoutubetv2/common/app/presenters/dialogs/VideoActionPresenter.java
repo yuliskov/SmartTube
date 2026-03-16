@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -29,9 +28,9 @@ public class VideoActionPresenter extends BasePresenter<Void> {
         }
 
         // Show playlist contents in channel instead of instant playback
-        if (item.hasVideo() && !item.isPlaylistInChannel()) {
+        if (item.hasVideo() && !item.isBadgePlaylistInChannel()) {
             PlaybackPresenter.instance(getContext()).openVideo(item);
-        } else if (item.hasChannel() || item.belongsToChannelUploads()) {
+        } else if (item.hasChannel() || (item.belongsToChannelUploads() && item.hasNestedItems())) {
             MediaServiceManager.chooseChannelPresenter(getContext(), item);
         } else if (item.hasPlaylist() || item.hasNestedItems()) {
             if (item.belongsToMusic()) {
