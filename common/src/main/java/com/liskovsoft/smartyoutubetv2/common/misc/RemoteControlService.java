@@ -3,13 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build.VERSION;
 import android.os.IBinder;
-import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.annotation.Nullable;
 
-import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -37,13 +36,18 @@ public class RemoteControlService extends Service {
         // NOTE: it's impossible to hide notification on Android 9 and above
         // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
         try {
-            if (AppInfoHelpers.getRealSdkVersion(this) >= 34) { // Fix ForegroundServiceStartNotAllowedException
-                // Tie service to active media session
-                MediaSessionCompat mediaSession = new MediaSessionCompat(this, TAG);
-                mediaSession.setActive(true);
-            }
+            //if (AppInfoHelpers.getRealSdkVersion(this) >= 34) { // Fix ForegroundServiceStartNotAllowedException
+            //    // Tie service to active media session
+            //    MediaSessionCompat mediaSession = new MediaSessionCompat(this, TAG);
+            //    mediaSession.setActive(true);
+            //}
 
-            startForeground(NOTIFICATION_ID, createNotification());
+            if (VERSION.SDK_INT >= 34) {
+                // Fix ForegroundServiceStartNotAllowedException on Android 14?
+                startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+            } else {
+                startForeground(NOTIFICATION_ID, createNotification());
+            }
         } catch (NullPointerException e) {
             // NullPointerException: Attempt to read from field 'int com.android.server.am.UidRecord.curProcState' on a null object reference
             e.printStackTrace();
