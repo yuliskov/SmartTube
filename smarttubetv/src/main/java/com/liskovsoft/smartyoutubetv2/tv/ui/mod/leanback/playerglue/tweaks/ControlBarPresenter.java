@@ -97,7 +97,7 @@ class ControlBarPresenter extends Presenter {
             }
             mControlBar.setDefaultFocusToMiddle(mDefaultFocusToMiddle);
             mControlBar.setFocusRecovery(mFocusRecovery);
-            mControlBar.setSyncedFocusIndexEnabled(mIsSyncedFocusIndexEnabled);
+            mControlBar.setSharedFocusEnabled(mIsSharedFocusEnabled);
             mControlBar.setOnChildFocusedListener(new ControlBar.OnChildFocusedListener() {
                 @Override
                 public void onChildFocusedListener(View child, View focused) {
@@ -221,7 +221,7 @@ class ControlBarPresenter extends Presenter {
     private static int sControlIconWidth;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
-    boolean mIsSyncedFocusIndexEnabled = true;
+    boolean mIsSharedFocusEnabled = true;
 
     /**
      * Constructor for a ControlBarPresenter.
@@ -343,7 +343,7 @@ class ControlBarPresenter extends Presenter {
     /**
      * MOD: global navigation
      */
-    void setSyncedFocusIndexEnabled(boolean enabled) {
-        mIsSyncedFocusIndexEnabled = enabled;
+    void setSharedFocusEnabled(boolean enabled) {
+        mIsSharedFocusEnabled = enabled;
     }
 }

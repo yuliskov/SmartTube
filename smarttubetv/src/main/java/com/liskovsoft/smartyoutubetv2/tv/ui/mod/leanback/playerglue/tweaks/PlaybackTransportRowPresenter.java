@@ -429,8 +429,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mPlayerData = PlayerData.instance(rootView.getContext());
             // MOD: switch between navigation modes
             PlayerTweaksData tweaksData = PlayerTweaksData.instance(rootView.getContext());
-            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setSyncedFocusIndexEnabled(tweaksData.isSyncRowButtonIndexEnabled());
-            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setSyncedFocusIndexEnabled(tweaksData.isSyncRowButtonIndexEnabled());
+            PlaybackTransportRowPresenter.this.mPlaybackControlsPresenter.setSharedFocusEnabled(tweaksData.isSyncRowButtonIndexEnabled());
+            PlaybackTransportRowPresenter.this.mSecondaryControlsPresenter.setSharedFocusEnabled(tweaksData.isSyncRowButtonIndexEnabled());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
@@ -920,10 +920,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
-        mPlaybackControlsPresenter.setFocusRecovery(true);
+        mPlaybackControlsPresenter.setFocusRecovery(false);
         mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
-        mSecondaryControlsPresenter.setFocusRecovery(true);
+        mSecondaryControlsPresenter.setFocusRecovery(false);
 
         mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
         mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
