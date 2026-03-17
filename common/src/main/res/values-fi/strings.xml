@@ -725,4 +725,5 @@
   <string name="player_time_stretching_desc">Pitää äänen luonnollisena nopeutta vaihdettaessa. Saattaa heikentää suorituskykyä merkittävästi joillakin laitteilla.</string>
   <string name="queue_respects_playback_mode">Toistojono noudattaa toistotilaa</string>
   <string name="play_from_start">Toista alusta</string>
+  <string name="ignore_short_segments">Ohita lyhyet video-osiot</string>
 </resources>
