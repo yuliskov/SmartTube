@@ -28,6 +28,7 @@ public class IntentExtractor {
      * https://youtube.com/channel/BLABLA/video
      */
     private static final String CHANNEL_KEY = "channel";
+    private static final String USER_KEY = "user";
     private static final String CHANNEL_ALT_KEY = "c";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions"; // last 'resume' param isn't parsed by intent and should be removed
@@ -130,6 +131,11 @@ public class IntentExtractor {
         if (channelId == null) {
             // https://www.youtube.com/c/IngaMezerya
             channelId = parser.get(CHANNEL_ALT_KEY);
+
+            if (channelId == null) {
+                // https://youtube.com/user/RVLucius
+                channelId = parser.get(USER_KEY);
+            }
 
             if (channelId != null) {
                 channelId = "@" + channelId; // add the prefix to quickly distinguish later
