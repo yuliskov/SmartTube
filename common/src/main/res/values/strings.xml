@@ -734,6 +734,7 @@
     <string name="queue_respects_playback_mode">Queue respects playback mode</string>
     <string name="ignore_short_segments">Ignore short segments</string>
     <string name="install_bridge">Install ATV/Amazon bridge</string>
+    <string name="fix_empty_subs_and_channels">Fix empty Subscriptions and Channels</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>

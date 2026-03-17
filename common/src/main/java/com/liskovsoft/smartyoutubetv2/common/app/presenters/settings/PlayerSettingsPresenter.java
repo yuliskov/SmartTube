@@ -241,190 +241,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
-    private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
-                getContext().getString(R.string.playback_notifications_fix_desc),
-                option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
-                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
-        
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
-                getContext().getString(R.string.disable_network_error_fixing_desc),
-                option -> mPlayerTweaksData.setNetworkErrorFixingDisabled(option.isSelected()),
-                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
-
-        // Oculus Quest fix: back button not closing the activity
-        options.add(UiOptionItem.from(getContext().getString(R.string.oculus_quest_fix),
-                option -> {
-                    mPlayerTweaksData.setOculusQuestFixEnabled(option.isSelected());
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.isOculusQuestFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_google_dns),
-                getContext().getString(R.string.prefer_ipv4_desc),
-                option -> {
-                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_GOOGLE : PlayerTweaksData.DNS_TYPE_SYSTEM);
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_GOOGLE));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
-                getContext().getString(R.string.prefer_ipv4_desc),
-                option -> {
-                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_IPV4 : PlayerTweaksData.DNS_TYPE_SYSTEM);
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_IPV4));
-
-        // Disable long press on buggy controllers.
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
-                getContext().getString(R.string.disable_ok_long_press_desc),
-                option -> mGeneralData.setOkButtonLongPressDisabled(option.isSelected()),
-                mGeneralData.isOkButtonLongPressDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
-                getContext().getString(R.string.audio_sync_fix_desc),
-                option -> mPlayerTweaksData.setAudioSyncFixEnabled(option.isSelected()),
-                mPlayerTweaksData.isAudioSyncFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.ambilight_ratio_fix),
-                getContext().getString(R.string.ambilight_ratio_fix_desc),
-                option -> {
-                    mPlayerTweaksData.setTextureViewEnabled(option.isSelected());
-                    if (option.isSelected()) {
-                        // Tunneled playback works only with SurfaceView
-                        mPlayerTweaksData.setTunneledPlaybackEnabled(false);
-                    }
-                },
-                mPlayerTweaksData.isTextureViewEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats) + " " + TrackSelectorUtil.HIGH_BITRATE_MARK,
-                option -> mPlayerTweaksData.setHighBitrateFormatsEnabled(option.isSelected()),
-                mPlayerTweaksData.isHighBitrateFormatsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_audio_formats),
-                option -> mPlayerTweaksData.setUnsafeAudioFormatsEnabled(option.isSelected()),
-                mPlayerTweaksData.isUnsafeAudioFormatsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
-                getContext().getString(R.string.force_legacy_codecs_desc),
-                option -> mPlayerData.setLegacyCodecsForced(option.isSelected()),
-                mPlayerData.isLegacyCodecsForced()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
-                getContext().getString(R.string.live_stream_fix_desc),
-                option -> {
-                    mPlayerTweaksData.setHlsStreamsForced(option.isSelected());
-                },
-                mPlayerTweaksData.isHlsStreamsForced()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix_4k),
-                getContext().getString(R.string.live_stream_fix_4k_desc),
-                option -> {
-                    mPlayerTweaksData.setDashUrlStreamsForced(option.isSelected());
-                },
-                mPlayerTweaksData.isDashUrlStreamsForced()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
-                getContext().getString(R.string.disable_stream_buffer_desc),
-                option -> mPlayerTweaksData.setBufferOnStreamsDisabled(option.isSelected()),
-                mPlayerTweaksData.isBufferOnStreamsDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_all_formats),
-                getContext().getString(R.string.unlock_all_formats_desc),
-                option -> mPlayerTweaksData.setAllFormatsUnlocked(option.isSelected()),
-                mPlayerTweaksData.isAllFormatsUnlocked()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.alt_presets_behavior),
-                getContext().getString(R.string.alt_presets_behavior_desc),
-                option -> mPlayerTweaksData.setNoFpsPresetsEnabled(option.isSelected()),
-                mPlayerTweaksData.isNoFpsPresetsEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_over_vp9),
-                getContext().getString(R.string.prefer_avc_over_vp9_desc),
-                option -> mPlayerTweaksData.setAvcOverVp9Preferred(option.isSelected()),
-                mPlayerTweaksData.isAvcOverVp9Preferred()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.amlogic_fix),
-                getContext().getString(R.string.amlogic_fix_desc),
-                option -> mPlayerTweaksData.setAmlogicFixEnabled(option.isSelected()),
-                mPlayerTweaksData.isAmlogicFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.tunneled_video_playback),
-                getContext().getString(R.string.tunneled_video_playback_desc),
-                option -> {
-                    mPlayerTweaksData.setTunneledPlaybackEnabled(option.isSelected());
-                    if (option.isSelected()) {
-                        // Tunneled playback works only with SurfaceView
-                        mPlayerTweaksData.setTextureViewEnabled(false);
-                    }
-                },
-                mPlayerTweaksData.isTunneledPlaybackEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
-                getContext().getString(R.string.disable_vsync_desc),
-                option -> mPlayerTweaksData.setSnappingToVsyncDisabled(option.isSelected()),
-                mPlayerTweaksData.isSnappingToVsyncDisabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.skip_codec_profile_check),
-                getContext().getString(R.string.skip_codec_profile_check_desc),
-                option -> mPlayerTweaksData.setProfileLevelCheckSkipped(option.isSelected()),
-                mPlayerTweaksData.isProfileLevelCheckSkipped()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.force_sw_codec),
-                getContext().getString(R.string.force_sw_codec_desc),
-                option -> mPlayerTweaksData.setSWDecoderForced(option.isSelected()),
-                mPlayerTweaksData.isSWDecoderForced()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.sony_frame_drop_fix),
-                getContext().getString(R.string.sony_frame_drop_fix_desc),
-                option -> mPlayerTweaksData.setSonyFrameDropFixEnabled(option.isSelected()),
-                mPlayerTweaksData.isSonyFrameDropFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.amazon_frame_drop_fix),
-                getContext().getString(R.string.amazon_frame_drop_fix_desc),
-                option -> mPlayerTweaksData.setAmazonFrameDropFixEnabled(option.isSelected()),
-                mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.keep_finished_activities),
-                option -> mPlayerTweaksData.setKeepFinishedActivityEnabled(option.isSelected()),
-                mPlayerTweaksData.isKeepFinishedActivityEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_channels_service),
-                option -> GlobalPreferences.instance(getContext()).setChannelsServiceEnabled(!option.isSelected()),
-                !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
-                option -> {
-                    mSidebarService.enableSettingsSection(!option.isSelected());
-                    mRestartApp = true;
-                },
-                !mSidebarService.isSettingsSectionEnabled()));
-
-        options.add(UiOptionItem.from("Fix empty Subscriptions and Channels",
-                option -> mMediaServiceData.setLegacyUIEnabled(option.isSelected()),
-                mMediaServiceData.isLegacyUIEnabled()));
-
-        // Disabled inside RetrofitHelper
-        //options.add(UiOptionItem.from("Prefer IPv4 DNS",
-        //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
-        //        GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
-        //
-        //options.add(UiOptionItem.from("Enable DNS over HTTPS",
-        //        option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
-        //        GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
-
-        // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
-        // It's because there's no tweaks for modern devices.
-        //options.add(UiOptionItem.from("Enable set output surface workaround",
-        //        option -> mPlayerTweaksData.enableSetOutputSurfaceWorkaround(option.isSelected()),
-        //        mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled()));
-
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
-    }
-
     private void appendSeekTypeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -509,6 +325,20 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createNetworkEngineCategory(getContext());
         settingsPresenter.appendCategory(category);
+    }
+
+    private void appendPlayerExitCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.app_double_back_exit, GeneralData.EXIT_DOUBLE_BACK},
+                {R.string.app_single_back_exit, GeneralData.EXIT_SINGLE_BACK}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mGeneralData.setPlayerExitShortcut(pair[1]),
+                    mGeneralData.getPlayerExitShortcut() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_exit_shortcut), options);
     }
 
     private void appendSleepTimerCategory(AppDialogPresenter settingsPresenter) {
@@ -668,17 +498,187 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
-    private void appendPlayerExitCategory(AppDialogPresenter settingsPresenter) {
+    private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int[] pair : new int[][] {
-                {R.string.app_double_back_exit, GeneralData.EXIT_DOUBLE_BACK},
-                {R.string.app_single_back_exit, GeneralData.EXIT_SINGLE_BACK}}) {
-            options.add(UiOptionItem.from(getContext().getString(pair[0]),
-                    optionItem -> mGeneralData.setPlayerExitShortcut(pair[1]),
-                    mGeneralData.getPlayerExitShortcut() == pair[1]));
-        }
+        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
+                getContext().getString(R.string.playback_notifications_fix_desc),
+                option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
+                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_exit_shortcut), options);
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
+                getContext().getString(R.string.disable_network_error_fixing_desc),
+                option -> mPlayerTweaksData.setNetworkErrorFixingDisabled(option.isSelected()),
+                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
+
+        // Oculus Quest fix: back button not closing the activity
+        options.add(UiOptionItem.from(getContext().getString(R.string.oculus_quest_fix),
+                option -> {
+                    mPlayerTweaksData.setOculusQuestFixEnabled(option.isSelected());
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.isOculusQuestFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_google_dns),
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> {
+                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_GOOGLE : PlayerTweaksData.DNS_TYPE_SYSTEM);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_GOOGLE));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> {
+                    mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_IPV4 : PlayerTweaksData.DNS_TYPE_SYSTEM);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_IPV4));
+
+        // Disable long press on buggy controllers.
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+                getContext().getString(R.string.disable_ok_long_press_desc),
+                option -> mGeneralData.setOkButtonLongPressDisabled(option.isSelected()),
+                mGeneralData.isOkButtonLongPressDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
+                getContext().getString(R.string.audio_sync_fix_desc),
+                option -> mPlayerTweaksData.setAudioSyncFixEnabled(option.isSelected()),
+                mPlayerTweaksData.isAudioSyncFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.ambilight_ratio_fix),
+                getContext().getString(R.string.ambilight_ratio_fix_desc),
+                option -> {
+                    mPlayerTweaksData.setTextureViewEnabled(option.isSelected());
+                    if (option.isSelected()) {
+                        // Tunneled playback works only with SurfaceView
+                        mPlayerTweaksData.setTunneledPlaybackEnabled(false);
+                    }
+                },
+                mPlayerTweaksData.isTextureViewEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats) + " " + TrackSelectorUtil.HIGH_BITRATE_MARK,
+                option -> mPlayerTweaksData.setHighBitrateFormatsEnabled(option.isSelected()),
+                mPlayerTweaksData.isHighBitrateFormatsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_audio_formats),
+                option -> mPlayerTweaksData.setUnsafeAudioFormatsEnabled(option.isSelected()),
+                mPlayerTweaksData.isUnsafeAudioFormatsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
+                getContext().getString(R.string.force_legacy_codecs_desc),
+                option -> mPlayerData.setLegacyCodecsForced(option.isSelected()),
+                mPlayerData.isLegacyCodecsForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
+                getContext().getString(R.string.live_stream_fix_desc),
+                option -> {
+                    mPlayerTweaksData.setHlsStreamsForced(option.isSelected());
+                },
+                mPlayerTweaksData.isHlsStreamsForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix_4k),
+                getContext().getString(R.string.live_stream_fix_4k_desc),
+                option -> {
+                    mPlayerTweaksData.setDashUrlStreamsForced(option.isSelected());
+                },
+                mPlayerTweaksData.isDashUrlStreamsForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_stream_buffer),
+                getContext().getString(R.string.disable_stream_buffer_desc),
+                option -> mPlayerTweaksData.setBufferOnStreamsDisabled(option.isSelected()),
+                mPlayerTweaksData.isBufferOnStreamsDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.unlock_all_formats),
+                getContext().getString(R.string.unlock_all_formats_desc),
+                option -> mPlayerTweaksData.setAllFormatsUnlocked(option.isSelected()),
+                mPlayerTweaksData.isAllFormatsUnlocked()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.alt_presets_behavior),
+                getContext().getString(R.string.alt_presets_behavior_desc),
+                option -> mPlayerTweaksData.setNoFpsPresetsEnabled(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_over_vp9),
+                getContext().getString(R.string.prefer_avc_over_vp9_desc),
+                option -> mPlayerTweaksData.setAvcOverVp9Preferred(option.isSelected()),
+                mPlayerTweaksData.isAvcOverVp9Preferred()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.amlogic_fix),
+                getContext().getString(R.string.amlogic_fix_desc),
+                option -> mPlayerTweaksData.setAmlogicFixEnabled(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.tunneled_video_playback),
+                getContext().getString(R.string.tunneled_video_playback_desc),
+                option -> {
+                    mPlayerTweaksData.setTunneledPlaybackEnabled(option.isSelected());
+                    if (option.isSelected()) {
+                        // Tunneled playback works only with SurfaceView
+                        mPlayerTweaksData.setTextureViewEnabled(false);
+                    }
+                },
+                mPlayerTweaksData.isTunneledPlaybackEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_vsync),
+                getContext().getString(R.string.disable_vsync_desc),
+                option -> mPlayerTweaksData.setSnappingToVsyncDisabled(option.isSelected()),
+                mPlayerTweaksData.isSnappingToVsyncDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.skip_codec_profile_check),
+                getContext().getString(R.string.skip_codec_profile_check_desc),
+                option -> mPlayerTweaksData.setProfileLevelCheckSkipped(option.isSelected()),
+                mPlayerTweaksData.isProfileLevelCheckSkipped()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_sw_codec),
+                getContext().getString(R.string.force_sw_codec_desc),
+                option -> mPlayerTweaksData.setSWDecoderForced(option.isSelected()),
+                mPlayerTweaksData.isSWDecoderForced()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.sony_frame_drop_fix),
+                getContext().getString(R.string.sony_frame_drop_fix_desc),
+                option -> mPlayerTweaksData.setSonyFrameDropFixEnabled(option.isSelected()),
+                mPlayerTweaksData.isSonyFrameDropFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.amazon_frame_drop_fix),
+                getContext().getString(R.string.amazon_frame_drop_fix_desc),
+                option -> mPlayerTweaksData.setAmazonFrameDropFixEnabled(option.isSelected()),
+                mPlayerTweaksData.isAmazonFrameDropFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.keep_finished_activities),
+                option -> mPlayerTweaksData.setKeepFinishedActivityEnabled(option.isSelected()),
+                mPlayerTweaksData.isKeepFinishedActivityEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_channels_service),
+                option -> GlobalPreferences.instance(getContext()).setChannelsServiceEnabled(!option.isSelected()),
+                !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
+                option -> {
+                    mSidebarService.enableSettingsSection(!option.isSelected());
+                    mRestartApp = true;
+                },
+                !mSidebarService.isSettingsSectionEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.fix_empty_subs_and_channels),
+                option -> mMediaServiceData.setLegacyUIEnabled(option.isSelected()),
+                mMediaServiceData.isLegacyUIEnabled()));
+
+        // Disabled inside RetrofitHelper
+        //options.add(UiOptionItem.from("Prefer IPv4 DNS",
+        //        option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+        //
+        //options.add(UiOptionItem.from("Enable DNS over HTTPS",
+        //        option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
+        //        GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
+
+        // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
+        // It's because there's no tweaks for modern devices.
+        //options.add(UiOptionItem.from("Enable set output surface workaround",
+        //        option -> mPlayerTweaksData.enableSetOutputSurfaceWorkaround(option.isSelected()),
+        //        mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
 }
