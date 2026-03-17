@@ -119,27 +119,6 @@ android {
         }
     }
 
-    // gradle 4.6 migration: disable dimensions mechanism
-    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
-    flavorDimensions "default"
-
-    // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
-    productFlavors {
-        stbeta {
-            applicationId "org.smarttube.beta"
-            targetSdkVersion project.properties.compileSdkVersion
-        }
-        ststable {
-            applicationId "org.smarttube.stable"
-            targetSdkVersion project.properties.compileSdkVersion
-        }
-        stfdroid {
-            applicationId "app.smarttube.fdroid"
-            minSdkVersion 21
-            targetSdkVersion project.properties.compileSdkVersion
-        }
-    }
-
     // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
@@ -170,7 +149,29 @@ android {
     }
 
     lintOptions {
-        checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
+        abortOnError true
+        //checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
+    }
+
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
+    productFlavors {
+        stbeta {
+            applicationId "org.smarttube.beta"
+            targetSdkVersion project.properties.compileSdkVersion
+        }
+        ststable {
+            applicationId "org.smarttube.stable"
+            targetSdkVersion project.properties.compileSdkVersion
+        }
+        stfdroid {
+            applicationId "app.smarttube.fdroid"
+            minSdkVersion 21
+            targetSdkVersion project.properties.compileSdkVersion
+        }
     }
 }
 

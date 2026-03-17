@@ -714,7 +714,7 @@
     <string name="action_debug_info">Debuq məlumatı</string>
     <string name="dialog_block_channel">Kanalə bloklayın</string>
     <string name="dialog_unblock_channel">Kanalı blokdan çıxarın</string>
-    <string name="confirm_block_channel">Bütün məzmun %-dən gizlədilsin?</string>
+    <string name="confirm_block_channel">Bütün məzmun %s-dən gizlədilsin?</string>
     <string name="channel_blocked">Kanal bloklanıb</string>
     <string name="channel_unblocked">Kanal blokdan çıxarıldı</string>
     <string name="header_blocked_channels">Bloklanmış Kanallar</string>

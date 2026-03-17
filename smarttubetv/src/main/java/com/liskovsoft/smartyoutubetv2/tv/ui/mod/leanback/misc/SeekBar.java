@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -398,6 +399,10 @@ public final class SeekBar extends View {
     }
 
     private void setHotspot(float x, float y) {
+        if (VERSION.SDK_INT < 21) {
+            return;
+        }
+
         final Drawable bg = getBackground();
         if (bg != null) {
             bg.setHotspot(x, y);

@@ -16,14 +16,11 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ClickableSpan;
-import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +34,6 @@ import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat;
@@ -152,6 +148,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
         }
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public @Nullable View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -216,31 +213,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
         return view;
     }
 
-    /**
-     * Make link open in browser. Not working.
-     */
-    private CharSequence toSpannableString(CharSequence message) {
-        SpannableStringBuilder builder = SpannableStringBuilder.valueOf(message);
-        URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
-
-        for (URLSpan span : spans) {
-           builder.setSpan(new ClickableSpan() {
-                   @Override
-                   public void onClick(@NonNull View widget) {
-                       MessageHelpers.showMessage(getContext(), "On link clicked " + span.getURL());
-                   }
-               },
-               builder.getSpanStart(span),
-               builder.getSpanEnd(span),
-               Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-           );
-           builder.removeSpan(span);
-        }
-
-        return builder;
-    }
-
-    public RecyclerView.Adapter onCreateAdapter() {
+    public RecyclerView.Adapter<ViewHolder> onCreateAdapter() {
         //final DialogPreference preference = getPreference();
         if (mMulti) {
             return new AdapterMulti(mEntries, mEntryValues, mInitialSelections);

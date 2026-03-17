@@ -27,7 +27,6 @@
   <string name="category_background_playback">Afspil i baggrunden</string>
   <string name="not_implemented">Ikke implementeret</string>
   <string name="option_background_playback_off">Deaktiveret</string>
-  <string name="option_background_playback_all">Video og lyd</string>
   <string name="option_background_playback_only_audio">Kun lyd</string>
   <string name="playback_settings">Indstillinger for afspilningskvalitet</string>
   <string name="video_speed">Videohastighed</string>

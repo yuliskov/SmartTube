@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.VideoView;
 
+import androidx.annotation.RequiresApi;
+
 public class LoopingVideoView extends VideoView {
 
     private MediaPlayer mMediaPlayer;
@@ -22,6 +24,7 @@ public class LoopingVideoView extends VideoView {
         super(context, attrs, defStyleAttr);
     }
 
+    @RequiresApi(21)
     public LoopingVideoView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }

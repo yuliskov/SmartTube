@@ -36,16 +36,21 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.BaseInputConnection;
 
+import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -1237,6 +1242,30 @@ public class Utils {
         }
         
         return false;
+    }
+
+    /**
+     * Make link open in browser. Not working.
+     */
+    public static CharSequence toBrowserLink(Context context, CharSequence message) {
+        SpannableStringBuilder builder = SpannableStringBuilder.valueOf(message);
+        URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
+
+        for (URLSpan span : spans) {
+            builder.setSpan(new ClickableSpan() {
+                                @Override
+                                public void onClick(@NonNull View widget) {
+                                    MessageHelpers.showMessage(context, "On link clicked " + span.getURL());
+                                }
+                            },
+                    builder.getSpanStart(span),
+                    builder.getSpanEnd(span),
+                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            );
+            builder.removeSpan(span);
+        }
+
+        return builder;
     }
 
     private static void persistData(Context context) {

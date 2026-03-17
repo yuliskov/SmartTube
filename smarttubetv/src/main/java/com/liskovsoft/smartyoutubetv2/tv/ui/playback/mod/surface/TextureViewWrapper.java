@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ public class TextureViewWrapper implements SurfaceWrapper {
     private final TextureView mVideoSurface;
     private SurfaceHolder.Callback mMediaPlaybackCallback;
 
+    @SuppressLint("WrongConstant")
     public TextureViewWrapper(Context context, ViewGroup root) {
         mVideoSurface = (TextureView) LayoutInflater.from(context).inflate(
                 R.layout.lb_video_texture, root, false);

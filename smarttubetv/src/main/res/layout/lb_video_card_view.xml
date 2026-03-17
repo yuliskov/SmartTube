@@ -45,7 +45,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="@dimen/lb_basic_card_info_text_margin"
                 android:layout_marginLeft="@dimen/lb_basic_card_info_text_margin"
-                android:ellipsize="none"
+                android:ellipsize="end"
                 android:fontFamily="sans-serif-condensed"
                 android:maxLines="1"
                 android:textColor="@color/lb_basic_card_content_text_color"
