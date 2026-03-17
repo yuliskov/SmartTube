@@ -733,6 +733,15 @@
     <string name="player_time_stretching_desc">Zachovává přirozený hlas i při změně rychlosti. Na některých zařízeních může výrazně snížit výkon.</string>
     <string name="queue_respects_playback_mode">Fronta respektuje režim přehrávání</string>
     <string name="ignore_short_segments">Ignorovat krátké segmenty</string>
+    <string name="install_bridge">Nainstalovat ATV/Amazon most</string>
+    <plurals name="hours">
+        <item quantity="one">%s hodina</item>
+        <item quantity="other">%s hodin</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s sekunda</item>
+        <item quantity="other">%s sekund</item>
+    </plurals>
 </resources>
 
 
