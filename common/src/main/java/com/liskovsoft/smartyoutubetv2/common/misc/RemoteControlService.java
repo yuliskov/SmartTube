@@ -36,20 +36,10 @@ public class RemoteControlService extends Service {
         // NOTE: it's impossible to hide notification on Android 9 and above
         // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
         try {
-            //if (AppInfoHelpers.getRealSdkVersion(this) >= 34) { // Fix ForegroundServiceStartNotAllowedException
-            //    // Tie service to active media session
-            //    MediaSessionCompat mediaSession = new MediaSessionCompat(this, TAG);
-            //    mediaSession.setActive(true);
-            //}
-
-            if (VERSION.SDK_INT >= 34) {
-                // Fix ForegroundServiceStartNotAllowedException on Android 14?
-                startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
-            } else {
-                startForeground(NOTIFICATION_ID, createNotification());
-            }
-        } catch (NullPointerException e) {
+            startForeground(NOTIFICATION_ID, createNotification());
+        } catch (Exception e) {
             // NullPointerException: Attempt to read from field 'int com.android.server.am.UidRecord.curProcState' on a null object reference
+            // ForegroundServiceStartNotAllowedException: Service.startForeground() not allowed due to mAllowStartForeground false (Android 14)
             e.printStackTrace();
         }
     }
