@@ -631,7 +631,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 if (mediaTrack != null && mediaTrack.format != null) {
-                    if (Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
+                    if (resultLanguage != null && Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
                         if (resultTracks == null) {
                             resultTracks = new ArrayList<>();
                         }
