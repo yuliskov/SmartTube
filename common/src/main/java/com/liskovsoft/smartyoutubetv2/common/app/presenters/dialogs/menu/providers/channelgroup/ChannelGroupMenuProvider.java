@@ -66,6 +66,10 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
     }
 
     private void showGroupDialog(Video item, VideoMenuCallback callback) {
+        if (item == null || item.channelId == null) {
+            return;
+        }
+
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         List<ItemGroup> groups = mService.getChannelGroups();
@@ -100,8 +104,6 @@ public class ChannelGroupMenuProvider extends ContextMenuProvider {
                         return true;
                     });
         }, false));
-
-        //options.add(AppDialogUtil.createSubscriptionsBackupButton(getContext()));
 
         for (ItemGroup group : groups) {
             options.add(UiOptionItem.from(group.getTitle(), optionItem -> {
