@@ -342,17 +342,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendSleepTimerCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (float sleepHours : Helpers.range(0, 10, 0.5f)) {
-            options.add(UiOptionItem.from(
-                    sleepHours == 0 ? getContext().getString(R.string.option_disabled)
-                            : getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)),
-                    option -> mPlayerData.setSleepTimerHours(sleepHours),
-                    Helpers.floatEquals(mPlayerData.getSleepTimerHours(), sleepHours)));
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_sleep_timer), options);
+        OptionCategory category = AppDialogUtil.createSleepTimerCategory(getContext());
+        settingsPresenter.appendCategory(category);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

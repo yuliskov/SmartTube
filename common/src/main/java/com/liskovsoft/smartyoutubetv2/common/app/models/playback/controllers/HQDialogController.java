@@ -54,6 +54,7 @@ public class HQDialogController extends BasePlayerController {
         addVideoBufferCategory();
         addAudioDelayCategory();
         addPitchEffectCategory();
+        addSleepTimerCategory();
         //addBackgroundPlaybackCategory();
 
         appendOptions(mCategoriesInt);
@@ -139,6 +140,10 @@ public class HQDialogController extends BasePlayerController {
 
     private void addPitchEffectCategory() {
         addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext()));
+    }
+
+    private void addSleepTimerCategory() {
+        addCategoryInt(AppDialogUtil.createSleepTimerCategory(getContext()));
     }
 
     private void addAudioLanguage() {
