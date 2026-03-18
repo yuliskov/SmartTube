@@ -176,8 +176,8 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-        showHideDimming(show);
         showHideScreensaver(show);
+        showHideDimming(show);
     }
 
     private void showHideDimming(boolean show) {
@@ -221,6 +221,10 @@ public class ScreensaverManager {
     }
 
     private void showHideScreensaver(boolean show) {
+        if (sLockInstance) {
+            return;
+        }
+
         Activity activity = mActivity.get();
 
         if (activity == null) {
