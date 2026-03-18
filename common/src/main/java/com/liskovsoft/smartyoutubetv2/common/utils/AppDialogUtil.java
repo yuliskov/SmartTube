@@ -406,20 +406,35 @@ public class AppDialogUtil {
 
     public static OptionCategory createAudioShiftCategory(Context context, Runnable onSetCallback) {
         PlayerData playerData = PlayerData.instance(context);
-        String title = context.getString(R.string.audio_shift);
+        String title = context.getResources().getQuantityString(R.plurals.seconds, 10, context.getString(R.string.audio_shift));
 
-        List<OptionItem> options = new ArrayList<>();
+        OptionItem optionItem = UiOptionItem.from(title, item -> {
+            AppDialogPresenter.instance(context).closeDialog();
+            float delaySec = playerData.getAudioDelayMs() / 1_000f;
+            SimpleEditDialog.show(
+                    context,
+                    title,
+                    Helpers.toString(delaySec),
+                    newValue -> {
+                        if (!Helpers.isNumeric(newValue)) {
+                            return false;
+                        }
 
-        for (int delayMs : Helpers.range(-8_000, 8_000, 50)) {
-            options.add(UiOptionItem.from(context.getString(R.string.audio_shift_sec, Helpers.toString(delayMs / 1_000f)),
-                    optionItem -> {
-                        playerData.setAudioDelayMs(delayMs);
+                        float newDelaySec = Helpers.parseFloat(newValue);
+                        int newDelayMs = (int) (newDelaySec * 1_000);
+
+                        if (newDelayMs == 0 && newDelaySec != 0) { // lower than 1ms
+                            return false;
+                        }
+
+                        playerData.setAudioDelayMs(newDelayMs);
                         onSetCallback.run();
-                    },
-                    delayMs == playerData.getAudioDelayMs()));
-        }
+                        return true;
+                    }
+            );
+        });
 
-        return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+        return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_SINGLE_BUTTON, title, optionItem);
     }
 
     public static OptionCategory createAudioVolumeCategory(Context context) {
