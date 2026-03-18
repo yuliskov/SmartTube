@@ -65,15 +65,12 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendLocalBackupCategory(settingsPresenter);
-
-        appendDriveBackupCategory(settingsPresenter);
-
+        appendGDriveBackupCategory(settingsPresenter);
         appendSubscriptionsBackupButton(settingsPresenter);
-
         settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
     }
 
-    private void appendDriveBackupCategory(AppDialogPresenter settingsPresenter) {
+    private void appendGDriveBackupCategory(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from("Google Drive", optionItem -> {
             AppDialogPresenter settingsPresenter2 = AppDialogPresenter.instance(getContext());
             appendGDriveBackupSettings(settingsPresenter2);
@@ -93,7 +90,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.app_backup), optionItem -> mGDriveBackupManager.backup()));
     }
 
-    private void appendLocalDriveAutoBackupOption(List<OptionItem> options) {
+    private void appendLocalAutoBackupOption(List<OptionItem> options) {
         options.add(
                 UiOptionItem.from(
                         getContext().getString(R.string.auto_backup_category), option -> {
@@ -169,14 +166,13 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
     private void appendLocalBackupCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        appendBackupRestoreOptions(options);
-
-        appendLocalDriveAutoBackupOption(options);
+        appendLocalBackupRestoreOptions(options);
+        appendLocalAutoBackupOption(options);
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.local_backup), options);
     }
 
-    private void appendBackupRestoreOptions(List<OptionItem> options) {
+    private void appendLocalBackupRestoreOptions(List<OptionItem> options) {
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
 
         String backupPath = backupManager.getBackupRootPath();

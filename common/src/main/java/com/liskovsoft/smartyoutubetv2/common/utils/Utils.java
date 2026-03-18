@@ -60,6 +60,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -1268,6 +1269,11 @@ public class Utils {
         return builder;
     }
 
+    public static boolean isSharedDirRestricted(Context context) {
+        // Android 11+: only backup through the file manager (no shared dir)
+        return AppInfoHelpers.getRealSdkVersion(context) > 29;
+    }
+
     private static void persistData(Context context) {
         VideoStateService.instance(context).persistNow();
         PlayerData.instance(context).persistNow();
@@ -1275,8 +1281,6 @@ public class Utils {
         MainUIData.instance(context).persistNow();
         GeneralData.instance(context).persistNow();
         MediaServiceData mediaServiceData = MediaServiceData.instance();
-        if (mediaServiceData != null) {
-            mediaServiceData.persistNow();
-        }
+        mediaServiceData.persistNow();
     }
 }

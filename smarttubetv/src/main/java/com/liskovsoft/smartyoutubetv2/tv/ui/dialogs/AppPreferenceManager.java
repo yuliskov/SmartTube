@@ -214,7 +214,7 @@ public class AppPreferenceManager {
                             if (requiredItems != null) {
                                 for (OptionItem requiredItem : requiredItems) {
                                     if (!requiredItem.isSelected()) {
-                                        MessageHelpers.showMessageThrottled(mContext, mContext.getString(R.string.require_checked, requiredItem.getTitle()));
+                                        MessageHelpers.showMessage(mContext, mContext.getString(R.string.require_checked, requiredItem.getTitle()));
                                     }
                                 }
                             }

@@ -721,6 +721,7 @@
     <string name="player_time_stretching_desc">Зберігає природний голос при зміні швидкості. Може суттєво знизити продуктивність на деяких пристроях.</string>
     <string name="queue_respects_playback_mode">Черга враховує режим відтворення</string>
     <string name="ignore_short_segments">Ігнорувати короткі сегменти</string>
+    <string name="local_backup_not_supported">Автобекап на Android TV 11+ не підтримується через обмеження системи. Використовуйте GDrive.</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>

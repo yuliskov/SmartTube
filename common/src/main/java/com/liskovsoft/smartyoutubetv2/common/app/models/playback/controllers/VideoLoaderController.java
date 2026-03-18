@@ -318,7 +318,7 @@ public class VideoLoaderController extends BasePlayerController {
         } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
-                MessageHelpers.showMessageThrottled(getContext(), R.string.wait_data_loading);
+                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
             }
             // Short videos next fix (suggestions aren't loaded yet)
             boolean isEnded = getPlayer() != null && Math.abs(getPlayer().getDurationMs() - getPlayer().getPositionMs()) < 100;

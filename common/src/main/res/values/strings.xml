@@ -735,6 +735,7 @@
     <string name="ignore_short_segments">Ignore short segments</string>
     <string name="install_bridge">Install ATV/Amazon bridge</string>
     <string name="fix_empty_subs_and_channels">Fix empty Subscriptions and Channels</string>
+    <string name="local_backup_not_supported">Auto backup on Android TV 11+ is not supported due to system restrictions. Use GDrive instead.</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>

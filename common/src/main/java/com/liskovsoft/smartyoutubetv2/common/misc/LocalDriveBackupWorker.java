@@ -10,9 +10,11 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,10 +36,9 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        //if (AppInfoHelpers.getTargetSdkVersion(context) > 29) {
-        //    // Android 11+: only backup through the file manager (no shared dir)
-        //    return;
-        //}
+        if (Utils.isSharedDirRestricted(context)) {
+            return;
+        }
 
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
             WorkManager workManager = WorkManager.getInstance(context);
@@ -56,6 +57,11 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void forceSchedule(Context context) {
+        if (Utils.isSharedDirRestricted(context)) {
+            MessageHelpers.showLongMessage(context, R.string.local_backup_not_supported);
+            return;
+        }
+
         new BackupAndRestoreManager(context).checkPermAndBackup();
         schedule(context);
     }

@@ -733,6 +733,7 @@
     <string name="player_time_stretching_desc">Hız değiştirildiğinde sesi doğal tutar. Bazı cihazlarda performansı önemli ölçüde düşürebilir.</string>
     <string name="queue_respects_playback_mode">Kuyruk oynatma modunu dikkate alır</string>
     <string name="ignore_short_segments">Kısa segmentleri yok say</string>
+    <string name="local_backup_not_supported">Android TV 11+’da otomatik yedekleme sistem kısıtlamaları nedeniyle desteklenmez. Bunun yerine GDrive kullanın.</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

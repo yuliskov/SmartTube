@@ -173,7 +173,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void continueGroup(VideoGroup group, OnVideoGroup callback, boolean showLoading) {
-        if (group == null) {
+        if (getPlayer() == null || group == null) {
             Log.e(TAG, "Can't continue group. The group is null.");
             return;
         }
@@ -205,6 +205,11 @@ public class SuggestionsController extends BasePlayerController {
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            if (getPlayer() != null) {
+                                getPlayer().showProgressBar(false);
+                            }
+                        },
+                        () -> {
                             if (getPlayer() != null) {
                                 getPlayer().showProgressBar(false);
                             }

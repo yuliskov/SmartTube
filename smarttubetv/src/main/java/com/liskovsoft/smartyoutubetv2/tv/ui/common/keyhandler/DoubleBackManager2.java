@@ -36,7 +36,7 @@ public class DoubleBackManager2 {
 
     private void showMsg() {
         if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
-            MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
+            MessageHelpers.showMessage(mContext, R.string.msg_press_again_to_exit);
             mMsgShownTimeMs = System.currentTimeMillis();
         }
     }
