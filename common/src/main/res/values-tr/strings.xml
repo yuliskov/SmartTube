@@ -597,6 +597,7 @@
     <string name="screensaver">Ekran koruyucu</string>
     <string name="player_screen_off_timeout">Ekran kapatma zaman aşımı</string>
     <string name="old_update_notifications">Güncelleme bildirimlerinin eski görünümü</string>
+    <string name="sidebar_notification">Bildirimi kenar çubuğunda göster</string>
     <string name="dialog_notification">Açılır iletişim kutusuyla güncelleme hakkında bilgi ver</string>
     <string name="mark_as_watched">İzlendi olarak işaretle</string>
     <string name="player_ui_animations">Kontrol paneli animasyonlarını etkinleştir</string>

@@ -44,7 +44,7 @@ public class AboutSimpleSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAutoUpdateSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
-            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
+            mUpdateChecker.setUpdateCheckEnabled(optionItem.isSelected());
         }, mUpdateChecker.isUpdateCheckEnabled()));
     }
 

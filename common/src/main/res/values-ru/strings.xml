@@ -592,6 +592,7 @@
     <string name="screensaver">Заставка</string>
     <string name="player_screen_off_timeout">Тайм-аут выключения экрана</string>
     <string name="old_update_notifications">Старый вид уведомлений о доступном обновлении</string>
+    <string name="sidebar_notification">Показать уведомление на боковой панели</string>
     <string name="dialog_notification">Уведомлять про обновление всплывающим диалогом</string>
     <string name="mark_as_watched">Отметить как просмотренное</string>
     <string name="player_ui_animations">Включить анимацию интерфейса плеера</string>

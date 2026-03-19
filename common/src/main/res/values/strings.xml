@@ -597,7 +597,8 @@
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Screen off timeout</string>
     <string name="old_update_notifications">Old look of the update notifications</string>
-    <string name="dialog_notification">Notify about updates with a pop-up dialog</string>
+    <string name="sidebar_notification">Show notification in sidebar</string>
+    <string name="dialog_notification">Notify via pop-up dialog</string>
     <string name="mark_as_watched">Mark as watched</string>
     <string name="player_ui_animations">Enable player UI animations</string>
     <string name="player_likes_count">Show likes/dislikes count</string>
