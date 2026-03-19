@@ -115,7 +115,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
                                 if (group.getChannelId() == null) {
                                     List<MediaItem> mediaItems = group.getMediaItems();
 
-                                    if (mediaItems != null && mediaItems.size() > 0) {
+                                    if (mediaItems != null && !mediaItems.isEmpty()) {
                                         mServiceManager.loadMetadata(mediaItems.get(0), metadata -> {
                                             unsubscribe(metadata.getChannelId());
                                             mVideo.channelId = metadata.getChannelId();

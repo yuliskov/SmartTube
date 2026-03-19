@@ -23,6 +23,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.OnComplete;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.OnError;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.OnMediaGroup;
+
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
@@ -145,9 +149,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
-    public void obtainGroup(Video item, VideoGroupCallback callback) {
+    public void obtainGroup(Video item, OnMediaGroup callback) {
+        obtainGroup(item, callback, null, null);
+    }
+
+    public void obtainGroup(Video item, OnMediaGroup callback, OnError onError, OnComplete onComplete) {
         if (item != null && item.mediaItem != null) {
-            obtainGroup(item.mediaItem, callback);
+            obtainGroup(item.mediaItem, callback, onError, onComplete);
         }
     }
 
@@ -283,23 +291,26 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
-    private void obtainGroup(MediaItem mediaItem, VideoGroupCallback callback) {
+    private void obtainGroup(MediaItem mediaItem, OnMediaGroup callback, OnError onError, OnComplete onComplete) {
         Log.d(TAG, "obtainGroup: Start loading group...");
 
         disposeActions();
 
-        //Observable<MediaGroup> group = getContentService().getGroupObserve(mediaItem);
-
-        //mUpdateAction = group
         mUpdateAction = obtainUploadsObservable(Video.from(mediaItem))
                 .subscribe(
-                        callback::onGroup,
-                        error -> Log.e(TAG, "obtainGroup error: %s", error.getMessage())
+                        callback::onMediaGroup,
+                        error -> {
+                            Log.e(TAG, "obtainGroup error: %s", error.getMessage());
+                            if (onError != null) {
+                                onError.onError(error);
+                            }
+                        },
+                        () -> {
+                            if (onComplete != null) {
+                                onComplete.onComplete();
+                            }
+                        }
                 );
-    }
-
-    public interface VideoGroupCallback {
-        void onGroup(MediaGroup mediaGroup);
     }
 
     /**

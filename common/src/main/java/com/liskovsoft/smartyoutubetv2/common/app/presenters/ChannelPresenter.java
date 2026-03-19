@@ -312,12 +312,13 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 callback.onChannelId(item.channelId);
             } else if (item.videoId != null) {
                 LoadingManager.showLoading(getContext(), true);
-                //MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                 getServiceManager().loadMetadata(item, metadata -> {
                     LoadingManager.showLoading(getContext(), false);
                     callback.onChannelId(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
-                });
+                },
+                e -> LoadingManager.showLoading(getContext(), false),
+                () -> LoadingManager.showLoading(getContext(), false));
             } else if (item.belongsToChannelUploads()) {
                 LoadingManager.showLoading(getContext(), true);
                 // Maybe this is subscribed items view
@@ -329,7 +330,12 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                             if (group.getChannelId() == null) {
                                 List<MediaItem> mediaItems = group.getMediaItems();
 
-                                if (mediaItems != null && mediaItems.size() > 0) {
+                                // Filter collaborative items
+                                MediaItem first = Helpers.findFirst(mediaItems, mediaItem -> Helpers.startsWith(mediaItem.getAuthor(), item.getAuthor()));
+
+                                if (first != null) {
+                                    extractChannelId(Video.from(first), callback);
+                                } else if (mediaItems != null && !mediaItems.isEmpty()) {
                                     extractChannelId(Video.from(mediaItems.get(0)), callback);
                                 }
 
@@ -338,7 +344,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
                             callback.onChannelId(group.getChannelId());
                             item.channelId = group.getChannelId();
-                        });
+                        },
+                        e -> LoadingManager.showLoading(getContext(), false),
+                        () -> LoadingManager.showLoading(getContext(), false));
             }
         }
     }

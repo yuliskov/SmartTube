@@ -54,6 +54,8 @@ public class VideoActionPresenter extends BasePresenter<Void> {
             if (!mediaGroup.isEmpty()) {
                 PlaybackPresenter.instance(getContext()).openVideo(Video.from(mediaGroup.getMediaItems().get(0)));
             }
-        });
+        },
+        e -> LoadingManager.showLoading(getContext(), false),
+        () -> LoadingManager.showLoading(getContext(), false));
     }
 }

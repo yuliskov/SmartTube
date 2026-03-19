@@ -116,7 +116,22 @@ public class MediaServiceManager implements OnAccountChange {
         return sInstance;
     }
 
+    public void loadMetadata(MediaItem mediaItem, OnMetadata onMetadata) {
+        loadMetadata(mediaItem, onMetadata, null, null);
+    }
+
+    /**
+     * NOTE: Load suggestions from MediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
+     */
+    public void loadMetadata(MediaItem mediaItem, OnMetadata onMetadata, OnError onError, OnComplete onComplete) {
+        loadMetadata(Video.from(mediaItem), onMetadata, onError, onComplete);
+    }
+
     public void loadMetadata(Video video, OnMetadata onMetadata) {
+        loadMetadata(video, onMetadata, null, null);
+    }
+
+    public void loadMetadata(Video video, OnMetadata onMetadata, OnError onError, OnComplete onComplete) {
         if (video == null) {
             return;
         }
@@ -138,28 +153,17 @@ public class MediaServiceManager implements OnAccountChange {
         mMetadataAction = observable
                 .subscribe(
                         onMetadata::onMetadata,
-                        error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
-                );
-    }
-
-    /**
-     * NOTE: Load suggestions from MediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
-     */
-    public void loadMetadata(MediaItem mediaItem, OnMetadata onMetadata) {
-        if (mediaItem == null) {
-            return;
-        }
-
-        RxHelper.disposeActions(mMetadataAction);
-
-        Observable<MediaItemMetadata> observable;
-
-        observable = mItemService.getMetadataObserve(mediaItem);
-
-        mMetadataAction = observable
-                .subscribe(
-                        onMetadata::onMetadata,
-                        error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
+                        error -> {
+                            Log.e(TAG, "loadMetadata error: %s", error.getMessage());
+                            if (onError != null) {
+                                onError.onError(error);
+                            }
+                        },
+                        () -> {
+                            if (onComplete != null) {
+                                onComplete.onComplete();
+                            }
+                        }
                 );
     }
 
