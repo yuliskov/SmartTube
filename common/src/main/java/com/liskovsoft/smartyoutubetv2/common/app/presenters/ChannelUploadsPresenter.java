@@ -324,7 +324,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         for (MediaGroup group : mediaItemMetadata.getSuggestions()) {
             List<MediaItem> mediaItems = group.getMediaItems();
-            if (mediaItems != null && mediaItems.size() > 0) {
+            if (mediaItems != null && !mediaItems.isEmpty()) {
                 return group;
             }
         }
