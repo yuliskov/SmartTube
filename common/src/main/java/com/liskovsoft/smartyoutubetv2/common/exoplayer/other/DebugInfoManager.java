@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 import android.util.Pair;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
@@ -41,8 +41,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.app.models.AppInfo;
 import com.liskovsoft.youtubeapi.common.helpers.AppClient;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
-
-import org.chromium.net.ApiVersion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,8 +205,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDeviceNameSDKCache();
         appendMemoryInfo();
         appendWebViewInfo();
-        appendClientType();
-        appendPlayerVersion();
+        appendWebClientInfo();
+        //appendClientType();
+        //appendPlayerVersion();
         appendAccountInfo();
 
         // Schedule next update
@@ -259,17 +258,22 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video decoder name", videoCodecName));
-        mVideoInfo.add(new Pair<>("Hardware accelerated", String.valueOf(DeviceHelpers.isHardwareAccelerated(videoCodecName))));
+        //mVideoInfo.add(new Pair<>("Hardware accelerated", String.valueOf(DeviceHelpers.isHardwareAccelerated(videoCodecName))));
         
         if (video.colorInfo != null) {
+            //String transferFunction = getColorTransferString(video.colorInfo.colorTransfer);
+            //if (!transferFunction.equals(NOT_AVAILABLE)) {
+            //    mVideoInfo.add(new Pair<>("Transfer function", transferFunction));
+            //}
+            //String colorSpace = getColorSpaceString(video.colorInfo.colorSpace);
+            //if (!colorSpace.equals(NOT_AVAILABLE)) {
+            //    mVideoInfo.add(new Pair<>("Color space", colorSpace));
+            //}
+
             String transferFunction = getColorTransferString(video.colorInfo.colorTransfer);
-            if (!transferFunction.equals(NOT_AVAILABLE)) {
-                mVideoInfo.add(new Pair<>("Transfer function", transferFunction));
-            }
             String colorSpace = getColorSpaceString(video.colorInfo.colorSpace);
-            if (!colorSpace.equals(NOT_AVAILABLE)) {
-                mVideoInfo.add(new Pair<>("Color space", colorSpace));
-            }
+
+            mVideoInfo.add(new Pair<>("Transfer function/Color space", transferFunction + "/" + colorSpace));
         }
     }
 
@@ -284,7 +288,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendPlayerState() {
-        appendRow("Player paused", !mPlayer.getPlayWhenReady());
+        //appendRow("Player paused", !mPlayer.getPlayWhenReady());
 
         String text;
         switch (mPlayer.getPlaybackState()) {
@@ -304,7 +308,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 text = "unknown";
                 break;
         }
-        appendRow("Playback state", text);
+        //appendRow("Playback state", text);
+        appendRow("Playback state", String.format("paused=%s;state=%s", !mPlayer.getPlayWhenReady(), text));
     }
 
     private void appendDisplayModeId() {
@@ -329,8 +334,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDisplayModeId.add(new Pair<>("UI resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
         mDisplayModeId.add(new Pair<>("Boot resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
 
-        mDisplayModeId.add(new Pair<>("Display mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
-        mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+        //mDisplayModeId.add(new Pair<>("Display mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
+        //mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+        String modeId = currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE;
+        String modeLength = supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE;
+        mDisplayModeId.add(new Pair<>("Display mode ID/length", modeId + "/" + modeLength));
     }
 
     private void appendDisplayInfo() {
@@ -350,19 +358,20 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendVersion() {
-        appendRow("ExoPlayer version", ExoPlayerLibraryInfo.VERSION);
+        //appendRow("ExoPlayer version", ExoPlayerLibraryInfo.VERSION);
         appendRow("ExoPlayer engine",
                 PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
                         PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET ? "Cronet" :
                         "Default");
-        appendRow("Cronet version", ApiVersion.getCronetVersion());
+        //appendRow("Cronet version", ApiVersion.getCronetVersion());
         //appendRow("OkHttp version", Version.userAgent());
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
     private void appendDeviceNameSDKCache() {
-        appendRow("Device name", Helpers.getDeviceName());
-        appendRow("Android SDK", VERSION.SDK_INT);
+        //appendRow("Device name", Helpers.getDeviceName());
+        //appendRow("Android SDK", VERSION.SDK_INT);
+        appendRow("Device name/SDK", Helpers.getDeviceName() + "/" + VERSION.SDK_INT);
         appendRow("Disk cache size (MB)", String.valueOf(
                 (FileHelpers.getDirSize(FileHelpers.getInternalCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
                         / 1024 / 1024
@@ -370,8 +379,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendMemoryInfo() {
-        appendRow("Max heap memory (MB)", DeviceHelpers.getMaxHeapMemoryMB()); // Growth Limit
-        appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB());
+        //appendRow("Max heap memory (MB)", DeviceHelpers.getMaxHeapMemoryMB()); // Growth Limit
+        //appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB());
+        appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
     }
 
     private void appendWebViewInfo() {
@@ -395,6 +405,13 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             appendRow("Player version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
             appendRow("Player url", isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl);
         }
+    }
+
+    private void appendWebClientInfo() {
+        String clientType = getClientType();
+        CharSequence playerVersion = getPlayerVersion();
+
+        appendRow("Web client/Web player version", TextUtils.concat(clientType, "/", playerVersion));
     }
 
     private void appendAccountInfo() {
@@ -522,5 +539,25 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             default:
                 return NOT_AVAILABLE;
         }
+    }
+
+    private String getClientType() {
+        int videoInfoType = MediaServiceData.instance().getVideoInfoType();
+        String clientType = videoInfoType != -1 && videoInfoType < AppClient.values().length ? AppClient.values()[videoInfoType].name() : "default";
+
+        return clientType;
+    }
+
+    private CharSequence getPlayerVersion() {
+        CharSequence result = NOT_AVAILABLE;
+        AppInfo appInfo = Helpers.firstNonNull(MediaServiceData.instance().getFailedAppInfo(), MediaServiceData.instance().getAppInfo());
+        String playerUrl = appInfo != null ? appInfo.getPlayerUrl() : null;
+        if (playerUrl != null) {
+            String playerVersion = UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player");
+            boolean isFailed = MediaServiceData.instance().getFailedAppInfo() != null;
+            result = isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion;
+        }
+
+        return result;
     }
 }
