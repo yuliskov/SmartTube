@@ -333,10 +333,12 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                                 // Filter collaborative items
                                 MediaItem first = Helpers.findFirst(mediaItems, mediaItem -> Helpers.startsWith(mediaItem.getAuthor(), item.getAuthor()));
 
+                                if (first == null && mediaItems != null && !mediaItems.isEmpty()) {
+                                    first = mediaItems.get(0);
+                                }
+
                                 if (first != null) {
                                     extractChannelId(Video.from(first), callback);
-                                } else if (mediaItems != null && !mediaItems.isEmpty()) {
-                                    extractChannelId(Video.from(mediaItems.get(0)), callback);
                                 }
 
                                 return;

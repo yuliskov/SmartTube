@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -115,8 +116,15 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
                                 if (group.getChannelId() == null) {
                                     List<MediaItem> mediaItems = group.getMediaItems();
 
-                                    if (mediaItems != null && !mediaItems.isEmpty()) {
-                                        mServiceManager.loadMetadata(mediaItems.get(0), metadata -> {
+                                    // Filter collaborative content
+                                    MediaItem first = Helpers.findFirst(mediaItems, mediaItem -> Helpers.startsWith(mediaItem.getAuthor(), mVideo.getAuthor()));
+
+                                    if (first == null && mediaItems != null && !mediaItems.isEmpty()) {
+                                        first = mediaItems.get(0);
+                                    }
+
+                                    if (first != null) {
+                                        mServiceManager.loadMetadata(first, metadata -> {
                                             unsubscribe(metadata.getChannelId());
                                             mVideo.channelId = metadata.getChannelId();
                                         });
