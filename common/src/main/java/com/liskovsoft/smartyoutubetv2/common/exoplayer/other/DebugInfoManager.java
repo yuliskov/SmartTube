@@ -338,7 +338,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
         String modeId = currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE;
         String modeLength = supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE;
-        mDisplayModeId.add(new Pair<>("Display mode ID/length", modeId + "/" + modeLength));
+        mDisplayModeId.add(new Pair<>("Display mode ID/Length", modeId + "/" + modeLength));
     }
 
     private void appendDisplayInfo() {
@@ -369,9 +369,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private void appendDeviceNameSDKCache() {
-        //appendRow("Device name", Helpers.getDeviceName());
-        //appendRow("Android SDK", VERSION.SDK_INT);
-        appendRow("Device name/SDK", Helpers.getDeviceName() + "/" + VERSION.SDK_INT);
+        appendRow("Device name", Helpers.getDeviceName());
+        appendRow("Android SDK", VERSION.SDK_INT);
         appendRow("Disk cache size (MB)", String.valueOf(
                 (FileHelpers.getDirSize(FileHelpers.getInternalCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
                         / 1024 / 1024
@@ -411,7 +410,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         String clientType = getClientType();
         CharSequence playerVersion = getPlayerVersion();
 
-        appendRow("Web client/Web player version", TextUtils.concat(clientType, "/", playerVersion));
+        appendRow("Web client/Web player", TextUtils.concat(clientType, "/", playerVersion));
     }
 
     private void appendAccountInfo() {
