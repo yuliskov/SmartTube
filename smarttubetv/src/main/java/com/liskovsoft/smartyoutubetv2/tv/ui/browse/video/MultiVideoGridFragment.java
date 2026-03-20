@@ -122,9 +122,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
             addSearchHeader();
-            //freeze1(true); // bug: severe ui glitches
+
+            // Smooth remove animation
+            if (group.getAction() == VideoGroup.ACTION_REMOVE) {
+                updateGroup1(group);
+                return;
+            }
+
+            freeze1(true);
             updateGroup1(group);
-            //freeze1(false); // bug: severe ui glitches
+            freeze1(false);
         } else if (group.getPosition() == 1) {
             int action = group.getAction();
 
