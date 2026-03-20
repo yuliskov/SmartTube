@@ -32,8 +32,8 @@ public class ViewUtil {
     /**
      * Focused card zoom factor
      */
-    //public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_NONE;
+    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    //public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_NONE;
     /**
      * Dim focused card?
      */
@@ -68,7 +68,7 @@ public class ViewUtil {
     }
 
     public static void disableMarquee(TextView... textViews) {
-        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
+        if (VERSION.SDK_INT <= 19 || textViews == null) { // Android 4: Broken grid layout fix
             return;
         }
 
@@ -85,7 +85,7 @@ public class ViewUtil {
      * <a href="https://stackoverflow.com/questions/3332924/textview-marquee-not-working">More info</a>
      */
     public static void enableMarquee(TextView... textViews) {
-        if (VERSION.SDK_INT <= 19 || textViews == null || textViews.length == 0) { // Android 4: Broken grid layout fix
+        if (VERSION.SDK_INT <= 19 || textViews == null) { // Android 4: Broken grid layout fix
             return;
         }
 
@@ -167,7 +167,7 @@ public class ViewUtil {
         if (obj instanceof ListRow) {
             ListRow row = (ListRow) obj;
             VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) row.getAdapter();
-            return adapter == null || adapter.size() == 0;
+            return adapter == null || adapter.isEmpty();
         }
 
         return true;
