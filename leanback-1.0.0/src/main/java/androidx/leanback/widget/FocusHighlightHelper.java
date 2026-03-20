@@ -244,7 +244,9 @@ public class FocusHighlightHelper {
      * @see HeadersFragment#getBridgeAdapter()
      */
     public static void setupHeaderItemFocusHighlight(ItemBridgeAdapter adapter) {
-        setupHeaderItemFocusHighlight(adapter, true);
+        // MOD: disable focus zoom of the sidebar headers
+        //setupHeaderItemFocusHighlight(adapter, true);
+        setupHeaderItemFocusHighlight(adapter, false);
     }
 
     /**

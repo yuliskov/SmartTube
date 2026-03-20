@@ -72,14 +72,17 @@
     <dimen name="lb_browse_title_height">50dp</dimen>
 
     <!--
-    Making my card's corner rounded. More info:
+    MOD: Making card's corner rounded. More info:
     https://stackoverflow.com/questions/42623677/android-tv-verticalgridfragment-shadow-dimension-and-color
     https://developer.android.com/reference/androidx/leanback/widget/ShadowOverlayHelper
     https://developer.android.com/reference/kotlin/androidx/leanback/widget/ListRowPresenter#arechildroundedcornersenabled
     You can also override ShadowOverlayHelper.Options createShadowOverlayOptions() in
     ListRowPresenter which gives you some ability to change corner radius and focused and unfocused z.
     -->
-    <!--<dimen name="lb_rounded_rect_corner_radius">5dp</dimen>-->
+    <dimen name="lb_rounded_rect_corner_radius">12dp</dimen>
+
+    <!-- MOD: don't zoom SearchOrbView -->
+    <!--<item name="lb_search_orb_focused_zoom" type="fraction">100%</item>-->
 
     <!--
     Space between cards. Origin: 8dp More info:
@@ -117,7 +120,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!-- Tooltip mod: extracted private values -->
+    <!-- Tooltip MOD: extracted private values -->
     <dimen name="tooltip_corner_radius_mod">20dp</dimen>
     <dimen name="tooltip_horizontal_padding_mod">16dp</dimen>
     <dimen name="tooltip_margin_mod">8dp</dimen>

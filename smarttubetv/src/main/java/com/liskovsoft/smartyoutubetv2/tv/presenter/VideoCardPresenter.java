@@ -84,6 +84,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.enableBadge(isBadgeEnabled());
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
+        cardView.setBackgroundColor(mDefaultBackgroundColor); // background is temporarily visible during animations
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
@@ -94,7 +95,9 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
-        view.setBackgroundColor(backgroundColor);
+        // NOTE: has visual bug with rounded corners
+        //view.setBackgroundColor(backgroundColor);
+
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
             infoField.setBackgroundColor(backgroundColor);

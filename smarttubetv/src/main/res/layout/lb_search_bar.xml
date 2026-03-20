@@ -30,6 +30,7 @@
         <requestFocus/>
     </androidx.leanback.widget.SpeechOrbView>
 
+    <!-- MOD: rounded search bg (old value: lb_in_app_search_bg) -->
     <RelativeLayout
             android:id="@+id/lb_search_bar_items"
             android:layout_width="@dimen/lb_search_bar_items_width"
@@ -39,7 +40,7 @@
             android:layout_marginStart="@dimen/lb_search_bar_items_margin_start"
             android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
             android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
-            android:background="@drawable/lb_in_app_search_bg"
+            android:background="@drawable/rounded_search_bg"
             >
 
         <ImageView
