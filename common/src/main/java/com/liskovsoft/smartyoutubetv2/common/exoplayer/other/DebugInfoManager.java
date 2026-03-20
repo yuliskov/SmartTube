@@ -204,10 +204,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendVersion();
         appendDeviceNameSDKCache();
         appendMemoryInfo();
-        appendWebViewInfo();
-        appendWebClientInfo();
+        //appendWebViewInfo();
         //appendClientType();
         //appendPlayerVersion();
+        appendWebClientInfo();
         appendAccountInfo();
 
         // Schedule next update
@@ -338,7 +338,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
         String modeId = currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE;
         String modeLength = supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE;
-        mDisplayModeId.add(new Pair<>("Display mode ID/Length", modeId + "/" + modeLength));
+        mDisplayModeId.add(new Pair<>("Display mode ID/length", modeId + "/" + modeLength));
     }
 
     private void appendDisplayInfo() {
@@ -409,8 +409,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendWebClientInfo() {
         String clientType = getClientType();
         CharSequence playerVersion = getPlayerVersion();
+        boolean potSupported = MediaServiceData.instance().isPotSupported();
 
-        appendRow("Web client/Web player", TextUtils.concat(clientType, "/", playerVersion));
+        appendRow("Web info", TextUtils.concat("client=", clientType, ";player=", playerVersion, ";pot=" + potSupported));
     }
 
     private void appendAccountInfo() {
