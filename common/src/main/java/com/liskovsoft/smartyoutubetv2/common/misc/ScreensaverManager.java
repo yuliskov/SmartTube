@@ -221,13 +221,14 @@ public class ScreensaverManager {
     }
 
     private void showHideScreensaver(boolean show) {
-        if (sLockInstance) {
-            return;
-        }
-
         Activity activity = mActivity.get();
 
         if (activity == null) {
+            return;
+        }
+
+        if (sLockInstance) {
+            Helpers.enableScreensaver(activity);
             return;
         }
 
