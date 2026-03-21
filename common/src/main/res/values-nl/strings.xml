@@ -43,7 +43,7 @@
   <string name="update_changelog">Wijzigingslog</string>
   <string name="install_update">Update installeren</string>
   <string name="section_is_empty">Deze rubriek is leeg.</string>
-  <string name="dialog_add_to_playlist">Op afspeellijst</string>
+  <string name="dialog_add_to_playlist">Voeg toe/Verwijder uit afspeellijst</string>
   <string name="msg_signed_users_only">Enkel voor ingelogde gebruikers</string>
   <string name="msg_cant_load_content">De inhoud kan niet worden geladen.\n1) Controleer je internetverbinding.\n2) Log in op je account.</string>
   <string name="title_video_presets">Voorinstelling</string>
@@ -717,4 +717,9 @@
   <string name="action_debug_info">Foutopsporingsinformatie</string>
   <string name="player_time_stretching">Audio-tijdverlenging</string>
   <string name="player_time_stretching_desc">Behoudt de natuurlijke stem bij het veranderen van de snelheid. Kan de prestaties op sommige apparaten aanzienlijk verminderen.</string>
+  <string name="queue_respects_playback_mode">Wachtrij respecteert afpseelmodus</string>
+  <string name="ignore_short_segments">Negeer korte segmenten</string>
+  <string name="install_bridge">Installeer ATV/Amazon bridge</string>
+  <string name="fix_empty_subs_and_channels">Fix lege Abonnementen en Kanalen</string>
+  <string name="local_backup_not_supported">Automatische back-up op Android TV 11+ wordt niet ondersteund door systeem restricties. Gebruik in plaats van Gdrive hiervoor.</string>
 </resources>
