@@ -774,6 +774,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
         String[] split = Helpers.splitData(data);
 
+        int yellowOnSemiBgSubIdx = 4;
         mOKButtonBehavior = Helpers.parseInt(split, 0, OK_ONLY_UI);
         mUiHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         // mIsAbsoluteDateEnabled
@@ -787,7 +788,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), getDefaultAudioFormat());
         mSubtitleFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 11)), getDefaultSubtitleFormat());
         mVideoBufferType = Helpers.parseInt(split, 12, PlayerEngine.BUFFER_MEDIUM);
-        mSubtitleStyleIndex = Helpers.parseInt(split, 13, 4); // yellow on semi bg
+        mSubtitleStyleIndex = Helpers.parseInt(split, 13, yellowOnSemiBgSubIdx);
         mResizeMode = Helpers.parseInt(split, 14, PlayerEngine.RESIZE_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
@@ -845,6 +846,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
         if (!mIsAllSpeedEnabled) {
             mSpeed = 1.0f;
+        }
+
+        if (mSubtitleStyleIndex >= mSubtitleStyles.size()) {
+            mSubtitleStyleIndex = yellowOnSemiBgSubIdx;
         }
     }
 
