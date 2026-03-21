@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import androidx.annotation.Nullable;
 
@@ -274,10 +275,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         BlockedChannelData blockedChannelData = BlockedChannelData.instance(getContext());
         List<Video> videos = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : blockedChannelData.getChannelIdsWithNames().entrySet()) {
+        for (Pair<String, String> entry : blockedChannelData.getChannelIdsWithNames()) {
             Video video = new Video();
-            video.channelId = entry.getKey();
-            video.title = entry.getValue() != null ? entry.getValue() : entry.getKey();
+            video.channelId = entry.first;
+            video.title = entry.second;
             videos.add(video);
         }
 

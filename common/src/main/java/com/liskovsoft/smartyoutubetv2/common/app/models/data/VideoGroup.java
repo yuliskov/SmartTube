@@ -473,11 +473,12 @@ public class VideoGroup {
 
     private boolean isChannelBlocked(Video video) {
         // Filter out videos from blacklisted channels
-        String channelId = video.getChannelIdOrName();
-        if (channelId != null) {
+        String channelId = video.channelId;
+        String channelName = video.getAuthor();
+        if (!Helpers.allNulls(channelId, channelName)) {
             try {
                 BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
-                return blockedChannelData != null && blockedChannelData.containsChannel(channelId);
+                return blockedChannelData != null && blockedChannelData.containsChannel(channelId, channelName);
             } catch (Exception e) {
                 // If BlockedChannelData isn't initialized yet, allow the video through
                 // This can happen during early app startup

@@ -2,27 +2,71 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Pair;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 
 public class BlockedChannelData implements ProfileChangeListener {
     private static final String BLOCKED_CHANNEL_DATA = "blocked_channel_data";
     @SuppressLint("StaticFieldLeak")
     private static BlockedChannelData sInstance;
     private final AppPrefs mPrefs;
-    private Set<String> mChannelIds;
-    private Map<String, String> mChannelIdsWithNames;
+    private List<Channel> mChannels;
     private final Runnable mPersistStateInt = this::persistStateInt;
     private final List<BlockedChannelListener> mListeners = new ArrayList<>();
+
+    private static class Channel {
+        public String channelId;
+        public String channelName;
+
+        public Channel(String channelId, String channelName) {
+            this.channelId = channelId;
+            this.channelName = channelName;
+        }
+
+        public static Channel fromString(String specs) {
+            String[] split = Helpers.splitObj(specs);
+
+            if (split == null || split.length != 2) {
+                return null;
+            }
+
+            return new Channel(Helpers.parseStr(split[0]), Helpers.parseStr(split[1]));
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj instanceof Channel) {
+                Channel channel = (Channel) obj;
+
+                if (channelName != null && channel.channelName != null) {
+                    return Helpers.contains(channelName, channel.channelName) || Helpers.contains(channel.channelName, channelName);
+                }
+
+                if (channelId != null && channel.channelId != null) {
+                    return Helpers.equals(channel, channel.channelId);
+                }
+            }
+
+            return super.equals(obj);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return Helpers.mergeObj(channelId, channelName);
+        }
+    }
 
     public interface BlockedChannelListener {
         void onChanged();
@@ -43,80 +87,55 @@ public class BlockedChannelData implements ProfileChangeListener {
     }
 
     /**
-     * Add a channel to the blacklist
-     *
-     * @param channelId   The channel ID to blacklist
-     * @param channelName The channel name (optional, for display purposes)
+     * Add a channel to the block list
      */
     public void addChannel(String channelId, String channelName) {
-        if (channelId == null || channelId.isEmpty()) {
+        if (channelId == null && channelName == null) {
             return;
         }
 
-        mChannelIds.add(channelId);
-        if (channelName != null && !channelName.isEmpty()) {
-            mChannelIdsWithNames.put(channelId, channelName);
-        }
+        Channel channel = new Channel(channelId, channelName);
+        mChannels.remove(channel);
+        mChannels.add(channel);
+
         persistState();
         notifyListeners();
     }
 
     /**
-     * Remove a channel from the blacklist
-     *
-     * @param channelId The channel ID to remove
+     * Remove a channel from the list
      */
-    public void removeChannel(String channelId) {
-        if (channelId == null || channelId.isEmpty()) {
+    public void removeChannel(String channelId, String channelName) {
+        if (channelId == null && channelName == null) {
             return;
         }
 
-        mChannelIds.remove(channelId);
-        mChannelIdsWithNames.remove(channelId);
+        mChannels.remove(new Channel(channelId, channelName));
+
         persistState();
         notifyListeners();
     }
 
     /**
-     * Check if a channel is blacklisted
-     *
-     * @param channelId The channel ID to check
-     * @return true if the channel is blacklisted
+     * Check if a channel is blocked
      */
-    public boolean containsChannel(String channelId) {
-        if (channelId == null || channelId.isEmpty()) {
-            return false;
+    public boolean containsChannel(String channelId, String channelName) {
+        return mChannels.contains(new Channel(channelId, channelName));
+    }
+
+    /**
+     * Get all blocked channels with their names
+     *
+     * @return List of channelId -> channel name
+     */
+    public List<Pair<String, String>> getChannelIdsWithNames() {
+        List<Pair<String, String>> result = new ArrayList<>();
+
+        for (Channel item : mChannels) {
+            result.add(new Pair<>(item.channelId, item.channelName));
         }
 
-        return mChannelIds.contains(channelId);
-    }
-
-    /**
-     * Get all blacklisted channel IDs
-     *
-     * @return Unmodifiable set of blacklisted channel IDs
-     */
-    public Set<String> getChannelIds() {
-        return Collections.unmodifiableSet(mChannelIds);
-    }
-
-    /**
-     * Get the name of a blacklisted channel
-     *
-     * @param channelId The channel ID
-     * @return The channel name, or null if not available
-     */
-    public String getChannelName(String channelId) {
-        return mChannelIdsWithNames.get(channelId);
-    }
-
-    /**
-     * Get all blacklisted channels with their names
-     *
-     * @return Unmodifiable map of channelId -> channel name
-     */
-    public Map<String, String> getChannelIdsWithNames() {
-        return Collections.unmodifiableMap(mChannelIdsWithNames);
+        return result;
     }
 
     /**
@@ -125,15 +144,14 @@ public class BlockedChannelData implements ProfileChangeListener {
      * @return Number of blacklisted channels
      */
     public int getChannelCount() {
-        return mChannelIds.size();
+        return mChannels.size();
     }
 
     /**
      * Clear all blacklisted channels
      */
     public void clear() {
-        mChannelIds.clear();
-        mChannelIdsWithNames.clear();
+        mChannels.clear();
         persistState();
     }
 
@@ -142,10 +160,23 @@ public class BlockedChannelData implements ProfileChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        List<String> channelIdList = Helpers.parseStrList(split, 0);
-        mChannelIdsWithNames = Helpers.parseMap(split, 1, Helpers::parseStr, Helpers::parseStr);
+        mChannels = Helpers.parseList(split, 0, Channel::fromString);
+        // null
 
-        mChannelIds = new HashSet<>(channelIdList);
+        restoreOldData(split);
+    }
+
+    private void restoreOldData(String[] split) {
+        Map<String, String> channelIdsWithNames = Helpers.parseMap(split, 1, Helpers::parseStr, Helpers::parseStr);
+
+        if (!channelIdsWithNames.isEmpty()) {
+            for (Entry<String, String> entry : channelIdsWithNames.entrySet()) {
+                Channel channel = new Channel(entry.getKey(), entry.getValue());
+                if (!mChannels.contains(channel)) {
+                    mChannels.add(channel);
+                }
+            }
+        }
     }
 
     public void persistNow() {
@@ -158,9 +189,8 @@ public class BlockedChannelData implements ProfileChangeListener {
 
     private void persistStateInt() {
         // Convert Set to List for persistence
-        List<String> channelIdList = new ArrayList<>(mChannelIds);
         mPrefs.setProfileData(BLOCKED_CHANNEL_DATA, Helpers.mergeData(
-                channelIdList, mChannelIdsWithNames));
+                mChannels, null));
     }
 
     public void addListener(BlockedChannelListener listener) {

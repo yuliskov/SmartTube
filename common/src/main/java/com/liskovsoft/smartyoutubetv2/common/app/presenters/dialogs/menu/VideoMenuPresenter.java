@@ -404,23 +404,25 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        String channelId = mVideo.getChannelIdOrName();
-        if (channelId == null || channelId.isEmpty()) {
+        String channelId = mVideo.channelId;
+        String channelName = mVideo.getAuthor();
+
+        if (Helpers.allNulls(channelId, channelName)) {
             return;
         }
 
         BlockedChannelData blockedChannelData = BlockedChannelData.instance(getContext());
-        boolean isBlacklisted = blockedChannelData.containsChannel(channelId);
+        boolean isBlocked = blockedChannelData.containsChannel(channelId, channelName);
 
-        String buttonText = isBlacklisted
+        String buttonText = isBlocked
                 ? getContext().getString(R.string.dialog_unblock_channel)
                 : getContext().getString(R.string.dialog_block_channel);
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(buttonText, optionItem -> {
-                    if (isBlacklisted) {
+                    if (isBlocked) {
                         // Remove from blacklist
-                        blockedChannelData.removeChannel(channelId);
+                        blockedChannelData.removeChannel(channelId, channelName);
                         MessageHelpers.showMessage(getContext(), R.string.channel_unblocked);
                         if (mCallback != null) {
                             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
@@ -428,7 +430,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         mDialogPresenter.closeDialog();
                     } else {
                         // Show confirmation dialog before blocking
-                        String channelName = mVideo.getAuthor();
                         String confirmMessage = getContext().getString(R.string.confirm_block_channel, channelName);
 
                         AppDialogUtil.showConfirmationDialog(

@@ -311,13 +311,14 @@ public final class Video {
     }
 
     public String getAuthor() {
-        if (author != null) {
-            return author;
+        if (author != null && !Helpers.startsWith(author, "@")) {
+            return extractAuthor(author);
         }
 
         String mainTitle = metadataTitle != null ? metadataTitle : title;
         CharSequence subtitle = metadataSecondTitle != null ? metadataSecondTitle : secondTitle;
-        return hasVideo() ? extractAuthor(subtitle) : Helpers.toString(YouTubeHelper.createInfo(mainTitle, subtitle)); // BAD idea
+        //return hasVideo() ? extractAuthor(subtitle) : Helpers.toString(YouTubeHelper.createInfo(mainTitle, subtitle)); // BAD idea
+        return hasVideo() ? extractAuthor(subtitle) : extractAuthor(YouTubeHelper.createInfo(mainTitle, subtitle));
     }
 
     public VideoGroup getGroup() {
@@ -348,7 +349,8 @@ public final class Video {
             } else {
                 // First part may be a special label (4K, Stream, New etc)
                 // Two cases to detect label: 1) Description is long (4 items); 2) First item of info is too short (2 letters)
-                result = split.length < 4 && split[0].trim().length() > 2 ? split[0] : split[1];
+                //result = split.length < 4 && split[0].trim().length() > 2 ? split[0] : split[1];
+                result = split.length < 4 ? split[0] : split[1];
             }
         }
 
