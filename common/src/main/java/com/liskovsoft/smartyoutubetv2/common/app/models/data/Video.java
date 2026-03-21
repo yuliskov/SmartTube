@@ -311,7 +311,7 @@ public final class Video {
     }
 
     public String getAuthor() {
-        if (author != null && !Helpers.startsWith(author, "@")) {
+        if (author != null && !Helpers.startsWith(author, "@")) { // not a channel handle (alias)
             return extractAuthor(author);
         }
 

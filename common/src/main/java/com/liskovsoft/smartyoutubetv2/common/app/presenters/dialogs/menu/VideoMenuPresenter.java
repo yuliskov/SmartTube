@@ -407,7 +407,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         String channelId = mVideo.channelId;
         String channelName = mVideo.getAuthor();
 
-        if (Helpers.allNulls(channelId, channelName)) {
+        if (channelName == null) {
             return;
         }
 
@@ -424,27 +424,15 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         // Remove from blacklist
                         blockedChannelData.removeChannel(channelId, channelName);
                         MessageHelpers.showMessage(getContext(), R.string.channel_unblocked);
-                        if (mCallback != null) {
-                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
-                        }
-                        mDialogPresenter.closeDialog();
                     } else {
-                        // Show confirmation dialog before blocking
-                        String confirmMessage = getContext().getString(R.string.confirm_block_channel, channelName);
-
-                        AppDialogUtil.showConfirmationDialog(
-                                getContext(),
-                                confirmMessage,
-                                () -> {
-                                    blockedChannelData.addChannel(channelId, channelName);
-                                    MessageHelpers.showMessage(getContext(), R.string.channel_blocked);
-
-                                    if (mCallback != null) {
-                                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
-                                    }
-                                    mDialogPresenter.closeDialog();
-                                });
+                        blockedChannelData.addChannel(channelId, channelName);
+                        MessageHelpers.showMessage(getContext(), R.string.channel_blocked);
                     }
+
+                    if (mCallback != null) {
+                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                    }
+                    mDialogPresenter.closeDialog();
                 }));
     }
 

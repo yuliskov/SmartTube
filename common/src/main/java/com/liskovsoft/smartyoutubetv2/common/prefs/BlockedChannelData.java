@@ -96,7 +96,7 @@ public class BlockedChannelData implements ProfileChangeListener {
 
         Channel channel = new Channel(channelId, channelName);
         mChannels.remove(channel);
-        mChannels.add(channel);
+        mChannels.add(0, channel);
 
         persistState();
         notifyListeners();
