@@ -277,6 +277,17 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.rounded_card_corners),
+                option -> {
+                    if (option.isSelected()) {
+                        mMainUIData.setUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
+                    } else {
+                        mMainUIData.setUiTweakDisabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
+                    }
+                    mRestartApp = true;
+                },
+                mMainUIData.isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)));
+        
         options.add(UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
                 option -> {
                     mMainUIData.setUnlocalizedTitlesEnabled(option.isSelected());
@@ -305,20 +316,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
                 option -> mPlayerData.setGlobalEndingTimeEnabled(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
-        //        option -> {
-        //            mGeneralData.enableOldHomeLook(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isOldHomeLookEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
-        //        option -> {
-        //            mGeneralData.enableOldChannelLook(option.isSelected());
-        //            mMainUIData.enableChannelSearchBar(!option.isSelected());
-        //        },
-        //        mGeneralData.isOldChannelLookEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
                 optionItem -> {

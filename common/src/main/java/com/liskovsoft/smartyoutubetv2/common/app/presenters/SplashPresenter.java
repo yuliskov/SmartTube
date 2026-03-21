@@ -80,12 +80,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         Utils.cancelFinishTheApp(getContext());
 
-        runOneTimeTasks();
+        runOnceTasks();
         runPerInstanceTasks();
         runPerViewTasks();
     }
 
-    private void runOneTimeTasks() {
+    private void runOnceTasks() {
         if (!sRunOnce) {
             sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();

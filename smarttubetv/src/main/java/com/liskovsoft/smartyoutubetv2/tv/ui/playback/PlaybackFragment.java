@@ -7,7 +7,6 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -62,6 +61,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -466,7 +466,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
         hideControlsOverlay(true); // fix player ui not synced correctly
 
-        mIsUIAnimationsEnabled = PlayerTweaksData.instance(getContext()).isUIAnimationsEnabled();
+        mIsUIAnimationsEnabled = getPlayerTweaksData().isUIAnimationsEnabled();
 
         mExoPlayerController.setPlayerView(mPlayerGlue);
     }
@@ -503,7 +503,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         DateTimeView clock = getView().findViewById(R.id.global_time);
         clock.showDate(false);
-        clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
+        clock.setVisibility(getPlayerData().isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void initializeGlobalEndingTime() {
@@ -512,11 +512,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
-        endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
+        endingTime.setVisibility(getPlayerData().isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void initializePixelRatio() {
-        setPixelRatio(PlayerTweaksData.instance(getContext()).getPixelRatio());
+        setPixelRatio(getPlayerTweaksData().getPixelRatio());
     }
 
     private void initializeDoubleTapHandler() {
@@ -534,7 +534,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mYouTubeOverlay
                 .player(mPlayer)
                 .playerView(mDoubleTapPlayerAdapter)
-                .seekSeconds(PlayerData.instance(getContext()).getSeekIncrementMs() / 1_000)
+                .seekSeconds(getPlayerData().getSeekIncrementMs() / 1_000)
                 .performListener(new PerformListener() {
             @Override
             public void onAnimationStart() {
@@ -574,7 +574,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         // NOTE: No way to disable only a notifications. We need to disable the media session instead.
-        boolean disableNotifications = PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled();
+        boolean disableNotifications = getPlayerTweaksData().isPlaybackNotificationsDisabled();
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(!disableNotifications);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
@@ -630,7 +630,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // Fix exoplayer pause after activity is resumed (AFR switching).
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                if (System.currentTimeMillis() - PlayerData.instance(getContext()).getAfrSwitchTimeMs() < 5_000) {
+                if (System.currentTimeMillis() - getPlayerData().getAfrSwitchTimeMs() < 5_000) {
                     return false;
                 }
 
@@ -684,6 +684,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 //}
             }
         };
+        mRowPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
 
         mCardPresenter = new VideoCardPresenter();
         mShortsPresenter = new ShortsCardPresenter();
@@ -1603,5 +1604,17 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private boolean forbidShowOverlay(boolean show) {
         return show && isInPIPMode();
+    }
+
+    private MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
+    }
+
+    private PlayerData getPlayerData() {
+        return PlayerData.instance(getContext());
+    }
+
+    private PlayerTweaksData getPlayerTweaksData() {
+        return PlayerTweaksData.instance(getContext());
     }
 }

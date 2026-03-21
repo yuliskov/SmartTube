@@ -21,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
@@ -90,6 +91,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
         if (mRowsAdapter == null) {
             mRowPresenter = new CustomListRowPresenter();
+            mRowPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
 
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
@@ -316,6 +318,10 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
                 mRowPresenter.freeze(vh, freeze);
             }
         }
+    }
+
+    private MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {

@@ -214,7 +214,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public boolean isEmpty() {
-        return mVideoItems.isEmpty();
+        return size() == 0;
     }
 
     private void removeFromGroup(Video video) {

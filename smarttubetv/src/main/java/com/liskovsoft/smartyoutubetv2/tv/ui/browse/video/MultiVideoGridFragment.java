@@ -215,10 +215,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     private void setupAdapter() {
         // Left vertical list of channels
         VerticalGridPresenter presenter1 = new CustomVerticalGridPresenter(R.layout.lb_vertical_grid1, R.id.browse_grid1);
+        presenter1.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         presenter1.setNumberOfColumns(1);
 
         // Right grid of channel's content
         VerticalGridPresenter presenter2 = new CustomVerticalGridPresenter(R.layout.lb_vertical_grid2, R.id.browse_grid2);
+        presenter2.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         int maxColsNum = GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale);
         presenter2.setNumberOfColumns(Math.max(maxColsNum, 1) - 1);
 
@@ -331,7 +333,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
     }
 
     private void addSearchHeader() {
-        if (mGridAdapter1 == null || mGridAdapter1.getHeader() != null || !MainUIData.instance(getContext()).isChannelsFilterEnabled()) {
+        if (mGridAdapter1 == null || mGridAdapter1.getHeader() != null || !getMainUIData().isChannelsFilterEnabled()) {
             return;
         }
 
@@ -356,7 +358,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return mPendingUpdates1.isEmpty();
         }
 
-        return mGridAdapter1.size() == 0;
+        return mGridAdapter1.isEmpty();
     }
 
     private boolean isEmpty2() {
@@ -364,7 +366,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             return mPendingUpdates2.isEmpty();
         }
 
-        return mGridAdapter2.size() == 0;
+        return mGridAdapter2.isEmpty();
     }
 
     /**
@@ -385,6 +387,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             getBrowseGrid2().setScrollEnabled(!freeze);
             getBrowseGrid2().setAnimateChildLayout(!freeze);
         }
+    }
+
+    private MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {

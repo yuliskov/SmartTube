@@ -21,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
@@ -61,9 +62,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         mProgressBarManager = new ProgressBarManager();
         mResultsPresenter = new CustomListRowPresenter();
+        mResultsPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mTagsPresenter = new TagPresenter();
-        mSearchTagsAdapter = new TagAdapter(getActivity(), mTagsPresenter, "");
+        mSearchTagsAdapter = new TagAdapter(getContext(), mTagsPresenter, "");
         setSearchResultProvider(this);
         setupListenersAndPermissions();
     }
@@ -153,7 +155,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         // NOTE: External recognizer makes voice search behave unexpectedly (broken by Google app updates).
         // You should avoid using it till there be a solution.
 
-        switch (SearchData.instance(getContext()).getSpeechRecognizerType()) {
+        switch (getSearchData().getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
                 // Don't uncomment. Sometimes system recognizer works on lower api
                 // Do nothing unless we have old api.
@@ -175,7 +177,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     protected void stopSpeechService() {
         // Note: Other services don't need to be stopped
 
-        if (SearchData.instance(getContext()).getSpeechRecognizerType() != SearchData.SPEECH_RECOGNIZER_GOTEV) {
+        if (getSearchData().getSpeechRecognizerType() != SearchData.SPEECH_RECOGNIZER_GOTEV) {
             return;
         }
 
@@ -280,6 +282,14 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
 
         return false;
+    }
+
+    private MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
+    }
+
+    private SearchData getSearchData() {
+        return SearchData.instance(getContext());
     }
 
     @SuppressWarnings("deprecation")

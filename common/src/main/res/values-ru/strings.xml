@@ -725,6 +725,7 @@
     <string name="queue_respects_playback_mode">Очередь учитывает режим воспроизведения</string>
     <string name="ignore_short_segments">Игнорировать короткие сегменты</string>
     <string name="local_backup_not_supported">Автобэкап на Android TV 11+ не поддерживается из-за ограничений системы. Используйте GDrive.</string>
+    <string name="rounded_card_corners">Скруглённые углы карточек</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>

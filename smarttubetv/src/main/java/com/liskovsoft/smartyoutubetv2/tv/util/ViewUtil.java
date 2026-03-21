@@ -47,7 +47,6 @@ public class ViewUtil {
      */
     public static final int GRID_SCROLL_CONTINUE_NUM = 10;
     public static final int ROW_SCROLL_CONTINUE_NUM = 4;
-    public static final boolean ROUNDED_CORNERS_ENABLED = true;
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)

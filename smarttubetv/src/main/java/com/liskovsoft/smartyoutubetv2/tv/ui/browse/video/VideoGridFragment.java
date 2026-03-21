@@ -9,7 +9,6 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -89,6 +88,7 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
         presenter.setNumberOfColumns(
                 GridFragmentHelper.getMaxColsNum(getContext(), isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width, mVideoGridScale)
         );
+        presenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
@@ -238,6 +238,10 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
 
     protected boolean isShorts() {
         return false;
+    }
+
+    private MainUIData getMainUIData() {
+        return MainUIData.instance(getContext());
     }
 
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {

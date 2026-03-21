@@ -71,6 +71,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     public static final int TOP_BUTTON_CHANGE_LANGUAGE = 1 << 1;
     public static final int TOP_BUTTON_SEARCH = 1 << 2;
     public static final int TOP_BUTTON_DEFAULT = TOP_BUTTON_SEARCH | TOP_BUTTON_BROWSE_ACCOUNTS;
+    public static final long UI_TWEAK_ROUNDED_CORNERS = 1;
     public static final long MENU_ITEM_DEFAULT = MENU_ITEM_PIN_TO_SIDEBAR | MENU_ITEM_NOT_INTERESTED | MENU_ITEM_NOT_RECOMMEND_CHANNEL
             | MENU_ITEM_REMOVE_FROM_HISTORY | MENU_ITEM_BLOCK_CHANNEL | MENU_ITEM_MOVE_SECTION_UP | MENU_ITEM_MOVE_SECTION_DOWN
             | MENU_ITEM_RENAME_SECTION | MENU_ITEM_SAVE_REMOVE_PLAYLIST | MENU_ITEM_ADD_TO_PLAYLIST | MENU_ITEM_CREATE_PLAYLIST
@@ -87,6 +88,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
             MENU_ITEM_SHARE_EMBED_LINK, MENU_ITEM_SHARE_QR_LINK, MENU_ITEM_SELECT_ACCOUNT, MENU_ITEM_TOGGLE_HISTORY, MENU_ITEM_CLEAR_HISTORY,
             MENU_ITEM_MOVE_SECTION_UP, MENU_ITEM_MOVE_SECTION_DOWN, MENU_ITEM_UPDATE_CHECK
     };
+    public static final long UI_TWEAK_DEFAULT = UI_TWEAK_ROUNDED_CORNERS;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -114,6 +116,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private int mCardPreviewType;
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsUnlocalizedTitlesEnabled;
+    private long mUiTweaks;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -354,6 +357,20 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
+    public boolean isUiTweakEnabled(long uiTweaks) {
+        return (mUiTweaks & uiTweaks) == uiTweaks;
+    }
+
+    public void setUiTweakEnabled(long uiTweaks) {
+        mUiTweaks |= uiTweaks;
+        persistState();
+    }
+
+    public void setUiTweakDisabled(long uiTweaks) {
+        mUiTweaks &= ~uiTweaks;
+        persistState();
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -427,6 +444,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
         mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
+        mUiTweaks = Helpers.parseLong(split, 23, UI_TWEAK_DEFAULT);
 
         int idx = -1;
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
@@ -470,7 +488,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType,
-                mIsUnlocalizedTitlesEnabled));
+                mIsUnlocalizedTitlesEnabled, mUiTweaks));
     }
 
     public static class ColorScheme {
