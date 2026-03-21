@@ -717,7 +717,7 @@
   <string name="action_debug_info">Foutopsporingsinformatie</string>
   <string name="player_time_stretching">Audio-tijdverlenging</string>
   <string name="player_time_stretching_desc">Behoudt de natuurlijke stem bij het veranderen van de snelheid. Kan de prestaties op sommige apparaten aanzienlijk verminderen.</string>
-  <string name="queue_respects_playback_mode">Wachtrij respecteert afpseelmodus</string>
+  <string name="queue_respects_playback_mode">Wachtrij respecteert afspeelmodus</string>
   <string name="ignore_short_segments">Negeer korte segmenten</string>
   <string name="install_bridge">Installeer ATV/Amazon bridge</string>
   <string name="fix_empty_subs_and_channels">Fix lege Abonnementen en Kanalen</string>
