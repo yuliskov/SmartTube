@@ -355,7 +355,8 @@ public final class Video {
         }
 
         // Skip subtitles starting with number of views (e.g. 1.4M views)
-        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+        //return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? result.trim() : null;
     }
 
     public static List<Video> findVideosByAuthor(VideoGroup group, String author) {

@@ -120,7 +120,7 @@ public class BlockedChannelData implements ProfileChangeListener {
      * Check if a channel is blocked
      */
     public boolean containsChannel(String channelId, String channelName) {
-        return mChannels.contains(new Channel(channelId, channelName));
+        return !mChannels.isEmpty() && mChannels.contains(new Channel(channelId, channelName));
     }
 
     /**
