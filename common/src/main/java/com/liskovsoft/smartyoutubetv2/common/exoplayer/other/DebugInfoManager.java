@@ -206,8 +206,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendMemoryInfo();
         //appendWebViewInfo();
         //appendClientType();
-        //appendPlayerVersion();
         appendWebClientInfo();
+        appendPlayerVersion();
         appendAccountInfo();
 
         // Schedule next update
@@ -273,7 +273,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             String transferFunction = getColorTransferString(video.colorInfo.colorTransfer);
             String colorSpace = getColorSpaceString(video.colorInfo.colorSpace);
 
-            mVideoInfo.add(new Pair<>("Transfer function/Color space", transferFunction + "/" + colorSpace));
+            mVideoInfo.add(new Pair<>("Transfer func/Color space", transferFunction + "/" + colorSpace));
         }
     }
 
@@ -380,7 +380,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendMemoryInfo() {
         //appendRow("Max heap memory (MB)", DeviceHelpers.getMaxHeapMemoryMB()); // Growth Limit
         //appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB());
-        appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
+        appendRow("Allocated memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
     }
 
     private void appendWebViewInfo() {
@@ -401,17 +401,22 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             String playerVersion = UrlQueryStringFactory.parse(Uri.parse(playerUrl)).get("player");
             String shortPlayerUrl = playerVersion != null ? playerUrl.split(playerVersion)[1] : null;
             boolean isFailed = MediaServiceData.instance().getFailedAppInfo() != null;
-            appendRow("Player version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
-            appendRow("Player url", isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl);
+            //appendRow("Player version", isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion);
+            //appendRow("Player url", isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl);
+
+            shortPlayerUrl = shortPlayerUrl != null ? shortPlayerUrl.split("/")[1] : null;
+            CharSequence coloredVersion = isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion;
+            CharSequence coloredType = isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl;
+            appendRow("Web player version/type", TextUtils.concat(coloredVersion, "/", coloredType));
         }
     }
 
     private void appendWebClientInfo() {
         String clientType = getClientType();
-        CharSequence playerVersion = getPlayerVersion();
+        //CharSequence playerVersion = getPlayerVersion();
         boolean potSupported = MediaServiceData.instance().isPotSupported();
 
-        appendRow("Web info", TextUtils.concat("client=", clientType, ";player=", playerVersion, ";pot=" + potSupported));
+        appendRow("Web info", "client=" + clientType + ";pot=" + potSupported);
     }
 
     private void appendAccountInfo() {
