@@ -25,6 +25,15 @@ public class GeneralData implements ProfileChangeListener {
     public static final int HISTORY_AUTO = 0;
     public static final int HISTORY_ENABLED = 1;
     public static final int HISTORY_DISABLED = 2;
+    public static final int ACTION_UNDEFINED = -1;
+    public static final int ACTION_VOLUME_UP_DOWN = 0;
+    public static final int ACTION_NEXT_PREVIOUS = 1;
+    public static final int ACTION_LIKE_DISLIKE = 2;
+    public static final int ACTION_SPEED_UP_DOWN = 3;
+    public static final int ACTION_SPEED_DOWN_UP = 4;
+    public static final int ACTION_SPEED_TOGGLE = 5;
+    public static final int ACTION_FAST_FORWARD_REWIND = 6;
+    public static final int ACTION_SEARCH = 7;
     @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
     private final Context mContext;
@@ -36,7 +45,6 @@ public class GeneralData implements ProfileChangeListener {
     private int mBackgroundShortcut;
     private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
-    private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreensaverTimeoutMs;
     private int mScreensaverDimmingPercents;
     private boolean mIsProxyEnabled;
@@ -44,21 +52,13 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsOkButtonLongPressDisabled;
     private String mLastPlaylistId;
     private String mLastPlaylistTitle;
-    private boolean mIsRemapPageUpToNextEnabled;
-    private boolean mIsRemapPageUpToLikeEnabled;
-    private boolean mIsRemapChannelUpToNextEnabled;
-    private boolean mIsRemapChannelUpToLikeEnabled;
-    private boolean mIsRemapChannelUpToVolumeEnabled;
-    private boolean mIsRemapPageUpToSpeedEnabled;
-    private boolean mIsRemapPageDownToSpeedEnabled;
-    private boolean mIsRemapChannelUpToSpeedEnabled;
-    private boolean mIsRemapFastForwardToSpeedEnabled;
-    private boolean mIsRemapFastForwardToSpeedToggleEnabled;
-    private boolean mIsRemapNextToFastForwardEnabled;
-    private boolean mIsRemapNextToSpeedEnabled;
     private boolean mIsRemapNumbersToSpeedEnabled;
     private boolean mIsRemapPlayToOKEnabled;
-    private boolean mIsRemapChannelUpToSearchEnabled;
+    private int mDpadUpDownAction;
+    private int mNextPreviousAction;
+    private int mFastForwardRewindAction;
+    private int mPageUpDownAction;
+    private int mChannelUpDownAction;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
@@ -75,8 +75,6 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsOldUpdateNotificationsEnabled;
     private boolean mIsRememberSubscriptionsPositionEnabled;
     private boolean mIsRememberPinnedPositionEnabled;
-    private boolean mIsRemapDpadUpToSpeedEnabled;
-    private boolean mIsRemapDpadUpToVolumeEnabled;
     private boolean mIsRemapDpadLeftToVolumeEnabled;
     private boolean mIsHideWatchedFromNotificationsEnabled;
     private List<String> mChangelog;
@@ -192,99 +190,12 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public boolean isRemapFastForwardToNextEnabled() {
-        return mIsRemapFastForwardToNextEnabled;
-    }
-
-    public void setRemapFastForwardToNextEnabled(boolean enable) {
-        resetFastForwardSettings();
-        mIsRemapFastForwardToNextEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapFastForwardToSpeedEnabled() {
-        return mIsRemapFastForwardToSpeedEnabled;
-    }
-
-    public void setRemapFastForwardToSpeedEnabled(boolean enable) {
-        resetFastForwardSettings();
-        mIsRemapFastForwardToSpeedEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapFastForwardToSpeedToggleEnabled() {
-        return mIsRemapFastForwardToSpeedToggleEnabled;
-    }
-
-    public void setRemapFastForwardToSpeedToggleEnabled(boolean enable) {
-        resetFastForwardSettings();
-        mIsRemapFastForwardToSpeedToggleEnabled = enable;
-        persistState();
-    }
-
-    private void resetFastForwardSettings() {
-        mIsRemapFastForwardToSpeedToggleEnabled = false;
-        mIsRemapFastForwardToSpeedEnabled = false;
-        mIsRemapFastForwardToNextEnabled = false;
-    }
-
-    public boolean isRemapNextToFastForwardEnabled() {
-        return mIsRemapNextToFastForwardEnabled;
-    }
-
-    public void setRemapNextToFastForwardEnabled(boolean enable) {
-        resetNextSettings();
-        mIsRemapNextToFastForwardEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapNextToSpeedEnabled() {
-        return mIsRemapNextToSpeedEnabled;
-    }
-
-    public void setRemapNextToSpeedEnabled(boolean enable) {
-        resetNextSettings();
-        mIsRemapNextToSpeedEnabled = enable;
-        persistState();
-    }
-
-    private void resetNextSettings() {
-        mIsRemapNextToFastForwardEnabled = false;
-        mIsRemapNextToSpeedEnabled = false;
-    }
-
     public boolean isRemapNumbersToSpeedEnabled() {
         return mIsRemapNumbersToSpeedEnabled;
     }
 
     public void setRemapNumbersToSpeedEnabled(boolean enable) {
         mIsRemapNumbersToSpeedEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapDpadUpToSpeedEnabled() {
-        return mIsRemapDpadUpToSpeedEnabled;
-    }
-
-    public void setRemapDpadUpDownToSpeedEnabled(boolean enable) {
-        resetDpadUpDownSettings();
-        mIsRemapDpadUpToSpeedEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapDpadUpToVolumeEnabled() {
-        return mIsRemapDpadUpToVolumeEnabled;
-    }
-
-    public void setRemapDpadUpToVolumeEnabled(boolean enable) {
-        resetDpadUpDownSettings();
-        mIsRemapDpadUpToVolumeEnabled = enable;
-        persistState();
-    }
-
-    public void resetDpadUpDownSettings() {
-        mIsRemapDpadUpToSpeedEnabled = false;
-        mIsRemapDpadUpToVolumeEnabled = false;
         persistState();
     }
 
@@ -310,111 +221,6 @@ public class GeneralData implements ProfileChangeListener {
     public void setRemapPlayToOKEnabled(boolean enable) {
         mIsRemapPlayToOKEnabled = enable;
         persistState();
-    }
-
-    public boolean isRemapPageUpToNextEnabled() {
-        return mIsRemapPageUpToNextEnabled;
-    }
-
-    public void setRemapPageUpToNextEnabled(boolean enable) {
-        resetPageUpSettings();
-        mIsRemapPageUpToNextEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapPageUpToLikeEnabled() {
-        return mIsRemapPageUpToLikeEnabled;
-    }
-
-    public void setRemapPageUpToLikeEnabled(boolean enable) {
-        resetPageUpSettings();
-        mIsRemapPageUpToLikeEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapPageUpToSpeedEnabled() {
-        return mIsRemapPageUpToSpeedEnabled;
-    }
-
-    public void setRemapPageUpToSpeedEnabled(boolean enable) {
-        resetPageUpSettings();
-        mIsRemapPageUpToSpeedEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapPageDownToSpeedEnabled() {
-        return mIsRemapPageDownToSpeedEnabled;
-    }
-
-    public void setRemapPageDownToSpeedEnabled(boolean enable) {
-        resetPageUpSettings();
-        mIsRemapPageDownToSpeedEnabled = enable;
-        persistState();
-    }
-
-    private void resetPageUpSettings() {
-        mIsRemapPageDownToSpeedEnabled = false;
-        mIsRemapPageUpToSpeedEnabled = false;
-        mIsRemapPageUpToLikeEnabled = false;
-        mIsRemapPageUpToNextEnabled = false;
-    }
-
-    public boolean isRemapChannelUpToNextEnabled() {
-        return mIsRemapChannelUpToNextEnabled;
-    }
-
-    public void setRemapChannelUpToNextEnabled(boolean enable) {
-        resetChannelUpSettings();
-        mIsRemapChannelUpToNextEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapChannelUpToVolumeEnabled() {
-        return mIsRemapChannelUpToVolumeEnabled;
-    }
-
-    public void setRemapChannelUpToVolumeEnabled(boolean enable) {
-        resetChannelUpSettings();
-        mIsRemapChannelUpToVolumeEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapChannelUpToLikeEnabled() {
-        return mIsRemapChannelUpToLikeEnabled;
-    }
-
-    public void setRemapChannelUpToLikeEnabled(boolean enable) {
-        resetChannelUpSettings();
-        mIsRemapChannelUpToLikeEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapChannelUpToSpeedEnabled() {
-        return mIsRemapChannelUpToSpeedEnabled;
-    }
-
-    public void setRemapChannelUpToSpeedEnabled(boolean enable) {
-        resetChannelUpSettings();
-        mIsRemapChannelUpToSpeedEnabled = enable;
-        persistState();
-    }
-
-    public boolean isRemapChannelUpToSearchEnabled() {
-        return mIsRemapChannelUpToSearchEnabled;
-    }
-
-    public void setRemapChannelUpToSearchEnabled(boolean enable) {
-        resetChannelUpSettings();
-        mIsRemapChannelUpToSearchEnabled = enable;
-        persistState();
-    }
-
-    private void resetChannelUpSettings() {
-        mIsRemapChannelUpToVolumeEnabled = false;
-        mIsRemapChannelUpToNextEnabled = false;
-        mIsRemapChannelUpToSearchEnabled = false;
-        mIsRemapChannelUpToLikeEnabled = false;
-        mIsRemapChannelUpToSpeedEnabled = false;
     }
 
     public int getScreensaverTimeoutMs() {
@@ -718,6 +524,51 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public int getDpadUpDownAction() {
+        return mDpadUpDownAction;
+    }
+
+    public void setDpadUpDownAction(int action) {
+        mDpadUpDownAction = action;
+        persistState();
+    }
+
+    public int getNextPreviousAction() {
+        return mNextPreviousAction;
+    }
+
+    public void setNextPreviousAction(int action) {
+        mNextPreviousAction = action;
+        persistState();
+    }
+
+    public int getFastForwardRewindAction() {
+        return mFastForwardRewindAction;
+    }
+
+    public void setFastForwardRewindAction(int action) {
+        mFastForwardRewindAction = action;
+        persistState();
+    }
+
+    public int getPageUpDownAction() {
+        return mPageUpDownAction;
+    }
+
+    public void setPageUpDownAction(int action) {
+        mPageUpDownAction = action;
+        persistState();
+    }
+
+    public int getChannelUpDownAction() {
+        return mChannelUpDownAction;
+    }
+
+    public void setChannelUpDownAction(int action) {
+        mChannelUpDownAction = action;
+        persistState();
+    }
+
     /**
      * Fixed ConcurrentModificationException after onProfileChanged()<br/>
      * Happened inside cleanupPinnedItems()
@@ -735,7 +586,7 @@ public class GeneralData implements ProfileChangeListener {
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
         mOldPinnedItems = Helpers.parseList(split, 6, Video::fromString);
         mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
-        mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
+        mFastForwardRewindAction = Helpers.parseInt(split, 8, ACTION_UNDEFINED);
         //mScreenDimmingTimeoutMs = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
@@ -743,14 +594,14 @@ public class GeneralData implements ProfileChangeListener {
         mLastPlaylistId = Helpers.parseStr(split, 13);
         //String selectedSections = Helpers.parseStr(split, 14);
         mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
-        mIsRemapPageUpToNextEnabled = Helpers.parseBoolean(split, 16, false);
-        mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
-        mIsRemapChannelUpToNextEnabled = Helpers.parseBoolean(split, 18, false);
-        mIsRemapChannelUpToLikeEnabled = Helpers.parseBoolean(split, 19, false);
-        mIsRemapPageUpToSpeedEnabled = Helpers.parseBoolean(split, 20, false);
-        mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
-        mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
-        mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
+        mPageUpDownAction = Helpers.parseInt(split, 16, ACTION_UNDEFINED);
+        //mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
+        mChannelUpDownAction = Helpers.parseInt(split, 18, ACTION_UNDEFINED);
+        //mIsRemapChannelUpToLikeEnabled = Helpers.parseBoolean(split, 19, false);
+        //mIsRemapPageUpToSpeedEnabled = Helpers.parseBoolean(split, 20, false);
+        //mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
+        //mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
+        //mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
         mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, true);
@@ -774,17 +625,17 @@ public class GeneralData implements ProfileChangeListener {
         //mIsOldHomeLookEnabled = Helpers.parseBoolean(split, 42, Build.VERSION.SDK_INT <= 19);
         mIsOldUpdateNotificationsEnabled = Helpers.parseBoolean(split, 43, false);
         mScreensaverDimmingPercents = Helpers.parseInt(split, 44, 80);
-        mIsRemapNextToSpeedEnabled = Helpers.parseBoolean(split, 45, false);
+        mNextPreviousAction = Helpers.parseInt(split, 45, ACTION_UNDEFINED);
         mIsRemapPlayToOKEnabled = Helpers.parseBoolean(split, 46, false);
         mHistoryState = Helpers.parseInt(split, 47, HISTORY_AUTO);
         mIsRememberSubscriptionsPositionEnabled = Helpers.parseBoolean(split, 48, false);
         // mSelectedSubscriptionsItem was here
         mIsRemapNumbersToSpeedEnabled = Helpers.parseBoolean(split, 50, false);
-        mIsRemapDpadUpToSpeedEnabled = Helpers.parseBoolean(split, 51, false);
-        mIsRemapChannelUpToVolumeEnabled = Helpers.parseBoolean(split, 52, false);
-        mIsRemapDpadUpToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
+        mDpadUpDownAction = Helpers.parseInt(split, 51, ACTION_UNDEFINED);
+        //mIsRemapChannelUpToVolumeEnabled = Helpers.parseBoolean(split, 52, false);
+        //mIsRemapDpadUpToVolumeEnabled = Helpers.parseBoolean(split, 53, false);
         mIsRemapDpadLeftToVolumeEnabled = Helpers.parseBoolean(split, 54, false);
-        mIsRemapNextToFastForwardEnabled = Helpers.parseBoolean(split, 55, false);
+        //mIsRemapNextToFastForwardEnabled = Helpers.parseBoolean(split, 55, false);
         mIsHideWatchedFromNotificationsEnabled = Helpers.parseBoolean(split, 56, false);
         mChangelog = Helpers.parseStrList(split, 57);
         mPlayerExitShortcut = Helpers.parseInt(split, 58, EXIT_SINGLE_BACK);
@@ -797,11 +648,11 @@ public class GeneralData implements ProfileChangeListener {
         mIsFirstUseTooltipEnabled = Helpers.parseBoolean(split, 64, true);
         mIsDeviceSpecificBackupEnabled = Helpers.parseBoolean(split, 65, false);
         //mIsAutoBackupEnabled = Helpers.parseBoolean(split, 66, false);
-        mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
+        //mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
         mSearchExitShortcut = Helpers.parseInt(split, 68, EXIT_SINGLE_BACK);
         mGDriveBackupFreqDays = Helpers.parseInt(split, 69, -1);
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, -1);
-        mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
+        //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
     }
 
@@ -817,19 +668,18 @@ public class GeneralData implements ProfileChangeListener {
         // Zero index is skipped. Selected sections were there.
         mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, null, null, mAppExitShortcut, mIsReturnToLauncherEnabled,
                 mBackgroundShortcut, mOldPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
-                mIsRemapFastForwardToNextEnabled, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
-                null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
-                mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
-                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
+                mFastForwardRewindAction, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
+                null, mIsHideUpcomingEnabled, mPageUpDownAction, null, mChannelUpDownAction, null, null, null, null, null,
                 mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled, mLastPlaylistTitle,
                 mPlaylistOrder, mPendingStreams, mIsGlobalClockEnabled, null, mSettingsPassword, mIsChildModeEnabled, mIsHistoryEnabled,
                 mScreensaverTimeoutMs, null, mIsAltAppIconEnabled, mVersionCode, mIsSelectChannelSectionEnabled, mMasterPassword,
-                null, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mIsRemapNextToSpeedEnabled, mIsRemapPlayToOKEnabled,
-                mHistoryState, mIsRememberSubscriptionsPositionEnabled, null, mIsRemapNumbersToSpeedEnabled, mIsRemapDpadUpToSpeedEnabled,
-                mIsRemapChannelUpToVolumeEnabled, mIsRemapDpadUpToVolumeEnabled, mIsRemapDpadLeftToVolumeEnabled, mIsRemapNextToFastForwardEnabled,
+                null, mIsOldUpdateNotificationsEnabled, mScreensaverDimmingPercents, mNextPreviousAction, mIsRemapPlayToOKEnabled,
+                mHistoryState, mIsRememberSubscriptionsPositionEnabled, null, mIsRemapNumbersToSpeedEnabled, mDpadUpDownAction,
+                null, null, mIsRemapDpadLeftToVolumeEnabled, null,
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
-                mIsRemapPageDownToSpeedEnabled, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, mIsRemapFastForwardToSpeedToggleEnabled, mIsRemapSToSpeedToggleEnabled));
+                null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
+                mIsRemapSToSpeedToggleEnabled));
     }
 
     @Override

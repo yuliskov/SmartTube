@@ -56,7 +56,7 @@ public class GlobalKeyTranslator extends KeyTranslator {
 
         actionMapping.put(KeyEvent.KEYCODE_AT, searchAction);
 
-        if (getGeneralData().isRemapChannelUpToSearchEnabled()) {
+        if (getGeneralData().getChannelUpDownAction() == GeneralData.ACTION_SEARCH) {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
         }

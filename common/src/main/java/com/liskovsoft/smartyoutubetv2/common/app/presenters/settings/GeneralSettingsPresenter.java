@@ -328,7 +328,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_shorts_skip_alt),
                 option -> {
                     mPlayerTweaksData.setQuickSkipShortsAltEnabled(option.isSelected());
-                    mGeneralData.resetDpadUpDownSettings();
+                    mGeneralData.setDpadUpDownAction(GeneralData.ACTION_UNDEFINED);
                 },
                 mPlayerTweaksData.isQuickSkipShortsAltEnabled()));
 
@@ -342,7 +342,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_quick_skip_videos_alt),
                 option -> {
                     mPlayerTweaksData.setQuickSkipVideosAltEnabled(option.isSelected());
-                    mGeneralData.resetDpadUpDownSettings();
+                    mGeneralData.setDpadUpDownAction(GeneralData.ACTION_UNDEFINED);
                 },
                 mPlayerTweaksData.isQuickSkipVideosAltEnabled()));
         
@@ -366,81 +366,85 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Volume Up/Down",
                 option -> {
-                    mGeneralData.setRemapDpadUpToVolumeEnabled(option.isSelected());
+                    mGeneralData.setDpadUpDownAction(option.isSelected() ? GeneralData.ACTION_VOLUME_UP_DOWN : GeneralData.ACTION_UNDEFINED);
                     mPlayerTweaksData.resetDpadUpDownSettings();
                 },
-                mGeneralData.isRemapDpadUpToVolumeEnabled()));
+                mGeneralData.getDpadUpDownAction() == GeneralData.ACTION_VOLUME_UP_DOWN));
 
         options.add(UiOptionItem.from("DPAD UP/DOWN -> Speed Up/Down",
                 option -> {
-                    mGeneralData.setRemapDpadUpDownToSpeedEnabled(option.isSelected());
+                    mGeneralData.setDpadUpDownAction(option.isSelected() ? GeneralData.ACTION_SPEED_UP_DOWN : GeneralData.ACTION_UNDEFINED);
                     mPlayerTweaksData.resetDpadUpDownSettings();
                 },
-                mGeneralData.isRemapDpadUpToSpeedEnabled()));
+                mGeneralData.getDpadUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN));
 
         options.add(UiOptionItem.from("Numbers 3/1 -> Speed Up/Down",
                 option -> mGeneralData.setRemapNumbersToSpeedEnabled(option.isSelected()),
                 mGeneralData.isRemapNumbersToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Next/Previous -> Fast Forward/Rewind",
-                option -> mGeneralData.setRemapNextToFastForwardEnabled(option.isSelected()),
-                mGeneralData.isRemapNextToFastForwardEnabled()));
+                option -> mGeneralData.setNextPreviousAction(option.isSelected() ? GeneralData.ACTION_FAST_FORWARD_REWIND : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getNextPreviousAction() == GeneralData.ACTION_FAST_FORWARD_REWIND));
 
         options.add(UiOptionItem.from("Next/Previous -> Speed Up/Down",
-                option -> mGeneralData.setRemapNextToSpeedEnabled(option.isSelected()),
-                mGeneralData.isRemapNextToSpeedEnabled()));
+                option -> mGeneralData.setNextPreviousAction(option.isSelected() ? GeneralData.ACTION_SPEED_UP_DOWN : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getNextPreviousAction() == GeneralData.ACTION_SPEED_UP_DOWN));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
-                option -> mGeneralData.setRemapFastForwardToNextEnabled(option.isSelected()),
-                mGeneralData.isRemapFastForwardToNextEnabled()));
+                option -> mGeneralData.setFastForwardRewindAction(option.isSelected() ? GeneralData.ACTION_NEXT_PREVIOUS : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_NEXT_PREVIOUS));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Up/Down",
-                option -> mGeneralData.setRemapFastForwardToSpeedEnabled(option.isSelected()),
-                mGeneralData.isRemapFastForwardToSpeedEnabled()));
+                option -> mGeneralData.setFastForwardRewindAction(option.isSelected() ? GeneralData.ACTION_SPEED_UP_DOWN : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_SPEED_UP_DOWN));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Toggle",
-                option -> mGeneralData.setRemapFastForwardToSpeedToggleEnabled(option.isSelected()),
-                mGeneralData.isRemapFastForwardToSpeedToggleEnabled()));
+                option -> mGeneralData.setFastForwardRewindAction(option.isSelected() ? GeneralData.ACTION_SPEED_TOGGLE : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_SPEED_TOGGLE));
 
         options.add(UiOptionItem.from("S -> Speed Toggle",
                 option -> mGeneralData.setRemapSToSpeedToggleEnabled(option.isSelected()),
                 mGeneralData.isRemapSToSpeedToggleEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
-                option -> mGeneralData.setRemapPageUpToNextEnabled(option.isSelected()),
-                mGeneralData.isRemapPageUpToNextEnabled()));
+                option -> mGeneralData.setPageUpDownAction(option.isSelected() ? GeneralData.ACTION_NEXT_PREVIOUS : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getPageUpDownAction() == GeneralData.ACTION_NEXT_PREVIOUS));
 
         options.add(UiOptionItem.from("Page Up/Down -> Like/Dislike",
-                option -> mGeneralData.setRemapPageUpToLikeEnabled(option.isSelected()),
-                mGeneralData.isRemapPageUpToLikeEnabled()));
+                option -> mGeneralData.setPageUpDownAction(option.isSelected() ? GeneralData.ACTION_LIKE_DISLIKE : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getPageUpDownAction() == GeneralData.ACTION_LIKE_DISLIKE));
 
         options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
-                option -> mGeneralData.setRemapPageUpToSpeedEnabled(option.isSelected()),
-                mGeneralData.isRemapPageUpToSpeedEnabled()));
+                option -> mGeneralData.setPageUpDownAction(option.isSelected() ? GeneralData.ACTION_SPEED_UP_DOWN : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getPageUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN));
         
         options.add(UiOptionItem.from("Page Up/Down -> Speed Down/Up",
-                option -> mGeneralData.setRemapPageDownToSpeedEnabled(option.isSelected()),
-                mGeneralData.isRemapPageDownToSpeedEnabled()));
+                option -> mGeneralData.setPageUpDownAction(option.isSelected() ? GeneralData.ACTION_SPEED_DOWN_UP : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getPageUpDownAction() == GeneralData.ACTION_SPEED_DOWN_UP));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Volume Up/Down",
-                option -> mGeneralData.setRemapChannelUpToVolumeEnabled(option.isSelected()),
-                mGeneralData.isRemapChannelUpToVolumeEnabled()));
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_VOLUME_UP_DOWN : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_VOLUME_UP_DOWN));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
-                option -> mGeneralData.setRemapChannelUpToNextEnabled(option.isSelected()),
-                mGeneralData.isRemapChannelUpToNextEnabled()));
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_NEXT_PREVIOUS : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_NEXT_PREVIOUS));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Like/Dislike",
-                option -> mGeneralData.setRemapChannelUpToLikeEnabled(option.isSelected()),
-                mGeneralData.isRemapChannelUpToLikeEnabled()));
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_LIKE_DISLIKE : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_LIKE_DISLIKE));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Speed Up/Down",
-                option -> mGeneralData.setRemapChannelUpToSpeedEnabled(option.isSelected()),
-                mGeneralData.isRemapChannelUpToSpeedEnabled()));
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_SPEED_UP_DOWN : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN));
+
+        options.add(UiOptionItem.from("Channel Up/Down -> Speed Toggle",
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_SPEED_TOGGLE : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SPEED_TOGGLE));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Search",
-                option -> mGeneralData.setRemapChannelUpToSearchEnabled(option.isSelected()),
-                mGeneralData.isRemapChannelUpToSearchEnabled()));
+                option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_SEARCH : GeneralData.ACTION_UNDEFINED),
+                mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SEARCH));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }

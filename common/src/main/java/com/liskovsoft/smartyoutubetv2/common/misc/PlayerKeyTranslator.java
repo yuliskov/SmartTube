@@ -64,22 +64,22 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_REWIND);
         globalKeyMapping.remove(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
 
-        if (mGeneralData.isRemapFastForwardToNextEnabled()) {
+        if (mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_NEXT_PREVIOUS) {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
-        if (mGeneralData.isRemapNextToFastForwardEnabled()) {
+        if (mGeneralData.getNextPreviousAction() == GeneralData.ACTION_FAST_FORWARD_REWIND) {
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
             globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, KeyEvent.KEYCODE_MEDIA_REWIND);
         }
 
-        if (mGeneralData.isRemapPageUpToNextEnabled()) {
+        if (mGeneralData.getPageUpDownAction() == GeneralData.ACTION_NEXT_PREVIOUS) {
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
-        if (mGeneralData.isRemapChannelUpToNextEnabled()) {
+        if (mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_NEXT_PREVIOUS) {
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
             globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
@@ -107,62 +107,55 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_S, speedToggleAction);
         }
 
-        if (mGeneralData.isRemapPageUpToLikeEnabled()) {
+        if (mGeneralData.getPageUpDownAction() == GeneralData.ACTION_LIKE_DISLIKE) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
-        }
-
-        if (mGeneralData.isRemapChannelUpToLikeEnabled()) {
-            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
-            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
-        }
-
-        if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
+        } else if (mGeneralData.getPageUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
-        }
-
-        if (mGeneralData.isRemapPageDownToSpeedEnabled()) {
+        } else if (mGeneralData.getPageUpDownAction() == GeneralData.ACTION_SPEED_DOWN_UP) {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedDownAction);
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedUpAction);
         }
 
-        if (mGeneralData.isRemapChannelUpToSpeedEnabled()) {
+        if (mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_LIKE_DISLIKE) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
+        } else if (mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN) {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, speedDownAction);
+        } else if (mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_VOLUME_UP_DOWN) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, volumeDownAction);
+        } else if (mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SPEED_TOGGLE) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, speedToggleAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, speedToggleAction);
         }
 
-        if (mGeneralData.isRemapFastForwardToSpeedToggleEnabled()) {
+        if (mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_SPEED_TOGGLE) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedToggleAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedToggleAction);
-        } else if (mGeneralData.isRemapFastForwardToSpeedEnabled()) {
+        } else if (mGeneralData.getFastForwardRewindAction() == GeneralData.ACTION_SPEED_UP_DOWN) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
         }
 
-        if (mGeneralData.isRemapNextToSpeedEnabled()) {
+        if (mGeneralData.getNextPreviousAction() == GeneralData.ACTION_SPEED_UP_DOWN) {
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_NEXT, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_MEDIA_PREVIOUS, speedDownAction);
         }
 
-        if (mGeneralData.isRemapDpadUpToSpeedEnabled()) {
+        if (mGeneralData.getDpadUpDownAction() == GeneralData.ACTION_SPEED_UP_DOWN) {
             actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, speedDownAction);
+        } else if (mGeneralData.getDpadUpDownAction() == GeneralData.ACTION_VOLUME_UP_DOWN) {
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, volumeUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, volumeDownAction);
         }
 
         if (mGeneralData.isRemapNumbersToSpeedEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_3, speedUpAction);
             actionMapping.put(KeyEvent.KEYCODE_1, speedDownAction);
-        }
-
-        if (mGeneralData.isRemapChannelUpToVolumeEnabled()) {
-            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, volumeUpAction);
-            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, volumeDownAction);
-        }
-
-        if (mGeneralData.isRemapDpadUpToVolumeEnabled()) {
-            actionMapping.put(KeyEvent.KEYCODE_DPAD_UP, volumeUpAction);
-            actionMapping.put(KeyEvent.KEYCODE_DPAD_DOWN, volumeDownAction);
         }
 
         if (mGeneralData.isRemapDpadLeftToVolumeEnabled()) {
