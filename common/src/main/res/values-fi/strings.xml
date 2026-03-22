@@ -726,4 +726,7 @@
   <string name="queue_respects_playback_mode">Toistojono noudattaa toistotilaa</string>
   <string name="play_from_start">Toista alusta</string>
   <string name="ignore_short_segments">Ohita lyhyet video-osiot</string>
+  <string name="install_bridge">Asenna Android TV/Amazon yhteys</string>
+  <string name="fix_empty_subs_and_channels">Korjaa tyhjät tilaukset ja kanavat</string>
+  <string name="local_backup_not_supported">Automaattista varmuuskopiointia ei tueta Android TV 11:ssä tai sitä uudemmissa versioissa järjestelmärajoitusten vuoksi. Käytä sen sijaan GDrivea.</string>
 </resources>
