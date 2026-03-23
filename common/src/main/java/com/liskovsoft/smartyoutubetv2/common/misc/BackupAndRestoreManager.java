@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build.VERSION;
 import android.os.Environment;
 import android.os.Handler;
 
@@ -139,7 +140,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         File currentBackup = getBackup();
 
-        if (currentBackup == null) {
+        if (currentBackup == null || !hasStoragePermissions(mContext)) {
             Log.d(TAG, "Oops. Backup location not writable.");
             return;
         }
@@ -283,6 +284,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
     public String getBackupRootPath() {
         // NOTE: Android 11+ only backup through the file manager (no shared dir)
+        if (hasAccessOnlyToAppFolders() && VERSION.SDK_INT > 29) {
+            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
+                    + "/" + BackupAndRestoreHelper.BACKUP_FOLDER_NAME;
+        }
+
         return String.format("%s/data", getExternalStorageDirectory());
     }
 

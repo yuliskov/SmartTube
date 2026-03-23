@@ -657,7 +657,7 @@ public class GeneralData implements ProfileChangeListener {
         //mIsRemapPageDownToSpeedEnabled = Helpers.parseBoolean(split, 67, false);
         mSearchExitShortcut = Helpers.parseInt(split, 68, EXIT_SINGLE_BACK);
         mGDriveBackupFreqDays = Helpers.parseInt(split, 69, -1);
-        mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, -1);
+        mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 7);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
     }
