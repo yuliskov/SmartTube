@@ -36,10 +36,6 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (Utils.isSharedDirRestricted(context)) {
-            return;
-        }
-
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
             WorkManager workManager = WorkManager.getInstance(context);
 
@@ -57,11 +53,6 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void forceSchedule(Context context) {
-        if (Utils.isSharedDirRestricted(context)) {
-            MessageHelpers.showLongMessage(context, R.string.local_backup_not_supported);
-            return;
-        }
-
         new BackupAndRestoreManager(context).checkPermAndBackup();
         schedule(context);
     }

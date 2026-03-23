@@ -53,7 +53,7 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     public static AppPrefs instance(Context context) {
         if (sInstance == null) {
-            sInstance = new AppPrefs(context.getApplicationContext());
+            sInstance = new AppPrefs(context);
         }
 
         return sInstance;

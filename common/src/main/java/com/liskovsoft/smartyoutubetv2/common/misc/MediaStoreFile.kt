@@ -42,11 +42,12 @@ import java.io.OutputStream
  * @param path Relative path to the root directory (app package folder)
  */
 @RequiresApi(29)
-internal class MFile(
+internal class MediaStoreFile @JvmOverloads constructor(
     private val context: Context,
-    private val path: String // relative to rootDir
+    private val path: String, // relative to rootDir
+    private val rootDir: String = context.packageName,
+    private val publicDirType: String = Environment.DIRECTORY_DOCUMENTS
 ) {
-    private val rootDir = context.packageName
     private var cachedUri: Uri? = null
 
     private val resolver get() = context.contentResolver
@@ -60,13 +61,13 @@ internal class MFile(
     private fun relativePath(): String {
         val parent = parent()
         return if (parent.isEmpty())
-            Environment.DIRECTORY_DOCUMENTS + "/" + rootDir
+            "$publicDirType/$rootDir"
         else
-            Environment.DIRECTORY_DOCUMENTS + "/" + rootDir + "/" + parent
+            "$publicDirType/$rootDir/$parent"
     }
 
     private fun fullRelativeDir(): String {
-        return Environment.DIRECTORY_DOCUMENTS + "/" + rootDir + "/" + path
+        return "$publicDirType/$rootDir/$path"
     }
 
     private fun findUri(): Uri? {
@@ -111,7 +112,7 @@ internal class MFile(
      * So if you want a folder to “exist” even if it’s empty, you create a hidden placeholder file called .dir inside that folder.
      */
     fun isDirectory(): Boolean {
-        val dirMarker = MFile(context, "$path/.dir")
+        val dirMarker = MediaStoreFile(context, "$path/.dir", rootDir)
         if (dirMarker.exists()) return true
 
         val projection = arrayOf(MediaStore.Files.FileColumns._ID)
@@ -159,7 +160,7 @@ internal class MFile(
         for (part in parts) {
             if (part.isEmpty()) continue
             current = if (current.isEmpty()) part else "$current/$part"
-            val dummy = MFile(context, "$current/.dir")
+            val dummy = MediaStoreFile(context, "$current/.dir", rootDir)
             if (!dummy.exists()) {
                 dummy.createNewFile()
             }
@@ -173,8 +174,8 @@ internal class MFile(
         return result
     }
 
-    fun listFiles(): List<MFile> {
-        val list = mutableListOf<MFile>()
+    fun listFiles(): List<MediaStoreFile> {
+        val list = mutableListOf<MediaStoreFile>()
 
         val projection = arrayOf(
             MediaStore.Files.FileColumns.DISPLAY_NAME
@@ -197,7 +198,7 @@ internal class MFile(
             while (cursor.moveToNext()) {
                 val fileName = cursor.getString(0)
                 if (fileName != ".dir") {
-                    list.add(MFile(context, "$path/$fileName"))
+                    list.add(MediaStoreFile(context, "$path/$fileName", rootDir))
                 }
             }
         }
@@ -222,16 +223,16 @@ internal class MFile(
         val uri = findUri() ?: run {
             createNewFile()
             findUri()
-        }
+        } ?: return
 
-        resolver.openOutputStream(uri!!)?.use { out ->
+        resolver.openOutputStream(uri)?.use { out ->
             src.inputStream().use { input ->
                 input.copyTo(out)
             }
         }
     }
 
-    fun copyTo(dest: MFile) {
+    fun copyTo(dest: MediaStoreFile) {
         val input = openInputStream() ?: return
         val output = dest.openOutputStream() ?: return
 
@@ -255,16 +256,16 @@ internal class MFile(
     /**
      * Create file in the current directory
      */
-    fun child(name: String): MFile {
+    fun child(name: String): MediaStoreFile {
         return if (path.isEmpty())
-            MFile(context, name)
+            MediaStoreFile(context, name, rootDir)
         else
-            MFile(context, "$path/$name")
+            MediaStoreFile(context, "$path/$name", rootDir)
     }
 
     fun resolve(): String {
         return Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DOCUMENTS
+            publicDirType
         ).absolutePath + "/" + rootDir + "/" + path
     }
 
@@ -275,11 +276,11 @@ internal class MFile(
     fun getAbsolutePath(): String {
         val fileName = getStoredName() ?: name()
         return Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DOCUMENTS
-        ).absolutePath + "/" + rootDir + "/" + parent() + "/" + fileName
+            publicDirType
+        ).absolutePath + "/" + rootDir + "/" + if (parent().isNotEmpty()) parent() + "/" else "" + fileName
     }
 
-    fun renameTo(dest: MFile): Boolean {
+    fun renameTo(dest: MediaStoreFile): Boolean {
         val uri = findUri() ?: return false
 
         val values = ContentValues().apply {
@@ -341,5 +342,42 @@ internal class MFile(
             if (cursor.moveToFirst()) return cursor.getString(0)
         }
         return null
+    }
+
+    /**
+     * Returns true if this file can be written to without MediaStore renaming it.
+     *
+     * MediaStore may silently rename files if the app does not have permission
+     * to overwrite an existing file (e.g. after app reinstall). This method
+     * attempts a zero-byte write and then verifies that the stored file name
+     * matches the expected file name. If MediaStore created a renamed file,
+     * it will be deleted.
+     */
+    fun isWritable(): Boolean {
+        val uri = findUri() ?: run {
+            createNewFile()
+            findUri()
+        } ?: return false
+
+        return try {
+            // Attempt zero-byte write
+            resolver.openOutputStream(uri)?.use { out ->
+                out.write(byteArrayOf())
+            }
+
+            val storedName = getStoredName()
+
+            if (storedName != null && storedName != name()) {
+                // MediaStore created renamed file like "file.zip (1)"
+                delete()
+                return false
+            }
+
+            true
+        } catch (e: SecurityException) {
+            false
+        } catch (e: Exception) {
+            false
+        }
     }
 }

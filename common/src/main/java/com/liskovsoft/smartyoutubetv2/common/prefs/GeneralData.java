@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -34,10 +33,9 @@ public class GeneralData implements ProfileChangeListener {
     public static final int ACTION_SPEED_TOGGLE = 5;
     public static final int ACTION_FAST_FORWARD_REWIND = 6;
     public static final int ACTION_SEARCH = 7;
-    @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
-    private final Context mContext;
     private final AppPrefs mPrefs;
+    private String mBackupZipName;
     private int mAppExitShortcut;
     private int mPlayerExitShortcut;
     private int mSearchExitShortcut;
@@ -91,7 +89,6 @@ public class GeneralData implements ProfileChangeListener {
     private final Runnable mPersistStateInt = this::persistStateInt;
 
     private GeneralData(Context context) {
-        mContext = context;
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
         restoreState();
@@ -99,10 +96,19 @@ public class GeneralData implements ProfileChangeListener {
 
     public static GeneralData instance(Context context) {
         if (sInstance == null) {
-            sInstance = new GeneralData(context.getApplicationContext());
+            sInstance = new GeneralData(context);
         }
 
         return sInstance;
+    }
+
+    public String getBackupZipName() {
+        return mBackupZipName;
+    }
+
+    public void setBackupZipName(String backupZipName) {
+        mBackupZipName = backupZipName;
+        persistState();
     }
 
     public int getAppExitShortcut() {
@@ -578,7 +584,7 @@ public class GeneralData implements ProfileChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        // Zero index is skipped. Selected sections were there.
+        mBackupZipName = Helpers.parseStr(split, 0);
         //mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         //mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
@@ -666,7 +672,7 @@ public class GeneralData implements ProfileChangeListener {
 
     private void persistStateInt() {
         // Zero index is skipped. Selected sections were there.
-        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(null, null, null, mAppExitShortcut, mIsReturnToLauncherEnabled,
+        mPrefs.setProfileData(GENERAL_DATA, Helpers.mergeData(mBackupZipName, null, null, mAppExitShortcut, mIsReturnToLauncherEnabled,
                 mBackgroundShortcut, mOldPinnedItems, mIsHideShortsFromSubscriptionsEnabled,
                 mFastForwardRewindAction, null, mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mPageUpDownAction, null, mChannelUpDownAction, null, null, null, null, null,

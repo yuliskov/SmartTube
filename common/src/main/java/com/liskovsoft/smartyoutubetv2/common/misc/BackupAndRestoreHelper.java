@@ -7,16 +7,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
-
-import androidx.core.content.FileProvider;
 
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,27 +41,39 @@ public class BackupAndRestoreHelper implements OnResult {
         File dataDir = new File(mediaDir, "data");
         if (!dataDir.exists() || FileHelpers.isEmpty(dataDir)) return;
 
-        File zipFile = new File(mediaDir,  "backup_" + mContext.getPackageName() + ".zip");
+        String backupZipName = "backup_" + mContext.getPackageName() + ".zip";
+        File zipFile = new File(mediaDir, backupZipName);
         ZipHelper2.zipDirectory(dataDir, zipFile);
 
-        //if (VERSION.SDK_INT >= 29) {
-        //    MFile file = new MFile(mContext, zipFile.getName());
-        //    file.copyFrom(zipFile);
-        //    //file.getStoredName();
-        //}
+        if (VERSION.SDK_INT >= 29 && zipFile.exists()) {
+            String oldBackupZipName = getGeneralData().getBackupZipName();
+            if (oldBackupZipName != null && oldBackupZipName.endsWith(".zip")) {
+                backupZipName = oldBackupZipName;
+            }
+            MediaStoreFile file = new MediaStoreFile(mContext, backupZipName, "SmartTubeBackup");
+            if (!file.isWritable()) {
+                backupZipName = "backup_" + mContext.getPackageName() + "_" + System.currentTimeMillis() + ".zip";
+                file = new MediaStoreFile(mContext, backupZipName, "SmartTubeBackup");
+            }
 
-        Uri uri = FileProvider.getUriForFile(
-                mContext,
-                mContext.getPackageName() + ".update_provider",
-                zipFile
-        );
-
-        try {
-            openFileManager(uri);
-        } catch (Exception e) {
-            // Activity launch may fail if called from background (e.g. WorkManager)
-            e.printStackTrace();
+            if (file.isWritable()) {
+                file.copyFrom(zipFile);
+                getGeneralData().setBackupZipName(backupZipName);
+            }
         }
+
+        //Uri uri = FileProvider.getUriForFile(
+        //        mContext,
+        //        mContext.getPackageName() + ".update_provider",
+        //        zipFile
+        //);
+        //
+        //try {
+        //    openFileManager(uri);
+        //} catch (Exception e) {
+        //    // Activity launch may fail if called from background (e.g. WorkManager)
+        //    e.printStackTrace();
+        //}
     }
 
     private void openFileManager(Uri uri) {
@@ -240,5 +250,9 @@ public class BackupAndRestoreHelper implements OnResult {
             return name;
         }
         return null;
+    }
+
+    private GeneralData getGeneralData() {
+        return GeneralData.instance(mContext);
     }
 }

@@ -21,7 +21,7 @@ public abstract class DataSaverBase extends DataChangeBase {
     }
 
     public DataSaverBase(Context context) {
-        mAppPrefs = AppPrefs.instance(context.getApplicationContext());
+        mAppPrefs = AppPrefs.instance(context);
         mDataKey = this.getClass().getSimpleName();
         mValues = new ArrayList<>();
         restoreState();
