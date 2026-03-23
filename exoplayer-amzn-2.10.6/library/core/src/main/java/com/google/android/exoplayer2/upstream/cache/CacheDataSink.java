@@ -170,19 +170,20 @@ public final class CacheDataSink implements DataSink {
     file =
         cache.startFile(
             dataSpec.key, dataSpec.absoluteStreamPosition + dataSpecBytesWritten, length);
-    FileOutputStream underlyingFileOutputStream = new FileOutputStream(file);
-    if (bufferSize > 0) {
-      if (bufferedOutputStream == null) {
-        bufferedOutputStream = new ReusableBufferedOutputStream(underlyingFileOutputStream,
-            bufferSize);
-      } else {
-        bufferedOutputStream.reset(underlyingFileOutputStream);
-      }
-      outputStream = bufferedOutputStream;
-    } else {
-      outputStream = underlyingFileOutputStream;
+    try (FileOutputStream underlyingFileOutputStream = new FileOutputStream(file)) {
+            if (bufferSize > 0) {
+              if (bufferedOutputStream == null) {
+                bufferedOutputStream = new ReusableBufferedOutputStream(underlyingFileOutputStream,
+                    bufferSize);
+              } else {
+                bufferedOutputStream.reset(underlyingFileOutputStream);
+              }
+              outputStream = bufferedOutputStream;
+            } else {
+              outputStream = underlyingFileOutputStream;
+            }
+            outputStreamBytesWritten = 0;
     }
-    outputStreamBytesWritten = 0;
   }
 
   @SuppressWarnings("ThrowFromFinallyBlock")
