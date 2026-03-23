@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
@@ -44,6 +45,12 @@ public class BackupAndRestoreHelper implements OnResult {
 
         File zipFile = new File(mediaDir,  "backup_" + mContext.getPackageName() + ".zip");
         ZipHelper2.zipDirectory(dataDir, zipFile);
+
+        //if (VERSION.SDK_INT >= 29) {
+        //    MFile file = new MFile(mContext, zipFile.getName());
+        //    file.copyFrom(zipFile);
+        //    //file.getStoredName();
+        //}
 
         Uri uri = FileProvider.getUriForFile(
                 mContext,
