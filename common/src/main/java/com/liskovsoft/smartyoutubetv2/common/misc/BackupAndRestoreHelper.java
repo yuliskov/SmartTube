@@ -61,6 +61,8 @@ public class BackupAndRestoreHelper implements OnResult {
 
             if (zipFile.exists()) {
                 file.copyFrom(zipFile);
+                // Delete temporary zip
+                zipFile.delete();
             }
         }
 
@@ -174,7 +176,7 @@ public class BackupAndRestoreHelper implements OnResult {
         }
 
         // Delete the temporary ZIP
-        //tempZip.delete();
+        tempZip.delete();
     }
 
     private void unpackTempZip(Uri zipUri, Runnable onSuccess, Runnable onError) {

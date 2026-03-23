@@ -375,7 +375,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             for (File file : files) {
                 if (file.getName().endsWith(".zip")) {
                     mHelper.unpackTempZip(file);
-                    break;
+                    // More than one zip file
+                    //break;
                 }
             }
         }
