@@ -294,8 +294,8 @@ public class ChannelsProvider {
             return;
         }
 
-        if (clips.size() == 0) {
-            Log.d(TAG, "Cant add clips: clips.size() == 0");
+        if (clips == null || clips.isEmpty()) {
+            Log.d(TAG, "Cant add clips: clips null or empty");
             return;
         }
 
