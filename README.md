@@ -27,10 +27,10 @@ Please keep built-in security features enabled to stay protected.
 
 ![The app screenshot](./images/browse_home.png)
 
-SmartTube is a free and open-source advanced media player for Android TVs and TV boxes. It allows you to play content from various public sources.
+SmartTube is a free and open-source media client for Android TVs and TV boxes. It allows you to browse and play content from various public sources in a TV-optimized interface.
 
 ### ✅ Features
-- No ads  
+- Clean interface 
 - SponsorBlock integration  
 - Adjustable playback speed  
 - 8K resolution support  
@@ -65,7 +65,7 @@ Give it a try!
 
 > [video of the installation](images/new/zPV0imF.mp4) (note: download url changed to `kutt.to/stn_beta` or `kutt.to/stn_stable`)
 
-**Do not** download SmartTube from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTube is not officially published on any app store. Sadly, the Google PlayStore does not allow ad-free Youtube apps using unofficial APIs.
+**Do not** download SmartTube from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTube is not officially published on any app store.
 
 There is a **beta release** (recommended) and a **stable release**. Beta gets new features and bugfixes faster than the stable release.
 
@@ -134,14 +134,14 @@ It has been successfully tested on TVs, TV boxes and TV sticks that are based on
 
 ## Features
 
-### Adblocking
+### Interface
 
-SmartTube does not show any ad banners, preroll ads or ad intermissions. It not just tries to prevent them, it is literally programmed to be completely **unable** to display any ads, so YouTube cannot slip anything in. This also means you cannot allow ads or whitelist channels. Some YouTube channels include sponsored messages in their videos, these can also be skipped, see [SponsorBlock](#SponsorBlock) below.
+SmartTube focuses on a clean and distraction-free interface for watching media content. The app does not include advertising UI elements and focuses on playback and browsing experience instead.
 
 
 ### SponsorBlock
 
-SmartTube includes a SponsorBlock integration. From the [SponsorBlock website](https://sponsor.ajay.app/):
+SmartTube includes optional SponsorBlock integration. From the [SponsorBlock website](https://sponsor.ajay.app/):
 
 > SponsorBlock is an open-source crowdsourced browser extension and open API for **skipping sponsor segments** in YouTube videos. [...] the extension automatically skips sponsors **it knows about** using a privacy preserving query system. It also supports skipping **other categories**, such as intros, outros and reminders to subscribe [and non-music parts in music videos].
 
@@ -174,7 +174,7 @@ You can adjust the playback speed pressing the speed-indicator icon (gauge) in t
 
 ### Voice Search
 
-To enable global voice search, an additional app must be installed alongside SmartTube. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTube instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you cannot launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
+To enable global voice search, an additional app must be installed alongside SmartTube. This _bridge app_ allows the system voice search to open SmartTube instead of the default YouTube app. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you cannot launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
 
 **On Amazon Fire TV**: 
 
@@ -286,14 +286,14 @@ HDR works only **if your hardware supports it**. It's a complicated mess:
 - Yes, there truly are different HDMI cable versions with different HDR-support, it's complicated
 - some devices (like the **NVIDIA Shield**) generally support HDR, but **not** the specific HDR format that is used on YouTube :cry:
  
-If HDR videos look looked dim or washed out, then check [this article](https://www.wired.com/story/hdr-too-dark-how-to-fix-it/). **If HDR is not working**, it's probably not this app's fault. You might need to search on the web for "HDR" and your device name for any help.
+If HDR videos look dim or washed out, then check [this article](https://www.wired.com/story/hdr-too-dark-how-to-fix-it/). **If HDR is not working**, it's probably not this app's fault. You might need to search on the web for "HDR" and your device name for any help.
 
 ## Liability
 
 We take no responsibility for the use of our tool, or external instances
 provided by third parties. We strongly recommend you abide by the valid
-official regulations in your country. Furthermore, we refuse liability
-for any inappropriate use of Invidious, such as illegal downloading.
+official regulations in your country. Furthermore, we refuse liability 
+for any inappropriate use of third-party services.
 This tool is provided to you in the spirit of free, open software.
 
 You may view the LICENSE in which this software is provided to you [here](./LICENSE).
