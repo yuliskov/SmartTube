@@ -44,13 +44,20 @@ public class BackupAndRestoreHelper implements OnResult {
 
         String oldBackupZipName = getGeneralData().getBackupZipName();
         if (oldBackupZipName == null || !oldBackupZipName.endsWith(".zip")) {
-            oldBackupZipName = createBackupZipNameWithTimestamp();
+            oldBackupZipName = getBackupZipNameWithTimestamp();
             getGeneralData().setBackupZipName(oldBackupZipName);
         }
 
         MediaStoreFile file = new MediaStoreFile(mContext, oldBackupZipName, BACKUP_FOLDER_NAME);
         if (!file.isWritable()) {
-            oldBackupZipName = createBackupZipNameWithTimestamp();
+            oldBackupZipName = getBackupZipNameWithTimestamp();
+            getGeneralData().setBackupZipName(oldBackupZipName);
+            file = new MediaStoreFile(mContext, oldBackupZipName, BACKUP_FOLDER_NAME);
+        }
+
+        if (!file.isWritable()) {
+            deleteTimeStamp(); // User copied full old media directory (with the old timestamp)
+            oldBackupZipName = getBackupZipNameWithTimestamp();
             getGeneralData().setBackupZipName(oldBackupZipName);
             file = new MediaStoreFile(mContext, oldBackupZipName, BACKUP_FOLDER_NAME);
         }
@@ -191,7 +198,7 @@ public class BackupAndRestoreHelper implements OnResult {
             // Copy ZIP from URI to the temporary file
             String backupZipName = getGeneralData().getBackupZipName();
             if (backupZipName == null || !backupZipName.endsWith(".zip")) {
-                backupZipName = createBackupZipNameWithTimestamp();
+                backupZipName = getBackupZipNameWithTimestamp();
                 getGeneralData().setBackupZipName(backupZipName);
             }
             File tempZip = new File(mediaDir, backupZipName);
@@ -269,7 +276,31 @@ public class BackupAndRestoreHelper implements OnResult {
         return GeneralData.instance(mContext);
     }
     
-    private String createBackupZipNameWithTimestamp() {
-        return mContext.getPackageName() + "_" + System.currentTimeMillis() + ".zip";
+    private String getBackupZipNameWithTimestamp() {
+        return mContext.getPackageName() + "_" + getTimeStamp() + ".zip";
+    }
+
+    private String getTimeStamp() {
+        File timestampFile = getTimestampFile();
+        if (timestampFile.exists()) {
+            return FileHelpers.getFileContents(timestampFile);
+        }
+
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        FileHelpers.stringToFile(timestamp, timestampFile);
+        return timestamp;
+    }
+
+    private void deleteTimeStamp() {
+        File timestampFile = getTimestampFile();
+        if (timestampFile.exists()) {
+            timestampFile.delete();
+        }
+    }
+
+    private File getTimestampFile() {
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+        File timestampFile = new File(mediaDir, "timestamp.txt");
+        return timestampFile;
     }
 }

@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -143,10 +144,16 @@ internal class MediaStoreFile @JvmOverloads constructor(
             put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath())
         }
 
-        val uri = resolver.insert(
-            collectionUri(),
-            values
-        )
+        val uri = try {
+            resolver.insert(
+                collectionUri(),
+                values
+            )
+        } catch (e: SQLiteConstraintException) {
+            // The file already exists (by me or someone else)
+            // android.database.sqlite.SQLiteConstraintException: UNIQUE constraint failed: files._data (code 2067 SQLITE_CONSTRAINT_UNIQUE)
+            return false
+        }
 
         cachedUri = uri
         return uri != null
