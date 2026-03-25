@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Color of currently focused player control -->
-    <color name="lb_control_button_color_origin">#66EEEEEE</color>
-    <color name="lb_control_button_color">#E8FFFFFF</color>
+    <!-- MOD: Focused player button color (default: #66EEEEEE, new: #E8FFFFFF) -->
+    <color name="lb_control_button_color">#9EEEEEEE</color>
 
     <!-- Common colors -->
     <color name="default_background_gradient_start">#000000</color>

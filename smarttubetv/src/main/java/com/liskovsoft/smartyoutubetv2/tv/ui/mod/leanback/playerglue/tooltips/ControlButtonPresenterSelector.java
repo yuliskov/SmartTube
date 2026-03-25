@@ -126,7 +126,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                 vh.mFocusableView.sendAccessibilityEvent(
                         AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
 
-                // MODIFIED: enable control tooltips
+                // MOD: enable control tooltips
                 if (tooltipsEnabled) {
                     TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
                 }
