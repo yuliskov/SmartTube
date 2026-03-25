@@ -723,7 +723,7 @@
   <string name="prefer_google_dns">Privilégier les DNS Google</string>
   <string name="dialog_block_channel">Mettre sur liste noire</string>
   <string name="dialog_unblock_channel">Retirer de la liste noire</string>
-  <string name="confirm_block_channel">Masquer tout le contenu de %s?</string>
+  <string name="confirm_block_channel">Masquer tout le contenu de %s\?</string>
   <string name="channel_blocked">Chaîne mise sur liste noire</string>
   <string name="channel_unblocked">Retiré de la liste noire</string>
   <string name="header_blocked_channels">Chaînes sur liste noire</string>
@@ -731,4 +731,11 @@
   <string name="action_debug_info">Informations de débogage</string>
   <string name="player_time_stretching">Étirement temporel audio</string>
   <string name="player_time_stretching_desc">Conserve une voix naturelle lors du changement de vitesse. Peut réduire significativement les performances sur certains appareils.</string>
+  <string name="queue_respects_playback_mode">La file d\'attente respecte le mode de lecture</string>
+  <string name="sidebar_notification">Afficher la notification dans la barre latérale</string>
+  <string name="ignore_short_segments">Ignorer les segments courts</string>
+  <string name="install_bridge">Installer le pont ATV/Amazon</string>
+  <string name="fix_empty_subs_and_channels">Corriger les abonnements et chaînes vides</string>
+  <string name="local_backup_not_supported">La sauvegarde automatique sur Android TV 11+ n\'est pas prise en charge en raison des restrictions système. Utilisez Google Drive à la place</string>
+  <string name="rounded_card_corners">Coins de carte arrondis</string>
 </resources>
