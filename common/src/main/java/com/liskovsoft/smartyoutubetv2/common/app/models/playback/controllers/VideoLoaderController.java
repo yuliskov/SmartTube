@@ -279,7 +279,8 @@ public class VideoLoaderController extends BasePlayerController {
         float sleepHours = getPlayerData().getSleepTimerHours();
         if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
-            getPlayer().setTitle(getContext().getString(R.string.sleep_timer));
+            getPlayer().setTitle(getContext().getString(R.string.player_sleep_timer)
+                    + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
             getPlayer().showOverlay(true);
             Helpers.enableScreensaver(getActivity());
         }
