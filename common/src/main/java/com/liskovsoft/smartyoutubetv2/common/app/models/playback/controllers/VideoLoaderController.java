@@ -137,8 +137,12 @@ public class VideoLoaderController extends BasePlayerController {
                 reloadVideo();
             } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 // Faster source may differ across a devices. Try them one by one.
-                switchNextEngine();
-                restartEngine();
+                //switchNextEngine();
+                //restartEngine();
+                if (!isFasterDataSourceEnabled()) {
+                    enableFasterDataSource();
+                    restartEngine();
+                }
             }
         }
     }
