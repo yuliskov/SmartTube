@@ -400,7 +400,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendBlockChannelButton() {
-        if (mVideo == null || !mIsBlockChannelEnabled) {
+        if (mVideo == null || mVideo.isChapter || !mIsBlockChannelEnabled) {
             return;
         }
 
