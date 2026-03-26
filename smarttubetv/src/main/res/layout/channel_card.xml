@@ -20,7 +20,7 @@
             android:layout_gravity="start"
             android:visibility="invisible"
             tools:ignore="ContentDescription"/>
-        <TextView
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat
             android:id="@+id/channel_title"
             android:singleLine="true"
             android:ellipsize="end"

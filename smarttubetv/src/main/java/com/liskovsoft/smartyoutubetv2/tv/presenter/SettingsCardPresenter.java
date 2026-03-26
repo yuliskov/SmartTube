@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,12 +34,15 @@ public class SettingsCardPresenter extends Presenter {
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
 
+        @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
         TextView textView = container.findViewById(R.id.settings_title);
         textView.setBackgroundColor(mDefaultBackgroundColor);
         textView.setTextColor(mDefaultTextColor);
+
+        ViewUtil.setTextScrollSpeed(textView, getCardTextScrollSpeed(context));
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
@@ -49,7 +53,6 @@ public class SettingsCardPresenter extends Presenter {
 
             if (hasFocus) {
                 ViewUtil.enableMarquee(textView);
-                ViewUtil.setTextScrollSpeed(textView, MainUIData.instance(context).getCardTextScrollSpeed());
             } else {
                 ViewUtil.disableMarquee(textView);
             }
@@ -76,5 +79,13 @@ public class SettingsCardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
+    }
+
+    protected boolean isCardTextAutoScrollEnabled(Context context) {
+        return MainUIData.instance(context).isCardTextAutoScrollEnabled();
+    }
+
+    protected float getCardTextScrollSpeed(Context context) {
+        return MainUIData.instance(context).getCardTextScrollSpeed();
     }
 }

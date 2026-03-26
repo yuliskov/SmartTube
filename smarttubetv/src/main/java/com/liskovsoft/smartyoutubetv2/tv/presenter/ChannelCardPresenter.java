@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
@@ -51,12 +52,18 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         updateDimensions(context);
 
+        @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
         TextView textView = container.findViewById(R.id.channel_title);
         textView.setBackgroundColor(mDefaultBackgroundColor);
         textView.setTextColor(mDefaultTextColor);
+
+        boolean autoScrollEnabled = isCardTextAutoScrollEnabled(context);
+        if (autoScrollEnabled) {
+            ViewUtil.setTextScrollSpeed(textView, getCardTextScrollSpeed(context));
+        }
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor :
@@ -65,6 +72,10 @@ public class ChannelCardPresenter extends LongClickPresenter {
             
             textView.setBackgroundColor(backgroundColor);
             textView.setTextColor(textColor);
+
+            if (!autoScrollEnabled) {
+                return;
+            }
 
             if (hasFocus) {
                 ViewUtil.enableMarquee(textView);
@@ -124,6 +135,14 @@ public class ChannelCardPresenter extends LongClickPresenter {
                 R.dimen.channel_card_height,
                 MainUIData.instance(context).getVideoGridScale(),
                 true);
+    }
+
+    protected boolean isCardTextAutoScrollEnabled(Context context) {
+        return MainUIData.instance(context).isCardTextAutoScrollEnabled();
+    }
+
+    protected float getCardTextScrollSpeed(Context context) {
+        return MainUIData.instance(context).getCardTextScrollSpeed();
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
