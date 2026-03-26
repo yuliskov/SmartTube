@@ -90,7 +90,7 @@ public class BlockedChannelData implements ProfileChangeListener {
      * Add a channel to the block list
      */
     public void addChannel(String channelId, String channelName) {
-        if (channelId == null && channelName == null) {
+        if (Helpers.allNulls(channelId, channelName)) {
             return;
         }
 
@@ -106,7 +106,7 @@ public class BlockedChannelData implements ProfileChangeListener {
      * Remove a channel from the list
      */
     public void removeChannel(String channelId, String channelName) {
-        if (channelId == null && channelName == null) {
+        if (Helpers.allNulls(channelId, channelName) || mChannels.isEmpty()) {
             return;
         }
 
@@ -120,7 +120,11 @@ public class BlockedChannelData implements ProfileChangeListener {
      * Check if a channel is blocked
      */
     public boolean containsChannel(String channelId, String channelName) {
-        return !mChannels.isEmpty() && mChannels.contains(new Channel(channelId, channelName));
+        if (Helpers.allNulls(channelId, channelName) || mChannels.isEmpty()) {
+            return false;
+        }
+
+        return mChannels.contains(new Channel(channelId, channelName));
     }
 
     /**
@@ -145,6 +149,10 @@ public class BlockedChannelData implements ProfileChangeListener {
      */
     public int getChannelCount() {
         return mChannels.size();
+    }
+
+    public boolean isEmpty() {
+        return mChannels.isEmpty();
     }
 
     /**

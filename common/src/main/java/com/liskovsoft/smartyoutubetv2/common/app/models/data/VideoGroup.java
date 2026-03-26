@@ -472,17 +472,25 @@ public class VideoGroup {
     }
 
     private boolean isChannelBlocked(Video video) {
-        // Filter out videos from blacklisted channels
-        String channelId = video.channelId;
-        String channelName = video.getAuthor();
-        if (!Helpers.allNulls(channelId, channelName)) {
-            try {
-                BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
-                return blockedChannelData != null && blockedChannelData.containsChannel(channelId, channelName);
-            } catch (Exception e) {
-                // If BlockedChannelData isn't initialized yet, allow the video through
-                // This can happen during early app startup
+        if (video.isChapter) {
+            return false;
+        }
+
+        try {
+            BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
+
+            if (blockedChannelData == null || blockedChannelData.isEmpty()) {
+                return false;
             }
+
+            // Filter out videos from blacklisted channels
+            String channelId = video.channelId;
+            String channelName = video.getAuthor();
+
+            return blockedChannelData.containsChannel(channelId, channelName);
+        } catch (Exception e) {
+            // If BlockedChannelData isn't initialized yet, allow the video through
+            // This can happen during early app startup
         }
 
         return false;
