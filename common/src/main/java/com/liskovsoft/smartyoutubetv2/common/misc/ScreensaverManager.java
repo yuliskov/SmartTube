@@ -137,8 +137,10 @@ public class ScreensaverManager {
         //    return;
         //}
 
-        disable();
+        // NOTE: disable will create infinite loop
+        //disable();
         mMode = MODE_SCREEN_OFF;
+        Utils.removeCallbacks(mUndimScreen);
         Utils.postDelayed(mDimScreen, 0);
     }
 

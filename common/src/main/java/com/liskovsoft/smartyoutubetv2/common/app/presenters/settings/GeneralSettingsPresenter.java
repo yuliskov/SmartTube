@@ -544,17 +544,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from( getContext().getString(R.string.player_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
-                option -> mGeneralData.setPlayerExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
-                mGeneralData.getPlayerExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.search_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
-                option -> mGeneralData.setSearchExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
-                mGeneralData.getSearchExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mGeneralData.setReturnToLauncherEnabled(option.isSelected()),
-                mGeneralData.isReturnToLauncherEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
+                option -> mGeneralData.setScreensaverDisabled(option.isSelected()),
+                mGeneralData.isScreensaverDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.multi_profiles),
                 option -> {
@@ -562,21 +554,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     BrowsePresenter.instance(getContext()).updateSections();
                 },
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.child_mode),
-                getContext().getString(R.string.child_mode_desc),
-                option -> {
-                    if (option.isSelected()) {
-                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.lost_setting_warning),
-                                () -> showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected())),
-                                settingsPresenter::closeDialog);
-                    } else {
-                        mGeneralData.setSettingsPassword(null);
-                        enableChildMode(option.isSelected());
-                        settingsPresenter.closeDialog();
-                    }
-                },
-                mGeneralData.isChildModeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
                 option -> {
@@ -598,41 +575,32 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.getMasterPassword() != null));
 
-        //options.add(UiOptionItem.from(getContext().getString(R.string.app_corner_clock),
-        //        option -> {
-        //            mGeneralData.enableGlobalClock(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isGlobalClockEnabled()));
-        //
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_clock),
-        //        option -> mPlayerData.enableGlobalClock(option.isSelected()),
-        //        mPlayerData.isGlobalClockEnabled()));
-        //
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_corner_ending_time),
-        //        option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
-        //        mPlayerData.isGlobalEndingTimeEnabled()));
-        //
-        //options.add(UiOptionItem.from(getContext().getString(R.string.old_home_look),
-        //        option -> {
-        //            mGeneralData.enableOldHomeLook(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isOldHomeLookEnabled()));
-        //
-        //options.add(UiOptionItem.from(getContext().getString(R.string.old_channel_look),
-        //        option -> {
-        //            mGeneralData.enableOldChannelLook(option.isSelected());
-        //            mMainUIData.enableChannelSearchBar(!option.isSelected());
-        //        },
-        //        mGeneralData.isOldChannelLookEnabled()));
-        //
-        //options.add(UiOptionItem.from(getContext().getString(R.string.fullscreen_mode),
-        //        option -> {
-        //            mGeneralData.enableFullscreenMode(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isFullscreenModeEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.child_mode),
+                getContext().getString(R.string.child_mode_desc),
+                option -> {
+                    if (option.isSelected()) {
+                        AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.lost_setting_warning),
+                                () -> showPasswordDialog(settingsPresenter, () -> enableChildMode(option.isSelected())),
+                                settingsPresenter::closeDialog);
+                    } else {
+                        mGeneralData.setSettingsPassword(null);
+                        enableChildMode(option.isSelected());
+                        settingsPresenter.closeDialog();
+                    }
+                },
+                mGeneralData.isChildModeEnabled()));
+
+        options.add(UiOptionItem.from( getContext().getString(R.string.player_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
+                option -> mGeneralData.setPlayerExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
+                mGeneralData.getPlayerExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.search_exit_shortcut) + ": " + getContext().getString(R.string.app_double_back_exit),
+                option -> mGeneralData.setSearchExitShortcut(option.isSelected() ? GeneralData.EXIT_DOUBLE_BACK : GeneralData.EXIT_SINGLE_BACK),
+                mGeneralData.getSearchExitShortcut() == GeneralData.EXIT_DOUBLE_BACK));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
+                option -> mGeneralData.setReturnToLauncherEnabled(option.isSelected()),
+                mGeneralData.isReturnToLauncherEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_subscriptions),
                 option -> mGeneralData.setRememberSubscriptionsPositionEnabled(option.isSelected()),
@@ -642,25 +610,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.setRememberPinnedPositionEnabled(option.isSelected()),
                 mGeneralData.isRememberPinnedPositionEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
-                option -> mGeneralData.setScreensaverDisabled(option.isSelected()),
-                mGeneralData.isScreensaverDisabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.select_channel_section),
                 option -> mGeneralData.setSelectChannelSectionEnabled(option.isSelected()),
                 mGeneralData.isSelectChannelSectionEnabled()));
-
-        //options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips) + ": " + getContext().getString(R.string.long_press_for_options),
-        //        option -> {
-        //            mGeneralData.enableFirstUseTooltip(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isFirstUseTooltipEnabled()));
-
-        //// Disable long press on buggy controllers.
-        //options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
-        //        option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
-        //        mGeneralData.isOkButtonLongPressDisabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
