@@ -155,10 +155,7 @@ public class PlayerUIController extends BasePlayerController {
 
         // First run
         if (FormatItem.SUBTITLE_NONE.equals(getPlayerData().getLastSubtitleFormat())) {
-            if (!enabled) {
-                onSubtitleLongClicked();
-            }
-
+            onSubtitleLongClicked();
             return;
         }
 
