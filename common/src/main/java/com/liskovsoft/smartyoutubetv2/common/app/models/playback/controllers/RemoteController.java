@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.RemoteControlService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
@@ -302,10 +303,13 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     getPlayer().showOverlay(false);
                 }
                 movePlayerToForeground();
-                Video newVideo2 = Video.from(command.getVideoId());
-                newVideo2.remotePlaylistId = command.getPlaylistId();
-                newVideo2.playlistIndex = command.getPlaylistIndex();
-                newVideo2.isRemote = true;
+                Video subsVideo = Video.from(command.getVideoId());
+                if (Helpers.equals(getVideo(), subsVideo)) {
+                    subsVideo = getVideo();
+                }
+                subsVideo.remotePlaylistId = command.getPlaylistId();
+                subsVideo.playlistIndex = command.getPlaylistIndex();
+                subsVideo.isRemote = true;
                 mNewVideoPositionMs = command.getCurrentTimeMs();
 
                 String langCode = command.getSubLanguageCode();
@@ -334,7 +338,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
                     getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
                     //getMainController().onButtonClicked(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
                  }
-                 openNewVideo(newVideo2);
+                 openNewVideo(subsVideo);
                  break;
             case Command.TYPE_UPDATE_PLAYLIST:
                 if (getPlayer() != null && mConnected) {

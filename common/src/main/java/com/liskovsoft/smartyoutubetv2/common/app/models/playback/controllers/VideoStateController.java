@@ -150,7 +150,9 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         // Channel info should be loaded at this point
-        restoreSubtitleFormat();
+        if (getVideo() != null && !getVideo().isRemote) {
+            restoreSubtitleFormat();
+        }
 
         // Need to contain channel id
         restoreSpeedAndPositionIfNeeded();
