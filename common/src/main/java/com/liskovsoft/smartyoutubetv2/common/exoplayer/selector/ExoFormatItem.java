@@ -36,6 +36,7 @@ public class ExoFormatItem implements FormatItem {
     private String mLanguage;
     private String mFormatId;
     private boolean mIsPreset;
+    private boolean mIsDrc;
 
     public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
         if (mediaTracks == null) {
@@ -91,6 +92,7 @@ public class ExoFormatItem implements FormatItem {
             if (format.id != null) {
                 formatItem.mId = format.id.hashCode();
                 formatItem.mFormatId = format.id;
+                formatItem.mIsDrc = format.isDrc;
             }
         } else {
             formatItem.mIsDefault = true; // fake auto track
@@ -148,16 +150,18 @@ public class ExoFormatItem implements FormatItem {
                 case TYPE_AUDIO:
                     // NOTE: Don't compare subs by formatId (it's non-constant)
                     if (mFormatId != null && formatItem.mFormatId != null) {
-                        return mType == formatItem.mType &&
-                                Helpers.equals(mFormatId, formatItem.mFormatId); // instead of compare by bitrate
+                        return mType == formatItem.mType
+                                && mIsDrc == formatItem.mIsDrc
+                                && Helpers.equals(mFormatId, formatItem.mFormatId); // instead of compare by bitrate
                     }
-                    return mIsPreset == formatItem.mIsPreset &&
-                            mType == formatItem.mType &&
-                            mFrameRate == formatItem.mFrameRate &&
-                            mWidth == formatItem.mWidth &&
-                            mHeight == formatItem.mHeight &&
-                            Helpers.equals(mCodecs, formatItem.mCodecs) &&
-                            Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
+                    return mIsPreset == formatItem.mIsPreset
+                            && mType == formatItem.mType
+                            && mIsDrc == formatItem.mIsDrc
+                            && mFrameRate == formatItem.mFrameRate
+                            && mWidth == formatItem.mWidth
+                            && mHeight == formatItem.mHeight
+                            && Helpers.equals(mCodecs, formatItem.mCodecs)
+                            && Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
                 case TYPE_SUBTITLE:
                     return mType == formatItem.mType &&
                             Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
