@@ -134,7 +134,7 @@ public class HQDialogController extends BasePlayerController {
         if (getPlayer() == null) {
             return;
         }
-        addCategoryInt(AppDialogUtil.createAudioShiftCategory(getContext(),
+        addCategoryInt(AppDialogUtil.createAudioDelayCategory(getContext(),
                 () -> getPlayer().restartEngine()));
     }
 

@@ -100,6 +100,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private List<String> mLastAudioLanguages;
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsLegacyCodecsForced;
+    private boolean mIsAudioDelayEnabled;
 
     private static class SpeedItem {
         public String channelId;
@@ -609,6 +610,15 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
+    public boolean isAudioDelayEnabled() {
+        return mIsAudioDelayEnabled;
+    }
+
+    public void setAudioDelayEnabled(boolean enabled) {
+        mIsAudioDelayEnabled = enabled;
+        persistState();
+    }
+
     public int getAudioDelayMs() {
         return mAudioDelayMs;
     }
@@ -836,6 +846,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mIsSkipShortsEnabled = Helpers.parseBoolean(split, 59, false);
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
+        mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -872,7 +883,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsSeekConfirmPlayEnabled, mSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled, mSubtitlePosition,
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
-                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages, mIsVideoFlipEnabled
+                mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled
         ));
     }
 

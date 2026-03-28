@@ -401,17 +401,27 @@ public class AppDialogUtil {
         return OptionCategory.from(AUDIO_LANGUAGE_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
-    public static OptionCategory createAudioShiftCategory(Context context) {
-        return createAudioShiftCategory(context, () -> {});
+    public static OptionCategory createAudioDelayCategory(Context context) {
+        return createAudioDelayCategory(context, () -> {});
     }
 
-    public static OptionCategory createAudioShiftCategory(Context context, Runnable onSetCallback) {
+    public static OptionCategory createAudioDelayCategory(Context context, Runnable onSetCallback) {
         PlayerData playerData = PlayerData.instance(context);
         String title = context.getResources().getQuantityString(R.plurals.seconds, 10, context.getString(R.string.audio_shift));
 
-        OptionItem optionItem = UiOptionItem.from(title, item -> {
+        List<OptionItem> items = new ArrayList<>();
+
+        OptionItem enableSwitch = UiOptionItem.from(context.getString(R.string.enable), item -> {
+            if (playerData.getAudioDelayMs() != 0) {
+                playerData.setAudioDelayEnabled(item.isSelected());
+                onSetCallback.run();
+            }
+        }, playerData.isAudioDelayEnabled());
+
+        OptionItem audioDelay = UiOptionItem.from(title, item -> {
             AppDialogPresenter.instance(context).closeDialog();
-            float delaySec = playerData.getAudioDelayMs() / 1_000f;
+            int delayMs = playerData.getAudioDelayMs();
+            float delaySec = delayMs / 1_000f;
             SimpleEditDialog.show(
                     context,
                     title,
@@ -424,18 +434,26 @@ public class AppDialogUtil {
                         float newDelaySec = Helpers.parseFloat(newValue);
                         int newDelayMs = (int) (newDelaySec * 1_000);
 
+                        if (newDelayMs == delayMs) {
+                            return false;
+                        }
+
                         if (newDelayMs == 0 && newDelaySec != 0) { // lower than 1ms
                             return false;
                         }
 
                         playerData.setAudioDelayMs(newDelayMs);
+                        playerData.setAudioDelayEnabled(newDelayMs != 0);
                         onSetCallback.run();
                         return true;
                     }
             );
-        });
+        }, playerData.isAudioDelayEnabled());
 
-        return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_SINGLE_BUTTON, title, optionItem);
+        items.add(enableSwitch);
+        items.add(audioDelay);
+
+        return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, items);
     }
 
     public static OptionCategory createAudioVolumeCategory(Context context) {

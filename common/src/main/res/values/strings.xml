@@ -169,7 +169,7 @@
     <string name="wait_data_loading">Please wait while data is loading…</string>
     <string name="auto_frame_rate_pause">Auto Frame Rate (pause when switching)</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s\@%s</string>
-    <string name="audio_shift">Audio shift</string>
+    <string name="audio_shift">Audio delay</string>
     <string name="player_remember_speed">Remember speed</string>
     <string name="mark_channel_as_watched">Mark as watched</string>
     <string name="channel_marked_as_watched">Channel has been marked as watched</string>
