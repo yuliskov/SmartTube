@@ -276,12 +276,6 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         }
     }
 
-    public String getBackupPath() {
-        File currentBackup = getBackup();
-
-        return currentBackup != null ? currentBackup.toString() : null;
-    }
-
     public String getBackupRootPath() {
         // NOTE: Android 11+ only backup through the file manager (no shared dir)
         if (hasAccessOnlyToAppFolders() && VERSION.SDK_INT > 29) {
@@ -289,13 +283,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
                     + "/" + BackupAndRestoreHelper.BACKUP_FOLDER_NAME;
         }
 
-        return String.format("%s/data", getExternalStorageDirectory());
+        return getRestoreRootPath();
     }
 
-    public String getBackupPathCheck() {
-        File currentBackup = getBackupCheck();
-
-        return currentBackup != null ? currentBackup.toString() : null;
+    public String getRestoreRootPath() {
+        return String.format("%s/data", getExternalStorageDirectory());
     }
 
     public void getBackupNames(OnBackupNames callback) {

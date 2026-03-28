@@ -176,6 +176,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
 
         String backupPath = backupManager.getBackupRootPath();
+        String restorePath = backupManager.getRestoreRootPath();
 
         options.add(UiOptionItem.from(
                 backupPath == null ? getContext().getString(R.string.app_backup) :
@@ -190,7 +191,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 backupPath == null ? getContext().getString(R.string.app_restore) :
-                    String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupPath),
+                    String.format("%s:\n%s", getContext().getString(R.string.app_restore), restorePath),
                 option -> {
                     backupManager.getBackupNames(names -> showLocalRestoreDialog(backupManager, names));
                 }));
