@@ -583,15 +583,26 @@ public class VideoLoaderController extends BasePlayerController {
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-            if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
-            } else if (isSubtitlesEnabled()) {
+
+            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
+            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
+            //} else if (isSubtitlesEnabled()) {
+            //    disableSubtitles(); // Response code: 429
+            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
+            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
+            //} else {
+            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
+            //}
+
+            boolean isGeneralError = Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 500");
+            if (isGeneralError && isSubtitlesEnabled()) {
                 disableSubtitles(); // Response code: 429
-            } else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
+            } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
+
             restartEngine = false;
             showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
