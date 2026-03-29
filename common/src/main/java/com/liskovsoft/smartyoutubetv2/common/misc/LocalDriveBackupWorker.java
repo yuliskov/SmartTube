@@ -42,7 +42,8 @@ public class LocalDriveBackupWorker extends Worker {
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
                     WORK_NAME,
-                    ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
                     new PeriodicWorkRequest.Builder(
                             LocalDriveBackupWorker.class,
                             GeneralData.instance(context).getLocalDriveBackupFreqDays(),
