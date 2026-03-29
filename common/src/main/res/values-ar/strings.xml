@@ -3,7 +3,7 @@
   <string name="header_home">الصفحة الرئيسية</string>
   <string name="title_search">بحث</string>
   <string name="header_subscriptions">الاشتراكات</string>
-  <string name="header_history">ّالسجلّ</string>
+  <string name="header_history">السجلّ</string>
   <string name="header_music">موسيقى</string>
   <string name="header_news">أخبار</string>
   <string name="header_gaming">ألعاب فيديو</string>
@@ -156,7 +156,7 @@
   <string name="wait_data_loading">الرجاء الانتظار بينما يتم تحميل البيانات ...</string>
   <string name="auto_frame_rate_pause">معدل الإطارات التلقائي (إيقاف عند التبديل)</string>
   <string name="auto_frame_rate_applying">تطبيق معدل الإطارات التلقائي%sx%s\@%s</string>
-  <string name="audio_shift">تزامن الصوت</string>
+  <string name="audio_shift">تأخير الصوت</string>
   <string name="player_remember_speed">تذكر السرعة</string>
   <string name="mark_channel_as_watched">وضع علامة كمشاهد</string>
   <string name="channel_marked_as_watched">تم وضع علامة على القناة كمشاهدَة</string>
@@ -306,7 +306,7 @@
   <string name="keyboard_auto_show">عرض لوحة المفاتيح تلقائيًا</string>
   <string name="cancel_dialog">إلغاء</string>
   <string name="msg_player_error_source2">عنوان URL لا يعمل أو وقت الجهاز غير صحيح.\nعادةً ما يكون ذلك خطأً في التطبيق.</string>
-  <string name="hide_upcoming">إخفاء القادم من الاشتراكات</string>
+  <string name="hide_upcoming">إخفاء الفيديوهات القادمة من الاشتراكات</string>
   <string name="search_background_playback">تشغيل في الخلفية أثناء البحث أو تصفح القناة</string>
   <string name="trending_row_name">الرائجة</string>
   <string name="player_seek_type">سلوك التسريع</string>
@@ -453,7 +453,7 @@
   <string name="place_chat_left">ضع المحادثات المباشرة على اليسار</string>
   <string name="use_alt_speech_recognizer">أداة التعرف على الكلام البديلة</string>
   <string name="time_format">تنسيق الوقت</string>
-  <string name="time_format_24">ساعة 24</string>
+  <string name="time_format_24">24 ساعة</string>
   <string name="time_format_12">12 ساعة (ص/م)</string>
   <string name="use_alt_speech_recognizer_desc">يحتوي على أخطاء كثيرة. استخدمه فقط إذا كانت لديك مشاكل مع أداة التعرف الافتراضية.</string>
   <string name="speech_recognizer">أداة التعرف على الكلام</string>
@@ -615,8 +615,8 @@
   <string name="hide_shorts_channel">إخفاء فيديوهات Shorts من القناة</string>
   <string name="news_row_name">أخبار</string>
   <string name="action_sound_off">كتم الصوت</string>
-  <string name="hide_upcoming_channel">إخفاء القادم من القناة</string>
-  <string name="hide_upcoming_home">إخفاء القادم من الصفحة الرئيسية</string>
+  <string name="hide_upcoming_channel">إخفاء الفيديوهات القادمة من القناة</string>
+  <string name="hide_upcoming_home">إخفاء الفيديوهات القادمة من الصفحة الرئيسية</string>
   <string name="hide_shorts_from_trending">إخفاء فيديوهات Shorts من الأكثر رواجًا</string>
   <string name="remember_position_of_live_videos">تذكر تقدم البث المباشر</string>
   <string name="save_playlist">إضافة قائمة التشغيل إلى قسم قوائم التشغيل</string>
@@ -717,4 +717,33 @@
   <string name="once_a_day">مرة واحدة يوميًا</string>
   <string name="once_a_week">مرة واحدة أسبوعيًا</string>
   <string name="once_a_month">مرة واحدة شهريًا</string>
+  <string name="sidebar_notification">عرض الإشعارات في الشريط الجانبي</string>
+  <string name="player_quick_shorts_skip_alt">تخطي Shorts باستخدام الأزرار الأعلى/الأسفل</string>
+  <string name="player_quick_skip_videos_alt">تخطي الفيديوهات العادية باستخدام الأزرار الأعلى/الأسفل</string>
+  <string name="prefer_google_dns">تفضيل Google DNS</string>
+  <string name="action_debug_info">معلومات تصحيح الأخطاء</string>
+  <string name="dialog_block_channel">حظر القناة</string>
+  <string name="dialog_unblock_channel">إلغاء حظر القناة</string>
+  <string name="header_blocked_channels">القنوات المحظورة</string>
+  <string name="channel_blocked">القناة محظورة</string>
+  <string name="channel_unblocked">القناة غير محظورة</string>
+  <string name="msg_no_blocked_channels">لا توجد قنوات محظورة</string>
+  <string name="confirm_block_channel">إخفاء كل المحتوى من %s</string>
+  <string name="ignore_short_segments">تجاهل المقاطع القصيرة</string>
+  <string name="fix_empty_subs_and_channels">إصلاح الاشتراكات والقنوات الفارغة</string>
+  <string name="local_backup_not_supported">لا يدعم نظام Android TV 11 والإصدارات الأحدث ميزة النسخ الاحتياطي التلقائي بسبب قيود النظام. استخدم Google Drive بدلًا من ذلك.</string>
+  <string name="rounded_card_corners">زوايا البطاقات مدوّرة</string>
+  <string name="install_bridge">تثبيت ATV/Amazon Bridge</string>
+  <string name="player_time_stretching">تمديد زمن الصوت</string>
+  <string name="player_time_stretching_desc">يحافظ على طبيعة الصوت عند تغيير السرعة. قد يقلل الأداء بشكل ملحوظ على بعض الأجهزة.</string>
+  <string name="queue_respects_playback_mode">قائمة الانتظار تلتزم بوضع التشغيل</string>
+  <string name="player_toggle_speed">تشغيل/إيقاف سرعة التشغيل</string>
+  <plurals name="hours">
+        <item quantity="one">%s ساعة</item>
+        <item quantity="other">%s ساعة</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s ثانية</item>
+        <item quantity="other">%s ثانية</item>
+    </plurals>
 </resources>
