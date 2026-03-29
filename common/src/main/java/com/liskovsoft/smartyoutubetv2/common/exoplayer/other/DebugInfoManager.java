@@ -338,7 +338,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mDisplayModeId.add(new Pair<>("Display modes length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
         String modeId = currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE;
         String modeLength = supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE;
-        mDisplayModeId.add(new Pair<>("Display mode ID/length", modeId + "/" + modeLength));
+        mDisplayModeId.add(new Pair<>("Display mode (ID/Length)", modeId + "/" + modeLength));
     }
 
     private void appendDisplayInfo() {
@@ -380,7 +380,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendMemoryInfo() {
         //appendRow("Max heap memory (MB)", DeviceHelpers.getMaxHeapMemoryMB()); // Growth Limit
         //appendRow("Allocated heap memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB());
-        appendRow("Allocated memory (MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
+        appendRow("Memory (Alloc/Max, MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
     }
 
     private void appendWebViewInfo() {
@@ -407,7 +407,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             shortPlayerUrl = shortPlayerUrl != null ? shortPlayerUrl.split("/")[1] : null;
             CharSequence coloredVersion = isFailed ? Utils.color(playerVersion, Color.RED) : playerVersion;
             CharSequence coloredType = isFailed ? Utils.color(shortPlayerUrl, Color.RED) : shortPlayerUrl;
-            appendRow("Web player version/type", TextUtils.concat(coloredVersion, "/", coloredType));
+            appendRow("Web player (Version/Type)", TextUtils.concat(coloredVersion, "/", coloredType));
         }
     }
 
