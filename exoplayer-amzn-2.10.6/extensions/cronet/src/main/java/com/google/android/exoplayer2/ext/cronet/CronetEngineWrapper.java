@@ -19,6 +19,7 @@ import android.content.Context;
 import androidx.annotation.IntDef;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+import java.io.File;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -102,15 +103,20 @@ public final class CronetEngineWrapper {
     // Sort remaining providers by type and version.
     CronetProviderComparator providerComparator = new CronetProviderComparator(preferGMSCoreCronet);
     Collections.sort(cronetProviders, providerComparator);
+    // Make cache dir for QUIC cache support
+    File cacheDir = new File(context.getCacheDir(), "StCronet");
+    cacheDir.mkdirs();
     for (int i = 0; i < cronetProviders.size() && cronetEngine == null; i++) {
       String providerName = cronetProviders.get(i).getName();
       try {
-        // MODIFIED: enable Quic
+        // MODIFIED: enable Quic and cache for Quic
         //cronetEngine = cronetProviders.get(i).createBuilder().build();
         cronetEngine = cronetProviders.get(i).createBuilder()
                 .enableQuic(true)
                 .enableHttp2(true)
                 .enableBrotli(true)
+                .setStoragePath(cacheDir.getAbsolutePath())
+                .enableHttpCache(CronetEngine.Builder.HTTP_CACHE_DISK_NO_HTTP, 2 * 1024 * 1024)
                 .build();
         if (providerComparator.isNativeProvider(providerName)) {
           cronetEngineSource = SOURCE_NATIVE;
