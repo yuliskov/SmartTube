@@ -90,6 +90,9 @@ public class DashManifest implements FilterableManifest<DashManifest> {
   /** The {@link ProgramInformation}, or null if not present. */
   @Nullable public final ProgramInformation programInformation;
 
+  // MOD: add subtitles cookie
+  @Nullable public final String visitorCookie;
+
   private final List<Period> periods;
 
   /**
@@ -137,6 +140,36 @@ public class DashManifest implements FilterableManifest<DashManifest> {
       UtcTimingElement utcTiming,
       Uri location,
       List<Period> periods) {
+    this(
+        availabilityStartTimeMs,
+        durationMs,
+        minBufferTimeMs,
+        dynamic,
+        minUpdatePeriodMs,
+        timeShiftBufferDepthMs,
+        suggestedPresentationDelayMs,
+        publishTimeMs,
+        programInformation,
+        utcTiming,
+        location,
+        /* visitorCookie= */ null,
+        periods);
+  }
+
+  public DashManifest(
+      long availabilityStartTimeMs,
+      long durationMs,
+      long minBufferTimeMs,
+      boolean dynamic,
+      long minUpdatePeriodMs,
+      long timeShiftBufferDepthMs,
+      long suggestedPresentationDelayMs,
+      long publishTimeMs,
+      @Nullable ProgramInformation programInformation,
+      UtcTimingElement utcTiming,
+      Uri location,
+      @Nullable String visitorCookie,
+      List<Period> periods) {
     this.availabilityStartTimeMs = availabilityStartTimeMs;
     this.durationMs = durationMs;
     this.minBufferTimeMs = minBufferTimeMs;
@@ -148,6 +181,7 @@ public class DashManifest implements FilterableManifest<DashManifest> {
     this.programInformation = programInformation;
     this.utcTiming = utcTiming;
     this.location = location;
+    this.visitorCookie = visitorCookie;
     this.periods = periods == null ? Collections.emptyList() : periods;
   }
 

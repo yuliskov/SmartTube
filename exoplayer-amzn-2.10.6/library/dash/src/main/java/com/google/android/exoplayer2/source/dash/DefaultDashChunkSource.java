@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -529,8 +530,13 @@ public class DefaultDashChunkSource implements DashChunkSource {
     String baseUrl = representation.baseUrl;
     if (representationHolder.extractorWrapper == null) {
       long endTimeUs = representationHolder.getSegmentEndTimeUs(firstSegmentNum);
-      DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
-          segmentUri.start, segmentUri.length, representation.getCacheKey());
+      // MOD: fix subtitles bot check error by add cookie header
+      // NOTE: extractorWrapper == null on subtitles
+      //DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
+      //    segmentUri.start, segmentUri.length, representation.getCacheKey());
+      DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl), DataSpec.HTTP_METHOD_GET, null,
+              segmentUri.start, segmentUri.start, segmentUri.length, representation.getCacheKey(), 0,
+              manifest.visitorCookie != null ? Collections.singletonMap("Cookie", manifest.visitorCookie) : Collections.emptyMap());
       return new SingleSampleMediaChunk(dataSource, dataSpec, trackFormat, trackSelectionReason,
           trackSelectionData, startTimeUs, endTimeUs, firstSegmentNum, trackType, trackFormat);
     } else {

@@ -85,6 +85,7 @@ public class DashManifestParser2 {
                 null,
                 null,
                 null,
+                formatInfo.getVisitorCookie(),
                 periods);
     }
 
