@@ -622,7 +622,12 @@ public class VideoLoaderController extends BasePlayerController {
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
             // Hide unknown errors on all devices
-            showMessage = false;
+            //showMessage = true;
+            // IllegalStateException: Buffer too small (5242880 < 7208383)
+            if (Helpers.startsWithAny(errorContent, "Buffer too small")) {
+                getPlayerData().setVideoBufferType(getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW
+                        ? PlayerData.BUFFER_MEDIUM : PlayerData.BUFFER_HIGH);
+            }
         }
 
         if (showMessage) {

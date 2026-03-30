@@ -151,7 +151,9 @@ public class ExoFormatItem implements FormatItem {
                     // NOTE: Don't compare subs by formatId (it's non-constant)
                     if (mFormatId != null && formatItem.mFormatId != null) {
                         return mType == formatItem.mType
-                                && mIsDrc == formatItem.mIsDrc
+                                && mIsDrc == formatItem.mIsDrc                      // drc audio
+                                && Helpers.contains(SubtitleTrack.trim(mLanguage),  // dubbed audio
+                                    SubtitleTrack.trim(formatItem.mLanguage))
                                 && Helpers.equals(mFormatId, formatItem.mFormatId); // instead of compare by bitrate
                     }
                     return mIsPreset == formatItem.mIsPreset
