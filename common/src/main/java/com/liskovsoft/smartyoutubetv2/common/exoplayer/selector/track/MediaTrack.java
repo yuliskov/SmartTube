@@ -144,13 +144,13 @@ public abstract class MediaTrack {
         return isVP9Codec(codec) ? sVP9Weight : isAVCCodec(codec) ? sAVCWeight : isAV1Codec(codec) ? sAV1Weight : 0;
     }
 
-    public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {
-        return getCodecWeight(prevTrack) - getCodecWeight(nextTrack) > 0;
-    }
-
-    public static void preferAvcOverVp9(boolean prefer) {
+    public static void setAvcOverVp9Preferred(boolean prefer) {
         sAVCWeight = prefer ? VP9_WEIGHT : AVC_WEIGHT;
         sVP9Weight = prefer ? AVC_WEIGHT : VP9_WEIGHT;
+    }
+
+    public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {
+        return getCodecWeight(prevTrack) - getCodecWeight(nextTrack) > 0;
     }
 
     public static boolean preferByDrc(MediaTrack origin, MediaTrack prevTrack, MediaTrack nextTrack) {

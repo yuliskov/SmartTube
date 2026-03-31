@@ -12,7 +12,8 @@ public class VideoTrack extends MediaTrack {
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
-    public static boolean sIsNoFpsPresetsEnabled;
+    private static final int MAX_ALT_PRESET_BITRATE = 90_000_000; // 90 Mbit
+    public static boolean sIsAltPresetsEnabled;
 
     public VideoTrack(int rendererIndex) {
         super(rendererIndex);
@@ -98,10 +99,13 @@ public class VideoTrack extends MediaTrack {
         boolean isPreset = format.id == null;
 
         if (isPreset) {
+            if (sIsAltPresetsEnabled && track2.format != null && track2.format.bitrate > MAX_ALT_PRESET_BITRATE) {
+                return -1;
+            }
             // Overcome non-standard aspect ratio by getting resolution label
             //boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
             //        sizeEquals(format.height, TrackSelectorUtil.getOriginHeight(track2.format.height));
-            boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
+            boolean respectPresetsFps = !sIsAltPresetsEnabled ||
                     sizeEquals(TrackSelectorUtil.getRealHeight(format), TrackSelectorUtil.getRealHeight(track2.format));
             return compare(track2, isMultiFpsFormat || respectPresetsFps ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS);
         } else {

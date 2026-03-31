@@ -581,8 +581,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.alt_presets_behavior),
                 getContext().getString(R.string.alt_presets_behavior_desc),
-                option -> mPlayerTweaksData.setNoFpsPresetsEnabled(option.isSelected()),
-                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+                option -> mPlayerTweaksData.setAltPresetsEnabled(option.isSelected()),
+                mPlayerTweaksData.isAltPresetsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_avc_over_vp9),
                 getContext().getString(R.string.prefer_avc_over_vp9_desc),

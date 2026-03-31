@@ -68,7 +68,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsPlaybackNotificationsDisabled;
     private boolean mIsTunneledPlaybackEnabled;
     private int mPlayerButtons;
-    private boolean mIsNoFpsPresetsEnabled;
+    private boolean mIsAltPresetsEnabled;
     private boolean mIsRememberPositionOfShortVideosEnabled;
     private boolean mIsRememberPositionOfLiveVideosEnabled;
     private boolean mIsSuggestionsDisabled;
@@ -295,12 +295,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
-    public boolean isNoFpsPresetsEnabled() {
-        return mIsNoFpsPresetsEnabled;
+    public boolean isAltPresetsEnabled() {
+        return mIsAltPresetsEnabled;
     }
 
-    public void setNoFpsPresetsEnabled(boolean enable) {
-        mIsNoFpsPresetsEnabled = enable;
+    public void setAltPresetsEnabled(boolean enable) {
+        mIsAltPresetsEnabled = enable;
         persistData();
     }
 
@@ -712,7 +712,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, PLAYER_BUTTON_DEFAULT);
         // Buffering fix was there.
-        mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
+        mIsAltPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);
         mIsSuggestionsDisabled = Helpers.parseBoolean(split, 17, false);
         mIsAvcOverVp9Preferred = Helpers.parseBoolean(split, 18, false);
@@ -780,7 +780,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled, mIsHlsStreamsForced,
                 mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                null, mIsNoFpsPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
+                null, mIsAltPresetsEnabled, mIsRememberPositionOfShortVideosEnabled, mIsSuggestionsDisabled,
                 mIsAvcOverVp9Preferred, mIsChatPlacedLeft, mIsRealChannelIconEnabled, mPixelRatio, mIsQualityInfoBitrateEnabled,
                 mIsSpeedButtonOldBehaviorEnabled, mIsButtonLongClickEnabled, mIsLongSpeedListEnabled, mPlayerDataSource, mUnlockAllFormats,
                 mIsDashUrlStreamsForced, mIsSonyFrameDropFixEnabled, mIsBufferOnStreamsDisabled, mIsSectionPlaylistEnabled,
