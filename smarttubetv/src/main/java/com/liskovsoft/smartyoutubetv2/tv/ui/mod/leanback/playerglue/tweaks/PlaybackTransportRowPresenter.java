@@ -948,7 +948,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     }
 
     /**
-     * MODIFIED: Sets the listener for {@link Action} long click events.
+     * MOD: Sets the listener for {@link Action} long click events.
      */
     public void setOnActionLongClickedListener(OnActionLongClickedListener listener) {
         mOnActionLongClickedListener = listener;

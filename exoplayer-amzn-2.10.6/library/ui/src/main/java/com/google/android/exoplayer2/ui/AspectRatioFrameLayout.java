@@ -164,7 +164,7 @@ public final class AspectRatioFrameLayout extends FrameLayout {
   }
 
   /**
-   * MODIFIED: Set video zoom in percents
+   * MOD: Set video zoom in percents
    */
   public void setZoom(int percents) {
     if (zoomPercents != percents) {

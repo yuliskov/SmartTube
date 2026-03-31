@@ -109,7 +109,7 @@ public final class CronetEngineWrapper {
     for (int i = 0; i < cronetProviders.size() && cronetEngine == null; i++) {
       String providerName = cronetProviders.get(i).getName();
       try {
-        // MODIFIED: enable Quic and cache for Quic
+        // MOD: enable Quic and cache for Quic
         //cronetEngine = cronetProviders.get(i).createBuilder().build();
         cronetEngine = cronetProviders.get(i).createBuilder()
                 .enableQuic(true)

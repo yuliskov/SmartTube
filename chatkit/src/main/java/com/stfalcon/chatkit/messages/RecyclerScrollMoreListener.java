@@ -50,12 +50,12 @@ class RecyclerScrollMoreListener
         return maxSize;
     }
 
-    // MODIFIED: fully custom
+    // MOD: fully custom
     // Fix: lastVisibleItemPositions is wrong. Solution: remove it altogether.
     @Override
     public void onScrolled(RecyclerView view, int dx, int dy) {
         if (loadMoreListener != null) {
-            // MODIFIED: throttle calls
+            // MOD: throttle calls
             // Swallow scrolling up. Continue on scroll down.
             currentScrollPos += dy;
             if (currentScrollPos <= maxScrollPos) {

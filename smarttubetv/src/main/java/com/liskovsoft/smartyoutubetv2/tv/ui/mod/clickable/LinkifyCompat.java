@@ -153,7 +153,7 @@ public final class LinkifyCompat {
 
         pruneOverlaps(links, text);
 
-        // MODIFIED: force enable scrolling even there's no links in text
+        // MOD: force enable scrolling even there's no links in text
         //if (links.size() == 0 && timeLinks.size() == 0) {
         //    return false;
         //}
@@ -405,7 +405,7 @@ public final class LinkifyCompat {
     }
 
     private static boolean shouldAddLinksFallbackToFramework() {
-        // MODIFIED: use custom realization always
+        // MOD: use custom realization always
         //return Build.VERSION.SDK_INT >= 28;
         return false;
     }
@@ -458,7 +458,7 @@ public final class LinkifyCompat {
             int end = m.end();
 
             if (matchFilter == null || matchFilter.acceptMatch(s, start, end)) {
-                // MODIFIED: Support link without a prefix
+                // MOD: Support link without a prefix
                 String url = schemes != null ? makeUrl(m.group(0), schemes, m, transformFilter) : m.group(0);
 
                 if (url != null && !url.isEmpty()) {

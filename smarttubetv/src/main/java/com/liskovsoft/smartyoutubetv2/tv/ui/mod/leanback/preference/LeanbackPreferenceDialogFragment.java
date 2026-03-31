@@ -34,7 +34,7 @@ public class LeanbackPreferenceDialogFragment extends Fragment {
         }
     }
 
-    // MODIFIED: Fix Android 9 error by allowing null fragments
+    // MOD: Fix Android 9 error by allowing null fragments
     // Target fragment doesn't belongs to this fragment manager
     //@Override
     //public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class LeanbackPreferenceDialogFragment extends Fragment {
     //    }
     //}
 
-    // MODIFIED: Android 9 error fix: Target fragment doesn't belongs to this fragment manager
+    // MOD: Android 9 error fix: Target fragment doesn't belongs to this fragment manager
     //public DialogPreference getPreference() {
     //    if (mPreference == null) {
     //        final String key = getArguments().getString(ARG_KEY);
@@ -58,7 +58,7 @@ public class LeanbackPreferenceDialogFragment extends Fragment {
     //    return mPreference;
     //}
 
-    // MODIFIED: Fix Android 9 error by allowing null fragments
+    // MOD: Fix Android 9 error by allowing null fragments
     // Target fragment doesn't belongs to this fragment manager
     @Override
     public void setTargetFragment(Fragment fragment, int requestCode) {
@@ -69,7 +69,7 @@ public class LeanbackPreferenceDialogFragment extends Fragment {
         mPref = pref;
     }
 
-    // MODIFIED: allow use this fragment without target fragment
+    // MOD: allow use this fragment without target fragment
     public DialogPreference getPreference() {
         return mPref != null ? (DialogPreference) mPref : null;
     }

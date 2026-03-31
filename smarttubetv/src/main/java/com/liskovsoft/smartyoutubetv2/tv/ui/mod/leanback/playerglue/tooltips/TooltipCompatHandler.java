@@ -102,7 +102,7 @@ public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHo
             sActiveHandler.hide();
         }
 
-        // MODIFIED: listener already added in ControlBarPresenter
+        // MOD: listener already added in ControlBarPresenter
         //view.setOnLongClickListener(null);
         //view.setLongClickable(false);
 
@@ -128,7 +128,7 @@ public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHo
                 ViewConfiguration.get(mAnchor.getContext()));
         clearAnchorPos();
 
-        // MODIFIED: listener already added in ControlBarPresenter
+        // MOD: listener already added in ControlBarPresenter
         //mAnchor.setOnLongClickListener(this);
 
         // Invisible controls bar can react on mouse pointer

@@ -677,7 +677,7 @@ public final class MediaSessionConnector {
    * {@link MediaMetadataProvider#getMetadata(Player)}.
    */
   public final void invalidateMediaSessionMetadata() {
-    // MODIFIED: disable notifications if no provider is set
+    // MOD: disable notifications if no provider is set
     if (mediaMetadataProvider == null) {
       return;
     }

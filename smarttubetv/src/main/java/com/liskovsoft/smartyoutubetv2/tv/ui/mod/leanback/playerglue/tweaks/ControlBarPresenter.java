@@ -68,7 +68,7 @@ class ControlBarPresenter extends Presenter {
     }
 
     /**
-     * MODIFIED: Listener for control long clicked events.
+     * MOD: Listener for control long clicked events.
      */
     interface OnControlLongClickedListener {
         boolean onControlLongClicked(Presenter.ViewHolder controlViewHolder, Object item,
@@ -184,7 +184,7 @@ class ControlBarPresenter extends Presenter {
                         }
                     }
                 });
-                // MODIFIED: player controls: enable long clicks
+                // MOD: player controls: enable long clicks
                 ((ControlButtonPresenterSelector.ControlButtonPresenter) presenter).setOnLongClickListener(vh, new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -247,7 +247,7 @@ class ControlBarPresenter extends Presenter {
     }
 
     /**
-     * MODIFIED: Sets the listener for control long clicked events.
+     * MOD: Sets the listener for control long clicked events.
      */
     public void setOnControlLongClickedListener(OnControlLongClickedListener listener) {
         mOnControlLongClickedListener = listener;
