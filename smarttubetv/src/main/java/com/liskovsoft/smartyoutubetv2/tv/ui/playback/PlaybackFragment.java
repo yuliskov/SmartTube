@@ -1600,10 +1600,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     /**
-     * UI couldn't be properly displayed in PIP mode
+     * UI couldn't be properly displayed in PIP mode<br/>
+     * Also UI may auto hide if user holds seek (< or > buttons).
      */
     private boolean forbidShowOverlay(boolean show) {
-        return show && isInPIPMode();
+        boolean showUiInPip = show && isInPIPMode();
+        boolean hideUiSeeking = !show && mPlayerGlue != null && mPlayerGlue.isSeeking();
+        return showUiInPip || hideUiSeeking;
     }
 
     private MainUIData getMainUIData() {

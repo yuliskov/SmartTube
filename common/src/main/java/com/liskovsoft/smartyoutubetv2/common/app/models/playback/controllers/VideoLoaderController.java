@@ -782,10 +782,9 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        //getPlayer().setPositionMs(getPlayer().getDurationMs());
+        getPlayer().setPositionMs(getPlayer().getDurationMs());
         getPlayer().setPlayWhenReady(false);
-        //getPlayer().showSuggestions(true);
-        getPlayer().showControls(true);
+        getPlayer().showSuggestions(true);
     }
 
     private void restartPlaylistIfNeeded() {

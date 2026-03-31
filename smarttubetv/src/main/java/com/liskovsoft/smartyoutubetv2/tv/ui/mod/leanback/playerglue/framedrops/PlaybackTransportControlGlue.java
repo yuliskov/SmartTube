@@ -425,4 +425,11 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
     public final boolean isSeekEnabled() {
         return mSeekEnabled;
     }
+
+    /**
+     * MOD: Check seek state to prevent UI auto hide
+     */
+    public final boolean isSeeking() {
+        return mPlaybackSeekUiClient.mIsSeek;
+    }
 }
