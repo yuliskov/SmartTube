@@ -12,7 +12,7 @@ public class VideoTrack extends MediaTrack {
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
-    private static final int MAX_ALT_PRESET_BITRATE = 90_000_000; // 90 Mbit
+    private static final int MAX_ALT_PRESET_BITRATE = 120_000_000; // 120 Mbit
     public static boolean sIsAltPresetsEnabled;
 
     public VideoTrack(int rendererIndex) {
