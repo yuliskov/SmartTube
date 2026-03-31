@@ -110,6 +110,7 @@ public final class CronetEngineWrapper {
       String providerName = cronetProviders.get(i).getName();
       try {
         // MOD: enable Quic and cache for Quic
+        // NOTE: caching is intended to fix the bot guard check for auto-translated subtitles
         //cronetEngine = cronetProviders.get(i).createBuilder().build();
         cronetEngine = cronetProviders.get(i).createBuilder()
                 .enableQuic(true)
