@@ -147,9 +147,17 @@ public class BackupAndRestoreHelper implements OnResult {
     }
 
     public void handleIncomingZip(Intent intent) {
-        if (intent == null || !Intent.ACTION_SEND.equals(intent.getAction())) return;
+        if (intent == null) {
+            return;
+        }
 
-        Uri zipUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        Uri zipUri = null;
+
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            zipUri = intent.getData();
+        } else if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            zipUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        }
 
         unpackTempZip(
                 zipUri,
