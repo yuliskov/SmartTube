@@ -389,35 +389,33 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void destroyPlayerObjects() {
-        // Fix access calls when player isn't initialized
-        mExoPlayerController.release();
+        setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
+        if (mRowsAdapter != null) {
+            mRowsAdapter.clear();
+            mRowsAdapter = null;
+        }
         if (mMediaSessionConnector != null) {
             mMediaSessionConnector.setPlayer(null);
+            mMediaSessionConnector = null;
         }
         if (mMediaSession != null) {
             mMediaSession.setActive(false);
             mMediaSession.release();
+            mMediaSession = null;
         }
-        if (mRowsAdapter != null) {
-            mRowsAdapter.clear();
-        }
-        setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
-        mPlayer = null;
         mPlayerGlue = null;
-        mRowsAdapter = null;
+        // Fix access calls when player isn't initialized
+        mExoPlayerController.release();
+        mPlayer = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
-        mMediaSessionConnector = null;
-        mMediaSession = null;
         if (mYouTubeOverlay != null) {
             mYouTubeOverlay
                     .player(null)
                     .playerView(null)
                     .performListener(null);
         }
-        if (mDoubleTapPlayerAdapter != null) {
-            mDoubleTapPlayerAdapter = null;
-        }
+        mDoubleTapPlayerAdapter = null;
     }
 
     private void createPlayerObjects() {

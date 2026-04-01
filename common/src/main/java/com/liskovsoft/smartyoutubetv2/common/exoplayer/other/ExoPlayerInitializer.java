@@ -137,6 +137,9 @@ public class ExoPlayerInitializer {
         baseBuilder
                 .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs);
 
+        // Decrease buffer size?
+        //baseBuilder.setAllocator(new DefaultAllocator(true, 16 * 1024));
+
         return baseBuilder.createDefaultLoadControl();
     }
 
