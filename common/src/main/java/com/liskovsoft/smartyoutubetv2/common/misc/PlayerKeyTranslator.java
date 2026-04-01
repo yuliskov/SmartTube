@@ -20,19 +20,15 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final Runnable likeAction = () -> {
         PlaybackPresenter playbackPresenter = getPlaybackPresenter();
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
-            playbackPresenter.onButtonClicked(R.id.action_thumbs_up, PlayerUI.BUTTON_ON);
-            playbackPresenter.getView().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_ON);
-            playbackPresenter.getView().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
-            MessageHelpers.showMessage(getContext(), R.string.action_like);
+            int currentState = playbackPresenter.getView().getButtonState(R.id.action_thumbs_up);
+            playbackPresenter.onButtonClicked(R.id.action_thumbs_up, currentState);
         }
     };
     private final Runnable dislikeAction = () -> {
         PlaybackPresenter playbackPresenter = getPlaybackPresenter();
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
-            playbackPresenter.onButtonClicked(R.id.action_thumbs_down, PlayerUI.BUTTON_ON);
-            playbackPresenter.getView().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
-            playbackPresenter.getView().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_ON);
-            MessageHelpers.showMessage(getContext(), R.string.action_dislike);
+            int currentState = playbackPresenter.getView().getButtonState(R.id.action_thumbs_down);
+            playbackPresenter.onButtonClicked(R.id.action_thumbs_down, currentState);
         }
     };
     private final Runnable speedUpAction = () -> speedUp(true);
