@@ -381,6 +381,7 @@ public class VideoLoaderController extends BasePlayerController {
             bgImageUrl = getVideo().getBackgroundUrl();
 
             // 18+ video or the video is hidden/removed
+            player.showOverlay(true);
             scheduleNextVideoTimer(5_000);
 
             //if (formatInfo.isUnknownError()) { // the bot error or the video not available
@@ -414,6 +415,7 @@ public class VideoLoaderController extends BasePlayerController {
             player.showProgressBar(false);
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
+            player.showOverlay(true);
             scheduleReloadVideoTimer(30 * 1_000);
         }
 
@@ -427,7 +429,6 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Reloading the video...");
-            getPlayer().showOverlay(true);
             Utils.postDelayed(mReloadVideo, delayMs);
         }
     }
@@ -439,7 +440,6 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (getPlayer().isEngineInitialized()) {
             Log.d(TAG, "Starting the next video...");
-            getPlayer().showOverlay(true);
             Utils.postDelayed(mLoadNext, delayMs);
         }
     }
@@ -447,7 +447,6 @@ public class VideoLoaderController extends BasePlayerController {
     private void scheduleRebootAppTimer(int delayMs) {
         if (getPlayer() != null) {
             Log.d(TAG, "Rebooting the app...");
-            getPlayer().showOverlay(true);
             Utils.postDelayed(mRebootApp, delayMs);
         }
     }
@@ -455,7 +454,6 @@ public class VideoLoaderController extends BasePlayerController {
     private void scheduleRestartEngineTimer(int delayMs) {
         if (getPlayer() != null) {
             Log.d(TAG, "Restarting the engine...");
-            getPlayer().showOverlay(true);
             Utils.postDelayed(mRestartEngine, delayMs);
         }
     }
@@ -489,10 +487,12 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void runFormatErrorAction(Throwable error) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (isEmbedPlayer()) {
-            if (getPlayer() != null) {
-                getPlayer().finish();
-            }
+            getPlayer().finish();
             return;
         }
 
