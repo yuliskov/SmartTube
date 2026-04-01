@@ -235,6 +235,15 @@ public class Playlist {
         return Collections.unmodifiableList(mPlaylist);
     }
 
+    public List<Video> getAllReversed() {
+        List<Video> reversed = new ArrayList<>(mPlaylist.size());
+        for (int i = mPlaylist.size() - 1; i >= 0; i--) {
+            reversed.add(mPlaylist.get(i));
+        }
+
+        return reversed;
+    }
+
     public List<Video> getChangedItems() {
         return Collections.unmodifiableList(mSyncedItems);
     }
