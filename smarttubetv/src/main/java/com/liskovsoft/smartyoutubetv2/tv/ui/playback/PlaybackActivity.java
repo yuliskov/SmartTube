@@ -181,7 +181,7 @@ public class PlaybackActivity extends LeanbackActivity {
             getViewManager().blockTop(this);
             getViewManager().startParentView(this);
         } else {
-            // NOTE: temporal player memory leaking fix (Activities num grow with every player start)!
+            // NOTE: don't destroy player to prevent leaking (Activities num grow with every player start)!
             // The command to check: adb shell dumpsys meminfo org.smarttube.stable
             getViewManager().startParentView(this);
             // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
