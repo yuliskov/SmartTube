@@ -181,15 +181,21 @@ public class PlaybackActivity extends LeanbackActivity {
             getViewManager().blockTop(this);
             getViewManager().startParentView(this);
         } else {
-            if (getPlayerTweaksData().isKeepFinishedActivityEnabled()) {
-                //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
-                getViewManager().startParentView(this);
+            // NOTE: temporal player memory leaking fix (Activities num grow with every player start)!
+            // The command to check: adb shell dumpsys meminfo org.smarttube.stable
+            getViewManager().startParentView(this);
+            // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
+            mPlaybackFragment.maybeReleasePlayer();
 
-                // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
-                mPlaybackFragment.maybeReleasePlayer();
-            } else {
-                super.finish();
-            }
+            //if (getPlayerTweaksData().isKeepFinishedActivityEnabled()) {
+            //    //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
+            //    getViewManager().startParentView(this);
+            //
+            //    // Player with TextureView keeps running in background because onStop() fired with huge delay (~5sec).
+            //    mPlaybackFragment.maybeReleasePlayer();
+            //} else {
+            //    super.finish();
+            //}
         }
     }
 

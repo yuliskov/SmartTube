@@ -129,11 +129,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     public void finishReally() {
         // Mandatory line. Fix un-proper view order (especially for playback view).
         getViewManager().startParentView(this);
-        // NOTE: temporal player memory leaking fix (Activities num grow with every player start)!
-        // The command to check: adb shell dumpsys meminfo org.smarttube.stable
-        if (!(this instanceof PlaybackActivity)) {
-            super.finishReally();
-        }
+        super.finishReally();
     }
 
     private void finishTheApp() {
