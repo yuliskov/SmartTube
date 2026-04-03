@@ -108,6 +108,26 @@ class SecondsView(context: Context, attrs: AttributeSet?) :
         reset()
     }
 
+    // MOD: memory leak fix (animator keep ref to activity)
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
+        firstAnimator.removeAllUpdateListeners()
+        firstAnimator.removeAllListeners()
+
+        secondAnimator.removeAllUpdateListeners()
+        secondAnimator.removeAllListeners()
+
+        thirdAnimator.removeAllUpdateListeners()
+        thirdAnimator.removeAllListeners()
+
+        fourthAnimator.removeAllUpdateListeners()
+        fourthAnimator.removeAllListeners()
+
+        fifthAnimator.removeAllUpdateListeners()
+        fifthAnimator.removeAllListeners()
+    }
+
     private fun reset() {
         icon1.alpha = 0f
         icon2.alpha = 0f

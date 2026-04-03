@@ -207,6 +207,10 @@ public final class LeanbackPlayerAdapter extends PlayerAdapter implements Runnab
 
   @Override
   public void run() {
+    if (!hasSurface) { // MOD: mem leak fix (SegmentTimelineElement)
+      return;
+    }
+
     Callback callback = getCallback();
     callback.onCurrentPositionChanged(this);
     callback.onBufferedPositionChanged(this);

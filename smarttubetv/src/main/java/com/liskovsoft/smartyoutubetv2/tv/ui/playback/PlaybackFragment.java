@@ -75,6 +75,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
@@ -394,8 +395,24 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mRowsAdapter.clear();
             mRowsAdapter = null;
         }
+        // pollution exo SegmentBase.SegmentTimelineElement 3 million allocation and grown after the player reinstantiation
+        setPlaybackRow(null);
+        setOnPlaybackItemViewClickedListener(null);
+        setHostCallback(null);
+        setPlaybackSeekUiClient(null);
+        setPlaybackRowPresenter(null);
+        setOnKeyInterceptListener(null);
+        if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+            mRowsSupportFragment.getVerticalGridView().setAdapter(null);
+            mRowsSupportFragment.getBridgeAdapter().clear();
+            mRowsSupportFragment.getBridgeAdapter().getPresenterMapper().clear();
+            mRowsSupportFragment = null;
+        }
         if (mMediaSessionConnector != null) {
             mMediaSessionConnector.setPlayer(null);
+            mMediaSessionConnector.setControlDispatcher(null);
+            mMediaSessionConnector.setMediaMetadataProvider(null);
+            mMediaSessionConnector.setQueueNavigator(null);
             mMediaSessionConnector = null;
         }
         if (mMediaSession != null) {
@@ -403,12 +420,21 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mMediaSession.release();
             mMediaSession = null;
         }
-        mPlayerGlue = null;
+        if (mPlayerGlue != null) {
+            ((PlaybackTransportRowPresenter) mPlayerGlue.getPlaybackRowPresenter()).setOnActionLongClickedListener(null);
+            ((PlaybackTransportRowPresenter) mPlayerGlue.getPlaybackRowPresenter()).setOnActionClickedListener(null);
+            mPlayerGlue.getPlayerAdapter().onDetachedFromHost();
+            mPlayerGlue.setHost(null);
+            mPlayerGlue = null;
+        }
+        if (mDebugInfoManager != null) {
+            mDebugInfoManager.show(false);
+            mDebugInfoManager = null;
+        }
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
         mPlayer = null;
         mSubtitleManager = null;
-        mDebugInfoManager = null;
         if (mYouTubeOverlay != null) {
             mYouTubeOverlay
                     .player(null)
@@ -573,7 +599,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // NOTE: No way to disable only a notifications. We need to disable the media session instead.
         boolean disableNotifications = getPlayerTweaksData().isPlaybackNotificationsDisabled();
-        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+        mMediaSession = new MediaSessionCompat(getContext().getApplicationContext(), getContext().getPackageName()); // NOTE: mem leak fix (SegmentTimelineElement)
         mMediaSession.setActive(!disableNotifications);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
 
