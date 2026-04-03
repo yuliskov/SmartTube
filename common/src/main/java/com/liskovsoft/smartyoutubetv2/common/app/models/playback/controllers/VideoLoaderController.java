@@ -119,30 +119,16 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void onLongBuffering() {
-        if (getPlayer() == null || getVideo() == null) {
-            return;
-        }
-
-        // Stream end check (hangs on buffering)
-        if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            reloadVideo();
-        } else if ((!getVideo().isLive || getVideo().isLiveEnd)
-                && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS) {
+        if (isPlaybackEnded()) {
             getMainController().onPlayEnd();
-        } else if (!getVideo().isLive && !getVideo().isLiveEnd) {
-            if (isSubtitlesEnabled()) {
-                // Long loading subtitles cause hangs
-                disableSubtitles();
-                reloadVideo();
-            } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-                // Faster source may differ across a devices. Try them one by one.
-                //switchNextEngine();
-                //restartEngine();
-                if (!isFasterDataSourceEnabled()) {
-                    enableFasterDataSource();
-                    restartEngine();
-                }
+        } else if (isOfflineVideo() && isSubtitlesEnabled()) {
+            // Long loading subtitles cause hangs
+            disableSubtitles();
+            reloadVideo();
+        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+            if (!isFasterDataSourceEnabled()) {
+                enableFasterDataSource();
+                restartEngine();
             }
         }
     }
@@ -535,6 +521,8 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (restart) {
             restartEngine();
+        } else if (isPlaybackEnded()) {
+            getMainController().onPlayEnd();
         } else {
             reloadVideo();
         }
@@ -1022,5 +1010,22 @@ public class VideoLoaderController extends BasePlayerController {
 
         getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+    }
+
+    private boolean isPlaybackEnded() {
+        if (getPlayer() == null || getVideo() == null) {
+            return false;
+        }
+
+        return (!getVideo().isLive || getVideo().isLiveEnd)
+                && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
+    }
+
+    private boolean isOfflineVideo() {
+        if (getPlayer() == null || getVideo() == null) {
+            return false;
+        }
+
+        return !getVideo().isLive && !getVideo().isLiveEnd;
     }
 }
