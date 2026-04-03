@@ -221,6 +221,7 @@
     <string name="msg_player_error_audio_renderer">Обраний АУДІОФОРМАТ не підтримуєтся.\nСпробуйте обрати інший формат, натиснувши кнопку HQ у плеєрі.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
     <string name="msg_player_error_subtitle_renderer">Обраний формат СУБТИТРІВ не підтримуєтся.\nСпробуйте обрати інший формат, утримуючи кнопку CC у плеєрі.\nЯкщо це не допоможе, то спробуйте перезавантажити пристрій.</string>
     <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
+    <string name="player_unexpected_error">Неочікувана помилка відтворення</string>
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
     <string name="header_uploads">Завантаження</string>

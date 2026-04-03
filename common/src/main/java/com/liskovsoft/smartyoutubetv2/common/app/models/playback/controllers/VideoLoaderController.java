@@ -678,7 +678,7 @@ public class VideoLoaderController extends BasePlayerController {
                 errorTitle = getContext().getString(msgResId);
                 break;
             case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
-                errorTitle = getContext().getString(R.string.msg_player_error_unexpected);
+                errorTitle = getContext().getString(R.string.player_unexpected_error);
                 break;
             default:
                 errorTitle = getContext().getString(R.string.msg_player_error, type);

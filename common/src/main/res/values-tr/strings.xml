@@ -221,6 +221,7 @@
     <string name="msg_player_error_audio_renderer">Seçilen SES biçimi desteklenmiyor.\nOynatıcıdaki HQ düğmesine basarak başka bir tane seçmeyi deneyin.\nBu işe yaramazsa cihazı yeniden başlatmayı deneyin.</string>
     <string name="msg_player_error_subtitle_renderer">Seçilen ALTYAZI biçimi desteklenmiyor.\nOynatıcıdaki CC düğmesine uzun basarak başka bir tane seçmeyi deneyin.\nBu işe yaramazsa cihazı yeniden başlatmayı deneyin.</string>
     <string name="msg_player_error_unexpected">Bilinmeyen video çözücü hatası</string>
+    <string name="player_unexpected_error">Beklenmeyen oynatma hatası</string>
     <string name="video_aspect">En boy oranı</string>
     <string name="player_tweaks">Geliştirici seçenekleri</string>
     <string name="header_uploads">Yüklemeler</string>
