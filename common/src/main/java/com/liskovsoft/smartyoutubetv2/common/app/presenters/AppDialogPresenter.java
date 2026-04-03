@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -13,15 +12,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @SuppressLint("StaticFieldLeak")
     private static AppDialogPresenter sInstance;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
-    private final WeakHashSet<Runnable> mOnStart = new WeakHashSet<>();
-    private final WeakHashSet<Runnable> mOnFinish = new WeakHashSet<>();
+    private final Set<Runnable> mOnStart = new HashSet<>();
+    private final Set<Runnable> mOnFinish = new HashSet<>();
     private String mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
@@ -59,9 +60,8 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @Override
     public void onFinish() {
         super.onFinish();
-        clear();
-
         Utils.runMyCallbacks(mOnFinish);
+        clear();
     }
 
     private void clear() {
@@ -69,6 +69,8 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mHandler.removeCallbacks(mCloseDialog);
         resetData();
         mBackupCategories = null; // Mem leak fix (UiOption callback holds PlaybackActivity)
+        mOnStart.clear();
+        mOnFinish.clear();
     }
 
     /**

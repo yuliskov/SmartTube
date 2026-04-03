@@ -94,6 +94,7 @@ import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -1168,7 +1169,7 @@ public class Utils {
         return randomIndex;
     }
 
-    public static void addMyCallback(List<Runnable> myCallbacks, Runnable callback) {
+    public static void addMyCallback(Collection<Runnable> myCallbacks, Runnable callback) {
         if (myCallbacks == null || callback == null) {
             return;
         }
@@ -1188,7 +1189,7 @@ public class Utils {
         }
     }
 
-    public static void runMyCallbacks(List<Runnable> myCallbacks) {
+    public static void runMyCallbacks(Collection<Runnable> myCallbacks) {
         if (myCallbacks == null || myCallbacks.isEmpty()) {
             return;
         }

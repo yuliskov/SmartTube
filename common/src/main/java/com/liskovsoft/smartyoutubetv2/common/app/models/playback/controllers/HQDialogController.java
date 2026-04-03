@@ -168,6 +168,10 @@ public class HQDialogController extends BasePlayerController {
         for (Runnable listener : mHideListeners) {
             listener.run();
         }
+
+        mHideListeners.clear();
+        mCategories.clear();
+        mCategoriesInt.clear();
     }
 
     //private void updateBackgroundPlayback() {
@@ -206,6 +210,10 @@ public class HQDialogController extends BasePlayerController {
     }
 
     private void addVideoZoomCategory() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         addCategoryInt(AppDialogUtil.createVideoZoomCategory(
                 getContext(), () -> {
                     getPlayer().setResizeMode(getPlayerData().getResizeMode());
