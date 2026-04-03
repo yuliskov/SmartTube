@@ -10,7 +10,7 @@ public abstract class AbstractCommentsReceiver implements CommentsReceiver {
     private Callback mCallback;
 
     public AbstractCommentsReceiver(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext(); // Mem leak fix (holds PlaybackActivity)
     }
 
     @Override
@@ -56,7 +56,7 @@ public abstract class AbstractCommentsReceiver implements CommentsReceiver {
 
     @Override
     public void onFinish(Backup backup) {
-        
+        setCallback(null); // Mem leak fix (holds AppDialogActivity)
     }
 
     @Override

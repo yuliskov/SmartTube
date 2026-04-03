@@ -68,6 +68,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mTimeoutMs = 0;
         mHandler.removeCallbacks(mCloseDialog);
         resetData();
+        mBackupCategories = null; // Mem leak fix (UiOption callback holds PlaybackActivity)
     }
 
     /**

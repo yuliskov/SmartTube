@@ -112,6 +112,7 @@ public class CommentsController extends BasePlayerController {
 
             @Override
             public void onFinish(Backup backup) {
+                super.onFinish(backup);
                 if (Helpers.equals(backupKey, mCommentsKey)) {
                     mBackup = new Pair<>(mCommentsKey, backup);
                 }
