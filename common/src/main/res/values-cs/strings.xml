@@ -31,7 +31,7 @@
     <string name="option_background_playback_off">Zakázáno</string>
     <string name="option_background_playback_pip">Video a zvuk</string>
     <string name="option_background_playback_only_audio">Pouze zvuk</string>
-    <string name="playback_settings">Nastavení kvality přehrávání</string>
+    <string name="playback_settings">Pokročilá nastavení přehrávání</string>
     <string name="video_speed">Rychlost videa</string>
     <string name="resolution_switch">Přepnout rozlišení</string>
     <string name="video_buffer">Vyrovnávací paměť videa</string>
@@ -169,7 +169,7 @@
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
     <string name="auto_frame_rate_pause">Automatická snímková frekvence (pozastav při přepnutí)</string>
     <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s\@%s</string>
-    <string name="audio_shift">Posunutí zvuku</string>
+    <string name="audio_shift">Zpoždění zvuku</string>
     <string name="player_remember_speed">Pamatovat rychlost videa</string>
     <string name="mark_channel_as_watched">Označit jako zhlédnuté</string>
     <string name="channel_marked_as_watched">Kanál byl označen jako zhlédnutý</string>
@@ -597,7 +597,8 @@
     <string name="screensaver">Spořič obrazovky</string>
     <string name="player_screen_off_timeout">Časový limit vypnutí obrazovky</string>
     <string name="old_update_notifications">Původní vzhled upozornění na aktualizace</string>
-    <string name="dialog_notification">Upozornit na aktualizaci pomocí vyskakovacího dialogu</string>
+    <string name="sidebar_notification">Zobrazit oznámení v postranním panelu</string>
+    <string name="dialog_notification">Upozornit pomocí vyskakovacího dialogu</string>
     <string name="mark_as_watched">Označit jako zhlédnuté</string>
     <string name="player_ui_animations">Povolit animaci rozhraní přehrávače</string>
     <string name="player_likes_count">Zobrazit počet Líbí/Nelíbí</string>
@@ -734,6 +735,9 @@
     <string name="queue_respects_playback_mode">Fronta respektuje režim přehrávání</string>
     <string name="ignore_short_segments">Ignorovat krátké segmenty</string>
     <string name="install_bridge">Nainstalovat ATV/Amazon most</string>
+    <string name="fix_empty_subs_and_channels">Oprava prázdných Odběrů a Kanálů</string>
+    <string name="local_backup_not_supported">Automatické zálohování na Android TV 11+ není podporováno z důvodu systémových omezení. Použijte místo toho GDrive.</string>
+    <string name="rounded_card_corners">Zaoblené rohy karet</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>
