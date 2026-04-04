@@ -58,7 +58,7 @@
         android:theme="@style/App.Theme.Leanback.Browse"
         tools:node="merge"
         tools:replace="android:theme,android:allowBackup"
-        tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
+        tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute,DiscouragedApi">
 
         <!-- Screen Mirror (e.g. DIAL) for Amazon TV -->
         <!-- Not implemented yet( -->

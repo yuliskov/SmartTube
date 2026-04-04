@@ -513,9 +513,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             return;
         }
 
+        SplashPresenter splashPresenter = SplashPresenter.instance(getContext());
+
+        if (splashPresenter == null) {
+            return;
+        }
+
         int appLogoRes = Helpers.getThemeAttr(getContext(), R.attr.appLogo);
 
-        Drawable bridgeIcon = Utils.getDrawable(getContext(), SplashPresenter.instance(getContext()).getBridgePackageName(), "app_icon");
+        Drawable bridgeIcon = Utils.getDrawable(getContext(), splashPresenter.getBridgePackageName(), "app_icon");
 
         // Top right corner logo
         setBadgeDrawable(bridgeIcon != null ? bridgeIcon : appLogoRes > 0 ? ContextCompat.getDrawable(getContext(), appLogoRes) : null);

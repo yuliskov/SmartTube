@@ -50,7 +50,8 @@ public class BlockedChannelData implements ProfileChangeListener {
                 Channel channel = (Channel) obj;
 
                 if (channelName != null && channel.channelName != null) {
-                    return Helpers.contains(channelName, channel.channelName) || Helpers.contains(channel.channelName, channelName);
+                    //return Helpers.contains(channelName, channel.channelName) || Helpers.contains(channel.channelName, channelName);
+                    return Helpers.startsWith(channelName, channel.channelName) || Helpers.startsWith(channel.channelName, channelName);
                 }
 
                 if (channelId != null && channel.channelId != null) {
