@@ -424,6 +424,7 @@ public class PlayerUIController extends BasePlayerController {
         boolean dislike = buttonState == PlayerUI.BUTTON_ON;
 
         getPlayer().setButtonState(R.id.action_thumbs_down, !dislike ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
 
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -451,6 +452,7 @@ public class PlayerUIController extends BasePlayerController {
         boolean like = buttonState == PlayerUI.BUTTON_ON;
 
         getPlayer().setButtonState(R.id.action_thumbs_up, !like ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
 
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
