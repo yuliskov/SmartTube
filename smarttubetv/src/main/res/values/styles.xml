@@ -208,7 +208,7 @@
     </style>
     <!--  End Color scheme: Dark Grey (monochrome)  -->
 
-    <!--  Color scheme: Dark (Blue)  -->
+    <!--  Color scheme: Dark Blue  -->
     <style name="App.Theme.Leanback.Blue.Browse" parent="App.Theme.Leanback.Browse">
         <!--<item name="brandColor">@color/scheme_blue_background_dark</item>-->
         <item name="brandAccentColor">@color/scheme_blue_background</item>
@@ -231,5 +231,16 @@
         <!--<item name="android:colorPrimary" tools:targetApi="21">@color/scheme_blue_background_dark</item>-->
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_grey_background</item>
     </style>
-    <!--  End Color scheme: Teal (Blue)  -->
+    <!--  End Color scheme: Dark Blue  -->
+
+    <!--  Color scheme: Dark Blue (OLED)  -->
+    <style name="App.Theme.Leanback.Blue.OLED.Browse" parent="App.Theme.Leanback.Blue.Browse">
+        <item name="brandAccentColor">@color/semi_transparent</item>
+        <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
+        <item name="appLogo">@null</item>
+    </style>
+    <style name="App.Theme.Leanback.Blue.OLED.Player" parent="App.Theme.Leanback.Blue.Player">
+        <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
+    </style>
+    <!--  End Color scheme: Dark Blue (OLED)  -->
 </resources>
