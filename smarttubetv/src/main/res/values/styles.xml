@@ -235,7 +235,6 @@
 
     <!--  Color scheme: Dark Blue (OLED)  -->
     <style name="App.Theme.Leanback.Blue.OLED.Browse" parent="App.Theme.Leanback.Blue.Browse">
-        <item name="brandAccentColor">@color/semi_transparent</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
         <item name="appLogo">@null</item>
     </style>
