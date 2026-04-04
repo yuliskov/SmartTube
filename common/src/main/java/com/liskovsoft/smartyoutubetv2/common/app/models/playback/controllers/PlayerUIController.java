@@ -392,14 +392,15 @@ public class PlayerUIController extends BasePlayerController {
             if (getPlayer() == null || item.getGroup() == null)
                 return;
 
-            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE
-                    || action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST
+            if (action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST
                     || action == VideoMenuCallback.ACTION_REMOVE) {
                 int id = item.getGroup().getId();
                 VideoGroup group = VideoGroup.from(videoItem);
                 group.setId(id);
                 getPlayer().removeSuggestions(group);
-            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE || action == VideoMenuCallback.ACTION_PLAY_NEXT) {
+            } else if (action == VideoMenuCallback.ACTION_ADD_TO_QUEUE
+                    || action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE
+                    || action == VideoMenuCallback.ACTION_PLAY_NEXT) {
                 String title = getContext().getString(R.string.action_playback_queue);
                 int id = title.hashCode();
                 Video newItem = videoItem.copy();
@@ -411,8 +412,12 @@ public class PlayerUIController extends BasePlayerController {
                 if (action == VideoMenuCallback.ACTION_PLAY_NEXT) {
                     group.setAction(VideoGroup.ACTION_PREPEND);
                 }
-                getPlayer().updateSuggestions(group);
-                getPlayer().setNextTitle(mSuggestionsController.getNext());
+                if (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+                    getPlayer().removeSuggestions(group);
+                } else {
+                    getPlayer().updateSuggestions(group);
+                    getPlayer().setNextTitle(mSuggestionsController.getNext());
+                }
             }
         });
     }

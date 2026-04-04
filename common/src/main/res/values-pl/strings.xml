@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="header_home">Główna</string>
+  <string name="header_home">Strona Główna</string>
   <string name="title_search">Szukaj</string>
   <string name="header_subscriptions">Subskrypcje</string>
   <string name="header_history">Historia</string>
@@ -724,7 +724,7 @@
   <string name="action_debug_info">Informacje debugowania</string>
   <string name="dialog_block_channel">Zablokuj kanał</string>
   <string name="dialog_unblock_channel">Odblokuj kanał</string>
-  <string name="confirm_block_channel">Ukryć całą zawartość od %s?</string>
+  <string name="confirm_block_channel">Ukryć całą zawartość od %s\?</string>
   <string name="channel_blocked">Kanał zablokowany</string>
   <string name="channel_unblocked">Kanał odblokowany</string>
   <string name="header_blocked_channels">Zablokowane kanały</string>
@@ -733,4 +733,9 @@
   <string name="player_time_stretching">Korekcja czasu w sygnałach audio</string>
   <string name="queue_respects_playback_mode">Kolejka respektuje tryb odtwarzania</string>
   <string name="ignore_short_segments">Pomiń krótkie segmenty</string>
+  <string name="fix_empty_subs_and_channels">Napraw puste subskrypcje i kanały</string>
+  <string name="local_backup_not_supported">Automatyczne tworzenie kopii zapasowych na telewizorach z systemem Android TV 11 i nowszym nie jest obsługiwane ze względu na ograniczenia systemowe. Zamiast tego użyj GDrive. </string>
+  <string name="rounded_card_corners">Zaokrąglone rogi kart</string>
+  <string name="install_bridge">Zainstaluj most ATV/Amazon</string>
+  <string name="sidebar_notification">Pokaż powiadomienie na pasku bocznym</string>
 </resources>
