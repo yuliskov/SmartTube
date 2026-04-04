@@ -463,7 +463,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_REMOVE ||
                     action == VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST ||
-                    action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE) {
+                    (action == VideoMenuCallback.ACTION_REMOVE_FROM_QUEUE && isPlaybackQueueSection())) {
                     removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
                     removeItem(mCurrentVideo);
