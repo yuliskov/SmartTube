@@ -32,7 +32,7 @@
   <string name="playback_settings">Lejátszás beállítása</string>
   <string name="video_speed">Videósebesség</string>
   <string name="resolution_switch">Felbontás váltása</string>
-  <string name="video_buffer">Videó-puffer</string>
+  <string name="video_buffer">Videópuffer</string>
   <string name="video_buffer_size_low">Alacsony</string>
   <string name="video_buffer_size_med">Közepes</string>
   <string name="video_buffer_size_high">Magas</string>
@@ -113,7 +113,7 @@
   <string name="repeat_mode_none">Lejátszás végén stop</string>
   <string name="repeat_mode_shuffle">Véletlenszerű lejátszás</string>
   <string name="subscribed_to_channel">Feliratkozva</string>
-  <string name="unsubscribed_from_channel">Leliratkozva</string>
+  <string name="unsubscribed_from_channel">Leiratkozva</string>
   <string name="subtitle_yellow_transparent">Sárga, átlátszó háttérrel</string>
   <string name="subtitle_white_black">Fehér, fekete háttérrel</string>
   <string name="player_seek_preview">Előnézet gyorstekeréskor</string>
@@ -133,7 +133,7 @@
   <string name="app_exit_none">Ne lépjen ki</string>
   <string name="app_double_back_exit">Vissza gomb kétszer nyomva</string>
   <string name="app_single_back_exit">Vissza gomb egyszer nyomva</string>
-  <string name="action_video_zoom">Videó zoom</string>
+  <string name="action_video_zoom">Videózoom</string>
   <string name="video_zoom">Videó zoom</string>
   <string name="video_zoom_default">Alapértelmezett</string>
   <string name="video_zoom_fit_width">Szélességhez igazít</string>
@@ -200,7 +200,7 @@
   <string name="cancel_segment_skip">Szegmens kihagyásának megszakítása</string>
   <string name="video_preset_disabled">Nincs megadva</string>
   <string name="video_preset_enabled">A következő videó formátuma az előre beállított értékek szerint lesz beállítva</string>
-  <string name="player_sleep_timer">Ébresztőóra</string>
+  <string name="player_sleep_timer">Kikapcsolás időzítő</string>
   <string name="player_show_quality_info">Bitráta megjelenítése a videó információknál</string>
   <string name="player_remember_each_speed">Emlékezzen minden videó sebességére</string>
   <string name="player_remember_speed_none">Alapértelmezett</string>
@@ -411,7 +411,7 @@
   <string name="sleep_timer_desc">Lejátszás szüneteltetése, ha a felhasználó egy órán keresztül nem használja a távirányítót.</string>
   <string name="disable_vsync">vsync letiltása</string>
   <string name="disable_vsync_desc">Kicsit javítja a lejátszási teljesítményt</string>
-  <string name="skip_codec_profile_check">A kodekprofilszint-ellenőrzés kihagyása</string>
+  <string name="skip_codec_profile_check">A kodek profilszint-ellenőrzés kihagyása</string>
   <string name="skip_codec_profile_check_desc">Videó indításakor ne ellenőrizze a kodek támogatását. Hasznos lehet a bugos firmware-eknél.</string>
   <string name="force_sw_codec">Szoftveres videó dekóder kényszerítése</string>
   <string name="force_sw_codec_desc">Szinte bármilyen videót le tud játszani, de a teljesítmény nagyon gyenge.</string>
@@ -463,7 +463,7 @@
   <string name="speech_recognizer_external_2">Külső 2 (komolyan hibás)</string>
   <string name="real_channel_icon">Logo megjelenítése a csatorna megnyitása gombon</string>
   <string name="subtitle_yellow_semi_transparent">Sárga, félig átlátszó háttérrel</string>
-  <string name="subtitle_yellow_black">Sárga, fekete háttérel</string>
+  <string name="subtitle_yellow_black">Sárga, fekete háttérrel</string>
   <string name="player_pixel_ratio">Képernyőfelbontás</string>
   <string name="color_scheme_dark_grey_monochrome">Sötétszürke (monokróm)</string>
   <string name="disable_mic_permission">Kérjük, tiltsa le az alkalmazás mikrofonhoz való hozzáférését, hogy ez a felismerő megfelelően működjön.</string>
@@ -600,7 +600,7 @@
   <string name="multi_profiles">Használjon külön beállításokat minden fiókhoz</string>
   <string name="enter_account_password">Adja meg a fiók jelszavát</string>
   <string name="show_connect_messages">Csatlakozási üzenetek megjelenítése</string>
-  <string name="prefer_avc_over_vp9_desc">FIgyelem!: Maximum 1080p</string>
+  <string name="prefer_avc_over_vp9_desc">Figyelem!: Maximum 1080p</string>
   <string name="news_row_name">Hírek</string>
   <string name="play_next">Következő lejátszása</string>
   <string name="nothing_found">Nincs találat</string>
@@ -619,7 +619,7 @@
   <string name="keyboard_fix">Megakadályozza a billentyűzet megjelenítését az OK gomb megnyomásával (G20s és egyebek)</string>
   <string name="hide_shorts_channel">Rövid klipek elrejtése a Csatornák menüből</string>
   <string name="channel_filter_hint">Csatornaszűrés</string>
-  <string name="player_quick_shorts_skip">Rövid klip lapozás Bal/jobb gomb</string>
+  <string name="player_quick_shorts_skip">Rövid klip lapozás bal/jobb gomb</string>
   <string name="channels_filter">Csatornaszűrés a Csatornák részben</string>
   <string name="channel_search_bar">Keresősáv a csatornaoldalon belül</string>
   <string name="player_loop_shorts">Rövid klipek újrajátszása</string>
@@ -685,7 +685,7 @@
   <string name="video_buffer_size_lowest">Legalacsonyabb</string>
   <string name="video_buffer_size_highest">Legmagasabb</string>
   <string name="suggestions">Javaslatok</string>
-  <string name="place_comments_left">Helyezze a megjegyzéseket balra</string>
+  <string name="place_comments_left">Megjegyzések balra helyezése</string>
   <string name="search_exit_shortcut">Kilépés a keresésből</string>
   <string name="context_menu_sorting">Helyi menü rendezése</string>
   <string name="hide_shorts_from_search">Rövid klipek elrejtése a keresési eredményekből</string>
@@ -712,4 +712,32 @@
   <string name="typing_corrections">Az automatikus javítás letiltása szöveg beírása közben</string>
   <string name="suggestions_horizontally_scrolled">Vízszintesen görgetett Javaslatok</string>
   <string name="stable_restore">Minden beállítás törlése!</string>
+  <string name="dialog_block_channel">Csatorna blokkolása</string>
+  <string name="dialog_unblock_channel">Csatorna blokkolás feloldása</string>
+  <string name="channel_blocked">Csatorna blokkolva</string>
+  <string name="channel_unblocked">Csatorna blokkolás feloldva</string>
+  <string name="header_blocked_channels">Blokkolt csatornák</string>
+  <string name="msg_no_blocked_channels">Nincs blokkolt csatorna</string>
+  <string name="auto_backup_category">Automata biztonsági mentés</string>
+  <string name="once_a_day">Naponta</string>
+  <string name="once_a_week">Hetente</string>
+  <string name="once_a_month">Havonta</string>
+  <string name="action_debug_info">Hibakeresési információ</string>
+  <string name="confirm_block_channel">Az összes tartalom elrejtése a %s-ból</string>
+  <string name="player_time_stretching">Hangsebesség</string>
+  <string name="player_time_stretching_desc">Tartsa a hangsebességet alapértelmezetten. Ha változtat a sebességen, jelentősen csökkentheti a teljesítményt egyes eszközökön.</string>
+  <string name="queue_respects_playback_mode">A várólista tiszteletben tartja a lejátszási módot</string>
+  <string name="ignore_short_segments">Rövid szegmensek figyelmen kívül hagyása</string>
+  <string name="fix_empty_subs_and_channels">Az üres feliratkozások és csatornák javítása</string>
+  <string name="local_backup_not_supported">Az automatikus biztonsági mentés az Android TV 11+ rendszeren a rendszerkorlátozások miatt nem támogatott. Használja helyette a GDRive-ot.</string>
+  <string name="rounded_card_corners">Lekerekített kártya sarkok</string>
+  <string name="install_bridge">ATV/Amazon híd telepítése</string>
+  <string name="prefer_google_dns">Google DNS-t előnyben részesítése</string>
+  <string name="player_quick_shorts_skip_alt">Rövid klip lapozás fel/le gomb</string>
+  <string name="player_quick_skip_videos_alt">A normál videók kihagyása a fel/le gombokkal</string>
+  <string name="color_scheme_dark_blue_oled">Sötétkék (OLED)</string>
+  <string name="sidebar_notification">Értesítés megjelenítése az oldalsávon</string>
+  <string name="create_playlist_note">MEGJEGYZÉS: Nem lesz látható a YouTube alkalmazásban</string>
+  <string name="player_unexpected_error">Váratlan lejátszási hiba</string>
+  <string name="player_toggle_speed">Lejátszási sebesség be/ki váltása</string>
 </resources>
