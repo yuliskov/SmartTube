@@ -332,6 +332,19 @@ public class SponsorBlockController extends BasePlayerController {
         getPlayer().setPositionMs(Math.min(positionMs, durationMs));
     }
 
+    private static String formatDurationMs(long ms) {
+        long seconds = ms / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        seconds -= minutes * 60;
+        minutes -= hours * 60;
+
+        if (hours > 0) {
+            return String.format("%d:%02d:%02d", hours, minutes, seconds);
+        }
+        return String.format("%d:%02d", minutes, seconds);
+    }
+
     /**
      * @param fullMatch Match only the beginning or the full segment length
      */
@@ -376,7 +389,8 @@ public class SponsorBlockController extends BasePlayerController {
         SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
 
         Integer resId = getSponsorBlockData().getLocalizedRes(lastSegment.getCategory());
-        String skipMessage = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
+        String skipMessage = (resId != null ? getContext().getString(resId) : lastSegment.getCategory())
+                + " (" + formatDurationMs(lastSegment.getEndMs() - lastSegment.getStartMs()) + ")";
 
         int type = getSponsorBlockData().getAction(lastSegment.getCategory());
 
