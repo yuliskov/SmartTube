@@ -14,6 +14,7 @@ import com.liskovsoft.leanbackassistant.R;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.sharedutils.rx.AppSchedulerProvider;
 import com.liskovsoft.sharedutils.rx.SchedulerProvider;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
@@ -65,6 +66,11 @@ public class VideoContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mUriMatcher = buildUriMatcher();
+
+        // Init the global ctx in case the app isn't started yet
+        // Testing. Stop the app and run:
+        // adb shell content query --uri content://org.smarttube.stable/search/search_suggest_query/test
+        GlobalPreferences.instance(getContext());
 
         return true;
     }
