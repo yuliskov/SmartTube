@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="header_home">Strona Główna</string>
+  <string name="header_home">Strona główna</string>
   <string name="title_search">Szukaj</string>
   <string name="header_subscriptions">Subskrypcje</string>
   <string name="header_history">Historia</string>
@@ -738,4 +738,6 @@
   <string name="rounded_card_corners">Zaokrąglone rogi kart</string>
   <string name="install_bridge">Zainstaluj most ATV/Amazon</string>
   <string name="sidebar_notification">Pokaż powiadomienie na pasku bocznym</string>
+  <string name="player_unexpected_error">Nieoczekiwany błąd odtwarzania</string>
+  <string name="color_scheme_dark_blue_oled">Ciemnoniebieski (OLED)</string>
 </resources>
