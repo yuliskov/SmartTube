@@ -463,6 +463,7 @@
     <string name="playlist_order_popularity">Popularity</string>
     <string name="cant_do_this_for_foreign_playlist">Can\'t do this for foreign playlist</string>
     <string name="owned_playlist_warning">Error: This action can be applied only for owned playlists</string>
+    <string name="content_block_show_duration">Show duration in skip message</string>
     <string name="content_block_alt_server">Use alternative server</string>
     <string name="content_block_alt_server_desc">Enable this option if SponsorBlock refusing to work by different reasons.</string>
     <string name="unset_stream_reminder">Unset stream reminder</string>

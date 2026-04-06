@@ -389,8 +389,10 @@ public class SponsorBlockController extends BasePlayerController {
         SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
 
         Integer resId = getSponsorBlockData().getLocalizedRes(lastSegment.getCategory());
-        String skipMessage = (resId != null ? getContext().getString(resId) : lastSegment.getCategory())
-                + " (" + formatDurationMs(lastSegment.getEndMs() - lastSegment.getStartMs()) + ")";
+        String skipMessage = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
+        if (getSponsorBlockData().isShowDurationEnabled()) {
+            skipMessage += " (" + formatDurationMs(lastSegment.getEndMs() - lastSegment.getStartMs()) + ")";
+        }
 
         int type = getSponsorBlockData().getAction(lastSegment.getCategory());
 
