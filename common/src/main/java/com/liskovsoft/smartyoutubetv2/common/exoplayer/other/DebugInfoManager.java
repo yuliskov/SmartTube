@@ -272,8 +272,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
             String transferFunction = getColorTransferString(video.colorInfo.colorTransfer);
             String colorSpace = getColorSpaceString(video.colorInfo.colorSpace);
+            String colorRange = getColorRangeString(video.colorInfo.hdrStaticInfo);
 
-            mVideoInfo.add(new Pair<>("Transfer func/Color space", transferFunction + "/" + colorSpace));
+            mVideoInfo.add(new Pair<>("Transfer/Space/Range", transferFunction + "/" + colorSpace + "/" + colorRange));
         }
     }
 
@@ -544,6 +545,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             default:
                 return NOT_AVAILABLE;
         }
+    }
+
+    private String getColorRangeString(byte[] hdrInfo) {
+        return hdrInfo != null ? "HDR" : "SDR";
     }
 
     private String getClientType() {

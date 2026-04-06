@@ -50,6 +50,10 @@ public class BlockedChannelData implements ProfileChangeListener {
                 Channel channel = (Channel) obj;
 
                 if (channelName != null && channel.channelName != null) {
+                    // The possible combinations:
+                    // <author_name1> and <author_name2>
+                    // <author_name1>, <author_name2>
+                    // <author_name1> and more...
                     //return Helpers.contains(channelName, channel.channelName) || Helpers.contains(channel.channelName, channelName);
                     return Helpers.startsWith(channelName, channel.channelName) || Helpers.startsWith(channel.channelName, channelName);
                 }
