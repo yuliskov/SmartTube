@@ -103,21 +103,16 @@ public final class CronetEngineWrapper {
     // Sort remaining providers by type and version.
     CronetProviderComparator providerComparator = new CronetProviderComparator(preferGMSCoreCronet);
     Collections.sort(cronetProviders, providerComparator);
-    // Make cache dir for QUIC cache support
-    File cacheDir = new File(context.getCacheDir(), "StCronet");
-    cacheDir.mkdirs();
     for (int i = 0; i < cronetProviders.size() && cronetEngine == null; i++) {
       String providerName = cronetProviders.get(i).getName();
       try {
+        // NOTE: Unused wrapper. Replaced by com.liskovsoft.sharedutils.cronet.CronetManager
         // MOD: enable Quic and cache for Quic
-        // NOTE: caching is intended to fix the bot guard check for auto-translated subtitles
         //cronetEngine = cronetProviders.get(i).createBuilder().build();
         cronetEngine = cronetProviders.get(i).createBuilder()
                 .enableQuic(true)
                 .enableHttp2(true)
                 .enableBrotli(true)
-                .setStoragePath(cacheDir.getAbsolutePath())
-                .enableHttpCache(CronetEngine.Builder.HTTP_CACHE_DISK_NO_HTTP, 2 * 1024 * 1024)
                 .build();
         if (providerComparator.isNativeProvider(providerName)) {
           cronetEngineSource = SOURCE_NATIVE;
