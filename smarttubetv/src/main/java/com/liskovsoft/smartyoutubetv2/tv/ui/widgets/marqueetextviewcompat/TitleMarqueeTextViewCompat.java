@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 /**
- * MarqueeTextView used in browse pip title
+ * MarqueeTextView used in browse pip title, dialog headers and more
  */
 public class TitleMarqueeTextViewCompat extends MarqueeTextViewCompat {
     private final Runnable mUpdateMarquee = super::updateMarquee;
