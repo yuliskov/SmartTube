@@ -132,14 +132,14 @@
         </activity-alias>
 
         <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
-        <!-- behind is important too. This fix crashes on Android 8 (api 26) and above. -->
+        <!-- screenOrientation="behind" is important too. This fix crashes on Android 8 (api 26) and above, except few devices. -->
         <!-- More info about behind: https://stackoverflow.com/a/52426009/1279056 -->
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity"
                   android:noHistory="true"
                   android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-                  android:screenOrientation="behind"
+                  android:screenOrientation="unspecified"
                   android:theme="@style/App.Theme.Leanback.Preferences"/>
 
         <activity
