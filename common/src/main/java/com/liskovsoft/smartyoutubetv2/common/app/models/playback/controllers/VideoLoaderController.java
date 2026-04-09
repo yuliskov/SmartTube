@@ -324,7 +324,9 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        getPlayer().showProgressBar(true);
+        // The engine still buffering after the release and may hide the progress incidentally.
+        //getPlayer().showProgressBar(true);
+        Utils.post(() -> getPlayer().showProgressBar(true));
         disposeActions();
 
         ServiceManager service = YouTubeServiceManager.instance();

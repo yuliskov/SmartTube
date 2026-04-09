@@ -123,7 +123,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private YouTubeOverlay mYouTubeOverlay;
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
-    private long mProgressShowTimeMs;
     private String mSelectedVideoId;
 
     @Override
@@ -891,22 +890,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (show) {
             getProgressBarManager().show();
-            mProgressShowTimeMs = System.currentTimeMillis();
         } else {
             getProgressBarManager().hide();
         }
     }
-
-    // NOTE: This tweak has side effect. On some devices a video playing with the infinite loading circle.
-    //@Override
-    //protected void onBufferingStateChanged(boolean start) {
-    //    // Fix progress stop when playing videos non-stop (stop buffer event from previous video called)
-    //    if (!start && System.currentTimeMillis() - mProgressShowTimeMs < 100) {
-    //        return;
-    //    }
-    //
-    //    super.onBufferingStateChanged(start);
-    //}
 
     @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
