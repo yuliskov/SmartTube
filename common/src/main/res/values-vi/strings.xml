@@ -721,4 +721,5 @@
   <string name="header_blocked_channels">Kênh đã chặn</string>
   <string name="msg_no_blocked_channels">Không có kênh nào bị chặn</string>
   <string name="action_debug_info">Thông tin gỡ lỗi</string>
+  <string name="color_scheme_dark_blue_oled">Xanh biển tối (OLED)</string>
 </resources>
