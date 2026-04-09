@@ -324,7 +324,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        // The engine still buffering after the release and may hide the progress incidentally.
+        // Fix progress hide if engine still running (next video switch)
         //getPlayer().showProgressBar(true);
         Utils.post(() -> getPlayer().showProgressBar(true));
         disposeActions();

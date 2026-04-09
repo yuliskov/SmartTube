@@ -758,6 +758,7 @@ public final class Video {
         author = metadata.getAuthor();
         durationMs = metadata.getDurationMs();
         isSynced = true;
+        mediaItem = toMediaItem(); // Fix subscribe during playback (see PlayerUIController.callMediaItemObservable)
     }
 
     public void sync(MediaItemFormatInfo formatInfo) {
