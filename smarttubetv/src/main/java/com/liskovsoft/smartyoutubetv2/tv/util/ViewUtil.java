@@ -232,17 +232,37 @@ public class ViewUtil {
         iconView.setColorFilter(filter);
     }
 
-    public static void setGravity(FrameLayout frameLayout, int gravity) {
-        if (frameLayout == null) {
+    public static void setGravity(View view, int gravity) {
+        if (view == null) {
             return;
         }
 
-        ViewGroup.LayoutParams lp = frameLayout.getLayoutParams();
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp instanceof FrameLayout.LayoutParams) {
             FrameLayout.LayoutParams flp = (FrameLayout.LayoutParams) lp;
             flp.gravity = gravity;
-            frameLayout.setLayoutParams(flp);
+            view.setLayoutParams(flp);
         }
+    }
+
+    public static void setWidth(View view, int width) {
+        if (view == null) {
+            return;
+        }
+
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp != null) {
+            lp.width = width;
+            view.setLayoutParams(lp);
+        }
+    }
+
+    public static void setPadding(View view, int padding) {
+        if (view == null) {
+            return;
+        }
+
+        view.setPadding(padding, view.getPaddingTop(), padding, view.getPaddingBottom());
     }
 
     /**

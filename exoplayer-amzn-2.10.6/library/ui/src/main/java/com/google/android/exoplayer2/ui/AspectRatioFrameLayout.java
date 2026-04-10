@@ -164,6 +164,13 @@ public final class AspectRatioFrameLayout extends FrameLayout {
   }
 
   /**
+   * MOD: Get video zoom in percents
+   */
+  public int getZoom() {
+    return zoomPercents;
+  }
+
+  /**
    * MOD: Set video zoom in percents
    */
   public void setZoom(int percents) {

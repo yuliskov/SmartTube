@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
+import com.google.android.exoplayer2.ui.SubtitleView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -24,6 +25,8 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private SurfaceWrapper mVideoSurfaceWrapper;
     private AspectRatioFrameLayout mVideoSurfaceRoot;
+    private SubtitleView mLeanbackSubtitles;
+    private int mSubtitlesPadding;
     private int mBackgroundResId;
     private float mAspectRatio;
     private float mPixelRatio = 1.0f;
@@ -33,12 +36,17 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
+        if (root == null) {
+            throw new IllegalStateException("Can't create root of SurfacePlaybackFragment");
+        }
         mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
                 PlayerData.instance(getContext()).getRotationAngle() != 0) ?
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
+        mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
+        mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
         return root;
     }
@@ -185,6 +193,33 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
     protected void setGravity(int gravity) {
         ViewUtil.setGravity(mVideoSurfaceRoot, gravity);
+
+        scaleSubtitles(gravity);
+    }
+
+    private void scaleSubtitles(int gravity) {
+        if ((gravity & Gravity.START) == Gravity.START) {
+            scaleSubtitles(scaleSubsWidth(), scaleSubsPadding(), Gravity.START);
+        } else if ((gravity & Gravity.END) == Gravity.END) {
+            scaleSubtitles(scaleSubsWidth(), scaleSubsPadding(), Gravity.END);
+        } else if ((gravity & Gravity.CENTER) == Gravity.CENTER) {
+            scaleSubtitles(ViewGroup.LayoutParams.MATCH_PARENT, mSubtitlesPadding, Gravity.CENTER);
+        }
+    }
+
+    private void scaleSubtitles(int width, int padding, int gravity) {
+        ViewUtil.setWidth(mLeanbackSubtitles, width);
+        ViewUtil.setPadding(mLeanbackSubtitles, padding);
+        ViewUtil.setGravity(mLeanbackSubtitles, gravity);
+    }
+
+    private int scaleSubsWidth() {
+        View parent = (View) mLeanbackSubtitles.getParent();
+        return parent.getWidth() / 100 * mVideoSurfaceRoot.getZoom();
+    }
+
+    private int scaleSubsPadding() {
+        return mSubtitlesPadding / 10;
     }
 
     private float calculateAspectRatio() {
