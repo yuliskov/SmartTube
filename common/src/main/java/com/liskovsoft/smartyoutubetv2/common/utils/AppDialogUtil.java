@@ -407,7 +407,8 @@ public class AppDialogUtil {
 
     public static OptionCategory createAudioDelayCategory(Context context, Runnable onSetCallback) {
         PlayerData playerData = PlayerData.instance(context);
-        String title = context.getResources().getQuantityString(R.plurals.seconds, 10, context.getString(R.string.audio_shift));
+        String title = context.getString(R.string.audio_shift);
+        String dialogTitle = context.getResources().getQuantityString(R.plurals.seconds, 10, context.getString(R.string.audio_shift));
 
         List<OptionItem> items = new ArrayList<>();
 
@@ -424,7 +425,7 @@ public class AppDialogUtil {
             float delaySec = delayMs / 1_000f;
             SimpleEditDialog.show(
                     context,
-                    title,
+                    dialogTitle,
                     Helpers.toString(delaySec),
                     newValue -> {
                         if (!Helpers.isNumeric(newValue)) {
