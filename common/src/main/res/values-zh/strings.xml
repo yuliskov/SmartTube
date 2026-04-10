@@ -51,7 +51,7 @@
   <string name="settings_other">其他</string>
   <string name="settings_player">视频播放器</string>
   <string name="settings_language">语言</string>
-  <string name="settings_linked_devices">已关联的设备</string>
+  <string name="settings_linked_devices">已连接的设备</string>
   <string name="settings_about">关于</string>
   <string name="dialog_account_list">选择账号</string>
   <string name="dialog_account_none">无</string>
@@ -160,10 +160,10 @@
   <string name="share_link">分享链接</string>
   <string name="share_qr_link">分享链接（二维码）</string>
   <string name="subscribe_to_channel">订阅频道</string>
-  <string name="wait_data_loading">数据正在加载，请稍后……</string>
+  <string name="wait_data_loading">数据正在加载，请稍等……</string>
   <string name="auto_frame_rate_pause">自动帧率（切换时暂停）</string>
   <string name="auto_frame_rate_applying">应用自动帧率 %sx%s\@%s</string>
-  <string name="audio_shift">音频偏移</string>
+  <string name="audio_shift">音频延迟</string>
   <string name="player_remember_speed">记忆播放速度</string>
   <string name="mark_channel_as_watched">标记为已观看</string>
   <string name="channel_marked_as_watched">频道已被标记为已观看</string>
@@ -198,7 +198,7 @@
   <string name="intent_force_close">如果视频是从外部来源打开的则强制退出</string>
   <string name="btn_confirm">确认</string>
   <string name="player_low_video_quality">低画质</string>
-  <string name="remote_session_closed">远程会话已关闭</string>
+  <string name="remote_session_closed">遥控配对已断开</string>
   <string name="msg_mode_switch_error">无法切换显示模式至 \"%s</string>
   <string name="msg_player_error">播放器发生错误 %s。正在重新播放……</string>
   <string name="video_preset_disabled">无预设</string>
@@ -272,7 +272,7 @@
   <string name="option_disabled">禁用</string>
   <string name="live_now_row_name">直播中</string>
   <string name="run_in_background">后台播放</string>
-  <string name="settings_remote_control">远程控制</string>
+  <string name="settings_remote_control">遥控</string>
   <string name="background_service_started">后台服务已启动</string>
   <string name="dialog_add_to">添加至 %s</string>
   <string name="dialog_remove_from">从 %s 移除</string>
@@ -435,8 +435,8 @@
   <string name="lb_playback_controls_skip_previous">跳过上集回顾/返回起始位置</string>
   <string name="alt_presets_behavior">备用预设操作（低带宽）</string>
   <string name="alt_presets_behavior_desc">应用将尽量维持与所选预设相对应的带宽，而不是匹配分辨率、帧率和解码器。</string>
-  <string name="sleep_timer">睡眠定时（如果超过一小时未使用遥控器）</string>
-  <string name="sleep_timer_desc">如果用户超过一小时未使用遥控器则暂停播放</string>
+  <string name="sleep_timer">睡眠定时（如果超过一小时未使用遥控）</string>
+  <string name="sleep_timer_desc">如果用户超过一小时未使用遥控则暂停播放</string>
   <string name="disable_vsync">禁用垂直同步</string>
   <string name="disable_vsync_desc">此选项会禁用与显示器垂直同步信号的帧对齐。通过释放CPU资源来提高低端设备性能。</string>
   <string name="skip_codec_profile_check">跳过解码器的画质检查</string>
@@ -621,9 +621,9 @@
   <string name="hide_watched_from_notifications">隐藏通知中已观看的视频</string>
   <string name="hide_unwanted_content">隐藏内容</string>
   <string name="hide_watched_from_home">隐藏首页中已观看的视频</string>
-  <string name="remote_control_permission">后台远程控制需要悬浮窗权限</string>
+  <string name="remote_control_permission">后台遥控需要悬浮窗权限</string>
   <string name="login_from_browser">从浏览器登录</string>
-  <string name="disable_remote_history">使用远程控制时禁用历史记录</string>
+  <string name="disable_remote_history">使用遥控时禁用历史记录</string>
   <string name="keyboard_fix">防止确认键弹出键盘（G20s及其他型号）</string>
   <string name="nothing_found">未找到任何结果</string>
   <string name="auto_frame_rate_desc">此项可以消除镜头快速移动场景（例如体育赛事直播）产生的抖动。</string>
@@ -738,4 +738,5 @@
   <string name="local_backup_not_supported">由于系统限制，Android TV 11及以上版本不支持自动备份。请改用Google云端硬盘。</string>
   <string name="sidebar_notification">在侧边栏显示通知</string>
   <string name="rounded_card_corners">圆角卡片</string>
+  <string name="color_scheme_dark_blue_oled">深蓝（OLED）</string>
 </resources>
