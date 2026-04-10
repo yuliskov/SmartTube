@@ -219,7 +219,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     }
 
     private int scaleSubsPadding() {
-        return mSubtitlesPadding / 10;
+        //return mSubtitlesPadding / 10;
+        return mSubtitlesPadding / 100 * mVideoSurfaceRoot.getZoom();
     }
 
     private float calculateAspectRatio() {

@@ -75,6 +75,11 @@ public class VideoLoaderController extends BasePlayerController {
             applyPlaybackMode(getPlaybackMode());
         }
     };
+    private final Runnable mShowProgressBar = () -> {
+        if (getPlayer() != null) {
+            getPlayer().showProgressBar(true);
+        }
+    };
     private Pair<Integer, Long> mBufferingCount;
 
     public VideoLoaderController() {
@@ -324,9 +329,9 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        // Fix progress hide if engine still running (next video switch)
+        // Fix no progress on next video (the engine may still buffering a bit)
         //getPlayer().showProgressBar(true);
-        Utils.post(() -> getPlayer().showProgressBar(true));
+        Utils.post(mShowProgressBar);
         disposeActions();
 
         ServiceManager service = YouTubeServiceManager.instance();
