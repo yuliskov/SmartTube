@@ -623,6 +623,10 @@ public class VideoLoaderController extends BasePlayerController {
                 getPlayerData().setVideoBufferType(getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW
                         ? PlayerData.BUFFER_MEDIUM : PlayerData.BUFFER_HIGH);
             }
+
+            if (errorContent == null) {
+                YouTubeServiceManager.instance().invalidateCache();
+            }
         }
 
         if (showMessage) {
