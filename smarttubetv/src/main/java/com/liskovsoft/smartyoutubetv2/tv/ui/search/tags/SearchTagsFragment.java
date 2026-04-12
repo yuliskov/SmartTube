@@ -49,6 +49,10 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null); // Real restore takes place in the presenter
 
+        if (getContext() == null) {
+            throw new IllegalStateException("Can't create SearchTagsFragment: the context is null");
+        }
+
         mCrashRestorer = new CrashRestorer(getContext(), savedInstanceState);
         mIsFragmentCreated = true;
         mSearchPresenter = SearchPresenter.instance(getContext());
