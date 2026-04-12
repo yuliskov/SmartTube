@@ -103,7 +103,7 @@ public abstract class Representation {
      * Returns a {@link RangedUri} defining the location of the representation's segment index, or
      * null if the representation provides an index directly.
      */
-    public abstract RangedUri getIndexUri();
+    //public abstract RangedUri getIndexUri();
 
     /**
      * Returns an index if the representation provides one directly, or null otherwise.
@@ -168,10 +168,10 @@ public abstract class Representation {
             //        : new SingleSegmentIndex(new RangedUri(null, 0, contentLength));
         }
 
-        @Override
-        public RangedUri getIndexUri() {
-            return indexUri;
-        }
+        //@Override
+        //public RangedUri getIndexUri() {
+        //    return indexUri;
+        //}
 
         //@Override
         //public SabrSegmentIndex getIndex() {
@@ -207,10 +207,10 @@ public abstract class Representation {
             this.segmentBase = segmentBase;
         }
 
-        @Override
-        public RangedUri getIndexUri() {
-            return null;
-        }
+        //@Override
+        //public RangedUri getIndexUri() {
+        //    return null;
+        //}
 
         //@Override
         //public SabrSegmentIndex getIndex() {

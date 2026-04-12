@@ -556,7 +556,7 @@ public final class SabrMediaSource extends BaseMediaSource {
                 com.google.android.exoplayer2.source.sabr.manifest.Period period, long durationUs) {
             int adaptationSetCount = period.adaptationSets.size();
             long availableStartTimeUs = 0;
-            long availableEndTimeUs = Long.MAX_VALUE; // TODO: calc SABR start time
+            long availableEndTimeUs = Long.MAX_VALUE;
             boolean isIndexExplicit = false;
             boolean seenEmptyIndex = false;
 
@@ -576,6 +576,9 @@ public final class SabrMediaSource extends BaseMediaSource {
                 if (haveAudioVideoAdaptationSets && adaptationSet.type == C.TRACK_TYPE_TEXT) {
                     continue;
                 }
+
+                // MOD: In SABR, segments are not known beforehand like in DASH
+                return new PeriodSeekInfo(true, 0, durationUs);
 
                 //SabrSegmentIndex index = adaptationSet.representations.get(0).getIndex();
                 //if (index == null) {
