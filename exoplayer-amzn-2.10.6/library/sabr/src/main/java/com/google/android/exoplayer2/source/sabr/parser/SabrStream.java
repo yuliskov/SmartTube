@@ -182,6 +182,10 @@ public class SabrStream {
         return processor.getSegmentDurationMs(iTag);
     }
 
+    public int getBackoffTimeMs() {
+        return processor.getBackoffTimeMs();
+    }
+
     public MediaHeader getInitializedFormat(int iTag) {
         return processor.getInitializedFormats().get(iTag);
     }

@@ -586,7 +586,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 0,
                 sabrHeaders);
         long sampleOffsetUs = -representation.presentationTimeOffsetUs;
-        Log.e(TAG, "Load media chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber() + ", startTimeMs=" + startTimeMs);
+        Log.e(TAG, "Load media chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber()
+                + ", startTimeMs=" + startTimeMs + ", backoffTimeMs=" + sabrStream.getBackoffTimeMs());
         return new ContainerMediaChunk(
                 dataSource,
                 dataSpec,

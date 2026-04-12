@@ -673,6 +673,10 @@ public class SabrProcessor {
         return mediaHeader.getDurationMs();
     }
 
+    public int getBackoffTimeMs() {
+        return nextRequestPolicy != null ? nextRequestPolicy.getBackoffTimeMs() : 0;
+    }
+
     //private List<FormatId> createSelectedFormatIds() {
     //    List<FormatId> result = new ArrayList<>();
     //
