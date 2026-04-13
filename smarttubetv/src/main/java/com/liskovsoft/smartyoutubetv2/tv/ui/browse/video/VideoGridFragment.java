@@ -49,6 +49,10 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getActivity() == null) {
+            throw new IllegalStateException("VideoGridFragment doesn't attached to the activity");
+        }
+
         mMainPresenter = getMainPresenter();
         mCardPresenter = isShorts() ? new ShortsCardPresenter() : new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
@@ -190,8 +194,6 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     }
 
     private void restorePosition() {
-        //LoadingManager.showLoading(getContext(), true); // Restore task takes some time
-
         setPosition(mSelectedItemIndex);
         selectItem(mSelectedItem);
 
