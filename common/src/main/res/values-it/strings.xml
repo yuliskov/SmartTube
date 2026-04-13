@@ -31,7 +31,7 @@
     <string name="option_background_playback_off">Disabilitato</string>
     <string name="option_background_playback_pip">Immagine nell\'immagine</string>
     <string name="option_background_playback_only_audio">Solo audio</string>
-    <string name="playback_settings">Impostazioni qualità di riproduzione</string>
+    <string name="playback_settings">Impostazioni di riproduzione avanzate</string>
     <string name="video_speed">Velocità video</string>
     <string name="resolution_switch">Cambia risoluzione</string>
     <string name="video_buffer">Buffer video</string>
@@ -169,7 +169,7 @@
     <string name="wait_data_loading">Attendi il caricamento dei dati…</string>
     <string name="auto_frame_rate_pause">Frequenza fotogrammi automatica (pausa durante il passaggio)</string>
     <string name="auto_frame_rate_applying">Applica frequenza automatica fotogrammi %sx%s\@%s</string>
-    <string name="audio_shift">Modifica audio</string>
+    <string name="audio_shift">Ritardo audio</string>
     <string name="player_remember_speed">Ricorda velocità</string>
     <string name="mark_channel_as_watched">Contrassegna come già visto</string>
     <string name="channel_marked_as_watched">Il canale è stato contrassegnato come già visto</string>
@@ -221,6 +221,7 @@
     <string name="msg_player_error_audio_renderer">Il formato AUDIO selezionato non è supportato.\nProva a selezionarne un altro premendo il pulsante HQ nel lettore.\nSe il problema persiste, prova a riavviare il dispositivo.</string>
     <string name="msg_player_error_subtitle_renderer">Il formato SOTTOTITOLI selezionato non è supportato.\nProva a selezionarne un altro premendo a lungo il pulsante CC nel lettore.\nSe il problema persiste, prova a riavviare il dispositivo.</string>
     <string name="msg_player_error_unexpected">Errore sconosciuto di decodifica video</string>
+    <string name="player_unexpected_error">Errore di riproduzione imprevisto</string>
     <string name="video_aspect">Proporzioni</string>
     <string name="player_tweaks">Opzioni per sviluppatori</string>
     <string name="header_uploads">Caricamenti</string>
@@ -597,7 +598,8 @@
     <string name="screensaver">Screensaver</string>
     <string name="player_screen_off_timeout">Timeout di spegnimento dello schermo</string>
     <string name="old_update_notifications">Il vecchio aspetto delle notifiche di aggiornamento</string>
-    <string name="dialog_notification">Notifica aggiornamenti con una finestra di dialogo pop-up</string>
+    <string name="sidebar_notification">Mostra notifica nella barra laterale</string>
+   	<string name="dialog_notification">Notifica tramite finestra di dialogo pop-up</string>
     <string name="mark_as_watched">Contrassegna come già visto</string>
     <string name="player_ui_animations">Abilita le animazioni dell\'interfaccia utente del lettore</string>
     <string name="player_likes_count">Mostra il conteggio dei Mi piace/Non mi piace</string>
@@ -632,6 +634,7 @@
     <string name="unlock_high_bitrate_audio_formats">Sblocca formati mp4a 1080p ad alto bitrate</string>
     <string name="color_scheme_blue">Blu</string>
     <string name="color_scheme_dark_blue">Blu scuro</string>
+    <string name="color_scheme_dark_blue_oled">Blu scuro (OLED)</string>
     <string name="player_speed_per_channel">Per ciascun canale</string>
     <string name="disable_popular_searches">Disabilita le query di ricerca più popolari</string>
     <string name="multi_profiles">Usa impostazioni separate per ciascun account</string>
@@ -731,4 +734,18 @@
     <string name="msg_no_blocked_channels">Nessun canale bloccato</string>
     <string name="player_time_stretching">Dilatazione del tempo audio</string>
     <string name="player_time_stretching_desc">Mantiene la voce naturale quando si cambia velocità. Potrebbe ridurre significativamente le prestazioni su alcuni dispositivi.</string>
+    <string name="queue_respects_playback_mode">La coda rispetta la modalità di riproduzione</string>
+    <string name="ignore_short_segments">Ignora i segmenti brevi</string>
+    <string name="install_bridge">Installa il bridge ATV/Amazon</string>
+    <string name="fix_empty_subs_and_channels">Correggi Iscrizioni e canali vuoti</string>
+    <string name="local_backup_not_supported">Il backup automatico su Android TV 11 non è supportato a causa di restrizioni di sistema. Usa invece GDrive.</string>
+    <string name="rounded_card_corners">Angoli delle cartoline arrotondati</string>
+    <plurals name="hours">
+        <item quantity="one">%s ora</item>
+        <item quantity="other">%s ore</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s secondo</item>
+        <item quantity="other">%s secondi</item>
+    </plurals>
 </resources>
