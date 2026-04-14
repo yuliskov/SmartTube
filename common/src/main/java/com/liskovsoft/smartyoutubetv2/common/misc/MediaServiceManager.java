@@ -371,6 +371,10 @@ public class MediaServiceManager implements OnAccountChange {
         RxHelper.runAsyncUser(mContentService::clearSearchHistory);
     }
 
+    public void removeSearchTag(String tag) {
+        RxHelper.runAsyncUser(() -> mContentService.removeSearchTag(tag));
+    }
+
     public void updateHistory(Video video, long positionMs) {
         if (video == null || RxHelper.isAnyActionRunning(mHistoryAction)) {
             return;

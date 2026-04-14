@@ -560,6 +560,7 @@
     <string name="sort_by_date">Дата завантаження</string>
     <string name="sort_by_rating">Оцінка</string>
     <string name="clear_search_history">Видалити історію пошуку</string>
+    <string name="remove_from_search_history">Видалити з історії пошуку</string>
     <string name="remove_from_subscriptions">Приховати</string>
     <string name="player_long_speed_list">Довгий список швидкостей</string>
     <string name="player_extra_long_speed_list">Дуже довгий список швидкостей</string>

@@ -271,6 +271,15 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
     }
 
+    protected void removeTag(Tag tag) {
+        if (containsAdapter(mSearchTagsAdapter)) {
+            mSearchTagsAdapter.remove(tag);
+            if (mSearchTagsAdapter.size() == 0) {
+                detachAdapter(0);
+            }
+        }
+    }
+
     protected boolean containsAdapter(ObjectAdapter adapter) {
         if (mResultsAdapter != null) {
             for (int i = 0; i < mResultsAdapter.size(); i++) {

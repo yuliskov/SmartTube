@@ -160,6 +160,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     @Override
+    public void removeSearchTag(Tag tag) {
+        removeTag(tag);
+    }
+
+    @Override
     public void setTagsProvider(MediaServiceSearchTagProvider provider) {
         setSearchTagsProvider(provider);
     }

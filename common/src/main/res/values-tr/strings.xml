@@ -566,6 +566,7 @@
     <string name="sort_by_date">Yüklenme tarihi</string>
     <string name="sort_by_rating">Derecelendirme</string>
     <string name="clear_search_history">Arama geçmişini temizle</string>
+    <string name="remove_from_search_history">Arama geçmişinden kaldır</string>
     <string name="remove_from_subscriptions">Gizle</string>
     <string name="player_long_speed_list">Uzun oynatma hızı listesi</string>
     <string name="player_extra_long_speed_list">Ekstra uzun oynatma hızı listesi</string>

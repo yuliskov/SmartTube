@@ -119,13 +119,33 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        AppDialogUtil.showConfirmationDialog(
-                getContext(),
-                getContext().getString(R.string.clear_search_history),
-                () -> {
-                    MediaServiceManager.instance().clearSearchHistory();
-                    getView().clearSearchTags();
-                });
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+
+        appendRemoveSearchTagButton(settingsPresenter, item);
+        appendClearSearchHistoryButton(settingsPresenter);
+
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_search));
+    }
+
+    private void appendRemoveSearchTagButton(AppDialogPresenter settingsPresenter, Tag item) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.remove_from_search_history), option -> {
+            MediaServiceManager.instance().removeSearchTag(item.tag);
+            getView().removeSearchTag(item);
+            settingsPresenter.closeDialog();
+        }));
+    }
+
+    private void appendClearSearchHistoryButton(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.clear_search_history), option -> {
+            AppDialogUtil.showConfirmationDialog(
+                    getContext(),
+                    getContext().getString(R.string.clear_search_history),
+                    () -> {
+                        MediaServiceManager.instance().clearSearchHistory();
+                        getView().clearSearchTags();
+                        settingsPresenter.closeDialog();
+                    });
+        }));
     }
 
     @Override

@@ -560,6 +560,7 @@
     <string name="sort_by_date">Дата загрузки</string>
     <string name="sort_by_rating">Рейтинг</string>
     <string name="clear_search_history">Очистить историю поиска</string>
+    <string name="remove_from_search_history">Удалить из истории поиска</string>
     <string name="remove_from_subscriptions">Скрыть</string>
     <string name="player_long_speed_list">Длинный список скоростей</string>
     <string name="player_extra_long_speed_list">Очень длинный список скоростей</string>
