@@ -59,6 +59,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return sInstance;
     }
 
+    public boolean isMultiProfilesEnabled() {
+        return getBoolean(MULTI_PROFILES, false);
+    }
+
     public void enableMultiProfiles(boolean enabled) {
         if (isMultiProfilesEnabled() == enabled) {
             return;
@@ -69,16 +73,12 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         //selectAccount(enabled ? MediaServiceManager.instance().getSelectedAccount() : null);
     }
 
-    public boolean isMultiProfilesEnabled() {
-        return getBoolean(MULTI_PROFILES, false);
+    public String getBootResolution() {
+        return mBootResolution;
     }
 
     public void setBootResolution(String resolution) {
         mBootResolution = resolution;
-    }
-
-    public String getBootResolution() {
-        return mBootResolution;
     }
 
     public String getStateUpdaterData() {
@@ -92,27 +92,19 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     public String getChannelGroupData() {
-        // Always use multiple profiles
-        return getData(getProfileKey(CHANNEL_GROUP_DATA, true));
+        return getData(getProfileKey(CHANNEL_GROUP_DATA,  isMultiProfilesEnabled()));
     }
 
     public void setChannelGroupData(String data) {
-        // Always use multiple profiles
-        setData(getProfileKey(CHANNEL_GROUP_DATA, true), data);
+        setData(getProfileKey(CHANNEL_GROUP_DATA,  isMultiProfilesEnabled()), data);
     }
 
     public String getSidebarData() {
-        // Always use multiple profiles
-        return getData(getProfileKey(SIDEBAR_DATA, true));
+        return getData(getProfileKey(SIDEBAR_DATA,  isMultiProfilesEnabled()));
     }
 
     public void setSidebarData(String data) {
-        // Always use multiple profiles
-        setData(getProfileKey(SIDEBAR_DATA, true), data);
-    }
-
-    public void setProfileData(String key, String data) {
-        setData(getProfileKey(key, isMultiProfilesEnabled()), data);
+        setData(getProfileKey(SIDEBAR_DATA,  isMultiProfilesEnabled()), data);
     }
 
     public String getProfileData(String key) {
@@ -124,15 +116,19 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         return getData(getProfileKey(key, isMultiProfilesEnabled()));
     }
 
-    public void setData(String key, String data) {
-        if (checkData(key, data)) {
-            putString(key, data);
-        }
+    public void setProfileData(String key, String data) {
+        setData(getProfileKey(key, isMultiProfilesEnabled()), data);
     }
 
     public String getData(String key) {
         // Don't sync hash here. Hashes won't match.
         return getString(key, null);
+    }
+
+    public void setData(String key, String data) {
+        if (checkData(key, data)) {
+            putString(key, data);
+        }
     }
 
     public String getWebProxyUri() {
@@ -151,12 +147,12 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 
-    private void setProfileName(String profileName) {
-        putString(LAST_PROFILE_NAME, profileName);
-    }
-
     private String getProfileName() {
         return getString(LAST_PROFILE_NAME, null);
+    }
+
+    private void setProfileName(String profileName) {
+        putString(LAST_PROFILE_NAME, profileName);
     }
 
     private void selectProfile(Account account) {
