@@ -92,19 +92,23 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     public String getChannelGroupData() {
-        return getData(getProfileKey(CHANNEL_GROUP_DATA,  isMultiProfilesEnabled()));
+        // Always use multiple profiles
+        return getData(getProfileKey(CHANNEL_GROUP_DATA,  true));
     }
 
     public void setChannelGroupData(String data) {
-        setData(getProfileKey(CHANNEL_GROUP_DATA,  isMultiProfilesEnabled()), data);
+        // Always use multiple profiles
+        setData(getProfileKey(CHANNEL_GROUP_DATA,  true), data);
     }
 
     public String getSidebarData() {
-        return getData(getProfileKey(SIDEBAR_DATA,  isMultiProfilesEnabled()));
+        // Always use multiple profiles
+        return getData(getProfileKey(SIDEBAR_DATA,  true));
     }
 
     public void setSidebarData(String data) {
-        setData(getProfileKey(SIDEBAR_DATA,  isMultiProfilesEnabled()), data);
+        // Always use multiple profiles
+        setData(getProfileKey(SIDEBAR_DATA,  true), data);
     }
 
     public String getProfileData(String key) {
