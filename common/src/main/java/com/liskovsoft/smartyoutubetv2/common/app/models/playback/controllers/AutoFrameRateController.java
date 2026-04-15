@@ -219,6 +219,10 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
     }
 
     private void restorePlayback() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         // Fix restore after disable afr: don't do afr enabled check
         if (!skipAfr() && mAutoFrameRateHelper.isSupported() && getPlayerData().getAfrPauseMs() > 0) {
             mStateController.blockPlay(false);
