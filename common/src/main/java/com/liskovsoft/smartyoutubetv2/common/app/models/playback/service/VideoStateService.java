@@ -26,7 +26,13 @@ public class VideoStateService implements ProfileChangeListener {
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
-    private final Runnable mPersistStateInt = this::persistStateInt;
+    private final Runnable mPersistStateInt = () -> {
+        try {
+            persistStateInt();
+        } catch (OutOfMemoryError e) {
+            // NOP
+        }
+    };
     private long mSessionStartTimeMs;
 
     private VideoStateService(Context context) {
