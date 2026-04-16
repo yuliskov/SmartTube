@@ -625,7 +625,7 @@ public class VideoLoaderController extends BasePlayerController {
             }
 
             if (errorContent == null) {
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                showMessage = false;
             }
         }
 

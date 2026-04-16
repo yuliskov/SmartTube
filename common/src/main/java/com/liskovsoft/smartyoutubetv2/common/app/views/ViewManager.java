@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
@@ -84,6 +85,10 @@ public class ViewManager {
 
     public Class<? extends Activity> getActivity(Class<?> viewClass) {
         return mViewMapping.get(viewClass);
+    }
+    
+    public Class<?> getView(Class<? extends Activity> activityClass) {
+        return Helpers.getKey(mViewMapping, activityClass);
     }
 
     public Class<? extends Activity> getRootActivity() {
