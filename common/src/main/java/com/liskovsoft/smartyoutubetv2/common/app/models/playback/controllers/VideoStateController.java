@@ -117,7 +117,7 @@ public class VideoStateController extends BasePlayerController {
         //restoreFormats();
 
         // Show user info instead of black screen.
-        if (!getPlayEnabled()) {
+        if (getPlayer() != null && !getPlayEnabled()) {
             getPlayer().showOverlay(true);
         }
     }
@@ -586,13 +586,13 @@ public class VideoStateController extends BasePlayerController {
         mIsPlayBlocked = block;
     }
 
+    public boolean getPlayEnabled() {
+        return mIsPlayEnabled;
+    }
+
     public void setPlayEnabled(boolean isPlayEnabled) {
         Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
         mIsPlayEnabled = isPlayEnabled;
-    }
-
-    public boolean getPlayEnabled() {
-        return mIsPlayEnabled;
     }
 
     private void restoreVolume() {

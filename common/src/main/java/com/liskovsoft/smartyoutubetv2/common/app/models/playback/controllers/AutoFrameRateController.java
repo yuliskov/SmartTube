@@ -164,6 +164,10 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
     }
 
     public void applyAfr() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (!skipAfr() && getPlayerData().isAfrEnabled()) {
             FormatItem videoFormat = getPlayer().getVideoFormat();
             applyAfr(videoFormat, false);
