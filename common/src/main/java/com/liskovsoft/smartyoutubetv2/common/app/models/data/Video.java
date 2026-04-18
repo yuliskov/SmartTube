@@ -306,6 +306,26 @@ public final class Video {
         return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
+    /** Best-effort upload time (ms); includes parsing relative text from subtitles when API omits millis (e.g. tile rows). */
+    public long getPublishedMs() {
+        if (mediaItem == null) {
+            return 0;
+        }
+        long ms = mediaItem.getPublishedDate();
+        if (ms > 0) {
+            return ms;
+        }
+        ms = DateHelper.publishedTimeTextToUnixMs(mediaItem.getProductionDate());
+        if (ms > 0) {
+            return ms;
+        }
+        CharSequence st = mediaItem.getSecondTitle();
+        if (st == null) {
+            st = secondTitle;
+        }
+        return DateHelper.publishedTimeTextToUnixMs(Helpers.toString(st));
+    }
+
     public String getCardImageUrl() {
         return altCardImageUrl != null ? altCardImageUrl : cardImageUrl;
     }

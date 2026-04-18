@@ -160,15 +160,15 @@ android {
     // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
     productFlavors {
         stbeta {
-            applicationId "org.smarttube.beta.autolike"
+            applicationId "org.smarttube.beta"
             targetSdkVersion project.properties.compileSdkVersion
         }
         ststable {
-            applicationId "org.smarttube.stable.autolike"
+            applicationId "org.smarttube.stable"
             targetSdkVersion project.properties.compileSdkVersion
         }
         stfdroid {
-            applicationId "app.smarttube.fdroid.autolike"
+            applicationId "app.smarttube.fdroid"
             minSdkVersion 21
             targetSdkVersion project.properties.compileSdkVersion
         }

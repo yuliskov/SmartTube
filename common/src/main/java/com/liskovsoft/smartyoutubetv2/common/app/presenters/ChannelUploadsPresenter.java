@@ -272,6 +272,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (mChannel != null && TextUtils.isEmpty(mBaseGroup.getTitle())) {
             mBaseGroup.setTitle(mChannel.getTitle());
         }
+        if (mChannel != null && mChannel.hasPlaylist()) {
+            mBaseGroup.setSkipAgeCutoff(true);
+        }
         update(mBaseGroup);
     }
 
@@ -280,6 +283,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         if (getView() == null || group == null) {
             return;
+        }
+
+        if (mChannel != null && mChannel.hasPlaylist()) {
+            group.setSkipAgeCutoff(true);
         }
 
         getView().update(group);
