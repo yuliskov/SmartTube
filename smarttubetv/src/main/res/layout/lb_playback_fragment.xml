@@ -31,6 +31,27 @@
         android:paddingLeft="150sp"
         android:paddingRight="150sp"/>
 
+    <View
+        android:id="@+id/watch_overlay_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#CC000000"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/watch_overlay_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:shadowColor="@color/black"
+        android:shadowRadius="1.6"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/live_chat_wrapper"
         android:layout_width="300sp"
