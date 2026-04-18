@@ -131,10 +131,12 @@ public class VideoLoaderController extends BasePlayerController {
             disableSubtitles();
             reloadVideo();
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            if (!isFasterDataSourceEnabled()) {
-                enableFasterDataSource();
-                restartEngine();
-            }
+            //if (!isFasterDataSourceEnabled()) {
+            //    enableFasterDataSource();
+            //    restartEngine();
+            //}
+            switchNextEngine();
+            restartEngine();
         }
     }
 
