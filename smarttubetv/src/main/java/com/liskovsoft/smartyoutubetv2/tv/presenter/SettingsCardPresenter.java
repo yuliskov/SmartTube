@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,9 @@ public class SettingsCardPresenter extends Presenter {
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
+        //if (VERSION.SDK_INT >= 23) {
+        //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
+        //}
 
         TextView textView = container.findViewById(R.id.settings_title);
         textView.setBackgroundColor(mDefaultBackgroundColor);

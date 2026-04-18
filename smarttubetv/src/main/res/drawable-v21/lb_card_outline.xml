@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: add outline to a cards -->
+<shape
+    android:shape="rectangle"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#00000000"/>
+    <corners android:radius="@dimen/lb_rounded_rect_corner_radius"/>
+    <stroke
+        android:width="2.0dip"
+        android:color="#4dffffff"/>
+</shape>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: add outline to the search -->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#ff888888"/>
+    <corners android:radius="30dp"/>
+    <stroke
+        android:width="2dp"
+        android:color="#ffffffff"/>
+</shape>

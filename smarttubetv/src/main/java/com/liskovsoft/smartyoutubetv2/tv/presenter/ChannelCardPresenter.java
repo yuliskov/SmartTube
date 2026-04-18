@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,9 @@ public class ChannelCardPresenter extends LongClickPresenter {
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
+        //if (VERSION.SDK_INT >= 23) {
+        //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
+        //}
 
         TextView textView = container.findViewById(R.id.channel_title);
         textView.setBackgroundColor(mDefaultBackgroundColor);
