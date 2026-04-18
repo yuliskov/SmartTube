@@ -716,7 +716,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     /**
-     * When {@link #AUTOLIKE_MODE_SECONDS}: value is seconds.\n
+     * When {@link #AUTOLIKE_MODE_SECONDS}: value is seconds.
      * When {@link #AUTOLIKE_MODE_PERCENT}: value is percent (1..99).
      */
     public int getAutoLikeValue() {

@@ -88,11 +88,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.player_autolike), optionItem -> {
             AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
 
-            List<OptionItem> triggerOptions = new ArrayList<>();
             boolean enabled = mPlayerTweaksData.isAutoLikeEnabled();
             int mode = mPlayerTweaksData.getAutoLikeMode();
             int value = mPlayerTweaksData.getAutoLikeValue();
 
+            List<OptionItem> triggerOptions = new ArrayList<>();
             triggerOptions.add(UiOptionItem.from(
                     getContext().getString(R.string.option_disabled),
                     option -> mPlayerTweaksData.setAutoLikeEnabled(false),
@@ -123,7 +123,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
             presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_mode), triggerOptions);
 
-            // Minimum duration (minutes -> seconds)
             List<OptionItem> minDurOptions = new ArrayList<>();
             int currentMinDur = mPlayerTweaksData.getAutoLikeMinDurationSec();
             for (int minutes : new int[] {1, 3, 5, 10, 15, 30}) {
