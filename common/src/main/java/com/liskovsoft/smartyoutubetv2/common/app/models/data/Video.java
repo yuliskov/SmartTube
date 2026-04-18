@@ -16,6 +16,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup.Item;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.utils.RelativePublishedTime;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -315,7 +316,7 @@ public final class Video {
         if (ms > 0) {
             return ms;
         }
-        ms = DateHelper.publishedTimeTextToUnixMs(mediaItem.getProductionDate());
+        ms = RelativePublishedTime.publishedTimeTextToUnixMs(mediaItem.getProductionDate());
         if (ms > 0) {
             return ms;
         }
@@ -323,7 +324,7 @@ public final class Video {
         if (st == null) {
             st = secondTitle;
         }
-        return DateHelper.publishedTimeTextToUnixMs(Helpers.toString(st));
+        return RelativePublishedTime.publishedTimeTextToUnixMs(Helpers.toString(st));
     }
 
     public String getCardImageUrl() {
