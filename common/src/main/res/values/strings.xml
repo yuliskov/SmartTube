@@ -102,6 +102,9 @@
     <string name="check_updates_auto">Notify about updates</string>
     <string name="select_account_on_boot">Show account selection on boot</string>
     <string name="player_other">Misc</string>
+    <string name="player_autolike">Auto-like</string>
+    <string name="player_autolike_trigger">Auto-like trigger</string>
+    <string name="player_autolike_min_duration">Minimum video length</string>
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>
     <string name="open_playlist">Open playlist</string>

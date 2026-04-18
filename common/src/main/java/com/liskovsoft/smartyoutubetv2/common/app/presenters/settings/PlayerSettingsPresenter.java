@@ -77,10 +77,65 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendPixelRatioCategory(settingsPresenter);
         //appendPlayerExitCategory(settingsPresenter);
         appendSleepTimerCategory(settingsPresenter);
+        appendAutoLikeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_player), mOnFinish);
+    }
+
+    private void appendAutoLikeCategory(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.player_autolike), optionItem -> {
+            AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+
+            boolean enabled = mPlayerTweaksData.isAutoLikeEnabled();
+            int mode = mPlayerTweaksData.getAutoLikeMode();
+            int value = mPlayerTweaksData.getAutoLikeValue();
+
+            List<OptionItem> triggerOptions = new ArrayList<>();
+            triggerOptions.add(UiOptionItem.from(
+                    getContext().getString(R.string.option_disabled),
+                    option -> mPlayerTweaksData.setAutoLikeEnabled(false),
+                    !enabled));
+
+            for (int minutes : new int[] {1, 2, 3, 5, 10, 15}) {
+                int seconds = minutes * 60;
+                triggerOptions.add(UiOptionItem.from(
+                        minutes + " min",
+                        option -> {
+                            mPlayerTweaksData.setAutoLikeEnabled(true);
+                            mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_SECONDS);
+                            mPlayerTweaksData.setAutoLikeValue(seconds);
+                        },
+                        enabled && mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS && value == seconds));
+            }
+
+            for (int percent : new int[] {25, 50, 75}) {
+                triggerOptions.add(UiOptionItem.from(
+                        percent + "%",
+                        option -> {
+                            mPlayerTweaksData.setAutoLikeEnabled(true);
+                            mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_PERCENT);
+                            mPlayerTweaksData.setAutoLikeValue(percent);
+                        },
+                        enabled && mode == PlayerTweaksData.AUTOLIKE_MODE_PERCENT && value == percent));
+            }
+
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_trigger), triggerOptions);
+
+            List<OptionItem> minDurOptions = new ArrayList<>();
+            int currentMinDur = mPlayerTweaksData.getAutoLikeMinDurationSec();
+            for (int minutes : new int[] {1, 3, 5, 10, 15, 30}) {
+                int seconds = minutes * 60;
+                minDurOptions.add(UiOptionItem.from(
+                        minutes + " min",
+                        option -> mPlayerTweaksData.setAutoLikeMinDurationSec(seconds),
+                        currentMinDur == seconds));
+            }
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_min_duration), minDurOptions);
+
+            presenter.showDialog(getContext().getString(R.string.player_autolike));
+        }));
     }
 
     private void appendOKButtonCategory(AppDialogPresenter settingsPresenter) {
