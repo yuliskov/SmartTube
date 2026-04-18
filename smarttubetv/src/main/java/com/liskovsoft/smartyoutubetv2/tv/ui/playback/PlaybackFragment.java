@@ -104,8 +104,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private static final String SELECTED_VIDEO_ID = "SelectedVideoId";
     private static final int UPDATE_DELAY_MS = 100;
     private static final int WATCH_OVERLAY_UPDATE_INTERVAL_MS = 1_000;
-    private static final long ONE_MINUTE_MS = 60_000L;
-    private static final long THREE_MINUTES_MS = 180_000L;
     private static final int SUGGESTIONS_START_INDEX = 1;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
@@ -130,11 +128,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private String mSelectedVideoId;
+    private PlayerTweaksData mPlayerTweaksData;
 
     private View mWatchOverlayBackground;
     private TextView mWatchOverlayMessage;
-    private boolean mHasShownOneMinuteMessage;
-    private boolean mHasShownSeventyFivePercentMessage;
     private boolean mHasAutoLikedCurrentVideo;
 
     private final Handler mWatchOverlayHandler = new Handler(Looper.getMainLooper());
@@ -168,6 +165,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
         mExoPlayerController = new ExoPlayerController(getContext(), mPlaybackPresenter);
+        mPlayerTweaksData = PlayerTweaksData.instance(getContext());
 
         // Fix open previous video
         if (mPlaybackPresenter.getVideo() != null) {
@@ -872,8 +870,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void resetWatchOverlayState() {
-        mHasShownOneMinuteMessage = false;
-        mHasShownSeventyFivePercentMessage = false;
         mHasAutoLikedCurrentVideo = false;
     }
 
@@ -919,19 +915,32 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void checkWatchOverlayTriggers(long currentPositionMs, long durationMs) {
-        if (!mHasShownOneMinuteMessage && currentPositionMs >= ONE_MINUTE_MS) {
-            showWatchOverlay("Du hast dieses Video 1 Minute lang geschaut.");
-            mHasShownOneMinuteMessage = true;
-            maybeAutoLikeCurrentVideo();
+        if (mPlayerTweaksData == null || !mPlayerTweaksData.isAutoLikeEnabled() || mHasAutoLikedCurrentVideo) {
+            return;
         }
 
-        if (durationMs >= THREE_MINUTES_MS && !mHasShownSeventyFivePercentMessage) {
-            long threshold = (long) (0.75 * durationMs);
-            if (currentPositionMs >= threshold) {
-                showWatchOverlay("Du hast 75 % dieses Videos geschaut.");
-                mHasShownSeventyFivePercentMessage = true;
-                maybeAutoLikeCurrentVideo();
-            }
+        long minDurationMs = Math.max(0, mPlayerTweaksData.getAutoLikeMinDurationSec()) * 1_000L;
+        if (durationMs < minDurationMs) {
+            return;
+        }
+
+        long thresholdMs;
+        if (mPlayerTweaksData.getAutoLikeMode() == PlayerTweaksData.AUTOLIKE_MODE_PERCENT) {
+            int percent = mPlayerTweaksData.getAutoLikeValue();
+            percent = Math.max(1, Math.min(99, percent));
+            thresholdMs = (long) (durationMs * (percent / 100.0));
+        } else {
+            int seconds = mPlayerTweaksData.getAutoLikeValue();
+            seconds = Math.max(0, seconds);
+            thresholdMs = seconds * 1_000L;
+        }
+
+        if (currentPositionMs >= thresholdMs) {
+            boolean willLike = mPlayerGlue != null && mPlayerGlue.getButtonState(R.id.action_thumbs_up) == PlayerUI.BUTTON_OFF;
+            maybeAutoLikeCurrentVideo();
+            showWatchOverlay(willLike
+                    ? "AutoLike: Video wurde geliked."
+                    : "AutoLike: Video ist bereits geliked.");
         }
     }
 
