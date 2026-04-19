@@ -273,6 +273,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         mPlaybackPresenter.onKeyDown(-1); // reset ui timer
+        if (getView() != null) {
+            getView().requestFocus(); // fix mouse DPAD emulation on API 28+
+        }
     }
 
     public void onFinish() {
