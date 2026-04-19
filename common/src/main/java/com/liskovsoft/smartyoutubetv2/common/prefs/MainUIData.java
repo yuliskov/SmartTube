@@ -474,6 +474,10 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mMenuItemsOrdered.add(provider.getId());
             }
         }
+
+        if (mColorSchemes.size() <= mColorSchemeIndex) {
+            mColorSchemeIndex = mColorSchemes.size() - 1;
+        }
         
         updateDefaultValues();
     }
