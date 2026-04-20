@@ -139,6 +139,17 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         OptionItem unlocalizedTitle = UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
                 option -> mMainUIData.setUnlocalizedTitlesEnabled(option.isSelected()), mMainUIData.isUnlocalizedTitlesEnabled());
+
+        OptionItem roundedCardCorners = UiOptionItem.from(getContext().getString(R.string.rounded_card_corners),
+                option -> {
+                    if (option.isSelected()) {
+                        mMainUIData.setUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
+                    } else {
+                        mMainUIData.setUiTweakDisabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
+                    }
+                    mRestartApp = true;
+                },
+                mMainUIData.isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         
         options.add(multilineTitle);
         options.add(multilineSubtitle);
@@ -146,6 +157,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
             options.add(autoScrolledTitle);
         }
         options.add(unlocalizedTitle);
+        options.add(roundedCardCorners);
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.cards_style), options);
     }
@@ -276,17 +288,6 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.rounded_card_corners),
-                option -> {
-                    if (option.isSelected()) {
-                        mMainUIData.setUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
-                    } else {
-                        mMainUIData.setUiTweakDisabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS);
-                    }
-                    mRestartApp = true;
-                },
-                mMainUIData.isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)));
         
         options.add(UiOptionItem.from(getContext().getString(R.string.card_unlocalized_titles),
                 option -> {
