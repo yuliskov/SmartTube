@@ -51,7 +51,7 @@
   <string name="settings_linked_devices">الأجهزة المرتبطة</string>
   <string name="settings_about">حول التطبيق</string>
   <string name="dialog_account_list">تحديد حساب</string>
-  <string name="dialog_account_none">لا شيء</string>
+  <string name="dialog_account_none">بدون</string>
   <string name="dialog_remove_account">تسجيل الخروج</string>
   <string name="dialog_add_account">تسجيل الدخول</string>
   <string name="default_lang">الافتراضي</string>
@@ -85,7 +85,7 @@
   <string name="large_ui">واجهة مستخدم كبيرة</string>
   <string name="video_grid_scale">مقياس شبكة الفيديو</string>
   <string name="scale_ui">مقياس واجهة المستخدم</string>
-  <string name="color_scheme">مخطط الألوان</string>
+  <string name="color_scheme">مظهر الألوان</string>
   <string name="color_scheme_default">الافتراضي</string>
   <string name="color_scheme_red_grey">أحمر رمادي</string>
   <string name="color_scheme_red">أحمر</string>
@@ -738,6 +738,9 @@
   <string name="player_time_stretching_desc">يحافظ على طبيعة الصوت عند تغيير السرعة. قد يقلل الأداء بشكل ملحوظ على بعض الأجهزة.</string>
   <string name="queue_respects_playback_mode">قائمة الانتظار تلتزم بوضع التشغيل</string>
   <string name="player_toggle_speed">تشغيل/إيقاف سرعة التشغيل</string>
+  <string name="player_unexpected_error">خطأ غير متوقع في التشغيل</string>
+  <string name="remove_from_search_history">إزالة من سجل البحث</string>
+  <string name="color_scheme_dark_blue_oled">أزرق داكن (OLED)</string>
   <plurals name="hours">
         <item quantity="one">%s ساعة</item>
         <item quantity="other">%s ساعة</item>
