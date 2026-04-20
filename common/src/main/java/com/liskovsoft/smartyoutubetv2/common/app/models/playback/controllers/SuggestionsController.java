@@ -140,7 +140,7 @@ public class SuggestionsController extends BasePlayerController {
 
     @Override
     public void onSeekPositionChanged(long positionMs) {
-        if (getPlayer().isControlsShown()) {
+        if (getPlayer() != null && getPlayer().isControlsShown()) {
             updateSeekPreviewTitle(positionMs);
         }
     }

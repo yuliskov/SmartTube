@@ -162,6 +162,12 @@ public class VideoStateController extends BasePlayerController {
     }
 
     @Override
+    public void onSeekPositionChanged(long positionMs) {
+        // Need a delay while player internal state changed
+        Utils.post(mUpdateHistory);
+    }
+
+    @Override
     public void onEngineError(int type, int rendererIndex, Throwable error) {
         if (getPlayer() == null) {
             return;
