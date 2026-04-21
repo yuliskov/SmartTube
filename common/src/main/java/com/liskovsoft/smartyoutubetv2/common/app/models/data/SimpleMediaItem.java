@@ -27,6 +27,8 @@ public final class SimpleMediaItem implements MediaItem {
     private boolean mIsUpcoming;
     private boolean mIsMovie;
     private String mClickTrackingParams;
+    private String mFeedbackToken;
+    private String mFeedbackToken2;
 
     private SimpleMediaItem() {
     }
@@ -72,6 +74,10 @@ public final class SimpleMediaItem implements MediaItem {
         mediaItem.mIsUpcoming = video.isUpcoming;
         mediaItem.mIsMovie = video.isMovie;
         mediaItem.mClickTrackingParams = video.clickTrackingParams;
+        if (video.mediaItem != null) {
+            mediaItem.mFeedbackToken = video.mediaItem.getFeedbackToken();
+            mediaItem.mFeedbackToken2 = video.mediaItem.getFeedbackToken2();
+        }
 
         return mediaItem;
     }
@@ -118,12 +124,12 @@ public final class SimpleMediaItem implements MediaItem {
 
     @Override
     public String getFeedbackToken() {
-        return null;
+        return mFeedbackToken;
     }
 
     @Override
     public String getFeedbackToken2() {
-        return null;
+        return mFeedbackToken2;
     }
 
     @Override
