@@ -129,6 +129,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Video mPendingFocus;
     private String mSelectedVideoId;
     private boolean mHasAutoLikedCurrentVideo;
+    private String mAutoLikeVideoId;
     private final Handler mAutoLikeHandler = new Handler(Looper.getMainLooper());
     private final Runnable mAutoLikeRunnable = new Runnable() {
         @Override
@@ -836,7 +837,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setVideo(Video video) {
         mExoPlayerController.setVideo(video);
-        mHasAutoLikedCurrentVideo = false;
+        String newVideoId = video != null ? video.videoId : null;
+        if (!TextUtils.equals(newVideoId, mAutoLikeVideoId)) {
+            mAutoLikeVideoId = newVideoId;
+            mHasAutoLikedCurrentVideo = false;
+        }
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
@@ -896,9 +901,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         int currentState = mPlayerGlue.getButtonState(R.id.action_thumbs_up);
         if (currentState == PlayerUI.BUTTON_OFF) {
             mPlaybackPresenter.onButtonClicked(R.id.action_thumbs_up, currentState);
-            MessageHelpers.showMessage(getContext(), "AutoLike: liked");
-        } else {
-            MessageHelpers.showMessage(getContext(), "AutoLike: already liked");
+            MessageHelpers.showMessage(getContext(), getString(R.string.you_liked));
         }
 
         mHasAutoLikedCurrentVideo = true;
