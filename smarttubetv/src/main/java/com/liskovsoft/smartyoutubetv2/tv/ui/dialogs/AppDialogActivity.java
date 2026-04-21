@@ -101,6 +101,12 @@ public class AppDialogActivity extends MotherActivity {
         // NOTE: Fragment's onDestroy/onDestroyView are not reliable way to catch dialog finish
         Log.d(TAG, "Dialog finish");
         if (mFragment != null) { // fragment isn't created yet (expandable = true)
+            // Fix mouse DPAD emulation on API 28+
+            if (!mFragment.hasFocus() && mFragment.canGoBack()) {
+                mFragment.goBack();
+                return;
+            }
+
             mFragment.onFinish();
         }
 

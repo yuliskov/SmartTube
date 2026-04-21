@@ -9,6 +9,8 @@ public interface AppDialogView {
     void finish();
     void goBack();
     void clearBackstack();
+    boolean canGoBack();
+    boolean hasFocus();
     boolean isShown();
     boolean isTransparent();
     boolean isOverlay();

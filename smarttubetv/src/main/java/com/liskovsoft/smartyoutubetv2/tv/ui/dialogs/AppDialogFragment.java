@@ -36,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class AppDialogFragment extends LeanbackSettingsFragment implements AppDialogView {
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppDialogPresenter mPresenter;
@@ -246,7 +247,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
 
     @Override
     public void goBack() {
-        if (getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() > 0) {
+        if (canGoBack()) {
             getChildFragmentManager().popBackStack();
         } else {
             finish();
@@ -257,6 +258,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     public void clearBackstack() {
         // this manager holds entire back stack
         Helpers.setField(this, "mChildFragmentManager", null);
+    }
+
+    @Override
+    public boolean canGoBack() {
+        return getChildFragmentManager() != null && getChildFragmentManager().getBackStackEntryCount() > 0;
+    }
+
+    @Override
+    public boolean hasFocus() {
+        return getView() != null && getView().hasFocus();
     }
 
     @Override
