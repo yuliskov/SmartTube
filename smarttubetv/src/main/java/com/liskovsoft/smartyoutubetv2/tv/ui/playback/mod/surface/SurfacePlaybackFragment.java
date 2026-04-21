@@ -215,12 +215,17 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
     private int scaleSubsWidth() {
         View parent = (View) mLeanbackSubtitles.getParent();
-        return parent.getWidth() / 100 * mVideoSurfaceRoot.getZoom();
+        return parent.getWidth() / 100 * calculateZoom();
     }
 
     private int scaleSubsPadding() {
-        //return mSubtitlesPadding / 10;
-        return mSubtitlesPadding / 100 * mVideoSurfaceRoot.getZoom();
+        return mSubtitlesPadding / 100 * calculateZoom();
+    }
+
+    private int calculateZoom() {
+        View parent = (View) mLeanbackSubtitles.getParent();
+        int widthRatio = mVideoSurfaceRoot.getWidth() * 100 / parent.getWidth();
+        return mVideoSurfaceRoot.getZoom() * widthRatio / 100;
     }
 
     private float calculateAspectRatio() {
