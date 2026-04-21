@@ -112,14 +112,10 @@ public class VideoStateController extends BasePlayerController {
         // Reset auto-save history timer
         mTickleLeft = 0;
 
-        // Restore before video loaded.
-        // This way we override auto track selection mechanism.
-        //restoreFormats();
-
         // Show user info instead of black screen.
-        if (getPlayer() != null && !getPlayEnabled()) {
-            getPlayer().showOverlay(true);
-        }
+        //if (getPlayer() != null && !getPlayEnabled()) {
+        //    getPlayer().showOverlay(true);
+        //}
     }
 
     @Override

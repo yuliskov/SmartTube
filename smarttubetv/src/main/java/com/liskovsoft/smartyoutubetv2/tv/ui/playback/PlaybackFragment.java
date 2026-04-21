@@ -347,7 +347,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         releasePlayer();
         // Improve memory usage??? Player may hangs on a second after close
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().gc();
         initializePlayer();
     }
 

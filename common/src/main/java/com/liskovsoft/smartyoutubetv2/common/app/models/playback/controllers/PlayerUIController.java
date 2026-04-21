@@ -58,6 +58,7 @@ public class PlayerUIController extends BasePlayerController {
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
+    private boolean mOverlayEnabled;
     private boolean mIsMetadataLoaded;
     private long mOverlayHideTimeMs;
     private final Runnable mSuggestionsResetHandler = () -> {
@@ -266,8 +267,7 @@ public class PlayerUIController extends BasePlayerController {
         boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
         mDebugViewEnabled = !enabled;
-        getPlayer().showDebugInfo(mDebugViewEnabled);
-        getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        showDebugInfo();
     }
 
     @Override
@@ -282,13 +282,10 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        if (getAppDialogPresenter().isDialogShown()) {
-            // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
-            getPlayer().showOverlay(true);
-            getPlayer().showDebugInfo(mDebugViewEnabled);
-            getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        }
-        
+        // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
+        getPlayer().showOverlay(mOverlayEnabled);
+        showDebugInfo();
+
         if (getPlayerTweaksData().isScreenOffTimeoutEnabled() || getPlayerTweaksData().isBootScreenOffEnabled()) {
             prepareScreenOff();
             applyScreenOff(PlayerUI.BUTTON_OFF);
@@ -325,8 +322,7 @@ public class PlayerUIController extends BasePlayerController {
         getSearchData().setTempBackgroundModeClass(null);
 
         // Activate debug infos when restoring after PIP.
-        getPlayer().showDebugInfo(mDebugViewEnabled);
-        getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        showDebugInfo();
         getPlayer().showSubtitles(true);
 
         // Maybe dialog just closed. Reset timeout just in case.
@@ -364,6 +360,7 @@ public class PlayerUIController extends BasePlayerController {
     public void onEngineReleased() {
         Log.d(TAG, "Engine released. Disabling all callbacks...");
         mEngineReady = false;
+        mOverlayEnabled = getPlayer() != null && getPlayer().isOverlayShown();
 
         disposeTimeouts();
     }
@@ -1150,6 +1147,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void showSoundOffDialog() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();
         OptionCategory audioVolumeCategory = AppDialogUtil.createAudioVolumeCategory(getContext(), () -> {
             applySoundOff(getPlayerData().getPlayerVolume() == 0 ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
@@ -1164,5 +1165,14 @@ public class PlayerUIController extends BasePlayerController {
     private void openChannel() {
         startTempBackgroundMode(ChannelPresenter.class);
         ChannelPresenter.instance(getContext()).openChannel(getVideo());
+    }
+
+    private void showDebugInfo() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        getPlayer().showDebugInfo(mDebugViewEnabled);
+        getPlayer().setButtonState(R.id.action_video_stats, mDebugViewEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
     }
 }
