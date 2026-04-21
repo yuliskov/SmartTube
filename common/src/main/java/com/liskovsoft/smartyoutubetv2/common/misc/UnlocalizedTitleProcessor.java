@@ -58,11 +58,13 @@ public class UnlocalizedTitleProcessor implements OnDataChange, BrowseProcessor 
                         .map(newTitle -> new Pair<>(videoId, newTitle)))
                 .subscribe(title -> {
                     Video video = videoGroup.findVideoById(title.first);
-                    if (video == null || Helpers.equals(video.title, title.second)) {
+                    if (video == null) {
                         return;
                     }
-                    video.deArrowTitle = title.second;
-                    mOnItemReady.onItemReady(video);
+                    video.deArrowTitle = title.second; // sometimes player titles localized while cards not
+                    if (!Helpers.equals(video.title, video.deArrowTitle)) {
+                        mOnItemReady.onItemReady(video);
+                    }
                 },
                 error -> {
                     Log.d(TAG, "Unlocalized title: Cannot process the video");
