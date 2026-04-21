@@ -305,7 +305,7 @@ public class Playlist {
         if (prevPosition < mPlaylist.size() && prevPosition >= 0) {
             Video prevItem = mPlaylist.get(prevPosition);
             if (prevItem != null) {
-                prevItem.mediaItem = null;
+                //prevItem.mediaItem = null; // Don't remove: stores feedback tokens
                 prevItem.nextMediaItem = null;
                 prevItem.shuffleMediaItem = null;
             }
