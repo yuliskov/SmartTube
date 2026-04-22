@@ -649,6 +649,11 @@
     <string name="hide_unwanted_content">Hide content</string>
     <string name="hide_watched_from_home">Hide watched videos from Home</string>
     <string name="hide_watched_from_watch_later">Hide watched videos from Watch later playlist</string>
+    <string name="age_cutoff">Age cut off</string>
+    <string name="age_cutoff_off">Off</string>
+    <string name="age_cutoff_1_day">1 day</string>
+    <string name="age_cutoff_1_week">1 week</string>
+    <string name="age_cutoff_n_months">%d months</string>
     <string name="remote_control_permission">Background Remote control requires Overlay permission</string>
     <string name="login_from_browser">Login from browser</string>
     <string name="disable_remote_history">Disable history when using remote control</string>
