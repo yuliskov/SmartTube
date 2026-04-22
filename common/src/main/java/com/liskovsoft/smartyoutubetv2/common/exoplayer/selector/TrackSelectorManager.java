@@ -617,39 +617,88 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         List<MediaTrack[]> originTracks = null;
         List<MediaTrack[]> resultTracksFallback = null;
 
+        //// Tracks are grouped by the language/formats
+        //for (MediaTrack[] trackGroup : trackGroupList) {
+        //    if (trackGroup != null && trackGroup.length >= 1) {
+        //        MediaTrack mediaTrack = null;
+        //
+        //        // All tracks in the group have same language. Pick up first non empty.
+        //        for (MediaTrack track : trackGroup) {
+        //            if (track != null) {
+        //                mediaTrack = track;
+        //                break;
+        //            }
+        //        }
+        //
+        //        if (mediaTrack != null && mediaTrack.format != null) {
+        //            if (resultLanguage != null && Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
+        //                if (resultTracks == null) {
+        //                    resultTracks = new ArrayList<>();
+        //                }
+        //
+        //                resultTracks.add(trackGroup);
+        //            } else if (originLanguage != null && Helpers.startsWith(mediaTrack.format.language, originLanguage)) {
+        //                if (originTracks == null) {
+        //                    originTracks = new ArrayList<>();
+        //                }
+        //
+        //                originTracks.add(trackGroup);
+        //            } else if (Helpers.contains(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // original, descriptive, dubbed, secondary
+        //                if (resultTracksFallback == null) {
+        //                    resultTracksFallback = new ArrayList<>();
+        //                }
+        //
+        //                resultTracksFallback.add(trackGroup);
+        //            }
+        //        }
+        //    }
+        //}
+
         // Tracks are grouped by the language/formats
         for (MediaTrack[] trackGroup : trackGroupList) {
             if (trackGroup != null && trackGroup.length >= 1) {
-                MediaTrack mediaTrack = null;
+                List<MediaTrack> resultGroup = null;
+                List<MediaTrack> originGroup = null;
+                List<MediaTrack> fallbackGroup = null;
+                for (MediaTrack mediaTrack : trackGroup) {
+                    if (mediaTrack == null || mediaTrack.format == null) {
+                         continue;
+                    }
 
-                // All tracks in the group have same language. Pick up first non empty.
-                for (MediaTrack track : trackGroup) {
-                    if (track != null) {
-                        mediaTrack = track;
-                        break;
+                    if (resultLanguage != null && Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
+                        if (resultGroup == null) {
+                            resultGroup = new ArrayList<>();
+                        }
+
+                        resultGroup.add(mediaTrack);
+                    } else if (originLanguage != null && Helpers.startsWith(mediaTrack.format.language, originLanguage)) {
+                        if (originGroup == null) {
+                            originGroup = new ArrayList<>();
+                        }
+
+                        originGroup.add(mediaTrack);
+                    } else if (Helpers.contains(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // original, descriptive, dubbed, secondary
+                        if (fallbackGroup == null) {
+                            fallbackGroup = new ArrayList<>();
+                        }
+
+                        fallbackGroup.add(mediaTrack);
                     }
                 }
 
-                if (mediaTrack != null && mediaTrack.format != null) {
-                    if (resultLanguage != null && Helpers.startsWith(mediaTrack.format.language, resultLanguage)) { // en-us
-                        if (resultTracks == null) {
-                            resultTracks = new ArrayList<>();
-                        }
+                if (resultGroup != null) {
+                    resultTracks = new ArrayList<>();
+                    resultTracks.add(resultGroup.toArray(new MediaTrack[0]));
+                }
 
-                        resultTracks.add(trackGroup);
-                    } else if (originLanguage != null && Helpers.startsWith(mediaTrack.format.language, originLanguage)) {
-                        if (originTracks == null) {
-                            originTracks = new ArrayList<>();
-                        }
+                if (originGroup != null) {
+                    originTracks = new ArrayList<>();
+                    originTracks.add(originGroup.toArray(new MediaTrack[0]));
+                }
 
-                        originTracks.add(trackGroup);
-                    } else if (Helpers.contains(mediaTrack.format.language, DEFAULT_LANGUAGE)) { // original, descriptive, dubbed, secondary
-                        if (resultTracksFallback == null) {
-                            resultTracksFallback = new ArrayList<>();
-                        }
-
-                        resultTracksFallback.add(trackGroup);
-                    }
+                if (fallbackGroup != null) {
+                    resultTracksFallback = new ArrayList<>();
+                    resultTracksFallback.add(fallbackGroup.toArray(new MediaTrack[0]));
                 }
             }
         }
