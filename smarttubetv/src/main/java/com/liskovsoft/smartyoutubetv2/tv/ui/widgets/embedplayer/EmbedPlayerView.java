@@ -578,6 +578,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
             if (mPlaybackPresenter.getView() == null || mPlaybackPresenter.getView() == this) {
                 mPlaybackPresenter.onEngineReleased();
             }
+            mPlayerInitializer.release();
             mExoPlayerController.setOnVideoLoaded(null);
             // Fix access calls when player isn't initialized
             mExoPlayerController.release();

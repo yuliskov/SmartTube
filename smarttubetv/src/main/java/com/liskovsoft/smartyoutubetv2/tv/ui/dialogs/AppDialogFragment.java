@@ -266,11 +266,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public boolean hasFocus() {
-        return getView() != null && getView().hasFocus();
-    }
-
-    @Override
     public boolean isShown() {
         return isVisible() && getUserVisibleHint();
     }

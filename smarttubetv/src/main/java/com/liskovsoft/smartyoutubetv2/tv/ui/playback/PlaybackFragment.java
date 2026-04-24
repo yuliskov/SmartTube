@@ -433,6 +433,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mDebugInfoManager.show(false);
             mDebugInfoManager = null;
         }
+        mPlayerInitializer.release();
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
         mPlayer = null;

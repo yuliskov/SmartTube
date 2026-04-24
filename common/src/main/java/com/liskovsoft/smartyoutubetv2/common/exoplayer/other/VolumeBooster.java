@@ -37,15 +37,13 @@ public class VolumeBooster implements AudioListener {
 
         Log.d(TAG, "Audio session id is %s, supported gain %s", audioSessionId, LoudnessEnhancer.PARAM_TARGET_GAIN_MB);
 
-        if (audioSessionId == mCurrentSessionId) {
+        if (mBooster != null && audioSessionId == mCurrentSessionId) {
             return; // Already initialized for this session
         }
 
         mCurrentSessionId = audioSessionId;
 
-        if (mBooster != null) {
-            mBooster.release();
-        }
+        release();
 
         try {
             mBooster = new LoudnessEnhancer(audioSessionId);
@@ -80,5 +78,12 @@ public class VolumeBooster implements AudioListener {
 
     public boolean isSupported() {
         return mIsSupported;
+    }
+
+    public void release() {
+        if (mBooster != null) {
+            mBooster.release();
+            mBooster = null;
+        }
     }
 }

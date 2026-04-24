@@ -31,6 +31,8 @@ public class ExoPlayerInitializer {
     private final int mMaxBufferBytes;
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
+    private VolumeBooster mVolumeBooster;
+    private SimpleExoPlayer mPlayer;
     private static AudioAttributes sAudioAttributes;
 
     public ExoPlayerInitializer(Context context) {
@@ -73,6 +75,8 @@ public class ExoPlayerInitializer {
         setupAudioFocus(player);
 
         setupVolumeBoost(player);
+
+        mPlayer = player;
 
         return player;
     }
@@ -148,7 +152,7 @@ public class ExoPlayerInitializer {
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
         float volume = mPlayerTweaksData.isPlayerAutoVolumeEnabled() ? 2.0f : mPlayerData.getPlayerVolume();
         if (volume > 1f && Build.VERSION.SDK_INT >= 19) {
-            VolumeBooster mVolumeBooster = new VolumeBooster(true, volume, player);
+            mVolumeBooster = new VolumeBooster(true, volume, player);
             player.addAudioListener(mVolumeBooster);
         }
     }
@@ -178,6 +182,19 @@ public class ExoPlayerInitializer {
             // Also, live stream (dash) seeking fix
             player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
         }
+    }
+
+    public void release() {
+        if (mVolumeBooster != null) {
+            mVolumeBooster.release();
+        }
+
+        if (mPlayer != null && mVolumeBooster != null) {
+            mPlayer.removeAudioListener(mVolumeBooster);
+        }
+
+        mVolumeBooster = null;
+        mPlayer = null;
     }
 
     private DrmSessionManager<FrameworkMediaCrypto> createDrmManager() {
