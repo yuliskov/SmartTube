@@ -567,9 +567,9 @@ public class AppDialogUtil {
         PlayerData playerData = PlayerData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
-        for (int positionPercent : Helpers.range(0, 100, 5)) {
+        for (float positionPercent : Helpers.range(0, 100, 2.5f)) {
             float position = positionPercent / 100f;
-            options.add(UiOptionItem.from(String.format("%s%%", positionPercent),
+            options.add(UiOptionItem.from(String.format("%s%%", Helpers.formatFloat(positionPercent)),
                     optionItem -> {
                         playerData.setSubtitlePosition(position);
                         Utils.showPlayerControls(context, false);
