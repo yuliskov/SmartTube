@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -552,7 +553,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         if (mYouTubeOverlay == null) {
-            mYouTubeOverlay = getView().findViewById(R.id.youtube_overlay);
+            ViewStub youTubeOverlayStub = getView().findViewById(R.id.youtube_overlay_stub);
+            mYouTubeOverlay = (YouTubeOverlay) youTubeOverlayStub.inflate();
         }
 
         mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());

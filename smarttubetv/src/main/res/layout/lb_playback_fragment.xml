@@ -101,11 +101,11 @@
                  android:layout_gravity="top|right"
                  android:background="#70000000"/>
 
-    <com.github.vkay94.dtpv.youtube.YouTubeOverlay
-        android:id="@+id/youtube_overlay"
+    <ViewStub
+        android:id="@+id/youtube_overlay_stub"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:layout="@layout/youtube_overlay"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
         android:id="@+id/playback_fragment_background"

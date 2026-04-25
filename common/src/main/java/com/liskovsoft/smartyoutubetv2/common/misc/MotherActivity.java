@@ -90,7 +90,7 @@ public class MotherActivity extends FragmentActivity {
             //}
         }
 
-        if (mIsOculusQuestFixEnabled) {
+        if (mIsOculusQuestFixEnabled && VERSION.SDK_INT != 26) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
