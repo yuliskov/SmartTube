@@ -566,6 +566,7 @@
     <string name="sort_by_date">Datum nahrání</string>
     <string name="sort_by_rating">Hodnocení</string>
     <string name="clear_search_history">Vymazat historii vyhledávání</string>
+    <string name="remove_from_search_history">Odebrat z historie vyhledávání</string>
     <string name="remove_from_subscriptions">Skrýt</string>
     <string name="player_long_speed_list">Dlouhý seznam rychlostí</string>
     <string name="player_extra_long_speed_list">Velmi dlouhý seznam rychlostí</string>
@@ -634,6 +635,7 @@
     <string name="unlock_high_bitrate_audio_formats">Odemknout vyšší datový tok pro mp4a formáty</string>
     <string name="color_scheme_blue">Modré</string>
     <string name="color_scheme_dark_blue">Tmavě modré</string>
+    <string name="color_scheme_dark_blue_oled">Tmavě modré (OLED)</string>
     <string name="player_speed_per_channel">Pro každý kanál</string>
     <string name="disable_popular_searches">Nezobrazovat oblíbené vyhledávání</string>
     <string name="multi_profiles">Použít samostatná nastavení pro každý účet</string>
