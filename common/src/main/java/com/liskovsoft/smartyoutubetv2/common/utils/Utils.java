@@ -1129,7 +1129,8 @@ public class Utils {
 
     public static boolean skipCronet() {
         // Android 6 and below may crash running Cronet???
-        return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
+        //return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
+        return Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
     }
 
     public static boolean isEnoughRam() {

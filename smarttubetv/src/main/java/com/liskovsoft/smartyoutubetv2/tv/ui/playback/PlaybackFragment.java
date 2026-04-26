@@ -554,7 +554,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mYouTubeOverlay == null) {
             ViewStub youTubeOverlayStub = getView().findViewById(R.id.youtube_overlay_stub);
-            mYouTubeOverlay = (YouTubeOverlay) youTubeOverlayStub.inflate();
+            if (youTubeOverlayStub != null) {
+                mYouTubeOverlay = (YouTubeOverlay) youTubeOverlayStub.inflate();
+            } else {
+                mYouTubeOverlay = getView().findViewById(R.id.youtube_overlay);
+            }
         }
 
         mDoubleTapPlayerAdapter = new DoubleTapPlayerAdapter(getView());
