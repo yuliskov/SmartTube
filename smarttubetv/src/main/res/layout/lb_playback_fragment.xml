@@ -118,4 +118,25 @@
             android:transitionGroup="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
+
+    <!-- Watch overlay: background -->
+    <View
+        android:id="@+id/watch_overlay_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#66000000"
+        android:visibility="gone"/>
+
+    <!-- Watch overlay: message -->
+    <TextView
+        android:id="@+id/watch_overlay_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:visibility="gone"/>
 </FrameLayout>

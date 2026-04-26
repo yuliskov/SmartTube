@@ -78,6 +78,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //appendPlayerExitCategory(settingsPresenter);
         appendSleepTimerCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
+        appendAutoLikeCategory(settingsPresenter);
         appendDeveloperCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_player), mOnFinish);
@@ -487,6 +488,93 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isQueueRespectsPlaybackMode()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendAutoLikeCategory(AppDialogPresenter settingsPresenter) {
+        // Single button that opens sub-dialog
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.player_autolike), optionItem -> {
+            AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+
+            // Enable checkbox
+            boolean enabled = mPlayerTweaksData.isAutoLikeEnabled();
+            presenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.player_autolike_enabled),
+                    option -> mPlayerTweaksData.setAutoLikeEnabled(option.isSelected()), enabled));
+
+            // Trigger mode: seconds or percent
+            List<OptionItem> triggerOptions = new ArrayList<>();
+            int mode = mPlayerTweaksData.getAutoLikeMode();
+            int value = mPlayerTweaksData.getAutoLikeValue();
+            int[] secondsValues = {30, 60, 120, 300, 600};
+            int[] percentValues = {10, 25, 50, 75, 90};
+
+            if (mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS) {
+                for (int s : secondsValues) {
+                    int secs = s;
+                    triggerOptions.add(UiOptionItem.from(
+                            getContext().getString(R.string.player_autolike_value_seconds, String.valueOf(secs)),
+                            option -> {
+                                mPlayerTweaksData.setAutoLikeEnabled(true);
+                                mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_SECONDS);
+                                mPlayerTweaksData.setAutoLikeValue(secs);
+                            },
+                            value == secs && mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS));
+                }
+            } else {
+                for (int p : percentValues) {
+                    int pct = p;
+                    triggerOptions.add(UiOptionItem.from(
+                            getContext().getString(R.string.player_autolike_value_percent, String.valueOf(pct)),
+                            option -> {
+                                mPlayerTweaksData.setAutoLikeEnabled(true);
+                                mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_PERCENT);
+                                mPlayerTweaksData.setAutoLikeValue(pct);
+                            },
+                            value == pct && mode == PlayerTweaksData.AUTOLIKE_MODE_PERCENT));
+                }
+            }
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_mode), triggerOptions);
+
+            // Min duration
+            List<OptionItem> minDurOptions = new ArrayList<>();
+            int[] minDurValues = {0, 1, 3, 5, 10, 15};
+            int currentMinDur = mPlayerTweaksData.getAutoLikeMinDurationSec();
+            for (int d : minDurValues) {
+                int durSec = d * 60;
+                minDurOptions.add(UiOptionItem.from(
+                        getContext().getString(R.string.player_autolike_min_duration_val, String.valueOf(d)),
+                        option -> mPlayerTweaksData.setAutoLikeMinDurationSec(durSec),
+                        currentMinDur == durSec));
+            }
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_min_duration), minDurOptions);
+
+            // Overlay duration
+            List<OptionItem> overlayDurOptions = new ArrayList<>();
+            int[] overlayDurValues = {0, 1, 2, 3, 5, 10};
+            int currentOverlayDur = mPlayerTweaksData.getAutoLikeOverlayDurationSec();
+            for (int d : overlayDurValues) {
+                int dur = d;
+                overlayDurOptions.add(UiOptionItem.from(
+                        getContext().getString(R.string.player_autolike_overlay_duration_val, String.valueOf(dur)),
+                        option -> mPlayerTweaksData.setAutoLikeOverlayDurationSec(dur),
+                        currentOverlayDur == dur));
+            }
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_overlay_duration), overlayDurOptions);
+
+            // Overlay dimming
+            List<OptionItem> overlayDimOptions = new ArrayList<>();
+            int[] overlayDimValues = {0, 10, 20, 40, 60, 80};
+            int currentOverlayDim = mPlayerTweaksData.getAutoLikeOverlayDimmingPercent();
+            for (int dim : overlayDimValues) {
+                int d = dim;
+                overlayDimOptions.add(UiOptionItem.from(
+                        getContext().getString(R.string.player_autolike_overlay_dimming_val, String.valueOf(d)),
+                        option -> mPlayerTweaksData.setAutoLikeOverlayDimmingPercent(d),
+                        currentOverlayDim == d));
+            }
+            presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_overlay_dimming), overlayDimOptions);
+
+            presenter.showDialog(getContext().getString(R.string.player_autolike));
+        }));
     }
 
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {

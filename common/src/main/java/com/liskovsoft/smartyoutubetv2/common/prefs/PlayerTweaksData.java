@@ -47,6 +47,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
             PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
             PLAYER_BUTTON_REPEAT_MODE | PLAYER_BUTTON_NEXT | PLAYER_BUTTON_PREVIOUS | PLAYER_BUTTON_HIGH_QUALITY |
             PLAYER_BUTTON_VIDEO_INFO | PLAYER_BUTTON_CHAT;
+    public static final int AUTOLIKE_MODE_SECONDS = 0;
+    public static final int AUTOLIKE_MODE_PERCENT = 1;
+
     public static final int DNS_TYPE_SYSTEM = GlobalPreferences.DNS_TYPE_SYSTEM;
     public static final int DNS_TYPE_IPV4 = GlobalPreferences.DNS_TYPE_IPV4;
     public static final int DNS_TYPE_GOOGLE = GlobalPreferences.DNS_TYPE_GOOGLE;
@@ -109,6 +112,13 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsDontResizeVideoToFitDialogEnabled;
     private boolean mIsSuggestionsHorizontallyScrolled;
     private boolean mIsQueueRespectsPlaybackMode;
+    // Autolike: indices 61-64, Overlay: indices 65-66
+    private boolean mIsAutoLikeEnabled;
+    private int mAutoLikeMode;
+    private int mAutoLikeValue;
+    private int mAutoLikeMinDurationSec;
+    private int mAutoLikeOverlayDurationSec;   // index 65, default 5
+    private int mAutoLikeOverlayDimmingPercent; // index 66, default 40
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -691,6 +701,66 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    // Autolike settings (indices 61-64)
+    public boolean isAutoLikeEnabled() {
+        return mIsAutoLikeEnabled;
+    }
+
+    public void setAutoLikeEnabled(boolean enable) {
+        mIsAutoLikeEnabled = enable;
+        persistData();
+    }
+
+    public int getAutoLikeMode() {
+        return mAutoLikeMode;
+    }
+
+    public void setAutoLikeMode(int mode) {
+        mAutoLikeMode = mode;
+        persistData();
+    }
+
+    /**
+     * When {@link #AUTOLIKE_MODE_SECONDS}: value is seconds.
+     * When {@link #AUTOLIKE_MODE_PERCENT}: value is percent (1..99).
+     */
+    public int getAutoLikeValue() {
+        return mAutoLikeValue;
+    }
+
+    public void setAutoLikeValue(int value) {
+        mAutoLikeValue = value;
+        persistData();
+    }
+
+    public int getAutoLikeMinDurationSec() {
+        return mAutoLikeMinDurationSec;
+    }
+
+    public void setAutoLikeMinDurationSec(int minDurationSec) {
+        mAutoLikeMinDurationSec = minDurationSec;
+        persistData();
+    }
+
+    // Overlay settings (indices 65-66)
+    public int getAutoLikeOverlayDurationSec() {
+        return mAutoLikeOverlayDurationSec;
+    }
+
+    public void setAutoLikeOverlayDurationSec(int value) {
+        mAutoLikeOverlayDurationSec = value;
+        persistNow();
+    }
+
+    public int getAutoLikeOverlayDimmingPercent() {
+        return mAutoLikeOverlayDimmingPercent;
+    }
+
+    public void setAutoLikeOverlayDimmingPercent(int value) {
+        mAutoLikeOverlayDimmingPercent = value;
+        persistNow();
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -762,6 +832,14 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
         mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
         mIsQueueRespectsPlaybackMode = Helpers.parseBoolean(split, 60, false);
+        // Autolike: 61-64
+        mIsAutoLikeEnabled = Helpers.parseBoolean(split, 61, false);
+        mAutoLikeMode = Helpers.parseInt(split, 62, AUTOLIKE_MODE_SECONDS);
+        mAutoLikeValue = Helpers.parseInt(split, 63, 60);
+        mAutoLikeMinDurationSec = Helpers.parseInt(split, 64, 180);
+        // Overlay: 65-66
+        mAutoLikeOverlayDurationSec = Helpers.parseInt(split, 65, 5);
+        mAutoLikeOverlayDimmingPercent = Helpers.parseInt(split, 66, 40);
 
         updateDefaultValues();
     }
@@ -789,7 +867,9 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode,
+                mIsAutoLikeEnabled, mAutoLikeMode, mAutoLikeValue, mAutoLikeMinDurationSec,
+                mAutoLikeOverlayDurationSec, mAutoLikeOverlayDimmingPercent
                 ));
     }
 
