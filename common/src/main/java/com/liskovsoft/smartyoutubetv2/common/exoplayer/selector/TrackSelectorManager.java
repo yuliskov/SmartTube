@@ -687,17 +687,23 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 if (resultGroup != null) {
-                    resultTracks = new ArrayList<>();
+                    if (resultTracks == null) {
+                        resultTracks = new ArrayList<>();
+                    }
                     resultTracks.add(resultGroup.toArray(new MediaTrack[0]));
                 }
 
                 if (originGroup != null) {
-                    originTracks = new ArrayList<>();
+                    if (originTracks == null) {
+                        originTracks = new ArrayList<>();
+                    }
                     originTracks.add(originGroup.toArray(new MediaTrack[0]));
                 }
 
                 if (fallbackGroup != null) {
-                    resultTracksFallback = new ArrayList<>();
+                    if (resultTracksFallback == null) {
+                        resultTracksFallback = new ArrayList<>();
+                    }
                     resultTracksFallback.add(fallbackGroup.toArray(new MediaTrack[0]));
                 }
             }
