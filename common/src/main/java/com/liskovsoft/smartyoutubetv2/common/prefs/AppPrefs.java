@@ -36,7 +36,8 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     private AppPrefs(Context context) {
-        super(context, R.xml.app_prefs);
+        //super(context, R.xml.app_prefs);
+        super(context);
 
         initProfiles();
     }
