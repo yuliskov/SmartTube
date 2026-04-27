@@ -1,3 +1,4 @@
+-keep class kotlinx.coroutines.ExecutorCoroutineDispatcher
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity {
     <init>(...);
     public void onCreate(android.os.Bundle);
