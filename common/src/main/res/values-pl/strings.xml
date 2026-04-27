@@ -241,8 +241,8 @@
   <string name="share_embed_link">Udostępnij link do osadzania</string>
   <string name="card_text_scroll_factor">Szybkość przewijania tekstu karty</string>
   <string name="preferred_update_source">Wybierz źródło aktualizacji</string>
-  <string name="hide_shorts">Ukryj Shorts w sekcji Subskrypcje</string>
-  <string name="hide_shorts_channel">Ukryj Shorts w sekcji Kanały</string>
+  <string name="hide_shorts">Ukryj Szorty w sekcji Subskrypcje</string>
+  <string name="hide_shorts_channel">Ukryj Szorty w sekcji Kanały</string>
   <string name="key_remapping">Zmiana mapowania przycisków</string>
   <string name="screen_dimming">Przyciemnianie ekranu</string>
   <string name="removed_from_playback_queue">Usunięto z kolejki odtwarzania</string>
