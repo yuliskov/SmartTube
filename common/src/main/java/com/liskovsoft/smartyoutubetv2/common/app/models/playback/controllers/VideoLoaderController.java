@@ -520,7 +520,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (getVideo() != null && getVideo().isLiveEnd) {
+        if (isPlaybackEnded()) {
             // Url no longer works (e.g. live stream ended)
             getMainController().onPlayEnd();
             return;
@@ -530,8 +530,6 @@ public class VideoLoaderController extends BasePlayerController {
 
         if (restart) {
             restartEngine();
-        } else if (isPlaybackEnded()) {
-            getMainController().onPlayEnd();
         } else {
             reloadVideo();
         }
