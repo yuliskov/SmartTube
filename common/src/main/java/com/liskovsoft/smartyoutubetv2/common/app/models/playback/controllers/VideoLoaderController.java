@@ -622,8 +622,10 @@ public class VideoLoaderController extends BasePlayerController {
             //showMessage = true;
             // IllegalStateException: Buffer too small (5242880 < 7208383)
             if (Helpers.startsWithAny(errorContent, "Buffer too small")) {
-                getPlayerData().setVideoBufferType(getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW
-                        ? PlayerData.BUFFER_MEDIUM : PlayerData.BUFFER_HIGH);
+                //getPlayerData().setVideoBufferType(getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW
+                //        ? PlayerData.BUFFER_MEDIUM : PlayerData.BUFFER_HIGH);
+                lowerVideoQuality();
+                restartEngine = false;
             }
 
             if (errorContent == null) {
@@ -840,7 +842,7 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        loadRandomNext();
+        initRandomNext();
     }
 
     @Override
@@ -853,7 +855,7 @@ public class VideoLoaderController extends BasePlayerController {
         Utils.removeCallbacks(mOnLongBuffering);
     }
 
-    private void loadRandomNext() {
+    private void initRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
         if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().playlistInfo == null ||
@@ -1040,5 +1042,24 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         return !getVideo().isLive && !getVideo().isLiveEnd;
+    }
+
+    private void lowerVideoQuality() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        List<FormatItem> videoFormats = getPlayer().getVideoFormats();
+
+        if (videoFormats == null) {
+            return;
+        }
+
+        int idx = videoFormats.indexOf(getPlayer().getVideoFormat());
+        int nextIdx = idx + 1;
+
+        if (videoFormats.size() > nextIdx) {
+            getPlayer().setFormat(videoFormats.get(nextIdx));
+        }
     }
 }
