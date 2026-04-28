@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
@@ -197,25 +198,33 @@ public class BackupAndRestoreHelper implements OnResult {
             return;
         }
 
-        try {
-            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+        RxHelper.runAsyncUser(() -> unpackTempZip(zipUri),
+                error -> {
+                    error.printStackTrace();
+                    if (onError != null) {
+                        onError.run();
+                    }
+                },
+                () -> {
+                    if (onSuccess != null) {
+                        onSuccess.run();
+                    }
+                });
+    }
 
-            // Copy ZIP from URI to the temporary file
-            String backupZipName = getSavedBackupZipName();
-            File tempZip = new File(mediaDir, backupZipName);
-            copyUriToFile(zipUri, tempZip);
-
-            unpackTempZip(tempZip);
-
-            if (onSuccess != null) {
-                onSuccess.run();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (onError != null) {
-                onError.run();
-            }
+    private void unpackTempZip(Uri zipUri) {
+        if (zipUri == null) {
+            return;
         }
+
+        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+
+        // Copy ZIP from URI to the temporary file
+        String backupZipName = getSavedBackupZipName();
+        File tempZip = new File(mediaDir, backupZipName);
+        copyUriToFile(zipUri, tempZip);
+
+        unpackTempZip(tempZip);
     }
 
     private void copyUriToDir(Uri uri, File targetDir) {
