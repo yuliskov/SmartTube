@@ -10,6 +10,7 @@ import android.os.Build.VERSION;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
@@ -220,7 +221,7 @@ public class BackupAndRestoreHelper implements OnResult {
     private void copyUriToDir(Uri uri, File targetDir) {
         try {
             String fileName = getFileName(uri);
-            if (fileName == null) fileName = "imported_" + System.currentTimeMillis();
+            if (fileName == null) fileName = "imported_" + DateHelper.createTimestamp();
 
             File outFile = new File(targetDir, fileName);
 
@@ -286,7 +287,7 @@ public class BackupAndRestoreHelper implements OnResult {
             return FileHelpers.getFileContents(timestampFile);
         }
 
-        String timestamp = String.valueOf(System.currentTimeMillis());
+        String timestamp = DateHelper.createTimestamp();
         FileHelpers.stringToFile(timestamp, timestampFile);
         return timestamp;
     }
