@@ -19,7 +19,9 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.googlecommon.common.helpers.ServiceHelper;
 import com.liskovsoft.googlecommon.common.helpers.YouTubeHelper;
@@ -840,7 +842,13 @@ public final class Video {
 
             if (suggestions != null && suggestions.size() > 1) {
                 List<MediaItem> mediaItems = suggestions.get(1).getMediaItems();
-                nextVideo = Helpers.findFirst(mediaItems, item -> item.getVideoId() != null);
+                BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
+                nextVideo = Helpers.findFirst(mediaItems,
+                        item -> {
+                            Video video = Video.from(item);
+                            return video != null
+                                    && video.videoId != null && !blockedChannelData.containsChannel(video.channelId, video.getAuthor());
+                        });
             }
         }
 
