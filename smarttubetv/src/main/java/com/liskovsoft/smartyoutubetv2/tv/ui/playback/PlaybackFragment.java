@@ -269,14 +269,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void applyTickle(MotionEvent event) {
+        if (getView() != null && !isOverlayShown()) {
+            getView().requestFocus(); // fix mouse DPAD emulation on API 28+
+        }
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             tickle(); // show Player UI
         }
 
         mPlaybackPresenter.onKeyDown(-1); // reset ui timer
-        if (getView() != null) {
-            getView().requestFocus(); // fix mouse DPAD emulation on API 28+
-        }
     }
 
     public void onFinish() {
