@@ -845,6 +845,10 @@ public final class Video {
                 BlockedChannelData blockedChannelData = BlockedChannelData.instance(GlobalPreferences.context());
                 nextVideo = Helpers.findFirst(mediaItems,
                         item -> {
+                            if (blockedChannelData.isEmpty()) {
+                                return item.getVideoId() != null;
+                            }
+
                             Video video = Video.from(item);
                             return video != null
                                     && video.videoId != null && !blockedChannelData.containsChannel(video.channelId, video.getAuthor());
