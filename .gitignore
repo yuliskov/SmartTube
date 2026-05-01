@@ -70,3 +70,4 @@ tmp/
 fabric.properties
 *BAK.java
 hs_err_pid*.log
+.hermes/
