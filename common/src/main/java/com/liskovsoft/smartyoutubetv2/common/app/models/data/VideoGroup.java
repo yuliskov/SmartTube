@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AgeCutoffData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class VideoGroup {
     private int mAction = ACTION_APPEND;
     private int mType = -1;
     public boolean isQueue;
+    /** Skip age filter for playlist-style rows from {@link com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter}. */
+    private boolean mSkipAgeCutoff;
 
     public static VideoGroup from(BrowseSection section) {
         return from((MediaGroup) null, section);
@@ -266,6 +269,14 @@ public class VideoGroup {
         mType = type;
     }
 
+    public boolean isSkipAgeCutoff() {
+        return mSkipAgeCutoff;
+    }
+
+    public void setSkipAgeCutoff(boolean skip) {
+        mSkipAgeCutoff = skip;
+    }
+
     public String getReloadPageKey() {
         return getMediaGroup() != null ? getMediaGroup().getReloadPageKey() : null;
     }
@@ -456,6 +467,10 @@ public class VideoGroup {
 
         if (mVideos == null) {
             mVideos = new ArrayList<>();
+        }
+
+        if (AgeCutoffData.instance(GlobalPreferences.context()).shouldFilterOutVideo(this, video)) {
+            return;
         }
 
         // Group position in multi-grid fragments

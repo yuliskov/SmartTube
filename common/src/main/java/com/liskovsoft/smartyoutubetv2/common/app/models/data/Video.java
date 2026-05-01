@@ -16,6 +16,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup.Item;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
+import com.liskovsoft.mediaserviceinterfaces.utils.RelativePublishedTime;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -306,6 +307,26 @@ public final class Video {
 
     public String getPlaylistId() {
         return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
+    }
+
+    /** Best-effort upload time (ms); includes parsing relative text from subtitles when API omits millis (e.g. tile rows). */
+    public long getPublishedMs() {
+        if (mediaItem == null) {
+            return 0;
+        }
+        long ms = mediaItem.getPublishedDate();
+        if (ms > 0) {
+            return ms;
+        }
+        ms = RelativePublishedTime.publishedTimeTextToUnixMs(mediaItem.getProductionDate());
+        if (ms > 0) {
+            return ms;
+        }
+        CharSequence st = mediaItem.getSecondTitle();
+        if (st == null) {
+            st = secondTitle;
+        }
+        return RelativePublishedTime.publishedTimeTextToUnixMs(Helpers.toString(st));
     }
 
     public String getCardImageUrl() {
