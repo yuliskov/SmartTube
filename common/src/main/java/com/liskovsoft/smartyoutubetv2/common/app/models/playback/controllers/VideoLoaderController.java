@@ -215,7 +215,6 @@ public class VideoLoaderController extends BasePlayerController {
         Video next = mSuggestionsController.getNext();
 
         if (next != null) {
-            next.isShuffled = getVideo().isShuffled;
             openVideoInt(next);
         } else {
             waitMetadataSync(getVideo(), true);
@@ -856,48 +855,52 @@ public class VideoLoaderController extends BasePlayerController {
     private void initRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
-        if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().playlistInfo == null ||
-                getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
+        PlaybackView player = getPlayer();
+        PlayerData playerData = getPlayerData();
+        Video current = getVideo();
+
+        if (player == null || playerData == null || current == null || current.playlistInfo == null ||
+                playerData.getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
             return;
         }
 
-        if (getVideo().playlistInfo.getSize() != -1) {
+        if (current.playlistInfo.getSize() != -1) {
             Video video = new Video();
-            video.playlistId = getVideo().playlistId;
-            video.playlistIndex = Utils.getRandomIndex(getVideo().playlistInfo.getCurrentIndex(), getVideo().playlistInfo.getSize());
+            video.playlistId = current.playlistId;
+            video.playlistIndex = Utils.getRandomIndex(current.playlistInfo.getCurrentIndex(), current.playlistInfo.getSize());
             MediaServiceManager.instance().loadMetadata(video, randomMetadata -> {
                 if (randomMetadata.getNextVideo() == null) {
                     return;
                 }
 
-                getVideo().nextMediaItem = SimpleMediaItem.from(randomMetadata);
-                getPlayer().setNextTitle(Video.from(getVideo().nextMediaItem));
+                current.nextMediaItem = SimpleMediaItem.from(randomMetadata);
+                player.setNextTitle(Video.from(current.nextMediaItem));
             });
         } else {
-            VideoGroup topRow = getPlayer().getSuggestionsByIndex(0); // the playlist row
+            VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
             if (topRow != null) {
-                int currentIdx = topRow.indexOf(getVideo());
+                int currentIdx = topRow.indexOf(current);
                 int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
 
                 if (randomIndex != -1) {
                     Video nextVideo = topRow.get(randomIndex);
-                    getVideo().nextMediaItem = SimpleMediaItem.from(nextVideo);
-                    getPlayer().setNextTitle(nextVideo);
+                    current.nextMediaItem = SimpleMediaItem.from(nextVideo);
+                    player.setNextTitle(nextVideo);
                 }
             }
         }
     }
 
-    private void loadRandomNext2() {
-        if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().isShuffled ||
-                getVideo().shuffleMediaItem == null || getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-            return;
-        }
-
-        getVideo().isShuffled = true;
-        getVideo().playlistParams = getVideo().shuffleMediaItem.getParams();
-        getController(SuggestionsController.class).loadSuggestions(getVideo());
-    }
+    //private void loadRandomNext2() {
+    //    if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().isShuffled ||
+    //            getVideo().shuffleMediaItem == null || getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
+    //        return;
+    //    }
+    //
+    //    getVideo().isShuffled = true;
+    //    getVideo().playlistParams = getVideo().shuffleMediaItem.getParams();
+    //    getController(SuggestionsController.class).loadSuggestions(getVideo());
+    //}
 
     private void updateBufferingCountIfNeeded() {
         updateBufferingCount();

@@ -155,7 +155,7 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
 
         if (video == null || !video.isLive || RxHelper.isAnyActionRunning(mActions)) {
             return;
@@ -279,32 +279,32 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     public Video getNext() {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || getVideo() == null) {
             return null;
         }
 
         Video result = null;
         Video next = Playlist.instance().getNext();
-        Video current = getPlayer().getVideo();
+        boolean isShuffle = getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE && getVideo().nextMediaItem != null;
 
         if (next != null) {
             next.fromQueue = true;
             result = next;
-        } else if (mNextSectionVideo != null) {
+        } else if (mNextSectionVideo != null && !isShuffle) {
             result = mNextSectionVideo;
-        } else if (current != null && current.nextMediaItem != null) {
-            result = Video.from(current.nextMediaItem);
+        } else if (getVideo().nextMediaItem != null) {
+            result = Video.from(getVideo().nextMediaItem);
         }
 
         return result;
     }
 
     public Video getPrevious() {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || getVideo() == null) {
             return null;
         }
 
-        Video result = getPreviousFromGroup(getPlayer().getVideo());
+        Video result = getPreviousFromGroup(getVideo());
 
         if (result == null) {
             Video previous = Playlist.instance().getPrevious();
@@ -455,10 +455,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void mergeUserAndRemoteQueue(VideoGroup videoGroup) {
-        if (getPlayer() == null)
+        if (getPlayer() == null || getVideo() == null)
             return;
 
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
         if (videoGroup.isQueue) {
             Playlist.instance().addAll(videoGroup.getVideos());
             Playlist.instance().setCurrent(video);
@@ -663,7 +663,7 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        Video video = getPlayer().getVideo();
+        Video video = getVideo();
 
         if (group == null || group.isEmpty() || video == null || !video.hasVideo()) {
             return;
