@@ -308,6 +308,34 @@ public final class Video {
         return isRemote && remotePlaylistId != null ? remotePlaylistId : playlistId;
     }
 
+    /**
+     * Best-effort upload time (ms). Tries multiple sources:
+     * 1. mediaItem.getPublishedDate() (Unix ms from API)
+     * 2. RelativePublishedTime parsing of productionDate text
+     * 3. RelativePublishedTime parsing of secondTitle text (e.g. "2 years ago")
+     */
+    public long getPublishedMs() {
+        if (mediaItem == null) {
+            return 0;
+        }
+        long ms = mediaItem.getPublishedDate();
+        if (ms > 0) {
+            return ms;
+        }
+        CharSequence prodDate = mediaItem.getProductionDate();
+        if (prodDate != null) {
+            ms = com.liskovsoft.smartyoutubetv2.common.utils.RelativePublishedTime.publishedTimeTextToUnixMs(prodDate);
+            if (ms > 0) {
+                return ms;
+            }
+        }
+        CharSequence secondTitle = mediaItem.getSecondTitle();
+        if (secondTitle != null) {
+            ms = com.liskovsoft.smartyoutubetv2.common.utils.RelativePublishedTime.publishedTimeTextToUnixMs(secondTitle);
+        }
+        return ms;
+    }
+
     public String getCardImageUrl() {
         return altCardImageUrl != null ? altCardImageUrl : cardImageUrl;
     }

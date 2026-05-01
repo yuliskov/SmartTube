@@ -281,6 +281,11 @@
     <string name="live_now_row_name">Live now</string>
     <string name="run_in_background">Background playback</string>
     <string name="settings_remote_control">Remote control</string>
+    <string name="age_cutoff">Age cutoff</string>
+    <string name="age_cutoff_off">Off</string>
+    <string name="age_cutoff_1_day">1 day</string>
+    <string name="age_cutoff_1_week">1 week</string>
+    <string name="age_cutoff_n_months">%d months</string>
     <string name="background_service_started">Background service started</string>
     <string name="dialog_add_to">Add to %s</string>
     <string name="dialog_remove_from">Remove from %s</string>

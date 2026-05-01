@@ -41,6 +41,16 @@ public class VideoGroup {
     private int mAction = ACTION_APPEND;
     private int mType = -1;
     public boolean isQueue;
+    /** Skip age filter for playlist-style rows from ChannelUploadsPresenter. */
+    public boolean skipAgeCutoff;
+
+    public boolean isSkipAgeCutoff() {
+        return skipAgeCutoff;
+    }
+
+    public void setSkipAgeCutoff(boolean skip) {
+        skipAgeCutoff = skip;
+    }
 
     public static VideoGroup from(BrowseSection section) {
         return from((MediaGroup) null, section);

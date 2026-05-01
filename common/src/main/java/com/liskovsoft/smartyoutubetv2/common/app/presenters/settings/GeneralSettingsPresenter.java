@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provide
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AgeCutoffData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -75,6 +76,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
         appendHideContent(settingsPresenter);
+        appendAgeCutoffCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
@@ -178,6 +180,37 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mMediaServiceData.isContentHidden(MediaServiceData.CONTENT_UPCOMING_CHANNEL)));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.hide_unwanted_content), options);
+    }
+
+    private void appendAgeCutoffCategory(AppDialogPresenter settingsPresenter) {
+        AgeCutoffData ageData = AgeCutoffData.instance(getContext());
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.age_cutoff_off),
+                option -> ageData.setAgeCutoffIndex(AgeCutoffData.INDEX_OFF),
+                ageData.getAgeCutoffIndex() == AgeCutoffData.INDEX_OFF));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.age_cutoff_1_day),
+                option -> ageData.setAgeCutoffIndex(AgeCutoffData.INDEX_DAY),
+                ageData.getAgeCutoffIndex() == AgeCutoffData.INDEX_DAY));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.age_cutoff_1_week),
+                option -> ageData.setAgeCutoffIndex(AgeCutoffData.INDEX_WEEK),
+                ageData.getAgeCutoffIndex() == AgeCutoffData.INDEX_WEEK));
+
+        for (int i = 0; i < AgeCutoffData.MONTH_COUNTS.length; i++) {
+            final int index = AgeCutoffData.INDEX_FIRST_MONTH + i;
+            int months = AgeCutoffData.MONTH_COUNTS[i];
+            options.add(UiOptionItem.from(
+                    getContext().getString(R.string.age_cutoff_n_months, months),
+                    option -> ageData.setAgeCutoffIndex(index),
+                    ageData.getAgeCutoffIndex() == index));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.age_cutoff), options);
     }
 
     private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
