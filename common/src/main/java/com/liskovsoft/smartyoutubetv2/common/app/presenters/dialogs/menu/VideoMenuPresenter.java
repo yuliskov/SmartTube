@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -421,7 +422,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(buttonText, optionItem -> {
                     if (isBlocked) {
-                        // Remove from blacklist
                         blockedChannelData.removeChannel(channelId, channelName);
                         MessageHelpers.showMessage(getContext(), R.string.channel_unblocked);
                     } else {
@@ -433,7 +433,16 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
                     }
                     mDialogPresenter.closeDialog();
+                    showHideBlockedChannelsSection(blockedChannelData);
                 }));
+    }
+
+    private void showHideBlockedChannelsSection(BlockedChannelData blockedChannelData) {
+        if (blockedChannelData.getChannelCount() == 1) { // show on add first channel
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_BLOCKED_CHANNELS, true);
+        } else if (blockedChannelData.isEmpty()) { // hide on remove all
+            BrowsePresenter.instance(getContext()).enableSection(MediaGroup.TYPE_BLOCKED_CHANNELS, false);
+        }
     }
 
     private void appendRemoveFromHistoryButton() {
