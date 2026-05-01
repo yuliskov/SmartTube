@@ -500,37 +500,33 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
             presenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.player_autolike_enabled),
                     option -> mPlayerTweaksData.setAutoLikeEnabled(option.isSelected()), enabled));
 
-            // Trigger mode: seconds or percent
-            List<OptionItem> triggerOptions = new ArrayList<>();
+            // Trigger by: single list with all seconds AND percent options mixed
+            // Selecting any value automatically determines the mode
             int mode = mPlayerTweaksData.getAutoLikeMode();
             int value = mPlayerTweaksData.getAutoLikeValue();
             int[] secondsValues = {30, 60, 120, 300, 600};
             int[] percentValues = {10, 25, 50, 75, 90};
 
-            if (mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS) {
-                for (int s : secondsValues) {
-                    int secs = s;
-                    triggerOptions.add(UiOptionItem.from(
-                            getContext().getString(R.string.player_autolike_value_seconds, String.valueOf(secs)),
-                            option -> {
-                                mPlayerTweaksData.setAutoLikeEnabled(true);
-                                mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_SECONDS);
-                                mPlayerTweaksData.setAutoLikeValue(secs);
-                            },
-                            value == secs && mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS));
-                }
-            } else {
-                for (int p : percentValues) {
-                    int pct = p;
-                    triggerOptions.add(UiOptionItem.from(
-                            getContext().getString(R.string.player_autolike_value_percent, String.valueOf(pct)),
-                            option -> {
-                                mPlayerTweaksData.setAutoLikeEnabled(true);
-                                mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_PERCENT);
-                                mPlayerTweaksData.setAutoLikeValue(pct);
-                            },
-                            value == pct && mode == PlayerTweaksData.AUTOLIKE_MODE_PERCENT));
-                }
+            List<OptionItem> triggerOptions = new ArrayList<>();
+            for (int s : secondsValues) {
+                int secs = s;
+                triggerOptions.add(UiOptionItem.from(
+                        getContext().getString(R.string.player_autolike_value_seconds, String.valueOf(secs)),
+                        option -> {
+                            mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_SECONDS);
+                            mPlayerTweaksData.setAutoLikeValue(secs);
+                        },
+                        mode == PlayerTweaksData.AUTOLIKE_MODE_SECONDS && value == secs));
+            }
+            for (int p : percentValues) {
+                int pct = p;
+                triggerOptions.add(UiOptionItem.from(
+                        getContext().getString(R.string.player_autolike_value_percent, String.valueOf(pct)),
+                        option -> {
+                            mPlayerTweaksData.setAutoLikeMode(PlayerTweaksData.AUTOLIKE_MODE_PERCENT);
+                            mPlayerTweaksData.setAutoLikeValue(pct);
+                        },
+                        mode == PlayerTweaksData.AUTOLIKE_MODE_PERCENT && value == pct));
             }
             presenter.appendRadioCategory(getContext().getString(R.string.player_autolike_mode), triggerOptions);
 
