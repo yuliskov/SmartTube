@@ -878,6 +878,11 @@ public class VideoLoaderController extends BasePlayerController {
             });
         } else {
             VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
+
+            if (topRow != null && topRow.isChapters()) {
+                topRow = player.getSuggestionsByIndex(1);
+            }
+
             if (topRow != null) {
                 int currentIdx = topRow.indexOf(current);
                 int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());

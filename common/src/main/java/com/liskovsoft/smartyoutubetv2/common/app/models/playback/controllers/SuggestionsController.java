@@ -699,6 +699,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void findRandomSectionVideo(Video video) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mNextSectionVideo = null;
 
         VideoGroup group = video.getGroup();
@@ -716,6 +720,10 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void findNextSectionVideo(Video video) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mNextSectionVideo = null;
 
         VideoGroup group = video.getGroup();
