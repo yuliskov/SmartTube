@@ -739,7 +739,7 @@
     <string name="ignore_short_segments">Kısa segmentleri yok say</string>
     <string name="local_backup_not_supported">Android TV 11+’da otomatik yedekleme sistem kısıtlamaları nedeniyle desteklenmez. Bunun yerine GDrive kullanın.</string>
     <string name="rounded_card_corners">Yuvarlatılmış kart köşeleri</string>
-    <string name="app_restore_desc">NOT: Yedekleme zip dosyası, geri yükleme klasörüne manuel olarak kopyalanmalıdır</string>
+    <string name="app_restore_desc">NOT: Yedekleme zip dosyasının bu klasöre manuel olarak kopyalanması gerekmektedir</string>
     <string name="app_backup_desc">NOT: Yedekleme dosyası zip formatında oluşturulacaktır</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
