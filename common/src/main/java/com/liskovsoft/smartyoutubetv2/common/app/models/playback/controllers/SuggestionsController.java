@@ -285,12 +285,11 @@ public class SuggestionsController extends BasePlayerController {
 
         Video result = null;
         Video next = Playlist.instance().getNext();
-        boolean isShuffle = getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE && getVideo().nextMediaItem != null;
 
         if (next != null) {
             next.fromQueue = true;
             result = next;
-        } else if (mNextSectionVideo != null && !isShuffle) {
+        } else if (mNextSectionVideo != null && !getVideo().isShuffled) {
             result = mNextSectionVideo;
         } else if (getVideo().nextMediaItem != null) {
             result = Video.from(getVideo().nextMediaItem);

@@ -95,6 +95,7 @@ public final class Video {
     public float volume = 1.0f;
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
+    public boolean isShuffled;
     public String searchQuery;
     private int startSegmentNum;
     private long liveDurationMs = -1;

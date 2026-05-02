@@ -98,6 +98,8 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
+        item.isShuffled = false;
+
         if (!item.fromQueue && !item.belongsToPlaybackQueue()) {
             mPlaylist.add(item);
         } else {
@@ -874,6 +876,7 @@ public class VideoLoaderController extends BasePlayerController {
                 }
 
                 current.nextMediaItem = SimpleMediaItem.from(randomMetadata);
+                current.isShuffled = true;
                 player.setNextTitle(Video.from(current.nextMediaItem));
             });
         } else {
@@ -890,6 +893,7 @@ public class VideoLoaderController extends BasePlayerController {
                 if (randomIndex != -1) {
                     Video nextVideo = topRow.get(randomIndex);
                     current.nextMediaItem = SimpleMediaItem.from(nextVideo);
+                    current.isShuffled = true;
                     player.setNextTitle(nextVideo);
                 }
             }
