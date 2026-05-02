@@ -63,6 +63,10 @@ public class UiOptionItem implements OptionItem {
         return from(title, callback, false);
     }
 
+    public static OptionItem from(CharSequence title, CharSequence description, OptionCallback callback) {
+        return from(title, description, callback, false);
+    }
+
     public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked) {
         return from(title, callback, isChecked, null);
     }

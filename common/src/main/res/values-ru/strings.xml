@@ -729,6 +729,8 @@
     <string name="ignore_short_segments">Игнорировать короткие сегменты</string>
     <string name="local_backup_not_supported">Автобэкап на Android TV 11+ не поддерживается из-за ограничений системы. Используйте GDrive.</string>
     <string name="rounded_card_corners">Скруглённые углы карточек</string>
+    <string name="app_restore_desc">ВНИМАНИЕ: Резервную копию в формате ZIP следует скопировать в папку восстановления вручную</string>
+    <string name="app_backup_desc">ВНИМАНИЕ: Резервная копия будет создана в формате ZIP</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>
