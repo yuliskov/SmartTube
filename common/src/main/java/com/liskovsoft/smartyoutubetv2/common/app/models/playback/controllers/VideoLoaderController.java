@@ -866,6 +866,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
+        // NOTE: Shuffle only user created playlists (size != -1)
         if (current.playlistInfo.getSize() != -1) {
             Video video = new Video();
             video.playlistId = current.playlistId;
@@ -879,25 +880,26 @@ public class VideoLoaderController extends BasePlayerController {
                 current.isShuffled = true;
                 player.setNextTitle(Video.from(current.nextMediaItem));
             });
-        } else {
-            VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
-
-            if (topRow != null && topRow.isChapters()) {
-                topRow = player.getSuggestionsByIndex(1);
-            }
-
-            if (topRow != null) {
-                int currentIdx = topRow.indexOf(current);
-                int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
-
-                if (randomIndex != -1) {
-                    Video nextVideo = topRow.get(randomIndex);
-                    current.nextMediaItem = SimpleMediaItem.from(nextVideo);
-                    current.isShuffled = true;
-                    player.setNextTitle(nextVideo);
-                }
-            }
         }
+        //else {
+        //    VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
+        //
+        //    if (topRow != null && topRow.isChapters()) {
+        //        topRow = player.getSuggestionsByIndex(1);
+        //    }
+        //
+        //    if (topRow != null) {
+        //        int currentIdx = topRow.indexOf(current);
+        //        int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
+        //
+        //        if (randomIndex != -1) {
+        //            Video nextVideo = topRow.get(randomIndex);
+        //            current.nextMediaItem = SimpleMediaItem.from(nextVideo);
+        //            current.isShuffled = true;
+        //            player.setNextTitle(nextVideo);
+        //        }
+        //    }
+        //}
     }
 
     //private void loadRandomNext2() {

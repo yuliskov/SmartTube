@@ -690,11 +690,13 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void findNextSectionVideoIfNeeded(Video video) {
-        if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-            findRandomSectionVideo(video);
-        } else {
-            findNextSectionVideo(video);
-        }
+        //if (getPlayerData().getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
+        //    findRandomSectionVideo(video);
+        //} else {
+        //    findNextSectionVideo(video);
+        //}
+
+        findNextSectionVideo(video);
     }
 
     private void findRandomSectionVideo(Video video) {
