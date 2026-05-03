@@ -287,6 +287,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     }
 
     public String getRestoreRootPath() {
+        // NOTE: Android 11+ only restore through the file manager (no shared dir)
+        if (hasAccessOnlyToAppFolders()) {
+            return getExternalStorageDirectory().toString();
+        }
+
         return String.format("%s/data", getExternalStorageDirectory());
     }
 
