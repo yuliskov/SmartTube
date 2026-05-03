@@ -736,4 +736,8 @@
   <string name="player_unexpected_error">Odottamaton toistovirhe</string>
   <string name="color_scheme_dark_blue_oled">Tummansininen OLED</string>
   <string name="prefer_google_dns">Suosi Googlen DNS:ää</string>
+  <string name="sidebar_notification">Näytä ilmoitus sivupalkissa</string>
+  <string name="player_chapter_notification2">Siirry seuraavaan lukuun napsauttamalla ilmoitusta</string>
+  <string name="app_restore_desc">Varmuuskopiotiedosto zip tulee kopioida tähän kansioon manuaalisesti tai tiedostonhallinnassa käyttämällä \'Avaa sovelluksella\' -toimintoa.</string>
+  <string name="app_backup_desc">Varmuuskopio luodaan zip-muodossa</string>
 </resources>
