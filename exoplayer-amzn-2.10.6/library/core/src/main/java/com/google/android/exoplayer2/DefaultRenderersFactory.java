@@ -474,8 +474,9 @@ public class DefaultRenderersFactory implements RenderersFactory {
           (Renderer) constructor.newInstance(eventHandler, eventListener, audioProcessors);
       out.add(extensionRendererIndex++, renderer);
       Log.i(TAG, "Loaded FfmpegAudioRenderer.");
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException | NoClassDefFoundError e) {
       // Expected if the app was built without the extension.
+      // MOD: NoClassDefFoundError: Failed resolution of: Lcom/google/android/exoplayer2/audio/DecoderAudioRenderer;
     } catch (Exception e) {
       // The extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating FFmpeg extension", e);
