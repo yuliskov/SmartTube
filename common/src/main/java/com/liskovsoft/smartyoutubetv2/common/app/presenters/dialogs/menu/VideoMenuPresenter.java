@@ -63,6 +63,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsShareLinkButtonEnabled;
     private boolean mIsShareQRLinkButtonEnabled;
     private boolean mIsShareEmbedLinkButtonEnabled;
+    private boolean mIsAddToWatchLaterButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAddToRecentPlaylistButtonEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
@@ -215,6 +216,25 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
     }
 
+    private void appendAddToWatchLaterButton() {
+        if (!mIsAddToWatchLaterButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo() || mVideo.isPlaylistAsChannel()) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.add_video_to_watch_later),
+                        optionItem -> {
+                            MediaServiceManager.instance().addToWatchLaterPlaylist(mVideo);
+                            mDialogPresenter.closeDialog();
+                        }
+                ));
+    }
+
     private void appendAddToPlaylistButton() {
         if (!mIsAddToPlaylistButtonEnabled) {
             return;
@@ -224,7 +244,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        getDialogPresenter().appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(
                         getContext().getString(R.string.dialog_add_to_playlist),
                         optionItem -> AppDialogUtil.showAddToPlaylistDialog(getContext(), mVideo, mCallback)
@@ -270,31 +290,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 )
         );
     }
-
-    //private void appendReactiveAddToRecentPlaylistButton(String playlistId, String playlistTitle) {
-    //    mDialogPresenter.appendSingleButton(
-    //            UiOptionItem.from(getContext().getString(
-    //                    R.string.dialog_add_remove_from, playlistTitle),
-    //                    optionItem -> {
-    //                        mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
-    //                                .subscribe(
-    //                                        videoPlaylistInfos -> {
-    //                                            for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
-    //                                                if (playlistInfo.getPlaylistId().equals(playlistId)) {
-    //                                                    addRemoveFromPlaylist(playlistInfo.getPlaylistId(), playlistInfo.getTitle(), !playlistInfo.isSelected());
-    //                                                    break;
-    //                                                }
-    //                                            }
-    //                                        },
-    //                                        error -> {
-    //                                            // Fallback to something on error
-    //                                            Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
-    //                                        }
-    //                                );
-    //                    }
-    //            )
-    //    );
-    //}
 
     private void appendOpenChannelButton() {
         if (!mIsOpenChannelButtonEnabled) {
@@ -956,6 +951,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAddToRecentPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST);
         mIsAddToPlaybackQueueButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_QUEUE);
         mIsPlayNextButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_NEXT);
+        mIsAddToWatchLaterButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_WATCH_LATER);
         mIsAddToPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST);
         mIsShareLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK);
         mIsShareQRLinkButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_QR_LINK);
@@ -986,6 +982,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY, new MenuAction(this::appendRemoveFromHistoryButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_STREAM_REMINDER, new MenuAction(this::appendStreamReminderButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_RECENT_PLAYLIST, new MenuAction(this::appendAddToRecentPlaylistButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_WATCH_LATER, new MenuAction(this::appendAddToWatchLaterButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST, new MenuAction(this::appendAddToPlaylistButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_CREATE_PLAYLIST, new MenuAction(this::appendCreatePlaylistButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_RENAME_PLAYLIST, new MenuAction(this::appendRenamePlaylistButton, false));

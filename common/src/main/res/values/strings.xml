@@ -743,6 +743,7 @@
     <string name="rounded_card_corners">Rounded card corners</string>
     <string name="app_restore_desc">NOTE: The backup zip should be copied to this folder manually or in file manager, use \'Open with\'</string>
     <string name="app_backup_desc">NOTE: The backup will be created in zip format</string>
+    <string name="add_video_to_watch_later">Add to Watch later</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>

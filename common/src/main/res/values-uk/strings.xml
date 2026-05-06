@@ -729,6 +729,7 @@
     <string name="rounded_card_corners">Заокруглені кути карток</string>
     <string name="app_restore_desc">УВАГА: ZIP-бекап потрібно вручну скопіювати в цю папку або через файловий менеджер, використовуючи \'Відкрити за допомогою\'</string>
     <string name="app_backup_desc">УВАГА: Резервна копія буде створена у форматі zip</string>
+    <string name="add_video_to_watch_later">Додати до \'Переглянути пізніше\'</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>

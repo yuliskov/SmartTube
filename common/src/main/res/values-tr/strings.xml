@@ -741,6 +741,7 @@
     <string name="rounded_card_corners">Yuvarlatılmış kart köşeleri</string>
     <string name="app_restore_desc">NOT: Yedek ZIP dosyası bu klasöre manuel olarak veya dosya yöneticisi üzerinden \'Birlikte aç\' kullanılarak kopyalanmalıdır</string>
     <string name="app_backup_desc">NOT: Yedekleme dosyası zip formatında oluşturulacaktır</string>
+    <string name="add_video_to_watch_later">Daha Sonra İzle listesine ekle</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

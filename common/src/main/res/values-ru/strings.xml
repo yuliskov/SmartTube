@@ -731,6 +731,7 @@
     <string name="rounded_card_corners">Скруглённые углы карточек</string>
     <string name="app_restore_desc">ВНИМАНИЕ: ZIP-бэкап нужно вручную скопировать в эту папку или через файловый менеджер, используя \'Открыть с помощью\'</string>
     <string name="app_backup_desc">ВНИМАНИЕ: Резервная копия будет создана в формате ZIP</string>
+    <string name="add_video_to_watch_later">Добавить в \'Смотреть позже\'</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>
