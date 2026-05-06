@@ -404,14 +404,14 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     public void addToWatchLaterPlaylist(Video video) {
-        addRemoveFromWatchLaterPlaylist(video, true, null);
+        addRemoveFromWatchLaterPlaylist(video, true);
     }
 
     public void removeFromWatchLaterPlaylist(Video video) {
-        addRemoveFromWatchLaterPlaylist(video, false, null);
+        addRemoveFromWatchLaterPlaylist(video, false);
     }
 
-    public void addRemoveFromWatchLaterPlaylist(Video video, boolean isAdd, Runnable onSuccess) {
+    public void addRemoveFromWatchLaterPlaylist(Video video, boolean isAdd) {
         if (video == null || !mSignInService.isSigned()) {
             return;
         }
@@ -428,11 +428,7 @@ public class MediaServiceManager implements OnAccountChange {
                             Observable<Void> editObserve = isAdd ? mItemService.addToPlaylistObserve(watchLater.getPlaylistId(), video.videoId)
                                    : mItemService.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
 
-                            RxHelper.execute(editObserve, () -> {
-                                if (onSuccess != null) {
-                                    onSuccess.run();
-                                }
-                            });
+                            RxHelper.execute(editObserve);
                         },
                         error -> {
                             // Fallback to something on error
