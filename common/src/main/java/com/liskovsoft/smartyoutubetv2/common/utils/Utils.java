@@ -610,6 +610,14 @@ public class Utils {
         return spannable;
     }
 
+    public static CharSequence icon(Drawable drawable) {
+        SpannableString spannable = new SpannableString(" ");
+        CenteredImageSpan imageSpan = new CenteredImageSpan(drawable);
+        spannable.setSpan(imageSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannable;
+    }
+
     @SuppressWarnings("deprecation")
     public static boolean isServiceRunning(Context context, Class<? extends Service> serviceClass) {
         List<RunningServiceInfo> services = getRunningServices(context);
