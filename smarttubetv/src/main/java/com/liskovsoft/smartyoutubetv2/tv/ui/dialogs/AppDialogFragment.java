@@ -114,7 +114,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         return false;
     }
 
-    private AppPreferenceFragment buildPreferenceFragment(List<OptionCategory> categories, String title) {
+    private AppPreferenceFragment buildPreferenceFragment(List<OptionCategory> categories, CharSequence title) {
         AppPreferenceFragment fragment = new AppPreferenceFragment();
         fragment.setCategories(categories);
         fragment.setTitle(title);
@@ -123,7 +123,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     }
 
     @Override
-    public void show(List<OptionCategory> categories, String title, boolean isExpandable, boolean isTransparent, boolean isOverlay, int id) {
+    public void show(List<OptionCategory> categories, CharSequence title, boolean isExpandable, boolean isTransparent, boolean isOverlay, int id) {
         if (!Utils.checkActivity(getActivity())) {
             return;
         }
@@ -299,7 +299,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
         private List<OptionCategory> mCategories;
         private Context mExtractedContext;
         private AppPreferenceManager mManager;
-        private String mTitle;
+        private CharSequence mTitle;
         private boolean mIsTransparent;
 
         @Override
@@ -361,7 +361,9 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
             mCategories = categories;
         }
 
-        public void setTitle(String title) {
+        public void setTitle(CharSequence title) {
+            super.setTitle(title);
+
             mTitle = title;
         }
 

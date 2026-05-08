@@ -23,7 +23,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private final Runnable mCloseDialog = this::closeDialog;
     private final Set<Runnable> mOnStart = new HashSet<>();
     private final Set<Runnable> mOnFinish = new HashSet<>();
-    private String mTitle;
+    private CharSequence mTitle;
     private long mTimeoutMs;
     private boolean mIsTransparent;
     private boolean mIsOverlay;
@@ -31,7 +31,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private boolean mIsExpandable = true;
     private int mId;
 
-    private String mBackupTitle;
+    private CharSequence mBackupTitle;
     private List<OptionCategory> mBackupCategories;
     private int mBackupId;
     private boolean mBackupIsTransparent;
@@ -113,7 +113,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         showDialog(null, null);
     }
 
-    public void showDialog(String dialogTitle) {
+    public void showDialog(CharSequence dialogTitle) {
         showDialog(dialogTitle, null);
     }
 
@@ -121,7 +121,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         showDialog(null, onFinish);
     }
 
-    public void showDialog(String dialogTitle, Runnable onFinish) {
+    public void showDialog(CharSequence dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
         mOnFinish.add(onFinish);
         
@@ -171,27 +171,27 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         mCategories.add(category);
     }
 
-    public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
+    public void appendRadioCategory(CharSequence categoryTitle, List<OptionItem> items) {
         mCategories.add(OptionCategory.radioList(categoryTitle, items));
     }
 
-    public void appendCheckedCategory(String categoryTitle, List<OptionItem> items) {
+    public void appendCheckedCategory(CharSequence categoryTitle, List<OptionItem> items) {
         mCategories.add(OptionCategory.checkedList(categoryTitle, items));
     }
 
-    public void appendStringsCategory(String categoryTitle, List<OptionItem> items) {
+    public void appendStringsCategory(CharSequence categoryTitle, List<OptionItem> items) {
         mCategories.add(OptionCategory.stringList(categoryTitle, items));
     }
 
-    public void appendLongTextCategory(String categoryTitle, OptionItem item) {
+    public void appendLongTextCategory(CharSequence categoryTitle, OptionItem item) {
         mCategories.add(OptionCategory.longText(categoryTitle, item));
     }
 
-    public void appendChatCategory(String categoryTitle, OptionItem item) {
+    public void appendChatCategory(CharSequence categoryTitle, OptionItem item) {
         mCategories.add(OptionCategory.chat(categoryTitle, item));
     }
 
-    public void appendCommentsCategory(String categoryTitle, OptionItem item) {
+    public void appendCommentsCategory(CharSequence categoryTitle, OptionItem item) {
         mCategories.add(OptionCategory.comments(categoryTitle, item));
     }
 

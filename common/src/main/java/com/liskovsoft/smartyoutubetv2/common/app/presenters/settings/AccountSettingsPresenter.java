@@ -90,7 +90,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 }, true
         ));
 
-        String accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
+        CharSequence accountIcon = null;
+        CharSequence accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
 
         int index = -1;
 
@@ -105,11 +106,13 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             ));
 
             if (account.isSelected()) {
+                accountIcon = icon;
                 accountName = " (" + getSimpleName(account) + ")";
             }
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list) + accountName, optionItems);
+        String categoryTitle = getContext().getString(R.string.dialog_account_list) + accountName;
+        settingsPresenter.appendRadioCategory(accountIcon != null ? TextUtils.concat(accountIcon, " ", categoryTitle) : categoryTitle, optionItems);
     }
 
     private void appendSignOutSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
