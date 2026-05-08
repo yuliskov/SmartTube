@@ -67,7 +67,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         appendSelectAccountSection(accounts, icons, settingsPresenter);
         appendSignInButton(settingsPresenter);
-        appendSignOutSection(accounts, settingsPresenter);
+        appendSignOutSection(accounts, icons, settingsPresenter);
         appendProtectAccountWithPassword(settingsPresenter);
         appendSeparateSettings(settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
@@ -75,7 +75,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         Account account = getSignInService().getSelectedAccount();
         int accountIndex = accounts != null ? accounts.indexOf(account) : -1;
         CharSequence accountIcon = accountIndex != -1 ? Utils.icon(icons.get(accountIndex)) : null;
-        settingsPresenter.showDialog(accountIcon != null && account != null ? TextUtils.concat(accountIcon, " ", account.getName())
+        settingsPresenter.showDialog(account != null ? TextUtils.concat(accountIcon, " ", account.getName())
                 : getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
@@ -116,16 +116,20 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(categoryTitle, optionItems);
     }
 
-    private void appendSignOutSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
+    private void appendSignOutSection(List<Account> accounts, List<Drawable> icons, AppDialogPresenter settingsPresenter) {
         if (accounts == null || accounts.isEmpty()) {
             return;
         }
 
         List<OptionItem> optionItems = new ArrayList<>();
 
+        int index = -1;
+
         for (Account account : accounts) {
+            index++;
+            CharSequence icon = Utils.icon(icons.get(index));
             optionItems.add(UiOptionItem.from(
-                    getFullName(account), option ->
+                    TextUtils.concat(icon, " ", getFullName(account)), option ->
                         AppDialogUtil.showConfirmationDialog(
                                 getContext(), getContext().getString(R.string.dialog_remove_account), () -> {
                                     removeAccount(account);
