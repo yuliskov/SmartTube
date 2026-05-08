@@ -73,7 +73,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendSelectAccountOnBoot(settingsPresenter);
 
         Account account = getSignInService().getSelectedAccount();
-        settingsPresenter.showDialog(account != null ? account.getName() : getContext().getString(R.string.settings_accounts), this::unhold);
+        int accountIndex = accounts != null ? accounts.indexOf(account) : -1;
+        CharSequence accountIcon = accountIndex != -1 ? Utils.icon(icons.get(accountIndex)) : null;
+        settingsPresenter.showDialog(accountIcon != null && account != null ? TextUtils.concat(accountIcon, " ", account.getName())
+                : getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
     private void appendSelectAccountSection(List<Account> accounts, List<Drawable> icons, AppDialogPresenter settingsPresenter) {
@@ -90,7 +93,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 }, true
         ));
 
-        CharSequence accountIcon = null;
         CharSequence accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
 
         int index = -1;
@@ -106,13 +108,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             ));
 
             if (account.isSelected()) {
-                accountIcon = icon;
                 accountName = " (" + getSimpleName(account) + ")";
             }
         }
 
-        String categoryTitle = getContext().getString(R.string.dialog_account_list) + accountName;
-        settingsPresenter.appendRadioCategory(accountIcon != null ? TextUtils.concat(accountIcon, " ", categoryTitle) : categoryTitle, optionItems);
+        String categoryTitle = getContext().getString(R.string.dialog_account_list);
+        settingsPresenter.appendRadioCategory(categoryTitle, optionItems);
     }
 
     private void appendSignOutSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {

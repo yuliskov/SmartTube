@@ -611,6 +611,10 @@ public class Utils {
     }
 
     public static CharSequence icon(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
         SpannableString spannable = new SpannableString(" ");
         CenteredImageSpan imageSpan = new CenteredImageSpan(drawable);
         spannable.setSpan(imageSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
