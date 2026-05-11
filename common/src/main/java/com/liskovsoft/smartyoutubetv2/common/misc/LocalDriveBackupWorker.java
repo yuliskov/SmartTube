@@ -69,7 +69,7 @@ public class LocalDriveBackupWorker extends Worker {
     @Override
     public Result doWork() {
         if (BackupSettingsPresenter.hasInstance()) {
-            return Result.success();
+            return Result.retry();
         }
 
         Log.d(TAG, "Starting worker %s...", this);
