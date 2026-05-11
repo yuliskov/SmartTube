@@ -8,13 +8,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.provider.OpenableColumns;
-import android.widget.Toast;
 
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
-import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.OnError;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity.OnResult;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
@@ -164,7 +164,7 @@ public class BackupAndRestoreHelper implements OnResult {
         unpackTempZip(
                 zipUri,
                 () -> BackupSettingsPresenter.instance(mContext).showLocalRestoreDialogApi30(),
-                () -> Toast.makeText(mContext, "Failed to restore backup", Toast.LENGTH_SHORT).show()
+                error -> MessageHelpers.showLongMessage(mContext, "Failed to restore backup: " + error.getMessage())
         );
     }
 
@@ -192,9 +192,9 @@ public class BackupAndRestoreHelper implements OnResult {
         tempZip.delete();
     }
 
-    private void unpackTempZip(Uri zipUri, Runnable onSuccess, Runnable onError) {
+    private void unpackTempZip(Uri zipUri, Runnable onSuccess, OnError onError) {
         if (zipUri == null) {
-            Toast.makeText(mContext, "No ZIP received", Toast.LENGTH_SHORT).show();
+            MessageHelpers.showLongMessage(mContext, "No ZIP received");
             return;
         }
 
@@ -207,7 +207,7 @@ public class BackupAndRestoreHelper implements OnResult {
         } catch (Exception ex) {
             ex.printStackTrace();
             if (onError != null) {
-                onError.run();
+                onError.onError(ex);
             }
         }
     }
@@ -248,6 +248,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("Failed to copyUriToDir", e);
         }
     }
 
@@ -267,6 +268,7 @@ public class BackupAndRestoreHelper implements OnResult {
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("Failed to copyUriToFile", e);
         }
     }
 
