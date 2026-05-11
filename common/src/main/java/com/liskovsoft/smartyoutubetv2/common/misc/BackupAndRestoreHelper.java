@@ -198,18 +198,18 @@ public class BackupAndRestoreHelper implements OnResult {
             return;
         }
 
-        RxHelper.runAsyncUser(() -> unpackTempZip(zipUri),
-                error -> {
-                    error.printStackTrace();
-                    if (onError != null) {
-                        onError.run();
-                    }
-                },
-                () -> {
-                    if (onSuccess != null) {
-                        onSuccess.run();
-                    }
-                });
+        // Cannot use async calls because the app usually isn't started yet.
+        try {
+            unpackTempZip(zipUri);
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (onError != null) {
+                onError.run();
+            }
+        }
     }
 
     private void unpackTempZip(Uri zipUri) {

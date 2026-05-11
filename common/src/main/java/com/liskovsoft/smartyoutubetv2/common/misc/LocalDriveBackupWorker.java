@@ -10,11 +10,9 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -70,6 +68,10 @@ public class LocalDriveBackupWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        if (BackupSettingsPresenter.hasInstance()) {
+            return Result.success();
+        }
+
         Log.d(TAG, "Starting worker %s...", this);
 
         new BackupAndRestoreManager(getApplicationContext()).backupData();

@@ -41,6 +41,7 @@ public class GlideIconFetcher {
 
             Glide.with(context)
                     .load(url)
+                    .circleCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(new CustomTarget<Drawable>() {

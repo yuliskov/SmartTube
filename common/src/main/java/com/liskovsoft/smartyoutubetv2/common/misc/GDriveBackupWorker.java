@@ -15,6 +15,7 @@ import com.liskovsoft.googleapi.service.DriveService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BackupSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -100,6 +101,10 @@ public class GDriveBackupWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        if (BackupSettingsPresenter.hasInstance()) {
+            return Result.success();
+        }
+
         Log.d(TAG, "Starting worker %s...", this);
 
         checkedRunBackup();

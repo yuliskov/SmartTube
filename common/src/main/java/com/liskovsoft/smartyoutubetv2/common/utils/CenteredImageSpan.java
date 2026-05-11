@@ -8,7 +8,7 @@ import android.text.style.ReplacementSpan;
 import androidx.annotation.NonNull;
 
 public class CenteredImageSpan extends ReplacementSpan {
-    private static final float SCALE = 1.4f;
+    private static final float SCALE = 1.1f;
     private final Drawable drawable;
     private int height;
 

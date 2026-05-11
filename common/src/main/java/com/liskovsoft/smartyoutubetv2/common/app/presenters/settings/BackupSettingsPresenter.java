@@ -48,8 +48,12 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         return sInstance;
     }
 
-    public void unhold() {
+    public static void unhold() {
         sInstance = null;
+    }
+
+    public static boolean hasInstance() {
+        return sInstance != null;
     }
 
     public void show() {
@@ -68,7 +72,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
         appendLocalBackupCategory(settingsPresenter);
         appendGDriveBackupCategory(settingsPresenter);
         appendSubscriptionsBackupButton(settingsPresenter);
-        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), BackupSettingsPresenter::unhold);
     }
 
     private void appendGDriveBackupCategory(AppDialogPresenter settingsPresenter) {
