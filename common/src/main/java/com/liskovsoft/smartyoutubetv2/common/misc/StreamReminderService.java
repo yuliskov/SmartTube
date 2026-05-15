@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
+import android.util.Pair;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -59,10 +61,10 @@ public class StreamReminderService implements TickleListener {
             mGeneralData.addPendingStream(video);
         }
 
-        start();
+        startStop();
     }
 
-    public void start() {
+    public void startStop() {
         if (mGeneralData.getPendingStreams().isEmpty()) {
             TickleManager.instance().removeListener(this);
             sInstance = null;
@@ -74,13 +76,13 @@ public class StreamReminderService implements TickleListener {
     @Override
     public void onTickle() {
         if (mGeneralData.getPendingStreams().isEmpty()) {
-            start();
+            startStop();
             return;
         }
 
         RxHelper.disposeActions(mReminderAction);
 
-        List<Observable<MediaItemFormatInfo>> observables = toObservables();
+        List<Observable<Pair<Video, MediaItemFormatInfo>>> observables = toObservables();
 
         mReminderAction = Observable.mergeDelayError(observables)
                 .subscribe(
@@ -89,12 +91,13 @@ public class StreamReminderService implements TickleListener {
                 );
     }
 
-    private void processMetadata(MediaItemFormatInfo formatInfo) {
-        String videoId = formatInfo.getVideoId();
-        if (formatInfo.containsMedia() && videoId != null) {
+    private void processMetadata(Pair<Video, MediaItemFormatInfo> metadata) {
+        Video origin = metadata.first;
+        MediaItemFormatInfo formatInfo = metadata.second;
+        if (formatInfo.containsMedia() && formatInfo.getVideoId() != null) {
             Video video = new Video();
             video.title = formatInfo.getTitle();
-            video.videoId = videoId;
+            video.videoId = formatInfo.getVideoId();
             video.isPending = true;
 
             Playlist playlist = Playlist.instance();
@@ -109,18 +112,22 @@ public class StreamReminderService implements TickleListener {
             }
 
             mGeneralData.removePendingStream(video);
-            start();
+            startStop();
+        } else if (formatInfo.isUnplayable()) {
+            mGeneralData.removePendingStream(origin);
+            startStop();
         }
     }
 
     /**
      * NOTE: don't use MediaItemMetadata because it has contains isLive and isUpcoming flags
      */
-    private List<Observable<MediaItemFormatInfo>> toObservables() {
-        List<Observable<MediaItemFormatInfo>> result = new ArrayList<>();
+    private List<Observable<Pair<Video, MediaItemFormatInfo>>> toObservables() {
+        List<Observable<Pair<Video, MediaItemFormatInfo>>> result = new ArrayList<>();
 
         for (Video item : mGeneralData.getPendingStreams()) {
-            result.add(mMediaItemService.getFormatInfoObserve(item.videoId));
+            result.add(mMediaItemService.getFormatInfoObserve(item.videoId)
+                    .map(info -> new Pair<>(item, info)));
         }
 
         return result;

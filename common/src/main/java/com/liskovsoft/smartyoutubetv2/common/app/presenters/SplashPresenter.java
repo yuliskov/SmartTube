@@ -149,7 +149,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void initStreamReminderService() {
         if (getContext() != null) {
-            StreamReminderService.instance(getContext()).start();
+            StreamReminderService.instance(getContext()).startStop();
         }
     }
 

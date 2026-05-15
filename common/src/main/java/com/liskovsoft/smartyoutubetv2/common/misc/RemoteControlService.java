@@ -3,8 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
-import android.os.Build.VERSION;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -49,7 +47,7 @@ public class RemoteControlService extends Service {
         Log.d(TAG, "onStartCommand: %s", Helpers.toString(intent));
 
         PlaybackPresenter.instance(getApplicationContext()); // init RemoteControlListener
-        StreamReminderService.instance(getApplicationContext()).start(); // init reminder service
+        StreamReminderService.instance(getApplicationContext()).startStop(); // init reminder service
 
         return START_STICKY;
     }
