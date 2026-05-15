@@ -335,11 +335,11 @@ public final class Video {
         return getGroup() != null && !getGroup().isEmpty() ? getGroup().getVideos().indexOf(this) : -1;
     }
 
-    private static String extractAuthor(CharSequence secondTitle) {
+    private String extractAuthor(CharSequence secondTitle) {
         return extractAuthor(Helpers.toString(secondTitle));
     }
 
-    private static String extractAuthor(String secondTitle) {
+    private String extractAuthor(String secondTitle) {
         String result = null;
 
         if (secondTitle != null) {
@@ -356,9 +356,8 @@ public final class Video {
             }
         }
 
-        // Skip subtitles starting with number of views (e.g. 1.4M views)
-        //return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
-        return !TextUtils.isEmpty(result) && !Helpers.isNumeric(result.substring(0, 1)) ? result.trim() : null;
+        // Skip subtitles starting with number of views (e.g. 1.4M views). Usually found in channel uploads.
+        return !TextUtils.isEmpty(result) && (!belongsToChannelUploads() || !Helpers.isNumeric(result.substring(0, 1))) ? result.trim() : null;
     }
 
     public static List<Video> findVideosByAuthor(VideoGroup group, String author) {
