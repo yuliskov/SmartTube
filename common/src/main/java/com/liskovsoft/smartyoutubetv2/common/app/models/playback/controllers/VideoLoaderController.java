@@ -126,7 +126,7 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void onLongBuffering() {
-        if (isPlaybackEnded()) {
+        if (isStreamEnded()) {
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
             // Long loading subtitles cause hangs
@@ -528,7 +528,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (isPlaybackEnded()) {
+        if (isStreamEnded()) {
             // Url no longer works (e.g. live stream ended)
             getMainController().onPlayEnd();
             return;
@@ -1042,20 +1042,16 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void disableSubtitles() {
-        //if (getVideo() != null) {
-        //    getPlayerData().disableSubtitlesPerChannel(getVideo().channelId);
-        //}
-
         getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
     }
 
-    private boolean isPlaybackEnded() {
+    private boolean isStreamEnded() {
         if (getPlayer() == null || getVideo() == null) {
             return false;
         }
 
-        return (!getVideo().isLive || getVideo().isLiveEnd)
+        return getVideo().isLiveEnd && getPlayer().getDurationMs() > 0
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
     }
 
