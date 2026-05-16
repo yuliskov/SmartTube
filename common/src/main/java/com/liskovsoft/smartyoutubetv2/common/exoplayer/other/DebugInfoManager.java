@@ -62,6 +62,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private final SimpleExoPlayer mPlayer;
     private final ViewGroup mDebugViewGroup;
+    private final ExoPlayerInitializer mPlayerInitializer;
     private final Context mContext;
 
     private boolean mStarted;
@@ -76,11 +77,13 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     /**
      * @param debugViewGroup The container that should be updated to display the information.
      * @param player      The {@link SimpleExoPlayer} from which debug information should be obtained.
+     * @param playerInitializer The {@link ExoPlayerInitializer} from which debug information should be obtained.
      */
-    public DebugInfoManager(ViewGroup debugViewGroup, SimpleExoPlayer player) {
+    public DebugInfoManager(ViewGroup debugViewGroup, SimpleExoPlayer player, ExoPlayerInitializer playerInitializer) {
         mContext = debugViewGroup.getContext();
         mDebugViewGroup = debugViewGroup;
         mPlayer = player;
+        mPlayerInitializer = playerInitializer;
         mTextSize = mContext.getResources().getDimension(R.dimen.debug_text_size);
         mAppVersion = String.format("%s version", mContext.getString(R.string.app_name));
         inflate();
@@ -292,26 +295,28 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendPlayerState() {
         //appendRow("Player paused", !mPlayer.getPlayWhenReady());
 
-        String text;
+        String state;
         switch (mPlayer.getPlaybackState()) {
             case Player.STATE_BUFFERING:
-                text = "buffering";
+                state = "buffering";
                 break;
             case Player.STATE_ENDED:
-                text = "ended";
+                state = "ended";
                 break;
             case Player.STATE_IDLE:
-                text = "idle";
+                state = "idle";
                 break;
             case Player.STATE_READY:
-                text = "ready";
+                state = "ready";
                 break;
             default:
-                text = "unknown";
+                state = "unknown";
                 break;
         }
-        //appendRow("Playback state", text);
-        appendRow("Playback state", String.format("paused=%s;state=%s", !mPlayer.getPlayWhenReady(), text));
+        //appendRow("Playback state", state);
+        float boost = mPlayerInitializer.getVolumeBoost();
+        appendRow("Playback info",
+                String.format("paused=%s;state=%s;vol=%s", !mPlayer.getPlayWhenReady(), state, Helpers.formatFloat(boost * mPlayer.getVolume())));
     }
 
     private void appendDisplayModeId() {
@@ -361,9 +366,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVersion() {
         //appendRow("ExoPlayer version", ExoPlayerLibraryInfo.VERSION);
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(mContext);
         appendRow("ExoPlayer engine",
-                PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
-                        PlayerTweaksData.instance(mContext).getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET
+                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
+                        playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET
                                 && CronetManager.getEngine(mContext) != null ? "Cronet" : "Default");
         //appendRow("Cronet version", ApiVersion.getCronetVersion());
         //appendRow("OkHttp version", Version.userAgent());

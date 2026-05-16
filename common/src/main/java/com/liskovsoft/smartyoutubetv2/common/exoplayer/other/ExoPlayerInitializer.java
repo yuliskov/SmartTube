@@ -32,6 +32,7 @@ public class ExoPlayerInitializer {
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
     private VolumeBooster mVolumeBooster;
+    private float mVolumeBoost;
     private SimpleExoPlayer mPlayer;
     private static AudioAttributes sAudioAttributes;
 
@@ -155,6 +156,7 @@ public class ExoPlayerInitializer {
             mVolumeBooster = new VolumeBooster(true, volume, player);
             player.addAudioListener(mVolumeBooster);
         }
+        mVolumeBoost = Math.max(volume, 1f);
     }
 
     /**
@@ -182,6 +184,10 @@ public class ExoPlayerInitializer {
             // Also, live stream (dash) seeking fix
             player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
         }
+    }
+
+    public float getVolumeBoost() {
+        return mVolumeBoost;
     }
 
     public void release() {
