@@ -258,8 +258,13 @@ public class SidebarService implements ProfileChangeListener {
 
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
-            // Broken sections
-            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[]{MediaGroup.TYPE_NOTIFICATIONS, MediaGroup.TYPE_PLAYBACK_QUEUE, MediaGroup.TYPE_TRENDING}));
+            // Hidden sections
+            enableSection(sectionId, !Helpers.equalsAny(sectionId, new int[] {
+                    MediaGroup.TYPE_NOTIFICATIONS,
+                    MediaGroup.TYPE_PLAYBACK_QUEUE,
+                    MediaGroup.TYPE_TRENDING,
+                    MediaGroup.TYPE_BLOCKED_CHANNELS
+            }));
         }
     }
 
