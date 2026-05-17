@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable;
 public class YTSignInPresenter extends SignInPresenter {
     private static final String TAG = YTSignInPresenter.class.getSimpleName();
     private static final String SIGN_IN_URL = "https://yt.be/activate"; // 18+, no search history
+    private static final String QR_SIGN_IN_URL = "https://youtube.com/qr/activate/";
     //private static final String SIGN_IN_URL = "https://youtube.com/tv/activate"; // 18+, no search history
     //private static final String SIGN_IN_URL = "https://youtube.com/activate"; // age restricted, supports search history
     @SuppressLint("StaticFieldLeak")
@@ -64,7 +65,8 @@ public class YTSignInPresenter extends SignInPresenter {
     private void updateUserCode() {
         mSignInAction = mService.getSignInService().signInObserve()
                 .subscribe(
-                        userCode -> getView().showCode(userCode, SIGN_IN_URL),
+                        userCode ->
+                                getView().showCode(userCode, SIGN_IN_URL, QR_SIGN_IN_URL + userCode.replace(" ", "-")),
                         error -> {
                             Log.e(TAG, "Sign in error: %s", error.getMessage());
                             if (getView() != null) {

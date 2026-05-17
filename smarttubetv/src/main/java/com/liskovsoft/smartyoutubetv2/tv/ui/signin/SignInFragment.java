@@ -53,17 +53,22 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
 
     @Override
     public void showCode(String userCode, String signInUrl) {
-        setTitle(userCode, signInUrl);
+        setTitle(userCode, signInUrl, null);
     }
 
-    private void setTitle(String userCode, String signInUrl) {
-        if (TextUtils.isEmpty(userCode)) {
+    @Override
+    public void showCode(String userCode, String signInUrl, String fullSignInUrl) {
+        setTitle(userCode, signInUrl, fullSignInUrl);
+    }
+
+    private void setTitle(String userCode, String signInUrl, String fullSignInUrl) {
+        if (getContext() == null || TextUtils.isEmpty(userCode)) {
             return;
         }
 
         getGuidanceStylist().getTitleView().setText(userCode);
 
-        mFullSignInUrl = signInUrl + "?user_code=" + userCode.replace(" ", "-");
+        mFullSignInUrl = fullSignInUrl != null ? fullSignInUrl : signInUrl;
 
         Glide.with(getContext())
                 .load(Utils.toQrCodeLink(mFullSignInUrl))
