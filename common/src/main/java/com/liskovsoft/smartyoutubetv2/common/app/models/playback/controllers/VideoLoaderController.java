@@ -624,7 +624,7 @@ public class VideoLoaderController extends BasePlayerController {
             // Hide unknown errors on all devices
             //showMessage = true;
             // IllegalStateException: Buffer too small (5242880 < 7208383)
-            if (Helpers.startsWithAny(errorContent, "Buffer too small")) {
+            if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
                 //getPlayerData().setVideoBufferType(getPlayerData().getVideoBufferType() == PlayerData.BUFFER_LOW
                 //        ? PlayerData.BUFFER_MEDIUM : PlayerData.BUFFER_HIGH);
                 lowerVideoQuality();
