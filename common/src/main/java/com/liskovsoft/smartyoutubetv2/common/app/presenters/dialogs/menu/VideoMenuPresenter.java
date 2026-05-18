@@ -1,6 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.ContentService;
@@ -58,6 +67,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mSubscribeAction;
     private Disposable mPlaylistsInfoAction;
     private Disposable mShuffleAction;
+    private View mShuffleOverlay;
+    private TextView mShuffleText;
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
@@ -1064,9 +1075,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void shufflePlaylist(VideoGroup group) {
-        MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
-
         List<Video> allVideos = new ArrayList<>(group.getVideos());
+        showShuffleProgress(allVideos.size());
+
         MediaGroup mediaGroup = group.getMediaGroup();
 
         if (mediaGroup == null) {
@@ -1077,6 +1088,77 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         // Load all remaining pages then shuffle
         loadAllPages(mediaGroup, allVideos, 0);
+    }
+
+    private void showShuffleProgress(int loadedCount) {
+        String msg = getContext().getString(R.string.shuffle_loading_progress, loadedCount);
+
+        if (mShuffleOverlay != null) {
+            // Overlay already visible — just update the text
+            mShuffleText.setText(msg);
+            return;
+        }
+
+        Context context = getContext();
+        if (!(context instanceof Activity)) {
+            return;
+        }
+
+        ViewGroup root = (ViewGroup) ((Activity) context)
+                .findViewById(android.R.id.content);
+        if (root == null) {
+            return;
+        }
+
+        // Semi-transparent full-screen backdrop
+        FrameLayout overlay = new FrameLayout(context);
+        overlay.setBackgroundColor(0xB0000000);
+        overlay.setClickable(true); // absorb touches
+
+        // Vertical container: spinner + text
+        LinearLayout column = new LinearLayout(context);
+        column.setOrientation(LinearLayout.VERTICAL);
+        column.setGravity(Gravity.CENTER);
+
+        ProgressBar spinner = new ProgressBar(context, null,
+                android.R.attr.progressBarStyleLarge);
+
+        TextView text = new TextView(context);
+        text.setText(msg);
+        text.setTextColor(0xFFFFFFFF);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        text.setGravity(Gravity.CENTER);
+        int pad = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 16,
+                context.getResources().getDisplayMetrics());
+        text.setPadding(0, pad, 0, 0);
+
+        column.addView(spinner);
+        column.addView(text);
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+        overlay.addView(column, lp);
+
+        root.addView(overlay, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
+        mShuffleOverlay = overlay;
+        mShuffleText = text;
+    }
+
+    private void dismissShuffleProgress() {
+        if (mShuffleOverlay != null) {
+            ViewGroup parent = (ViewGroup) mShuffleOverlay.getParent();
+            if (parent != null) {
+                parent.removeView(mShuffleOverlay);
+            }
+            mShuffleOverlay = null;
+            mShuffleText = null;
+        }
     }
 
     private static final int MAX_SHUFFLE_CONTINUATIONS = 250;
@@ -1104,6 +1186,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                     }
                                 }
                             }
+                            showShuffleProgress(accumulated.size());
                             // Continue loading more pages
                             loadAllPages(nextGroup, accumulated, count + 1);
                         },
@@ -1122,6 +1205,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void shuffleAndPlay(List<Video> videos) {
+        dismissShuffleProgress();
         // Filter non-playable items
         List<Video> playable = new ArrayList<>();
         for (Video v : videos) {
