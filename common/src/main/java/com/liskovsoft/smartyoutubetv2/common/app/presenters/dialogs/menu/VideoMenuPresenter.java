@@ -3,7 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -12,6 +14,8 @@ import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -31,12 +35,15 @@ import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +57,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Disposable mPlaylistsInfoAction;
+    private Disposable mShuffleAction;
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
@@ -79,6 +87,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
     private boolean mIsMarkAsWatchedButtonEnabled;
+    private boolean mIsShufflePlaylistButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
     private final Map<Long, MenuAction> mMenuMapping = new HashMap<>();
@@ -971,6 +980,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
         mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
         mIsOpenCommentsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_COMMENTS);
+        mIsShufflePlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST);
     }
 
     private void initMenuMapping() {
@@ -1010,6 +1020,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, new MenuAction(this::appendToggleHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, new MenuAction(this::appendClearHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST, new MenuAction(this::appendShufflePlaylistButton, false));
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
             if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO) {
@@ -1026,5 +1037,125 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                     UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo(), getCallback()))
             );
         }
+    }
+
+    private void appendShufflePlaylistButton() {
+        if (!mIsShufflePlaylistButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
+
+        VideoGroup group = mVideo.getGroup();
+        if (group == null || group.isEmpty() || group.getSize() < 2) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_this_playlist),
+                        optionItem -> {
+                            mDialogPresenter.closeDialog();
+                            shufflePlaylist(group);
+                        }
+                ));
+    }
+
+    private void shufflePlaylist(VideoGroup group) {
+        MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+
+        List<Video> allVideos = new ArrayList<>(group.getVideos());
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        if (mediaGroup == null) {
+            // No continuation possible — shuffle what we have
+            shuffleAndPlay(allVideos);
+            return;
+        }
+
+        // Load all remaining pages then shuffle
+        loadAllPages(mediaGroup, allVideos, 0);
+    }
+
+    private static final int MAX_SHUFFLE_CONTINUATIONS = 250;
+
+    private void loadAllPages(MediaGroup mediaGroup, List<Video> accumulated, int count) {
+        if (count >= MAX_SHUFFLE_CONTINUATIONS) {
+            shuffleAndPlay(accumulated);
+            return;
+        }
+
+        ContentService contentService = getContentService();
+        RxHelper.disposeActions(mShuffleAction);
+
+        final boolean[] hasNextPage = {false};
+
+        mShuffleAction = contentService.continueGroupObserve(mediaGroup)
+                .subscribe(
+                        nextGroup -> {
+                            hasNextPage[0] = true;
+                            if (nextGroup.getMediaItems() != null) {
+                                for (MediaItem item : nextGroup.getMediaItems()) {
+                                    Video video = Video.from(item);
+                                    if (video != null && !accumulated.contains(video)) {
+                                        accumulated.add(video);
+                                    }
+                                }
+                            }
+                            // Continue loading more pages
+                            loadAllPages(nextGroup, accumulated, count + 1);
+                        },
+                        error -> {
+                            Log.e(TAG, "Shuffle load error: %s", error.getMessage());
+                            shuffleAndPlay(accumulated);
+                        },
+                        () -> {
+                            // Only shuffle here if onNext was never called
+                            // (i.e. no more pages to load)
+                            if (!hasNextPage[0]) {
+                                shuffleAndPlay(accumulated);
+                            }
+                        }
+                );
+    }
+
+    private void shuffleAndPlay(List<Video> videos) {
+        // Filter non-playable items
+        List<Video> playable = new ArrayList<>();
+        for (Video v : videos) {
+            if (v.hasVideo() && !v.isUpcoming) {
+                playable.add(v);
+            }
+        }
+
+        if (playable.size() < 2) {
+            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+            return;
+        }
+
+        Collections.shuffle(playable);
+
+        // Mark all as queue items to bypass trimPlaylist.
+        // Clear playlist metadata to prevent hasNextPlaylist() from
+        // triggering YouTube's chain after the queue is exhausted.
+        for (Video v : playable) {
+            v.fromQueue = true;
+            v.playlistId = null;
+            v.nextMediaItem = null;
+        }
+
+        // Populate the playback queue
+        Playlist playlist = Playlist.instance();
+        playlist.clear();
+        playlist.addAll(playable);
+        playlist.setCurrent(playable.get(0));
+
+        // Force playback mode to LIST (plays through queue, stops at end)
+        PlayerData.instance(getContext()).setPlaybackMode(PlayerConstants.PLAYBACK_MODE_LIST);
+
+        // Start playback
+        PlaybackPresenter.instance(getContext()).openVideo(playable.get(0));
     }
 }
