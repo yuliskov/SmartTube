@@ -513,6 +513,7 @@
     <string name="color_scheme_dark_grey_monochrome">Dark Grey (monochrome)</string>
     <string name="disable_mic_permission">Please disable microphone access for the app in order for this recognizer to work properly.</string>
     <string name="repeat_mode_shuffle">Shuffle any playlist</string>
+    <string name="shuffle_this_playlist">Shuffle this playlist</string>
     <string name="chat_left">Left</string>
     <string name="chat_right">Right</string>
     <string name="card_real_thumbnails">Replace thumbnails with a frame from the video</string>
