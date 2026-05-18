@@ -81,10 +81,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         }
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            if (Helpers.contains(e.getMessage(), "KatnissVoiceInteractionService")) {
-                // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
-                // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
-                // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
+            if (shouldIgnore(e)) {
                 return;
             }
 
@@ -93,6 +90,17 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
             defaultHandler.uncaughtException(t, e);
         });
+    }
+
+    private boolean shouldIgnore(Throwable e) {
+        if (Helpers.contains(e.getMessage(), "KatnissVoiceInteractionService")) {
+            // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
+            // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
+            // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
+            return true;
+        }
+
+        return false;
     }
 
     private Throwable wrapWithAdditionalInfo(Throwable e) {
