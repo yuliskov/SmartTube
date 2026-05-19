@@ -22,6 +22,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
@@ -1055,23 +1056,88 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasVideo()) {
+        if (mVideo == null) {
             return;
         }
 
-        VideoGroup group = mVideo.getGroup();
-        if (group == null || group.isEmpty() || group.getSize() < 2) {
-            return;
+        // Path 1: video inside an already-loaded playlist group
+        if (mVideo.hasVideo()) {
+            VideoGroup group = mVideo.getGroup();
+            if (group != null && !group.isEmpty() && group.getSize() >= 2) {
+                mDialogPresenter.appendSingleButton(
+                        UiOptionItem.from(
+                                getContext().getString(R.string.shuffle_this_playlist),
+                                optionItem -> {
+                                    mDialogPresenter.closeDialog();
+                                    shufflePlaylist(group);
+                                }
+                        ));
+                return;
+            }
         }
 
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(
-                        getContext().getString(R.string.shuffle_this_playlist),
-                        optionItem -> {
-                            mDialogPresenter.closeDialog();
-                            shufflePlaylist(group);
+        // Path 2: playlist card (videos not loaded yet)
+        if (mVideo.hasPlaylist() || mVideo.hasNestedItems() || mVideo.isPlaylistAsChannel()) {
+            mDialogPresenter.appendSingleButton(
+                    UiOptionItem.from(
+                            getContext().getString(R.string.shuffle_this_playlist),
+                            optionItem -> {
+                                mDialogPresenter.closeDialog();
+                                shufflePlaylistCard(mVideo);
+                            }
+                    ));
+        }
+    }
+
+    private void shufflePlaylistCard(Video video) {
+        showShuffleProgress(0);
+
+        // Ensure mediaItem is populated for the API call
+        if (video.mediaItem == null) {
+            video.mediaItem = SimpleMediaItem.from(video);
+        }
+
+        Observable<MediaGroup> observable;
+        if (video.hasNestedItems() || video.isChannel()) {
+            observable = getContentService().getGroupObserve(video.mediaItem);
+        } else if (video.hasReloadPageKey()) {
+            observable = getContentService().getGroupObserve(video.getReloadPageKey());
+        } else {
+            observable = mMediaItemService.getMetadataObserve(video.videoId, video.playlistId, 0, video.playlistParams)
+                    .flatMap(metadata -> {
+                        if (metadata == null || metadata.getSuggestions() == null) {
+                            return Observable.empty();
                         }
-                ));
+                        for (MediaGroup g : metadata.getSuggestions()) {
+                            if (g.getMediaItems() != null && !g.getMediaItems().isEmpty()) {
+                                return Observable.just(g);
+                            }
+                        }
+                        return Observable.empty();
+                    });
+        }
+
+        RxHelper.disposeActions(mShuffleAction);
+        final boolean[] hasGroup = {false};
+        mShuffleAction = observable
+                .subscribe(
+                        mediaGroup -> {
+                            hasGroup[0] = true;
+                            VideoGroup group = VideoGroup.from(mediaGroup);
+                            shufflePlaylist(group);
+                        },
+                        error -> {
+                            Log.e(TAG, "shufflePlaylistCard error: %s", error.getMessage());
+                            dismissShuffleProgress();
+                        },
+                        () -> {
+                            // Only show empty message if onNext was never called
+                            if (!hasGroup[0]) {
+                                dismissShuffleProgress();
+                                MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                            }
+                        }
+                );
     }
 
     private void shufflePlaylist(VideoGroup group) {
