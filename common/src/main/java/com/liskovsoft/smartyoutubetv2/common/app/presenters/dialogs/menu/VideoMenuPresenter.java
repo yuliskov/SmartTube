@@ -1066,7 +1066,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             if (group != null && !group.isEmpty() && group.getSize() >= 2) {
                 mDialogPresenter.appendSingleButton(
                         UiOptionItem.from(
-                                getContext().getString(R.string.shuffle_this_playlist),
+                                getContext().getString(R.string.shuffle_playlist),
                                 optionItem -> {
                                     mDialogPresenter.closeDialog();
                                     shufflePlaylist(group);
@@ -1080,7 +1080,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mVideo.hasPlaylist() || mVideo.hasNestedItems() || mVideo.isPlaylistAsChannel()) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(
-                            getContext().getString(R.string.shuffle_this_playlist),
+                            getContext().getString(R.string.shuffle_playlist),
                             optionItem -> {
                                 mDialogPresenter.closeDialog();
                                 shufflePlaylistCard(mVideo);
