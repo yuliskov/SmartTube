@@ -50,14 +50,18 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
@@ -1137,6 +1141,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         RxHelper.disposeActions(mShuffleAction);
         final boolean[] hasGroup = {false};
         mShuffleAction = observable
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
                             hasGroup[0] = true;
@@ -1170,7 +1175,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Load all remaining pages then shuffle
-        loadAllPages(mediaGroup, allVideos, 0);
+        Set<Video> seen = new HashSet<>(allVideos);
+        loadAllPages(mediaGroup, allVideos, seen, 0);
     }
 
     private void showShuffleProgress(int loadedCount) {
@@ -1261,8 +1267,9 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private static final int MAX_SHUFFLE_CONTINUATIONS = 250;
+    private static final int SHUFFLE_TIMEOUT_SEC = 5;
 
-    private void loadAllPages(MediaGroup mediaGroup, List<Video> accumulated, int count) {
+    private void loadAllPages(MediaGroup mediaGroup, List<Video> accumulated, Set<Video> seen, int count) {
         if (count >= MAX_SHUFFLE_CONTINUATIONS) {
             shuffleAndPlay(accumulated);
             return;
@@ -1274,20 +1281,27 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         final boolean[] hasNextPage = {false};
 
         mShuffleAction = contentService.continueGroupObserve(mediaGroup)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe(
                         nextGroup -> {
                             hasNextPage[0] = true;
+                            int sizeBefore = accumulated.size();
                             if (nextGroup.getMediaItems() != null) {
                                 for (MediaItem item : nextGroup.getMediaItems()) {
                                     Video video = Video.from(item);
-                                    if (video != null && !accumulated.contains(video)) {
+                                    if (video != null && seen.add(video)) {
                                         accumulated.add(video);
                                     }
                                 }
                             }
+                            if (accumulated.size() == sizeBefore) {
+                                // No new videos — playlist exhausted
+                                shuffleAndPlay(accumulated);
+                                return;
+                            }
                             showShuffleProgress(accumulated.size());
                             // Continue loading more pages
-                            loadAllPages(nextGroup, accumulated, count + 1);
+                            loadAllPages(nextGroup, accumulated, seen, count + 1);
                         },
                         error -> {
                             Log.e(TAG, "Shuffle load error: %s", error.getMessage());
