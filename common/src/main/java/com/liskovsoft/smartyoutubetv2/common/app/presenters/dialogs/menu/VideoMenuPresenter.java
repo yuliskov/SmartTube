@@ -1061,7 +1061,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Path 1: video inside an already-loaded playlist group
-        if (mVideo.hasVideo()) {
+        if (mVideo.hasVideo() && mVideo.belongsToSamePlaylistGroup()) {
             VideoGroup group = mVideo.getGroup();
             if (group != null && !group.isEmpty() && group.getSize() >= 2) {
                 mDialogPresenter.appendSingleButton(
@@ -1077,7 +1077,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Path 2: playlist card (videos not loaded yet)
-        if (mVideo.hasPlaylist() || mVideo.hasNestedItems() || mVideo.isPlaylistAsChannel()) {
+        if (mVideo.hasPlaylist() || mVideo.hasNestedItems() || mVideo.isPlaylistAsChannel() || mVideo.belongsToUserPlaylists()) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(
                             getContext().getString(R.string.shuffle_playlist),
