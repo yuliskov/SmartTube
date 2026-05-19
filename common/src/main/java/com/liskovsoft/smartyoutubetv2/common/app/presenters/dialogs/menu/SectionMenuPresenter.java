@@ -268,24 +268,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendShufflePlaylistButton() {
-        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST)) {
-            return;
-        }
-
-        Video video = getVideo();
-
-        if (video == null || (!video.hasPlaylist() && !video.hasNestedItems() && !video.isPlaylistAsChannel())) {
-            return;
-        }
-
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(
-                        getContext().getString(R.string.shuffle_playlist),
-                        optionItem -> {
-                            mDialogPresenter.closeDialog();
-                            VideoMenuPresenter.instance(getContext()).shufflePlaylistCard(video);
-                        }
-                ));
+        VideoMenuPresenter.instance(getContext()).appendShufflePlaylistCardButton(getVideo(), mDialogPresenter);
     }
 
     private void disposeActions() {

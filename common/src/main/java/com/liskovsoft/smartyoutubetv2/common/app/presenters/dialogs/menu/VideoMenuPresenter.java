@@ -1077,13 +1077,29 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Path 2: playlist card (videos not loaded yet)
-        if (mVideo.hasPlaylist() || mVideo.hasNestedItems() || mVideo.isPlaylistAsChannel() || mVideo.belongsToUserPlaylists()) {
-            mDialogPresenter.appendSingleButton(
+        appendShufflePlaylistCardButton(mVideo, mDialogPresenter);
+    }
+
+    /**
+     * Shared guard + button for shuffling a playlist card.
+     * Called from both VideoMenuPresenter and SectionMenuPresenter.
+     */
+    void appendShufflePlaylistCardButton(Video video, AppDialogPresenter dialogPresenter) {
+        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST)) {
+            return;
+        }
+
+        if (video == null) {
+            return;
+        }
+
+        if (video.hasPlaylist() || video.hasNestedItems() || video.isPlaylistAsChannel() || video.belongsToUserPlaylists()) {
+            dialogPresenter.appendSingleButton(
                     UiOptionItem.from(
                             getContext().getString(R.string.shuffle_playlist),
                             optionItem -> {
-                                mDialogPresenter.closeDialog();
-                                shufflePlaylistCard(mVideo);
+                                dialogPresenter.closeDialog();
+                                shufflePlaylistCard(video);
                             }
                     ));
         }
