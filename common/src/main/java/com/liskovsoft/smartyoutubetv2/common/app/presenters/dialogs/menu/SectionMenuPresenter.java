@@ -104,6 +104,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendToggleHistoryButton();
         appendClearHistoryButton();
         appendUpdateCheckButton();
+        appendShufflePlaylistButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
@@ -131,6 +132,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendMoveSectionButton();
         appendRenameSectionButton();
         appendClearHistoryButton();
+        appendShufflePlaylistButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
@@ -263,6 +265,27 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         } else {
             MessageHelpers.showMessage(getContext(), R.string.msg_done);
         }
+    }
+
+    private void appendShufflePlaylistButton() {
+        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST)) {
+            return;
+        }
+
+        Video video = getVideo();
+
+        if (video == null || (!video.hasPlaylist() && !video.hasNestedItems() && !video.isPlaylistAsChannel())) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_playlist),
+                        optionItem -> {
+                            mDialogPresenter.closeDialog();
+                            VideoMenuPresenter.instance(getContext()).shufflePlaylistCard(video);
+                        }
+                ));
     }
 
     private void disposeActions() {
