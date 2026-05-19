@@ -380,7 +380,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow("Device name", Helpers.getDeviceName());
         appendRow("Android SDK", VERSION.SDK_INT);
         appendRow("Disk cache size (MB)", String.valueOf(
-                (FileHelpers.getDirSize(FileHelpers.getInternalCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
+                (FileHelpers.getDirSize(FileHelpers.getCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
                         / 1024 / 1024
         ));
     }

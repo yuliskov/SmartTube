@@ -3,19 +3,17 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AppPrefs extends SharedPreferencesBase implements AccountChangeListener {
     private static final String TAG = AppPrefs.class.getSimpleName();
+    private static final String PREFS_DIR = "app_prefs";
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
     private static final String ANONYMOUS_PROFILE_NAME = "anonymous";
@@ -28,7 +26,6 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
     private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
-    private final Map<String, Integer> mDataHashes = new HashMap<>();
     private final WeakHashSet<ProfileChangeListener> mListeners = new WeakHashSet<>();
 
     public interface ProfileChangeListener {
@@ -125,16 +122,16 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         setData(getProfileKey(key, isMultiProfilesEnabled()), data);
     }
 
-    public String getData(String key) {
-        // Don't sync hash here. Hashes won't match.
-        return getString(key, null);
-    }
-
-    public void setData(String key, String data) {
-        if (checkData(key, data)) {
-            putString(key, data);
-        }
-    }
+    //public String getData(String key) {
+    //    // Don't sync hash here. Hashes won't match.
+    //    return getString(key, null);
+    //}
+    //
+    //public void setData(String key, String data) {
+    //    if (checkData(key, data)) {
+    //        putString(key, data);
+    //    }
+    //}
 
     public String getWebProxyUri() {
         return getString(WEB_PROXY_URI, "");
@@ -186,22 +183,6 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         mListeners.remove(listener);
     }
 
-    /**
-     * Check that the data has been modified.
-     */
-    private boolean checkData(String key, String data) {
-        Integer oldHashCode = mDataHashes.get(key);
-        int newHashCode = data != null ? data.hashCode() : -1;
-
-        if (oldHashCode != null && oldHashCode == newHashCode) {
-            return false;
-        }
-
-        mDataHashes.put(key, newHashCode);
-
-        return true;
-    }
-
     //private String getProfileKey(String key) {
     //    String profileName = getProfileName();
     //    if (!TextUtils.isEmpty(profileName)) {
@@ -218,5 +199,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         }
 
         return key;
+    }
+    
+    @Override
+    protected String getPrefsDir() {
+        return PREFS_DIR;
     }
 }

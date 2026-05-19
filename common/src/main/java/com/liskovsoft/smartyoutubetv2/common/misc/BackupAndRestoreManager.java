@@ -30,7 +30,9 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String BACKUP_DIR_NAME = "Backup";
     private final Context mContext;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
+    private static final String FILES_SUBDIR = "files";
     private final File mSharedPrefsDir;
+    private final File mFilesDir;
     private final List<File> mBackupDirs;
     private final BackupAndRestoreHelper mHelper;
     private final boolean mForceApi30;
@@ -52,6 +54,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         mHelper = new BackupAndRestoreHelper(context);
 
         mSharedPrefsDir = new File(mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
+        mFilesDir = FileHelpers.getFilesDir(context);
 
         mBackupDirs = new ArrayList<>();
     }
@@ -157,10 +160,15 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mSharedPrefsDir.isDirectory() && !FileHelpers.isEmpty(mSharedPrefsDir)) {
             File destination = new File(currentBackup, mSharedPrefsDir.getName());
-            FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
+            FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
+        }
+
+        if (mFilesDir.isDirectory() && !FileHelpers.isEmpty(mFilesDir)) {
+            File destination = new File(currentBackup, mFilesDir.getName());
+            FileHelpers.copy(mFilesDir, destination, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
         }
 
         if (hasAccessOnlyToAppFolders()) {
@@ -175,9 +183,10 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         Log.d(TAG, "App just updated. Restoring data...");
 
         File currentBackup = getBackupCheck(backupName);
-        File sourceBackupDir = new File(currentBackup, SHARED_PREFS_SUBDIR);
+        File sharedPrefsBackupDir = new File(currentBackup, SHARED_PREFS_SUBDIR);
+        File filesBackupDir = new File(currentBackup, FILES_SUBDIR);
 
-        if (FileHelpers.isEmpty(sourceBackupDir)) {
+        if (FileHelpers.isEmpty(sharedPrefsBackupDir)) {
             Log.d(TAG, "Oops. Backup folder is empty.");
             MessageHelpers.showLongMessage(mContext, "Oops. Backup folder is empty.");
             return;
@@ -188,7 +197,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(mSharedPrefsDir);
         }
 
-        FileHelpers.copy(sourceBackupDir, mSharedPrefsDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS));
+        FileHelpers.copy(sharedPrefsBackupDir, mSharedPrefsDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
+        FileHelpers.copy(filesBackupDir, mFilesDir, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
         fixFileNames(mSharedPrefsDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);

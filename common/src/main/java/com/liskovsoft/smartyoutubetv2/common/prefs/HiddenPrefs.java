@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class HiddenPrefs extends SharedPreferencesBase {
     @SuppressLint("StaticFieldLeak")
