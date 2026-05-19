@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -1196,6 +1197,17 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         FrameLayout overlay = new FrameLayout(context);
         overlay.setBackgroundColor(0xB0000000);
         overlay.setClickable(true); // absorb touches
+        overlay.setFocusable(true);
+        overlay.setFocusableInTouchMode(true);
+        overlay.requestFocus();
+        overlay.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_UP &&
+                    (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)) {
+                cancelShuffle();
+                return true;
+            }
+            return true; // consume all keys while overlay is visible
+        });
 
         // Vertical container: spinner + text
         LinearLayout column = new LinearLayout(context);
@@ -1241,6 +1253,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mShuffleOverlay = null;
             mShuffleText = null;
         }
+    }
+
+    private void cancelShuffle() {
+        RxHelper.disposeActions(mShuffleAction);
+        dismissShuffleProgress();
     }
 
     private static final int MAX_SHUFFLE_CONTINUATIONS = 250;
