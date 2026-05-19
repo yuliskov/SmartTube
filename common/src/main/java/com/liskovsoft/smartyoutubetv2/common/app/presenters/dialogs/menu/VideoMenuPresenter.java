@@ -1089,7 +1089,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
     }
 
-    private void shufflePlaylistCard(Video video) {
+    void shufflePlaylistCard(Video video) {
         showShuffleProgress(0);
 
         // Ensure mediaItem is populated for the API call
