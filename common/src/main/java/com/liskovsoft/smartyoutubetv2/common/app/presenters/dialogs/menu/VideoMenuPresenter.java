@@ -75,6 +75,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mShuffleAction;
     private View mShuffleOverlay;
     private TextView mShuffleText;
+    private int mShuffleProgressStringRes = R.string.shuffle_loading_progress;
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
@@ -105,6 +106,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsStreamReminderButtonEnabled;
     private boolean mIsMarkAsWatchedButtonEnabled;
     private boolean mIsShufflePlaylistButtonEnabled;
+    private boolean mIsShuffleChannelButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
     private final Map<Long, MenuAction> mMenuMapping = new HashMap<>();
@@ -998,6 +1000,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
         mIsOpenCommentsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_COMMENTS);
         mIsShufflePlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST);
+        mIsShuffleChannelButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL);
     }
 
     private void initMenuMapping() {
@@ -1038,6 +1041,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, new MenuAction(this::appendClearHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST, new MenuAction(this::appendShufflePlaylistButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL, new MenuAction(this::appendShuffleChannelButton, false));
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
             if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO) {
@@ -1074,6 +1078,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                 getContext().getString(R.string.shuffle_playlist),
                                 optionItem -> {
                                     mDialogPresenter.closeDialog();
+                                    mShuffleProgressStringRes = R.string.shuffle_loading_progress;
                                     shufflePlaylist(group);
                                 }
                         ));
@@ -1111,6 +1116,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     void shufflePlaylistCard(Video video) {
+        mShuffleProgressStringRes = R.string.shuffle_loading_progress;
         showShuffleProgress(0);
 
         // Ensure mediaItem is populated for the API call
@@ -1180,7 +1186,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void showShuffleProgress(int loadedCount) {
-        String msg = getContext().getString(R.string.shuffle_loading_progress, loadedCount);
+        String msg = getContext().getString(mShuffleProgressStringRes, loadedCount);
 
         if (mShuffleOverlay != null) {
             // Overlay already visible — just update the text
@@ -1354,5 +1360,109 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         // Start playback
         PlaybackPresenter.instance(getContext()).openVideo(playable.get(0));
+    }
+
+    private void appendShuffleChannelButton() {
+        if (!mIsShuffleChannelButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || (!mVideo.hasVideo() && !mVideo.isChannel()) || mVideo.isPlaylistAsChannel()) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_channel),
+                        optionItem -> {
+                            mDialogPresenter.closeDialog();
+                            shuffleChannel(mVideo);
+                        }
+                ));
+    }
+
+    /**
+     * Shared guard + button for shuffling a channel card.
+     * Called from both VideoMenuPresenter, ChannelUploadsMenuPresenter and SectionMenuPresenter.
+     */
+    void appendShuffleChannelCardButton(Video video, AppDialogPresenter dialogPresenter) {
+        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL)) {
+            return;
+        }
+
+        if (video == null || !video.isChannel() || video.isPlaylistAsChannel()) {
+            return;
+        }
+
+        dialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_channel),
+                        optionItem -> {
+                            dialogPresenter.closeDialog();
+                            shuffleChannel(video);
+                        }
+                ));
+    }
+
+    private void shuffleChannel(Video video) {
+        mShuffleProgressStringRes = R.string.shuffle_channel_loading_progress;
+        showShuffleProgress(0);
+
+        // Resolve channelId if not yet available
+        if (video.channelId == null) {
+            mServiceManager.loadMetadata(video,
+                    metadata -> {
+                        // Guard: user may have cancelled while metadata was loading
+                        if (mShuffleOverlay == null) {
+                            return;
+                        }
+                        video.sync(metadata);
+                        if (video.channelId == null) {
+                            dismissShuffleProgress();
+                            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                            return;
+                        }
+                        loadChannelAndShuffle(video.channelId);
+                    },
+                    error -> {
+                        Log.e(TAG, "shuffleChannel metadata error: %s", error.getMessage());
+                        dismissShuffleProgress();
+                    },
+                    () -> {
+                        // onComplete without onNext — metadata not found
+                    }
+            );
+            return;
+        }
+
+        loadChannelAndShuffle(video.channelId);
+    }
+
+    private void loadChannelAndShuffle(String channelId) {
+        RxHelper.disposeActions(mShuffleAction);
+
+        mShuffleAction = getContentService().getChannelObserve(channelId)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroups -> {
+                            // Find the first row that contains actual videos (typically "Uploads")
+                            for (MediaGroup group : mediaGroups) {
+                                if (group.getMediaItems() != null && !group.getMediaItems().isEmpty()) {
+                                    VideoGroup videoGroup = VideoGroup.from(group);
+                                    shufflePlaylist(videoGroup);
+                                    return;
+                                }
+                            }
+                            dismissShuffleProgress();
+                            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                        },
+                        error -> {
+                            Log.e(TAG, "shuffleChannel error: %s", error.getMessage());
+                            dismissShuffleProgress();
+                        },
+                        () -> {
+                            // onComplete without onNext — empty channel
+                        }
+                );
     }
 }

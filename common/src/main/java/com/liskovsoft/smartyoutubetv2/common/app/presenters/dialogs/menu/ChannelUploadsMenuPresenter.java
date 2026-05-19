@@ -79,8 +79,13 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
         appendUnsubscribeButton();
         appendMarkAsWatched();
         appendTogglePinVideoToSidebarButton();
+        appendShuffleChannelButton();
 
         mDialogPresenter.showDialog(mVideo.getTitle());
+    }
+
+    private void appendShuffleChannelButton() {
+        VideoMenuPresenter.instance(getContext()).appendShuffleChannelCardButton(mVideo, mDialogPresenter);
     }
 
     private void appendOpenChannelUploadsButton() {
