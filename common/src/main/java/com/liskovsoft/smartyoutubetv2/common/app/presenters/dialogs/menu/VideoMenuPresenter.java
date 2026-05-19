@@ -665,11 +665,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.start_mix),
                         optionItem -> {
-                            Video mixVideo = Video.from(mVideo);
-                            mixVideo.playlistId = "RD" + mVideo.videoId;
-                            mixVideo.playlistIndex = 0;
-                            mixVideo.playlistParams = null;
-                            PlaybackPresenter.instance(getContext()).openVideo(mixVideo);
+                            PlaybackPresenter.instance(getContext()).startMix(mVideo);
                             mDialogPresenter.closeDialog();
                         }
                 ));
