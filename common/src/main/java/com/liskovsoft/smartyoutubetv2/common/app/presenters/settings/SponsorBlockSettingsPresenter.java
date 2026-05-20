@@ -145,6 +145,10 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
         
+        options.add(UiOptionItem.from(getContext().getString(R.string.content_block_show_duration),
+                optionItem -> mContentBlockData.setShowDurationEnabled(optionItem.isSelected()),
+                mContentBlockData.isShowDurationEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),
                 optionItem -> mContentBlockData.setPaidContentNotificationEnabled(optionItem.isSelected()),
                 mContentBlockData.isPaidContentNotificationEnabled()));
