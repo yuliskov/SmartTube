@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
+import com.liskovsoft.smartyoutubetv2.common.filter.KeywordFilterManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -74,6 +75,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
+        appendKeywordFilterCategory(settingsPresenter);
         appendHideContent(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
@@ -222,6 +224,39 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.context_menu_sorting), options);
+    }
+
+    private void appendKeywordFilterCategory(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.settings_keyword_filter), optionItem -> showKeywordFilterDialog()));
+    }
+
+    private void showKeywordFilterDialog() {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+
+        dialog.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.keyword_filter_add), optionItem -> {
+            SimpleEditDialog.show(getContext(), getContext().getString(R.string.keyword_filter_add), null, newValue -> {
+                KeywordFilterManager.instance(getContext()).addWord(newValue);
+                showKeywordFilterDialog();
+                return true;
+            });
+        }));
+
+        KeywordFilterManager manager = KeywordFilterManager.instance(getContext());
+        List<OptionItem> keywords = new ArrayList<>();
+        for (String word : manager.getWords()) {
+            keywords.add(UiOptionItem.from(word, optionItem -> {
+                AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.keyword_filter_confirm_remove, word), () -> {
+                    manager.removeWord(word);
+                    showKeywordFilterDialog();
+                });
+            }));
+        }
+
+        if (!keywords.isEmpty()) {
+            dialog.appendStringsCategory(getContext().getString(R.string.keyword_filter_list), keywords);
+        }
+
+        dialog.showDialog(getContext().getString(R.string.settings_keyword_filter));
     }
 
     private void showMenuItemOrderDialog(Long menuItem) {

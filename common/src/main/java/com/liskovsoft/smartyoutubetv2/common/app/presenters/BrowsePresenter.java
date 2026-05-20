@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -744,11 +744,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
+// SKIP EMPTY GROUPS
+                                if (videoGroup == null ||
+                                        videoGroup.getVideos() == null ||
+                                        videoGroup.getVideos().isEmpty()) {
+                                    continue;
+                                }
+
                                 if (TextUtils.isEmpty(videoGroup.getTitle())) {
                                     videoGroup.setTitle(getContext().getString(R.string.suggestions));
                                 }
 
                                 getView().updateSection(videoGroup);
+
                                 mBrowseProcessor.process(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
@@ -798,8 +806,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             VideoGroup videoGroup = VideoGroup.from(baseGroup, mediaGroup);
+
                             appendLocalHistory(videoGroup);
+
+// SKIP EMPTY GROUPS
+                            if (videoGroup == null ||
+                                    videoGroup.getVideos() == null ||
+                                    videoGroup.getVideos().isEmpty()) {
+
+                                getView().showProgressBar(false);
+                                return;
+                            }
+
                             getView().updateSection(videoGroup);
+
                             mBrowseProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup);
@@ -857,7 +877,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             getView().showProgressBar(false);
 
                             VideoGroup videoGroup = VideoGroup.from(group, continueGroup);
+
+// SKIP EMPTY CONTINUATIONS
+                            if (videoGroup == null ||
+                                    videoGroup.getVideos() == null ||
+                                    videoGroup.getVideos().isEmpty()) {
+
+                                getView().showProgressBar(false);
+                                return;
+                            }
+
                             getView().updateSection(videoGroup);
+
                             mBrowseProcessor.process(videoGroup);
 
                             continueGroupIfNeeded(videoGroup, showLoading);
