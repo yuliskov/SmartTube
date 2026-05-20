@@ -91,4 +91,25 @@ public class ZipHelper {
             return false;
         }
     }
+
+    public static boolean hasDirectories(File zipFile) {
+        try (ZipInputStream zipIn = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)))) {
+            ZipEntry entry;
+
+            while ((entry = zipIn.getNextEntry()) != null) {
+                String name = entry.getName();
+
+                if (entry.isDirectory() || name.contains("/")) {
+                    return true;
+                }
+
+                zipIn.closeEntry();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }

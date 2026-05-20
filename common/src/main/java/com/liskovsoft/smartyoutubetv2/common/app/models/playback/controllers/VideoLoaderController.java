@@ -42,6 +42,7 @@ public class VideoLoaderController extends BasePlayerController {
     private static final long BUFFERING_WINDOW_MS = 60_000;
     private static final long BUFFERING_RECURRENCE_COUNT = 5;
     private static final long BUFFERING_CONTINUATION_MS = 20_000;
+    private static final int MIN_SHUFFLE_SIZE = 30;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private int mLastErrorType = -1;
@@ -878,7 +879,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // NOTE: Shuffle only user created playlists (size != -1)
-        if (current.playlistInfo.getSize() != -1) {
+        if (current.playlistInfo.getSize() > MIN_SHUFFLE_SIZE) {
             Video video = new Video();
             video.playlistId = current.playlistId;
             video.playlistIndex = Utils.getRandomIndex(current.playlistInfo.getCurrentIndex(), current.playlistInfo.getSize());

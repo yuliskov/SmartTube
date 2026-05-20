@@ -96,7 +96,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
         for (Account account : accounts) {
             index++;
-            CharSequence icon = Utils.icon(icons.get(index));
+            CharSequence icon = Utils.icon(accounts.size() == icons.size() ? icons.get(index) : null);
             optionItems.add(UiOptionItem.from(
                     TextUtils.concat(icon, " ", formatAccount(account)), option -> {
                         selectAccount(account);

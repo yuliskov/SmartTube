@@ -29,17 +29,20 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class GDriveBackupManager {
     @SuppressLint("StaticFieldLeak")
     private static GDriveBackupManager sInstance;
     private final Context mContext;
+    private static final String FILES_SUBDIR = "files";
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
-    private final String mDataDir;
+    private final String mRootDir;
+    private final String mSharedPrefs;
+    private final String mFilesDir;
+    private final String[] mDataDirs;
     private final String mBackupDir;
     private final String mRootBackupDir;
     private final GeneralData mGeneralData;
@@ -50,7 +53,10 @@ public class GDriveBackupManager {
     private GDriveBackupManager(Context context) {
         mContext = context;
         mGeneralData = GeneralData.instance(context);
-        mDataDir = String.format("%s/%s", mContext.getApplicationInfo().dataDir, SHARED_PREFS_SUBDIR);
+        mRootDir = mContext.getApplicationInfo().dataDir;
+        mSharedPrefs = String.format("%s/%s", mRootDir, SHARED_PREFS_SUBDIR);
+        mFilesDir = String.format("%s/%s", mRootDir, FILES_SUBDIR);
+        mDataDirs = new String[] { mSharedPrefs, mFilesDir };
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mRootBackupDir = "SmartTubeBackup";
         mSignInService = GoogleSignInService.instance();
@@ -119,37 +125,15 @@ public class GDriveBackupManager {
 
     private void startBackupWrapper() {
         String backupDir = getBackupDir();
-        startBackup(backupDir, mDataDir);
+        startBackup(backupDir);
     }
 
-    private void startBackupOld(String backupDir, String dataDir) {
-        Collection<File> files = FileHelpers.listFileTree(new File(dataDir));
-
-        Consumer<File> backupConsumer = file -> {
-            if (file.isFile()) {
-                if (checkFileName(file.getName())) {
-                    if (!mIsBlocking) MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_backup) + "\n" + file.getName());
-
-                    RxHelper.runBlocking(DriveService.uploadFile(file, Uri.parse(String.format("%s%s", backupDir, file.getAbsolutePath().replace(dataDir, "")))));
-                }
-            }
-        };
-
-        if (mIsBlocking) {
-            Observable.fromIterable(files)
-                    .blockingSubscribe(backupConsumer);
-        } else {
-            mBackupAction = Observable.fromIterable(files)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io()) // run subscribe on separate thread
-                    .subscribe(backupConsumer, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
-        }
-    }
-
-    private void startBackup(String backupDir, String dataDir) {
-        File source = new File(dataDir);
+    private void startBackup(String backupDir) {
+        // First, copy to the backup dir
+        File source = new File(FileHelpers.getExternalMediaDirectory(mContext), "data");
+        new BackupAndRestoreManager(mContext).backupToDir(source);
         File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
-        ZipHelper.zipFolder(source, zipFile, Utils.BACKUP_PATTERNS);
+        ZipHelper.zipFolder(source, zipFile, null);
 
         Observable<Void> uploadFile = DriveService.uploadFile(zipFile, Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)));
 
@@ -178,28 +162,27 @@ public class GDriveBackupManager {
         showRestoreChooserDialog();
     }
 
-    private void startRestoreWrapper() {
-        startRestore(getBackupDir(), mDataDir,
-                () -> startRestore(getAltBackupDir(), mDataDir,
-                        () -> startRestoreOld(getBackupDir(), mDataDir,
-                                () -> startRestoreOld(getAltBackupDir(), mDataDir, null))));
-    }
-
-    private void startRestoreOld(String backupDir, String dataDir, Runnable onError) {
+    private void startRestoreOld(String backupDir, Runnable onError) {
         mRestoreAction = DriveService.getFileList(Uri.parse(backupDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io()) // run subscribe on separate thread
                 .subscribe(names -> {
+                    if (names == null)
+                        return;
+
                     // remove old data
-                    FileHelpers.delete(dataDir);
+                    for (String dataDir : mDataDirs) {
+                        FileHelpers.delete(dataDir);
+                    }
 
                     for (String name : names) {
-                        if (checkFileName(name)) {
-                            MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
+                        if (name == null)
+                            continue;
 
-                            DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
-                                    .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(dataDir, fixAltPackageName(name))));
-                        }
+                        MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
+
+                        DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
+                                .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(mSharedPrefs, fixAltPackageName(name))));
                     }
 
                     // NOTE: Don't restart the app, just kill. The reboot will broke the files.
@@ -212,7 +195,7 @@ public class GDriveBackupManager {
                 });
     }
 
-    private void startRestore(String backupDir, String dataDir, Runnable onError) {
+    private void startRestore(String backupDir, Runnable onError) {
         MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore));
         mRestoreAction = DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
                 .subscribeOn(Schedulers.io())
@@ -221,11 +204,19 @@ public class GDriveBackupManager {
                     File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
                     FileHelpers.copy(inputStream, zipFile);
 
-                    File out = new File(dataDir);
+                    File sharedPrefs = new File(mSharedPrefs);
+
                     // remove old data
-                    FileHelpers.delete(out);
-                    ZipHelper.unzipToFolder(zipFile, out);
-                    fixFileNames(out);
+                    for (String dataDir : mDataDirs) {
+                        FileHelpers.delete(dataDir);
+                    }
+
+                    if (ZipHelper.hasDirectories(zipFile)) { // the new format, dirs: /files /share_prefs
+                        ZipHelper.unzipToFolder(zipFile, new File(mRootDir));
+                    } else { // the old format: only xml files
+                        ZipHelper.unzipToFolder(zipFile, sharedPrefs);
+                    }
+                    fixFileNames(sharedPrefs);
 
                     // NOTE: Don't restart the app, just kill. The reboot will broke the files.
                     // To apply settings we need to kill the app
@@ -239,10 +230,6 @@ public class GDriveBackupManager {
 
     private void logIn(Runnable onDone) {
         GoogleSignInPresenter.instance(mContext).start(onDone);
-    }
-
-    private boolean checkFileName(String name) {
-        return Helpers.endsWithAny(name, Utils.BACKUP_PATTERNS);
     }
 
     private String fixAltPackageName(String name) {
@@ -318,7 +305,7 @@ public class GDriveBackupManager {
             options.add(UiOptionItem.from(name, optionItem -> {
                 AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), () -> {
                     String backupDir = String.format("%s/%s", mRootBackupDir, name);
-                    startRestore(backupDir, mDataDir, () -> startRestoreOld(backupDir, mDataDir, null));
+                    startRestore(backupDir, () -> startRestoreOld(backupDir, null));
                 });
             }));
         }

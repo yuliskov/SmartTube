@@ -149,17 +149,46 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             return;
         }
 
+        //if (hasAccessOnlyToAppFolders()) {
+        //    File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
+        //    File dataDir = new File(mediaDir, "data");
+        //    FileHelpers.delete(dataDir);
+        //} else if (currentBackup.isDirectory()) { // plain sdcard storage
+        //    // remove old backup <app_id>/Backup
+        //    FileHelpers.delete(currentBackup);
+        //}
+        //
+        //if (mSharedPrefsDir.isDirectory() && !FileHelpers.isEmpty(mSharedPrefsDir)) {
+        //    File destination = new File(currentBackup, mSharedPrefsDir.getName());
+        //    FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
+        //
+        //    // Don't store unique id
+        //    FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
+        //}
+        //
+        //if (mFilesDir.isDirectory() && !FileHelpers.isEmpty(mFilesDir)) {
+        //    File destination = new File(currentBackup, mFilesDir.getName());
+        //    FileHelpers.copy(mFilesDir, destination, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
+        //}
+
+        backupToDir(currentBackup);
+
         if (hasAccessOnlyToAppFolders()) {
-            File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
-            File dataDir = new File(mediaDir, "data");
-            FileHelpers.delete(dataDir);
-        } else if (currentBackup.isDirectory()) { // plain sdcard storage
+            mHelper.exportAppMediaFolder();
+        } else {
+            RxHelper.disposeActions(mZipAction);
+            mZipAction = RxHelper.runAsync(this::saveDataToZip);
+        }
+    }
+
+    public void backupToDir(File target) {
+        if (target.isDirectory()) { // plain sdcard storage
             // remove old backup <app_id>/Backup
-            FileHelpers.delete(currentBackup);
+            FileHelpers.delete(target);
         }
 
         if (mSharedPrefsDir.isDirectory() && !FileHelpers.isEmpty(mSharedPrefsDir)) {
-            File destination = new File(currentBackup, mSharedPrefsDir.getName());
+            File destination = new File(target, mSharedPrefsDir.getName());
             FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
 
             // Don't store unique id
@@ -167,15 +196,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         }
 
         if (mFilesDir.isDirectory() && !FileHelpers.isEmpty(mFilesDir)) {
-            File destination = new File(currentBackup, mFilesDir.getName());
+            File destination = new File(target, mFilesDir.getName());
             FileHelpers.copy(mFilesDir, destination, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
-        }
-
-        if (hasAccessOnlyToAppFolders()) {
-            mHelper.exportAppMediaFolder();
-        } else {
-            RxHelper.disposeActions(mZipAction);
-            mZipAction = RxHelper.runAsync(this::saveDataToZip);
         }
     }
 
@@ -197,8 +219,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             FileHelpers.delete(mSharedPrefsDir);
         }
 
-        FileHelpers.copy(sharedPrefsBackupDir, mSharedPrefsDir, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
-        FileHelpers.copy(filesBackupDir, mFilesDir, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
+        FileHelpers.copy(sharedPrefsBackupDir, mSharedPrefsDir);
+        FileHelpers.copy(filesBackupDir, mFilesDir);
         fixFileNames(mSharedPrefsDir);
 
         MessageHelpers.showMessage(mContext, R.string.msg_done);
