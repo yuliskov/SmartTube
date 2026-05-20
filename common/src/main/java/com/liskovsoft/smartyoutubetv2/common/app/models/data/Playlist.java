@@ -279,6 +279,15 @@ public class Playlist {
     }
 
     /**
+     * Replace everything after the currently playing track with a new tail.
+     * Indices 0..mCurrentIndex are untouched. Caller must de-dup beforehand.
+     */
+    public void spliceAfterCurrent(List<Video> newTail) {
+        removeAllAfterCurrent();
+        mPlaylist.addAll(newTail);
+    }
+
+    /**
      * Trim playlist if one exceeds needed size or current element not last in the list
      */
     private void trimPlaylist() {

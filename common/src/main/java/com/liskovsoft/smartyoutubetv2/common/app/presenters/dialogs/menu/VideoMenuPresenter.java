@@ -1,9 +1,21 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -11,7 +23,10 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -31,15 +46,23 @@ import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ShuffleCacheData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class VideoMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
@@ -50,6 +73,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Disposable mPlaylistsInfoAction;
+    private Disposable mShuffleAction;
+    private Disposable mRevalidateAction;
+    private String mActiveShuffleCacheKey;
+    private View mShuffleOverlay;
+    private TextView mShuffleText;
+    private int mShuffleProgressStringRes = R.string.shuffle_loading_progress;
     private Video mVideo;
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
@@ -79,6 +108,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPlaylistOrderButtonEnabled;
     private boolean mIsStreamReminderButtonEnabled;
     private boolean mIsMarkAsWatchedButtonEnabled;
+    private boolean mIsShufflePlaylistButtonEnabled;
+    private boolean mIsShuffleChannelButtonEnabled;
     private VideoMenuCallback mCallback;
     private List<PlaylistInfo> mPlaylistInfos;
     private final Map<Long, MenuAction> mMenuMapping = new HashMap<>();
@@ -971,6 +1002,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsPlaylistOrderButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAYLIST_ORDER);
         mIsMarkAsWatchedButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MARK_AS_WATCHED);
         mIsOpenCommentsButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_COMMENTS);
+        mIsShufflePlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST);
+        mIsShuffleChannelButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL);
     }
 
     private void initMenuMapping() {
@@ -1010,6 +1043,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_TOGGLE_HISTORY, new MenuAction(this::appendToggleHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_CLEAR_HISTORY, new MenuAction(this::appendClearHistoryButton, true));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST, new MenuAction(this::appendShufflePlaylistButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL, new MenuAction(this::appendShuffleChannelButton, false));
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
             if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO) {
@@ -1025,6 +1060,701 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(provider.getTitleResId()), optionItem -> provider.onClicked(getVideo(), getCallback()))
             );
+        }
+    }
+
+    private void appendShufflePlaylistButton() {
+        if (!mIsShufflePlaylistButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null) {
+            return;
+        }
+
+        // Path 1: video inside an already-loaded playlist group
+        if (mVideo.hasVideo() && mVideo.belongsToSamePlaylistGroup()) {
+            VideoGroup group = mVideo.getGroup();
+            if (group != null && !group.isEmpty() && group.getSize() >= 2) {
+                mDialogPresenter.appendSingleButton(
+                        UiOptionItem.from(
+                                getContext().getString(R.string.shuffle_playlist),
+                                optionItem -> {
+                                    mDialogPresenter.closeDialog();
+                                    mShuffleProgressStringRes = R.string.shuffle_loading_progress;
+                                    mActiveShuffleCacheKey = resolveShuffleCacheKey(mVideo);
+                                    shufflePlaylist(group);
+                                }
+                        ));
+                return;
+            }
+        }
+
+        // Path 2: playlist card (videos not loaded yet)
+        appendShufflePlaylistCardButton(mVideo, mDialogPresenter);
+    }
+
+    /**
+     * Shared guard + button for shuffling a playlist card.
+     * Called from both VideoMenuPresenter and SectionMenuPresenter.
+     */
+    void appendShufflePlaylistCardButton(Video video, AppDialogPresenter dialogPresenter) {
+        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_PLAYLIST)) {
+            return;
+        }
+
+        if (video == null) {
+            return;
+        }
+
+        if (video.hasPlaylist() || video.hasNestedItems() || video.isPlaylistAsChannel() || video.belongsToUserPlaylists()) {
+            dialogPresenter.appendSingleButton(
+                    UiOptionItem.from(
+                            getContext().getString(R.string.shuffle_playlist),
+                            optionItem -> {
+                                dialogPresenter.closeDialog();
+                                shufflePlaylistCard(video);
+                            }
+                    ));
+        }
+    }
+
+    void shufflePlaylistCard(Video video) {
+        // SWR cache check
+        String cacheKey = resolveShuffleCacheKey(video);
+        if (cacheKey != null) {
+            List<String> cached = ShuffleCacheData.instance(getContext()).getCachedVideoIds(cacheKey);
+            if (cached != null) {
+                shuffleFromCache(cached, cacheKey);
+                revalidatePlaylistInBackground(video, cacheKey);
+                return;
+            }
+        }
+        mActiveShuffleCacheKey = cacheKey;
+
+        mShuffleProgressStringRes = R.string.shuffle_loading_progress;
+        showShuffleProgress(0);
+
+        // Ensure mediaItem is populated for the API call
+        if (video.mediaItem == null) {
+            video.mediaItem = SimpleMediaItem.from(video);
+        }
+
+        Observable<MediaGroup> observable;
+        if (video.hasNestedItems() || video.isChannel()) {
+            observable = getContentService().getGroupObserve(video.mediaItem);
+        } else if (video.hasReloadPageKey()) {
+            observable = getContentService().getGroupObserve(video.getReloadPageKey());
+        } else {
+            observable = mMediaItemService.getMetadataObserve(video.videoId, video.playlistId, 0, video.playlistParams)
+                    .flatMap(metadata -> {
+                        if (metadata == null || metadata.getSuggestions() == null) {
+                            return Observable.empty();
+                        }
+                        for (MediaGroup g : metadata.getSuggestions()) {
+                            if (g.getMediaItems() != null && !g.getMediaItems().isEmpty()) {
+                                return Observable.just(g);
+                            }
+                        }
+                        return Observable.empty();
+                    });
+        }
+
+        RxHelper.disposeActions(mShuffleAction);
+        final boolean[] hasGroup = {false};
+        mShuffleAction = observable
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroup -> {
+                            hasGroup[0] = true;
+                            VideoGroup group = VideoGroup.from(mediaGroup);
+                            shufflePlaylist(group);
+                        },
+                        error -> {
+                            Log.e(TAG, "shufflePlaylistCard error: %s", error.getMessage());
+                            dismissShuffleProgress();
+                        },
+                        () -> {
+                            // Only show empty message if onNext was never called
+                            if (!hasGroup[0]) {
+                                dismissShuffleProgress();
+                                MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                            }
+                        }
+                );
+    }
+
+    private void shufflePlaylist(VideoGroup group) {
+        List<Video> allVideos = new ArrayList<>(group.getVideos());
+        showShuffleProgress(allVideos.size());
+
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        if (mediaGroup == null) {
+            // No continuation possible — shuffle what we have
+            shuffleAndPlay(allVideos);
+            return;
+        }
+
+        // Load all remaining pages then shuffle
+        Set<Video> seen = new HashSet<>(allVideos);
+        loadAllPages(mediaGroup, allVideos, seen, 0);
+    }
+
+    private void showShuffleProgress(int loadedCount) {
+        String msg = getContext().getString(mShuffleProgressStringRes, loadedCount);
+
+        if (mShuffleOverlay != null) {
+            // Overlay already visible — just update the text
+            mShuffleText.setText(msg);
+            return;
+        }
+
+        Context context = getContext();
+        if (!(context instanceof Activity)) {
+            return;
+        }
+
+        ViewGroup root = (ViewGroup) ((Activity) context)
+                .findViewById(android.R.id.content);
+        if (root == null) {
+            return;
+        }
+
+        // Semi-transparent full-screen backdrop
+        FrameLayout overlay = new FrameLayout(context);
+        overlay.setBackgroundColor(0xB0000000);
+        overlay.setClickable(true); // absorb touches
+        overlay.setFocusable(true);
+        overlay.setFocusableInTouchMode(true);
+        overlay.requestFocus();
+        overlay.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_UP &&
+                    (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)) {
+                cancelShuffle();
+                return true;
+            }
+            return true; // consume all keys while overlay is visible
+        });
+
+        // Vertical container: spinner + text
+        LinearLayout column = new LinearLayout(context);
+        column.setOrientation(LinearLayout.VERTICAL);
+        column.setGravity(Gravity.CENTER);
+
+        ProgressBar spinner = new ProgressBar(context, null,
+                android.R.attr.progressBarStyleLarge);
+
+        TextView text = new TextView(context);
+        text.setText(msg);
+        text.setTextColor(0xFFFFFFFF);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        text.setGravity(Gravity.CENTER);
+        int pad = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 16,
+                context.getResources().getDisplayMetrics());
+        text.setPadding(0, pad, 0, 0);
+
+        column.addView(spinner);
+        column.addView(text);
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+        overlay.addView(column, lp);
+
+        root.addView(overlay, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
+        mShuffleOverlay = overlay;
+        mShuffleText = text;
+    }
+
+    private void dismissShuffleProgress() {
+        if (mShuffleOverlay != null) {
+            ViewGroup parent = (ViewGroup) mShuffleOverlay.getParent();
+            if (parent != null) {
+                parent.removeView(mShuffleOverlay);
+            }
+            mShuffleOverlay = null;
+            mShuffleText = null;
+        }
+    }
+
+    private void cancelShuffle() {
+        RxHelper.disposeActions(mShuffleAction);
+        RxHelper.disposeActions(mRevalidateAction);
+        dismissShuffleProgress();
+    }
+
+    private static final int MAX_SHUFFLE_CONTINUATIONS = 250;
+    private static final int SHUFFLE_TIMEOUT_SEC = 5;
+
+    private void loadAllPages(MediaGroup mediaGroup, List<Video> accumulated, Set<Video> seen, int count) {
+        if (count >= MAX_SHUFFLE_CONTINUATIONS) {
+            shuffleAndPlay(accumulated);
+            return;
+        }
+
+        ContentService contentService = getContentService();
+        RxHelper.disposeActions(mShuffleAction);
+
+        final boolean[] hasNextPage = {false};
+
+        mShuffleAction = contentService.continueGroupObserve(mediaGroup)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        nextGroup -> {
+                            hasNextPage[0] = true;
+                            int sizeBefore = accumulated.size();
+                            if (nextGroup.getMediaItems() != null) {
+                                for (MediaItem item : nextGroup.getMediaItems()) {
+                                    Video video = Video.from(item);
+                                    if (video != null && seen.add(video)) {
+                                        accumulated.add(video);
+                                    }
+                                }
+                            }
+                            if (accumulated.size() == sizeBefore) {
+                                // No new videos — playlist exhausted
+                                shuffleAndPlay(accumulated);
+                                return;
+                            }
+                            showShuffleProgress(accumulated.size());
+                            // Continue loading more pages
+                            loadAllPages(nextGroup, accumulated, seen, count + 1);
+                        },
+                        error -> {
+                            Log.e(TAG, "Shuffle load error: %s", error.getMessage());
+                            shuffleAndPlay(accumulated);
+                        },
+                        () -> {
+                            // Only shuffle here if onNext was never called
+                            // (i.e. no more pages to load)
+                            if (!hasNextPage[0]) {
+                                shuffleAndPlay(accumulated);
+                            }
+                        }
+                );
+    }
+
+    private void shuffleAndPlay(List<Video> videos) {
+        dismissShuffleProgress();
+        // Filter non-playable items
+        List<Video> playable = new ArrayList<>();
+        for (Video v : videos) {
+            if (v.hasVideo() && !v.isUpcoming) {
+                playable.add(v);
+            }
+        }
+
+        if (playable.size() < 2) {
+            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+            return;
+        }
+
+        Collections.shuffle(playable);
+
+        // Mark all as queue items to bypass trimPlaylist.
+        // Clear playlist metadata to prevent hasNextPlaylist() from
+        // triggering YouTube's chain after the queue is exhausted.
+        for (Video v : playable) {
+            v.fromQueue = true;
+            v.playlistId = null;
+            v.nextMediaItem = null;
+        }
+
+        // Write to SWR cache (cache miss path — first shuffle)
+        if (mActiveShuffleCacheKey != null) {
+            List<String> ids = new ArrayList<>(playable.size());
+            for (Video v : playable) {
+                ids.add(v.videoId);
+            }
+            ShuffleCacheData.instance(getContext()).putCachedVideoIds(mActiveShuffleCacheKey, ids);
+            mActiveShuffleCacheKey = null;
+        }
+
+        // Populate the playback queue
+        Playlist playlist = Playlist.instance();
+        playlist.clear();
+        playlist.addAll(playable);
+        playlist.setCurrent(playable.get(0));
+
+        // Force playback mode to LIST (plays through queue, stops at end)
+        PlayerData.instance(getContext()).setPlaybackMode(PlayerConstants.PLAYBACK_MODE_LIST);
+
+        // Start playback
+        PlaybackPresenter.instance(getContext()).openVideo(playable.get(0));
+    }
+
+    private void appendShuffleChannelButton() {
+        if (!mIsShuffleChannelButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || (!mVideo.hasVideo() && !mVideo.isChannel()) || mVideo.isPlaylistAsChannel()) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_channel),
+                        optionItem -> {
+                            mDialogPresenter.closeDialog();
+                            shuffleChannel(mVideo);
+                        }
+                ));
+    }
+
+    /**
+     * Shared guard + button for shuffling a channel card.
+     * Called from both VideoMenuPresenter, ChannelUploadsMenuPresenter and SectionMenuPresenter.
+     */
+    void appendShuffleChannelCardButton(Video video, AppDialogPresenter dialogPresenter) {
+        if (!MainUIData.instance(getContext()).isMenuItemEnabled(MainUIData.MENU_ITEM_SHUFFLE_CHANNEL)) {
+            return;
+        }
+
+        if (video == null || !video.isChannel() || video.isPlaylistAsChannel()) {
+            return;
+        }
+
+        dialogPresenter.appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.shuffle_channel),
+                        optionItem -> {
+                            dialogPresenter.closeDialog();
+                            shuffleChannel(video);
+                        }
+                ));
+    }
+
+    private void shuffleChannel(Video video) {
+        // SWR cache check — resolve channelId first if needed
+        String cacheKey = video.channelId;
+        if (cacheKey != null) {
+            List<String> cached = ShuffleCacheData.instance(getContext()).getCachedVideoIds(cacheKey);
+            if (cached != null) {
+                shuffleFromCache(cached, cacheKey);
+                revalidateChannelInBackground(video);
+                return;
+            }
+        }
+        mActiveShuffleCacheKey = cacheKey;
+
+        mShuffleProgressStringRes = R.string.shuffle_channel_loading_progress;
+        showShuffleProgress(0);
+
+        // Resolve channelId if not yet available
+        if (video.channelId == null) {
+            mServiceManager.loadMetadata(video,
+                    metadata -> {
+                        // Guard: user may have cancelled while metadata was loading
+                        if (mShuffleOverlay == null) {
+                            return;
+                        }
+                        video.sync(metadata);
+                        if (video.channelId == null) {
+                            dismissShuffleProgress();
+                            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                            return;
+                        }
+                        mActiveShuffleCacheKey = video.channelId;
+                        loadChannelAndShuffle(video.channelId);
+                    },
+                    error -> {
+                        Log.e(TAG, "shuffleChannel metadata error: %s", error.getMessage());
+                        dismissShuffleProgress();
+                    },
+                    () -> {
+                        // onComplete without onNext — metadata not found
+                    }
+            );
+            return;
+        }
+
+        loadChannelAndShuffle(video.channelId);
+    }
+
+    private void loadChannelAndShuffle(String channelId) {
+        RxHelper.disposeActions(mShuffleAction);
+
+        mShuffleAction = getContentService().getChannelObserve(channelId)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroups -> {
+                            // Find the first row that contains actual videos (typically "Uploads")
+                            for (MediaGroup group : mediaGroups) {
+                                if (group.getMediaItems() != null && !group.getMediaItems().isEmpty()) {
+                                    VideoGroup videoGroup = VideoGroup.from(group);
+                                    shufflePlaylist(videoGroup);
+                                    return;
+                                }
+                            }
+                            dismissShuffleProgress();
+                            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                        },
+                        error -> {
+                            Log.e(TAG, "shuffleChannel error: %s", error.getMessage());
+                            dismissShuffleProgress();
+                        },
+                        () -> {
+                            // onComplete without onNext — empty channel
+                        }
+                );
+    }
+
+    // ── SWR Cache helpers ────────────────────────────────────────────────
+
+    /**
+     * Resolve the cache key for the given video.
+     * Playlist shuffle → playlistId; Channel shuffle → channelId.
+     */
+    private String resolveShuffleCacheKey(Video video) {
+        if (video == null) {
+            return null;
+        }
+        // Playlist card: prefer playlistId
+        if (video.hasPlaylist()) {
+            return video.getPlaylistId();
+        }
+        // Channel card or video with channel
+        if (video.channelId != null) {
+            return video.channelId;
+        }
+        // Pinned sidebar / user-playlists may carry a reloadPageKey
+        if (video.hasReloadPageKey()) {
+            return video.getReloadPageKey();
+        }
+        return null;
+    }
+
+    /**
+     * Cache-hit path: re-shuffle cached IDs, build lightweight Video objects, start playback.
+     */
+    private void shuffleFromCache(List<String> cachedIds, String cacheKey) {
+        List<Video> playable = new ArrayList<>(cachedIds.size());
+        for (String videoId : cachedIds) {
+            if (videoId != null) {
+                Video v = Video.from(videoId);
+                v.fromQueue = true;
+                playable.add(v);
+            }
+        }
+
+        if (playable.size() < 2) {
+            MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+            return;
+        }
+
+        // Re-shuffle so the order differs from last session
+        Collections.shuffle(playable);
+
+        // Populate the playback queue
+        Playlist playlist = Playlist.instance();
+        playlist.clear();
+        playlist.addAll(playable);
+        playlist.setCurrent(playable.get(0));
+
+        // Force playback mode to LIST
+        PlayerData.instance(getContext()).setPlaybackMode(PlayerConstants.PLAYBACK_MODE_LIST);
+
+        // Start playback immediately — no loading overlay
+        PlaybackPresenter.instance(getContext()).openVideo(playable.get(0));
+    }
+
+    /**
+     * Background revalidation for playlist shuffle — no UI.
+     * Loads the full playlist, shuffles, and splices into the live queue.
+     */
+    private void revalidatePlaylistInBackground(Video video, String cacheKey) {
+        RxHelper.disposeActions(mRevalidateAction);
+
+        // Ensure mediaItem is populated for the API call
+        if (video.mediaItem == null) {
+            video.mediaItem = SimpleMediaItem.from(video);
+        }
+
+        Observable<MediaGroup> observable;
+        if (video.hasNestedItems() || video.isChannel()) {
+            observable = getContentService().getGroupObserve(video.mediaItem);
+        } else if (video.hasReloadPageKey()) {
+            observable = getContentService().getGroupObserve(video.getReloadPageKey());
+        } else {
+            observable = mMediaItemService.getMetadataObserve(video.videoId, video.playlistId, 0, video.playlistParams)
+                    .flatMap(metadata -> {
+                        if (metadata == null || metadata.getSuggestions() == null) {
+                            return Observable.empty();
+                        }
+                        for (MediaGroup g : metadata.getSuggestions()) {
+                            if (g.getMediaItems() != null && !g.getMediaItems().isEmpty()) {
+                                return Observable.just(g);
+                            }
+                        }
+                        return Observable.empty();
+                    });
+        }
+
+        mRevalidateAction = observable
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroup -> {
+                            List<Video> allVideos = new ArrayList<>();
+                            if (mediaGroup.getMediaItems() != null) {
+                                for (MediaItem item : mediaGroup.getMediaItems()) {
+                                    Video v = Video.from(item);
+                                    if (v != null) {
+                                        allVideos.add(v);
+                                    }
+                                }
+                            }
+                            Set<Video> seen = new HashSet<>(allVideos);
+                            loadAllPagesBackground(mediaGroup, allVideos, seen, 0, cacheKey);
+                        },
+                        error -> Log.e(TAG, "Revalidate playlist error: %s", error.getMessage())
+                );
+    }
+
+    /**
+     * Background revalidation for channel shuffle — no UI.
+     */
+    private void revalidateChannelInBackground(Video video) {
+        String cacheKey = video.channelId;
+        if (cacheKey == null) {
+            return;
+        }
+
+        RxHelper.disposeActions(mRevalidateAction);
+
+        mRevalidateAction = getContentService().getChannelObserve(cacheKey)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroups -> {
+                            for (MediaGroup group : mediaGroups) {
+                                if (group.getMediaItems() != null && !group.getMediaItems().isEmpty()) {
+                                    List<Video> allVideos = new ArrayList<>();
+                                    for (MediaItem item : group.getMediaItems()) {
+                                        Video v = Video.from(item);
+                                        if (v != null) {
+                                            allVideos.add(v);
+                                        }
+                                    }
+                                    Set<Video> seen = new HashSet<>(allVideos);
+                                    loadAllPagesBackground(group, allVideos, seen, 0, cacheKey);
+                                    return;
+                                }
+                            }
+                        },
+                        error -> Log.e(TAG, "Revalidate channel error: %s", error.getMessage())
+                );
+    }
+
+    /**
+     * Silent version of loadAllPages — no overlay, no progress updates.
+     * On completion calls spliceIntoLiveQueue instead of shuffleAndPlay.
+     */
+    private void loadAllPagesBackground(MediaGroup mediaGroup, List<Video> accumulated,
+                                        Set<Video> seen, int count, String cacheKey) {
+        if (count >= MAX_SHUFFLE_CONTINUATIONS) {
+            spliceIntoLiveQueue(accumulated, cacheKey);
+            return;
+        }
+
+        ContentService contentService = getContentService();
+        RxHelper.disposeActions(mRevalidateAction);
+
+        final boolean[] hasNextPage = {false};
+
+        mRevalidateAction = contentService.continueGroupObserve(mediaGroup)
+                .timeout(SHUFFLE_TIMEOUT_SEC, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(
+                        nextGroup -> {
+                            hasNextPage[0] = true;
+                            int sizeBefore = accumulated.size();
+                            if (nextGroup.getMediaItems() != null) {
+                                for (MediaItem item : nextGroup.getMediaItems()) {
+                                    Video video = Video.from(item);
+                                    if (video != null && seen.add(video)) {
+                                        accumulated.add(video);
+                                    }
+                                }
+                            }
+                            if (accumulated.size() == sizeBefore) {
+                                spliceIntoLiveQueue(accumulated, cacheKey);
+                                return;
+                            }
+                            loadAllPagesBackground(nextGroup, accumulated, seen, count + 1, cacheKey);
+                        },
+                        error -> {
+                            Log.e(TAG, "Background load error: %s", error.getMessage());
+                            spliceIntoLiveQueue(accumulated, cacheKey);
+                        },
+                        () -> {
+                            if (!hasNextPage[0]) {
+                                spliceIntoLiveQueue(accumulated, cacheKey);
+                            }
+                        }
+                );
+    }
+
+    /**
+     * Splice a fresh shuffled list into the live playback queue.
+     * De-dups against already-played tracks. Updates cache for next session.
+     */
+    private void spliceIntoLiveQueue(List<Video> freshVideos, String cacheKey) {
+        // Filter playable
+        List<Video> playable = new ArrayList<>();
+        for (Video v : freshVideos) {
+            if (v.hasVideo() && !v.isUpcoming) {
+                playable.add(v);
+            }
+        }
+
+        if (playable.size() < 2) {
+            return; // Silently bail — user is already listening to cached content
+        }
+
+        // Shuffle the fresh list
+        Collections.shuffle(playable);
+
+        // Update cache for next session
+        List<String> freshIds = new ArrayList<>(playable.size());
+        for (Video v : playable) {
+            freshIds.add(v.videoId);
+        }
+        ShuffleCacheData.instance(getContext()).putCachedVideoIds(cacheKey, freshIds);
+
+        // Collect already-played + current video IDs
+        Playlist playlist = Playlist.instance();
+        Video current = playlist.getCurrent();
+        if (current == null) {
+            return; // Playback has ended
+        }
+
+        List<Video> all = playlist.getAll();
+        int currentIndex = all.indexOf(current);
+        Set<String> playedIds = new HashSet<>();
+        for (int i = 0; i <= currentIndex && i < all.size(); i++) {
+            if (all.get(i).videoId != null) {
+                playedIds.add(all.get(i).videoId);
+            }
+        }
+
+        // Build de-duped tail
+        List<Video> tail = new ArrayList<>();
+        for (Video v : playable) {
+            if (!playedIds.contains(v.videoId)) {
+                v.fromQueue = true;
+                v.playlistId = null;
+                v.nextMediaItem = null;
+                tail.add(v);
+            }
+        }
+
+        if (!tail.isEmpty()) {
+            playlist.spliceAfterCurrent(tail);
         }
     }
 }

@@ -38,6 +38,7 @@ SmartTube is a free and open-source media client for Android TVs and TV boxes. I
 - HDR compatibility  
 - View live chat  
 - Customizable buttons  
+- Shuffle playlists & channels  
 - Does not require Google Services  
 - Helpful international community
 
@@ -170,6 +171,11 @@ SmartTube supports playing videos in PiP mode. This needs to be enabled under _S
 ### Adjust Speed
 
 You can adjust the playback speed pressing the speed-indicator icon (gauge) in the top row of the player. This is remembered across videos. Some speeds may case frame drops, this is a known issue.
+
+
+### Shuffle Playlists & Channels
+
+You can shuffle any playlist or channel's uploads by long-pressing a video, playlist, or channel card and selecting _Shuffle playlist_ or _Shuffle channel_ from the context menu. SmartTube loads all available videos, shuffles them, and plays them back in a random order. The shuffled list is cached so that launching the same shuffle again starts playback instantly.
 
 
 ### Voice Search

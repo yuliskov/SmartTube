@@ -104,6 +104,8 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendToggleHistoryButton();
         appendClearHistoryButton();
         appendUpdateCheckButton();
+        appendShufflePlaylistButton();
+        appendShuffleChannelButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
@@ -131,6 +133,8 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendMoveSectionButton();
         appendRenameSectionButton();
         appendClearHistoryButton();
+        appendShufflePlaylistButton();
+        appendShuffleChannelButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
             MenuAction menuAction = mMenuMapping.get(menuItem);
@@ -263,6 +267,14 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         } else {
             MessageHelpers.showMessage(getContext(), R.string.msg_done);
         }
+    }
+
+    private void appendShufflePlaylistButton() {
+        VideoMenuPresenter.instance(getContext()).appendShufflePlaylistCardButton(getVideo(), mDialogPresenter);
+    }
+
+    private void appendShuffleChannelButton() {
+        VideoMenuPresenter.instance(getContext()).appendShuffleChannelCardButton(getVideo(), mDialogPresenter);
     }
 
     private void disposeActions() {
