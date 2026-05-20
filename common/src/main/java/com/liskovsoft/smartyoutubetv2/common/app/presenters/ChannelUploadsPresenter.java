@@ -253,9 +253,15 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                         this::update,
                         error -> {
                             Log.e(TAG, "update error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        }
                 );
     }
 
