@@ -81,8 +81,10 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem.Video
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.RestApiService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -267,6 +269,18 @@ public class Utils {
         }, Context.BIND_AUTO_CREATE);
     }
 
+
+    public static void updateRestApiService(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        if (AppPrefs.instance(context).isRestApiEnabled()) {
+            startService(context, RestApiService.class);
+        } else {
+            stopService(context, RestApiService.class);
+        }
+    }
     public static void startRemoteControlWorkRequest(Context context) {
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(
