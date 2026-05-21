@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.filter.KeywordFilterManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 
 import java.util.ArrayList;
@@ -454,7 +455,7 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedAndRecommended(video)) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video) || isKeywordBlocked(video) || isWatchedAndRecommended(video)) {
             return;
         }
 
@@ -491,6 +492,14 @@ public class VideoGroup {
         String channelName = video.getAuthor();
 
         return blockedChannelData.containsChannel(channelId, channelName);
+    }
+
+    private boolean isKeywordBlocked(Video video) {
+        if (video == null || video.isChapter) {
+            return false;
+        }
+
+        return KeywordFilterManager.instance(GlobalPreferences.context()).isBlocked(video.getTitle());
     }
 
     private boolean isWatchedAndRecommended(Video video) {
