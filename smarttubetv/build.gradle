@@ -244,4 +244,7 @@ dependencies {
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
     implementation 'net.gotev:speech:' + gotevSpeechVersion
+
+    // ByeByeDPI fix
+    implementation 'org.conscrypt:conscrypt-android:' + conscryptVersion
 }
