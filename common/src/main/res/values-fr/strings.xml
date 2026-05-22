@@ -653,7 +653,7 @@
   <string name="old_channel_look">Ancienne apparence de la page Chaîne</string>
   <string name="player_extra_long_speed_list">Liste de vitesse extra longue</string>
   <string name="dearrow_status">Vérifier l’état du serveur DeArrow</string>
-  <chaîne nom="skip_shorts">Sauter les Shorts</chaise>
+  <string name="skip_shorts">Sauter les Shorts</string>
   <chaise nom="liste de lecture_inscription">Ajouter une playlist à la section Playlists</chaise>
   <chaise nom="raccourci_sortie_joueur">Quitter le lecteur</chaise>
   <chaise nom="sauvegarde_spécifique_à l'appareil">Sauvegarde pour cet appareil unique</chaise>
