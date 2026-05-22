@@ -605,7 +605,7 @@ public class VideoLoaderController extends BasePlayerController {
             }
 
             resultAction = ACTION_RELOAD_VIDEO;
-            showMessage = false;
+            //showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
