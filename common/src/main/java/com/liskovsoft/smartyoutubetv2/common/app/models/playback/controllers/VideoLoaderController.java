@@ -636,6 +636,7 @@ public class VideoLoaderController extends BasePlayerController {
         if (restartEngine) {
             restartEngine();
         } else {
+            // Need at least to reload the video because the player becomes idle after error
             reloadVideo();
         }
     }
