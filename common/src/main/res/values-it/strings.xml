@@ -741,8 +741,8 @@
     <string name="local_backup_not_supported">Il backup automatico su Android TV 11 non è supportato a causa di restrizioni di sistema. Usa invece GDrive.</string>
     <string name="rounded_card_corners">Angoli delle cartoline arrotondati</string>
     <string name="app_restore_desc">NOTA: Lo zip di backup dovrebbe essere copiato in questa cartella manualmente o tramite un gestore file, usa \'Apri con\'</string>
-    <string name="app_backup_desc">NOTA: Il backup sarà creato nel formato zip</string>
-    <string name="add_video_to_watch_later">Aggiunti a Guarda più tardi</string>
+    <string name="app_backup_desc">NOTA: Il backup sarà creato in formato zip</string>
+    <string name="add_video_to_watch_later">Aggiungi a Guarda più tardi</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>
