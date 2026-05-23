@@ -86,6 +86,7 @@ public final class Video {
     public long startTimeMs;
     public long pendingPosMs;
     public boolean fromQueue;
+    public boolean fromCrashRestorer;
     public boolean isPending;
     public boolean finishOnEnded;
     public boolean incognito;
