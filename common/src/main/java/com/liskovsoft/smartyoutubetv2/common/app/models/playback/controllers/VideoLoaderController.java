@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
-import android.annotation.SuppressLint;
-
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
@@ -17,36 +15,26 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector;
-import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector.OnLongBuffering;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import io.reactivex.disposables.Disposable;
 
-import java.util.Collections;
-import java.util.List;
-
-public class VideoLoaderController extends BasePlayerController implements OnLongBuffering {
+public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
-    private static final long STREAM_END_THRESHOLD_MS = 180_000;
     private static final int MIN_SHUFFLE_SIZE = 30;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
-    private int mLastErrorType = -1;
     private SuggestionsController mSuggestionsController;
+    private ErrorFixerController mErrorFixerController;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
-    private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -59,13 +47,6 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
     private final Runnable mRestartEngine = () -> {
         if (getPlayer() != null) {
             getPlayer().restartEngine(); // properly save position of the current track
-        }
-    };
-
-    private final Runnable mRebootApp = () -> {
-        Video video = getVideo();
-        if (getPlayer() != null) {
-            Utils.restartTheApp(getContext(), video, getPlayer().getPositionMs());
         }
     };
     private final Runnable mOnApplyPlaybackMode = () -> {
@@ -86,6 +67,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
     @Override
     public void onInit() {
         mSuggestionsController = getController(SuggestionsController.class);
+        mErrorFixerController = getController(ErrorFixerController.class);
         mSleepTimerStartMs = System.currentTimeMillis();
     }
 
@@ -112,37 +94,6 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
     }
 
     @Override
-    public void onBuffering() {
-        mBufferingDetector.onStartBuffering();
-    }
-
-    @Override
-    public void onSeekEnd() {
-        mBufferingDetector.reset();
-    }
-
-    @Override
-    public void onLongBuffering() {
-        if (isStreamEnded()) {
-            getMainController().onPlayEnd();
-        } else if (isOfflineVideo() && isSubtitlesEnabled()) {
-            // Long loading subtitles cause hangs
-            disableSubtitles();
-            reloadVideo();
-        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            //if (!isFasterDataSourceEnabled()) {
-            //    enableFasterDataSource();
-            //    restartEngine();
-            //}
-
-            //switchNextEngine();
-            //restartEngine();
-
-            lowerVideoQuality();
-        }
-    }
-
-    @Override
     public void onEngineInitialized() {
         if (getPlayer() == null) {
             return;
@@ -160,20 +111,11 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
     }
 
     @Override
-    public void onEngineError(int type, int rendererIndex, Throwable error) {
-        Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
-
-        mLastErrorType = type;
-        runEngineErrorAction(type, rendererIndex, error);
-    }
-
-    @Override
     public void onVideoLoaded(Video video) {
         if (getPlayer() == null) {
             return;
         }
-
-        mLastErrorType = -1;
+        
         getPlayer().setButtonState(R.id.action_repeat, video.finishOnEnded ? PlayerConstants.PLAYBACK_MODE_CLOSE : getPlayerData().getPlaybackMode());
         // Can't set title at this point
         //checkSleepTimer();
@@ -259,7 +201,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
             getPlayer().setVideo(getVideo());
         }
 
-        Utils.removeCallbacks(mRestartEngine, mRebootApp);
+        Utils.removeCallbacks(mRestartEngine);
 
         return false;
     }
@@ -347,7 +289,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
                 .subscribe(this::processFormatInfo,
                            error -> {
                                getPlayer().showProgressBar(false);
-                               runFormatErrorAction(error);
+                               mErrorFixerController.runFormatErrorAction(error);
                            });
     }
 
@@ -382,7 +324,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
 
             // 18+ video or the video is hidden/removed
             player.showOverlay(true);
-            scheduleNextVideoTimer(5_000);
+            loadNextVideo(5_000);
 
             //if (formatInfo.isUnknownError()) { // the bot error or the video not available
             //    scheduleRebootAppTimer(5_000);
@@ -408,7 +350,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
             player.openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsUrlFormats()) {
             Log.d(TAG, "Loading url list video. This is always LQ...");
-            player.openUrlList(applyFix(formatInfo.createUrlList()));
+            player.openUrlList(formatInfo.createUrlList());
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             player.setTitle(formatInfo.getPlayabilityReason());
@@ -416,13 +358,13 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
             mSuggestionsController.loadSuggestions(getVideo());
             bgImageUrl = getVideo().getBackgroundUrl();
             player.showOverlay(true);
-            scheduleReloadVideoTimer(30 * 1_000);
+            reloadVideo(30 * 1_000);
         }
 
         player.showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
     }
 
-    private void scheduleReloadVideoTimer(int delayMs) {
+    private void reloadVideo(int delayMs) {
         if (getPlayer() == null) {
             return;
         }
@@ -433,7 +375,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
         }
     }
 
-    private void scheduleNextVideoTimer(int delayMs) {
+    private void loadNextVideo(int delayMs) {
         if (getPlayer() == null) {
             return;
         }
@@ -444,14 +386,7 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
         }
     }
 
-    private void scheduleRebootAppTimer(int delayMs) {
-        if (getPlayer() != null) {
-            Log.d(TAG, "Rebooting the app...");
-            Utils.postDelayed(mRebootApp, delayMs);
-        }
-    }
-
-    private void scheduleRestartEngineTimer(int delayMs) {
+    private void restartEngine(int delayMs) {
         if (getPlayer() != null) {
             Log.d(TAG, "Restarting the engine...");
             Utils.postDelayed(mRestartEngine, delayMs);
@@ -480,233 +415,17 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
     }
 
     private void disposeActions() {
-        mBufferingDetector.reset();
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mRebootApp);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
     }
 
-    private void runFormatErrorAction(Throwable error) {
-        if (getPlayer() == null) {
-            return;
-        }
-
-        if (isEmbedPlayer()) {
-            getPlayer().finish();
-            return;
-        }
-
-        String message = error.getMessage();
-        String className = error.getClass().getSimpleName();
-        String fullMsg = String.format("loadFormatInfo error: %s: %s", className, Utils.getStackTraceAsString(error));
-        Log.e(TAG, fullMsg);
-
-        if (!Helpers.containsAny(message, "fromNullable result is null")) {
-            MessageHelpers.showLongMessage(getContext(), fullMsg);
-        }
-
-        if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
-                Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-            reloadVideo();
-        } else if (Helpers.containsAny(message, "is not defined")) {
-            YouTubeServiceManager.instance().invalidateCache();
-            reloadVideo();
-        } else {
-            Log.e(TAG, "Probably no internet connection");
-            scheduleReloadVideoTimer(1_000);
-        }
+    public void restartEngine() {
+        restartEngine(1_000);
     }
 
-    private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
-        // Hide begin errors in embed mode (e.g. wrong date/time: unable to connect to...)
-        if (isEmbedPlayer() && getPlayer() != null && getPlayer().getPositionMs() == 0) {
-            getPlayer().finish();
-            return;
-        }
-
-        if (isStreamEnded()) {
-            // Url no longer works (e.g. live stream ended)
-            getMainController().onPlayEnd();
-            return;
-        }
-
-        applyEngineErrorAction(type, rendererIndex, error);
-    }
-
-    private void applyEngineErrorAction(int type, int rendererIndex, Throwable error) {
-        boolean restartEngine = true;
-        boolean showMessage = true;
-        String errorContent = error != null ? error.getMessage() : null;
-        String errorTitle = getErrorTitle(type, rendererIndex);
-        String errorMessage = errorTitle + "\n" + errorContent;
-
-        if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
-            // No internet connection or WRONG DATE on the device
-            // Recently this message starting to show for other reasons
-            YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
-            //switchNextEngine(); // ?
-            //restartEngine = false;
-        } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
-            if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
-                // OkHttp has memory leak problems
-                enableFasterDataSource();
-            } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
-                getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
-            } else {
-                getPlayerTweaksData().setSectionPlaylistEnabled(false);
-                restartEngine = false;
-            }
-        } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
-                getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);
-            } else {
-                restartEngine = false;
-            }
-        } else if (type == PlayerEventListener.ERROR_TYPE_SOURCE && rendererIndex == PlayerEventListener.RENDERER_INDEX_UNKNOWN) {
-            // NOTE: Starts with any (url deciphered incorrectly)
-            // "Response code: 403" (poToken error, forbidden)
-            // "Response code: 404" (not sure whether below helps)
-            // "Response code: 503" (not sure whether below helps)
-            // "Response code: 400" (not sure whether below helps)
-            // "Response code: 429" (subtitle error, too many requests)
-            // "Response code: 500" (subtitle error, generic server error)
-
-            // NOTE: Fixing too many requests or network issues
-            // NOTE: All these errors have unknown renderer (-1)
-            // "Unable to connect to", "Invalid NAL length", "Response code: 421",
-            // "Response code: 404", "Response code: 429", "Invalid integer size",
-            // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-
-            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-            //} else if (isSubtitlesEnabled()) {
-            //    disableSubtitles(); // Response code: 429
-            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            //} else {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            //}
-
-            boolean isGeneralError = Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 500");
-            if (isGeneralError && isSubtitlesEnabled()) {
-                disableSubtitles(); // Response code: 429
-            } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-                getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            }
-
-            restartEngine = false;
-            showMessage = false;
-        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
-            // "Response code: 429" (subtitle error)
-            // "Response code: 500" (subtitle error)
-            disableSubtitles();
-            restartEngine = false;
-        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
-            getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
-            if (getPlayerTweaksData().isSWDecoderForced()) {
-                getPlayerTweaksData().setSWDecoderForced(false);
-            } else {
-                restartEngine = false;
-            }
-        } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_AUDIO) {
-            getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
-            restartEngine = false;
-        } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            // IllegalStateException: Buffer too small (5242880 < 7208383)
-            if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
-                lowerVideoQuality();
-                restartEngine = false;
-            }
-        }
-
-        if (showMessage) {
-            MessageHelpers.showLongMessage(getContext(), errorMessage);
-            if (getPlayer() != null) {
-                getPlayer().setTitle(errorContent);
-            }
-        }
-
-        if (restartEngine) {
-            restartEngine();
-        } else {
-            // Need at least to reload the video because the player becomes idle after error
-            reloadVideo();
-        }
-    }
-
-    @SuppressLint("StringFormatMatches")
-    private String getErrorTitle(int type, int rendererIndex) {
-        String errorTitle;
-        int msgResId;
-
-        switch (type) {
-            // Some ciphered data could be outdated.
-            // Might happen when the app wasn't used quite a long time.
-            case PlayerEventListener.ERROR_TYPE_SOURCE:
-                switch (rendererIndex) {
-                    case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                        msgResId = R.string.msg_player_error_video_source;
-                        break;
-                    case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                        msgResId = R.string.msg_player_error_audio_source;
-                        break;
-                    case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                        msgResId = R.string.msg_player_error_subtitle_source;
-                        break;
-                    default:
-                        msgResId = R.string.unknown_source_error;
-                }
-                errorTitle = getContext().getString(msgResId);
-                break;
-            case PlayerEventListener.ERROR_TYPE_RENDERER:
-                switch (rendererIndex) {
-                    case PlayerEventListener.RENDERER_INDEX_VIDEO:
-                        msgResId = R.string.msg_player_error_video_renderer;
-                        break;
-                    case PlayerEventListener.RENDERER_INDEX_AUDIO:
-                        msgResId = R.string.msg_player_error_audio_renderer;
-                        break;
-                    case PlayerEventListener.RENDERER_INDEX_SUBTITLE:
-                        msgResId = R.string.msg_player_error_subtitle_renderer;
-                        break;
-                    default:
-                        msgResId = R.string.unknown_renderer_error;
-                }
-                errorTitle = getContext().getString(msgResId);
-                break;
-            case PlayerEventListener.ERROR_TYPE_UNEXPECTED:
-                errorTitle = getContext().getString(R.string.player_unexpected_error);
-                break;
-            default:
-                errorTitle = getContext().getString(R.string.msg_player_error, type);
-                break;
-        }
-
-        return errorTitle;
-    }
-
-    private void restartEngine() {
-        scheduleRestartEngineTimer(1_000);
-    }
-
-    private void reloadVideo() {
-        scheduleReloadVideoTimer(1_000);
-    }
-
-    private void rebootApp() {
-        scheduleRebootAppTimer(1_000);
-    }
-
-    private List<String> applyFix(List<String> urlList) {
-        // Sometimes top url cannot be played
-        if (mLastErrorType == PlayerEventListener.ERROR_TYPE_SOURCE) {
-            Collections.reverse(urlList);
-        }
-
-        return urlList;
+    public void reloadVideo() {
+        reloadVideo(1_000);
     }
 
     private void applyPlaybackMode(int playbackMode) {
@@ -842,16 +561,6 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
         initRandomNext();
     }
 
-    @Override
-    public void onPlay() {
-        mBufferingDetector.onStopBuffering();
-    }
-
-    @Override
-    public void onPause() {
-        mBufferingDetector.onStopBuffering();
-    }
-
     private void initRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
@@ -900,52 +609,6 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
         //}
     }
 
-    //private void loadRandomNext2() {
-    //    if (getPlayer() == null || getPlayerData() == null || getVideo() == null || getVideo().isShuffled ||
-    //            getVideo().shuffleMediaItem == null || getPlayerData().getPlaybackMode() != PlayerConstants.PLAYBACK_MODE_SHUFFLE) {
-    //        return;
-    //    }
-    //
-    //    getVideo().isShuffled = true;
-    //    getVideo().playlistParams = getVideo().shuffleMediaItem.getParams();
-    //    getController(SuggestionsController.class).loadSuggestions(getVideo());
-    //}
-
-    private void switchNextEngine() {
-        getPlayerTweaksData().setPlayerDataSource(getNextEngine());
-    }
-
-    private int getNextEngine() {
-        int currentEngine = getPlayerTweaksData().getPlayerDataSource();
-        Integer[] engineList = Utils.skipCronet() ?
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP } :
-                new Integer[] { PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET, PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT, PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP };
-        return Helpers.getNextValue(engineList, currentEngine);
-    }
-
-    private static int getFasterDataSource() {
-        return Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
-    }
-
-    /**
-     * Bad idea. Faster source is different among devices
-     */
-    private void enableFasterDataSource() {
-        if (isFasterDataSourceEnabled()) {
-            return;
-        }
-
-        getPlayerTweaksData().setPlayerDataSource(getFasterDataSource());
-    }
-
-    /**
-     * Bad idea. Faster source is different among devices
-     */
-    private boolean isFasterDataSourceEnabled() {
-        int fasterDataSource = getFasterDataSource();
-        return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
-    }
-
     private int getPlaybackMode() {
         int playbackMode = getPlayerData().getPlaybackMode();
 
@@ -987,51 +650,6 @@ public class VideoLoaderController extends BasePlayerController implements OnLon
 
         if (getPlayer().getDurationMs() - getPlayer().getPositionMs() < 50_000) {
             MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
-        }
-    }
-
-    private boolean isSubtitlesEnabled() {
-        return getPlayer() != null && !FormatItem.SUBTITLE_NONE.equals(getPlayer().getSubtitleFormat());
-    }
-
-    private void disableSubtitles() {
-        getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
-        getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
-    }
-
-    private boolean isStreamEnded() {
-        if (getPlayer() == null || getVideo() == null) {
-            return false;
-        }
-
-        return getVideo().isLiveEnd && getPlayer().getDurationMs() > 0
-                && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
-    }
-
-    private boolean isOfflineVideo() {
-        if (getPlayer() == null || getVideo() == null) {
-            return false;
-        }
-
-        return !getVideo().isLive && !getVideo().isLiveEnd;
-    }
-
-    private void lowerVideoQuality() {
-        if (getPlayer() == null) {
-            return;
-        }
-
-        List<FormatItem> videoFormats = getPlayer().getVideoFormats();
-
-        if (videoFormats == null) {
-            return;
-        }
-
-        int idx = videoFormats.indexOf(getPlayer().getVideoFormat());
-        int nextIdx = idx + 1;
-
-        if (videoFormats.size() > nextIdx) {
-            getPlayer().setFormat(videoFormats.get(nextIdx));
         }
     }
 }
