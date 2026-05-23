@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.annotation.SuppressLint;
-import android.util.Pair;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
@@ -24,6 +23,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector;
+import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector.OnLongBuffering;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -35,13 +36,9 @@ import io.reactivex.disposables.Disposable;
 import java.util.Collections;
 import java.util.List;
 
-public class VideoLoaderController extends BasePlayerController {
+public class VideoLoaderController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
-    private static final long BUFFERING_THRESHOLD_MS = 3_000;
-    private static final long BUFFERING_WINDOW_MS = 60_000;
-    private static final long BUFFERING_RECURRENCE_COUNT = 5;
-    private static final long BUFFERING_CONTINUATION_MS = 20_000;
     private static final int MIN_SHUFFLE_SIZE = 30;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
@@ -49,6 +46,7 @@ public class VideoLoaderController extends BasePlayerController {
     private SuggestionsController mSuggestionsController;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
+    private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -63,7 +61,6 @@ public class VideoLoaderController extends BasePlayerController {
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
-    private final Runnable mOnLongBuffering = this::updateBufferingCountIfNeeded;
 
     private final Runnable mRebootApp = () -> {
         Video video = getVideo();
@@ -81,7 +78,6 @@ public class VideoLoaderController extends BasePlayerController {
             getPlayer().showProgressBar(true);
         }
     };
-    private Pair<Integer, Long> mBufferingCount;
 
     public VideoLoaderController() {
         mPlaylist = Playlist.instance();
@@ -117,16 +113,16 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public void onBuffering() {
-        Utils.postDelayed(mOnLongBuffering, BUFFERING_THRESHOLD_MS);
+        mBufferingDetector.onStartBuffering();
     }
 
     @Override
     public void onSeekEnd() {
-        // Reset buffering stats
-        mBufferingCount = null;
+        mBufferingDetector.reset();
     }
 
-    private void onLongBuffering() {
+    @Override
+    public void onLongBuffering() {
         if (isStreamEnded()) {
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
@@ -484,10 +480,10 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void disposeActions() {
-        mBufferingCount = null;
+        mBufferingDetector.reset();
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mOnLongBuffering, mRebootApp);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mRebootApp);
     }
 
     private void runFormatErrorAction(Throwable error) {
@@ -521,7 +517,7 @@ public class VideoLoaderController extends BasePlayerController {
             scheduleReloadVideoTimer(1_000);
         }
     }
-    
+
     private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
         // Hide begin errors in embed mode (e.g. wrong date/time: unable to connect to...)
         if (isEmbedPlayer() && getPlayer() != null && getPlayer().getPositionMs() == 0) {
@@ -848,12 +844,12 @@ public class VideoLoaderController extends BasePlayerController {
 
     @Override
     public void onPlay() {
-        Utils.removeCallbacks(mOnLongBuffering);
+        mBufferingDetector.onStopBuffering();
     }
 
     @Override
     public void onPause() {
-        Utils.removeCallbacks(mOnLongBuffering);
+        mBufferingDetector.onStopBuffering();
     }
 
     private void initRandomNext() {
@@ -914,40 +910,6 @@ public class VideoLoaderController extends BasePlayerController {
     //    getVideo().playlistParams = getVideo().shuffleMediaItem.getParams();
     //    getController(SuggestionsController.class).loadSuggestions(getVideo());
     //}
-
-    private void updateBufferingCountIfNeeded() {
-        updateBufferingCount();
-        if (isBufferingRecurrent()) {
-            mBufferingCount = null;
-            onLongBuffering();
-        } else {
-            // Count continuous buffering as a new occurrences....
-            Utils.postDelayed(mOnLongBuffering, BUFFERING_CONTINUATION_MS);
-        }
-    }
-
-    private void updateBufferingCount() {
-        final long currentTimeMs = System.currentTimeMillis();
-        int bufferingCount = 0;
-        long previousTimeMs = 0;
-
-        if (mBufferingCount != null) {
-            bufferingCount = mBufferingCount.first;
-            previousTimeMs = mBufferingCount.second;
-        }
-
-        if (currentTimeMs - previousTimeMs < BUFFERING_WINDOW_MS) {
-            bufferingCount++;
-        } else {
-            bufferingCount = 1;
-        }
-
-        mBufferingCount = new Pair<>(bufferingCount, currentTimeMs);
-    }
-
-    private boolean isBufferingRecurrent() {
-        return mBufferingCount != null && mBufferingCount.first > BUFFERING_RECURRENCE_COUNT;
-    }
 
     private void switchNextEngine() {
         getPlayerTweaksData().setPlayerDataSource(getNextEngine());
