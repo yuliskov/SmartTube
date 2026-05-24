@@ -37,6 +37,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.app.models.AppInfo;
@@ -315,8 +316,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
         //appendRow("Playback state", state);
         float boost = mPlayerInitializer.getVolumeBoost();
-        appendRow("Playback info",
-                String.format("paused=%s;state=%s;vol=%s", !mPlayer.getPlayWhenReady(), state, Helpers.formatFloat(boost * mPlayer.getVolume())));
+        appendRow("Playback info", String.format("paused=%s;state=%s", !mPlayer.getPlayWhenReady(), state));
+        appendRow("Volume",
+                String.format("original=%s;normalized=%s", PlayerData.instance(mContext).getPlayerVolume(), Helpers.formatFloat(boost * mPlayer.getVolume())));
     }
 
     private void appendDisplayModeId() {

@@ -1,74 +1,53 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
-import android.util.Pair;
+import androidx.annotation.NonNull;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class BufferingDetector {
-    private static final long BUFFERING_THRESHOLD_MS = 3_000;
     private static final long BUFFERING_WINDOW_MS = 60_000;
-    private static final long BUFFERING_RECURRENCE_COUNT = 2;
-    private static final long BUFFERING_CONTINUATION_MS = 20_000;
-
-    private Pair<Integer, Long> mBufferingCount;
-    private final Runnable mOnLongBuffering = this::updateBufferingCountIfNeeded;
+    private static final long BUFFERING_DURATION_MS = 20_000;
+    
+    private long mBeginTimeMs;
+    private long mStartTimeMs;
+    private long mTotalDurationMs;
+    private final Runnable mOnLongBuffering = this::onLongBuffering;
     private final OnLongBuffering mCallback;
 
     public interface OnLongBuffering {
         void onLongBuffering();
     }
 
-    public BufferingDetector(OnLongBuffering callback) {
+    public BufferingDetector(@NonNull OnLongBuffering callback) {
         mCallback = callback;
     }
 
     public void onStartBuffering() {
-        Utils.postDelayed(mOnLongBuffering, BUFFERING_THRESHOLD_MS);
+        long currentTimeMs = System.currentTimeMillis();
+        if (currentTimeMs - mBeginTimeMs > BUFFERING_WINDOW_MS) {
+            mBeginTimeMs = currentTimeMs;
+            mTotalDurationMs = 0;
+        }
+        mStartTimeMs = currentTimeMs;
+        Utils.postDelayed(mOnLongBuffering, BUFFERING_DURATION_MS - mTotalDurationMs);
     }
 
     public void onStopBuffering() {
         Utils.removeCallbacks(mOnLongBuffering);
+        long stopTimeMs = System.currentTimeMillis();
+        mTotalDurationMs += (stopTimeMs - mStartTimeMs);
     }
 
     /**
      * Reset buffering stats
      */
     public void reset() {
-        mBufferingCount = null;
-        onStopBuffering();
+        mBeginTimeMs = mStartTimeMs = mTotalDurationMs = 0;
+        Utils.removeCallbacks(mOnLongBuffering);
     }
 
-    private void updateBufferingCountIfNeeded() {
-        updateBufferingCount();
-        if (isBufferingRecurrent()) {
-            mBufferingCount = null;
-            mCallback.onLongBuffering();
-        } else {
-            // Count continuous buffering as a new occurrences....
-            Utils.postDelayed(mOnLongBuffering, BUFFERING_CONTINUATION_MS);
-        }
-    }
-
-    private void updateBufferingCount() {
-        final long currentTimeMs = System.currentTimeMillis();
-        int bufferingCount = 0;
-        long previousTimeMs = 0;
-
-        if (mBufferingCount != null) {
-            bufferingCount = mBufferingCount.first;
-            previousTimeMs = mBufferingCount.second;
-        }
-
-        if (currentTimeMs - previousTimeMs < BUFFERING_WINDOW_MS) {
-            bufferingCount++;
-        } else {
-            bufferingCount = 1;
-        }
-
-        mBufferingCount = new Pair<>(bufferingCount, currentTimeMs);
-    }
-
-    private boolean isBufferingRecurrent() {
-        return mBufferingCount != null && mBufferingCount.first > BUFFERING_RECURRENCE_COUNT;
+    private void onLongBuffering() {
+        reset();
+        mCallback.onLongBuffering();
     }
 }
