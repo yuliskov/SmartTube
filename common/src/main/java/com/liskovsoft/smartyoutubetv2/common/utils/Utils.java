@@ -534,7 +534,7 @@ public class Utils {
     }
 
     public static void postDelayed(Runnable callback, long delayMs) {
-        if (callback == null) {
+        if (callback == null || delayMs < 0) {
             return;
         }
 
