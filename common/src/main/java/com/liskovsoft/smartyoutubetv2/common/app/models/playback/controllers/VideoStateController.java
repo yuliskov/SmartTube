@@ -530,7 +530,9 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (!mIsPlayBlocked) {
-            getPlayer().setPlayWhenReady(getPlayEnabled());
+            boolean playEnabled = getPlayEnabled();
+            getPlayer().setPlayWhenReady(playEnabled);
+            getPlayer().showOverlay(!playEnabled);
         }
     }
 
