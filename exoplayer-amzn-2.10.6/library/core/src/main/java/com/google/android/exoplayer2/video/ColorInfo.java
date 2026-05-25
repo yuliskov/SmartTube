@@ -81,7 +81,8 @@ public final class ColorInfo implements Parcelable {
     this.colorTransfer = colorTransfer;
     // MOD: HDR10+ fix
     //this.hdrStaticInfo = hdrStaticInfo;
-    if (colorTransfer == C.COLOR_TRANSFER_ST2084
+    if ((colorTransfer == C.COLOR_TRANSFER_ST2084
+            || colorTransfer == C.COLOR_TRANSFER_HLG)
             && colorSpace == C.COLOR_SPACE_BT2020
             && hdrStaticInfo == null) {
       this.hdrStaticInfo = FAKE_HDR_STATIC_INFO;
