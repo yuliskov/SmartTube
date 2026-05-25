@@ -28,6 +28,7 @@ public interface PlayerUI {
     boolean isControlsShown();
     int getButtonState(int buttonId);
     void setButtonState(int buttonId, int buttonState);
+    void updateVoiceTranslatePendingEta(int remainingTimeSec);
     void setChannelIcon(String iconUrl);
     void setSeekPreviewTitle(String title);
     void setNextTitle(Video nextVideo);
