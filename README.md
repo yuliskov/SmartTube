@@ -1,10 +1,6 @@
 <p align="center">
-  <a href="https://github.com/yuliskov/SmartTube/releases">
-    <img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" 
-      alt="Get it on GitHub" height="80">
-  </a>
   <a href="https://f-droid.org/packages/app.smarttube.fdroid/">
-    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" width="206" style="max-width:100%; height:auto;"/>
   </a>
 </p>
 
