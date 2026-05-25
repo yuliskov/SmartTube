@@ -770,10 +770,8 @@ public final class Video {
             return;
         }
 
-        if (formatInfo.getPlayabilityReason() != null) {
-            metadataTitle = formatInfo.getPlayabilityReason();
-        }
-        
+        metadataTitle = formatInfo.getPlayabilityReason(); // null if has media formats
+
         isLive = formatInfo.isLive();
         if (isLive) {
             isUpcoming = false;
