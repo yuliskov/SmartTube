@@ -58,7 +58,6 @@ public class PlayerUIController extends BasePlayerController {
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
-    private boolean mOverlayEnabled;
     private boolean mIsMetadataLoaded;
     private long mOverlayHideTimeMs;
     private final Runnable mSuggestionsResetHandler = () -> {
@@ -283,7 +282,6 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
-        getPlayer().showOverlay(mOverlayEnabled);
         showDebugInfo();
 
         if (getPlayerTweaksData().isScreenOffTimeoutEnabled() || getPlayerTweaksData().isBootScreenOffEnabled()) {
@@ -360,13 +358,16 @@ public class PlayerUIController extends BasePlayerController {
     public void onEngineReleased() {
         Log.d(TAG, "Engine released. Disabling all callbacks...");
         mEngineReady = false;
-        mOverlayEnabled = getPlayer() != null && getPlayer().isOverlayShown();
 
         disposeTimeouts();
     }
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mIsMetadataLoaded = true;
         if (getPlayerData().getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getPlayer().loadStoryboard();

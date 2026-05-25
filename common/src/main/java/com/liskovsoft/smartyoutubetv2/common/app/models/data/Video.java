@@ -738,11 +738,13 @@ public final class Video {
 
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        metadataTitle = metadata.getTitle();
+        if (metadataTitle == null) {
+            metadataTitle = metadata.getTitle();
+        }
         metadataSecondTitle = metadata.getSecondTitle();
         // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
-        isLive = metadata.isLive();
-        isUpcoming = metadata.isUpcoming();
+        //isLive = metadata.isLive();
+        //isUpcoming = metadata.isUpcoming();
 
         // No checks. This data wasn't existed before sync.
         if (metadata.getDescription() != null) {
@@ -759,16 +761,23 @@ public final class Video {
         notificationStates = metadata.getNotificationStates();
         author = metadata.getAuthor();
         durationMs = metadata.getDurationMs();
-        isSynced = true;
         mediaItem = toMediaItem(); // Fix subscribe during playback (see PlayerUIController.callMediaItemObservable)
+        isSynced = true;
     }
 
     public void sync(MediaItemFormatInfo formatInfo) {
         if (formatInfo == null) {
             return;
         }
+
+        if (formatInfo.getPlayabilityReason() != null) {
+            metadataTitle = formatInfo.getPlayabilityReason();
+        }
         
         isLive = formatInfo.isLive();
+        if (isLive) {
+            isUpcoming = false;
+        }
 
         if (description == null) {
             description = formatInfo.getDescription();
