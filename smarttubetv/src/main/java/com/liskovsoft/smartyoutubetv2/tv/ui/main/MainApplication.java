@@ -151,6 +151,6 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private boolean isConscryptSupported() {
-        return !Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(), "Smart (Cvte)", "H3dlive (Humaxdigital)");
+        return !Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(), "Smart (Cvte)", "H3dlive (Humaxdigital)", "JmGO_G3 (MBX)");
     }
 }
