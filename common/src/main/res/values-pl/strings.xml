@@ -116,8 +116,8 @@
   <string name="repeat_mode_pause">Wstrzymaj odtwarzanie po każdym wideo</string>
   <string name="repeat_mode_pause_alt">Wstrzymaj odtwarzanie po każdym wideo spoza listy odtwarzania</string>
   <string name="repeat_mode_none">Wstrzymaj odtwarzanie po bieżącym wideo</string>
-  <string name="subscribed_to_channel">Anuluj subskrypcję </string>
-  <string name="unsubscribed_from_channel">Subskrybuj</string>
+  <string name="subscribed_to_channel">Rozpoczęto subskrypcję</string>
+  <string name="unsubscribed_from_channel">Anulowano subskrypcję</string>
   <string name="subtitle_yellow_transparent">Żółte na przezroczystym tle</string>
   <string name="subtitle_white_transparent">Białe na przezroczystym tle</string>
   <string name="subtitle_white_black">Białe na czarnym tle</string>
