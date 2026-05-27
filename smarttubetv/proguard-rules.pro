@@ -26,7 +26,7 @@
 -keepattributes *Annotation*
 #-keepattributes InnerClasses
 
--keep public class com.liskovsoft.youtubeapi.** { *; }
+#-keep public class com.liskovsoft.youtubeapi.** { *; }
 #-keep class okhttp3.**{*;}
 #-keep interface okhttp3.** { *; }
 
