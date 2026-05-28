@@ -26,9 +26,9 @@
 -keepattributes *Annotation*
 #-keepattributes InnerClasses
 
-#-keep public class com.liskovsoft.youtubeapi.** { *; }
-#-keep class okhttp3.**{*;}
-#-keep interface okhttp3.** { *; }
+-keep public class com.liskovsoft.youtubeapi.** { *; }
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
 
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn com.jayway.jsonpath.**

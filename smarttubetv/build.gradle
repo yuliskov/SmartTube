@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        //jcenter()
     }
 
     dependencies {
@@ -102,8 +102,8 @@ android {
     buildTypes {
         release {
             // Enable minification
-            // shrinkResources true
-            // minifyEnabled true
+            shrinkResources true
+            minifyEnabled true
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 

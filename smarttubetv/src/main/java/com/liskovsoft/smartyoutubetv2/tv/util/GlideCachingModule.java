@@ -22,5 +22,13 @@ public class GlideCachingModule extends AppGlideModule {
 
         // Limit cache size
         builder.setDiskCache(new InternalCacheDiskCacheFactory(context, CACHE_SIZE));
+
+        // Limit memory footprint for low RAM Android TV devices
+        com.bumptech.glide.load.engine.cache.MemorySizeCalculator calculator = new com.bumptech.glide.load.engine.cache.MemorySizeCalculator.Builder(context)
+                .setMemoryCacheScreens(1.5f)
+                .setBitmapPoolScreens(1.5f)
+                .build();
+        builder.setMemoryCache(new com.bumptech.glide.load.engine.cache.LruResourceCache(calculator.getMemoryCacheSize()));
+        builder.setBitmapPool(new com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool(calculator.getBitmapPoolSize()));
     }
 }
