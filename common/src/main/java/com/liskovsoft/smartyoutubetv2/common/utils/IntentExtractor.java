@@ -35,6 +35,12 @@ public class IntentExtractor {
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
+    private static final String CONTROL_ACTION_KEY = "action";
+    private static final String CONTROL_VIDEO_ID_KEY = "videoId";
+    private static final String CONTROL_PLAYLIST_ID_KEY = "playlistId";
+    private static final String CONTROL_URL_KEY = "url";
+    private static final String CONTROL_POSITION_MS_KEY = "positionMs";
+    private static final String CONTROL_INDEX_KEY = "index";
     private static final String VND_SCHEME = "vnd.youtube"; // vnd.youtube://8kKDjRmHp0g
     private static final Pattern timePattern = Pattern.compile("(\\d+)([A-Za-z]{0,2})");
     private static final Pattern voiceQueryPattern = Pattern.compile(":\\{\"query\":\"([^\"]*)\"");
@@ -167,6 +173,81 @@ public class IntentExtractor {
         UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
 
         return parser.get(PLAYLIST_KEY);
+    }
+
+    public static boolean isControlCommand(Intent intent) {
+        Uri uri = extractUri(intent);
+        return uri != null && "smarttube".equals(uri.getScheme()) && "control".equals(uri.getHost());
+    }
+
+    public static String extractControlArea(Intent intent) {
+        Uri uri = extractUri(intent);
+        if (uri == null || uri.getPathSegments() == null || uri.getPathSegments().isEmpty()) {
+            return null;
+        }
+        return uri.getPathSegments().get(0);
+    }
+
+    public static String extractControlAction(Intent intent) {
+        Uri uri = extractUri(intent);
+        return uri != null ? uri.getQueryParameter(CONTROL_ACTION_KEY) : null;
+    }
+
+    public static String extractControlVideoId(Intent intent) {
+        Uri uri = extractUri(intent);
+        if (uri == null) {
+            return null;
+        }
+
+        String videoId = uri.getQueryParameter(CONTROL_VIDEO_ID_KEY);
+        if (isValid(videoId)) {
+            return videoId;
+        }
+
+        String url = uri.getQueryParameter(CONTROL_URL_KEY);
+        if (url == null) {
+            return null;
+        }
+        Uri parsed = Uri.parse(url);
+        videoId = parsed.getQueryParameter(VIDEO_ID_KEY);
+        if (videoId == null && "youtu.be".equals(parsed.getHost())) {
+            videoId = parsed.getLastPathSegment();
+        }
+        return isValid(videoId) ? videoId : null;
+    }
+
+    public static String extractControlPlaylistId(Intent intent) {
+        Uri uri = extractUri(intent);
+        if (uri == null) {
+            return null;
+        }
+
+        String playlistId = uri.getQueryParameter(CONTROL_PLAYLIST_ID_KEY);
+        if (playlistId != null && !playlistId.trim().isEmpty()) {
+            return playlistId;
+        }
+
+        String url = uri.getQueryParameter(CONTROL_URL_KEY);
+        if (url == null) {
+            return null;
+        }
+        return Uri.parse(url).getQueryParameter(PLAYLIST_KEY);
+    }
+
+    public static long extractControlPositionMs(Intent intent) {
+        Uri uri = extractUri(intent);
+        if (uri == null) {
+            return -1;
+        }
+        return Helpers.parseLong(uri.getQueryParameter(CONTROL_POSITION_MS_KEY));
+    }
+
+    public static int extractControlIndex(Intent intent) {
+        Uri uri = extractUri(intent);
+        if (uri == null) {
+            return -1;
+        }
+        return Helpers.parseInt(uri.getQueryParameter(CONTROL_INDEX_KEY));
     }
 
     private static boolean isValid(String videoId) {
