@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.os.Build;
+
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -54,7 +56,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         // ByeByeDPI fix
         // https://android-review.googlesource.com/c/platform/external/conscrypt/+/89408/
         // NOTE: Android 10+ (API 29+) uses system Conscrypt TLS; custom Security providers are unnecessary
-        //if (Build.VERSION.SDK_INT < 29) {
+        //if (Build.VERSION.SDK_INT < 29 && Conscrypt.isAvailable()) {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
         if (Conscrypt.isAvailable()) {

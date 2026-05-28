@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -137,5 +138,14 @@ public class AppDialogActivity extends MotherActivity {
         }
 
         finish();
+    }
+
+    @Override
+    public void setRequestedOrientation(int requestedOrientation) {
+        if (Build.VERSION.SDK_INT == 26) {
+            // Ignore on Android 8 to prevent crash (Only fullscreen opaque activities can request orientation)
+            return;
+        }
+        super.setRequestedOrientation(requestedOrientation);
     }
 }
