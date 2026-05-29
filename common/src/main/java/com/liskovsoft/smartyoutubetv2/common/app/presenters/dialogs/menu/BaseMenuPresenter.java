@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -31,7 +32,7 @@ import java.util.List;
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
     private boolean mIsPinToSidebarEnabled;
-    private boolean mIsSavePlaylistEnabled;
+    private boolean mIsSaveRemovePlaylistEnabled;
     private boolean mIsCreatePlaylistEnabled;
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsAddToNewPlaylistEnabled;
@@ -185,7 +186,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendSaveRemovePlaylistButton() {
-        if (!mIsSavePlaylistEnabled) {
+        if (!mIsSaveRemovePlaylistEnabled) {
             return;
         }
 
@@ -362,9 +363,12 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 null,
                 newValue -> {
                     MediaItemService manager = YouTubeMediaItemService.instance();
-                    Observable<Void> action = video.mediaItem != null ?
-                            manager.createPlaylistObserve(newValue, video.hasVideo() ? video.mediaItem : null) :
-                            manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
+                    MediaItem mediaItem = null;
+                    if (video.hasVideo()) {
+                        mediaItem = video.mediaItem != null ? video.mediaItem : SimpleMediaItem.from(video);
+                    }
+                    Observable<Void> action =
+                            manager.createPlaylistObserve(newValue, mediaItem);
                     RxHelper.execute(
                             action,
                             (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
@@ -529,7 +533,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MainUIData mainUIData = MainUIData.instance(getContext());
         
         mIsPinToSidebarEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR);
-        mIsSavePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST);
+        mIsSaveRemovePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_REMOVE_PLAYLIST);
         mIsCreatePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST);
         mIsRenamePlaylistEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_PLAYLIST);
         mIsAccountSelectionEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT);
