@@ -244,6 +244,7 @@ public class GDriveBackupManagerOld {
                 "org.smarttube.beta",
                 "org.smarttube.stable",
                 "org.smarttube.fdroid",
+                "org.smarttube.mobil",
                 "com.liskovsoft.smarttubetv.beta",
                 "com.teamsmart.videomanager.tv"
         };
