@@ -476,7 +476,7 @@
   <string name="player_button_long_click">長按此按鈕即可設定更多選項。</string>
   <string name="pause_history">暫停觀看紀錄</string>
   <string name="resume_history">恢復觀看紀錄</string>
-  <string name="clear_history">清除觀看紀錄</string>
+  <string name="clear_history">清空觀看紀錄</string>
   <string name="chapters">章節</string>
   <string name="card_multiline_subtitle">多行字幕</string>
   <string name="auto_frame_rate_modes">支援的模式</string>
