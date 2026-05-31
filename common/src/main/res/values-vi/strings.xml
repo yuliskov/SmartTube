@@ -724,4 +724,5 @@
   <string name="color_scheme_dark_blue_oled">Xanh biển tối (OLED)</string>
   <string name="add_video_to_watch_later">Thêm vào Xem sau</string>
   <string name="remove_from_search_history">Xóa khỏi lịch sử tìm kiếm</string>
+  <string name="sidebar_notification">Hiển thi thông báo ở thanh bên</string>
 </resources>
