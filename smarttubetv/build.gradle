@@ -168,7 +168,7 @@ android {
             targetSdkVersion project.properties.compileSdkVersion
         }
         stfdroid {
-            applicationId "app.smarttube.fdroid"
+            applicationId "org.smarttube.mobil"
             minSdkVersion 21
             targetSdkVersion project.properties.compileSdkVersion
         }
