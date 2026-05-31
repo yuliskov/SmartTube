@@ -414,6 +414,19 @@ public class SabrStream {
         processor.processSabrContextSendingPolicy(sabrCtxSendingPolicy);
     }
 
+    /**
+     * Request to reload initial player info with the token.<br/>
+     * Player info url: <b>www.youtube.com/youtubei/v1/player</b><br/>
+     * <pre>
+     *    "playbackContext": {
+     *        "reloadPlaybackContext": {
+     *            "reloadPlaybackParams": {
+     *                "token": reload_playback_token
+     *            }
+     *        }
+     *    }
+     * </pre>
+     */
     private RefreshPlayerResponseSabrPart processReloadPlayerResponse(UMPPart part) {
         ReloadPlayerResponse reloadPlayerResponse;
 
