@@ -476,7 +476,7 @@
   <string name="player_button_long_click">長按此按鈕即可設定更多選項。</string>
   <string name="pause_history">暫停觀看紀錄</string>
   <string name="resume_history">恢復觀看紀錄</string>
-  <string name="clear_history">清除觀看紀錄</string>
+  <string name="clear_history">清空觀看紀錄</string>
   <string name="chapters">章節</string>
   <string name="card_multiline_subtitle">多行字幕</string>
   <string name="auto_frame_rate_modes">支援的模式</string>
@@ -505,7 +505,7 @@
   <string name="sort_by_views">觀看次數</string>
   <string name="sort_by_date">上傳日期</string>
   <string name="sort_by_rating">評分</string>
-  <string name="clear_search_history">清除搜尋紀錄</string>
+  <string name="clear_search_history">清空搜尋紀錄</string>
   <string name="remove_from_subscriptions">隱藏</string>
   <string name="player_long_speed_list">較長的速度列表</string>
   <string name="alt_app_icon">替代應用程式圖示（需要重新啟動）</string>
