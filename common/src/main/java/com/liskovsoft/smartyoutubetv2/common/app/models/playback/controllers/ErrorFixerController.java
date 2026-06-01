@@ -193,7 +193,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // IllegalStateException: Buffer too small (5242880 < 7208383)
             if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
                 lowerVideoQuality();
-                restartEngine = false;
+                //restartEngine = false;
             }
         }
 
@@ -371,7 +371,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         int nextIdx = idx + 1;
 
         if (videoFormats.size() > nextIdx) {
-            getPlayer().setFormat(videoFormats.get(nextIdx));
+            FormatItem formatItem = videoFormats.get(nextIdx);
+            getPlayer().setFormat(formatItem);
+            // This helps to persist the format between engine restart
+            getPlayerData().setTempVideoFormat(formatItem);
         }
     }
 }
