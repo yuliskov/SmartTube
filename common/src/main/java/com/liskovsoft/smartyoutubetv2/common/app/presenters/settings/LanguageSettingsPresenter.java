@@ -62,7 +62,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     option -> {
                         mLangUpdater.setPreferredLanguage(entry.getValue());
                         mRestartApp = true;
-                        settingsPresenter.closeDialog();
+                        //settingsPresenter.closeDialog(); // sometimes cause crashes
                     },
                     entry.getValue().equals(language)));
         }
@@ -88,7 +88,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     option -> {
                         mLangUpdater.setPreferredCountry(entry.getValue());
                         mRestartApp = true;
-                        settingsPresenter.closeDialog();
+                        //settingsPresenter.closeDialog(); // sometimes cause crashes
                     },
                     entry.getValue().equals(country)));
         }
