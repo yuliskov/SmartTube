@@ -12,7 +12,7 @@ jobs:
       actions: write
       issues: write
     steps:
-    - uses: actions/stale@v10
+    - uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899 # v10.3.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         operations-per-run: 3000 # This may result in rate limiting, could we reduce and run in batches?
