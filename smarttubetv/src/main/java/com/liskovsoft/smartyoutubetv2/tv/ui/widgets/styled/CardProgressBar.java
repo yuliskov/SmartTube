@@ -7,8 +7,6 @@ import androidx.annotation.RequiresApi;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class CardProgressBar extends ProgressBar {
-    private static final String TAG = CardProgressBar.class.getSimpleName();
-
     public CardProgressBar(Context context) {
         super(context, null, R.attr.cardProgressStyle);
     }

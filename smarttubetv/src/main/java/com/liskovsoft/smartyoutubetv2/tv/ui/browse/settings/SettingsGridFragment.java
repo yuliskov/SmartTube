@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsGridFragment extends GridFragment implements SettingsSection {
-    private static final String TAG = SettingsGridFragment.class.getSimpleName();
     private ArrayObjectAdapter mSettingsAdapter;
     private BrowsePresenter mMainPresenter;
     private UriBackgroundManager mBackgroundManager;

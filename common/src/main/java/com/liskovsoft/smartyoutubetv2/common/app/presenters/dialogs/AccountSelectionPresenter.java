@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountSelectionPresenter extends BasePresenter<Void> {
-    private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInService mSignInService;
