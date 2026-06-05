@@ -743,7 +743,7 @@
     <string name="app_backup_desc">NOT: Yedekleme dosyası zip formatında oluşturulacaktır</string>
     <string name="add_video_to_watch_later">Daha Sonra İzle listesine ekle</string>
     <string name="enable_conscrypt">Conscrypt\'i Etkinleştir</string>
-    <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır</string>
+    <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır, ancak bazen oynatma sorunlarına veya ağın yavaşlamasına neden olabilir</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

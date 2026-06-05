@@ -733,7 +733,7 @@
     <string name="app_backup_desc">ВНИМАНИЕ: Резервная копия будет создана в формате ZIP</string>
     <string name="add_video_to_watch_later">Добавить в \'Смотреть позже\'</string>
     <string name="enable_conscrypt">Включить Conscrypt</string>
-    <string name="enable_conscrypt_desc">Улучшает совместимость HTTPS, TLS и VPN на некоторых устройствах</string>
+    <string name="enable_conscrypt_desc">Улучшает совместимость HTTPS, TLS и VPN на некоторых устройствах, но иногда может вызывать проблемы с воспроизведением или замедление сети</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>
