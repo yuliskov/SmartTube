@@ -32,12 +32,12 @@ public class RecommendationsProvider {
                         break;
                     }
 
-                    Response response = OkHttpManager.instance().doGetRequest(clip.getCardImageUrl());
-
                     Bitmap image = null;
 
-                    if (response.body() != null) {
-                        image = BitmapFactory.decodeStream(response.body().byteStream());
+                    try (Response response = OkHttpManager.instance().doGetRequest(clip.getCardImageUrl())) {
+                        if (response.body() != null) {
+                            image = BitmapFactory.decodeStream(response.body().byteStream());
+                        }
                     }
 
                     Notification rec = new RecommendationBuilder()
