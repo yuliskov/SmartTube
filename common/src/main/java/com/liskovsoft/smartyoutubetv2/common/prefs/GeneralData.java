@@ -86,7 +86,6 @@ public class GeneralData implements ProfileChangeListener {
     private int mLocalDriveBackupFreqDays;
     private List<Video> mOldPinnedItems;
     private boolean mIsRemapSToSpeedToggleEnabled;
-    private boolean mIsConscryptEnabled;
     private final Runnable mPersistStateInt = this::persistStateInt;
 
     private GeneralData(Context context) {
@@ -576,15 +575,6 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public boolean isConscryptEnabled() {
-        return mIsConscryptEnabled;
-    }
-
-    public void setConscryptEnabled(boolean enable) {
-        mIsConscryptEnabled = enable;
-        persistState();
-    }
-
     /**
      * Fixed ConcurrentModificationException after onProfileChanged()<br/>
      * Happened inside cleanupPinnedItems()
@@ -670,7 +660,6 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
-        mIsConscryptEnabled = Helpers.parseBoolean(split, 73, false);
     }
 
     public void persistNow() {
@@ -696,7 +685,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled, mIsConscryptEnabled));
+                mIsRemapSToSpeedToggleEnabled));
     }
 
     @Override
