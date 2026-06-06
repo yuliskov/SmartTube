@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity;
@@ -57,7 +58,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //if (Build.VERSION.SDK_INT < 29 && Conscrypt.isAvailable()) {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
-        if (PlayerTweaksData.instance(getApplicationContext()).isConscryptEnabled() && Conscrypt.isAvailable()) {
+        if (GeneralData.instance(getApplicationContext()).isConscryptEnabled() && Conscrypt.isAvailable()) {
             Security.insertProviderAt(Conscrypt.newProvider(), 1);
         }
 

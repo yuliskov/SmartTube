@@ -492,14 +492,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.enable_conscrypt),
-                getContext().getString(R.string.enable_conscrypt_desc),
-                option -> {
-                    mPlayerTweaksData.setConscryptEnabled(option.isSelected());
-                    mRestartApp = true;
-                },
-                mPlayerTweaksData.isConscryptEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
                 getContext().getString(R.string.playback_notifications_fix_desc),
                 option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),

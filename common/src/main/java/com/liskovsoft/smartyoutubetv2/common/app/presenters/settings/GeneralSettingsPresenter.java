@@ -628,7 +628,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         appendProxyManager(settingsPresenter, options);
 
-        //appendOpenVPNManager(settingsPresenter, options);
+        appendConscrypt(settingsPresenter, options);
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
     }
@@ -647,11 +647,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
                         }
-                        
+
                         OkHttpManager.unhold();
                     },
                     mGeneralData.isProxyEnabled()));
         }
+    }
+
+    private void appendConscrypt(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
+        options.add(UiOptionItem.from(getContext().getString(R.string.enable_conscrypt),
+                getContext().getString(R.string.enable_conscrypt_desc),
+                option -> {
+                    mGeneralData.setConscryptEnabled(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isConscryptEnabled()));
     }
 
     private void enableChildMode(boolean enable) {
