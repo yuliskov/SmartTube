@@ -744,4 +744,6 @@
   <string name="app_backup_desc">注意：备份文件将以zip格式创建。</string>
   <string name="app_restore_desc">注意：备份的zip压缩文件需手动复制到此文件夹，或在文件管理器中使用“打开方式”选项。</string>
   <string name="remove_from_search_history">从搜索历史中移除</string>
+  <string name="enable_conscrypt">启用Conscrypt</string>
+  <string name="enable_conscrypt_desc">改进某些设备HTTPS、TLS和VPN的兼容性，但偶尔可能会导致播放问题或降低网络性能</string>
 </resources>
