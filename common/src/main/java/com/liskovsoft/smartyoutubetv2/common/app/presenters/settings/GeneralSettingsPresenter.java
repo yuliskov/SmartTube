@@ -630,7 +630,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         appendConscrypt(settingsPresenter, options);
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.network_settings), options);
     }
 
     private void appendProxyManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {

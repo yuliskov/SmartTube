@@ -744,6 +744,7 @@
     <string name="add_video_to_watch_later">Daha Sonra İzle listesine ekle</string>
     <string name="enable_conscrypt">Conscrypt\'i Etkinleştir</string>
     <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır, ancak bazen oynatma sorunlarına veya ağın yavaşlamasına neden olabilir</string>
+    <string name="network_settings">Ağ ayarları</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

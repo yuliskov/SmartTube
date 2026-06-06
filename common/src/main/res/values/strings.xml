@@ -746,6 +746,7 @@
     <string name="add_video_to_watch_later">Add to Watch later</string>
     <string name="enable_conscrypt">Enable Conscrypt</string>
     <string name="enable_conscrypt_desc">Improves HTTPS, TLS, and VPN compatibility on some devices, but may occasionally cause playback issues or slower network performance</string>
+    <string name="network_settings">Network settings</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>
