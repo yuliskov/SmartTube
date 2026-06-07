@@ -1303,6 +1303,5 @@ public class Utils {
         MediaServiceData mediaServiceData = MediaServiceData.instance();
         mediaServiceData.persistNow();
         BlockedChannelData.instance(context).persistNow();
-        NetworkData.instance(context).persistNow();
     }
 }

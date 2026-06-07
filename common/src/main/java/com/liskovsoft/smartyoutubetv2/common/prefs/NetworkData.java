@@ -8,7 +8,7 @@ public class NetworkData extends DataSaverBase {
     private static NetworkData sInstance;
 
     private NetworkData(Context context) {
-        super(context);
+        super(context, true);
     }
 
     public static NetworkData instance(Context context) {

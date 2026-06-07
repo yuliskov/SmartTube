@@ -59,8 +59,12 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //if (Build.VERSION.SDK_INT < 29 && Conscrypt.isAvailable()) {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
-        if (NetworkData.instance(getApplicationContext()).isConscryptEnabled() && Conscrypt.isAvailable()) {
-            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        if (NetworkData.instance(this).isConscryptEnabled()) {
+            try {
+                Security.insertProviderAt(Conscrypt.newProvider(), 1);
+            } catch (Throwable e) {
+                // UnsatisfiedLinkError
+            }
         }
 
         setupGlobalExceptionHandler();
