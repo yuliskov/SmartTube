@@ -727,4 +727,9 @@
   <string name="sidebar_notification">Hiển thi thông báo ở thanh bên</string>
   <string name="video_flip">Đảo ngược (phản chiếu)</string>
   <string name="player_time_stretching">Kéo dài thời gian âm thanh</string>
+  <string name="enable_conscrypt">Bật Conscrypt</string>
+  <string name="network_settings">Cài đặt mạng</string>
+  <string name="enable_conscrypt_desc">Nâng cao khả năng tương thích với các giao thức HTTPS, TLS và VPN trên một số thiết bị, tuy nhiên đôi khi có thể gây ra các vấn đề về việc phát lại nội dung hoặc làm chậm hiệu suất mạng.</string>
+  <string name="local_backup_not_supported">Tính năng sao lưu tự động trên Android TV phiên bản 11+ không được hỗ trợ do các hạn chế của hệ thống. Hãy sử dụng Google Drive thay thế.</string>
+  <string name="app_backup_desc">LƯU Ý: Bản sao lưu sẽ được tạo dưới định dạng zip</string>
 </resources>
