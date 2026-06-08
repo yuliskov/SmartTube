@@ -743,6 +743,9 @@
     <string name="app_restore_desc">NOTA: Lo zip di backup dovrebbe essere copiato in questa cartella manualmente o tramite un gestore file, usa \'Apri con\'</string>
     <string name="app_backup_desc">NOTA: Il backup sarà creato in formato zip</string>
     <string name="add_video_to_watch_later">Aggiungi a Guarda più tardi</string>
+    <string name="enable_conscrypt">Abilita Conscrypt</string>
+    <string name="enable_conscrypt_desc">Migliora la compatibilità con HTTPS, TLS e VPN su alcuni dispositivi, ma può causare occasionalmente problemi di riproduzione o prestazioni di rete inferiori</string>
+    <string name="network_settings">Impostazioni di rete</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>
