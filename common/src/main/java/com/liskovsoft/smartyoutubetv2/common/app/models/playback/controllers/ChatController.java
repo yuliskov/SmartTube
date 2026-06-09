@@ -36,6 +36,10 @@ public class ChatController extends BasePlayerController {
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
+        if (getPlayer() == null) {
+            return;
+        }
+
         mLiveChatKey = metadata != null ? metadata.getLiveChatKey() : null;
 
         if (mLiveChatKey != null) {
@@ -50,7 +54,7 @@ public class ChatController extends BasePlayerController {
     private void openLiveChat() {
         disposeActions();
 
-        if (mLiveChatKey == null) {
+        if (mLiveChatKey == null || getPlayer() == null) {
             return;
         }
 
