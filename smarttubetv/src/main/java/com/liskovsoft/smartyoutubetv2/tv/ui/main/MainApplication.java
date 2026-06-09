@@ -36,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
 import org.conscrypt.Conscrypt;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.security.Provider;
 import java.security.Security;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
@@ -62,9 +63,19 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         //if (Build.VERSION.SDK_INT < 29 && Conscrypt.isAvailable()) {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
-        if (NetworkData.instance(this).isConscryptEnabled()) {
+
+        // Important: Initialize the native Conscrypt provider BEFORE reading any configs/SharedPreferences.
+        // Otherwise, early disk I/O shifts the ClassLoader on some Android TV devices, causing silent JNI linking errors.
+        Provider conscryptProvider = null;
+        try {
+            conscryptProvider = Conscrypt.newProvider();
+        } catch (Throwable e) {
+            // UnsatisfiedLinkError
+        }
+
+        if (conscryptProvider != null && NetworkData.instance(this).isConscryptEnabled()) {
             try {
-                Security.insertProviderAt(Conscrypt.newProvider(), 1);
+                Security.insertProviderAt(conscryptProvider, 1);
             } catch (Throwable e) {
                 // UnsatisfiedLinkError
             }
