@@ -116,8 +116,8 @@
   <string name="repeat_mode_pause">Wstrzymaj odtwarzanie po każdym wideo</string>
   <string name="repeat_mode_pause_alt">Wstrzymaj odtwarzanie po każdym wideo spoza listy odtwarzania</string>
   <string name="repeat_mode_none">Wstrzymaj odtwarzanie po bieżącym wideo</string>
-  <string name="subscribed_to_channel">Rozpoczęto subskrypcję</string>
-  <string name="unsubscribed_from_channel">Anulowano subskrypcję</string>
+  <string name="subscribed_to_channel">Zasubskrybowano</string>
+  <string name="unsubscribed_from_channel">Nie subskybujesz </string>
   <string name="subtitle_yellow_transparent">Żółte na przezroczystym tle</string>
   <string name="subtitle_white_transparent">Białe na przezroczystym tle</string>
   <string name="subtitle_white_black">Białe na czarnym tle</string>
@@ -744,4 +744,7 @@
   <string name="app_restore_desc">UWAGA: Kopię zapasową pliku zip należy skopiować do tego folderu ręcznie lub w menedżerze plików, używając opcji „Otwórz za pomocą”</string>
   <string name="app_backup_desc">UWAGA: Kopia zapasowa zostanie utworzona w formacie zip</string>
   <string name="add_video_to_watch_later">Dodaj do obejrzenia później</string>
+  <string name="enable_conscrypt">Włącz Conscrypt</string>
+  <string name="enable_conscrypt_desc">Poprawia zgodność z protokołami HTTPS,TLS i VPN na niektórych urządzeniach,ale może czasami powodować problemy z odtwarzaniem lub wolniejszą wydajność sieci</string>
+  <string name="network_settings">Ustawienia sieciowe</string>
 </resources>
