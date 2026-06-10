@@ -234,12 +234,24 @@ public class HomeTheaterController {
     // ---- Refresh from HDMI CEC state (synchronous) ----
 
     /**
-     * Synchronously refresh theater state from dumpsys hdmi_control.
+     * Synchronously refresh theater state from HDMI CEC dumpsys.
      * Returns the updated state.
      */
     public JSONObject refreshTheaterState() {
         String output = runShellCommand("dumpsys hdmi_control | tail -n " + HDMI_HISTORY_LINES);
-        parseTheaterState(output);
+
+        if (output == null || output.isEmpty()) {
+            // Fallback: try cmd hdmi_control dump (may work without shell perms)
+            Log.w(TAG, "dumpsys failed, trying cmd hdmi_control dump");
+            output = runShellCommand("cmd hdmi_control dump");
+        }
+
+        if (output == null || output.isEmpty()) {
+            Log.e(TAG, "Unable to read HDMI CEC state — dumpsys requires shell/root permissions");
+        } else {
+            parseTheaterState(output);
+        }
+
         JSONObject state = getState();
         notifyListener();
         return state;

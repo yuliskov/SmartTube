@@ -453,7 +453,7 @@ public class RemoteApiServer extends NanoWSD {
                     try {
                         JSONObject theaterResp = new JSONObject();
                         theaterResp.put("type", "theater_state");
-                        theaterResp.put("data", getTheater().getState());
+                        theaterResp.put("data", getTheater().refreshTheaterState());
                         send(theaterResp.toString());
                     } catch (Exception e) {
                         Log.e(TAG, "WebSocket theater state error: %s", e.getMessage());
@@ -1032,7 +1032,8 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleGetTheaterState() throws JSONException {
-        return corsResponse(jsonResponse(getTheater().getState()));
+        // Always read fresh from hardware so we detect if TV fell back to TV speakers
+        return corsResponse(jsonResponse(getTheater().refreshTheaterState()));
     }
 
     private Response handleGetTheaterVolume() throws JSONException {
