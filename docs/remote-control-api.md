@@ -11,25 +11,29 @@
 2. [Service Discovery (UDP Broadcast)](#2-service-discovery-udp-broadcast)
 3. [Authentication & Pairing](#3-authentication--pairing)
 4. [REST API Endpoints](#4-rest-api-endpoints)
-5. [Data Models](#5-data-models)
-6. [Chrome Extension Spec](#6-chrome-extension-spec)
-7. [Android Implementation Plan](#7-android-implementation-plan)
-8. [Security](#8-security)
+5. [WebSocket — Real-time Updates](#410-websocket--real-time-state-updates)
+6. [Data Models](#5-data-models)
+7. [Chrome Extension Spec](#6-chrome-extension-spec)
+8. [Android Implementation Plan](#7-android-implementation-plan)
+9. [Security](#8-security)
 
 ---
 
 ## 1. Architecture
 
 ```
-Chrome Extension ──HTTP/UDP──► SmartTube Android TV
-                                    │
-                              RemoteApiServer (NanoHTTPD, port 8497)
-                                    │
-                              RemoteApiBridge (BasePlayerController)
-                                    │
-                              PlayerEngine (existing interface)
-                                    │
-                              ExoPlayerController (existing impl)
+Chrome Extension ──HTTP/UDP/WebSocket──► SmartTube Android TV
+                                           │
+                                     RemoteApiServer (NanoWSD, port 8497)
+                                           │
+                                     ├── HTTP REST (pairing, commands)
+                                     └── WebSocket (real-time state updates)
+                                           │
+                                     RemoteApiBridge (static adapter)
+                                           │
+                                     PlayerEngine (existing interface)
+                                           │
+                                     ExoPlayerController (existing impl)
 ```
 
 **Key principle:** Zero new playback logic. The `RemoteApiBridge` is a thin adapter that maps HTTP requests to existing `PlayerEngine` methods. All playback, track selection, quality switching, etc. already exists in the codebase.
@@ -226,7 +230,186 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 | `GET` | `/api/system/dpad` | Yes | `?key=up` | D-pad (up/down/left/right/enter/back) |
 | `POST` | `/api/system/voice` | Yes | `{"action":"start"}` | Voice search |
 
----
+### 4.10 WebSocket — Real-time State Updates
+
+**URL:** `ws://<TV_IP>:8497/ws?token=<auth_token>`
+
+Instead of polling `GET /api/player` every second, the Chrome extension can open a WebSocket connection to receive live player state updates at ~2Hz (every 500ms).
+
+#### Connection
+
+1. After pairing, open WebSocket to `ws://<TV_IP>:8497/ws?token=<your_token>`
+2. On connect, server sends a `hello` message
+3. Server then streams `state_update` messages every 500ms while player is active
+4. Client can send commands over the WebSocket (no HTTP needed)
+
+#### Server → Client Messages
+
+**Hello (on connect):**
+```json
+{
+  "type": "hello",
+  "api_version": "1",
+  "device_name": "Living Room TV"
+}
+```
+
+**State Update (every 500ms):**
+```json
+{
+  "type": "state_update",
+  "data": {
+    "state": "playing",
+    "video": {
+      "video_id": "dQw4w9WgXcQ",
+      "title": "Never Gonna Give You Up",
+      "author": "Rick Astley",
+      "channel_id": "UCuAXFkgsw1L7xaCfnd5JJOw",
+      "thumbnail_url": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "duration_ms": 212000,
+      "is_live": false,
+      "is_shorts": false,
+      "playlist_id": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf",
+      "playlist_index": 5
+    },
+    "position_ms": 45000,
+    "duration_ms": 212000,
+    "speed": 1.0,
+    "pitch": 1.0,
+    "volume": 0.85,
+    "selected_tracks": {
+      "video": { "format_id": "30232", "width": 1920, "height": 1080, "frame_rate": 60.0, "codec": "vp9", "bitrate": 4500000 },
+      "audio": { "format_id": "251", "codec": "opus", "language": "en", "bitrate": 128000 },
+      "subtitle": null
+    },
+    "video_transform": {
+      "resize_mode": 0,
+      "zoom_percents": 100,
+      "rotation_angle": 0,
+      "flip_enabled": false
+    },
+    "suggestions_count": 12
+  }
+}
+```
+
+#### Client → Server Commands
+
+Send JSON commands over the WebSocket:
+
+| Action | Body | Description |
+|--------|------|-------------|
+| `play` | `{"action":"play"}` | Resume |
+| `pause` | `{"action":"pause"}` | Pause |
+| `toggle` | `{"action":"toggle"}` | Toggle play/pause |
+| `seek` | `{"action":"seek","position_ms":60000}` | Seek |
+| `next` | `{"action":"next"}` | Next track |
+| `previous` | `{"action":"previous"}` | Previous track |
+| `stop` | `{"action":"stop"}` | Close player |
+| `reload` | `{"action":"reload"}` | Reload source |
+| `set_speed` | `{"action":"set_speed","speed":1.5}` | Set speed |
+| `set_volume` | `{"action":"set_volume","volume":0.85}` | Set volume |
+| `set_video_format` | `{"action":"set_video_format","format_id":"30232"}` | Switch video track |
+| `set_audio_format` | `{"action":"set_audio_format","format_id":"251"}` | Switch audio track |
+| `set_subtitle_format` | `{"action":"set_subtitle_format","format_id":"en"}` | Switch subtitle (null to disable) |
+| `get_state` | `{"action":"get_state"}` | Request immediate state update |
+
+#### Chrome Extension Usage
+
+```javascript
+class SmartTubeWebSocket {
+  constructor(host, port, token, onStateUpdate) {
+    this.url = `ws://${host}:${port}/ws?token=${token}`;
+    this.onStateUpdate = onStateUpdate;
+    this.ws = null;
+    this.reconnectDelay = 1000;
+  }
+
+  connect() {
+    this.ws = new WebSocket(this.url);
+    
+    this.ws.onopen = () => {
+      console.log('SmartTube WebSocket connected');
+      this.reconnectDelay = 1000;
+    };
+
+    this.ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      
+      if (msg.type === 'hello') {
+        console.log(`Connected to ${msg.device_name}`);
+      } else if (msg.type === 'state_update') {
+        this.onStateUpdate(msg.data);
+      }
+    };
+
+    this.ws.onclose = () => {
+      console.log('WebSocket closed, reconnecting...');
+      setTimeout(() => this.connect(), this.reconnectDelay);
+      this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000);
+    };
+
+    this.ws.onerror = (err) => {
+      console.error('WebSocket error:', err);
+      this.ws.close();
+    };
+  }
+
+  send(action, params = {}) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({ action, ...params }));
+    }
+  }
+
+  play()                          { this.send('play'); }
+  pause()                         { this.send('pause'); }
+  toggle()                        { this.send('toggle'); }
+  seek(positionMs)                { this.send('seek', { position_ms: positionMs }); }
+  next()                          { this.send('next'); }
+  previous()                      { this.send('previous'); }
+  setSpeed(speed)                 { this.send('set_speed', { speed }); }
+  setVolume(volume)               { this.send('set_volume', { volume }); }
+  setVideoFormat(formatId)        { this.send('set_video_format', { format_id: formatId }); }
+  setAudioFormat(formatId)        { this.send('set_audio_format', { format_id: formatId }); }
+  setSubtitleFormat(formatId)     { this.send('set_subtitle_format', { format_id: formatId }); }
+  getState()                      { this.send('get_state'); }
+
+  disconnect() {
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
+    }
+  }
+}
+```
+
+#### Popup Integration Example
+
+```javascript
+// In popup.js — replace polling with WebSocket
+const ws = new SmartTubeWebSocket(host, port, token, (state) => {
+  // Update UI instantly
+  updateSeekBar(state.position_ms, state.duration_ms);
+  updatePlayPauseButton(state.state);
+  updateVolumeSlider(state.volume);
+  updateVideoTitle(state.video?.title);
+  updateThumbnail(state.video?.thumbnail_url);
+});
+
+ws.connect();
+
+// Still use REST for one-off actions like track listing
+const formats = await api.getVideoFormats();
+```
+
+#### Performance Notes
+
+- State updates are ~500 bytes each, sent at 2Hz = ~1 KB/s bandwidth
+- Server only sends updates when WebSocket clients are connected and player is active
+- No updates sent when player is idle (saves battery)
+- Auto-reconnect with exponential backoff (1s → 30s max)
+- WebSocket auth uses the same bearer token from pairing
+- Multiple clients can connect simultaneously
 
 ## 5. Data Models
 
@@ -348,7 +531,8 @@ chrome-extension/
 ├── options.js
 ├── options.css
 ├── lib/
-│   ├── api.js            # API client class
+│   ├── api.js            # REST API client class
+│   ├── websocket.js      # WebSocket client for real-time updates
 │   ├── discovery.js      # UDP broadcast discovery
 │   └── storage.js        # chrome.storage wrapper
 └── icons/

@@ -18,10 +18,15 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.ResponseException;
+import fi.iki.elonen.NanoWSD;
+import fi.iki.elonen.NanoWSD.WebSocket;
+import fi.iki.elonen.NanoWSD.WebSocketFrame;
 
-public class RemoteApiServer extends NanoHTTPD {
+public class RemoteApiServer extends NanoWSD {
     private static final String TAG = RemoteApiServer.class.getSimpleName();
     private static final int DEFAULT_PORT = 8497;
     private static final String API_VERSION = "1";
@@ -32,6 +37,8 @@ public class RemoteApiServer extends NanoHTTPD {
     private final RemoteApiData mApiData;
     private Thread mUdpThread;
     private volatile boolean mRunning;
+    private final CopyOnWriteArrayList<RemoteApiWebSocket> mWebSocketClients = new CopyOnWriteArrayList<>();
+    private Thread mBroadcastThread;
 
     public RemoteApiServer(RemoteApiData apiData) {
         this(apiData.getPort(), apiData);
@@ -75,6 +82,7 @@ public class RemoteApiServer extends NanoHTTPD {
         mRunning = true;
         super.start();
         startUdpListener();
+        startBroadcastLoop();
         Log.i(TAG, "Remote API server started on port %d", getListeningPort());
     }
 
@@ -85,6 +93,14 @@ public class RemoteApiServer extends NanoHTTPD {
             mUdpThread.interrupt();
             mUdpThread = null;
         }
+        if (mBroadcastThread != null) {
+            mBroadcastThread.interrupt();
+            mBroadcastThread = null;
+        }
+        for (RemoteApiWebSocket ws : mWebSocketClients) {
+            try { ws.close(WebSocketFrame.CloseCode.NormalClosure, "server shutting down", false); } catch (Exception ignored) {}
+        }
+        mWebSocketClients.clear();
         super.stop();
         Log.i(TAG, "Remote API server stopped");
     }
@@ -145,6 +161,212 @@ public class RemoteApiServer extends NanoHTTPD {
             Log.e(TAG, "Invalid UDP JSON: %s", e.getMessage());
         } catch (IOException e) {
             Log.e(TAG, "UDP send error: %s", e.getMessage());
+        }
+    }
+
+    // ---- WebSocket Support ----
+
+    @Override
+    protected WebSocket openWebSocket(NanoHTTPD.IHTTPSession handshake) {
+        String uri = handshake.getUri();
+        if (!"/ws".equals(uri)) {
+            return null;
+        }
+
+        Map<String, String> parms = handshake.getParms();
+        String token = parms.get("token");
+        if (token == null || !mAuth.isTokenValid(token)) {
+            Log.w(TAG, "WebSocket connection rejected: invalid or missing token");
+            return null;
+        }
+
+        RemoteApiWebSocket ws = new RemoteApiWebSocket(handshake);
+        mWebSocketClients.add(ws);
+        Log.i(TAG, "WebSocket client connected (%d total)", mWebSocketClients.size());
+        return ws;
+    }
+
+    private void startBroadcastLoop() {
+        mBroadcastThread = new Thread(() -> {
+            while (mRunning && !Thread.currentThread().isInterrupted()) {
+                try {
+                    Thread.sleep(500);
+                    broadcastState();
+                } catch (InterruptedException e) {
+                    break;
+                } catch (Exception e) {
+                    Log.e(TAG, "Broadcast error: %s", e.getMessage());
+                }
+            }
+        }, "RemoteApi-WsBroadcast");
+        mBroadcastThread.setDaemon(true);
+        mBroadcastThread.start();
+    }
+
+    private void broadcastState() {
+        if (mWebSocketClients.isEmpty()) {
+            return;
+        }
+
+        JSONObject state = RemoteApiBridge.getPlayerState();
+        if (state == null) {
+            return;
+        }
+
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("type", "state_update");
+            msg.put("data", state);
+        } catch (JSONException e) {
+            return;
+        }
+
+        String payload = msg.toString();
+        for (RemoteApiWebSocket ws : mWebSocketClients) {
+            if (ws.isOpen()) {
+                try {
+                    ws.send(payload);
+                } catch (Exception e) {
+                    Log.e(TAG, "WebSocket send error: %s", e.getMessage());
+                    mWebSocketClients.remove(ws);
+                }
+            } else {
+                mWebSocketClients.remove(ws);
+            }
+        }
+    }
+
+    public void broadcastEvent(String eventType, JSONObject data) {
+        if (mWebSocketClients.isEmpty()) {
+            return;
+        }
+
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("type", eventType);
+            msg.put("data", data);
+        } catch (JSONException e) {
+            return;
+        }
+
+        String payload = msg.toString();
+        for (RemoteApiWebSocket ws : mWebSocketClients) {
+            if (ws.isOpen()) {
+                try {
+                    ws.send(payload);
+                } catch (Exception e) {
+                    mWebSocketClients.remove(ws);
+                }
+            } else {
+                mWebSocketClients.remove(ws);
+            }
+        }
+    }
+
+    private class RemoteApiWebSocket extends WebSocket {
+        RemoteApiWebSocket(NanoHTTPD.IHTTPSession handshake) {
+            super(handshake);
+        }
+
+        @Override
+        protected void onOpen() {
+            Log.d(TAG, "WebSocket opened");
+            try {
+                JSONObject hello = new JSONObject();
+                hello.put("type", "hello");
+                hello.put("api_version", API_VERSION);
+                hello.put("device_name", getDeviceName());
+                send(hello.toString());
+            } catch (Exception e) {
+                Log.e(TAG, "WebSocket hello error: %s", e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onClose(WebSocketFrame.CloseCode code, String reason, boolean initiatedByRemote) {
+            mWebSocketClients.remove(this);
+            Log.d(TAG, "WebSocket closed: %s (%d remaining)", reason, mWebSocketClients.size());
+        }
+
+        @Override
+        protected void onMessage(WebSocketFrame message) {
+            String text = message.getTextPayload();
+            try {
+                JSONObject cmd = new JSONObject(text);
+                String action = cmd.optString("action");
+                handleWebSocketCommand(action, cmd);
+            } catch (JSONException e) {
+                Log.e(TAG, "Invalid WebSocket message: %s", e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPong(WebSocketFrame pong) {}
+
+        @Override
+        protected void onException(IOException exception) {
+            Log.e(TAG, "WebSocket exception: %s", exception.getMessage());
+            mWebSocketClients.remove(this);
+        }
+
+        private void handleWebSocketCommand(String action, JSONObject cmd) {
+            switch (action) {
+                case "play":
+                    RemoteApiBridge.handlePlay();
+                    break;
+                case "pause":
+                    RemoteApiBridge.handlePause();
+                    break;
+                case "toggle":
+                    RemoteApiBridge.handleToggle();
+                    break;
+                case "seek":
+                    long pos = cmd.optLong("position_ms", 0);
+                    RemoteApiBridge.handleSeek(pos);
+                    break;
+                case "next":
+                    RemoteApiBridge.handleNext();
+                    break;
+                case "previous":
+                    RemoteApiBridge.handlePrevious();
+                    break;
+                case "stop":
+                    RemoteApiBridge.handleStop();
+                    break;
+                case "reload":
+                    RemoteApiBridge.handleReload();
+                    break;
+                case "set_speed":
+                    float speed = (float) cmd.optDouble("speed", 1.0);
+                    RemoteApiBridge.setSpeed(speed);
+                    break;
+                case "set_volume":
+                    float vol = (float) cmd.optDouble("volume", 1.0);
+                    RemoteApiBridge.setVolume(vol);
+                    break;
+                case "set_video_format":
+                    RemoteApiBridge.setVideoFormat(cmd.optString("format_id"));
+                    break;
+                case "set_audio_format":
+                    RemoteApiBridge.setAudioFormat(cmd.optString("format_id"));
+                    break;
+                case "set_subtitle_format":
+                    RemoteApiBridge.setSubtitleFormat(cmd.optString("format_id"));
+                    break;
+                case "get_state":
+                    JSONObject state = RemoteApiBridge.getPlayerState();
+                    if (state != null) {
+                        JSONObject resp = new JSONObject();
+                        try {
+                            resp.put("type", "state_update");
+                            resp.put("data", state);
+                            send(resp.toString());
+                        } catch (Exception e) {
+                            Log.e(TAG, "WebSocket state response error: %s", e.getMessage());
+                        }
+                    }
+                    break;
+            }
         }
     }
 

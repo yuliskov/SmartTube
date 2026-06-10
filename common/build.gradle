@@ -109,4 +109,5 @@ dependencies {
     implementation project(':slidableactivity') // https://github.com/r0adkll/Slidr
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websocket:2.3.1'
 }
