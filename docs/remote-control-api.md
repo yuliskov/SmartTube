@@ -248,41 +248,45 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 
 ### 4.9 Home Theater Control
 
-Control the TV's audio system directly — volume, mute, speaker/theater output switching, subwoofer/rear levels, sound mode, and Immersive Audio Enhancement. Replaces the ADB-based tvaudiocontrol GNOME extension with native in-app control via HDMI CEC.
+Control the TV's audio system directly — volume, mute, speaker/theater output switching, subwoofer/rear levels, sound mode, and Immersive Audio Enhancement. Replaces the ADB-based tvaudiocontrol GNOME extension with native in-app control.
+
+#### How It Works
+
+Some features use Android APIs that work from any app, while HDMI CEC features require shell-level access that is not available to user-installed apps. The app handles what it can directly and documents the ADB commands needed for CEC operations.
 
 | Method | Endpoint | Auth | Body | Description |
 |--------|----------|------|------|-------------|
-| `GET` | `/api/theater` | Yes | — | Full theater state |
+| `GET` | `/api/theater` | Yes | — | Full theater state (see note below) |
 | `GET` | `/api/theater/volume` | Yes | — | Get TV volume + muted state |
 | `PUT` | `/api/theater/volume` | Yes | `{"volume":50}` | Set TV volume (0–100) |
 | `POST` | `/api/theater/volume/up` | Yes | — | Volume up one step |
 | `POST` | `/api/theater/volume/down` | Yes | — | Volume down one step |
 | `POST` | `/api/theater/mute/toggle` | Yes | — | Toggle TV mute |
 | `GET` | `/api/theater/output` | Yes | — | Get audio output (`"tv"` or `"theater"`) |
-| `PUT` | `/api/theater/output` | Yes | `{"audio_output":"theater"}` | Switch output (TV speakers ↔ home theater) |
+| `PUT` | `/api/theater/output` | Yes | `{"audio_output":"theater"}` | Switch output — **requires ADB bridge** (see below) |
 | `GET` | `/api/theater/subwoofer` | Yes | — | Get subwoofer level (0–12) |
-| `PUT` | `/api/theater/subwoofer` | Yes | `{"level":8}` | Set subwoofer level |
+| `PUT` | `/api/theater/subwoofer` | Yes | `{"level":8}` | Set subwoofer level — **requires ADB bridge** (see below) |
 | `GET` | `/api/theater/rear` | Yes | — | Get rear speaker level (0–12) |
-| `PUT` | `/api/theater/rear` | Yes | `{"level":6}` | Set rear speaker level |
+| `PUT` | `/api/theater/rear` | Yes | `{"level":6}` | Set rear speaker level — **requires ADB bridge** (see below) |
 | `GET` | `/api/theater/sound_mode` | Yes | — | Get sound mode |
-| `PUT` | `/api/theater/sound_mode` | Yes | `{"sound_mode":"cinema"}` | Set mode (`auto`/`cinema`/`music`/`standard`) |
-| `POST` | `/api/theater/sound_mode/next` | Yes | — | Cycle to next sound mode |
-| `POST` | `/api/theater/sound_mode/previous` | Yes | — | Cycle to previous sound mode |
+| `PUT` | `/api/theater/sound_mode` | Yes | `{"sound_mode":"cinema"}` | Set mode — **requires ADB bridge** (see below) |
+| `POST` | `/api/theater/sound_mode/next` | Yes | — | Cycle to next sound mode — **requires ADB bridge** |
+| `POST` | `/api/theater/sound_mode/previous` | Yes | — | Cycle to previous sound mode — **requires ADB bridge** |
 | `GET` | `/api/theater/immersive_ae` | Yes | — | Get Immersive Audio Enhancement state |
-| `PUT` | `/api/theater/immersive_ae` | Yes | `{"enabled":true}` | Toggle Immersive AE |
+| `PUT` | `/api/theater/immersive_ae` | Yes | `{"enabled":true}` | Toggle Immersive AE — **requires ADB bridge** (see below) |
 | `POST` | `/api/theater/power/toggle` | Yes | — | Toggle TV power (sends `KEYCODE_POWER`) |
-| `POST` | `/api/theater/refresh` | Yes | — | Refresh theater state by parsing `dumpsys hdmi_control` output |
+| `POST` | `/api/theater/refresh` | Yes | — | Refresh theater state |
 
 **`GET /api/theater` Response:**
 ```json
 {
   "volume": 42,
   "muted": false,
-  "audio_output": "theater",
-  "subwoofer_level": 8,
-  "rear_level": 6,
-  "immersive_ae": true,
-  "sound_mode": "cinema"
+  "audio_output": "tv",
+  "subwoofer_level": null,
+  "rear_level": null,
+  "immersive_ae": null,
+  "sound_mode": null
 }
 ```
 
@@ -290,6 +294,132 @@ Control the TV's audio system directly — volume, mute, speaker/theater output 
 ```json
 { "volume": 42, "muted": false }
 ```
+
+#### Why HDMI CEC Needs an ADB Bridge
+
+`android.hardware.hdmi.HdmiControlManager` is a `@SystemApi` — it requires the `android.permission.MODIFY_TV_USER_SELECTION` signature-level permission, which is only granted to system apps. User-installed apps cannot access it.
+
+Similarly, the `cmd hdmi_control` shell commands require shell UID, which `Runtime.exec()` from an app does not have.
+
+**Volume and mute** use `AudioManager` — these work from any app.
+
+**CEC vendor commands** (output switching, subwoofer/rear levels, sound mode, immersive AE) must be run by an external tool that has shell access. An ADB-based bridge, a companion app installed as a system app, or a Shizuku service can execute these.
+
+#### ADB Commands for CEC Operations
+
+An extension or bridge tool running ADB commands on the user's machine can implement the full theater control. These are the exact commands:
+
+**Switch to home theater speakers:**
+```bash
+adb shell cmd hdmi_control setsystemaudiomode on
+adb shell cmd hdmi_control setarc on
+adb shell cmd hdmi_control cec_setting set volume_control_enabled 1
+```
+
+**Switch to TV speakers:**
+```bash
+adb shell cmd hdmi_control setsystemaudiomode off
+adb shell cmd hdmi_control setarc off
+```
+
+**Set subwoofer level (0–12):**
+```bash
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:44:00:FF:06:FF:FF" --id true
+```
+Replace `06` with hex level (e.g., `08` for level 8, `00` for off).
+
+**Set rear speaker level (0–12):**
+```bash
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:44:00:FF:FF:FF:FF:06" --id true
+```
+Replace `06` with hex level.
+
+**Set immersive audio enhancement:**
+```bash
+# Enable
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:44:00:FF:FF:FF:01" --id true
+
+# Disable
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:44:00:FF:FF:FF:00" --id true
+```
+
+**Set sound mode:**
+```bash
+# Auto
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:0D:00:55:FF:FF:FF:FF" --id true
+
+# Cinema
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:0D:00:34:FF:FF:FF:FF" --id true
+
+# Music
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:0D:00:06:FF:FF:FF:FF" --id true
+
+# Standard
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:0D:00:00:FF:FF:FF:FF" --id true
+```
+
+**Read current CEC state:**
+```bash
+adb shell dumpsys hdmi_control | tail -n 260
+```
+
+**Read current theater level state:**
+```bash
+adb shell cmd hdmi_control vendorcommand \
+  --device_type 0 --destination 5 \
+  --args "F2:43:00:FF:FF:FF:FF:FF" --id true
+```
+
+#### CEC State Parsing (from dumpsys output)
+
+Parse the last 260 lines of `dumpsys hdmi_control` to extract:
+
+| Pattern | Regex | Meaning |
+|---------|-------|---------|
+| Audio output | `(?:SET SYSTEM AUDIO MODE\|SYSTEM AUDIO MODE REQUEST).*(?:5F:72:\|05:70:[0-9A-F]{2}:[0-9A-F]{2}:)(00\|01)` | `01` = theater, `00` = TV |
+| Combined levels | `F2:43:00:FF:([0-9A-F]{2}):([0-9A-F]{2}):([0-9A-F]{2}):([0-9A-F]{2})` | Subwoofer, ?, Immersive, Rear |
+| Subwoofer set | `F2:44:00:FF:([0-9A-F]{2}):FF:FF` | Subwoofer level |
+| Rear set | `F2:44:00:FF:FF:FF:FF:([0-9A-F]{2})` | Rear level |
+| Immersive AE | `F2:44:00:FF:FF:FF:(00\|01)` | Immersive state |
+| Sound mode | `F2:0[CD]:00:([0-9A-F]{2}):FF:(?:00\|FF):FF:(?:00\|FF)` | Mode byte |
+
+#### Extension Implementation Pattern
+
+For an extension/bridge that controls theater via ADB:
+
+1. **GET /api/theater** returns volume/mute from AudioManager. CEC fields may be `null`.
+2. **Bridge polls** `dumpsys hdmi_control` to get CEC state (output, levels, mode).
+3. **Bridge writes** CEC commands via `adb shell cmd hdmi_control vendorcommand ...`
+4. **Bridge can call** the REST endpoints to notify the app of state changes (the app stores the values locally for `GET /api/theater`).
+5. **Or the app** can accept a `POST /api/theater/state_update` endpoint to receive CEC state from the bridge.
+
+The recommended architecture:
+
+```
+Chrome Extension ──WebSocket──► SmartTube App (volume/mute via AudioManager)
+                                    │
+                                    └── REST API ──► ADB Bridge (CEC commands via `cmd hdmi_control`)
+                                                          │
+                                                     HDMI CEC bus ──► Home Theater
+```
+
+The bridge connects to the same REST API and executes the CEC commands that the app cannot.
 
 ### 4.10 System Control
 
@@ -392,13 +522,13 @@ Send JSON commands over the WebSocket:
 | `get_queue` | `{"action":"get_queue"}` | Request queue list |
 | `theater_set_volume` | `{"action":"theater_set_volume","volume":50}` | Set TV volume |
 | `theater_mute_toggle` | `{"action":"theater_mute_toggle"}` | Toggle TV mute |
-| `theater_set_output` | `{"action":"theater_set_output","audio_output":"theater"}` | Switch audio output |
-| `theater_set_subwoofer` | `{"action":"theater_set_subwoofer","level":8}` | Set subwoofer level |
-| `theater_set_rear` | `{"action":"theater_set_rear","level":6}` | Set rear level |
-| `theater_set_sound_mode` | `{"action":"theater_set_sound_mode","sound_mode":"cinema"}` | Set sound mode |
-| `theater_set_immersive` | `{"action":"theater_set_immersive","enabled":true}` | Toggle Immersive AE |
+| `theater_set_output` | `{"action":"theater_set_output","audio_output":"theater"}` | Switch audio output ⚠️ ADB required |
+| `theater_set_subwoofer` | `{"action":"theater_set_subwoofer","level":8}` | Set subwoofer level ⚠️ ADB required |
+| `theater_set_rear` | `{"action":"theater_set_rear","level":6}` | Set rear level ⚠️ ADB required |
+| `theater_set_sound_mode` | `{"action":"theater_set_sound_mode","sound_mode":"cinema"}` | Set sound mode ⚠️ ADB required |
+| `theater_set_immersive` | `{"action":"theater_set_immersive","enabled":true}` | Toggle Immersive AE ⚠️ ADB required |
 | `theater_power_toggle` | `{"action":"theater_power_toggle"}` | Toggle TV power |
-| `theater_refresh` | `{"action":"theater_refresh"}` | Refresh theater state from HDMI CEC |
+| `theater_refresh` | `{"action":"theater_refresh"}` | Refresh theater state |
 | `theater_get_state` | `{"action":"theater_get_state"}` | Request theater state |
 | `get_state` | `{"action":"get_state"}` | Request immediate state update |
 
