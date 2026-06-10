@@ -11,7 +11,7 @@
 2. [Service Discovery (UDP Broadcast)](#2-service-discovery-udp-broadcast)
 3. [Authentication & Pairing](#3-authentication--pairing)
 4. [REST API Endpoints](#4-rest-api-endpoints)
-5. [WebSocket — Real-time Updates](#410-websocket--real-time-state-updates)
+5. [WebSocket — Real-time Updates](#411-websocket--real-time-state-updates)
 6. [Data Models](#5-data-models)
 7. [Chrome Extension Spec](#6-chrome-extension-spec)
 8. [Android Implementation Plan](#7-android-implementation-plan)
@@ -181,6 +181,10 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 | `PUT` | `/api/player/volume` | Yes | `{"volume":0.85}` | Set volume |
 | `GET` | `/api/player/pitch` | Yes | — | Get pitch |
 | `PUT` | `/api/player/pitch` | Yes | `{"pitch":1.0}` | Set pitch |
+| `GET` | `/api/player/mute` | Yes | — | Get mute state |
+| `POST` | `/api/player/mute/toggle` | Yes | — | Toggle mute/unmute |
+| `GET` | `/api/player/subtitle` | Yes | — | Get subtitle state |
+| `POST` | `/api/player/subtitle/toggle` | Yes | — | Toggle subtitles on/off |
 
 ### 4.6 Track Selection
 
@@ -212,8 +216,27 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 | Method | Endpoint | Auth | Body | Description |
 |--------|----------|------|------|-------------|
 | `POST` | `/api/content/open` | Yes | See below | Open video |
+| `POST` | `/api/content/search` | Yes | `{"query":"..."}` | Search YouTube and play first result |
 | `GET` | `/api/content/suggestions` | Yes | — | Get queue |
 | `POST` | `/api/content/suggestions/:index` | Yes | — | Play queue item |
+
+### 4.9 Queue Management
+
+| Method | Endpoint | Auth | Body | Description |
+|--------|----------|------|------|-------------|
+| `GET` | `/api/player/queue` | Yes | — | Get all videos in queue |
+| `POST` | `/api/player/queue` | Yes | `{"video_id":"..."}` | Add video to end of queue |
+| `POST` | `/api/player/queue/next` | Yes | `{"video_id":"..."}` | Play video next |
+| `DELETE` | `/api/player/queue` | Yes | `{"video_id":"..."}` | Remove video from queue |
+| `POST` | `/api/player/queue/clear` | Yes | — | Clear entire queue |
+
+**`GET /api/player/queue` Response:**
+```json
+[
+  { "index": 0, "video_id": "abc123", "title": "Video 1", "author": "Channel A", "is_current": true },
+  { "index": 1, "video_id": "def456", "title": "Video 2", "author": "Channel B", "is_current": false }
+]
+```
 
 **`POST /api/content/open` body variants:**
 ```json
@@ -223,7 +246,52 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 { "video_id": "dQw4w9WgXcQ", "playlist_id": "PLxxx", "playlist_index": 5 }
 ```
 
-### 4.9 System Control
+### 4.9 Home Theater Control
+
+Control the TV's audio system directly — volume, mute, speaker/theater output switching, subwoofer/rear levels, sound mode, and Immersive Audio Enhancement. Replaces the ADB-based tvaudiocontrol GNOME extension with native in-app control via HDMI CEC.
+
+| Method | Endpoint | Auth | Body | Description |
+|--------|----------|------|------|-------------|
+| `GET` | `/api/theater` | Yes | — | Full theater state |
+| `GET` | `/api/theater/volume` | Yes | — | Get TV volume + muted state |
+| `PUT` | `/api/theater/volume` | Yes | `{"volume":50}` | Set TV volume (0–100) |
+| `POST` | `/api/theater/volume/up` | Yes | — | Volume up one step |
+| `POST` | `/api/theater/volume/down` | Yes | — | Volume down one step |
+| `POST` | `/api/theater/mute/toggle` | Yes | — | Toggle TV mute |
+| `GET` | `/api/theater/output` | Yes | — | Get audio output (`"tv"` or `"theater"`) |
+| `PUT` | `/api/theater/output` | Yes | `{"audio_output":"theater"}` | Switch output (TV speakers ↔ home theater) |
+| `GET` | `/api/theater/subwoofer` | Yes | — | Get subwoofer level (0–12) |
+| `PUT` | `/api/theater/subwoofer` | Yes | `{"level":8}` | Set subwoofer level |
+| `GET` | `/api/theater/rear` | Yes | — | Get rear speaker level (0–12) |
+| `PUT` | `/api/theater/rear` | Yes | `{"level":6}` | Set rear speaker level |
+| `GET` | `/api/theater/sound_mode` | Yes | — | Get sound mode |
+| `PUT` | `/api/theater/sound_mode` | Yes | `{"sound_mode":"cinema"}` | Set mode (`auto`/`cinema`/`music`/`standard`) |
+| `POST` | `/api/theater/sound_mode/next` | Yes | — | Cycle to next sound mode |
+| `POST` | `/api/theater/sound_mode/previous` | Yes | — | Cycle to previous sound mode |
+| `GET` | `/api/theater/immersive_ae` | Yes | — | Get Immersive Audio Enhancement state |
+| `PUT` | `/api/theater/immersive_ae` | Yes | `{"enabled":true}` | Toggle Immersive AE |
+| `POST` | `/api/theater/power/toggle` | Yes | — | Toggle TV power (sends `KEYCODE_POWER`) |
+| `POST` | `/api/theater/refresh` | Yes | — | Refresh theater state by parsing `dumpsys hdmi_control` output |
+
+**`GET /api/theater` Response:**
+```json
+{
+  "volume": 42,
+  "muted": false,
+  "audio_output": "theater",
+  "subwoofer_level": 8,
+  "rear_level": 6,
+  "immersive_ae": true,
+  "sound_mode": "cinema"
+}
+```
+
+**`GET /api/theater/volume` Response:**
+```json
+{ "volume": 42, "muted": false }
+```
+
+### 4.10 System Control
 
 | Method | Endpoint | Auth | Body/Params | Description |
 |--------|----------|------|-------------|-------------|
@@ -288,7 +356,9 @@ Instead of polling `GET /api/player` every second, the Chrome extension can open
       "rotation_angle": 0,
       "flip_enabled": false
     },
-    "suggestions_count": 12
+    "suggestions_count": 12,
+    "queue_size": 5,
+    "queue_index": 0
   }
 }
 ```
@@ -312,6 +382,24 @@ Send JSON commands over the WebSocket:
 | `set_video_format` | `{"action":"set_video_format","format_id":"30232"}` | Switch video track |
 | `set_audio_format` | `{"action":"set_audio_format","format_id":"251"}` | Switch audio track |
 | `set_subtitle_format` | `{"action":"set_subtitle_format","format_id":"en"}` | Switch subtitle (null to disable) |
+| `toggle_subtitles` | `{"action":"toggle_subtitles"}` | Toggle subtitles on/off |
+| `toggle_mute` | `{"action":"toggle_mute"}` | Toggle mute/unmute |
+| `search` | `{"action":"search","query":"never gonna give you up"}` | Search and play first result |
+| `add_to_queue` | `{"action":"add_to_queue","video_id":"dQw4w9WgXcQ"}` | Add video to queue |
+| `play_next` | `{"action":"play_next","video_id":"dQw4w9WgXcQ"}` | Play video next |
+| `remove_from_queue` | `{"action":"remove_from_queue","video_id":"dQw4w9WgXcQ"}` | Remove video from queue |
+| `clear_queue` | `{"action":"clear_queue"}` | Clear entire queue |
+| `get_queue` | `{"action":"get_queue"}` | Request queue list |
+| `theater_set_volume` | `{"action":"theater_set_volume","volume":50}` | Set TV volume |
+| `theater_mute_toggle` | `{"action":"theater_mute_toggle"}` | Toggle TV mute |
+| `theater_set_output` | `{"action":"theater_set_output","audio_output":"theater"}` | Switch audio output |
+| `theater_set_subwoofer` | `{"action":"theater_set_subwoofer","level":8}` | Set subwoofer level |
+| `theater_set_rear` | `{"action":"theater_set_rear","level":6}` | Set rear level |
+| `theater_set_sound_mode` | `{"action":"theater_set_sound_mode","sound_mode":"cinema"}` | Set sound mode |
+| `theater_set_immersive` | `{"action":"theater_set_immersive","enabled":true}` | Toggle Immersive AE |
+| `theater_power_toggle` | `{"action":"theater_power_toggle"}` | Toggle TV power |
+| `theater_refresh` | `{"action":"theater_refresh"}` | Refresh theater state from HDMI CEC |
+| `theater_get_state` | `{"action":"theater_get_state"}` | Request theater state |
 | `get_state` | `{"action":"get_state"}` | Request immediate state update |
 
 #### Chrome Extension Usage

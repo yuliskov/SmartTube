@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.KeyEvent;
 
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -28,6 +30,7 @@ public class RemoteApiBridge {
     private static int sZoomPercents = 100;
     private static int sRotationAngle = 0;
     private static boolean sFlipEnabled = false;
+    private static float sPreviousVolume = 1.0f;
 
     public static void init(PlaybackPresenter presenter) {
         sPresenter = presenter;
@@ -107,6 +110,10 @@ public class RemoteApiBridge {
                 suggestionsCount += group.getSize();
             }
             state.put("suggestions_count", suggestionsCount);
+
+            Playlist playlist = Playlist.instance();
+            state.put("queue_size", playlist.getAll().size());
+            state.put("queue_index", playlist.getAll().indexOf(playlist.getCurrent()));
 
             return state;
         } catch (JSONException e) {
@@ -459,6 +466,128 @@ public class RemoteApiBridge {
                 }
             }
         }
+    }
+
+    // ---- Subtitles ----
+
+    public static void toggleSubtitles() {
+        PlaybackView player = getPlayer();
+        if (player == null) {
+            return;
+        }
+
+        boolean currentlyShown = player.getButtonState(
+                com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
+                == PlayerUI.BUTTON_ON;
+        player.showSubtitles(!currentlyShown);
+    }
+
+    public static boolean areSubtitlesOn() {
+        PlaybackView player = getPlayer();
+        if (player == null) {
+            return false;
+        }
+        return player.getButtonState(
+                com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
+                == PlayerUI.BUTTON_ON;
+    }
+
+    // ---- Mute / Unmute ----
+
+    public static void toggleMute() {
+        PlaybackView player = getPlayer();
+        if (player == null) {
+            return;
+        }
+
+        boolean isMuted = player.getVolume() == 0f;
+        if (isMuted && sPreviousVolume > 0f) {
+            player.setVolume(sPreviousVolume);
+        } else {
+            sPreviousVolume = player.getVolume();
+            player.setVolume(0f);
+        }
+    }
+
+    public static boolean isMuted() {
+        PlaybackView player = getPlayer();
+        return player != null && player.getVolume() == 0f;
+    }
+
+    // ---- Search ----
+
+    public static void search(String query) {
+        if (sPresenter == null || query == null || query.isEmpty()) {
+            return;
+        }
+
+        Context context = sPresenter.getContext();
+        if (context == null) {
+            return;
+        }
+
+        SearchPresenter.instance(context).startPlay(query);
+    }
+
+    // ---- Queue Management ----
+
+    public static JSONArray getQueue() {
+        Playlist playlist = Playlist.instance();
+        List<Video> all = playlist.getAll();
+        Video current = playlist.getCurrent();
+
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < all.size(); i++) {
+            Video video = all.get(i);
+            try {
+                JSONObject item = new JSONObject();
+                item.put("index", i);
+                item.put("video_id", video.videoId);
+                item.put("title", video.getTitle());
+                item.put("author", video.getAuthor());
+                item.put("is_current", video.equals(current));
+                result.put(item);
+            } catch (JSONException e) {
+                // skip
+            }
+        }
+        return result;
+    }
+
+    public static void addToQueue(String videoId) {
+        if (videoId == null) {
+            return;
+        }
+        Video video = Video.from(videoId);
+        video.isRemote = true;
+        Playlist.instance().add(video);
+    }
+
+    public static void playNext(String videoId) {
+        if (videoId == null) {
+            return;
+        }
+        Video video = Video.from(videoId);
+        video.isRemote = true;
+        Playlist.instance().next(video);
+    }
+
+    public static void removeFromQueue(String videoId) {
+        if (videoId == null) {
+            return;
+        }
+        Playlist playlist = Playlist.instance();
+        List<Video> all = playlist.getAll();
+        for (Video video : all) {
+            if (videoId.equals(video.videoId)) {
+                playlist.remove(video);
+                break;
+            }
+        }
+    }
+
+    public static void clearQueue() {
+        Playlist.instance().clear();
     }
 
     // ---- System Control ----
