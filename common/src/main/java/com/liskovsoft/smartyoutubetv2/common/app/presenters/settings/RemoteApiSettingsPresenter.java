@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -55,6 +56,7 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
         appendPortCategory(settingsPresenter);
         appendDeviceNameCategory(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
+        appendDebugButton(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_api), this::unhold);
     }
@@ -131,5 +133,19 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
         options.add(confirmItem);
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.remote_api_remove_all), options);
+    }
+
+    private void appendDebugButton(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(
+                "Home Theater Debug", option -> {
+                    try {
+                        Intent intent = new Intent();
+                        intent.setClassName(getContext(),
+                                "com.liskovsoft.smartyoutubetv2.tv.ui.debug.RemoteApiDebugActivity");
+                        getContext().startActivity(intent);
+                    } catch (Exception e) {
+                        MessageHelpers.showMessage(getContext(), "Debug activity not found: " + e.getMessage());
+                    }
+                }));
     }
 }
