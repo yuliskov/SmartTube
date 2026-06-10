@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.os.Build.VERSION;
+
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -16,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity;
@@ -23,12 +27,17 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivityOpaque;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.webbrowser.WebBrowserActivity;
 
+import org.conscrypt.Conscrypt;
+
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.security.Provider;
+import java.security.Security;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
@@ -47,11 +56,30 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     public void onCreate() {
         super.onCreate();
 
-        // Android 4 SponsorBlock fix???
+        // ByeByeDPI fix
         // https://android-review.googlesource.com/c/platform/external/conscrypt/+/89408/
-        //if (Build.VERSION.SDK_INT == 19) {
+        // NOTE: Android 10+ (API 29+) uses system Conscrypt TLS; custom Security providers are unnecessary
+        // NOTE: May cause 'Unexpected playback error null'
+        //if (Build.VERSION.SDK_INT < 29 && Conscrypt.isAvailable()) {
         //    Security.insertProviderAt(Conscrypt.newProvider(), 1);
         //}
+
+        // Important: Initialize the native Conscrypt provider BEFORE reading any configs/SharedPreferences.
+        // Otherwise, early disk I/O shifts the ClassLoader on some Android TV devices, causing silent JNI linking errors.
+        Provider conscryptProvider = null;
+        try {
+            conscryptProvider = Conscrypt.newProvider();
+        } catch (Throwable e) {
+            // UnsatisfiedLinkError
+        }
+
+        if (conscryptProvider != null && NetworkData.instance(this).isConscryptEnabled()) {
+            try {
+                Security.insertProviderAt(conscryptProvider, 1);
+            } catch (Throwable e) {
+                // UnsatisfiedLinkError
+            }
+        }
 
         setupGlobalExceptionHandler();
         setupViewManager();
@@ -60,11 +88,21 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
 
+        Class<? extends AppDialogActivity> dialogClazz;
+
+        if (VERSION.SDK_INT == 26
+                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(), "4S806_Z51S1 (Panasonic)")) {
+            // The fix: Only fullscreen opaque activities can request orientation
+            dialogClazz = AppDialogActivityOpaque.class;
+        } else {
+            dialogClazz = AppDialogActivity.class;
+        }
+
         viewManager.setRoot(BrowseActivity.class);
         viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
         viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
         viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppDialogView.class, AppDialogActivity.class, BrowseActivity.class);
+        viewManager.register(AppDialogView.class, dialogClazz, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
@@ -93,10 +131,14 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private boolean shouldIgnore(Throwable e) {
-        if (Helpers.contains(e.getMessage(), "KatnissVoiceInteractionService")) {
+        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture")) {
             // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
             // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
             // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
+
+            // java.lang.NoSuchMethodError: No interface method addListener(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)V
+            // in class Lcom/google/common/util/concurrent/ListenableFuture; or its super classes
+            // (declaration of 'com.google.common.util.concurrent.ListenableFuture' appears in /system/framework/libsetting.jar)
             return true;
         }
 

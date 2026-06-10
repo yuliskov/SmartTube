@@ -98,7 +98,7 @@
   <string name="player_full_date">Ngày chính xác trong mô tả</string>
   <string name="open_channel">Mở kênh</string>
   <string name="not_interested">Không quan tâm</string>
-  <string name="you_wont_see_this_video">Đã xoá video khỏi mục đề xuất</string>
+  <string name="you_wont_see_this_video">Đã xóa video khỏi mục đề xuất</string>
   <string name="settings_search">Tìm kiếm</string>
   <string name="dialog_search">Tìm kiếm</string>
   <string name="instant_voice_search">Tìm kiếm bằng giọng nói tức thì</string>
@@ -280,7 +280,7 @@
   <string name="play_video">Phát</string>
   <string name="remember_position_of_short_videos">Nhớ vị trí của các video Shorts (dưới 5 phút)</string>
   <string name="player_show_tooltips">Hiển thị chú thích của các nút</string>
-  <string name="action_like_unset">Đã xoá lượt thích</string>
+  <string name="action_like_unset">Đã xóa lượt thích</string>
   <string name="amlogic_fix_desc">Sửa lỗi giảm khung hình trên các thiết bị có vi xử lí Amlogic.</string>
   <string name="amlogic_fix">Sửa lỗi 1080p\@60fps trên thiết bị Amlogic</string>
   <string name="playback_notifications_fix">Tắt thông báo phát lại</string>
@@ -293,7 +293,7 @@
   <string name="rename_section">Đổi tên mục</string>
   <string name="internet_censorship">Kiểm Duyệt Mạng</string>
   <string name="openvpn_address_invalid">Địa chỉ cấu hình OpenVPN chưa được thiết lập.</string>
-  <string name="action_dislike_unset">Đã xoá lượt không thích</string>
+  <string name="action_dislike_unset">Đã xóa lượt không thích</string>
   <string name="cancel_dialog">Hủy bỏ</string>
   <string name="ambilight_ratio_fix_desc">Sửa lỗi mất độ nghiêng ánh sáng. Sửa tỷ lệ khung hình không chính xác. Sửa ảnh chụp màn hình trống. Nhưng nó sẽ ảnh hưởng đến hiệu suất!</string>
   <string name="ambilight_ratio_fix">Sửa hệ thống chiếu sáng/tỉ lệ khung hình/ảnh chụp màn hình</string>
@@ -495,7 +495,7 @@
   <string name="resume_history">Tiếp tục lưu lịch sử</string>
   <string name="disable_history">Tắt lưu lịch sử</string>
   <string name="enable_history">Bật lưu lịch sử</string>
-  <string name="clear_history">Xoá lịch sử</string>
+  <string name="clear_history">Xóa lịch sử</string>
   <string name="chapters">Chương</string>
   <string name="card_multiline_subtitle">Phụ đề nhiều dòng</string>
   <string name="auto_frame_rate_modes">Chế độ được hỗ trợ</string>
@@ -518,7 +518,7 @@
   <string name="sort_by_views">Lượt xem</string>
   <string name="sort_by_date">Ngày tải lên</string>
   <string name="sort_by_rating">Đánh giá</string>
-  <string name="clear_search_history">Xoá lịch sử tìm kiếm</string>
+  <string name="clear_search_history">Xóa lịch sử tìm kiếm</string>
   <string name="remove_from_subscriptions">Ẩn</string>
   <string name="unlock_all_formats">Mở khoá tất cả định dạng video</string>
   <string name="update_found">Cập nhật</string>
@@ -715,7 +715,7 @@
   <string name="prefer_google_dns">Ưu tiên DNS Google</string>
   <string name="dialog_block_channel">Chặn kênh</string>
   <string name="dialog_unblock_channel">Bỏ chặn kênh</string>
-  <string name="confirm_block_channel">Ẩn tất cả nội dung từ %s?</string>
+  <string name="confirm_block_channel">Ẩn tất cả nội dung từ %s\?</string>
   <string name="channel_blocked">Đã chặn kênh</string>
   <string name="channel_unblocked">Đã bỏ chặn kênh</string>
   <string name="header_blocked_channels">Kênh đã chặn</string>
@@ -723,4 +723,13 @@
   <string name="action_debug_info">Thông tin gỡ lỗi</string>
   <string name="color_scheme_dark_blue_oled">Xanh biển tối (OLED)</string>
   <string name="add_video_to_watch_later">Thêm vào Xem sau</string>
+  <string name="remove_from_search_history">Xóa khỏi lịch sử tìm kiếm</string>
+  <string name="sidebar_notification">Hiển thi thông báo ở thanh bên</string>
+  <string name="video_flip">Đảo ngược (phản chiếu)</string>
+  <string name="player_time_stretching">Kéo dài thời gian âm thanh</string>
+  <string name="enable_conscrypt">Bật Conscrypt</string>
+  <string name="network_settings">Cài đặt mạng</string>
+  <string name="enable_conscrypt_desc">Nâng cao khả năng tương thích với các giao thức HTTPS, TLS và VPN trên một số thiết bị, tuy nhiên đôi khi có thể gây ra các vấn đề về việc phát lại nội dung hoặc làm chậm hiệu suất mạng.</string>
+  <string name="local_backup_not_supported">Tính năng sao lưu tự động trên Android TV phiên bản 11+ không được hỗ trợ do các hạn chế của hệ thống. Hãy sử dụng Google Drive thay thế.</string>
+  <string name="app_backup_desc">LƯU Ý: Bản sao lưu sẽ được tạo dưới định dạng zip</string>
 </resources>

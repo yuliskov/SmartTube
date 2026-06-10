@@ -69,7 +69,7 @@
   <string name="card_animated_previews">Animowany podgląd</string>
   <string name="web_site">Strona internetowa</string>
   <string name="donation">Darowizna na dalszy rozwój</string>
-  <string name="dialog_about">O…</string>
+  <string name="dialog_about">O. </string>
   <string name="dialog_player_ui">Odtwarzacz wideo</string>
   <string name="player_show_ui_on_pause">Pokaż interfejs podczas pauzy</string>
   <string name="player_pause_on_ok">Przycisk OK wstrzymuje odtwarzanie</string>
@@ -116,8 +116,8 @@
   <string name="repeat_mode_pause">Wstrzymaj odtwarzanie po każdym wideo</string>
   <string name="repeat_mode_pause_alt">Wstrzymaj odtwarzanie po każdym wideo spoza listy odtwarzania</string>
   <string name="repeat_mode_none">Wstrzymaj odtwarzanie po bieżącym wideo</string>
-  <string name="subscribed_to_channel">Subskrybujesz</string>
-  <string name="unsubscribed_from_channel">Subskrybuj</string>
+  <string name="subscribed_to_channel">Zasubskrybowano</string>
+  <string name="unsubscribed_from_channel">Nie subskybujesz </string>
   <string name="subtitle_yellow_transparent">Żółte na przezroczystym tle</string>
   <string name="subtitle_white_transparent">Białe na przezroczystym tle</string>
   <string name="subtitle_white_black">Białe na czarnym tle</string>
@@ -186,7 +186,7 @@
   <string name="content_block_outro">Karty końcowe/Napisy końcowe</string>
   <string name="content_block_interaction">Przypomnienie o interakcji (subskrybuj)</string>
   <string name="content_block_self_promo">Bezpłatna reklama/Promocja własna</string>
-  <string name="content_block_music_off_topic">Niemuzyczna sekcja klipu</string>
+  <string name="content_block_music_off_topic">Część klipu nie zawierająca muzyki</string>
   <string name="confirm_segment_skip">Pomiń segment \"%s\"\?</string>
   <string name="cancel_segment_skip">Anuluj pomijanie segmentu</string>
   <string name="msg_skipping_segment">Pomijanie segmentu \"%s\"…</string>
@@ -253,7 +253,7 @@
   <string name="proxy_enabled">Proxy włączone</string>
   <string name="proxy_disabled">Proxy wyłączone</string>
   <string name="uploads_row_name">Przesyłanie</string>
-  <string name="playlists_row_name">Utworzone listy odtwarzania</string>
+  <string name="playlists_row_name">Utworzone playlisty</string>
   <string name="popular_uploads_row_name">Popularne wideo</string>
   <string name="news_row_name">Wiadomości</string>
   <string name="breaking_news_row_name">Z ostatniej chwili</string>
@@ -416,7 +416,7 @@
   <string name="pressing_home_back">naciskając DOM lub WSTECZ</string>
   <string name="pressing_back">naciskając WSTECZ</string>
   <string name="player_number_key_seek">Przewijaj za pomocą klawiszy numerycznych</string>
-  <string name="save_remove_playlist">Zapisz/Usuń tę playlistę z sekcji playlistu</string>
+  <string name="save_remove_playlist">Zapisz/Usuń tę playlistę z sekcji playlist</string>
   <string name="save_playlist">Dodaj playlistę odtwarzania do sekcji playlisty</string>
   <string name="remove_playlist">Skasuj na zawsze listę odtwarzania z sekcji listy odtwarzania</string>
   <string name="removed_from_playlists">Usunięto z sekcji listy odtwarzania</string>
@@ -473,7 +473,7 @@
   <string name="action_subscribe_off">Subskrypcja wył.</string>
   <string name="action_subscribe_on">Subskrypcja wł.</string>
   <string name="skip_24_rate">Pomiń format 24 kl./s (naprawa prawdziwego trybu kinowego\?)</string>
-  <string name="skip_shorts">Nie stosuj tych ustawień w przypadku Shorts</string>
+  <string name="skip_shorts">Nie stosuj tych ustawień w przypadku Szortów</string>
   <string name="player_disable_suggestions">Wyłącz sugestie</string>
   <string name="feedback">Uwagi, sugestie</string>
   <string name="sources">Kod źródłowy</string>
@@ -575,7 +575,7 @@
   <string name="update_found">Aktualizacja jest dostępna</string>
   <string name="volume_boost_warning">Wszelkie ustawienia powyżej limitu mogą uszkodzić głośniki</string>
   <string name="play_video_incognito">Odtwarzaj w trybie incognito</string>
-  <string name="header_kids_home">Dzieci</string>
+  <string name="header_kids_home">Dla dzieci</string>
   <string name="player_section_playlist">Użyj bieżącej zawartości jako listy odtwarzania</string>
   <string name="header_trending">Na Czasie</string>
   <string name="screensaver">Wygaszacz ekranu</string>
@@ -633,7 +633,7 @@
   <string name="nothing_found">Nic nie znaleziono</string>
   <string name="auto_frame_rate_desc">Opcja ta ma na celu usunięcie szarpania w scenach, w których kamera szybko się porusza, np. w transmisjach sportowych.</string>
   <string name="channel_filter_hint">Filtruj Kanały</string>
-  <string name="player_loop_shorts">Zapętl Shorts</string>
+  <string name="player_loop_shorts">Zapętl Szorty</string>
   <string name="player_quick_shorts_skip">Pomijaj Shorts przyciskami w lewo/prawo</string>
   <string name="player_quick_skip_videos">Pomijaj zwykłe wideo przyciskami w lewo/prawo</string>
   <string name="channels_filter">Filtrowanie listy kanałów w sekcji Kanały</string>
@@ -691,7 +691,7 @@
   <string name="import_subscriptions_group">Importuj</string>
   <string name="lb_playback_controls_closed_captioning_disable">Wyłącz napisy wkodowane</string>
   <string name="lb_playback_controls_closed_captioning_enable">Włącz napisy wkodowane</string>
-  <string name="my_videos">Moje wideo</string>
+  <string name="my_videos">Moje filmy</string>
   <string name="player_audio_focus">Automatyzacja audio (pauza w przypadku wykrycia innych odtwarzaczy)</string>
   <string name="paid_content_notification">Powiadomienia o płatnych treściach</string>
   <string name="you_liked">polubionych</string>
@@ -740,4 +740,11 @@
   <string name="sidebar_notification">Pokaż powiadomienie na pasku bocznym</string>
   <string name="player_unexpected_error">Nieoczekiwany błąd odtwarzania</string>
   <string name="color_scheme_dark_blue_oled">Ciemnoniebieski (OLED)</string>
+  <string name="remove_from_search_history">Usuń z historii wyszukiwania</string>
+  <string name="app_restore_desc">UWAGA: Kopię zapasową pliku zip należy skopiować do tego folderu ręcznie lub w menedżerze plików, używając opcji „Otwórz za pomocą”</string>
+  <string name="app_backup_desc">UWAGA: Kopia zapasowa zostanie utworzona w formacie zip</string>
+  <string name="add_video_to_watch_later">Dodaj do obejrzenia później</string>
+  <string name="enable_conscrypt">Włącz Conscrypt</string>
+  <string name="enable_conscrypt_desc">Poprawia zgodność z protokołami HTTPS,TLS i VPN na niektórych urządzeniach,ale może czasami powodować problemy z odtwarzaniem lub wolniejszą wydajność sieci</string>
+  <string name="network_settings">Ustawienia sieciowe</string>
 </resources>

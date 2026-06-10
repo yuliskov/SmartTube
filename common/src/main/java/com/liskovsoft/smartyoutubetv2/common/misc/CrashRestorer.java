@@ -61,7 +61,7 @@ public class CrashRestorer {
             VideoStateService stateService = VideoStateService.instance(mContext);
             boolean isVideoStateSynced = mSelectedVideo == null || stateService.getByVideoId(mSelectedVideo.videoId) != null;
             State lastState = stateService.getLastState();
-            PlaybackPresenter.instance(mContext).openVideo(lastState != null && isVideoStateSynced ? lastState.video : mSelectedVideo);
+            openVideo(lastState != null && isVideoStateSynced ? lastState.video : mSelectedVideo);
         }
 
         // Restore can be called only once
@@ -75,5 +75,13 @@ public class CrashRestorer {
 
         // Restore can be called only once
         mSelectedHeaderIndex = -1;
+    }
+
+    private void openVideo(Video video) {
+        if (video != null) {
+            video.fromCrashRestorer = true; // tell the state controller to not reset the position
+        }
+
+        PlaybackPresenter.instance(mContext).openVideo(video);
     }
 }

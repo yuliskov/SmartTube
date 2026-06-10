@@ -695,7 +695,7 @@
   <string name="card_preview">Korttien esikatselu</string>
   <string name="card_preview_full">Videon esikatselu äänellä</string>
   <string name="card_preview_muted">Videon esikatselu ilman ääntä</string>
-  <string name="oculus_quest_fix">Oculus Questin korjaus</string>
+  <string name="oculus_quest_fix">Oculus Quest korjaus</string>
   <string name="playback_buffering_fix">Toiston puskuroinnin korjaaminen</string>
   <string name="premium_users_only">Vain Youtube Premium-käyttäjille. Korjaa epätäydellinen videoformaattiluettelo</string>
   <string name="card_unlocalized_titles">Älä suomenna videoiden otsikoita</string>
@@ -740,4 +740,6 @@
   <string name="player_chapter_notification2">Siirry seuraavaan lukuun napsauttamalla ilmoitusta</string>
   <string name="app_restore_desc">Varmuuskopiotiedosto zip tulee kopioida tähän kansioon manuaalisesti tai tiedostonhallinnassa käyttämällä \'Avaa sovelluksella\' -toimintoa.</string>
   <string name="app_backup_desc">Varmuuskopio luodaan zip-muodossa</string>
+  <string name="remove_from_search_history">Poista hakuhistoriasta</string>
+  <string name="add_video_to_watch_later">Lisää katsottavaksi myöhemmin</string>
 </resources>

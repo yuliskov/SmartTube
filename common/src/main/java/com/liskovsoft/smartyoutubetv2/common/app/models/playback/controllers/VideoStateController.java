@@ -334,6 +334,11 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        if (item.fromCrashRestorer) {
+            item.fromCrashRestorer = false;
+            return;
+        }
+
         State state = getStateService().getByVideoId(item.videoId);
 
         // Reset position of music videos
@@ -525,7 +530,9 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (!mIsPlayBlocked) {
-            getPlayer().setPlayWhenReady(getPlayEnabled());
+            boolean playEnabled = getPlayEnabled();
+            getPlayer().setPlayWhenReady(playEnabled);
+            getPlayer().showOverlay(!playEnabled);
         }
     }
 

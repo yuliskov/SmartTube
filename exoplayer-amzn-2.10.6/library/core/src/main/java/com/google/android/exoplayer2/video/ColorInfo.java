@@ -56,6 +56,13 @@ public final class ColorInfo implements Parcelable {
   // Lazily initialized hashcode.
   private int hashCode;
 
+  // MOD: HDR10+ fix
+  private static final byte[] FAKE_HDR_STATIC_INFO = new byte[] {
+          0, -124, -48, 62, -128, 51, -64, -122,
+          -60, 29, 76, 11, -72, 61, 19, 64,
+          66, 3, -1, 0, 0, 3, -1, 1, -103
+  };
+
   /**
    * Constructs the ColorInfo.
    *
@@ -72,7 +79,16 @@ public final class ColorInfo implements Parcelable {
     this.colorSpace = colorSpace;
     this.colorRange = colorRange;
     this.colorTransfer = colorTransfer;
-    this.hdrStaticInfo = hdrStaticInfo;
+    // MOD: HDR10+ fix
+    //this.hdrStaticInfo = hdrStaticInfo;
+    if ((colorTransfer == C.COLOR_TRANSFER_ST2084
+            || colorTransfer == C.COLOR_TRANSFER_HLG)
+            && colorSpace == C.COLOR_SPACE_BT2020
+            && hdrStaticInfo == null) {
+      this.hdrStaticInfo = FAKE_HDR_STATIC_INFO;
+    } else {
+      this.hdrStaticInfo = hdrStaticInfo;
+    }
   }
 
   @SuppressWarnings("ResourceType")

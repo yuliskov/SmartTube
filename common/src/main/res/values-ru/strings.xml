@@ -643,7 +643,7 @@
     <string name="hide_watched_from_notifications">Скрывать просмотренные видео из Уведомлений</string>
     <string name="hide_unwanted_content">Скрывать содержимое</string>
     <string name="hide_watched_from_home">Скрывать просмотренные видео из Домашнего раздела</string>
-    <string name="hide_watched_from_watch_later">Скрывать просмотренные видео из плейлиста Смотреть позже</string>
+    <string name="hide_watched_from_watch_later">Удалять просмотренные видео из плейлиста Смотреть позже</string>
     <string name="remote_control_permission">Фоновое Дистанционное управление требует разрешения Перекрывать другие окна</string>
     <string name="login_from_browser">Войти через браузер</string>
     <string name="disable_remote_history">Отключить историю во время дистанционного управления</string>
@@ -732,6 +732,9 @@
     <string name="app_restore_desc">ВНИМАНИЕ: ZIP-бэкап нужно вручную скопировать в эту папку или через файловый менеджер, используя \'Открыть с помощью\'</string>
     <string name="app_backup_desc">ВНИМАНИЕ: Резервная копия будет создана в формате ZIP</string>
     <string name="add_video_to_watch_later">Добавить в \'Смотреть позже\'</string>
+    <string name="enable_conscrypt">Включить Conscrypt</string>
+    <string name="enable_conscrypt_desc">Улучшает совместимость HTTPS, TLS и VPN на некоторых устройствах, но иногда может вызывать проблемы с воспроизведением или замедление сети</string>
+    <string name="network_settings">Настройки сети</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>

@@ -21,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
@@ -1117,8 +1118,8 @@ public class AppDialogUtil {
         MediaItemService itemManager = YouTubeMediaItemService.instance();
 
         if (add) {
-            editObserve = video.mediaItem != null ?
-                    itemManager.addToPlaylistObserve(playlistId, video.mediaItem) : itemManager.addToPlaylistObserve(playlistId, video.videoId);
+            MediaItem mediaItem = video.mediaItem != null ? video.mediaItem : SimpleMediaItem.from(video);
+            editObserve = itemManager.addToPlaylistObserve(playlistId, mediaItem);
         } else {
             // Check that the current video belongs to the right section
             if (callback != null && Helpers.equals(video.playlistId, playlistId)) {

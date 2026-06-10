@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
@@ -46,6 +47,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final PlayerTweaksData mPlayerTweaksData;
     private final MainUIData mMainUIData;
     private final MediaServiceData mMediaServiceData;
+    private final NetworkData mNetworkData;
     private final SidebarService mSidebarService;
     private boolean mRestartApp;
     private final Runnable mOnFinish = () -> {
@@ -62,6 +64,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         mPlayerTweaksData = PlayerTweaksData.instance(context);
         mMainUIData = MainUIData.instance(context);
         mMediaServiceData = MediaServiceData.instance();
+        mNetworkData = NetworkData.instance(context);
         mSidebarService = SidebarService.instance(context);
     }
 
@@ -663,9 +666,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         appendProxyManager(settingsPresenter, options);
 
-        //appendOpenVPNManager(settingsPresenter, options);
+        appendConscrypt(settingsPresenter, options);
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.network_settings), options);
     }
 
     private void appendProxyManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
@@ -682,11 +685,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
                         }
-                        
+
                         OkHttpManager.unhold();
                     },
                     mGeneralData.isProxyEnabled()));
         }
+    }
+
+    private void appendConscrypt(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
+        options.add(UiOptionItem.from(getContext().getString(R.string.enable_conscrypt),
+                getContext().getString(R.string.enable_conscrypt_desc),
+                option -> {
+                    mNetworkData.setConscryptEnabled(option.isSelected());
+                    mRestartApp = true;
+                },
+                mNetworkData.isConscryptEnabled()));
     }
 
     private void enableChildMode(boolean enable) {

@@ -1,8 +1,5 @@
-<p align="center">
-  <a href="https://f-droid.org/packages/app.smarttube.fdroid/">
-    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" width="206" style="max-width:100%; height:auto;"/>
-  </a>
-</p>
+[<img src="images/badge_fdroid.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/app.smarttube.fdroid/)
+[<img src="images/badge_github.png" alt="Get it on GitHub" height="80">](https://github.com/yuliskov/SmartTube/releases)
 
 # Important announcement about the app
 
