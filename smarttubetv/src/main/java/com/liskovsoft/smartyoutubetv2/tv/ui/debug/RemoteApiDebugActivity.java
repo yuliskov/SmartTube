@@ -74,7 +74,11 @@ public class RemoteApiDebugActivity extends Activity {
 
         addButton(buttonRow2, "Theater State", () -> {
             HomeTheaterController theater = HomeTheaterController.instance(this);
-            log("State:\n" + theater.getState().toString(2) + "\nOutput: " + theater.getAudioOutput());
+            try {
+                log("State:\n" + theater.getState().toString(2) + "\nOutput: " + theater.getAudioOutput());
+            } catch (Exception e) {
+                log("Error: " + e.getMessage());
+            }
         });
         addButton(buttonRow2, "Power", () -> HomeTheaterController.instance(this).togglePower());
         addButton(buttonRow2, "Clear", () -> mHandler.post(() -> mLogView.setText("")));
