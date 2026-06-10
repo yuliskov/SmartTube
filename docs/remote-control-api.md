@@ -248,45 +248,24 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 
 ### 4.9 Home Theater Control
 
-Control the TV's audio system directly — volume, mute, speaker/theater output switching, subwoofer/rear levels, sound mode, and Immersive Audio Enhancement. Replaces the ADB-based tvaudiocontrol GNOME extension with native in-app control.
-
-#### How It Works
-
-Some features use Android APIs that work from any app, while HDMI CEC features require shell-level access that is not available to user-installed apps. The app handles what it can directly and documents the ADB commands needed for CEC operations.
+Control the TV's volume, mute, and power. HDMI CEC features (output switching, subwoofer/rear levels, sound mode, immersive AE) should be implemented by the Chrome extension or an ADB bridge — see [ADB Commands for CEC](#adb-commands-for-cec-operations).
 
 | Method | Endpoint | Auth | Body | Description |
 |--------|----------|------|------|-------------|
-| `GET` | `/api/theater` | Yes | — | Full theater state (see note below) |
+| `GET` | `/api/theater` | Yes | — | Volume + mute + audio output |
 | `GET` | `/api/theater/volume` | Yes | — | Get TV volume + muted state |
 | `PUT` | `/api/theater/volume` | Yes | `{"volume":50}` | Set TV volume (0–100) |
 | `POST` | `/api/theater/volume/up` | Yes | — | Volume up one step |
 | `POST` | `/api/theater/volume/down` | Yes | — | Volume down one step |
 | `POST` | `/api/theater/mute/toggle` | Yes | — | Toggle TV mute |
-| `GET` | `/api/theater/output` | Yes | — | Get audio output (`"tv"` or `"theater"`) |
-| `PUT` | `/api/theater/output` | Yes | `{"audio_output":"theater"}` | Switch output — **requires ADB bridge** (see below) |
-| `GET` | `/api/theater/subwoofer` | Yes | — | Get subwoofer level (0–12) |
-| `PUT` | `/api/theater/subwoofer` | Yes | `{"level":8}` | Set subwoofer level — **requires ADB bridge** (see below) |
-| `GET` | `/api/theater/rear` | Yes | — | Get rear speaker level (0–12) |
-| `PUT` | `/api/theater/rear` | Yes | `{"level":6}` | Set rear speaker level — **requires ADB bridge** (see below) |
-| `GET` | `/api/theater/sound_mode` | Yes | — | Get sound mode |
-| `PUT` | `/api/theater/sound_mode` | Yes | `{"sound_mode":"cinema"}` | Set mode — **requires ADB bridge** (see below) |
-| `POST` | `/api/theater/sound_mode/next` | Yes | — | Cycle to next sound mode — **requires ADB bridge** |
-| `POST` | `/api/theater/sound_mode/previous` | Yes | — | Cycle to previous sound mode — **requires ADB bridge** |
-| `GET` | `/api/theater/immersive_ae` | Yes | — | Get Immersive Audio Enhancement state |
-| `PUT` | `/api/theater/immersive_ae` | Yes | `{"enabled":true}` | Toggle Immersive AE — **requires ADB bridge** (see below) |
 | `POST` | `/api/theater/power/toggle` | Yes | — | Toggle TV power (sends `KEYCODE_POWER`) |
-| `POST` | `/api/theater/refresh` | Yes | — | Refresh theater state |
 
 **`GET /api/theater` Response:**
 ```json
 {
   "volume": 42,
   "muted": false,
-  "audio_output": "tv",
-  "subwoofer_level": null,
-  "rear_level": null,
-  "immersive_ae": null,
-  "sound_mode": null
+  "audio_output": "tv"
 }
 ```
 
@@ -305,7 +284,11 @@ Similarly, the `cmd hdmi_control` shell commands require shell UID, which `Runti
 
 **CEC vendor commands** (output switching, subwoofer/rear levels, sound mode, immersive AE) must be run by an external tool that has shell access. An ADB-based bridge, a companion app installed as a system app, or a Shizuku service can execute these.
 
-#### ADB Commands for CEC Operations
+#### ADB Commands for CEC Operations (for Chrome Extension / ADB Bridge)
+
+The SmartTube app cannot run these commands directly — `cmd hdmi_control` requires shell UID and `HdmiControlManager` is a `@SystemApi` unavailable to user-installed apps.
+
+The Chrome extension or an ADB bridge running on the user's machine should implement these features by executing the commands below via ADB.
 
 An extension or bridge tool running ADB commands on the user's machine can implement the full theater control. These are the exact commands:
 
@@ -401,25 +384,24 @@ Parse the last 260 lines of `dumpsys hdmi_control` to extract:
 
 #### Extension Implementation Pattern
 
-For an extension/bridge that controls theater via ADB:
+The Chrome extension or an ADB bridge implements full theater control:
 
-1. **GET /api/theater** returns volume/mute from AudioManager. CEC fields may be `null`.
-2. **Bridge polls** `dumpsys hdmi_control` to get CEC state (output, levels, mode).
-3. **Bridge writes** CEC commands via `adb shell cmd hdmi_control vendorcommand ...`
-4. **Bridge can call** the REST endpoints to notify the app of state changes (the app stores the values locally for `GET /api/theater`).
-5. **Or the app** can accept a `POST /api/theater/state_update` endpoint to receive CEC state from the bridge.
+1. **Volume/mute** — use `GET/PUT /api/theater/volume` (runs on TV via AudioManager).
+2. **CEC features** — execute ADB commands directly from the user's machine:
+   - Switch audio output, set subwoofer/rear levels, sound mode, immersive AE.
+   - Parse `dumpsys hdmi_control` for current CEC state.
+3. **Power** — use `POST /api/theater/power/toggle` or ADB `input keyevent KEYCODE_POWER`.
 
-The recommended architecture:
+The app stores no CEC state — the bridge reads it fresh from `dumpsys hdmi_control` each time.
+
+Recommended architecture:
 
 ```
-Chrome Extension ──WebSocket──► SmartTube App (volume/mute via AudioManager)
-                                    │
-                                    └── REST API ──► ADB Bridge (CEC commands via `cmd hdmi_control`)
-                                                          │
-                                                     HDMI CEC bus ──► Home Theater
+Chrome Extension ──ADB──► cmd hdmi_control (CEC features)
+                    ──REST──► SmartTube App (volume/mute/power via AudioManager)
 ```
 
-The bridge connects to the same REST API and executes the CEC commands that the app cannot.
+The extension connects to the same REST API for player controls and volume, and runs ADB commands for HDMI CEC features.
 
 ### 4.10 System Control
 
@@ -520,15 +502,7 @@ Send JSON commands over the WebSocket:
 | `remove_from_queue` | `{"action":"remove_from_queue","video_id":"dQw4w9WgXcQ"}` | Remove video from queue |
 | `clear_queue` | `{"action":"clear_queue"}` | Clear entire queue |
 | `get_queue` | `{"action":"get_queue"}` | Request queue list |
-| `theater_set_volume` | `{"action":"theater_set_volume","volume":50}` | Set TV volume |
-| `theater_mute_toggle` | `{"action":"theater_mute_toggle"}` | Toggle TV mute |
-| `theater_set_output` | `{"action":"theater_set_output","audio_output":"theater"}` | Switch audio output ⚠️ ADB required |
-| `theater_set_subwoofer` | `{"action":"theater_set_subwoofer","level":8}` | Set subwoofer level ⚠️ ADB required |
-| `theater_set_rear` | `{"action":"theater_set_rear","level":6}` | Set rear level ⚠️ ADB required |
-| `theater_set_sound_mode` | `{"action":"theater_set_sound_mode","sound_mode":"cinema"}` | Set sound mode ⚠️ ADB required |
-| `theater_set_immersive` | `{"action":"theater_set_immersive","enabled":true}` | Toggle Immersive AE ⚠️ ADB required |
 | `theater_power_toggle` | `{"action":"theater_power_toggle"}` | Toggle TV power |
-| `theater_refresh` | `{"action":"theater_refresh"}` | Refresh theater state |
 | `theater_get_state` | `{"action":"theater_get_state"}` | Request theater state |
 | `get_state` | `{"action":"get_state"}` | Request immediate state update |
 

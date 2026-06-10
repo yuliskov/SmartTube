@@ -85,7 +85,6 @@ public class RemoteApiServer extends NanoWSD {
         super.start();
         startUdpListener();
         startBroadcastLoop();
-        startTheaterListener();
         Log.i(TAG, "Remote API server started on port %d", getListeningPort());
     }
 
@@ -167,32 +166,7 @@ public class RemoteApiServer extends NanoWSD {
         }
     }
 
-    // ---- Theater State Broadcast ----
 
-    private void startTheaterListener() {
-        HomeTheaterController theater = HomeTheaterController.instance(mContext);
-        theater.setListener(state -> {
-            JSONObject msg = new JSONObject();
-            try {
-                msg.put("type", "theater_state");
-                msg.put("data", state);
-            } catch (JSONException e) {
-                return;
-            }
-            String payload = msg.toString();
-            for (RemoteApiWebSocket ws : mWebSocketClients) {
-                if (ws.isOpen()) {
-                    try {
-                        ws.send(payload);
-                    } catch (Exception e) {
-                        mWebSocketClients.remove(ws);
-                    }
-                } else {
-                    mWebSocketClients.remove(ws);
-                }
-            }
-        });
-    }
 
     // ---- WebSocket Support ----
 
@@ -415,45 +389,14 @@ public class RemoteApiServer extends NanoWSD {
                         Log.e(TAG, "WebSocket queue response error: %s", e.getMessage());
                     }
                     break;
-                case "theater_set_volume":
-                    getTheater().setVolume(cmd.optInt("volume", 50));
-                    break;
-                case "theater_mute_toggle":
-                    getTheater().toggleMute();
-                    break;
                 case "theater_power_toggle":
                     getTheater().togglePower();
-                    break;
-                case "theater_refresh":
-                    try {
-                        JSONObject refreshResp = new JSONObject();
-                        refreshResp.put("type", "theater_state");
-                        refreshResp.put("data", getTheater().refreshTheaterState());
-                        send(refreshResp.toString());
-                    } catch (Exception e) {
-                        Log.e(TAG, "WebSocket theater refresh error: %s", e.getMessage());
-                    }
-                    break;
-                case "theater_set_output":
-                    getTheater().setAudioOutput(cmd.optString("audio_output", "tv"));
-                    break;
-                case "theater_set_subwoofer":
-                    getTheater().setSubwooferLevel(cmd.optInt("level", 0));
-                    break;
-                case "theater_set_rear":
-                    getTheater().setRearLevel(cmd.optInt("level", 0));
-                    break;
-                case "theater_set_sound_mode":
-                    getTheater().setSoundMode(cmd.optString("sound_mode", "auto"));
-                    break;
-                case "theater_set_immersive":
-                    getTheater().setImmersiveAe(cmd.optBoolean("enabled", false));
                     break;
                 case "theater_get_state":
                     try {
                         JSONObject theaterResp = new JSONObject();
                         theaterResp.put("type", "theater_state");
-                        theaterResp.put("data", getTheater().refreshTheaterState());
+                        theaterResp.put("data", getTheater().getState());
                         send(theaterResp.toString());
                     } catch (Exception e) {
                         Log.e(TAG, "WebSocket theater state error: %s", e.getMessage());
@@ -710,56 +653,8 @@ public class RemoteApiServer extends NanoWSD {
                 return handleTransportAction(() -> getTheater().togglePower());
             }
 
-            if (Method.POST.equals(method) && "/api/theater/refresh".equals(path)) {
-                return handleTheaterRefresh();
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/output".equals(path)) {
-                return handleGetJsonValue("audio_output", getTheater().getAudioOutput());
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/output".equals(path)) {
-                return handleSetString(session, "audio_output", getTheater()::setAudioOutput);
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/subwoofer".equals(path)) {
-                return handleGetJsonValue("level", getTheater().getSubwooferLevel());
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/subwoofer".equals(path)) {
-                return handleSetInt(session, "level", getTheater()::setSubwooferLevel);
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/rear".equals(path)) {
-                return handleGetJsonValue("level", getTheater().getRearLevel());
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/rear".equals(path)) {
-                return handleSetInt(session, "level", getTheater()::setRearLevel);
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/sound_mode".equals(path)) {
-                return handleGetJsonValue("sound_mode", getTheater().getSoundMode());
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/sound_mode".equals(path)) {
-                return handleSetString(session, "sound_mode", getTheater()::setSoundMode);
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/sound_mode/next".equals(path)) {
-                return handleTransportAction(() -> getTheater().cycleSoundMode(1));
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/sound_mode/previous".equals(path)) {
-                return handleTransportAction(() -> getTheater().cycleSoundMode(-1));
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/immersive_ae".equals(path)) {
-                return handleGetJsonValue("enabled", getTheater().getImmersiveAe());
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/immersive_ae".equals(path)) {
-                return handleSetBool(session, "enabled", getTheater()::setImmersiveAe);
+            if (Method.GET.equals(method) && "/api/theater/refresh".equals(path)) {
+                return handleGetTheaterState();
             }
 
             if (Method.GET.equals(method) && "/api/system/dpad".equals(path)) {
@@ -1032,8 +927,7 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleGetTheaterState() throws JSONException {
-        // Always read fresh from hardware so we detect if TV fell back to TV speakers
-        return corsResponse(jsonResponse(getTheater().refreshTheaterState()));
+        return corsResponse(jsonResponse(getTheater().getState()));
     }
 
     private Response handleGetTheaterVolume() throws JSONException {
@@ -1051,19 +945,6 @@ public class RemoteApiServer extends NanoWSD {
         JSONObject body = new JSONObject();
         body.put("ok", true);
         body.put("volume", volume);
-        return corsResponse(jsonResponse(body));
-    }
-
-    private Response handleTheaterRefresh() throws JSONException {
-        JSONObject state = getTheater().refreshTheaterState();
-        return corsResponse(jsonResponse(state));
-    }
-
-    // ---- Generic JSON value getter (handles nullable Integer, Boolean, String) ----
-
-    private Response handleGetJsonValue(String key, Object value) throws JSONException {
-        JSONObject body = new JSONObject();
-        body.put(key, value != null ? value : JSONObject.NULL);
         return corsResponse(jsonResponse(body));
     }
 
