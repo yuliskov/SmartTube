@@ -421,6 +421,10 @@ public class RemoteApiServer extends NanoWSD {
 
     @Override
     public Response serve(IHTTPSession session) {
+        if (isWebsocketRequested(session)) {
+            return super.serve(session);
+        }
+
         String uri = session.getUri();
         Method method = session.getMethod();
         Map<String, String> headers = session.getHeaders();

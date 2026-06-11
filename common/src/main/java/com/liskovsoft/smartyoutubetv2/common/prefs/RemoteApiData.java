@@ -188,7 +188,7 @@ public class RemoteApiData extends DataChangeBase {
 
         String[] split = Helpers.splitData(data);
 
-        mIsApiEnabled = Helpers.parseBoolean(split, 0, false);
+        mIsApiEnabled = Helpers.parseBoolean(split, 0, true);
         mPort = Helpers.parseInt(split, 1, DEFAULT_PORT);
         mDeviceId = Helpers.parseStr(split, 2);
         mDeviceName = Helpers.parseStr(split, 3);

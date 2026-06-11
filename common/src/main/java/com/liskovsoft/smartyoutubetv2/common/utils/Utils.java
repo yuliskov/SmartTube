@@ -243,7 +243,8 @@ public class Utils {
             return;
         }
 
-        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
+        if (RemoteControlData.instance(context).isDeviceLinkEnabled() ||
+            com.liskovsoft.smartyoutubetv2.common.prefs.RemoteApiData.instance(context).isApiEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {
