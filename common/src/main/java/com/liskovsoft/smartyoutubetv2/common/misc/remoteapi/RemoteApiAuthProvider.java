@@ -3,8 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.misc.remoteapi;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteApiData;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RemoteApiAuthProvider {
     private static final int PAIRING_CODE_LENGTH = 6;
@@ -13,14 +13,20 @@ public class RemoteApiAuthProvider {
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final long RATE_LIMIT_WINDOW_MS = 60 * 1000;
 
+    // Index into the per-IP long[] state: [count, windowStartMs]
+    private static final int IDX_COUNT = 0;
+    private static final int IDX_TIMESTAMP = 1;
+
     private final RemoteApiData mApiData;
     private final SecureRandom mSecureRandom;
-    private final Map<String, int[]> mFailedAttempts;
+    // Accessed concurrently from NanoHTTPD request threads, so use a concurrent map.
+    // The value holds a 64-bit timestamp, so it must be long[] (an int can't hold currentTimeMillis()).
+    private final Map<String, long[]> mFailedAttempts;
 
     public RemoteApiAuthProvider(RemoteApiData apiData) {
         mApiData = apiData;
         mSecureRandom = new SecureRandom();
-        mFailedAttempts = new HashMap<>();
+        mFailedAttempts = new ConcurrentHashMap<>();
     }
 
     public String generatePairingCode() {
@@ -66,6 +72,11 @@ public class RemoteApiAuthProvider {
         return mApiData.isTokenValid(token);
     }
 
+    /** True when the client has exceeded the pairing rate limit and should be told to back off. */
+    public boolean isRateLimited(String clientIp) {
+        return !checkRateLimit(clientIp);
+    }
+
     public void revokeAllTokens() {
         mApiData.removeAllTokens();
     }
@@ -87,18 +98,18 @@ public class RemoteApiAuthProvider {
             return true;
         }
 
-        int[] attempts = mFailedAttempts.get(clientIp);
+        long[] attempts = mFailedAttempts.get(clientIp);
         if (attempts == null) {
             return true;
         }
 
         long now = System.currentTimeMillis();
-        if (now - attempts[1] > RATE_LIMIT_WINDOW_MS) {
+        if (now - attempts[IDX_TIMESTAMP] > RATE_LIMIT_WINDOW_MS) {
             mFailedAttempts.remove(clientIp);
             return true;
         }
 
-        return attempts[0] < MAX_FAILED_ATTEMPTS;
+        return attempts[IDX_COUNT] < MAX_FAILED_ATTEMPTS;
     }
 
     private void recordFailedAttempt(String clientIp) {
@@ -106,13 +117,13 @@ public class RemoteApiAuthProvider {
             return;
         }
 
-        int[] attempts = mFailedAttempts.get(clientIp);
         long now = System.currentTimeMillis();
+        long[] attempts = mFailedAttempts.get(clientIp);
 
-        if (attempts == null || now - attempts[1] > RATE_LIMIT_WINDOW_MS) {
-            mFailedAttempts.put(clientIp, new int[]{1, (int) now});
+        if (attempts == null || now - attempts[IDX_TIMESTAMP] > RATE_LIMIT_WINDOW_MS) {
+            mFailedAttempts.put(clientIp, new long[]{1, now});
         } else {
-            attempts[0]++;
+            attempts[IDX_COUNT]++;
         }
     }
 

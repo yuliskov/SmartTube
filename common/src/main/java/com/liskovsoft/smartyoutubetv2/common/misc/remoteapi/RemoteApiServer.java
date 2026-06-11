@@ -37,6 +37,7 @@ public class RemoteApiServer extends NanoWSD {
     private final RemoteApiData mApiData;
     private final Context mContext;
     private Thread mUdpThread;
+    private volatile DatagramSocket mUdpSocket;
     private volatile boolean mRunning;
     private final CopyOnWriteArrayList<RemoteApiWebSocket> mWebSocketClients = new CopyOnWriteArrayList<>();
     private Thread mBroadcastThread;
@@ -91,6 +92,12 @@ public class RemoteApiServer extends NanoWSD {
     @Override
     public void stop() {
         mRunning = false;
+        // Close the UDP socket first: socket.receive() is a blocking call that interrupt() can't wake,
+        // so closing the socket is what actually unblocks the listener thread and lets it exit.
+        DatagramSocket udpSocket = mUdpSocket;
+        if (udpSocket != null && !udpSocket.isClosed()) {
+            udpSocket.close();
+        }
         if (mUdpThread != null) {
             mUdpThread.interrupt();
             mUdpThread = null;
@@ -103,7 +110,11 @@ public class RemoteApiServer extends NanoWSD {
             try { ws.close(WebSocketFrame.CloseCode.NormalClosure, "server shutting down", false); } catch (Exception ignored) {}
         }
         mWebSocketClients.clear();
-        super.stop();
+        try {
+            super.stop();
+        } catch (Exception e) {
+            Log.e(TAG, "Error stopping HTTP server: %s", e.getMessage());
+        }
         Log.i(TAG, "Remote API server stopped");
     }
 
@@ -112,6 +123,7 @@ public class RemoteApiServer extends NanoWSD {
             DatagramSocket socket = null;
             try {
                 socket = new DatagramSocket(getListeningPort());
+                mUdpSocket = socket;
                 socket.setBroadcast(true);
                 byte[] buffer = new byte[1024];
 
@@ -673,7 +685,7 @@ public class RemoteApiServer extends NanoWSD {
 
         } catch (JSONException e) {
             Log.e(TAG, "JSON parse error: %s", e.getMessage());
-            return errorResponse(Response.Status.BAD_REQUEST, 422, "Invalid JSON");
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Invalid JSON");
         } catch (Exception e) {
             Log.e(TAG, "Request error: %s", e.getMessage());
             return errorResponse(Response.Status.INTERNAL_ERROR, 503, "Internal error");
@@ -702,6 +714,10 @@ public class RemoteApiServer extends NanoWSD {
         JSONObject reqBody = new JSONObject(bodyStr);
         String code = reqBody.getString("code");
         String clientIp = session.getRemoteIpAddress();
+
+        if (mAuth.isRateLimited(clientIp)) {
+            return errorResponse(Response.Status.TOO_MANY_REQUESTS, 429, "Too many attempts, try again later");
+        }
 
         String token = mAuth.verifyPairingCode(code, clientIp);
         if (token == null) {

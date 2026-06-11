@@ -27,10 +27,11 @@ public class RemoteApiBridge {
     private static PlaybackPresenter sPresenter;
     private static RemoteApiServer sServer;
 
-    private static int sZoomPercents = 100;
-    private static int sRotationAngle = 0;
-    private static boolean sFlipEnabled = false;
-    private static float sPreviousVolume = 1.0f;
+    // Mutated and read from NanoHTTPD request/WebSocket threads; volatile guarantees visibility.
+    private static volatile int sZoomPercents = 100;
+    private static volatile int sRotationAngle = 0;
+    private static volatile boolean sFlipEnabled = false;
+    private static volatile float sPreviousVolume = 1.0f;
 
     public static void init(PlaybackPresenter presenter) {
         sPresenter = presenter;

@@ -109,6 +109,14 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 { "error": { "code": 401, "message": "Unauthorized" } }
 ```
 
+| HTTP Status | When |
+|-------------|------|
+| `400 Bad Request` | Malformed JSON body or invalid/missing parameter |
+| `401 Unauthorized` | Missing or invalid bearer token |
+| `404 Not Found` | Unknown endpoint |
+| `429 Too Many Requests` | Pairing rate limit exceeded (5 failed attempts/min per IP) |
+| `500 Internal Server Error` | Unexpected server-side error |
+
 ### 4.1 System
 
 | Method | Endpoint | Auth | Description |
