@@ -461,7 +461,7 @@ public class VideoLoaderController extends BasePlayerController {
             case PlayerConstants.PLAYBACK_MODE_ONE:
                 if (VERSION.SDK_INT <= 19) {
                     // Fix frozen image on Android 4
-                    reloadVideo();
+                    restartEngine();
                 } else {
                     getPlayer().setPositionMs(0);
                 }
