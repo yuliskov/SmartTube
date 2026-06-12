@@ -60,6 +60,14 @@ public class RemoteApiBridge {
         return sPresenter != null ? sPresenter.getPlayer() : null;
     }
 
+    /// Prefer the background image (high-res) over the card image (small grid thumb).
+    private static String bestThumbnail(Video video) {
+        if (video.bgImageUrl != null && !video.bgImageUrl.isEmpty()) {
+            return video.bgImageUrl;
+        }
+        return video.getCardImageUrl();
+    }
+
     // ---- Player State ----
 
     public static JSONObject getPlayerState() {
@@ -86,7 +94,7 @@ public class RemoteApiBridge {
                 videoJson.put("title", video.getTitle());
                 videoJson.put("author", video.getAuthor());
                 videoJson.put("channel_id", video.channelId);
-                videoJson.put("thumbnail_url", video.getCardImageUrl());
+                videoJson.put("thumbnail_url", bestThumbnail(video));
                 videoJson.put("duration_ms", player.getDurationMs());
                 videoJson.put("is_live", video.isLive);
                 videoJson.put("is_shorts", video.isShorts);
@@ -183,7 +191,25 @@ public class RemoteApiBridge {
         return result;
     }
 
+    // Rapid next/previous presses arrive before the new video's metadata loads,
+    // making VideoLoaderController toast "Please wait while data is loading…".
+    // Drop skips that land within the debounce window.
+    private static volatile long sLastSkipMs;
+    private static final long SKIP_DEBOUNCE_MS = 700;
+
+    private static boolean skipDebounced() {
+        long now = System.currentTimeMillis();
+        if (now - sLastSkipMs < SKIP_DEBOUNCE_MS) {
+            return true;
+        }
+        sLastSkipMs = now;
+        return false;
+    }
+
     public static void handleNext() {
+        if (skipDebounced()) {
+            return;
+        }
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
             if (player != null && sPresenter != null) {
@@ -196,6 +222,9 @@ public class RemoteApiBridge {
     }
 
     public static void handlePrevious() {
+        if (skipDebounced()) {
+            return;
+        }
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
             if (player != null && sPresenter != null) {
@@ -484,7 +513,7 @@ public class RemoteApiBridge {
                         videoJson.put("video_id", video.videoId);
                         videoJson.put("title", video.getTitle());
                         videoJson.put("author", video.getAuthor());
-                        videoJson.put("thumbnail_url", video.getCardImageUrl());
+                        videoJson.put("thumbnail_url", bestThumbnail(video));
                         videoJson.put("duration_ms", video.getDurationMs());
                         videoJson.put("is_live", video.isLive);
                         result.put(videoJson);
