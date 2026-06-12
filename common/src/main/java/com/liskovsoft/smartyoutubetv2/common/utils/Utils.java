@@ -411,7 +411,9 @@ public class Utils {
         if (player == null) {
             return;
         }
-        player.setVolume(volume / 100f);
+        float playerVolume = volume / 100f;
+        player.setVolume(playerVolume);
+        PlayerData.instance(context).setPlayerVolume(playerVolume);
         MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(player)));
     }
 
