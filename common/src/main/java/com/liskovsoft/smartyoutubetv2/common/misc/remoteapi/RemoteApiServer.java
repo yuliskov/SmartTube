@@ -204,10 +204,17 @@ public class RemoteApiServer extends NanoWSD {
 
     private void startBroadcastLoop() {
         mBroadcastThread = new Thread(() -> {
+            int tick = 0;
             while (mRunning && !Thread.currentThread().isInterrupted()) {
                 try {
                     Thread.sleep(500);
                     broadcastState();
+                    // NanoHTTPD kills sockets after ~5s without a read. Browser JS can't
+                    // send WS pings, so the SERVER must ping; the client's auto-pong
+                    // resets the read timeout on both ends.
+                    if (++tick % 6 == 0) {
+                        pingClients();
+                    }
                 } catch (InterruptedException e) {
                     break;
                 } catch (Exception e) {
@@ -217,6 +224,21 @@ public class RemoteApiServer extends NanoWSD {
         }, "RemoteApi-WsBroadcast");
         mBroadcastThread.setDaemon(true);
         mBroadcastThread.start();
+    }
+
+    private void pingClients() {
+        byte[] payload = new byte[]{'k', 'a'};
+        for (RemoteApiWebSocket ws : mWebSocketClients) {
+            if (ws.isOpen()) {
+                try {
+                    ws.ping(payload);
+                } catch (IOException e) {
+                    mWebSocketClients.remove(ws);
+                }
+            } else {
+                mWebSocketClients.remove(ws);
+            }
+        }
     }
 
     private void broadcastState() {
