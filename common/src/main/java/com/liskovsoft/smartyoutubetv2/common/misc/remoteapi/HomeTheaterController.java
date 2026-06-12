@@ -54,10 +54,11 @@ public class HomeTheaterController {
         mAudioManager.setStreamVolume(STREAM_MUSIC, targetRaw, 0);
 
         // With a CEC audio system (soundbar/HT) the absolute set is silently ignored —
-        // CEC only understands volume-key steps. Ramp the remaining delta with paced
-        // adjust calls (downs get dropped by some devices if sent too fast). Runs on a
-        // background thread so a large delta doesn't stall the HTTP response; a newer
-        // setVolume cancels an in-flight ramp via the generation counter.
+        // CEC only understands volume-key steps. Measured on a Sony HT-A9: steps need
+        // ~200ms pacing or the device drops them, and the volume reported back via CEC
+        // <Report Audio Status> lags 1-2s — so fire the computed number of steps BLIND
+        // (mid-loop reads would be stale and overshoot), then verify once after settle.
+        // Runs on a background thread; a newer setVolume cancels an in-flight ramp.
         int current = mAudioManager.getStreamVolume(STREAM_MUSIC);
         if (current == targetRaw) {
             return;
@@ -65,22 +66,38 @@ public class HomeTheaterController {
 
         final int generation = ++sRampGeneration;
         new Thread(() -> {
-            int direction = targetRaw > mAudioManager.getStreamVolume(STREAM_MUSIC)
-                    ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER;
-            for (int i = 0; i < 100 && generation == sRampGeneration; i++) {
-                mAudioManager.adjustStreamVolume(STREAM_MUSIC, direction, 0);
-                try {
-                    Thread.sleep(direction == AudioManager.ADJUST_LOWER ? 120 : 60);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+            int from = mAudioManager.getStreamVolume(STREAM_MUSIC);
+            // Initial pass + up to 2 correction passes after the lagging report settles.
+            for (int pass = 0; pass < 3 && generation == sRampGeneration; pass++) {
+                int delta = targetRaw - from;
+                if (delta == 0) {
                     return;
                 }
-                int now = mAudioManager.getStreamVolume(STREAM_MUSIC);
-                if (direction == AudioManager.ADJUST_RAISE ? now >= targetRaw : now <= targetRaw) {
+                int direction = delta > 0 ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER;
+                int steps = Math.min(Math.abs(delta), 100);
+                for (int i = 0; i < steps && generation == sRampGeneration; i++) {
+                    mAudioManager.adjustStreamVolume(STREAM_MUSIC, direction, 0);
+                    if (!sleepQuiet(220)) {
+                        return;
+                    }
+                }
+                // Let the CEC volume report catch up, then re-check.
+                if (!sleepQuiet(1500)) {
                     return;
                 }
+                from = mAudioManager.getStreamVolume(STREAM_MUSIC);
             }
         }, "TheaterVolumeRamp").start();
+    }
+
+    private static boolean sleepQuiet(long ms) {
+        try {
+            Thread.sleep(ms);
+            return true;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
     }
 
     private static volatile int sRampGeneration;
