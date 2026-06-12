@@ -56,38 +56,56 @@ public class HomeTheaterController {
         // With a CEC audio system (soundbar/HT) the absolute set is silently ignored —
         // CEC only understands volume-key steps. Measured on a Sony HT-A9: steps need
         // ~200ms pacing or the device drops them, and the volume reported back via CEC
-        // <Report Audio Status> lags 1-2s — so fire the computed number of steps BLIND
-        // (mid-loop reads would be stale and overshoot), then verify once after settle.
-        // Runs on a background thread; a newer setVolume cancels an in-flight ramp.
-        int current = mAudioManager.getStreamVolume(STREAM_MUSIC);
-        if (current == targetRaw) {
-            return;
-        }
-
-        final int generation = ++sRampGeneration;
-        new Thread(() -> {
-            int from = mAudioManager.getStreamVolume(STREAM_MUSIC);
-            // Initial pass + up to 2 correction passes after the lagging report settles.
-            for (int pass = 0; pass < 3 && generation == sRampGeneration; pass++) {
-                int delta = targetRaw - from;
-                if (delta == 0) {
-                    return;
-                }
-                int direction = delta > 0 ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER;
-                int steps = Math.min(Math.abs(delta), 100);
-                for (int i = 0; i < steps && generation == sRampGeneration; i++) {
-                    mAudioManager.adjustStreamVolume(STREAM_MUSIC, direction, 0);
-                    if (!sleepQuiet(220)) {
-                        return;
-                    }
-                }
-                // Let the CEC volume report catch up, then re-check.
-                if (!sleepQuiet(1500)) {
-                    return;
-                }
-                from = mAudioManager.getStreamVolume(STREAM_MUSIC);
+        // <Report Audio Status> lags 1-2s. A single PERSISTENT worker walks toward the
+        // target counting its own steps (re-reading mid-ramp returns stale values);
+        // new setVolume calls just retarget it — never cancel/restart, otherwise a
+        // burst of slider updates strangles the ramp after one step each.
+        synchronized (sRampLock) {
+            sTargetRaw = targetRaw;
+            if (sRampThread == null || !sRampThread.isAlive()) {
+                sRampThread = new Thread(this::rampWorker, "TheaterVolumeRamp");
+                sRampThread.start();
             }
-        }, "TheaterVolumeRamp").start();
+        }
+    }
+
+    private void rampWorker() {
+        int expected = mAudioManager.getStreamVolume(STREAM_MUSIC);
+        int verifyPasses = 0;
+        while (true) {
+            int target;
+            synchronized (sRampLock) {
+                target = sTargetRaw;
+            }
+            int delta = target - expected;
+            if (delta != 0) {
+                verifyPasses = 0;
+                mAudioManager.adjustStreamVolume(STREAM_MUSIC,
+                        delta > 0 ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, 0);
+                expected += delta > 0 ? 1 : -1;
+                if (!sleepQuiet(220)) {
+                    return;
+                }
+                continue;
+            }
+            // Reached target by our own count. Wait for the lagging CEC report,
+            // then verify once; correct drift with a bounded number of passes.
+            if (!sleepQuiet(1500)) {
+                return;
+            }
+            int actual = mAudioManager.getStreamVolume(STREAM_MUSIC);
+            synchronized (sRampLock) {
+                if (sTargetRaw != target) {
+                    continue; // retargeted while settling — keep going from our count
+                }
+                if (actual == target || verifyPasses >= 2) {
+                    sRampThread = null;
+                    return;
+                }
+            }
+            expected = actual;
+            verifyPasses++;
+        }
     }
 
     private static boolean sleepQuiet(long ms) {
@@ -100,7 +118,9 @@ public class HomeTheaterController {
         }
     }
 
-    private static volatile int sRampGeneration;
+    private static final Object sRampLock = new Object();
+    private static int sTargetRaw = -1;
+    private static Thread sRampThread;
 
     public void volumeUp() {
         mAudioManager.adjustStreamVolume(STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);

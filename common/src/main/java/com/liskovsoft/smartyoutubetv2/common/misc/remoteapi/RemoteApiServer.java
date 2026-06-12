@@ -659,6 +659,10 @@ public class RemoteApiServer extends NanoWSD {
                 return handleGetSuggestions();
             }
 
+            if (Method.GET.equals(method) && "/api/content/recommended".equals(path)) {
+                return handleGetRecommended();
+            }
+
             if (path.startsWith("/api/content/suggestions/")) {
                 String indexStr = path.substring("/api/content/suggestions/".length());
                 if (Method.POST.equals(method)) {
@@ -884,6 +888,15 @@ public class RemoteApiServer extends NanoWSD {
             suggestions = new JSONArray();
         }
         return corsResponse(jsonResponse(suggestions));
+    }
+
+    private Response handleGetRecommended() {
+        // Blocking network fetch (cached in the bridge) — NanoHTTPD worker thread, so OK.
+        JSONArray recommended = RemoteApiBridge.getRecommended();
+        if (recommended == null) {
+            recommended = new JSONArray();
+        }
+        return corsResponse(jsonResponse(recommended));
     }
 
     private Response handlePlaySuggestion(String indexStr) throws JSONException {

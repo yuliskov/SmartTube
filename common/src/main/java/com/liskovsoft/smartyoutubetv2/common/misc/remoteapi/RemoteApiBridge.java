@@ -107,7 +107,7 @@ public class RemoteApiBridge {
             state.put("duration_ms", player.getDurationMs());
             state.put("speed", player.getSpeed());
             state.put("pitch", player.getPitch());
-            state.put("volume", player.getVolume());
+            state.put("volume", getVolume());
 
             JSONObject selectedTracks = new JSONObject();
             FormatItem videoFormat = player.getVideoFormat();
@@ -271,6 +271,14 @@ public class RemoteApiBridge {
     }
 
     public static float getVolume() {
+        // Report the user's intended volume (PlayerData), NOT player.getVolume():
+        // VideoStateController multiplies the persisted value by the video's loudness
+        // normalization on every load, so reading the effective value back and
+        // persisting it again ratchets the volume lower on each video change.
+        if (sPresenter != null && sPresenter.getContext() != null) {
+            return com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData
+                    .instance(sPresenter.getContext()).getPlayerVolume();
+        }
         PlaybackView player = getPlayer();
         return player != null ? player.getVolume() : 1.0f;
     }
@@ -527,6 +535,61 @@ public class RemoteApiBridge {
         return result;
     }
 
+    // ---- Recommended feed (YouTube Home) ----
+
+    private static final Object sRecommendedLock = new Object();
+    private static JSONArray sRecommendedCache;
+    private static long sRecommendedCacheAt;
+    private static final long RECOMMENDED_TTL_MS = 5 * 60 * 1000;
+
+    /**
+     * The user's actual Home recommendations — unlike getSuggestions(), which returns
+     * the videos related to what's currently playing. Blocking network call; must be
+     * invoked from a worker thread (NanoHTTPD request threads are fine).
+     */
+    public static JSONArray getRecommended() {
+        synchronized (sRecommendedLock) {
+            if (sRecommendedCache != null && System.currentTimeMillis() - sRecommendedCacheAt < RECOMMENDED_TTL_MS) {
+                return sRecommendedCache;
+            }
+        }
+
+        JSONArray result = new JSONArray();
+        try {
+            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group =
+                    com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
+                            .getContentService().getRecommended();
+            if (group != null && group.getMediaItems() != null) {
+                for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : group.getMediaItems()) {
+                    if (item.getVideoId() == null) {
+                        continue;
+                    }
+                    JSONObject json = new JSONObject();
+                    json.put("video_id", item.getVideoId());
+                    json.put("title", item.getTitle());
+                    json.put("author", item.getAuthor() != null ? item.getAuthor()
+                            : (item.getSecondTitle() != null ? item.getSecondTitle().toString() : null));
+                    String thumb = item.getBackgroundImageUrl() != null
+                            ? item.getBackgroundImageUrl() : item.getCardImageUrl();
+                    json.put("thumbnail_url", thumb);
+                    json.put("duration_ms", item.getDurationMs());
+                    json.put("is_live", item.isLive());
+                    result.put(json);
+                }
+            }
+        } catch (Exception e) {
+            // Network/parse failure — return whatever we collected (possibly empty).
+        }
+
+        if (result.length() > 0) {
+            synchronized (sRecommendedLock) {
+                sRecommendedCache = result;
+                sRecommendedCacheAt = System.currentTimeMillis();
+            }
+        }
+        return result;
+    }
+
     public static void playSuggestion(int index) {
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
@@ -639,6 +702,9 @@ public class RemoteApiBridge {
                 item.put("video_id", video.videoId);
                 item.put("title", video.getTitle());
                 item.put("author", video.getAuthor());
+                item.put("thumbnail_url", bestThumbnail(video));
+                item.put("duration_ms", video.getDurationMs());
+                item.put("is_live", video.isLive);
                 item.put("is_current", video.equals(current));
                 result.put(item);
             } catch (JSONException e) {
