@@ -252,6 +252,12 @@ public class RemoteApiBridge {
             if (player != null) {
                 player.setVolume(volume);
             }
+            // Persist it: VideoStateController re-applies PlayerData's volume on every
+            // video load, so without this the API value reverts on the next video.
+            if (sPresenter != null && sPresenter.getContext() != null) {
+                com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData
+                        .instance(sPresenter.getContext()).setPlayerVolume(volume);
+            }
         });
     }
 
