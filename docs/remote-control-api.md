@@ -291,6 +291,7 @@ Control the TV's volume, mute, and power. HDMI CEC features (output switching, s
 | `POST` | `/api/theater/volume/down` | Yes | — | Volume down one step |
 | `POST` | `/api/theater/mute/toggle` | Yes | — | Toggle TV mute |
 | `POST` | `/api/theater/power/toggle` | Yes | — | Toggle TV power (sends `KEYCODE_POWER`) |
+| `GET` | `/api/theater/refresh` | Yes | — | Force-refresh from hardware; returns the same shape as `GET /api/theater` |
 
 **`GET /api/theater` Response:**
 ```json
