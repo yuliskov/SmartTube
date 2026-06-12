@@ -291,16 +291,20 @@ public class RemoteApiBridge {
     }
 
     public static void setVolume(float volume) {
+        // Clamp to 0..1 (the API contract). Persisting a value > 1.0 arms the
+        // VolumeBooster (LoudnessEnhancer) on the next player init — its built-in
+        // limiter audibly compresses/"sidechains" the output. 1.0 is the safe max.
+        float clamped = Math.max(0f, Math.min(volume, 1f));
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
             if (player != null) {
-                player.setVolume(volume);
+                player.setVolume(clamped);
             }
             // Persist it: VideoStateController re-applies PlayerData's volume on every
             // video load, so without this the API value reverts on the next video.
             if (sPresenter != null && sPresenter.getContext() != null) {
                 com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData
-                        .instance(sPresenter.getContext()).setPlayerVolume(volume);
+                        .instance(sPresenter.getContext()).setPlayerVolume(clamped);
             }
         });
     }
