@@ -23,11 +23,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemoteApiBridge {
     private static PlaybackPresenter sPresenter;
     private static RemoteApiServer sServer;
+
+    // Bulk playlist-add caps: bound the blocking continuation loop so a huge playlist
+    // can't tie up a NanoHTTPD worker thread indefinitely or flood the queue.
+    private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
+    private static final int MAX_TOTAL_PLAYLIST_ITEMS = 500;
 
     // Mutated and read from NanoHTTPD request/WebSocket threads; volatile guarantees visibility.
     private static volatile int sZoomPercents = 100;
@@ -138,6 +144,7 @@ public class RemoteApiBridge {
             Playlist playlist = Playlist.instance();
             state.put("queue_size", playlist.getAll().size());
             state.put("queue_index", playlist.getAll().indexOf(playlist.getCurrent()));
+            state.put("queue_generation", playlist.getGeneration());
 
             return state;
         } catch (JSONException e) {
@@ -472,6 +479,9 @@ public class RemoteApiBridge {
 
     public static void openVideo(String url, String videoId, Long positionMs, String playlistId, Integer playlistIndex) {
         final String resolvedId = (videoId == null && url != null) ? extractVideoIdFromUrl(url) : videoId;
+        // No explicit playlist id, but the url may carry one (?list=...) — resolve it.
+        final String resolvedPlaylistId = (playlistId == null || playlistId.isEmpty()) && url != null
+                ? extractPlaylistIdFromUrl(url) : playlistId;
         runOnMainThread(() -> {
             if (sPresenter == null) {
                 return;
@@ -483,8 +493,8 @@ public class RemoteApiBridge {
 
             Video video = Video.from(resolvedId);
 
-            if (playlistId != null && !playlistId.isEmpty()) {
-                video.remotePlaylistId = playlistId;
+            if (resolvedPlaylistId != null && !resolvedPlaylistId.isEmpty()) {
+                video.remotePlaylistId = resolvedPlaylistId;
             }
 
             if (playlistIndex != null) {
@@ -793,6 +803,157 @@ public class RemoteApiBridge {
         });
     }
 
+    public static void shuffleQueue() {
+        runOnMainThread(() -> {
+            Playlist.instance().shuffle();
+        });
+    }
+
+    public static void moveQueueItem(int from, int to) {
+        runOnMainThread(() -> {
+            Playlist.instance().move(from, to);
+        });
+    }
+
+    /**
+     * Bulk-add a whole playlist to the queue. The playlist's items are fetched
+     * synchronously (blocking continuation paging like getRecommended()), so this
+     * MUST be called from a worker thread (NanoHTTPD request threads are fine).
+     * Only the final Playlist mutation + optional auto-start hops to the main thread.
+     */
+    public static void addPlaylistToQueue(String playlistId, boolean shuffle) {
+        if (playlistId == null || playlistId.isEmpty()) {
+            return;
+        }
+
+        final List<Video> videos = new ArrayList<>();
+        try {
+            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup playlistGroup = resolvePlaylistGroup(playlistId);
+            List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> items = loadAllPlaylistItems(playlistGroup);
+            if (items != null) {
+                for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : items) {
+                    if (item.getVideoId() == null) {
+                        continue;
+                    }
+                    Video video = Video.from(item);
+                    video.isRemote = true;
+                    videos.add(video);
+                }
+            }
+        } catch (Exception e) {
+            // Network/parse failure — swallow and return (matches getRecommended()).
+            return;
+        }
+
+        if (videos.isEmpty()) {
+            return;
+        }
+
+        runOnMainThread(() -> {
+            Playlist playlist = Playlist.instance();
+            for (Video video : videos) {
+                playlist.add(video);
+            }
+            if (shuffle) {
+                playlist.shuffle();
+            }
+
+            // Nothing is playing yet — start the first item so the bulk add is audible.
+            PlaybackView player = getPlayer();
+            if (sPresenter != null && (player == null || !player.containsMedia())) {
+                Video current = playlist.getCurrent();
+                if (current != null) {
+                    current.isRemote = true;
+                    sPresenter.openVideo(current);
+                }
+            }
+        });
+    }
+
+    /**
+     * Resolve a playlist id to its MediaGroup. The playlist row is the first
+     * suggestion row in the playlist's metadata that actually has media items.
+     * Uses the blocking MediaItemService.getMetadata(...) overload to stay
+     * consistent with getRecommended()'s synchronous worker-thread style.
+     */
+    private static com.liskovsoft.mediaserviceinterfaces.data.MediaGroup resolvePlaylistGroup(String playlistId) {
+        com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata metadata =
+                com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
+                        .getMediaItemService().getMetadata(null, playlistId, 0, null);
+        if (metadata == null || metadata.getSuggestions() == null) {
+            return null;
+        }
+        for (com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group : metadata.getSuggestions()) {
+            List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> mediaItems = group.getMediaItems();
+            if (mediaItems != null && !mediaItems.isEmpty()) {
+                return group;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Page through a playlist's continuations (blocking) up to the configured caps,
+     * collecting all of its MediaItems.
+     */
+    private static List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> loadAllPlaylistItems(
+            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup playlistGroup) {
+        if (playlistGroup == null) {
+            return null;
+        }
+        List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> allItems = new ArrayList<>();
+        List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> firstItems = playlistGroup.getMediaItems();
+        if (firstItems != null) {
+            allItems.addAll(firstItems);
+        }
+        com.liskovsoft.mediaserviceinterfaces.data.MediaGroup currentGroup = playlistGroup;
+        com.liskovsoft.mediaserviceinterfaces.ContentService contentService =
+                com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance().getContentService();
+        for (int i = 0; i < MAX_PLAYLIST_CONTINUATIONS && allItems.size() < MAX_TOTAL_PLAYLIST_ITEMS; i++) {
+            try {
+                String nextPageKey = currentGroup.getNextPageKey();
+                if (nextPageKey == null || nextPageKey.isEmpty()) {
+                    break;
+                }
+                com.liskovsoft.mediaserviceinterfaces.data.MediaGroup nextGroup = contentService.continueGroup(currentGroup);
+                if (nextGroup == null || nextGroup.isEmpty()) {
+                    break;
+                }
+                List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> nextItems = nextGroup.getMediaItems();
+                if (nextItems != null) {
+                    int remaining = MAX_TOTAL_PLAYLIST_ITEMS - allItems.size();
+                    if (nextItems.size() > remaining) {
+                        allItems.addAll(nextItems.subList(0, remaining));
+                        break;
+                    }
+                    allItems.addAll(nextItems);
+                }
+                currentGroup = nextGroup;
+            } catch (Exception e) {
+                break;
+            }
+        }
+        return allItems;
+    }
+
+    // ---- Picture-in-Picture ----
+
+    /**
+     * Enter PIP — there's no programmatic "exit", so this only enters (no-op if
+     * already in PIP). Mirrors PlayerUIController.onPipClicked().
+     */
+    public static void togglePip() {
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null || player.isInPIPMode()) {
+                return;
+            }
+            player.showOverlay(false);
+            player.blockEngine(true);
+            player.finish();
+        });
+    }
+
     // ---- System Control ----
 
     public static void dpad(String key) {
@@ -963,5 +1124,28 @@ public class RemoteApiBridge {
         }
 
         return null;
+    }
+
+    static String extractPlaylistIdFromUrl(String url) {
+        if (url == null || url.isEmpty()) {
+            return null;
+        }
+
+        Uri uri;
+        try {
+            uri = Uri.parse(url);
+        } catch (Exception e) {
+            return null;
+        }
+
+        if (uri == null) {
+            return null;
+        }
+
+        String playlistId = uri.getQueryParameter("list");
+        if (playlistId == null || playlistId.isEmpty()) {
+            return null;
+        }
+        return playlistId;
     }
 }

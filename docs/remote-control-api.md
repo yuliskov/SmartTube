@@ -192,6 +192,7 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | `POST` | `/api/player/previous` | Yes | — | Previous track |
 | `POST` | `/api/player/stop` | Yes | — | Close player |
 | `POST` | `/api/player/reload` | Yes | — | Reload source |
+| `POST` | `/api/player/pip` | Yes | — | Enter Picture-in-Picture mode (no-op if already in PIP; there is no programmatic "exit PIP") |
 
 **Standard response:** `{ "ok": true }`  
 **Seek response:** `{ "ok": true, "position_ms": 60000 }`
@@ -255,6 +256,9 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | `POST` | `/api/player/queue/next` | Yes | `{"video_id":"..."}` | Play video next |
 | `DELETE` | `/api/player/queue` | Yes | `{"video_id":"..."}` | Remove video from queue |
 | `POST` | `/api/player/queue/clear` | Yes | — | Clear entire queue |
+| `POST` | `/api/player/queue/shuffle` | Yes | — | Shuffle the queue (keeps the current item in place) |
+| `POST` | `/api/player/queue/move` | Yes | `{"from":2,"to":0}` | Move a queue item from one index to another (bounds-checked; out-of-range is a no-op). `400` if `from`/`to` are missing or non-integer |
+| `POST` | `/api/player/queue/playlist` | Yes | `{"playlist_id":"PLxxx","shuffle":false}` or `{"playlist_url":"https://www.youtube.com/playlist?list=PLxxx"}` | Bulk-add a whole YouTube playlist to the queue. Pass `playlist_id` **or** `playlist_url` (the `list=` param is parsed from the url). Optional `shuffle` (default `false`). If nothing is playing, playback starts on the first item. The playlist is paged on the device with caps of **500 items / 20 continuation pages**. Returns `202 Accepted`: `{ "ok": true, "playlist_id": "PLxxx" }`. `400` if neither `playlist_id` nor a resolvable `playlist_url` is supplied |
 
 **`GET /api/player/queue` Response:**
 ```json
@@ -271,6 +275,8 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 { "video_id": "dQw4w9WgXcQ", "position_ms": 30000 }
 { "video_id": "dQw4w9WgXcQ", "playlist_id": "PLxxx", "playlist_index": 5 }
 ```
+
+If `playlist_id` is omitted but the `url` carries a `list=` query parameter (e.g. `https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLxxx`), the playlist id is parsed from the url and applied automatically.
 
 ### 4.9 Home Theater Control
 
@@ -498,7 +504,8 @@ Instead of polling `GET /api/player` every second, a client can open a WebSocket
     },
     "suggestions_count": 12,
     "queue_size": 5,
-    "queue_index": 0
+    "queue_index": 0,
+    "queue_generation": 7
   }
 }
 ```
@@ -529,6 +536,10 @@ Send JSON commands over the WebSocket:
 | `play_next` | `{"action":"play_next","video_id":"dQw4w9WgXcQ"}` | Play video next |
 | `remove_from_queue` | `{"action":"remove_from_queue","video_id":"dQw4w9WgXcQ"}` | Remove video from queue |
 | `clear_queue` | `{"action":"clear_queue"}` | Clear entire queue |
+| `shuffle_queue` | `{"action":"shuffle_queue"}` | Shuffle the queue (keeps current item) |
+| `move_queue_item` | `{"action":"move_queue_item","from":2,"to":0}` | Move a queue item (bounds-checked; ignored if `from`/`to` missing) |
+| `queue_playlist` | `{"action":"queue_playlist","playlist_id":"PLxxx","shuffle":false}` | Bulk-add a playlist to the queue. Accepts `playlist_id` or `playlist_url`, optional `shuffle`. Caps at 500 items / 20 pages; starts playback if idle |
+| `toggle_pip` | `{"action":"toggle_pip"}` | Enter Picture-in-Picture (no-op if already in PIP) |
 | `get_queue` | `{"action":"get_queue"}` | Request queue list |
 | `theater_power_toggle` | `{"action":"theater_power_toggle"}` | Toggle TV power |
 | `theater_get_state` | `{"action":"theater_get_state"}` | Request theater state |
@@ -666,9 +677,14 @@ const formats = await api.getVideoFormats();
     "rotation_angle": 0,
     "flip_enabled": false
   },
-  "suggestions_count": 12
+  "suggestions_count": 12,
+  "queue_size": 5,
+  "queue_index": 0,
+  "queue_generation": 7
 }
 ```
+
+`queue_generation` is a monotonic counter that increments on every queue change (add/remove/clear/shuffle/move). Clients can compare it across state updates to cheaply detect whether the queue changed without re-fetching `GET /api/player/queue`.
 
 ### 5.2 Video Format
 

@@ -412,6 +412,27 @@ public class RemoteApiServer extends NanoWSD {
                 case "clear_queue":
                     RemoteApiBridge.clearQueue();
                     break;
+                case "shuffle_queue":
+                    RemoteApiBridge.shuffleQueue();
+                    break;
+                case "move_queue_item":
+                    if (cmd.has("from") && cmd.has("to")) {
+                        RemoteApiBridge.moveQueueItem(cmd.optInt("from"), cmd.optInt("to"));
+                    }
+                    break;
+                case "queue_playlist": {
+                    String playlistId = cmd.optString("playlist_id", null);
+                    if (playlistId == null || playlistId.isEmpty()) {
+                        playlistId = RemoteApiBridge.extractPlaylistIdFromUrl(cmd.optString("playlist_url", null));
+                    }
+                    if (playlistId != null && !playlistId.isEmpty()) {
+                        RemoteApiBridge.addPlaylistToQueue(playlistId, cmd.optBoolean("shuffle", false));
+                    }
+                    break;
+                }
+                case "toggle_pip":
+                    RemoteApiBridge.togglePip();
+                    break;
                 case "get_queue":
                     JSONArray queue = RemoteApiBridge.getQueue();
                     try {
@@ -649,6 +670,22 @@ public class RemoteApiServer extends NanoWSD {
 
             if (Method.POST.equals(method) && "/api/player/queue/clear".equals(path)) {
                 return handleTransportAction(() -> RemoteApiBridge.clearQueue());
+            }
+
+            if (Method.POST.equals(method) && "/api/player/queue/shuffle".equals(path)) {
+                return handleTransportAction(() -> RemoteApiBridge.shuffleQueue());
+            }
+
+            if (Method.POST.equals(method) && "/api/player/queue/move".equals(path)) {
+                return handleMoveQueueItem(session);
+            }
+
+            if (Method.POST.equals(method) && "/api/player/queue/playlist".equals(path)) {
+                return handleQueuePlaylist(session);
+            }
+
+            if (Method.POST.equals(method) && "/api/player/pip".equals(path)) {
+                return handleTransportAction(() -> RemoteApiBridge.togglePip());
             }
 
             if (Method.POST.equals(method) && "/api/content/open".equals(path)) {
@@ -973,6 +1010,50 @@ public class RemoteApiServer extends NanoWSD {
         JSONObject body = new JSONObject();
         body.put("ok", true);
         return corsResponse(jsonResponse(body));
+    }
+
+    private Response handleMoveQueueItem(IHTTPSession session) throws JSONException, IOException {
+        String bodyStr = readBody(session);
+        JSONObject reqBody = new JSONObject(bodyStr);
+        if (!reqBody.has("from") || !reqBody.has("to")) {
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Missing from/to");
+        }
+        int from = reqBody.getInt("from");
+        int to = reqBody.getInt("to");
+
+        RemoteApiBridge.moveQueueItem(from, to);
+
+        JSONObject body = new JSONObject();
+        body.put("ok", true);
+        return corsResponse(jsonResponse(body));
+    }
+
+    private Response handleQueuePlaylist(IHTTPSession session) throws JSONException, IOException {
+        String bodyStr = readBody(session);
+        JSONObject reqBody = new JSONObject(bodyStr);
+
+        String playlistId = reqBody.optString("playlist_id", null);
+        if (playlistId == null || playlistId.isEmpty()) {
+            String playlistUrl = reqBody.optString("playlist_url", null);
+            playlistId = RemoteApiBridge.extractPlaylistIdFromUrl(playlistUrl);
+        }
+        if (playlistId == null || playlistId.isEmpty()) {
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Missing playlist_id or playlist_url");
+        }
+        boolean shuffle = reqBody.optBoolean("shuffle", false);
+
+        // Blocking playlist fetch happens on this NanoHTTPD worker thread, then the
+        // queue mutation is posted to the main thread — return 202 (accepted) since
+        // the bulk add completes asynchronously from the client's perspective.
+        final String resolvedPlaylistId = playlistId;
+        RemoteApiBridge.addPlaylistToQueue(resolvedPlaylistId, shuffle);
+
+        JSONObject body = new JSONObject();
+        body.put("ok", true);
+        body.put("playlist_id", resolvedPlaylistId);
+        Response response = jsonResponse(body);
+        response.setStatus(Response.Status.ACCEPTED);
+        return corsResponse(response);
     }
 
     private Response handleDpad(IHTTPSession session) throws JSONException {
