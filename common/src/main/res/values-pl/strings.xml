@@ -747,4 +747,5 @@
   <string name="enable_conscrypt">Włącz Conscrypt</string>
   <string name="enable_conscrypt_desc">Poprawia zgodność z protokołami HTTPS,TLS i VPN na niektórych urządzeniach,ale może czasami powodować problemy z odtwarzaniem lub wolniejszą wydajność sieci</string>
   <string name="network_settings">Ustawienia sieciowe</string>
+  <string name="comments_disabled">Komentarze do tego wideo są wyłączone</string>
 </resources>

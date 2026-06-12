@@ -489,7 +489,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 for (MediaTrack mediaTrack : trackGroup) {
-                    if (mediaTrack == null) {
+                    if (mediaTrack == null || hasPlaybackGlitch(mediaTrack)) {
                         continue;
                     }
 
@@ -891,5 +891,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         return renderer.selectedTrack;
+    }
+
+    private boolean hasPlaybackGlitch(MediaTrack mediaTrack) {
+        // Shorts on Fire TV Cube has green screen or crashed
+        return mediaTrack.isAV1Codec()
+                && !TrackSelectorUtil.isWideScreen(mediaTrack.format)
+                && Helpers.equals(Helpers.getDeviceName(), "AFTGAZL (gazelle)");
     }
 }

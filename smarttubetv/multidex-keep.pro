@@ -1,3 +1,6 @@
+-keep class kotlin.ranges.RangesKt___RangesKt
+-keep class kotlin.collections.builders.MapBuilder
+-keep class kotlin.collections.builders.MapBuilder$Companion
 -keep class org.conscrypt.Conscrypt$Version
 -keep class kotlinx.coroutines.ExecutorCoroutineDispatcher
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity {

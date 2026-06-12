@@ -733,6 +733,7 @@
     <string name="enable_conscrypt">Увімкнути Conscrypt</string>
     <string name="enable_conscrypt_desc">Покращує сумісність HTTPS, TLS і VPN на деяких пристроях, але іноді може спричиняти проблеми з відтворенням або сповільнення мережі</string>
     <string name="network_settings">Налаштування мережі</string>
+    <string name="comments_disabled">Коментарі вимкнено для цього відео</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>
