@@ -572,6 +572,10 @@ public class RemoteApiServer extends NanoWSD {
                 return handleSetFloat(session, "pitch", RemoteApiBridge::setPitch);
             }
 
+            if (Method.GET.equals(method) && "/api/player/chapters".equals(path)) {
+                return handleGetChapters();
+            }
+
             if (Method.GET.equals(method) && "/api/player/formats/video".equals(path)) {
                 return handleGetFormats(RemoteApiBridge.getVideoFormats());
             }
@@ -879,6 +883,14 @@ public class RemoteApiServer extends NanoWSD {
         JSONObject body = new JSONObject();
         body.put("ok", true);
         return corsResponse(jsonResponse(body));
+    }
+
+    private Response handleGetChapters() throws JSONException {
+        JSONArray chapters = RemoteApiBridge.getChapters();
+        if (chapters == null) {
+            chapters = new JSONArray();
+        }
+        return corsResponse(jsonResponse(chapters));
     }
 
     private Response handleGetFormats(JSONArray formats) throws JSONException {

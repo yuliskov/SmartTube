@@ -177,8 +177,20 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
 | `GET` | `/api/player` | Yes | Full playback state |
+| `GET` | `/api/player/chapters` | Yes | Chapters of the current video (YouTube chapters, not SponsorBlock segments). Returns `[]` when nothing is playing or the video has no chapters |
 
-**Response — see Section 5.1**
+**`GET /api/player` response — see Section 5.1**
+
+**`GET /api/player/chapters` response:**
+
+```json
+[
+  { "title": "Intro", "start_ms": 0, "end_ms": 62000, "thumbnail_url": "https://i.ytimg.com/..." },
+  { "title": "Part 1", "start_ms": 62000, "end_ms": 184000, "thumbnail_url": "https://i.ytimg.com/..." }
+]
+```
+
+`end_ms` is derived: each chapter ends where the next begins; the last chapter ends at the video duration (omitted if the player can't report it). `thumbnail_url` is omitted when YouTube provides no chapter image.
 
 ### 4.4 Transport Controls
 

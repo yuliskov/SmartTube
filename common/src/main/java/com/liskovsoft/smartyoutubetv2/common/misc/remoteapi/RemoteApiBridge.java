@@ -9,6 +9,8 @@ import android.view.KeyEvent;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -543,6 +545,62 @@ public class RemoteApiBridge {
                         // skip this video
                     }
                 }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Chapters of the currently playing video, as parsed from YouTube metadata by
+     * SuggestionsController. Read-only snapshot — safe to call from NanoHTTPD worker
+     * threads (same direct-read style as getSuggestions()); the chapter list field
+     * is volatile and ChapterItems are immutable once parsed. Returns [] when
+     * nothing is playing or the video has no chapters.
+     */
+    public static JSONArray getChapters() {
+        JSONArray result = new JSONArray();
+
+        if (sPresenter == null) {
+            return result;
+        }
+
+        SuggestionsController controller = sPresenter.getController(SuggestionsController.class);
+        if (controller == null) {
+            return result;
+        }
+
+        List<ChapterItem> chapters = controller.getChapters();
+        if (chapters == null || chapters.isEmpty()) {
+            return result;
+        }
+
+        // end_ms of each chapter = start of the next one; the last chapter ends at the
+        // video duration (when the player can tell us — otherwise omit the field).
+        PlaybackView player = getPlayer();
+        long durationMs = player != null ? player.getDurationMs() : 0;
+
+        for (int i = 0; i < chapters.size(); i++) {
+            ChapterItem chapter = chapters.get(i);
+            if (chapter == null) {
+                continue;
+            }
+            try {
+                JSONObject json = new JSONObject();
+                json.put("title", chapter.getTitle());
+                json.put("start_ms", chapter.getStartTimeMs());
+                if (i + 1 < chapters.size() && chapters.get(i + 1) != null) {
+                    json.put("end_ms", chapters.get(i + 1).getStartTimeMs());
+                } else if (durationMs > 0) {
+                    json.put("end_ms", durationMs);
+                }
+                String thumb = chapter.getCardImageUrl();
+                if (thumb != null && !thumb.isEmpty()) {
+                    json.put("thumbnail_url", thumb);
+                }
+                result.put(json);
+            } catch (JSONException e) {
+                // skip this chapter
             }
         }
 
