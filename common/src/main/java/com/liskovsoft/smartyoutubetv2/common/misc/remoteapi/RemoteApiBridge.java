@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.misc.remoteapi;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
@@ -39,6 +41,19 @@ public class RemoteApiBridge {
 
     public static void setServer(RemoteApiServer server) {
         sServer = server;
+    }
+
+    private static final Handler sMainHandler = new Handler(Looper.getMainLooper());
+
+    // API commands arrive on NanoHTTPD worker threads, but ExoPlayer and the playback
+    // controllers must only be touched from the main thread — calling them off-thread
+    // makes commands like next/previous silently fail (or crash). All mutators post here.
+    private static void runOnMainThread(Runnable action) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            action.run();
+        } else {
+            sMainHandler.post(action);
+        }
     }
 
     private static PlaybackView getPlayer() {
@@ -125,31 +140,39 @@ public class RemoteApiBridge {
     // ---- Transport Controls ----
 
     public static void handlePlay() {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setPlayWhenReady(true);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setPlayWhenReady(true);
+            }
+        });
     }
 
     public static void handlePause() {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setPlayWhenReady(false);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setPlayWhenReady(false);
+            }
+        });
     }
 
     public static void handleToggle() {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setPlayWhenReady(!player.getPlayWhenReady());
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setPlayWhenReady(!player.getPlayWhenReady());
+            }
+        });
     }
 
     public static JSONObject handleSeek(long positionMs) {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setPositionMs(positionMs);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setPositionMs(positionMs);
+            }
+        });
         JSONObject result = new JSONObject();
         try {
             result.put("ok", true);
@@ -161,37 +184,45 @@ public class RemoteApiBridge {
     }
 
     public static void handleNext() {
-        PlaybackView player = getPlayer();
-        if (player != null && sPresenter != null) {
-            VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
-            if (controller != null) {
-                controller.loadNext();
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null && sPresenter != null) {
+                VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
+                if (controller != null) {
+                    controller.loadNext();
+                }
             }
-        }
+        });
     }
 
     public static void handlePrevious() {
-        PlaybackView player = getPlayer();
-        if (player != null && sPresenter != null) {
-            VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
-            if (controller != null) {
-                controller.loadPrevious();
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null && sPresenter != null) {
+                VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
+                if (controller != null) {
+                    controller.loadPrevious();
+                }
             }
-        }
+        });
     }
 
     public static void handleStop() {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.finish();
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.finish();
+            }
+        });
     }
 
     public static void handleReload() {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.reloadPlayback();
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.reloadPlayback();
+            }
+        });
     }
 
     // ---- Speed / Volume / Pitch ----
@@ -202,10 +233,12 @@ public class RemoteApiBridge {
     }
 
     public static void setSpeed(float speed) {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setSpeed(speed);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setSpeed(speed);
+            }
+        });
     }
 
     public static float getVolume() {
@@ -214,10 +247,12 @@ public class RemoteApiBridge {
     }
 
     public static void setVolume(float volume) {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setVolume(volume);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setVolume(volume);
+            }
+        });
     }
 
     public static float getPitch() {
@@ -226,10 +261,12 @@ public class RemoteApiBridge {
     }
 
     public static void setPitch(float pitch) {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setPitch(pitch);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setPitch(pitch);
+            }
+        });
     }
 
     // ---- Format Listing ----
@@ -284,44 +321,50 @@ public class RemoteApiBridge {
     // ---- Format Selection ----
 
     public static void setVideoFormat(String formatId) {
-        PlaybackView player = getPlayer();
-        if (player == null || formatId == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null || formatId == null) {
+                return;
+            }
 
-        FormatItem item = findFormatById(player.getVideoFormats(), formatId);
-        if (item != null) {
-            player.setFormat(item);
-        }
+            FormatItem item = findFormatById(player.getVideoFormats(), formatId);
+            if (item != null) {
+                player.setFormat(item);
+            }
+        });
     }
 
     public static void setAudioFormat(String formatId) {
-        PlaybackView player = getPlayer();
-        if (player == null || formatId == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null || formatId == null) {
+                return;
+            }
 
-        FormatItem item = findFormatById(player.getAudioFormats(), formatId);
-        if (item != null) {
-            player.setFormat(item);
-        }
+            FormatItem item = findFormatById(player.getAudioFormats(), formatId);
+            if (item != null) {
+                player.setFormat(item);
+            }
+        });
     }
 
     public static void setSubtitleFormat(String formatId) {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null) {
+                return;
+            }
 
-        if (formatId == null || formatId.isEmpty()) {
-            player.setFormat(FormatItem.SUBTITLE_NONE);
-            return;
-        }
+            if (formatId == null || formatId.isEmpty()) {
+                player.setFormat(FormatItem.SUBTITLE_NONE);
+                return;
+            }
 
-        FormatItem item = findFormatById(player.getSubtitleFormats(), formatId);
-        if (item != null) {
-            player.setFormat(item);
-        }
+            FormatItem item = findFormatById(player.getSubtitleFormats(), formatId);
+            if (item != null) {
+                player.setFormat(item);
+            }
+        });
     }
 
     // ---- Video Transform ----
@@ -332,10 +375,12 @@ public class RemoteApiBridge {
     }
 
     public static void setResizeMode(int mode) {
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setResizeMode(mode);
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setResizeMode(mode);
+            }
+        });
     }
 
     public static int getZoom() {
@@ -343,11 +388,13 @@ public class RemoteApiBridge {
     }
 
     public static void setZoom(int zoom) {
-        sZoomPercents = zoom;
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setZoomPercents(zoom);
-        }
+        runOnMainThread(() -> {
+            sZoomPercents = zoom;
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setZoomPercents(zoom);
+            }
+        });
     }
 
     public static int getRotation() {
@@ -355,11 +402,13 @@ public class RemoteApiBridge {
     }
 
     public static void setRotation(int angle) {
-        sRotationAngle = angle;
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setRotationAngle(angle);
-        }
+        runOnMainThread(() -> {
+            sRotationAngle = angle;
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setRotationAngle(angle);
+            }
+        });
     }
 
     public static boolean getFlip() {
@@ -367,44 +416,45 @@ public class RemoteApiBridge {
     }
 
     public static void setFlip(boolean enabled) {
-        sFlipEnabled = enabled;
-        PlaybackView player = getPlayer();
-        if (player != null) {
-            player.setVideoFlipEnabled(enabled);
-        }
+        runOnMainThread(() -> {
+            sFlipEnabled = enabled;
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                player.setVideoFlipEnabled(enabled);
+            }
+        });
     }
 
     // ---- Content ----
 
     public static void openVideo(String url, String videoId, Long positionMs, String playlistId, Integer playlistIndex) {
-        if (sPresenter == null) {
-            return;
-        }
+        final String resolvedId = (videoId == null && url != null) ? extractVideoIdFromUrl(url) : videoId;
+        runOnMainThread(() -> {
+            if (sPresenter == null) {
+                return;
+            }
 
-        if (videoId == null && url != null) {
-            videoId = extractVideoIdFromUrl(url);
-        }
+            if (resolvedId == null) {
+                return;
+            }
 
-        if (videoId == null) {
-            return;
-        }
+            Video video = Video.from(resolvedId);
 
-        Video video = Video.from(videoId);
+            if (playlistId != null && !playlistId.isEmpty()) {
+                video.remotePlaylistId = playlistId;
+            }
 
-        if (playlistId != null && !playlistId.isEmpty()) {
-            video.remotePlaylistId = playlistId;
-        }
+            if (playlistIndex != null) {
+                video.playlistIndex = playlistIndex;
+            }
 
-        if (playlistIndex != null) {
-            video.playlistIndex = playlistIndex;
-        }
+            if (positionMs != null) {
+                video.pendingPosMs = positionMs;
+            }
 
-        if (positionMs != null) {
-            video.pendingPosMs = positionMs;
-        }
-
-        video.isRemote = true;
-        sPresenter.openVideo(video);
+            video.isRemote = true;
+            sPresenter.openVideo(video);
+        });
     }
 
     public static JSONArray getSuggestions() {
@@ -443,44 +493,48 @@ public class RemoteApiBridge {
     }
 
     public static void playSuggestion(int index) {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return;
-        }
-
-        int currentIndex = 0;
-
-        for (int i = 0; i < 50; i++) {
-            VideoGroup group = player.getSuggestionsByIndex(i);
-            if (group == null) {
-                break;
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null) {
+                return;
             }
 
-            for (Video video : group.getVideos()) {
-                if (video.hasVideo()) {
-                    if (currentIndex == index) {
-                        video.pendingPosMs = 0;
-                        sPresenter.openVideo(video);
-                        return;
+            int currentIndex = 0;
+
+            for (int i = 0; i < 50; i++) {
+                VideoGroup group = player.getSuggestionsByIndex(i);
+                if (group == null) {
+                    break;
+                }
+
+                for (Video video : group.getVideos()) {
+                    if (video.hasVideo()) {
+                        if (currentIndex == index) {
+                            video.pendingPosMs = 0;
+                            sPresenter.openVideo(video);
+                            return;
+                        }
+                        currentIndex++;
                     }
-                    currentIndex++;
                 }
             }
-        }
+        });
     }
 
     // ---- Subtitles ----
 
     public static void toggleSubtitles() {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null) {
+                return;
+            }
 
-        boolean currentlyShown = player.getButtonState(
-                com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
-                == PlayerUI.BUTTON_ON;
-        player.showSubtitles(!currentlyShown);
+            boolean currentlyShown = player.getButtonState(
+                    com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
+                    == PlayerUI.BUTTON_ON;
+            player.showSubtitles(!currentlyShown);
+        });
     }
 
     public static boolean areSubtitlesOn() {
@@ -496,18 +550,20 @@ public class RemoteApiBridge {
     // ---- Mute / Unmute ----
 
     public static void toggleMute() {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player == null) {
+                return;
+            }
 
-        boolean isMuted = player.getVolume() == 0f;
-        if (isMuted && sPreviousVolume > 0f) {
-            player.setVolume(sPreviousVolume);
-        } else {
-            sPreviousVolume = player.getVolume();
-            player.setVolume(0f);
-        }
+            boolean isMuted = player.getVolume() == 0f;
+            if (isMuted && sPreviousVolume > 0f) {
+                player.setVolume(sPreviousVolume);
+            } else {
+                sPreviousVolume = player.getVolume();
+                player.setVolume(0f);
+            }
+        });
     }
 
     public static boolean isMuted() {
@@ -518,16 +574,18 @@ public class RemoteApiBridge {
     // ---- Search ----
 
     public static void search(String query) {
-        if (sPresenter == null || query == null || query.isEmpty()) {
-            return;
-        }
+        runOnMainThread(() -> {
+            if (sPresenter == null || query == null || query.isEmpty()) {
+                return;
+            }
 
-        Context context = sPresenter.getContext();
-        if (context == null) {
-            return;
-        }
+            Context context = sPresenter.getContext();
+            if (context == null) {
+                return;
+            }
 
-        SearchPresenter.instance(context).startPlay(query);
+            SearchPresenter.instance(context).startPlay(query);
+        });
     }
 
     // ---- Queue Management ----
@@ -556,97 +614,109 @@ public class RemoteApiBridge {
     }
 
     public static void addToQueue(String videoId) {
-        if (videoId == null) {
-            return;
-        }
-        Video video = Video.from(videoId);
-        video.isRemote = true;
-        Playlist.instance().add(video);
+        runOnMainThread(() -> {
+            if (videoId == null) {
+                return;
+            }
+            Video video = Video.from(videoId);
+            video.isRemote = true;
+            Playlist.instance().add(video);
+        });
     }
 
     public static void playNext(String videoId) {
-        if (videoId == null) {
-            return;
-        }
-        Video video = Video.from(videoId);
-        video.isRemote = true;
-        Playlist.instance().next(video);
+        runOnMainThread(() -> {
+            if (videoId == null) {
+                return;
+            }
+            Video video = Video.from(videoId);
+            video.isRemote = true;
+            Playlist.instance().next(video);
+        });
     }
 
     public static void removeFromQueue(String videoId) {
-        if (videoId == null) {
-            return;
-        }
-        Playlist playlist = Playlist.instance();
-        List<Video> all = playlist.getAll();
-        for (Video video : all) {
-            if (videoId.equals(video.videoId)) {
-                playlist.remove(video);
-                break;
+        runOnMainThread(() -> {
+            if (videoId == null) {
+                return;
             }
-        }
+            Playlist playlist = Playlist.instance();
+            List<Video> all = playlist.getAll();
+            for (Video video : all) {
+                if (videoId.equals(video.videoId)) {
+                    playlist.remove(video);
+                    break;
+                }
+            }
+        });
     }
 
     public static void clearQueue() {
-        Playlist.instance().clear();
+        runOnMainThread(() -> {
+            Playlist.instance().clear();
+        });
     }
 
     // ---- System Control ----
 
     public static void dpad(String key) {
-        int keyCode;
-        boolean isLongAction = false;
+        runOnMainThread(() -> {
+            int keyCode;
+            boolean isLongAction = false;
 
-        switch (key) {
-            case "up":
-                keyCode = KeyEvent.KEYCODE_DPAD_UP;
-                break;
-            case "down":
-                keyCode = KeyEvent.KEYCODE_DPAD_DOWN;
-                break;
-            case "left":
-                keyCode = KeyEvent.KEYCODE_DPAD_LEFT;
-                isLongAction = true;
-                break;
-            case "right":
-                keyCode = KeyEvent.KEYCODE_DPAD_RIGHT;
-                isLongAction = true;
-                break;
-            case "enter":
-                keyCode = KeyEvent.KEYCODE_DPAD_CENTER;
-                break;
-            case "back":
-                keyCode = KeyEvent.KEYCODE_BACK;
-                break;
-            default:
-                return;
-        }
+            switch (key) {
+                case "up":
+                    keyCode = KeyEvent.KEYCODE_DPAD_UP;
+                    break;
+                case "down":
+                    keyCode = KeyEvent.KEYCODE_DPAD_DOWN;
+                    break;
+                case "left":
+                    keyCode = KeyEvent.KEYCODE_DPAD_LEFT;
+                    isLongAction = true;
+                    break;
+                case "right":
+                    keyCode = KeyEvent.KEYCODE_DPAD_RIGHT;
+                    isLongAction = true;
+                    break;
+                case "enter":
+                    keyCode = KeyEvent.KEYCODE_DPAD_CENTER;
+                    break;
+                case "back":
+                    keyCode = KeyEvent.KEYCODE_BACK;
+                    break;
+                default:
+                    return;
+            }
 
-        if (isLongAction) {
-            Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
-            Utils.postDelayed(() -> Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, keyCode)), 500);
-        } else {
-            Utils.sendKey(keyCode);
-        }
+            if (isLongAction) {
+                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+                Utils.postDelayed(() -> Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, keyCode)), 500);
+            } else {
+                Utils.sendKey(keyCode);
+            }
+        });
     }
 
     public static void voice(String action) {
-        if (sPresenter == null) {
-            return;
-        }
+        runOnMainThread(() -> {
+            if (sPresenter == null) {
+                return;
+            }
 
-        Context context = sPresenter.getContext();
-        if (context == null) {
-            return;
-        }
+            Context context = sPresenter.getContext();
+            if (context == null) {
+                return;
+            }
 
-        SearchPresenter searchPresenter = SearchPresenter.instance(context);
+            SearchPresenter searchPresenter = SearchPresenter.instance(context);
 
-        if ("start".equals(action)) {
-            searchPresenter.startVoice();
-        } else if ("stop".equals(action)) {
-            searchPresenter.forceFinish();
-        }
+            if ("start".equals(action)) {
+                searchPresenter.startVoice();
+            } else if ("stop".equals(action)) {
+                searchPresenter.forceFinish();
+            }
+        });
     }
 
     // ---- Helpers ----
