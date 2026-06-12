@@ -51,6 +51,7 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendEnableSwitch(settingsPresenter);
+        appendAllowAllSwitch(settingsPresenter);
         appendStatusText(settingsPresenter);
         appendShowCodeButton(settingsPresenter);
         appendPortCategory(settingsPresenter);
@@ -71,6 +72,13 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
                 RemoteApiServer.stopRemoteApi(getContext());
             }
         }, mRemoteApiData.isApiEnabled()));
+    }
+
+    private void appendAllowAllSwitch(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(
+                "Allow all local connections (no pairing)",
+                optionItem -> mRemoteApiData.setAllowAllConnections(optionItem.isSelected()),
+                mRemoteApiData.isAllowAllConnections()));
     }
 
     private void appendStatusText(AppDialogPresenter settingsPresenter) {

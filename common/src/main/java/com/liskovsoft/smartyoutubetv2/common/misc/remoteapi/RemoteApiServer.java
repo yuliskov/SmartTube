@@ -191,7 +191,7 @@ public class RemoteApiServer extends NanoWSD {
 
         Map<String, String> parms = handshake.getParms();
         String token = parms.get("token");
-        if (token == null || !mAuth.isTokenValid(token)) {
+        if (!mApiData.isAllowAllConnections() && (token == null || !mAuth.isTokenValid(token))) {
             Log.w(TAG, "WebSocket connection rejected: invalid or missing token");
             return null;
         }
@@ -460,10 +460,13 @@ public class RemoteApiServer extends NanoWSD {
                 return handlePairVerify(session);
             }
 
-            String authHeader = headers.get("authorization");
-            String token = extractBearerToken(authHeader);
-            if (!mAuth.isTokenValid(token)) {
-                return errorResponse(Response.Status.UNAUTHORIZED, 401, "Unauthorized");
+            // When "allow all connections" is on, the LAN is trusted and no token is required.
+            if (!mApiData.isAllowAllConnections()) {
+                String authHeader = headers.get("authorization");
+                String token = extractBearerToken(authHeader);
+                if (!mAuth.isTokenValid(token)) {
+                    return errorResponse(Response.Status.UNAUTHORIZED, 401, "Unauthorized");
+                }
             }
 
             if (Method.GET.equals(method) && "/api/player".equals(path)) {
@@ -698,6 +701,8 @@ public class RemoteApiServer extends NanoWSD {
         body.put("device_name", getDeviceName());
         body.put("app_version", getAppVersion());
         body.put("api_version", API_VERSION);
+        // Lets clients skip the pairing flow when the API is open on the LAN.
+        body.put("pairing_required", !mApiData.isAllowAllConnections());
         return corsResponse(jsonResponse(body));
     }
 
@@ -1014,11 +1019,35 @@ public class RemoteApiServer extends NanoWSD {
         } catch (ResponseException e) {
             throw new IOException("Failed to parse body", e);
         }
+        // POST bodies arrive in "postData"; PUT bodies are written by NanoHTTPD to a
+        // temp file whose path is stored under "content". Without reading that file,
+        // every PUT (volume, speed, formats…) parses as "{}" and fails with 400.
         String body = bodyMap.get("postData");
         if (body == null) {
+            String tempFilePath = bodyMap.get("content");
+            if (tempFilePath != null) {
+                body = readFile(tempFilePath);
+            }
+        }
+        if (body == null || body.isEmpty()) {
             body = "{}";
         }
         return body;
+    }
+
+    private static String readFile(String path) throws IOException {
+        java.io.FileInputStream in = new java.io.FileInputStream(path);
+        try {
+            java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            return out.toString("UTF-8");
+        } finally {
+            in.close();
+        }
     }
 
     private Response jsonResponse(JSONObject json) {

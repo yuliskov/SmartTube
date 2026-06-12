@@ -68,22 +68,32 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 
 ## 3. Authentication & Pairing
 
-### Pairing Flow
+There are two modes, controlled by the **"Allow all local connections (no pairing)"** switch in *SmartTube → Settings → Remote API*:
+
+| Mode | When | Behavior |
+|------|------|----------|
+| **Open** (default) | switch ON | Any device on the LAN may use the API **without pairing or a token**. Works like Chromecast on a trusted home network. |
+| **Paired** | switch OFF | Clients must pair (6-digit code) and send `Authorization: Bearer <token>` on every request. |
+
+A client discovers the current mode from `GET /api/system/ping` → `pairing_required` (`false` = open, `true` = paired). In open mode the `Authorization` header is ignored, so clients may omit it or send any placeholder; the WebSocket `?token=` may be empty.
+
+### Pairing Flow (only when `pairing_required: true`)
 
 ```
-1. User enables "Remote API" in SmartTube settings
-   → TV generates 6-digit code, starts HTTP server on port 8497
+1. User enables "Remote API" in SmartTube settings and turns OFF "Allow all local connections"
+   → TV starts HTTP server on port 8497
 
-2. Extension sends GET /api/pair
+2. Client sends GET /api/pair
    ← { "code": "482 917", "expires_in": 300 }
+   (the code is also shown on the TV via Settings → Remote API → Show pairing code)
 
-3. User enters code in extension popup
+3. User enters code in the client
 
-4. Extension sends POST /api/pair/verify
+4. Client sends POST /api/pair/verify
    → { "code": "482 917" }
    ← { "token": "a1b2c3d4...", "device_name": "Living Room TV" }
 
-5. Extension stores token in chrome.storage.local
+5. Client stores the token
 
 6. All subsequent requests: Authorization: Bearer <token>
 ```
@@ -94,6 +104,7 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 - Persisted until explicitly revoked (no expiry)
 - Max 10 paired devices (oldest auto-revoked)
 - Pairing code: 6 digits, valid 5 minutes, 5 verification attempts/min per IP
+- In **open** mode tokens are not required and pairing is optional.
 
 ---
 
@@ -101,7 +112,7 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
 
 **Base URL:** `http://<TV_IP>:8497`  
 **Content-Type:** `application/json`  
-**Auth:** `Authorization: Bearer <token>` header (except ping & pair)
+**Auth:** `Authorization: Bearer <token>` header on every endpoint except ping & pair — **unless the API is in open mode** (`pairing_required: false`), in which case auth is not required.
 
 ### Error Response Format
 
@@ -129,11 +140,17 @@ The extension sends a broadcast to `255.255.255.255:8497` and each SmartTube ins
   "status": "ok",
   "device_name": "Living Room TV",
   "app_version": "24.93",
-  "api_version": "1"
+  "api_version": "1",
+  "pairing_required": false
 }
 ```
 
+- `pairing_required: false` → **open mode**: connect and use the API directly, no token needed.
+- `pairing_required: true` → **paired mode**: run the pairing flow (§3) and send `Authorization: Bearer <token>`.
+
 ### 4.2 Pairing
+
+> Only needed when `pairing_required: true`. In open mode these endpoints still work but are optional.
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -422,11 +439,13 @@ The extension connects to the same REST API for player controls and volume, and 
 
 **URL:** `ws://<TV_IP>:8497/ws?token=<auth_token>`
 
-Instead of polling `GET /api/player` every second, the Chrome extension can open a WebSocket connection to receive live player state updates at ~2Hz (every 500ms).
+In **open mode** (`pairing_required: false`) the `token` query parameter is ignored and may be omitted or empty: `ws://<TV_IP>:8497/ws`.
+
+Instead of polling `GET /api/player` every second, a client can open a WebSocket connection to receive live player state updates at ~2Hz (every 500ms).
 
 #### Connection
 
-1. After pairing, open WebSocket to `ws://<TV_IP>:8497/ws?token=<your_token>`
+1. Open WebSocket to `ws://<TV_IP>:8497/ws?token=<your_token>` (token required only in paired mode)
 2. On connect, server sends a `hello` message
 3. Server then streams `state_update` messages every 500ms while player is active
 4. Client can send commands over the WebSocket (no HTTP needed)
@@ -965,11 +984,13 @@ dependencies {
 
 | Threat | Mitigation |
 |--------|-----------|
-| Unauthorized LAN access | Bearer token via pairing |
-| Brute-force pairing | 5 attempts/min per IP |
+| Unauthorized LAN access | **Open mode (default):** none — any LAN device may control the TV (like Chromecast). Turn OFF "Allow all local connections" to require **paired-mode** bearer tokens. |
+| Brute-force pairing | 5 attempts/min per IP (paired mode) |
 | Token storage | SharedPreferences (encrypted on API 23+) |
 | MITM | HTTP only (local network, no sensitive data) |
-| DoS | 10 req/s per IP rate limit |
+| DoS | rate limiting on the pairing endpoint |
+
+> **Open mode** trusts the local network. Use it on a private home Wi-Fi. On shared/public networks, disable "Allow all local connections" so clients must pair.
 
 **CORS:**
 ```

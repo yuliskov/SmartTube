@@ -27,6 +27,7 @@ public class RemoteApiData extends DataChangeBase {
     private String mPairedTokens;
     private String mPairingCode;
     private long mPairingCodeExpiryMs;
+    private boolean mAllowAllConnections;
 
     private RemoteApiData(Context context) {
         mContext = context;
@@ -49,6 +50,16 @@ public class RemoteApiData extends DataChangeBase {
 
     public boolean isApiEnabled() {
         return mIsApiEnabled;
+    }
+
+    /** When true, any device on the local network may use the API without pairing. */
+    public boolean isAllowAllConnections() {
+        return mAllowAllConnections;
+    }
+
+    public void setAllowAllConnections(boolean allow) {
+        mAllowAllConnections = allow;
+        persistState();
     }
 
     public int getPort() {
@@ -195,6 +206,8 @@ public class RemoteApiData extends DataChangeBase {
         mPairedTokens = Helpers.parseStr(split, 4);
         mPairingCode = Helpers.parseStr(split, 5);
         mPairingCodeExpiryMs = Helpers.parseLong(split, 6, 0);
+        // Default ON: a home-LAN remote behaves like Chromecast (no pairing dance).
+        mAllowAllConnections = Helpers.parseBoolean(split, 7, true);
 
         if (mDeviceId == null || mDeviceId.isEmpty()) {
             mDeviceId = UUID.randomUUID().toString();
@@ -209,7 +222,7 @@ public class RemoteApiData extends DataChangeBase {
     private void persistState() {
         mAppPrefs.setData(REMOTE_API_DATA, Helpers.mergeData(
                 mIsApiEnabled, mPort, mDeviceId, mDeviceName, mPairedTokens,
-                mPairingCode, mPairingCodeExpiryMs
+                mPairingCode, mPairingCodeExpiryMs, mAllowAllConnections
         ));
 
         onDataChange();
