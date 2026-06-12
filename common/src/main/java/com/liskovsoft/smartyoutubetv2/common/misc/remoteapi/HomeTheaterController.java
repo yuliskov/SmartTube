@@ -48,9 +48,42 @@ public class HomeTheaterController {
     public void setVolume(int volume) {
         int clamped = Math.max(0, Math.min(100, volume));
         int max = mAudioManager.getStreamMaxVolume(STREAM_MUSIC);
-        int raw = max > 0 ? Math.round(clamped * max / 100f) : 0;
-        mAudioManager.setStreamVolume(STREAM_MUSIC, raw, 0);
+        int targetRaw = max > 0 ? Math.round(clamped * max / 100f) : 0;
+
+        // Try an absolute set first (works when the TV's own speakers are active).
+        mAudioManager.setStreamVolume(STREAM_MUSIC, targetRaw, 0);
+
+        // With a CEC audio system (soundbar/HT) the absolute set is silently ignored —
+        // CEC only understands volume-key steps. Ramp the remaining delta with paced
+        // adjust calls (downs get dropped by some devices if sent too fast). Runs on a
+        // background thread so a large delta doesn't stall the HTTP response; a newer
+        // setVolume cancels an in-flight ramp via the generation counter.
+        int current = mAudioManager.getStreamVolume(STREAM_MUSIC);
+        if (current == targetRaw) {
+            return;
+        }
+
+        final int generation = ++sRampGeneration;
+        new Thread(() -> {
+            int direction = targetRaw > mAudioManager.getStreamVolume(STREAM_MUSIC)
+                    ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER;
+            for (int i = 0; i < 100 && generation == sRampGeneration; i++) {
+                mAudioManager.adjustStreamVolume(STREAM_MUSIC, direction, 0);
+                try {
+                    Thread.sleep(direction == AudioManager.ADJUST_LOWER ? 120 : 60);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+                int now = mAudioManager.getStreamVolume(STREAM_MUSIC);
+                if (direction == AudioManager.ADJUST_RAISE ? now >= targetRaw : now <= targetRaw) {
+                    return;
+                }
+            }
+        }, "TheaterVolumeRamp").start();
     }
+
+    private static volatile int sRampGeneration;
 
     public void volumeUp() {
         mAudioManager.adjustStreamVolume(STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
