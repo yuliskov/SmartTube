@@ -243,6 +243,7 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 |--------|----------|------|------|-------------|
 | `POST` | `/api/content/open` | Yes | See below | Open video |
 | `POST` | `/api/content/search` | Yes | `{"query":"..."}` | Search YouTube and play first result |
+| `GET` | `/api/content/search/results?query=...&limit=20` | Yes | — | Search YouTube and return the result list as JSON **without** starting playback. `query` is required (`400` if missing); `limit` is optional (default `20`, capped at `50`). Items match the `/api/content/suggestions` shape. Play a result via `/api/content/open` with `video_id` |
 | `GET` | `/api/content/suggestions` | Yes | — | Related videos of the current video (player suggestions) |
 | `POST` | `/api/content/suggestions/:index` | Yes | — | Play a suggestion by index in the flattened list, or by **video ID** (e.g. `/api/content/suggestions/dQw4w9WgXcQ`) — ID is preferred since indexes go stale when the list refreshes |
 | `GET` | `/api/content/recommended` | Yes | — | The user's Home recommendations (cached ~5 min on device). Items: `video_id`, `title`, `author`, `thumbnail_url`, `duration_ms`, `is_live`. Play them via `/api/content/open` with `video_id`. |
@@ -277,6 +278,28 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 ```
 
 If `playlist_id` is omitted but the `url` carries a `list=` query parameter (e.g. `https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLxxx`), the playlist id is parsed from the url and applied automatically.
+
+**`GET /api/content/search/results?query=lofi+hip+hop&limit=2` Response:**
+```json
+[
+  {
+    "video_id": "jfKfPfyJRdk",
+    "title": "lofi hip hop radio - beats to relax/study to",
+    "author": "Lofi Girl",
+    "thumbnail_url": "https://i.ytimg.com/vi/jfKfPfyJRdk/maxresdefault.jpg",
+    "duration_ms": 0,
+    "is_live": true
+  },
+  {
+    "video_id": "abc123def45",
+    "title": "1 Hour Lofi Mix",
+    "author": "Some Channel",
+    "thumbnail_url": "https://i.ytimg.com/vi/abc123def45/maxresdefault.jpg",
+    "duration_ms": 3600000,
+    "is_live": false
+  }
+]
+```
 
 ### 4.9 Home Theater Control
 

@@ -652,6 +652,10 @@ public class RemoteApiServer extends NanoWSD {
                 return handleSearch(session);
             }
 
+            if (Method.GET.equals(method) && "/api/content/search/results".equals(path)) {
+                return handleSearchResults(session);
+            }
+
             if (Method.GET.equals(method) && "/api/player/queue".equals(path)) {
                 return handleGetQueue();
             }
@@ -969,6 +973,31 @@ public class RemoteApiServer extends NanoWSD {
         JSONObject body = new JSONObject();
         body.put("ok", true);
         return corsResponse(jsonResponse(body));
+    }
+
+    private Response handleSearchResults(IHTTPSession session) throws JSONException {
+        String query = session.getParms().get("query");
+        if (query == null || query.isEmpty()) {
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Missing query parameter");
+        }
+
+        int limit = 20;
+        String limitStr = session.getParms().get("limit");
+        if (limitStr != null && !limitStr.isEmpty()) {
+            try {
+                limit = Integer.parseInt(limitStr);
+            } catch (NumberFormatException e) {
+                return errorResponse(Response.Status.BAD_REQUEST, 400, "Invalid limit parameter");
+            }
+        }
+        limit = Math.max(1, Math.min(limit, 50));
+
+        // Blocking network fetch — NanoHTTPD worker thread, so OK.
+        JSONArray results = RemoteApiBridge.searchResults(query, limit);
+        if (results == null) {
+            results = new JSONArray();
+        }
+        return corsResponse(jsonResponse(results));
     }
 
     private Response handleGetQueue() throws JSONException {

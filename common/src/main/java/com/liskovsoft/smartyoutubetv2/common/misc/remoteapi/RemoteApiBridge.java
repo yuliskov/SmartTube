@@ -735,6 +735,55 @@ public class RemoteApiBridge {
         });
     }
 
+    /**
+     * Fetch YouTube search results WITHOUT starting playback — unlike search(),
+     * which plays the first hit. Blocking network call (same synchronous style
+     * as getRecommended()); must be invoked from a worker thread (NanoHTTPD
+     * request threads are fine). Items match the /api/content/suggestions shape.
+     */
+    public static JSONArray searchResults(String query, int limit) {
+        JSONArray result = new JSONArray();
+        if (query == null || query.isEmpty()) {
+            return result;
+        }
+
+        try {
+            List<com.liskovsoft.mediaserviceinterfaces.data.MediaGroup> groups =
+                    com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
+                            .getContentService().getSearch(query);
+            if (groups != null) {
+                for (com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group : groups) {
+                    if (group == null || group.getMediaItems() == null) {
+                        continue;
+                    }
+                    for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : group.getMediaItems()) {
+                        if (result.length() >= limit) {
+                            return result;
+                        }
+                        if (item.getVideoId() == null) {
+                            continue;
+                        }
+                        JSONObject json = new JSONObject();
+                        json.put("video_id", item.getVideoId());
+                        json.put("title", item.getTitle());
+                        json.put("author", item.getAuthor() != null ? item.getAuthor()
+                                : (item.getSecondTitle() != null ? item.getSecondTitle().toString() : null));
+                        String thumb = item.getBackgroundImageUrl() != null
+                                ? item.getBackgroundImageUrl() : item.getCardImageUrl();
+                        json.put("thumbnail_url", thumb);
+                        json.put("duration_ms", item.getDurationMs());
+                        json.put("is_live", item.isLive());
+                        result.put(json);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Network/parse failure — return whatever we collected (possibly empty).
+        }
+
+        return result;
+    }
+
     // ---- Queue Management ----
 
     public static JSONArray getQueue() {
