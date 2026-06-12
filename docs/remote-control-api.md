@@ -243,7 +243,7 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | `POST` | `/api/content/open` | Yes | See below | Open video |
 | `POST` | `/api/content/search` | Yes | `{"query":"..."}` | Search YouTube and play first result |
 | `GET` | `/api/content/suggestions` | Yes | — | Related videos of the current video (player suggestions) |
-| `POST` | `/api/content/suggestions/:index` | Yes | — | Play a suggestion by its index in the flattened list |
+| `POST` | `/api/content/suggestions/:index` | Yes | — | Play a suggestion by index in the flattened list, or by **video ID** (e.g. `/api/content/suggestions/dQw4w9WgXcQ`) — ID is preferred since indexes go stale when the list refreshes |
 | `GET` | `/api/content/recommended` | Yes | — | The user's Home recommendations (cached ~5 min on device). Items: `video_id`, `title`, `author`, `thumbnail_url`, `duration_ms`, `is_live`. Play them via `/api/content/open` with `video_id`. |
 
 ### 4.9 Queue Management

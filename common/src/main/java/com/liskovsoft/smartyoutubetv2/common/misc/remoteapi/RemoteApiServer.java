@@ -904,6 +904,14 @@ public class RemoteApiServer extends NanoWSD {
         try {
             index = Integer.parseInt(indexStr);
         } catch (NumberFormatException e) {
+            // Not a number — treat it as a video ID (11 chars, e.g. dQw4w9WgXcQ).
+            // ID-based play is preferred: indexes go stale when the list refreshes.
+            if (indexStr.matches("[A-Za-z0-9_-]{6,16}")) {
+                RemoteApiBridge.playSuggestionById(indexStr);
+                JSONObject ok = new JSONObject();
+                ok.put("ok", true);
+                return corsResponse(jsonResponse(ok));
+            }
             return errorResponse(Response.Status.BAD_REQUEST, 400, "Invalid suggestion index");
         }
 

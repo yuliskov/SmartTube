@@ -590,6 +590,41 @@ public class RemoteApiBridge {
         return result;
     }
 
+    /**
+     * Play a suggestion by video ID — robust against the list refreshing between
+     * the client fetching it and the user clicking (indexes go stale, IDs don't).
+     * Prefers the player's own suggestion Video object so playback keeps its
+     * metadata/context; falls back to opening the bare ID.
+     */
+    public static void playSuggestionById(String videoId) {
+        runOnMainThread(() -> {
+            if (videoId == null || sPresenter == null) {
+                return;
+            }
+
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                for (int i = 0; i < 50; i++) {
+                    VideoGroup group = player.getSuggestionsByIndex(i);
+                    if (group == null) {
+                        break;
+                    }
+                    for (Video video : group.getVideos()) {
+                        if (video.hasVideo() && videoId.equals(video.videoId)) {
+                            video.pendingPosMs = 0;
+                            sPresenter.openVideo(video);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            Video video = Video.from(videoId);
+            video.isRemote = true;
+            sPresenter.openVideo(video);
+        });
+    }
+
     public static void playSuggestion(int index) {
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
