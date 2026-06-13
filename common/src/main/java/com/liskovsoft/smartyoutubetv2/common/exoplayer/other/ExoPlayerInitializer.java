@@ -151,13 +151,7 @@ public class ExoPlayerInitializer {
     private void setupVolumeBoost(SimpleExoPlayer player) {
         // 5.1 audio cannot be boosted (format isn't supported error)
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
-        // The auto-volume headroom boost (x2 LoudnessEnhancer) only makes sense when the
-        // user's baseline is below max and content is being normalized up. At >= 100% the
-        // user wants literal full volume, so don't arm the booster — its limiter audibly
-        // compresses/"sidechains" the output. Pairs with restoreVolume() keeping >= 100%
-        // at full instead of ducking to the per-video gain.
-        float baseline = mPlayerData.getPlayerVolume();
-        float volume = (mPlayerTweaksData.isPlayerAutoVolumeEnabled() && baseline < 1f) ? baseline * 2.0f : baseline;
+        float volume = mPlayerTweaksData.isPlayerAutoVolumeEnabled() ? mPlayerData.getPlayerVolume() * 2.0f : mPlayerData.getPlayerVolume();
         if (volume > 1f && Build.VERSION.SDK_INT >= 19) {
             mVolumeBooster = new VolumeBooster(true, volume, player);
             player.addAudioListener(mVolumeBooster);

@@ -360,13 +360,13 @@ public class Utils {
     public static int getVolume(Context context, PlayerManager player) {
         if (context != null) {
             if (isGlobalVolumeFixed(context)) {
-                return getPlayerVolume(context, player);
+                return getPlayerVolume(player);
             } else {
                 try {
                     return getGlobalVolume(context);
                 } catch (SecurityException e) {
                     // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
-                    return getPlayerVolume(context, player);
+                    return getPlayerVolume(player);
                 }
             }
         }
@@ -374,16 +374,11 @@ public class Utils {
         return 100;
     }
 
-    private static int getPlayerVolume(Context context, PlayerManager player) {
+    private static int getPlayerVolume(PlayerManager player) {
         if (player == null) {
             return -1;
         }
-        // Read the persisted baseline (the user's chosen volume), NOT player.getVolume():
-        // the effective player volume includes per-video loudness normalization (gain < 1),
-        // so reading it here and writing it back via setVolume()/setPlayerVolume() rebased
-        // the baseline to the normalized value — ratcheting the volume lower on every
-        // video change + volume keypress cycle.
-        return (int)(PlayerData.instance(context).getPlayerVolume() * 100);
+        return (int)(player.getVolume() * 100);
     }
 
     /**
@@ -416,10 +411,8 @@ public class Utils {
         if (player == null) {
             return;
         }
-        float playerVolume = volume / 100f;
-        player.setVolume(playerVolume);
-        PlayerData.instance(context).setPlayerVolume(playerVolume);
-        MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(context, player)));
+        player.setVolume(volume / 100f);
+        MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(player)));
     }
 
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
@@ -438,10 +431,7 @@ public class Utils {
     @SuppressLint("StringFormatMatches")
     public static void volumeUpPlayer(Context context, PlayerManager player, boolean up) {
         if (player != null) {
-            // Step from the persisted baseline, not player.getVolume(): the effective
-            // value is scaled down per-video by loudness normalization, so stepping from
-            // it and persisting the result ratchets the baseline lower on each video.
-            int volume = (int) (PlayerData.instance(context).getPlayerVolume() * 100);
+            int volume = (int) (player.getVolume() * 100);
             int round = 10 - volume % 10;
             if (round != 10) {
                 volume += round;

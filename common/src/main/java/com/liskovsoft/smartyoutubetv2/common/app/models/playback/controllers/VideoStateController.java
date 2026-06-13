@@ -613,13 +613,14 @@ public class VideoStateController extends BasePlayerController {
 
         float newVolume = getPlayerData().getPlayerVolume();
 
-        // Auto-volume normalizes loudness per-video ONLY when the user picked a
-        // below-max baseline. At 100% the user wants full, consistent volume on every
-        // video — the old `else` branch replaced their 1.0 with the per-video gain
-        // (often < 1), so audio dropped to near-inaudible after each video change and
-        // had to be re-set by hand. Keep full volume at >= 100% instead.
-        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled() && newVolume < 1f) {
-            newVolume *= getVideo().volume;
+        if (getPlayerTweaksData().isPlayerAutoVolumeEnabled()) {
+            //newVolume *= getVideo().volume;
+            //newVolume = getVideo().volume;
+            if (newVolume < 1f) {
+                newVolume *= getVideo().volume;
+            } else {
+                newVolume = getVideo().volume;
+            }
         }
 
         if (getVideo().isShorts) {
