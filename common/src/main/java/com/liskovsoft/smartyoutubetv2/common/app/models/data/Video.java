@@ -919,7 +919,7 @@ public final class Video {
     }
 
     public void sync(VideoStateService.State state) {
-        if (state != null) {
+        if (state != null && state.durationMs != -1) {
             percentWatched = state.positionMs / (state.durationMs / 100f);
         }
     }
