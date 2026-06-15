@@ -38,6 +38,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     public static final int SEEK_PREVIEW_SINGLE = 1;
     public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
     public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
+    private static final float DEFAULT_PLAYER_VOLUME = 0.10f;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
@@ -824,7 +825,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
         // old subs size px
         mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
-        mPlayerVolume = Helpers.parseFloat(split, 40, 1.0f);
+        mPlayerVolume = Helpers.parseFloat(split, 40, DEFAULT_PLAYER_VOLUME);
         mIsTooltipsEnabled = Helpers.parseBoolean(split, 41, true);
         mSubtitlePosition = Helpers.parseFloat(split, 42, 0.1f);
         mIsNumberKeySeekEnabled = Helpers.parseBoolean(split, 43, true);

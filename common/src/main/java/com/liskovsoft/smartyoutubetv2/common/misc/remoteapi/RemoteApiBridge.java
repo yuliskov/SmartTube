@@ -293,10 +293,15 @@ public class RemoteApiBridge {
     }
 
     public static void setVolume(float volume) {
+        // Accept both the documented normalized form (0.10) and controller/UI
+        // percent values (10). The persisted value is always ExoPlayer's 0..1
+        // gain, matching the macOS "10/100" player-volume command.
+        float normalized = volume > 1f ? volume / 100f : volume;
+
         // Clamp to 0..1 (the API contract). Persisting a value > 1.0 arms the
         // VolumeBooster (LoudnessEnhancer) on the next player init — its built-in
         // limiter audibly compresses/"sidechains" the output. 1.0 is the safe max.
-        float clamped = Math.max(0f, Math.min(volume, 1f));
+        float clamped = Math.max(0f, Math.min(normalized, 1f));
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
             if (player != null) {
