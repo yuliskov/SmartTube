@@ -81,7 +81,18 @@ public class RemoteApiBridge {
     public static JSONObject getPlayerState() {
         PlaybackView player = getPlayer();
         if (player == null || !player.isEngineInitialized()) {
-            return null;
+            try {
+                JSONObject state = new JSONObject();
+                state.put("state", "idle");
+                state.put("suggestions_count", 0);
+                Playlist playlist = Playlist.instance();
+                state.put("queue_size", playlist.getAll().size());
+                state.put("queue_index", playlist.getAll().indexOf(playlist.getCurrent()));
+                state.put("queue_generation", playlist.getGeneration());
+                return state;
+            } catch (JSONException e) {
+                return null;
+            }
         }
 
         try {
@@ -484,6 +495,35 @@ public class RemoteApiBridge {
                 player.setVideoFlipEnabled(enabled);
             }
         });
+    }
+
+    public static void notifySuggestionsUpdated() {
+        RemoteApiServer server = RemoteApiServer.getInstance();
+        if (server != null) {
+            try {
+                JSONObject data = new JSONObject();
+                data.put("suggestions_count", getSuggestionsCount());
+                server.broadcastEvent("suggestions_updated", data);
+            } catch (JSONException e) {
+                // won't happen
+            }
+        }
+    }
+
+    private static int getSuggestionsCount() {
+        PlaybackView player = getPlayer();
+        if (player == null) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 0; i < 50; i++) {
+            VideoGroup group = player.getSuggestionsByIndex(i);
+            if (group == null) {
+                break;
+            }
+            count += group.getSize();
+        }
+        return count;
     }
 
     // ---- Content ----

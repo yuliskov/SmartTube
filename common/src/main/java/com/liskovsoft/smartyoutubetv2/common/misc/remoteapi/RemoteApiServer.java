@@ -80,6 +80,13 @@ public class RemoteApiServer extends NanoWSD {
         return sInstance;
     }
 
+    public static void pushEvent(String eventType, JSONObject data) {
+        RemoteApiServer server = sInstance;
+        if (server != null) {
+            server.broadcastEvent(eventType, data);
+        }
+    }
+
     @Override
     public void start() throws IOException {
         mRunning = true;

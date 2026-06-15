@@ -356,6 +356,9 @@ public class SuggestionsController extends BasePlayerController {
 
         // After video suggestions
         callListener(mediaItemMetadata);
+
+        // Notify remote API clients that suggestions have been updated
+        com.liskovsoft.smartyoutubetv2.common.misc.remoteapi.RemoteApiBridge.notifySuggestionsUpdated();
     }
 
     private void appendSuggestions(Video video, MediaItemMetadata mediaItemMetadata) {

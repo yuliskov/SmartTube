@@ -38,7 +38,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     public static final int SEEK_PREVIEW_SINGLE = 1;
     public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
     public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
-    private static final float DEFAULT_PLAYER_VOLUME = 0.10f;
+    private static final float DEFAULT_PLAYER_VOLUME = 0.50f;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
