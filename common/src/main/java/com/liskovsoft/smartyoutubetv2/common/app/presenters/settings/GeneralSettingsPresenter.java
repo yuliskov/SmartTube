@@ -466,7 +466,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         int activeMode = mGeneralData.getScreensaverDimmingPercents();
 
-        for (int dimPercents : Helpers.range(10, 100, 10)) {
+        for (int dimPercents : Helpers.range(10, 80, 10)) {
+            options.add(UiOptionItem.from(
+                    dimPercents + "%",
+                    option -> mGeneralData.setScreensaverDimmingPercents(dimPercents),
+                    activeMode == dimPercents));
+        }
+
+        for (int dimPercents : Helpers.range(85, 100, 5)) {
             options.add(UiOptionItem.from(
                     dimPercents + "%",
                     option -> mGeneralData.setScreensaverDimmingPercents(dimPercents),
