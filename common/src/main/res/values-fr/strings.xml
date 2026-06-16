@@ -747,4 +747,5 @@
   <string name="enable_conscrypt">Activer Conscrypt</string>
   <string name="enable_conscrypt_desc">Améliore la compatibilité HTTPS, TLS et VPN sur certains appareils, mais peut occasionnellement provoquer des problèmes de lecture ou ralentir les performances réseau</string>
   <string name="network_settings">Paramètres réseau</string>
+  <string name="comments_disabled">Les commentaires sont désactivés pour cette vidéo</string>
 </resources>
