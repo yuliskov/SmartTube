@@ -1092,7 +1092,16 @@ public class AppDialogUtil {
             Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<PlaylistInfo> playlistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (PlaylistInfo playlistInfo : playlistInfos) {
+        // Sort playlists alphabetically so their position stays stable instead of
+        // shuffling around in most-recently-used order (see issue #5904).
+        List<PlaylistInfo> sortedPlaylistInfos = new ArrayList<>(playlistInfos);
+        Collections.sort(sortedPlaylistInfos, (info1, info2) -> {
+            String title1 = info1.getTitle() != null ? info1.getTitle() : "";
+            String title2 = info2.getTitle() != null ? info2.getTitle() : "";
+            return title1.compareToIgnoreCase(title2);
+        });
+
+        for (PlaylistInfo playlistInfo : sortedPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
