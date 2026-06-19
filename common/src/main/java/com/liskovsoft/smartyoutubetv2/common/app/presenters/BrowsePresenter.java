@@ -1031,7 +1031,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 "News", // Top news
                 "news", // Top news
                 "NBA TV", // Sports
-                "The Life of a Showgirl" // Taylor Swift ADS
+                "The Life of a Showgirl", // Taylor Swift ADS
+                "FIFA World Cup" // Sports
         ) || Helpers.equalsAny(
                 value.getTitle(),
                 //getContext().getString(R.string.news_row_name),
