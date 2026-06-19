@@ -127,14 +127,21 @@ public class SponsorBlockController extends BasePlayerController {
 
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
-        if (buttonId == R.id.action_content_block) {
-            List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments, true);
+        if (getPlayer() == null) {
+            return;
+        }
 
-            if (foundSegments != null) {
-                SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
-                setPositionMs(lastSegment.getEndMs());
-                return;
-            }
+        if (buttonId == R.id.action_content_block) {
+            //List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments, true);
+            //
+            //if (foundSegments != null) {
+            //    SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
+            //    setPositionMs(lastSegment.getEndMs());
+            //    return;
+            //}
+
+            getSponsorBlockData().setSponsorBlockEnabled(buttonState != PlayerUI.BUTTON_ON);
+            onVideoLoaded(getPlayer().getVideo());
         }
     }
 
@@ -178,7 +185,7 @@ public class SponsorBlockController extends BasePlayerController {
     }
 
     private Observable<Long> startSponsorWatcher(List<SponsorSegment> segments) {
-        if (segments == null || segments.isEmpty()) {
+        if (getPlayer() == null || segments == null || segments.isEmpty()) {
             mActiveSegments = mOriginalSegments = null;
             return Observable.empty();
         }
