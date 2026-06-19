@@ -60,12 +60,12 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         }
 
         final String channelId = video != null ? video.channelId : null;
-        boolean isChannelExcluded = SponsorBlockData.instance(getContext()).isChannelExcluded(channelId);
+        boolean isChannelExcluded = mSponsorBlockData.isChannelExcluded(channelId);
 
         OptionItem sponsorBlockOption = UiOptionItem.from(getContext().getString(R.string.enable),
                 option -> {
                     mSponsorBlockData.setSponsorBlockEnabled(option.isSelected());
-                    SponsorBlockData.instance(getContext()).stopExcludingChannel(channelId);
+                    mSponsorBlockData.stopExcludingChannel(channelId);
                 },
                 !isChannelExcluded && mSponsorBlockData.isSponsorBlockEnabled()
         );

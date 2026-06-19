@@ -112,10 +112,12 @@ public class SponsorBlockController extends BasePlayerController {
     public void onMetadata(MediaItemMetadata metadata) {
         // Disable sponsor for the live streams.
         // Fix when using remote control.
-        if (!getSponsorBlockData().isSponsorBlockEnabled() || !checkVideo(getPlayer().getVideo())) {
+        if (!getSponsorBlockData().isSponsorBlockEnabled() || !checkVideo(getVideo())) {
             disposeActions();
         } else if (isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
-            getPlayer().setButtonState(R.id.action_content_block, PlayerUI.BUTTON_OFF);
+            if (getPlayer() != null) {
+                getPlayer().setButtonState(R.id.action_content_block, PlayerUI.BUTTON_OFF);
+            }
             disposeActions();
         }
     }
@@ -140,8 +142,12 @@ public class SponsorBlockController extends BasePlayerController {
             //    return;
             //}
 
+            Video video = getVideo();
+            String channelId = video != null ? video.channelId : null;
+
             getSponsorBlockData().setSponsorBlockEnabled(buttonState != PlayerUI.BUTTON_ON);
-            onVideoLoaded(getPlayer().getVideo());
+            getSponsorBlockData().stopExcludingChannel(channelId);
+            onVideoLoaded(video);
         }
     }
 
@@ -150,7 +156,7 @@ public class SponsorBlockController extends BasePlayerController {
         if (buttonId == R.id.action_content_block) {
             SponsorBlockSettingsPresenter.instance(getContext()).show(() -> {
                 if (getPlayer() != null) {
-                    onVideoLoaded(getPlayer().getVideo());
+                    onVideoLoaded(getVideo());
                 }
             });
         }
