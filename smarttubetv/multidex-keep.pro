@@ -1,3 +1,10 @@
+-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter
+-keepclassmembers class io.reactivex.internal.operators.observable.ObservableFlatMap$MergeObserver {
+    <init>(io.reactivex.Observer, io.reactivex.functions.Function, boolean, int, int);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity {
+    <init>(...);
+}
 -keep class kotlin.ranges.RangesKt___RangesKt
 -keep class kotlin.collections.builders.MapBuilder
 -keep class kotlin.collections.builders.MapBuilder$Companion
