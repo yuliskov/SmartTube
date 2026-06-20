@@ -17,7 +17,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import java.nio.ByteBuffer;
 
 public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
-    private static final String TAG = DelayMediaCodecAudioRenderer.class.getSimpleName();
     private int mDelayUs;
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsAudioSyncFixChanged;

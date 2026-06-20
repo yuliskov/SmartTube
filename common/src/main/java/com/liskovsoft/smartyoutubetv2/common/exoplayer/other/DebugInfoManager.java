@@ -56,7 +56,6 @@ import java.util.Locale;
  * a {@link SimpleExoPlayer}.
  */
 public final class DebugInfoManager implements Runnable, Player.EventListener {
-    private static final String TAG = DebugInfoManager.class.getSimpleName();
     private static final int REFRESH_INTERVAL_MS = 1000;
     private static final String NOT_AVAILABLE = "none";
     private final float mTextSize;
