@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.data.FeedbackReasons.FeedbackItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -350,20 +351,37 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
-                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken())
+                    mNotInterestedAction = mMediaItemService.getFeedbackReasonsObserve(mVideo.mediaItem.getFeedbackToken())
                             .subscribe(
-                                    var -> {},
-                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
-                                    () -> {
-                                        if (mCallback != null) {
-                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                    reasons -> {
+                                        if (reasons.getItems() != null) {
+                                            for (FeedbackItem item : reasons.getItems()) {
+                                                mDialogPresenter.appendSingleButton(
+                                                        UiOptionItem.from(item.getTitle(),
+                                                                option -> {
+                                                                    RxHelper.execute(mMediaItemService.markAsNotInterestedObserve(item.getToken()));
+                                                                    removeSuggestedItemAndClose();
+                                                                }
+                                                        )
+                                                );
+                                            }
+                                            mDialogPresenter.showDialog(reasons.getTitle());
                                         } else {
-                                            MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
+                                            removeSuggestedItemAndClose();
                                         }
-                                    }
+                                    },
+                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage())
                             );
-                    mDialogPresenter.closeDialog();
                 }));
+    }
+
+    private void removeSuggestedItemAndClose() {
+        if (mCallback != null) {
+            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
+        }
+        mDialogPresenter.closeDialog();
     }
 
     private void appendNotRecommendChannelButton() {
