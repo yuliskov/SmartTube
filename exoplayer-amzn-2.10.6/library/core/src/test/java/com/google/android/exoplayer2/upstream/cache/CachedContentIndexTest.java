@@ -237,38 +237,39 @@ public class CachedContentIndexTest {
     assertThat(file1.length()).isEqualTo(file2.length());
     // Assert file content is different
     FileInputStream fis1 = new FileInputStream(file1);
-    FileInputStream fis2 = new FileInputStream(file2);
-    for (int b; (b = fis1.read()) == fis2.read(); ) {
-      assertThat(b != -1).isTrue();
+    try (FileInputStream fis2 = new FileInputStream(file2)) {
+        for (int b; (b = fis1.read()) == fis2.read(); ) {
+          assertThat(b != -1).isTrue();
+        }
+
+        boolean threw = false;
+        try {
+          assertStoredAndLoadedEqual(newLegacyInstance(key), newLegacyInstance(key2));
+        } catch (AssertionError e) {
+          threw = true;
+        }
+        assertWithMessage("Encrypted index file can not be read with different encryption key")
+            .that(threw)
+            .isTrue();
+
+        try {
+          assertStoredAndLoadedEqual(newLegacyInstance(key), newLegacyInstance());
+        } catch (AssertionError e) {
+          threw = true;
+        }
+        assertWithMessage("Encrypted index file can not be read without encryption key")
+            .that(threw)
+            .isTrue();
+
+        // Non encrypted index file can be read even when encryption key provided.
+        assertStoredAndLoadedEqual(newLegacyInstance(), newLegacyInstance(key));
+
+        // Test multiple store() calls
+        CachedContentIndex index = newLegacyInstance(key);
+        index.getOrAdd("key3");
+        index.store();
+        assertStoredAndLoadedEqual(index, newLegacyInstance(key));
     }
-
-    boolean threw = false;
-    try {
-      assertStoredAndLoadedEqual(newLegacyInstance(key), newLegacyInstance(key2));
-    } catch (AssertionError e) {
-      threw = true;
-    }
-    assertWithMessage("Encrypted index file can not be read with different encryption key")
-        .that(threw)
-        .isTrue();
-
-    try {
-      assertStoredAndLoadedEqual(newLegacyInstance(key), newLegacyInstance());
-    } catch (AssertionError e) {
-      threw = true;
-    }
-    assertWithMessage("Encrypted index file can not be read without encryption key")
-        .that(threw)
-        .isTrue();
-
-    // Non encrypted index file can be read even when encryption key provided.
-    assertStoredAndLoadedEqual(newLegacyInstance(), newLegacyInstance(key));
-
-    // Test multiple store() calls
-    CachedContentIndex index = newLegacyInstance(key);
-    index.getOrAdd("key3");
-    index.store();
-    assertStoredAndLoadedEqual(index, newLegacyInstance(key));
   }
 
   @Test
