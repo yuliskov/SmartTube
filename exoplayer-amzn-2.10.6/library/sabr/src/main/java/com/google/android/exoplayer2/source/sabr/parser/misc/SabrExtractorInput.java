@@ -31,7 +31,8 @@ public final class SabrExtractorInput implements ExtractorInput {
         }
 
         if (this.input != null) {
-            throw new IllegalStateException("The input should be disposed before initializing");
+            //throw new IllegalStateException("The input should be disposed before initializing");
+            Log.e(TAG, "User doing seek? The input should be disposed before initializing");
         }
 
         this.input = input;
@@ -43,7 +44,8 @@ public final class SabrExtractorInput implements ExtractorInput {
     public void dispose() {
         if (data != null) {
             if (getAdvance() != data.contentLength) {
-                throw new IllegalStateException("The SABR read isn't finished yet");
+                //throw new IllegalStateException("The SABR read isn't finished yet");
+                Log.e(TAG, "User doing seek? The SABR read isn't finished yet");
             }
         }
 

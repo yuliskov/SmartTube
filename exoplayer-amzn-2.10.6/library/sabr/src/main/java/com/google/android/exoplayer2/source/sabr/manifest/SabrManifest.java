@@ -189,6 +189,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+        return createVideoPlaybackAbrRequest(trackType, isInit, C.TIME_UNSET);
+    }
+
+    public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit, long seekTimeUs) {
         SabrStream activeStream = sabrStreams.get(trackType);
 
         if (activeStream == null) {
@@ -203,7 +207,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
         FormatId formatId = getFormatSelector(trackType).getSelectedFormatId();
-        long startTimeMs = isInit ? 0 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
+        long startTimeMs = isInit ? 0 : seekTimeUs != C.TIME_UNSET
+                ? seekTimeUs / 1_000 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
 
         ClientAbrState.Builder clientAbrStateBuilder = ClientAbrState.newBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
