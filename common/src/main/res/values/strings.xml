@@ -760,6 +760,9 @@
     <string name="remote_api_port">Port</string>
     <string name="remote_api_device_name">Device Name</string>
     <string name="remote_api_code_expires">Code expires in %1$d seconds</string>
+    <string name="remote_api_allow_all">Allow all local connections (no pairing)</string>
+    <string name="remote_api_restart_port">Restart app to apply port changes</string>
+    <string name="remote_api_debug">Home Theater Debug</string>
     <string name="comments_disabled">Comments are disabled for this video</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>

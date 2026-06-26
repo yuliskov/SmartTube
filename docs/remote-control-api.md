@@ -11,7 +11,7 @@
 2. [Service Discovery (UDP Broadcast)](#2-service-discovery-udp-broadcast)
 3. [Authentication & Pairing](#3-authentication--pairing)
 4. [REST API Endpoints](#4-rest-api-endpoints)
-5. [WebSocket — Real-time Updates](#411-websocket--real-time-state-updates)
+5. [WebSocket — Real-time Updates](#412-websocket--real-time-state-updates)
 6. [Data Models](#5-data-models)
 7. [Chrome Extension Spec](#6-chrome-extension-spec)
 8. [Android Implementation Plan](#7-android-implementation-plan)
@@ -204,7 +204,9 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | `POST` | `/api/player/previous` | Yes | — | Previous track |
 | `POST` | `/api/player/stop` | Yes | — | Close player |
 | `POST` | `/api/player/reload` | Yes | — | Reload source |
-| `POST` | `/api/player/pip` | Yes | — | Enter Picture-in-Picture mode (no-op if already in PIP; there is no programmatic "exit PIP") |
+| `GET` | `/api/player/pip` | Yes | — | Get Picture-in-Picture status → `{ "active": false }` |
+| `POST` | `/api/player/pip/toggle` | Yes | — | Toggle Picture-in-Picture: enters PIP from fullscreen, exits (re-expands to fullscreen) when already in PIP |
+| `POST` | `/api/player/pip` | Yes | — | Back-compat alias of `/api/player/pip/toggle` |
 
 **Standard response:** `{ "ok": true }`  
 **Seek response:** `{ "ok": true, "position_ms": 60000 }`
@@ -221,8 +223,11 @@ A client discovers the current mode from `GET /api/system/ping` → `pairing_req
 | `PUT` | `/api/player/pitch` | Yes | `{"pitch":1.0}` | Set pitch |
 | `GET` | `/api/player/mute` | Yes | — | Get mute state |
 | `POST` | `/api/player/mute/toggle` | Yes | — | Toggle mute/unmute |
-| `GET` | `/api/player/subtitle` | Yes | — | Get subtitle state |
-| `POST` | `/api/player/subtitle/toggle` | Yes | — | Toggle subtitles on/off |
+| `GET` | `/api/player/subtitle` | Yes | — | Get subtitle (closed caption) state → `{ "enabled": true }` |
+| `PUT` | `/api/player/subtitle` | Yes | `{"enabled":true}` | Enable/disable subtitles (closed captions) deterministically |
+| `POST` | `/api/player/subtitle/toggle` | Yes | — | Toggle subtitles (closed captions) on/off |
+
+> **Subtitles = closed captions.** These three endpoints control the same on-screen captions; "subtitle" is just the player's term. Use `PUT` to set a known on/off state, or `POST .../toggle` to flip the current one.
 
 ### 4.6 Track Selection
 
@@ -313,7 +318,7 @@ If `playlist_id` is omitted but the `url` carries a `list=` query parameter (e.g
 ]
 ```
 
-### 4.9 Home Theater Control
+### 4.10 Home Theater Control
 
 Control the TV's volume, mute, and power. HDMI CEC features (output switching, subwoofer/rear levels, sound mode, immersive AE) should be implemented by the Chrome extension or an ADB bridge — see [ADB Commands for CEC](#adb-commands-for-cec-operations).
 
@@ -471,14 +476,14 @@ Chrome Extension ──ADB──► cmd hdmi_control (CEC features)
 
 The extension connects to the same REST API for player controls and volume, and runs ADB commands for HDMI CEC features.
 
-### 4.10 System Control
+### 4.11 System Control
 
 | Method | Endpoint | Auth | Body/Params | Description |
 |--------|----------|------|-------------|-------------|
 | `GET` | `/api/system/dpad` | Yes | `?key=up` | D-pad (up/down/left/right/enter/back) |
 | `POST` | `/api/system/voice` | Yes | `{"action":"start"}` | Voice search |
 
-### 4.10 WebSocket — Real-time State Updates
+### 4.12 WebSocket — Real-time State Updates
 
 **URL:** `ws://<TV_IP>:8497/ws?token=<auth_token>`
 
@@ -575,7 +580,7 @@ Send JSON commands over the WebSocket:
 | `shuffle_queue` | `{"action":"shuffle_queue"}` | Shuffle the queue (keeps current item) |
 | `move_queue_item` | `{"action":"move_queue_item","from":2,"to":0}` | Move a queue item (bounds-checked; ignored if `from`/`to` missing) |
 | `queue_playlist` | `{"action":"queue_playlist","playlist_id":"PLxxx","shuffle":false}` | Bulk-add a playlist to the queue. Accepts `playlist_id` or `playlist_url`, optional `shuffle`. Caps at 500 items / 20 pages; starts playback if idle |
-| `toggle_pip` | `{"action":"toggle_pip"}` | Enter Picture-in-Picture (no-op if already in PIP) |
+| `toggle_pip` | `{"action":"toggle_pip"}` | Toggle Picture-in-Picture (enters from fullscreen, exits when already in PIP) |
 | `get_queue` | `{"action":"get_queue"}` | Request queue list |
 | `theater_power_toggle` | `{"action":"theater_power_toggle"}` | Toggle TV power |
 | `theater_get_state` | `{"action":"theater_get_state"}` | Request theater state |

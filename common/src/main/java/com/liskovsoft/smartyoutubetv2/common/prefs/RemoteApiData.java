@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.misc.remoteapi.RemoteApiConstants;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class RemoteApiData extends DataChangeBase {
     private static final String REMOTE_API_DATA = "remote_api_data";
     private static final String DEVICE_NAME_DEFAULT = "Android TV";
-    private static final int DEFAULT_PORT = 8497;
+    private static final int DEFAULT_PORT = RemoteApiConstants.DEFAULT_PORT;
     private static final String TOKEN_SEPARATOR = ";;";
 
     @SuppressLint("StaticFieldLeak")
@@ -137,12 +138,34 @@ public class RemoteApiData extends DataChangeBase {
 
         for (String entry : entries) {
             String[] parts = entry.split(":");
-            if (parts.length >= 1 && parts[0].equals(token)) {
+            if (parts.length >= 1 && constantTimeEquals(parts[0], token)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Constant-time string comparison: avoids leaking a token/code's length or matching
+     * prefix through response timing (a brute-force aid on the LAN). Returns false for
+     * any null input.
+     */
+    private static boolean constantTimeEquals(String a, String b) {
+        if (a == null || b == null) {
+            return false;
+        }
+
+        byte[] ab = a.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        byte[] bb = b.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+
+        int result = ab.length ^ bb.length;
+        for (int i = 0; i < ab.length; i++) {
+            byte other = i < bb.length ? bb[i] : 0;
+            result |= ab[i] ^ other;
+        }
+
+        return result == 0;
     }
 
     public List<String[]> getPairedDevices() {
@@ -191,7 +214,22 @@ public class RemoteApiData extends DataChangeBase {
             return false;
         }
 
-        return mPairingCode.equals(code);
+        return constantTimeEquals(mPairingCode, code);
+    }
+
+    /**
+     * Atomically validate and consume the active pairing code: returns true at most
+     * once for a given code, clearing it so a concurrent verify can't reuse it.
+     */
+    public synchronized boolean consumePairingCode(String code) {
+        if (!isPairingCodeValid(code)) {
+            return false;
+        }
+
+        mPairingCode = null;
+        mPairingCodeExpiryMs = 0;
+        persistState();
+        return true;
     }
 
     private void restoreState() {

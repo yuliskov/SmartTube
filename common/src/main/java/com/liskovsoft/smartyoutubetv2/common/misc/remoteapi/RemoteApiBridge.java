@@ -6,20 +6,27 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 
+import com.liskovsoft.mediaserviceinterfaces.ContentService;
+import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.ChapterItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +43,10 @@ public class RemoteApiBridge {
     // can't tie up a NanoHTTPD worker thread indefinitely or flood the queue.
     private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int MAX_TOTAL_PLAYLIST_ITEMS = 500;
+
+    // The player exposes suggestions as indexed groups with no count; scan until the
+    // first null group. Bound the scan so a misbehaving provider can't spin forever.
+    private static final int MAX_SUGGESTION_GROUPS = 50;
 
     // Mutated and read from NanoHTTPD request/WebSocket threads; volatile guarantees visibility.
     private static volatile int sZoomPercents = 100;
@@ -66,6 +77,23 @@ public class RemoteApiBridge {
 
     private static PlaybackView getPlayer() {
         return sPresenter != null ? sPresenter.getPlayer() : null;
+    }
+
+    @FunctionalInterface
+    private interface PlayerAction {
+        void run(PlaybackView player);
+    }
+
+    // Most mutating commands share the same shape: hop to the main thread, grab the
+    // player, and no-op if it's gone. This bundles that guard so call sites read as
+    // just their payload. (getPlayer() != null also implies sPresenter != null.)
+    private static void withPlayerOnMain(PlayerAction action) {
+        runOnMainThread(() -> {
+            PlaybackView player = getPlayer();
+            if (player != null) {
+                action.run(player);
+            }
+        });
     }
 
     /// Prefer the background image (high-res) over the card image (small grid thumb).
@@ -108,14 +136,10 @@ public class RemoteApiBridge {
 
             Video video = sPresenter.getVideo();
             if (video != null) {
-                JSONObject videoJson = new JSONObject();
-                videoJson.put("video_id", video.videoId);
-                videoJson.put("title", video.getTitle());
-                videoJson.put("author", video.getAuthor());
+                JSONObject videoJson = videoToJson(video);
                 videoJson.put("channel_id", video.channelId);
-                videoJson.put("thumbnail_url", bestThumbnail(video));
+                // The player knows the real, resolved duration; prefer it over the card's.
                 videoJson.put("duration_ms", player.getDurationMs());
-                videoJson.put("is_live", video.isLive);
                 videoJson.put("is_shorts", video.isShorts);
                 videoJson.put("playlist_id", video.getPlaylistId());
                 videoJson.put("playlist_index", video.playlistIndex);
@@ -128,14 +152,7 @@ public class RemoteApiBridge {
             state.put("pitch", player.getPitch());
             state.put("volume", getVolume());
 
-            JSONObject selectedTracks = new JSONObject();
-            FormatItem videoFormat = player.getVideoFormat();
-            FormatItem audioFormat = player.getAudioFormat();
-            FormatItem subtitleFormat = player.getSubtitleFormat();
-            selectedTracks.put("video", formatToJsonObject(videoFormat));
-            selectedTracks.put("audio", formatToJsonObject(audioFormat));
-            selectedTracks.put("subtitle", formatToJsonObject(subtitleFormat));
-            state.put("selected_tracks", selectedTracks);
+            state.put("selected_tracks", selectedTracksJson(player));
 
             JSONObject videoTransform = new JSONObject();
             videoTransform.put("resize_mode", player.getResizeMode());
@@ -144,15 +161,7 @@ public class RemoteApiBridge {
             videoTransform.put("flip_enabled", sFlipEnabled);
             state.put("video_transform", videoTransform);
 
-            int suggestionsCount = 0;
-            for (int i = 0; i < 50; i++) {
-                VideoGroup group = player.getSuggestionsByIndex(i);
-                if (group == null) {
-                    break;
-                }
-                suggestionsCount += group.getSize();
-            }
-            state.put("suggestions_count", suggestionsCount);
+            state.put("suggestions_count", countSuggestions(player));
 
             Playlist playlist = Playlist.instance();
             state.put("queue_size", playlist.getAll().size());
@@ -168,45 +177,25 @@ public class RemoteApiBridge {
     // ---- Transport Controls ----
 
     public static void handlePlay() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setPlayWhenReady(true);
-            }
-        });
+        withPlayerOnMain(player -> player.setPlayWhenReady(true));
     }
 
     public static void handlePause() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setPlayWhenReady(false);
-            }
-        });
+        withPlayerOnMain(player -> player.setPlayWhenReady(false));
     }
 
     public static void handleToggle() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setPlayWhenReady(!player.getPlayWhenReady());
-            }
-        });
+        withPlayerOnMain(player -> player.setPlayWhenReady(!player.getPlayWhenReady()));
     }
 
     public static JSONObject handleSeek(long positionMs) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setPositionMs(positionMs);
-            }
-        });
+        withPlayerOnMain(player -> player.setPositionMs(positionMs));
         JSONObject result = new JSONObject();
         try {
             result.put("ok", true);
             result.put("position_ms", positionMs);
         } catch (JSONException e) {
-            // won't happen
+            // JSON construction over constant keys can't fail.
         }
         return result;
     }
@@ -230,13 +219,10 @@ public class RemoteApiBridge {
         if (skipDebounced()) {
             return;
         }
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null && sPresenter != null) {
-                VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
-                if (controller != null) {
-                    controller.loadNext();
-                }
+        withPlayerOnMain(player -> {
+            VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
+            if (controller != null) {
+                controller.loadNext();
             }
         });
     }
@@ -245,33 +231,20 @@ public class RemoteApiBridge {
         if (skipDebounced()) {
             return;
         }
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null && sPresenter != null) {
-                VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
-                if (controller != null) {
-                    controller.loadPrevious();
-                }
+        withPlayerOnMain(player -> {
+            VideoLoaderController controller = sPresenter.getController(VideoLoaderController.class);
+            if (controller != null) {
+                controller.loadPrevious();
             }
         });
     }
 
     public static void handleStop() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.finish();
-            }
-        });
+        withPlayerOnMain(PlaybackView::finish);
     }
 
     public static void handleReload() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.reloadPlayback();
-            }
-        });
+        withPlayerOnMain(PlaybackView::reloadPlayback);
     }
 
     // ---- Speed / Volume / Pitch ----
@@ -282,12 +255,7 @@ public class RemoteApiBridge {
     }
 
     public static void setSpeed(float speed) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setSpeed(speed);
-            }
-        });
+        withPlayerOnMain(player -> player.setSpeed(speed));
     }
 
     public static float getVolume() {
@@ -296,8 +264,7 @@ public class RemoteApiBridge {
         // normalization on every load, so reading the effective value back and
         // persisting it again ratchets the volume lower on each video change.
         if (sPresenter != null && sPresenter.getContext() != null) {
-            return com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData
-                    .instance(sPresenter.getContext()).getPlayerVolume();
+            return PlayerData.instance(sPresenter.getContext()).getPlayerVolume();
         }
         PlaybackView player = getPlayer();
         return player != null ? player.getVolume() : 1.0f;
@@ -312,17 +279,18 @@ public class RemoteApiBridge {
         // Clamp to 0..1 (the API contract). Persisting a value > 1.0 arms the
         // VolumeBooster (LoudnessEnhancer) on the next player init — its built-in
         // limiter audibly compresses/"sidechains" the output. 1.0 is the safe max.
-        float clamped = Math.max(0f, Math.min(normalized, 1f));
+        // Math.max/min also coerce a non-finite (NaN/Infinity) input to a sane bound.
+        float clamped = Float.isNaN(normalized) ? 1f : Math.max(0f, Math.min(normalized, 1f));
+        // Persist independently of the player: VideoStateController re-applies
+        // PlayerData's volume on every video load, so without this the API value
+        // reverts on the next video — even if no player is attached right now.
         runOnMainThread(() -> {
             PlaybackView player = getPlayer();
             if (player != null) {
                 player.setVolume(clamped);
             }
-            // Persist it: VideoStateController re-applies PlayerData's volume on every
-            // video load, so without this the API value reverts on the next video.
             if (sPresenter != null && sPresenter.getContext() != null) {
-                com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData
-                        .instance(sPresenter.getContext()).setPlayerVolume(clamped);
+                PlayerData.instance(sPresenter.getContext()).setPlayerVolume(clamped);
             }
         });
     }
@@ -333,44 +301,24 @@ public class RemoteApiBridge {
     }
 
     public static void setPitch(float pitch) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setPitch(pitch);
-            }
-        });
+        withPlayerOnMain(player -> player.setPitch(pitch));
     }
 
     // ---- Format Listing ----
 
     public static JSONArray getVideoFormats() {
         PlaybackView player = getPlayer();
-        if (player == null) {
-            return new JSONArray();
-        }
-
-        List<FormatItem> formats = player.getVideoFormats();
-        return formatListToJson(formats);
+        return player != null ? formatListToJson(player.getVideoFormats()) : new JSONArray();
     }
 
     public static JSONArray getAudioFormats() {
         PlaybackView player = getPlayer();
-        if (player == null) {
-            return new JSONArray();
-        }
-
-        List<FormatItem> formats = player.getAudioFormats();
-        return formatListToJson(formats);
+        return player != null ? formatListToJson(player.getAudioFormats()) : new JSONArray();
     }
 
     public static JSONArray getSubtitleFormats() {
         PlaybackView player = getPlayer();
-        if (player == null) {
-            return new JSONArray();
-        }
-
-        List<FormatItem> formats = player.getSubtitleFormats();
-        return formatListToJson(formats);
+        return player != null ? formatListToJson(player.getSubtitleFormats()) : new JSONArray();
     }
 
     public static JSONObject getSelectedTracks() {
@@ -378,65 +326,50 @@ public class RemoteApiBridge {
         if (player == null) {
             return new JSONObject();
         }
-
         try {
-            JSONObject result = new JSONObject();
-            result.put("video", formatToJsonObject(player.getVideoFormat()));
-            result.put("audio", formatToJsonObject(player.getAudioFormat()));
-            result.put("subtitle", formatToJsonObject(player.getSubtitleFormat()));
-            return result;
+            return selectedTracksJson(player);
         } catch (JSONException e) {
             return new JSONObject();
         }
     }
 
+    private static JSONObject selectedTracksJson(PlaybackView player) throws JSONException {
+        JSONObject result = new JSONObject();
+        result.put("video", formatToJsonObject(player.getVideoFormat()));
+        result.put("audio", formatToJsonObject(player.getAudioFormat()));
+        result.put("subtitle", formatToJsonObject(player.getSubtitleFormat()));
+        return result;
+    }
+
     // ---- Format Selection ----
 
     public static void setVideoFormat(String formatId) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null || formatId == null) {
-                return;
-            }
-
-            FormatItem item = findFormatById(player.getVideoFormats(), formatId);
-            if (item != null) {
-                player.setFormat(item);
-            }
-        });
+        withPlayerOnMain(player -> setFormatById(player, player.getVideoFormats(), formatId));
     }
 
     public static void setAudioFormat(String formatId) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null || formatId == null) {
-                return;
-            }
-
-            FormatItem item = findFormatById(player.getAudioFormats(), formatId);
-            if (item != null) {
-                player.setFormat(item);
-            }
-        });
+        withPlayerOnMain(player -> setFormatById(player, player.getAudioFormats(), formatId));
     }
 
     public static void setSubtitleFormat(String formatId) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null) {
-                return;
-            }
-
+        withPlayerOnMain(player -> {
             if (formatId == null || formatId.isEmpty()) {
                 player.setFormat(FormatItem.SUBTITLE_NONE);
                 return;
             }
-
-            FormatItem item = findFormatById(player.getSubtitleFormats(), formatId);
-            if (item != null) {
-                player.setFormat(item);
-            }
+            setFormatById(player, player.getSubtitleFormats(), formatId);
         });
+    }
+
+    // Find the format matching formatId in the given list and select it; no-op if absent.
+    private static void setFormatById(PlaybackView player, List<FormatItem> formats, String formatId) {
+        if (formatId == null) {
+            return;
+        }
+        FormatItem item = findFormatById(formats, formatId);
+        if (item != null) {
+            player.setFormat(item);
+        }
     }
 
     // ---- Video Transform ----
@@ -447,12 +380,7 @@ public class RemoteApiBridge {
     }
 
     public static void setResizeMode(int mode) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                player.setResizeMode(mode);
-            }
-        });
+        withPlayerOnMain(player -> player.setResizeMode(mode));
     }
 
     public static int getZoom() {
@@ -460,6 +388,7 @@ public class RemoteApiBridge {
     }
 
     public static void setZoom(int zoom) {
+        // Track the value even when no player is attached so getZoom() stays accurate.
         runOnMainThread(() -> {
             sZoomPercents = zoom;
             PlaybackView player = getPlayer();
@@ -502,28 +431,12 @@ public class RemoteApiBridge {
         if (server != null) {
             try {
                 JSONObject data = new JSONObject();
-                data.put("suggestions_count", getSuggestionsCount());
+                data.put("suggestions_count", countSuggestions(getPlayer()));
                 server.broadcastEvent("suggestions_updated", data);
             } catch (JSONException e) {
-                // won't happen
+                // JSON construction over constant keys can't fail.
             }
         }
-    }
-
-    private static int getSuggestionsCount() {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return 0;
-        }
-        int count = 0;
-        for (int i = 0; i < 50; i++) {
-            VideoGroup group = player.getSuggestionsByIndex(i);
-            if (group == null) {
-                break;
-            }
-            count += group.getSize();
-        }
-        return count;
     }
 
     // ---- Content ----
@@ -562,37 +475,15 @@ public class RemoteApiBridge {
     }
 
     public static JSONArray getSuggestions() {
-        PlaybackView player = getPlayer();
-        if (player == null) {
-            return new JSONArray();
-        }
-
         JSONArray result = new JSONArray();
-
-        for (int i = 0; i < 50; i++) {
-            VideoGroup group = player.getSuggestionsByIndex(i);
-            if (group == null) {
-                break;
+        forEachSuggestion(getPlayer(), video -> {
+            try {
+                result.put(videoToJson(video));
+            } catch (JSONException e) {
+                // skip this video
             }
-
-            for (Video video : group.getVideos()) {
-                if (video.hasVideo()) {
-                    try {
-                        JSONObject videoJson = new JSONObject();
-                        videoJson.put("video_id", video.videoId);
-                        videoJson.put("title", video.getTitle());
-                        videoJson.put("author", video.getAuthor());
-                        videoJson.put("thumbnail_url", bestThumbnail(video));
-                        videoJson.put("duration_ms", video.getDurationMs());
-                        videoJson.put("is_live", video.isLive);
-                        result.put(videoJson);
-                    } catch (JSONException e) {
-                        // skip this video
-                    }
-                }
-            }
-        }
-
+            return false;
+        });
         return result;
     }
 
@@ -673,25 +564,13 @@ public class RemoteApiBridge {
 
         JSONArray result = new JSONArray();
         try {
-            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group =
-                    com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
-                            .getContentService().getRecommended();
+            MediaGroup group = YouTubeServiceManager.instance().getContentService().getRecommended();
             if (group != null && group.getMediaItems() != null) {
-                for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : group.getMediaItems()) {
+                for (MediaItem item : group.getMediaItems()) {
                     if (item.getVideoId() == null) {
                         continue;
                     }
-                    JSONObject json = new JSONObject();
-                    json.put("video_id", item.getVideoId());
-                    json.put("title", item.getTitle());
-                    json.put("author", item.getAuthor() != null ? item.getAuthor()
-                            : (item.getSecondTitle() != null ? item.getSecondTitle().toString() : null));
-                    String thumb = item.getBackgroundImageUrl() != null
-                            ? item.getBackgroundImageUrl() : item.getCardImageUrl();
-                    json.put("thumbnail_url", thumb);
-                    json.put("duration_ms", item.getDurationMs());
-                    json.put("is_live", item.isLive());
-                    result.put(json);
+                    result.put(mediaItemToJson(item));
                 }
             }
         } catch (Exception e) {
@@ -719,79 +598,100 @@ public class RemoteApiBridge {
                 return;
             }
 
-            PlaybackView player = getPlayer();
-            if (player != null) {
-                for (int i = 0; i < 50; i++) {
-                    VideoGroup group = player.getSuggestionsByIndex(i);
-                    if (group == null) {
-                        break;
-                    }
-                    for (Video video : group.getVideos()) {
-                        if (video.hasVideo() && videoId.equals(video.videoId)) {
-                            video.pendingPosMs = 0;
-                            sPresenter.openVideo(video);
-                            return;
-                        }
-                    }
+            boolean[] found = {false};
+            forEachSuggestion(getPlayer(), video -> {
+                if (videoId.equals(video.videoId)) {
+                    video.pendingPosMs = 0;
+                    sPresenter.openVideo(video);
+                    found[0] = true;
+                    return true;
                 }
-            }
+                return false;
+            });
 
-            Video video = Video.from(videoId);
-            video.isRemote = true;
-            sPresenter.openVideo(video);
+            if (!found[0]) {
+                Video video = Video.from(videoId);
+                video.isRemote = true;
+                sPresenter.openVideo(video);
+            }
         });
     }
 
     public static void playSuggestion(int index) {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null) {
-                return;
-            }
-
-            int currentIndex = 0;
-
-            for (int i = 0; i < 50; i++) {
-                VideoGroup group = player.getSuggestionsByIndex(i);
-                if (group == null) {
-                    break;
+        withPlayerOnMain(player -> {
+            int[] currentIndex = {0};
+            forEachSuggestion(player, video -> {
+                if (currentIndex[0] == index) {
+                    video.pendingPosMs = 0;
+                    sPresenter.openVideo(video);
+                    return true;
                 }
-
-                for (Video video : group.getVideos()) {
-                    if (video.hasVideo()) {
-                        if (currentIndex == index) {
-                            video.pendingPosMs = 0;
-                            sPresenter.openVideo(video);
-                            return;
-                        }
-                        currentIndex++;
-                    }
-                }
-            }
+                currentIndex[0]++;
+                return false;
+            });
         });
+    }
+
+    @FunctionalInterface
+    private interface SuggestionVisitor {
+        /** Return true to stop iterating. */
+        boolean visit(Video video);
+    }
+
+    // Walk every playable suggestion video across all groups for the given player,
+    // hiding the indexed-group scan and the null-group termination. No-op if player
+    // is null. Stops early once the visitor returns true.
+    private static void forEachSuggestion(PlaybackView player, SuggestionVisitor visitor) {
+        if (player == null) {
+            return;
+        }
+        for (int i = 0; i < MAX_SUGGESTION_GROUPS; i++) {
+            VideoGroup group = player.getSuggestionsByIndex(i);
+            if (group == null) {
+                break;
+            }
+            for (Video video : group.getVideos()) {
+                if (video.hasVideo() && visitor.visit(video)) {
+                    return;
+                }
+            }
+        }
+    }
+
+    // Total number of items across all suggestion groups (counts group sizes, not
+    // filtered by hasVideo — mirrors what the player's grid shows).
+    private static int countSuggestions(PlaybackView player) {
+        if (player == null) {
+            return 0;
+        }
+        int count = 0;
+        for (int i = 0; i < MAX_SUGGESTION_GROUPS; i++) {
+            VideoGroup group = player.getSuggestionsByIndex(i);
+            if (group == null) {
+                break;
+            }
+            count += group.getSize();
+        }
+        return count;
     }
 
     // ---- Subtitles ----
 
     public static void toggleSubtitles() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null) {
-                return;
-            }
+        withPlayerOnMain(player -> player.showSubtitles(!isSubtitleButtonOn(player)));
+    }
 
-            boolean currentlyShown = player.getButtonState(
-                    com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
-                    == PlayerUI.BUTTON_ON;
-            player.showSubtitles(!currentlyShown);
-        });
+    /** Deterministically enable or disable subtitles (closed captions). */
+    public static void setSubtitlesEnabled(boolean enabled) {
+        withPlayerOnMain(player -> player.showSubtitles(enabled));
     }
 
     public static boolean areSubtitlesOn() {
         PlaybackView player = getPlayer();
-        if (player == null) {
-            return false;
-        }
+        return player != null && isSubtitleButtonOn(player);
+    }
+
+    private static boolean isSubtitleButtonOn(PlaybackView player) {
         return player.getButtonState(
                 com.liskovsoft.smartyoutubetv2.common.R.id.lb_control_closed_captioning)
                 == PlayerUI.BUTTON_ON;
@@ -800,12 +700,7 @@ public class RemoteApiBridge {
     // ---- Mute / Unmute ----
 
     public static void toggleMute() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null) {
-                return;
-            }
-
+        withPlayerOnMain(player -> {
             boolean isMuted = player.getVolume() == 0f;
             if (isMuted && sPreviousVolume > 0f) {
                 player.setVolume(sPreviousVolume);
@@ -819,6 +714,36 @@ public class RemoteApiBridge {
     public static boolean isMuted() {
         PlaybackView player = getPlayer();
         return player != null && player.getVolume() == 0f;
+    }
+
+    // ---- Picture-in-Picture ----
+
+    /**
+     * Toggle Picture-in-Picture: enter if the player is in fullscreen, exit (back to
+     * fullscreen) if it's already in PIP. Entering mirrors PlayerUIController.onPipClicked();
+     * exiting unblocks the engine and brings the player view back to the foreground via
+     * ViewManager.movePlayerToForeground() — the app's own "surface the player" path,
+     * which expands it out of the PIP window.
+     */
+    public static void togglePip() {
+        withPlayerOnMain(player -> {
+            if (player.isInPIPMode()) {
+                player.blockEngine(false);
+                Context context = sPresenter.getContext();
+                if (context != null) {
+                    ViewManager.instance(context).movePlayerToForeground();
+                }
+            } else {
+                player.showOverlay(false);
+                player.blockEngine(true);
+                player.finish();
+            }
+        });
+    }
+
+    public static boolean isPipActive() {
+        PlaybackView player = getPlayer();
+        return player != null && player.isInPIPMode();
     }
 
     // ---- Search ----
@@ -851,32 +776,20 @@ public class RemoteApiBridge {
         }
 
         try {
-            List<com.liskovsoft.mediaserviceinterfaces.data.MediaGroup> groups =
-                    com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
-                            .getContentService().getSearch(query);
+            List<MediaGroup> groups = YouTubeServiceManager.instance().getContentService().getSearch(query);
             if (groups != null) {
-                for (com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group : groups) {
+                for (MediaGroup group : groups) {
                     if (group == null || group.getMediaItems() == null) {
                         continue;
                     }
-                    for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : group.getMediaItems()) {
+                    for (MediaItem item : group.getMediaItems()) {
                         if (result.length() >= limit) {
                             return result;
                         }
                         if (item.getVideoId() == null) {
                             continue;
                         }
-                        JSONObject json = new JSONObject();
-                        json.put("video_id", item.getVideoId());
-                        json.put("title", item.getTitle());
-                        json.put("author", item.getAuthor() != null ? item.getAuthor()
-                                : (item.getSecondTitle() != null ? item.getSecondTitle().toString() : null));
-                        String thumb = item.getBackgroundImageUrl() != null
-                                ? item.getBackgroundImageUrl() : item.getCardImageUrl();
-                        json.put("thumbnail_url", thumb);
-                        json.put("duration_ms", item.getDurationMs());
-                        json.put("is_live", item.isLive());
-                        result.put(json);
+                        result.put(mediaItemToJson(item));
                     }
                 }
             }
@@ -898,14 +811,8 @@ public class RemoteApiBridge {
         for (int i = 0; i < all.size(); i++) {
             Video video = all.get(i);
             try {
-                JSONObject item = new JSONObject();
+                JSONObject item = videoToJson(video);
                 item.put("index", i);
-                item.put("video_id", video.videoId);
-                item.put("title", video.getTitle());
-                item.put("author", video.getAuthor());
-                item.put("thumbnail_url", bestThumbnail(video));
-                item.put("duration_ms", video.getDurationMs());
-                item.put("is_live", video.isLive);
                 item.put("is_current", video.equals(current));
                 result.put(item);
             } catch (JSONException e) {
@@ -943,8 +850,7 @@ public class RemoteApiBridge {
                 return;
             }
             Playlist playlist = Playlist.instance();
-            List<Video> all = playlist.getAll();
-            for (Video video : all) {
+            for (Video video : playlist.getAll()) {
                 if (videoId.equals(video.videoId)) {
                     playlist.remove(video);
                     break;
@@ -954,21 +860,15 @@ public class RemoteApiBridge {
     }
 
     public static void clearQueue() {
-        runOnMainThread(() -> {
-            Playlist.instance().clear();
-        });
+        runOnMainThread(() -> Playlist.instance().clear());
     }
 
     public static void shuffleQueue() {
-        runOnMainThread(() -> {
-            Playlist.instance().shuffle();
-        });
+        runOnMainThread(() -> Playlist.instance().shuffle());
     }
 
     public static void moveQueueItem(int from, int to) {
-        runOnMainThread(() -> {
-            Playlist.instance().move(from, to);
-        });
+        runOnMainThread(() -> Playlist.instance().move(from, to));
     }
 
     /**
@@ -984,10 +884,10 @@ public class RemoteApiBridge {
 
         final List<Video> videos = new ArrayList<>();
         try {
-            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup playlistGroup = resolvePlaylistGroup(playlistId);
-            List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> items = loadAllPlaylistItems(playlistGroup);
+            MediaGroup playlistGroup = resolvePlaylistGroup(playlistId);
+            List<MediaItem> items = loadAllPlaylistItems(playlistGroup);
             if (items != null) {
-                for (com.liskovsoft.mediaserviceinterfaces.data.MediaItem item : items) {
+                for (MediaItem item : items) {
                     if (item.getVideoId() == null) {
                         continue;
                     }
@@ -1032,15 +932,14 @@ public class RemoteApiBridge {
      * Uses the blocking MediaItemService.getMetadata(...) overload to stay
      * consistent with getRecommended()'s synchronous worker-thread style.
      */
-    private static com.liskovsoft.mediaserviceinterfaces.data.MediaGroup resolvePlaylistGroup(String playlistId) {
-        com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata metadata =
-                com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance()
-                        .getMediaItemService().getMetadata(null, playlistId, 0, null);
+    private static MediaGroup resolvePlaylistGroup(String playlistId) {
+        MediaItemMetadata metadata = YouTubeServiceManager.instance()
+                .getMediaItemService().getMetadata(null, playlistId, 0, null);
         if (metadata == null || metadata.getSuggestions() == null) {
             return null;
         }
-        for (com.liskovsoft.mediaserviceinterfaces.data.MediaGroup group : metadata.getSuggestions()) {
-            List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> mediaItems = group.getMediaItems();
+        for (MediaGroup group : metadata.getSuggestions()) {
+            List<MediaItem> mediaItems = group.getMediaItems();
             if (mediaItems != null && !mediaItems.isEmpty()) {
                 return group;
             }
@@ -1052,30 +951,28 @@ public class RemoteApiBridge {
      * Page through a playlist's continuations (blocking) up to the configured caps,
      * collecting all of its MediaItems.
      */
-    private static List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> loadAllPlaylistItems(
-            com.liskovsoft.mediaserviceinterfaces.data.MediaGroup playlistGroup) {
+    private static List<MediaItem> loadAllPlaylistItems(MediaGroup playlistGroup) {
         if (playlistGroup == null) {
             return null;
         }
-        List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> allItems = new ArrayList<>();
-        List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> firstItems = playlistGroup.getMediaItems();
+        List<MediaItem> allItems = new ArrayList<>();
+        List<MediaItem> firstItems = playlistGroup.getMediaItems();
         if (firstItems != null) {
             allItems.addAll(firstItems);
         }
-        com.liskovsoft.mediaserviceinterfaces.data.MediaGroup currentGroup = playlistGroup;
-        com.liskovsoft.mediaserviceinterfaces.ContentService contentService =
-                com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance().getContentService();
+        MediaGroup currentGroup = playlistGroup;
+        ContentService contentService = YouTubeServiceManager.instance().getContentService();
         for (int i = 0; i < MAX_PLAYLIST_CONTINUATIONS && allItems.size() < MAX_TOTAL_PLAYLIST_ITEMS; i++) {
             try {
                 String nextPageKey = currentGroup.getNextPageKey();
                 if (nextPageKey == null || nextPageKey.isEmpty()) {
                     break;
                 }
-                com.liskovsoft.mediaserviceinterfaces.data.MediaGroup nextGroup = contentService.continueGroup(currentGroup);
+                MediaGroup nextGroup = contentService.continueGroup(currentGroup);
                 if (nextGroup == null || nextGroup.isEmpty()) {
                     break;
                 }
-                List<com.liskovsoft.mediaserviceinterfaces.data.MediaItem> nextItems = nextGroup.getMediaItems();
+                List<MediaItem> nextItems = nextGroup.getMediaItems();
                 if (nextItems != null) {
                     int remaining = MAX_TOTAL_PLAYLIST_ITEMS - allItems.size();
                     if (nextItems.size() > remaining) {
@@ -1090,24 +987,6 @@ public class RemoteApiBridge {
             }
         }
         return allItems;
-    }
-
-    // ---- Picture-in-Picture ----
-
-    /**
-     * Enter PIP — there's no programmatic "exit", so this only enters (no-op if
-     * already in PIP). Mirrors PlayerUIController.onPipClicked().
-     */
-    public static void togglePip() {
-        runOnMainThread(() -> {
-            PlaybackView player = getPlayer();
-            if (player == null || player.isInPIPMode()) {
-                return;
-            }
-            player.showOverlay(false);
-            player.blockEngine(true);
-            player.finish();
-        });
     }
 
     // ---- System Control ----
@@ -1173,6 +1052,35 @@ public class RemoteApiBridge {
     }
 
     // ---- Helpers ----
+
+    // The fields shared by every video-list endpoint (suggestions, queue, player
+    // state). Callers add their own extras (index/is_current, channel_id, …).
+    private static JSONObject videoToJson(Video video) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("video_id", video.videoId);
+        json.put("title", video.getTitle());
+        json.put("author", video.getAuthor());
+        json.put("thumbnail_url", bestThumbnail(video));
+        json.put("duration_ms", video.getDurationMs());
+        json.put("is_live", video.isLive);
+        return json;
+    }
+
+    // YouTube-API MediaItem → the same wire shape as videoToJson(), used by the
+    // recommended feed and search results. Author falls back to the second title.
+    private static JSONObject mediaItemToJson(MediaItem item) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("video_id", item.getVideoId());
+        json.put("title", item.getTitle());
+        json.put("author", item.getAuthor() != null ? item.getAuthor()
+                : (item.getSecondTitle() != null ? item.getSecondTitle().toString() : null));
+        String thumb = item.getBackgroundImageUrl() != null
+                ? item.getBackgroundImageUrl() : item.getCardImageUrl();
+        json.put("thumbnail_url", thumb);
+        json.put("duration_ms", item.getDurationMs());
+        json.put("is_live", item.isLive());
+        return json;
+    }
 
     private static JSONArray formatListToJson(List<FormatItem> formats) {
         JSONArray array = new JSONArray();

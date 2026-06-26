@@ -76,7 +76,7 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAllowAllSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(
-                "Allow all local connections (no pairing)",
+                getContext().getString(R.string.remote_api_allow_all),
                 optionItem -> mRemoteApiData.setAllowAllConnections(optionItem.isSelected()),
                 mRemoteApiData.isAllowAllConnections()));
     }
@@ -111,7 +111,7 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(String.valueOf(mRemoteApiData.getPort()), option -> {
             mRemoteApiData.setPort(Integer.parseInt(option.getData().toString()));
-            MessageHelpers.showMessage(getContext(), "Restart app to apply port changes");
+            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.remote_api_restart_port));
         }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.remote_api_port), options);
@@ -145,7 +145,7 @@ public class RemoteApiSettingsPresenter extends BasePresenter<Void> {
 
     private void appendDebugButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
-                "Home Theater Debug", option -> {
+                getContext().getString(R.string.remote_api_debug), option -> {
                     try {
                         Intent intent = new Intent();
                         intent.setClassName(getContext(),

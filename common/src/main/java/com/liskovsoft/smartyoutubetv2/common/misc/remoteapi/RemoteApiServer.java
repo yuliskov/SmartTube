@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.misc.remoteapi;
 
 import android.content.Context;
 import android.os.Build;
-import android.provider.Settings;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteApiData;
@@ -28,19 +27,31 @@ import fi.iki.elonen.NanoWSD.WebSocketFrame;
 
 public class RemoteApiServer extends NanoWSD {
     private static final String TAG = RemoteApiServer.class.getSimpleName();
-    private static final int DEFAULT_PORT = 8497;
-    private static final String API_VERSION = "1";
+    private static final String API_VERSION = RemoteApiConstants.API_VERSION;
 
     private static RemoteApiServer sInstance;
 
     private final RemoteApiAuthProvider mAuth;
     private final RemoteApiData mApiData;
     private final Context mContext;
+    // Cached once: querying Build.MODEL / PackageManager on every request is wasteful.
+    private final String mDeviceName;
+    private final String mAppVersion;
     private Thread mUdpThread;
     private volatile DatagramSocket mUdpSocket;
     private volatile boolean mRunning;
     private final CopyOnWriteArrayList<RemoteApiWebSocket> mWebSocketClients = new CopyOnWriteArrayList<>();
     private Thread mBroadcastThread;
+
+    // Routes reachable without a token (discovery + pairing). Everything else goes
+    // through the auth gate before its handler runs.
+    private final Map<String, RouteHandler> mPublicRoutes = new HashMap<>();
+    private final Map<String, RouteHandler> mRoutes = new HashMap<>();
+
+    @FunctionalInterface
+    private interface RouteHandler {
+        Response handle(IHTTPSession session) throws JSONException, IOException;
+    }
 
     public RemoteApiServer(Context context, RemoteApiData apiData) {
         this(context, apiData.getPort(), apiData);
@@ -51,6 +62,9 @@ public class RemoteApiServer extends NanoWSD {
         mContext = context.getApplicationContext();
         mApiData = apiData;
         mAuth = new RemoteApiAuthProvider(apiData);
+        mDeviceName = resolveDeviceName();
+        mAppVersion = resolveAppVersion();
+        registerRoutes();
     }
 
     public static synchronized void startRemoteApi(Context context) {
@@ -233,79 +247,62 @@ public class RemoteApiServer extends NanoWSD {
         mBroadcastThread.start();
     }
 
-    private void pingClients() {
-        byte[] payload = new byte[]{'k', 'a'};
+    @FunctionalInterface
+    private interface ClientSender {
+        void send(RemoteApiWebSocket ws) throws Exception;
+    }
+
+    // Single place that walks the client list, prunes anything closed, and drops a
+    // client if the send throws. broadcast/ping all funnel through here so the
+    // liveness bookkeeping can't drift between them.
+    private void forEachOpenClient(ClientSender sender) {
         for (RemoteApiWebSocket ws : mWebSocketClients) {
-            if (ws.isOpen()) {
-                try {
-                    ws.ping(payload);
-                } catch (IOException e) {
-                    mWebSocketClients.remove(ws);
-                }
-            } else {
+            if (!ws.isOpen()) {
+                mWebSocketClients.remove(ws);
+                continue;
+            }
+            try {
+                sender.send(ws);
+            } catch (Exception e) {
                 mWebSocketClients.remove(ws);
             }
         }
+    }
+
+    private void pingClients() {
+        byte[] payload = new byte[]{'k', 'a'};
+        forEachOpenClient(ws -> ws.ping(payload));
     }
 
     private void broadcastState() {
         if (mWebSocketClients.isEmpty()) {
             return;
         }
-
         JSONObject state = RemoteApiBridge.getPlayerState();
         if (state == null) {
             return;
         }
-
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("type", "state_update");
-            msg.put("data", state);
-        } catch (JSONException e) {
-            return;
-        }
-
-        String payload = msg.toString();
-        for (RemoteApiWebSocket ws : mWebSocketClients) {
-            if (ws.isOpen()) {
-                try {
-                    ws.send(payload);
-                } catch (Exception e) {
-                    Log.e(TAG, "WebSocket send error: %s", e.getMessage());
-                    mWebSocketClients.remove(ws);
-                }
-            } else {
-                mWebSocketClients.remove(ws);
-            }
-        }
+        sendEnvelope("state_update", state);
     }
 
     public void broadcastEvent(String eventType, JSONObject data) {
         if (mWebSocketClients.isEmpty()) {
             return;
         }
+        sendEnvelope(eventType, data);
+    }
 
+    // Wrap data in the {type, data} envelope and fan it out to every open client.
+    private void sendEnvelope(String type, JSONObject data) {
         JSONObject msg = new JSONObject();
         try {
-            msg.put("type", eventType);
+            msg.put("type", type);
             msg.put("data", data);
         } catch (JSONException e) {
             return;
         }
-
         String payload = msg.toString();
-        for (RemoteApiWebSocket ws : mWebSocketClients) {
-            if (ws.isOpen()) {
-                try {
-                    ws.send(payload);
-                } catch (Exception e) {
-                    mWebSocketClients.remove(ws);
-                }
-            } else {
-                mWebSocketClients.remove(ws);
-            }
-        }
+        forEachOpenClient(ws -> ws.send(payload));
     }
 
     private class RemoteApiWebSocket extends WebSocket {
@@ -352,6 +349,18 @@ public class RemoteApiServer extends NanoWSD {
         protected void onException(IOException exception) {
             Log.e(TAG, "WebSocket exception: %s", exception.getMessage());
             mWebSocketClients.remove(this);
+        }
+
+        // Send a {type, data} response to this single client.
+        private void sendResponse(String type, Object data) {
+            try {
+                JSONObject resp = new JSONObject();
+                resp.put("type", type);
+                resp.put("data", data);
+                send(resp.toString());
+            } catch (Exception e) {
+                Log.e(TAG, "WebSocket %s response error: %s", type, e.getMessage());
+            }
         }
 
         private void handleWebSocketCommand(String action, JSONObject cmd) {
@@ -441,44 +450,125 @@ public class RemoteApiServer extends NanoWSD {
                     RemoteApiBridge.togglePip();
                     break;
                 case "get_queue":
-                    JSONArray queue = RemoteApiBridge.getQueue();
-                    try {
-                        JSONObject queueResp = new JSONObject();
-                        queueResp.put("type", "queue_update");
-                        queueResp.put("data", queue);
-                        send(queueResp.toString());
-                    } catch (Exception e) {
-                        Log.e(TAG, "WebSocket queue response error: %s", e.getMessage());
-                    }
+                    sendResponse("queue_update", RemoteApiBridge.getQueue());
                     break;
                 case "theater_power_toggle":
                     getTheater().togglePower();
                     break;
                 case "theater_get_state":
-                    try {
-                        JSONObject theaterResp = new JSONObject();
-                        theaterResp.put("type", "theater_state");
-                        theaterResp.put("data", getTheater().getState());
-                        send(theaterResp.toString());
-                    } catch (Exception e) {
-                        Log.e(TAG, "WebSocket theater state error: %s", e.getMessage());
-                    }
+                    sendResponse("theater_state", getTheater().getState());
                     break;
                 case "get_state":
                     JSONObject state = RemoteApiBridge.getPlayerState();
                     if (state != null) {
-                        JSONObject resp = new JSONObject();
-                        try {
-                            resp.put("type", "state_update");
-                            resp.put("data", state);
-                            send(resp.toString());
-                        } catch (Exception e) {
-                            Log.e(TAG, "WebSocket state response error: %s", e.getMessage());
-                        }
+                        sendResponse("state_update", state);
                     }
                     break;
             }
         }
+    }
+
+    // ---- HTTP routing ----
+
+    // Register a route under the auth gate. Key is "METHOD /path".
+    private void route(Method method, String path, RouteHandler handler) {
+        mRoutes.put(method.name() + " " + path, handler);
+    }
+
+    // Register a fire-and-forget action that just returns {"ok": true}.
+    private void action(Method method, String path, Runnable action) {
+        route(method, path, session -> handleTransportAction(action));
+    }
+
+    private void registerRoutes() {
+        // ---- Public (no token required) ----
+        mPublicRoutes.put("GET /api/system/ping", session -> handlePing());
+        mPublicRoutes.put("GET /api/pair", session -> handlePair());
+        mPublicRoutes.put("POST /api/pair/verify", this::handlePairVerify);
+
+        // ---- Player state + transport ----
+        route(Method.GET, "/api/player", session -> handleGetPlayerState());
+        action(Method.POST, "/api/player/play", RemoteApiBridge::handlePlay);
+        action(Method.POST, "/api/player/pause", RemoteApiBridge::handlePause);
+        action(Method.POST, "/api/player/toggle", RemoteApiBridge::handleToggle);
+        route(Method.POST, "/api/player/seek", this::handleSeek);
+        action(Method.POST, "/api/player/next", RemoteApiBridge::handleNext);
+        action(Method.POST, "/api/player/previous", RemoteApiBridge::handlePrevious);
+        action(Method.POST, "/api/player/stop", RemoteApiBridge::handleStop);
+        action(Method.POST, "/api/player/reload", RemoteApiBridge::handleReload);
+
+        // ---- Playback settings ----
+        route(Method.GET, "/api/player/speed", session -> handleGetFloat("speed", RemoteApiBridge.getSpeed()));
+        route(Method.PUT, "/api/player/speed", session -> handleSetFloat(session, "speed", RemoteApiBridge::setSpeed));
+        route(Method.GET, "/api/player/volume", session -> handleGetFloat("volume", RemoteApiBridge.getVolume()));
+        route(Method.PUT, "/api/player/volume", session -> handleSetFloat(session, "volume", RemoteApiBridge::setVolume));
+        route(Method.GET, "/api/player/pitch", session -> handleGetFloat("pitch", RemoteApiBridge.getPitch()));
+        route(Method.PUT, "/api/player/pitch", session -> handleSetFloat(session, "pitch", RemoteApiBridge::setPitch));
+        route(Method.GET, "/api/player/chapters", session -> handleGetChapters());
+
+        // ---- Tracks ----
+        route(Method.GET, "/api/player/formats/video", session -> handleGetFormats(RemoteApiBridge.getVideoFormats()));
+        route(Method.GET, "/api/player/formats/audio", session -> handleGetFormats(RemoteApiBridge.getAudioFormats()));
+        route(Method.GET, "/api/player/formats/subtitle", session -> handleGetFormats(RemoteApiBridge.getSubtitleFormats()));
+        route(Method.GET, "/api/player/formats/selected", session -> handleGetSelectedTracks());
+        route(Method.PUT, "/api/player/formats/video", session -> handleSetFormat(session, RemoteApiBridge::setVideoFormat));
+        route(Method.PUT, "/api/player/formats/audio", session -> handleSetFormat(session, RemoteApiBridge::setAudioFormat));
+        route(Method.PUT, "/api/player/formats/subtitle", session -> handleSetFormat(session, RemoteApiBridge::setSubtitleFormat));
+
+        // ---- Video transform ----
+        route(Method.GET, "/api/player/video/resize", session -> handleGetInt("resize_mode", RemoteApiBridge.getResizeMode()));
+        route(Method.PUT, "/api/player/video/resize", session -> handleSetInt(session, "mode", RemoteApiBridge::setResizeMode));
+        route(Method.GET, "/api/player/video/zoom", session -> handleGetInt("zoom_percents", RemoteApiBridge.getZoom()));
+        route(Method.PUT, "/api/player/video/zoom", session -> handleSetInt(session, "zoom", RemoteApiBridge::setZoom));
+        route(Method.GET, "/api/player/video/rotation", session -> handleGetInt("rotation_angle", RemoteApiBridge.getRotation()));
+        route(Method.PUT, "/api/player/video/rotation", session -> handleSetInt(session, "angle", RemoteApiBridge::setRotation));
+        route(Method.GET, "/api/player/video/flip", session -> handleGetBool("flip_enabled", RemoteApiBridge.getFlip()));
+        route(Method.PUT, "/api/player/video/flip", session -> handleSetBool(session, "enabled", RemoteApiBridge::setFlip));
+
+        // ---- Subtitles (closed captions) ----
+        route(Method.POST, "/api/player/subtitle/toggle", session -> handleTransportAction(RemoteApiBridge::toggleSubtitles));
+        route(Method.PUT, "/api/player/subtitle", session -> handleSetBool(session, "enabled", RemoteApiBridge::setSubtitlesEnabled));
+        route(Method.GET, "/api/player/subtitle", session -> handleGetBool("enabled", RemoteApiBridge.areSubtitlesOn()));
+
+        // ---- Mute ----
+        action(Method.POST, "/api/player/mute/toggle", RemoteApiBridge::toggleMute);
+        route(Method.GET, "/api/player/mute", session -> handleGetBool("muted", RemoteApiBridge.isMuted()));
+
+        // ---- Picture-in-Picture ----
+        route(Method.GET, "/api/player/pip", session -> handleGetBool("active", RemoteApiBridge.isPipActive()));
+        action(Method.POST, "/api/player/pip/toggle", RemoteApiBridge::togglePip);
+        action(Method.POST, "/api/player/pip", RemoteApiBridge::togglePip); // back-compat alias
+
+        // ---- Content ----
+        route(Method.POST, "/api/content/search", session -> handleSetString(session, "query", RemoteApiBridge::search));
+        route(Method.GET, "/api/content/search/results", this::handleSearchResults);
+        route(Method.POST, "/api/content/open", this::handleContentOpen);
+        route(Method.GET, "/api/content/suggestions", session -> handleGetSuggestions());
+        route(Method.GET, "/api/content/recommended", session -> handleGetRecommended());
+
+        // ---- Queue ----
+        route(Method.GET, "/api/player/queue", session -> handleGetQueue());
+        route(Method.POST, "/api/player/queue", session -> handleSetString(session, "video_id", RemoteApiBridge::addToQueue));
+        route(Method.POST, "/api/player/queue/next", session -> handleSetString(session, "video_id", RemoteApiBridge::playNext));
+        route(Method.DELETE, "/api/player/queue", session -> handleSetString(session, "video_id", RemoteApiBridge::removeFromQueue));
+        action(Method.POST, "/api/player/queue/clear", RemoteApiBridge::clearQueue);
+        action(Method.POST, "/api/player/queue/shuffle", RemoteApiBridge::shuffleQueue);
+        route(Method.POST, "/api/player/queue/move", this::handleMoveQueueItem);
+        route(Method.POST, "/api/player/queue/playlist", this::handleQueuePlaylist);
+
+        // ---- Home Theater ----
+        route(Method.GET, "/api/theater", session -> handleGetTheaterState());
+        route(Method.GET, "/api/theater/volume", session -> handleGetTheaterVolume());
+        route(Method.PUT, "/api/theater/volume", this::handleSetTheaterVolume);
+        action(Method.POST, "/api/theater/volume/up", () -> getTheater().volumeUp());
+        action(Method.POST, "/api/theater/volume/down", () -> getTheater().volumeDown());
+        action(Method.POST, "/api/theater/mute/toggle", () -> getTheater().toggleMute());
+        action(Method.POST, "/api/theater/power/toggle", () -> getTheater().togglePower());
+        route(Method.GET, "/api/theater/refresh", session -> handleGetTheaterState());
+
+        // ---- System ----
+        route(Method.GET, "/api/system/dpad", this::handleDpad);
+        route(Method.POST, "/api/system/voice", this::handleVoice);
     }
 
     @Override
@@ -496,270 +586,30 @@ public class RemoteApiServer extends NanoWSD {
         }
 
         String path = uri.endsWith("/") && uri.length() > 1 ? uri.substring(0, uri.length() - 1) : uri;
+        String key = method.name() + " " + path;
 
         try {
-            if (Method.GET.equals(method) && "/api/system/ping".equals(path)) {
-                return handlePing();
-            }
-
-            if (Method.GET.equals(method) && "/api/pair".equals(path)) {
-                return handlePair();
-            }
-
-            if (Method.POST.equals(method) && "/api/pair/verify".equals(path)) {
-                return handlePairVerify(session);
+            RouteHandler publicRoute = mPublicRoutes.get(key);
+            if (publicRoute != null) {
+                return publicRoute.handle(session);
             }
 
             // When "allow all connections" is on, the LAN is trusted and no token is required.
             if (!mApiData.isAllowAllConnections()) {
-                String authHeader = headers.get("authorization");
-                String token = extractBearerToken(authHeader);
+                String token = extractBearerToken(headers.get("authorization"));
                 if (!mAuth.isTokenValid(token)) {
                     return errorResponse(Response.Status.UNAUTHORIZED, 401, "Unauthorized");
                 }
             }
 
-            if (Method.GET.equals(method) && "/api/player".equals(path)) {
-                return handleGetPlayerState();
+            RouteHandler route = mRoutes.get(key);
+            if (route != null) {
+                return route.handle(session);
             }
 
-            if (Method.POST.equals(method) && "/api/player/play".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handlePlay());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/pause".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handlePause());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/toggle".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handleToggle());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/seek".equals(path)) {
-                return handleSeek(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/next".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handleNext());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/previous".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handlePrevious());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/stop".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handleStop());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/reload".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.handleReload());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/speed".equals(path)) {
-                return handleGetFloat("speed", RemoteApiBridge.getSpeed());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/speed".equals(path)) {
-                return handleSetFloat(session, "speed", RemoteApiBridge::setSpeed);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/volume".equals(path)) {
-                return handleGetFloat("volume", RemoteApiBridge.getVolume());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/volume".equals(path)) {
-                return handleSetFloat(session, "volume", RemoteApiBridge::setVolume);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/pitch".equals(path)) {
-                return handleGetFloat("pitch", RemoteApiBridge.getPitch());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/pitch".equals(path)) {
-                return handleSetFloat(session, "pitch", RemoteApiBridge::setPitch);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/chapters".equals(path)) {
-                return handleGetChapters();
-            }
-
-            if (Method.GET.equals(method) && "/api/player/formats/video".equals(path)) {
-                return handleGetFormats(RemoteApiBridge.getVideoFormats());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/formats/audio".equals(path)) {
-                return handleGetFormats(RemoteApiBridge.getAudioFormats());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/formats/subtitle".equals(path)) {
-                return handleGetFormats(RemoteApiBridge.getSubtitleFormats());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/formats/selected".equals(path)) {
-                return handleGetSelectedTracks();
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/formats/video".equals(path)) {
-                return handleSetFormat(session, RemoteApiBridge::setVideoFormat);
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/formats/audio".equals(path)) {
-                return handleSetFormat(session, RemoteApiBridge::setAudioFormat);
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/formats/subtitle".equals(path)) {
-                return handleSetFormat(session, RemoteApiBridge::setSubtitleFormat);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/video/resize".equals(path)) {
-                return handleGetInt("resize_mode", RemoteApiBridge.getResizeMode());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/video/resize".equals(path)) {
-                return handleSetInt(session, "mode", RemoteApiBridge::setResizeMode);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/video/zoom".equals(path)) {
-                return handleGetInt("zoom_percents", RemoteApiBridge.getZoom());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/video/zoom".equals(path)) {
-                return handleSetInt(session, "zoom", RemoteApiBridge::setZoom);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/video/rotation".equals(path)) {
-                return handleGetInt("rotation_angle", RemoteApiBridge.getRotation());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/video/rotation".equals(path)) {
-                return handleSetInt(session, "angle", RemoteApiBridge::setRotation);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/video/flip".equals(path)) {
-                return handleGetBool("flip_enabled", RemoteApiBridge.getFlip());
-            }
-
-            if (Method.PUT.equals(method) && "/api/player/video/flip".equals(path)) {
-                return handleSetBool(session, "enabled", RemoteApiBridge::setFlip);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/subtitle/toggle".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.toggleSubtitles());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/subtitle".equals(path)) {
-                return handleGetBool("enabled", RemoteApiBridge.areSubtitlesOn());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/mute/toggle".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.toggleMute());
-            }
-
-            if (Method.GET.equals(method) && "/api/player/mute".equals(path)) {
-                return handleGetBool("muted", RemoteApiBridge.isMuted());
-            }
-
-            if (Method.POST.equals(method) && "/api/content/search".equals(path)) {
-                return handleSearch(session);
-            }
-
-            if (Method.GET.equals(method) && "/api/content/search/results".equals(path)) {
-                return handleSearchResults(session);
-            }
-
-            if (Method.GET.equals(method) && "/api/player/queue".equals(path)) {
-                return handleGetQueue();
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue".equals(path)) {
-                return handleAddToQueue(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue/next".equals(path)) {
-                return handlePlayNext(session);
-            }
-
-            if (Method.DELETE.equals(method) && "/api/player/queue".equals(path)) {
-                return handleRemoveFromQueue(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue/clear".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.clearQueue());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue/shuffle".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.shuffleQueue());
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue/move".equals(path)) {
-                return handleMoveQueueItem(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/queue/playlist".equals(path)) {
-                return handleQueuePlaylist(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/player/pip".equals(path)) {
-                return handleTransportAction(() -> RemoteApiBridge.togglePip());
-            }
-
-            if (Method.POST.equals(method) && "/api/content/open".equals(path)) {
-                return handleContentOpen(session);
-            }
-
-            if (Method.GET.equals(method) && "/api/content/suggestions".equals(path)) {
-                return handleGetSuggestions();
-            }
-
-            if (Method.GET.equals(method) && "/api/content/recommended".equals(path)) {
-                return handleGetRecommended();
-            }
-
-            if (path.startsWith("/api/content/suggestions/")) {
-                String indexStr = path.substring("/api/content/suggestions/".length());
-                if (Method.POST.equals(method)) {
-                    return handlePlaySuggestion(indexStr);
-                }
-            }
-
-            if (Method.GET.equals(method) && "/api/theater".equals(path)) {
-                return handleGetTheaterState();
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/volume".equals(path)) {
-                return handleGetTheaterVolume();
-            }
-
-            if (Method.PUT.equals(method) && "/api/theater/volume".equals(path)) {
-                return handleSetTheaterVolume(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/volume/up".equals(path)) {
-                return handleTransportAction(() -> getTheater().volumeUp());
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/volume/down".equals(path)) {
-                return handleTransportAction(() -> getTheater().volumeDown());
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/mute/toggle".equals(path)) {
-                return handleTransportAction(() -> getTheater().toggleMute());
-            }
-
-            if (Method.POST.equals(method) && "/api/theater/power/toggle".equals(path)) {
-                return handleTransportAction(() -> getTheater().togglePower());
-            }
-
-            if (Method.GET.equals(method) && "/api/theater/refresh".equals(path)) {
-                return handleGetTheaterState();
-            }
-
-            if (Method.GET.equals(method) && "/api/system/dpad".equals(path)) {
-                return handleDpad(session);
-            }
-
-            if (Method.POST.equals(method) && "/api/system/voice".equals(path)) {
-                return handleVoice(session);
+            // Dynamic: play a suggestion by index or video id.
+            if (Method.POST.equals(method) && path.startsWith("/api/content/suggestions/")) {
+                return handlePlaySuggestion(path.substring("/api/content/suggestions/".length()));
             }
 
             return errorResponse(Response.Status.NOT_FOUND, 404, "Not found");
@@ -793,8 +643,7 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handlePairVerify(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         String code = reqBody.getString("code");
         String clientIp = session.getRemoteIpAddress();
 
@@ -823,14 +672,11 @@ public class RemoteApiServer extends NanoWSD {
 
     private Response handleTransportAction(Runnable action) throws JSONException {
         action.run();
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleSeek(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         long positionMs = reqBody.getLong("position_ms");
 
         JSONObject result = RemoteApiBridge.handleSeek(positionMs);
@@ -851,13 +697,13 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleSetFloat(IHTTPSession session, String key, FloatSetter setter) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         float value = (float) reqBody.getDouble(key);
+        if (Float.isNaN(value) || Float.isInfinite(value)) {
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Invalid value for " + key);
+        }
         setter.set(value);
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleGetInt(String key, int value) throws JSONException {
@@ -867,13 +713,10 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleSetInt(IHTTPSession session, String key, IntSetter setter) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         int value = reqBody.getInt(key);
         setter.set(value);
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleGetBool(String key, boolean value) throws JSONException {
@@ -883,28 +726,18 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleSetBool(IHTTPSession session, String key, BoolSetter setter) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         boolean value = reqBody.getBoolean(key);
         setter.set(value);
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleGetChapters() throws JSONException {
-        JSONArray chapters = RemoteApiBridge.getChapters();
-        if (chapters == null) {
-            chapters = new JSONArray();
-        }
-        return corsResponse(jsonResponse(chapters));
+        return corsResponse(jsonResponse(orEmptyArray(RemoteApiBridge.getChapters())));
     }
 
     private Response handleGetFormats(JSONArray formats) throws JSONException {
-        if (formats == null) {
-            formats = new JSONArray();
-        }
-        return corsResponse(jsonResponse(formats));
+        return corsResponse(jsonResponse(orEmptyArray(formats)));
     }
 
     private Response handleGetSelectedTracks() throws JSONException {
@@ -916,18 +749,14 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleSetFormat(IHTTPSession session, FormatSetter setter) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         String formatId = reqBody.getString("format_id");
         setter.set(formatId);
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleContentOpen(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
 
         String url = reqBody.optString("url", null);
         String videoId = reqBody.optString("video_id", null);
@@ -937,26 +766,16 @@ public class RemoteApiServer extends NanoWSD {
 
         RemoteApiBridge.openVideo(url, videoId, positionMs, playlistId, playlistIndex);
 
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleGetSuggestions() throws JSONException {
-        JSONArray suggestions = RemoteApiBridge.getSuggestions();
-        if (suggestions == null) {
-            suggestions = new JSONArray();
-        }
-        return corsResponse(jsonResponse(suggestions));
+        return corsResponse(jsonResponse(orEmptyArray(RemoteApiBridge.getSuggestions())));
     }
 
-    private Response handleGetRecommended() {
+    private Response handleGetRecommended() throws JSONException {
         // Blocking network fetch (cached in the bridge) — NanoHTTPD worker thread, so OK.
-        JSONArray recommended = RemoteApiBridge.getRecommended();
-        if (recommended == null) {
-            recommended = new JSONArray();
-        }
-        return corsResponse(jsonResponse(recommended));
+        return corsResponse(jsonResponse(orEmptyArray(RemoteApiBridge.getRecommended())));
     }
 
     private Response handlePlaySuggestion(String indexStr) throws JSONException {
@@ -964,34 +783,17 @@ public class RemoteApiServer extends NanoWSD {
         try {
             index = Integer.parseInt(indexStr);
         } catch (NumberFormatException e) {
-            // Not a number — treat it as a video ID (11 chars, e.g. dQw4w9WgXcQ).
+            // Not a number — treat it as a video ID (exactly 11 chars, e.g. dQw4w9WgXcQ).
             // ID-based play is preferred: indexes go stale when the list refreshes.
-            if (indexStr.matches("[A-Za-z0-9_-]{6,16}")) {
+            if (indexStr.matches("[A-Za-z0-9_-]{11}")) {
                 RemoteApiBridge.playSuggestionById(indexStr);
-                JSONObject ok = new JSONObject();
-                ok.put("ok", true);
-                return corsResponse(jsonResponse(ok));
+                return okResponse();
             }
             return errorResponse(Response.Status.BAD_REQUEST, 400, "Invalid suggestion index");
         }
 
         RemoteApiBridge.playSuggestion(index);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
-    }
-
-    private Response handleSearch(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
-        String query = reqBody.getString("query");
-
-        RemoteApiBridge.search(query);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     private Response handleSearchResults(IHTTPSession session) throws JSONException {
@@ -1012,73 +814,33 @@ public class RemoteApiServer extends NanoWSD {
         limit = Math.max(1, Math.min(limit, 50));
 
         // Blocking network fetch — NanoHTTPD worker thread, so OK.
-        JSONArray results = RemoteApiBridge.searchResults(query, limit);
-        if (results == null) {
-            results = new JSONArray();
-        }
-        return corsResponse(jsonResponse(results));
+        return corsResponse(jsonResponse(orEmptyArray(RemoteApiBridge.searchResults(query, limit))));
     }
 
     private Response handleGetQueue() throws JSONException {
-        JSONArray queue = RemoteApiBridge.getQueue();
-        return corsResponse(jsonResponse(queue));
-    }
-
-    private Response handleAddToQueue(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
-        String videoId = reqBody.getString("video_id");
-
-        RemoteApiBridge.addToQueue(videoId);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
-    }
-
-    private Response handlePlayNext(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
-        String videoId = reqBody.getString("video_id");
-
-        RemoteApiBridge.playNext(videoId);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
-    }
-
-    private Response handleRemoveFromQueue(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
-        String videoId = reqBody.getString("video_id");
-
-        RemoteApiBridge.removeFromQueue(videoId);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return corsResponse(jsonResponse(RemoteApiBridge.getQueue()));
     }
 
     private Response handleMoveQueueItem(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         if (!reqBody.has("from") || !reqBody.has("to")) {
             return errorResponse(Response.Status.BAD_REQUEST, 400, "Missing from/to");
         }
         int from = reqBody.getInt("from");
         int to = reqBody.getInt("to");
 
-        RemoteApiBridge.moveQueueItem(from, to);
+        // Reject out-of-range indices up front: Playlist.move() would otherwise throw.
+        int size = RemoteApiBridge.getQueue().length();
+        if (from < 0 || from >= size || to < 0 || to >= size) {
+            return errorResponse(Response.Status.BAD_REQUEST, 400, "Queue index out of range");
+        }
 
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        RemoteApiBridge.moveQueueItem(from, to);
+        return okResponse();
     }
 
     private Response handleQueuePlaylist(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
 
         String playlistId = reqBody.optString("playlist_id", null);
         if (playlistId == null || playlistId.isEmpty()) {
@@ -1111,10 +873,7 @@ public class RemoteApiServer extends NanoWSD {
         }
 
         RemoteApiBridge.dpad(key);
-
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
+        return okResponse();
     }
 
     // ---- Home Theater Handlers ----
@@ -1135,8 +894,7 @@ public class RemoteApiServer extends NanoWSD {
     }
 
     private Response handleSetTheaterVolume(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         int volume = reqBody.getInt("volume");
         getTheater().setVolume(volume);
         JSONObject body = new JSONObject();
@@ -1145,33 +903,25 @@ public class RemoteApiServer extends NanoWSD {
         return corsResponse(jsonResponse(body));
     }
 
-    // ---- StringSetter functional interface ----
-
-    @FunctionalInterface
-    private interface StringSetter {
-        void set(String value);
-    }
-
-    private Response handleSetString(IHTTPSession session, String jsonKey, StringSetter setter) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
-        String value = reqBody.getString(jsonKey);
-        setter.set(value);
-        JSONObject body = new JSONObject();
-        body.put("ok", true);
-        return corsResponse(jsonResponse(body));
-    }
-
     private Response handleVoice(IHTTPSession session) throws JSONException, IOException {
-        String bodyStr = readBody(session);
-        JSONObject reqBody = new JSONObject(bodyStr);
+        JSONObject reqBody = parseBody(session);
         String action = reqBody.getString("action");
 
         RemoteApiBridge.voice(action);
+        return okResponse();
+    }
 
+    // ---- Response helpers ----
+
+    // The {"ok": true} acknowledgement shared by every fire-and-forget endpoint.
+    private Response okResponse() throws JSONException {
         JSONObject body = new JSONObject();
         body.put("ok", true);
         return corsResponse(jsonResponse(body));
+    }
+
+    private static JSONArray orEmptyArray(JSONArray array) {
+        return array != null ? array : new JSONArray();
     }
 
     private String extractBearerToken(String authHeader) {
@@ -1182,6 +932,10 @@ public class RemoteApiServer extends NanoWSD {
             return authHeader.substring(7);
         }
         return null;
+    }
+
+    private JSONObject parseBody(IHTTPSession session) throws JSONException, IOException {
+        return new JSONObject(readBody(session));
     }
 
     private String readBody(IHTTPSession session) throws IOException {
@@ -1252,7 +1006,9 @@ public class RemoteApiServer extends NanoWSD {
         return response;
     }
 
-    private String getDeviceName() {
+    // ---- Device info (cached) ----
+
+    private String resolveDeviceName() {
         String name = Build.MODEL;
         if (name == null || name.isEmpty()) {
             name = "SmartTube Device";
@@ -1260,12 +1016,26 @@ public class RemoteApiServer extends NanoWSD {
         return name;
     }
 
+    private String resolveAppVersion() {
+        try {
+            return mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            return API_VERSION;
+        }
+    }
+
+    private String getDeviceName() {
+        return mDeviceName;
+    }
+
     private String getDeviceId() {
-        return Settings.Secure.ANDROID_ID;
+        // Stable per-install UUID generated/persisted by RemoteApiData (NOT the literal
+        // Settings.Secure.ANDROID_ID key string the old code returned by mistake).
+        return mApiData.getDeviceId();
     }
 
     private String getAppVersion() {
-        return API_VERSION;
+        return mAppVersion;
     }
 
     @FunctionalInterface
@@ -1286,5 +1056,17 @@ public class RemoteApiServer extends NanoWSD {
     @FunctionalInterface
     private interface FormatSetter {
         void set(String formatId);
+    }
+
+    @FunctionalInterface
+    private interface StringSetter {
+        void set(String value);
+    }
+
+    private Response handleSetString(IHTTPSession session, String jsonKey, StringSetter setter) throws JSONException, IOException {
+        JSONObject reqBody = parseBody(session);
+        String value = reqBody.getString(jsonKey);
+        setter.set(value);
+        return okResponse();
     }
 }

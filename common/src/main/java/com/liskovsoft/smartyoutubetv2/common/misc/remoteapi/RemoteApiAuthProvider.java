@@ -54,7 +54,9 @@ public class RemoteApiAuthProvider {
             return null;
         }
 
-        if (code == null || !mApiData.isPairingCodeValid(code)) {
+        // Atomically validate AND invalidate the code: a second concurrent verify with
+        // the same code must fail (one code, one token), closing the double-issue race.
+        if (code == null || !mApiData.consumePairingCode(code)) {
             recordFailedAttempt(clientIp);
             return null;
         }
@@ -62,7 +64,6 @@ public class RemoteApiAuthProvider {
         String token = generateToken();
 
         mApiData.addPairedToken(token, null);
-        mApiData.setPairingCode(null, 0);
         resetFailedAttempts(clientIp);
 
         return token;

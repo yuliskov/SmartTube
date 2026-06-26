@@ -15,7 +15,7 @@ import org.json.JSONObject;
  * immersive AE) require ADB shell access and should be implemented by
  * the Chrome extension or an ADB bridge.
  *
- * @see docs/remote-control-api.md section 4.9 for ADB commands.
+ * @see docs/remote-control-api.md section 4.10 for ADB commands.
  */
 public class HomeTheaterController {
     private static final String TAG = HomeTheaterController.class.getSimpleName();

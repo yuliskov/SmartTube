@@ -307,12 +307,53 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
 
   /api/player/pip:
+    get:
+      tags: [Player]
+      summary: Get Picture-in-Picture status
+      responses:
+        "200":
+          description: PIP state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active: { type: boolean, example: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
     post:
       tags: [Player]
-      summary: Enter Picture-in-Picture
-      description: Enters PIP. No-op if already in PIP. There is no programmatic "exit PIP".
+      summary: Toggle Picture-in-Picture (alias of /api/player/pip/toggle)
+      description: Back-compat alias for `POST /api/player/pip/toggle`.
       responses:
         "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/pip/toggle:
+    post:
+      tags: [Player]
+      summary: Toggle Picture-in-Picture
+      description: |
+        Enters PIP when the player is in fullscreen; exits PIP (re-expands the player to
+        fullscreen) when already in PIP.
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/chapters:
+    get:
+      tags: [Player]
+      summary: Chapters of the current video
+      description: |
+        Chapters parsed from the playing video's YouTube metadata. Returns `[]` when
+        nothing is playing or the video has no chapters.
+      responses:
+        "200":
+          description: Chapter list
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Chapter" }
         "401": { $ref: "#/components/responses/Unauthorized" }
 
   # ─────────────────────── Playback settings ────────────────────
@@ -435,7 +476,8 @@ paths:
   /api/player/subtitle:
     get:
       tags: [Playback Settings]
-      summary: Get subtitle on/off state
+      summary: Get subtitle (closed caption) on/off state
+      description: '"subtitle" and "closed captions" are the same thing here — `enabled` reflects whether captions are showing.'
       responses:
         "200":
           description: Subtitle state
@@ -446,11 +488,28 @@ paths:
                 properties:
                   enabled: { type: boolean, example: true }
         "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Playback Settings]
+      summary: Enable or disable subtitles (closed captions)
+      description: Deterministically turns captions on or off, unlike `POST /api/player/subtitle/toggle`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean, example: true }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
 
   /api/player/subtitle/toggle:
     post:
       tags: [Playback Settings]
-      summary: Toggle subtitles on/off
+      summary: Toggle subtitles (closed captions) on/off
       responses:
         "200": { $ref: "#/components/responses/Ok" }
         "401": { $ref: "#/components/responses/Unauthorized" }
@@ -733,6 +792,36 @@ paths:
                 query: { type: string, example: never gonna give you up }
       responses:
         "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/search/results:
+    get:
+      tags: [Content]
+      summary: Search YouTube WITHOUT playing
+      description: |
+        Returns search results so the client can present them — unlike
+        `POST /api/content/search`, which plays the first hit. Play an item via
+        `POST /api/content/open` with its `video_id`.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+          example: lofi hip hop
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+          description: Clamped to 1–50.
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/VideoSummary" }
         "400": { $ref: "#/components/responses/BadRequest" }
         "401": { $ref: "#/components/responses/Unauthorized" }
 
@@ -1167,7 +1256,7 @@ components:
 
     VideoSummary:
       type: object
-      description: Compact video used in suggestions, recommendations, and queue listings
+      description: Compact video used in suggestions, recommendations, search results, and queue listings
       properties:
         video_id: { type: string, example: dQw4w9WgXcQ }
         title: { type: string }
@@ -1175,6 +1264,18 @@ components:
         thumbnail_url: { type: string, nullable: true }
         duration_ms: { type: integer, format: int64 }
         is_live: { type: boolean }
+
+    Chapter:
+      type: object
+      properties:
+        title: { type: string, example: Intro }
+        start_ms: { type: integer, format: int64, example: 0 }
+        end_ms:
+          type: integer
+          format: int64
+          description: Start of the next chapter, or the video duration for the last one. Omitted if unknown.
+          example: 45000
+        thumbnail_url: { type: string, nullable: true }
 
     QueueItem:
       type: object
