@@ -35,6 +35,7 @@ SmartTube is a free and open-source media client for Android TVs and TV boxes. I
 - HDR compatibility  
 - View live chat  
 - Customizable buttons  
+- Start mix (radio-style infinite playback)  
 - Does not require Google Services  
 - Helpful international community
 
@@ -167,6 +168,11 @@ SmartTube supports playing videos in PiP mode. This needs to be enabled under _S
 ### Adjust Speed
 
 You can adjust the playback speed pressing the speed-indicator icon (gauge) in the top row of the player. This is remembered across videos. Some speeds may case frame drops, this is a known issue.
+
+
+### Start Mix
+
+You can start a mix (radio-style infinite playback) from any video. Long-press a video card and select _Start mix_ from the context menu, or press the mix button in the player toolbar while watching. SmartTube uses YouTube's algorithmic radio to queue a continuous stream of related videos.
 
 
 ### Voice Search

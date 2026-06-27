@@ -19,6 +19,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
@@ -28,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
@@ -352,6 +354,7 @@ public class PlayerUIController extends BasePlayerController {
         getPlayer().setButtonState(R.id.action_video_speed, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_chat, PlayerUI.BUTTON_OFF);
         getPlayer().setButtonState(R.id.action_subscribe, PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_start_mix, PlayerUI.BUTTON_OFF);
     }
 
     @Override
@@ -620,6 +623,8 @@ public class PlayerUIController extends BasePlayerController {
             onDislikeClicked(buttonState);
         } else if (buttonId == R.id.action_thumbs_up) {
             onLikeClicked(buttonState);
+        } else if (buttonId == R.id.action_start_mix) {
+            onStartMixClicked();
         }
     }
 
@@ -995,6 +1000,23 @@ public class PlayerUIController extends BasePlayerController {
         getPlayer().setVideoFlipEnabled(newFlipEnabled);
         getPlayer().setButtonState(R.id.action_flip, newFlipEnabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         getPlayerData().setVideoFlipEnabled(newFlipEnabled);
+    }
+
+    private void onStartMixClicked() {
+        Video video = getVideo();
+        if (video == null || getPlayer() == null) {
+            return;
+        }
+
+        Playlist.instance().clear();
+
+        video.playlistId = "RD" + video.videoId;
+        video.playlistIndex = 0;
+        video.playlistParams = null;
+
+        mSuggestionsController.loadSuggestions(video);
+
+        getPlayer().setButtonState(R.id.action_start_mix, PlayerUI.BUTTON_ON);
     }
 
     private void onSubscribe(int buttonState) {
