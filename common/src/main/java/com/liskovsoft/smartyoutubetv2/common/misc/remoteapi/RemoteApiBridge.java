@@ -1052,7 +1052,12 @@ public class RemoteApiBridge {
     private static JSONObject videoToJson(Video video) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("video_id", video.videoId);
-        json.put("title", video.getTitle());
+        // Use getTitleFull(), not getTitle(): a video opened by bare id (search → play, remote
+        // API) has a null `title` field — only `metadataTitle` gets populated once metadata loads
+        // (author/channel/duration do too, which is why those show but the title was missing).
+        // getTitle() ignores metadataTitle; getTitleFull() falls back to it. Otherwise org.json
+        // drops the null and the client shows "untitled" / "no video loaded".
+        json.put("title", video.getTitleFull());
         json.put("author", video.getAuthor());
         json.put("thumbnail_url", bestThumbnail(video));
         json.put("duration_ms", video.getDurationMs());
