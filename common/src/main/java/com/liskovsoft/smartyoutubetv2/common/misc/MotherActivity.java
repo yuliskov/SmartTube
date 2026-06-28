@@ -43,6 +43,9 @@ public class MotherActivity extends FragmentActivity {
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
     private static DisplayMetrics sCachedDisplayMetrics;
     protected static boolean sIsInPipMode;
+    // The currently-resumed activity, so remote-control key events (e.g. the D-pad remote API)
+    // can be dispatched into the app's own view hierarchy instead of via Instrumentation.
+    private static MotherActivity sCurrentActivity;
     private ScreensaverManager mScreensaverManager;
     // Make static in case Don't keep activities enabled in Developer settings
     private static List<OnPermissions> mOnPermissions;
@@ -193,6 +196,11 @@ public class MotherActivity extends FragmentActivity {
         super.attachBaseContext(contextWrapper);
     }
 
+    /** The currently-resumed MotherActivity, or null. Used to deliver remote-control key events. */
+    public static MotherActivity getCurrentActivity() {
+        return sCurrentActivity;
+    }
+
     @Override
     protected void onResume() {
         try {
@@ -200,6 +208,8 @@ public class MotherActivity extends FragmentActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+
+        sCurrentActivity = this;
 
         // 4K fix with AFR
         applyCustomConfig();
@@ -214,6 +224,10 @@ public class MotherActivity extends FragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (sCurrentActivity == this) {
+            sCurrentActivity = null;
+        }
 
         // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
