@@ -477,75 +477,40 @@ public class RemoteApiBridge {
     }
 
     public static JSONArray getSuggestions() {
+        // SmartTube's own "Up Next": the player's loaded suggestion rows for the current video (populated
+        // by SuggestionsController.loadSuggestions() from cached metadata, in a stable order) — reliable
+        // and consistent across calls, no fresh network fetch.
         JSONArray result = new JSONArray();
         Set<String> seen = new HashSet<>();
         Video current = Playlist.instance().getCurrent();
 
-        // Lead with the autoplay continuation — the video the Next button (and end-of-video autoplay)
-        // ACTUALLY plays. The player's suggestion rows / related list don't necessarily start with it,
-        // which made the client's "Up Next" first item disagree with what Next played. Uses the cached
-        // Video.nextMediaItem, so no extra network call.
-        if (current != null && current.nextMediaItem != null) {
-            try {
-                putSuggestion(result, seen, mediaItemToJson(current.nextMediaItem), current.nextMediaItem.getVideoId());
-            } catch (JSONException e) {
-                // skip the lead item
-            }
-        }
-
-        // Then the player's loaded suggestion rows (related videos), de-duplicated against the above.
-        boolean[] hadRows = {false};
-        forEachSuggestion(getPlayer(), video -> {
-            hadRows[0] = true;
-            try {
-                putSuggestion(result, seen, videoToJson(video), video.videoId);
-            } catch (JSONException e) {
-                // skip this video
-            }
-            return false;
-        });
-
-        // The player only populates its suggestion rows once its UI renders them. A video autoplaying
-        // in the background never loads those rows, so fall back to the current video's related videos
-        // pulled straight from metadata (the robust path getRecommended()/resolvePlaylistGroup use) so
-        // Up Next is populated regardless of the on-TV player UI state.
-        if (!hadRows[0] && current != null && current.videoId != null) {
-            appendMetadataSuggestions(result, seen, current.videoId);
-        }
-        return result;
-    }
-
-    /** Add a suggestion JSON to the array unless its video id was already added (or is null). */
-    private static void putSuggestion(JSONArray result, Set<String> seen, JSONObject json, String videoId) {
-        if (json == null || videoId == null || !seen.add(videoId)) {
-            return;
-        }
-        result.put(json);
-    }
-
-    /**
-     * Append the current video's related ("Up Next") videos, fetched directly from its metadata
-     * rather than the player's on-screen suggestion rows. Blocking network call; must be invoked from
-     * a worker thread (NanoHTTPD request threads are fine — same as getRecommended()).
-     */
-    private static void appendMetadataSuggestions(JSONArray result, Set<String> seen, String videoId) {
-        try {
-            MediaItemMetadata metadata = YouTubeServiceManager.instance()
-                    .getMediaItemService().getMetadata(videoId);
-            if (metadata != null && metadata.getSuggestions() != null) {
-                for (MediaGroup group : metadata.getSuggestions()) {
-                    List<MediaItem> items = group.getMediaItems();
-                    if (items == null) {
-                        continue;
-                    }
-                    for (MediaItem item : items) {
-                        putSuggestion(result, seen, mediaItemToJson(item), item.getVideoId());
+        // Exclude the current video's OWN group. SuggestionsController.appendSectionPlaylistIfNeeded()
+        // adds that group as a suggestion row ("section playlist"); when the video was reached via
+        // autoplay/Home, that group IS the Home/recommended feed — the "Up Next mixed with home
+        // recommended" bug. Pre-seeding `seen` with the group's ids makes the loop skip them, leaving
+        // only the video's actual related suggestions.
+        if (current != null && current.getGroup() != null) {
+            VideoGroup ownGroup = current.getGroup();
+            if (ownGroup.getVideos() != null) {
+                for (Video v : ownGroup.getVideos()) {
+                    if (v.videoId != null) {
+                        seen.add(v.videoId);
                     }
                 }
             }
-        } catch (Exception e) {
-            // Network/parse failure — keep whatever was collected (possibly empty).
         }
+
+        forEachSuggestion(getPlayer(), video -> {
+            if (video.videoId != null && seen.add(video.videoId)) {
+                try {
+                    result.put(videoToJson(video));
+                } catch (JSONException e) {
+                    // skip this video
+                }
+            }
+            return false;
+        });
+        return result;
     }
 
     /**
