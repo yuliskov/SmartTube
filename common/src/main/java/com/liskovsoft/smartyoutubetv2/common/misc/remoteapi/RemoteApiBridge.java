@@ -33,7 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RemoteApiBridge {
     private static PlaybackPresenter sPresenter;
@@ -476,15 +478,74 @@ public class RemoteApiBridge {
 
     public static JSONArray getSuggestions() {
         JSONArray result = new JSONArray();
-        forEachSuggestion(getPlayer(), video -> {
+        Set<String> seen = new HashSet<>();
+        Video current = Playlist.instance().getCurrent();
+
+        // Lead with the autoplay continuation — the video the Next button (and end-of-video autoplay)
+        // ACTUALLY plays. The player's suggestion rows / related list don't necessarily start with it,
+        // which made the client's "Up Next" first item disagree with what Next played. Uses the cached
+        // Video.nextMediaItem, so no extra network call.
+        if (current != null && current.nextMediaItem != null) {
             try {
-                result.put(videoToJson(video));
+                putSuggestion(result, seen, mediaItemToJson(current.nextMediaItem), current.nextMediaItem.getVideoId());
+            } catch (JSONException e) {
+                // skip the lead item
+            }
+        }
+
+        // Then the player's loaded suggestion rows (related videos), de-duplicated against the above.
+        boolean[] hadRows = {false};
+        forEachSuggestion(getPlayer(), video -> {
+            hadRows[0] = true;
+            try {
+                putSuggestion(result, seen, videoToJson(video), video.videoId);
             } catch (JSONException e) {
                 // skip this video
             }
             return false;
         });
+
+        // The player only populates its suggestion rows once its UI renders them. A video autoplaying
+        // in the background never loads those rows, so fall back to the current video's related videos
+        // pulled straight from metadata (the robust path getRecommended()/resolvePlaylistGroup use) so
+        // Up Next is populated regardless of the on-TV player UI state.
+        if (!hadRows[0] && current != null && current.videoId != null) {
+            appendMetadataSuggestions(result, seen, current.videoId);
+        }
         return result;
+    }
+
+    /** Add a suggestion JSON to the array unless its video id was already added (or is null). */
+    private static void putSuggestion(JSONArray result, Set<String> seen, JSONObject json, String videoId) {
+        if (json == null || videoId == null || !seen.add(videoId)) {
+            return;
+        }
+        result.put(json);
+    }
+
+    /**
+     * Append the current video's related ("Up Next") videos, fetched directly from its metadata
+     * rather than the player's on-screen suggestion rows. Blocking network call; must be invoked from
+     * a worker thread (NanoHTTPD request threads are fine — same as getRecommended()).
+     */
+    private static void appendMetadataSuggestions(JSONArray result, Set<String> seen, String videoId) {
+        try {
+            MediaItemMetadata metadata = YouTubeServiceManager.instance()
+                    .getMediaItemService().getMetadata(videoId);
+            if (metadata != null && metadata.getSuggestions() != null) {
+                for (MediaGroup group : metadata.getSuggestions()) {
+                    List<MediaItem> items = group.getMediaItems();
+                    if (items == null) {
+                        continue;
+                    }
+                    for (MediaItem item : items) {
+                        putSuggestion(result, seen, mediaItemToJson(item), item.getVideoId());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Network/parse failure — keep whatever was collected (possibly empty).
+        }
     }
 
     /**
