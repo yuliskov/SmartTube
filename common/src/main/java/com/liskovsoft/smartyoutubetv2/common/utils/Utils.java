@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
-import android.app.Instrumentation;
 import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -754,34 +753,76 @@ public class Utils {
     }
 
     /**
-     * NOTE: Doesn't work in Android 13<br/>
-     * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
+     * Deliver a key press into the app's own UI. A full ACTION_DOWN + ACTION_UP pair.
      */
     public static void sendKey(int key) {
-        if (VERSION.SDK_INT < 33) {
-            try {
-                Instrumentation instrumentation = new Instrumentation();
-                instrumentation.sendKeyDownUpSync(key);
-            } catch (SecurityException e) {
-                // Injecting to another application requires INJECT_EVENTS permission
-                e.printStackTrace();
-            }
-        }
+        sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, key));
+        sendKey(new KeyEvent(KeyEvent.ACTION_UP, key));
     }
 
     /**
-     * NOTE: Doesn't work in Android 13<br/>
-     * java.lang.SecurityException: Injecting input events requires the caller (or the source of the instrumentation, if any) to have the INJECT_EVENTS permission.
+     * Deliver a single KeyEvent into the app's own current activity (D-pad remote API etc.).
+     * <p>NOTE: must NOT use Instrumentation.sendKeySync/sendKeyDownUpSync here — those call
+     * validateNotAppThread() which throws a RuntimeException on the main thread (where remote
+     * commands run), crashing the app, and system-wide injection requires INJECT_EVENTS anyway.
+     * <p>Dispatching to the current activity routes the key through the normal view hierarchy
+     * (so player controls, search box and dialogs that consume keys still work). But default
+     * D-pad focus navigation and item clicking are performed by ViewRootImpl, NOT by
+     * Activity.dispatchKeyEvent — and we bypass ViewRootImpl here. So when the view hierarchy
+     * does not consume the key, we replicate ViewRootImpl.performFocusNavigation() ourselves:
+     * move focus for the arrow keys and click the focused view for DPAD_CENTER/ENTER. (BACK is
+     * already handled inside Activity.dispatchKeyEvent, which is why it worked without this.)
      */
     public static void sendKey(KeyEvent keyEvent) {
-        if (VERSION.SDK_INT < 33) {
-            try {
-                Instrumentation instrumentation = new Instrumentation();
-                instrumentation.sendKeySync(keyEvent);
-            } catch (SecurityException e) {
-                // Injecting to another application requires INJECT_EVENTS permission
-                e.printStackTrace();
+        MotherActivity activity = MotherActivity.getCurrentActivity();
+        if (activity == null) {
+            return;
+        }
+        try {
+            // Let the view hierarchy (player overlay, search, dialogs) consume it first.
+            boolean handled = activity.dispatchKeyEvent(keyEvent);
+            if (handled || keyEvent.getAction() != KeyEvent.ACTION_DOWN) {
+                return;
             }
+
+            View decor = activity.getWindow().getDecorView();
+            int keyCode = keyEvent.getKeyCode();
+            int direction = focusDirectionFromKeyCode(keyCode);
+
+            if (direction != -1) {
+                View focused = decor.findFocus();
+                if (focused != null) {
+                    View next = focused.focusSearch(direction);
+                    if (next != null && next != focused) {
+                        next.requestFocus(direction);
+                    }
+                } else {
+                    decor.requestFocus(direction);
+                }
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER
+                    || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
+                View focused = decor.findFocus();
+                if (focused != null) {
+                    focused.performClick();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static int focusDirectionFromKeyCode(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                return View.FOCUS_LEFT;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                return View.FOCUS_RIGHT;
+            case KeyEvent.KEYCODE_DPAD_UP:
+                return View.FOCUS_UP;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                return View.FOCUS_DOWN;
+            default:
+                return -1;
         }
     }
 

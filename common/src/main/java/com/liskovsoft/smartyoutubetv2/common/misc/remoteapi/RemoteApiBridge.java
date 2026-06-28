@@ -994,7 +994,6 @@ public class RemoteApiBridge {
     public static void dpad(String key) {
         runOnMainThread(() -> {
             int keyCode;
-            boolean isLongAction = false;
 
             switch (key) {
                 case "up":
@@ -1005,11 +1004,9 @@ public class RemoteApiBridge {
                     break;
                 case "left":
                     keyCode = KeyEvent.KEYCODE_DPAD_LEFT;
-                    isLongAction = true;
                     break;
                 case "right":
                     keyCode = KeyEvent.KEYCODE_DPAD_RIGHT;
-                    isLongAction = true;
                     break;
                 case "enter":
                     keyCode = KeyEvent.KEYCODE_DPAD_CENTER;
@@ -1021,12 +1018,9 @@ public class RemoteApiBridge {
                     return;
             }
 
-            if (isLongAction) {
-                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
-                Utils.postDelayed(() -> Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, keyCode)), 500);
-            } else {
-                Utils.sendKey(keyCode);
-            }
+            // Each press is a clean ACTION_DOWN + ACTION_UP. Focus navigation happens on the
+            // DOWN (see Utils.sendKey); the UP completes clicks for DPAD_CENTER/ENTER.
+            Utils.sendKey(keyCode);
         });
     }
 
