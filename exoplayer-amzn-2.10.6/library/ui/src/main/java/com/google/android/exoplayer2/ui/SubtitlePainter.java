@@ -25,6 +25,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.text.Annotation;
 import android.text.Layout.Alignment;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -62,6 +64,7 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
   private final float spacingAdd;
 
   private final TextPaint textPaint;
+  private final TextPaint translationLinePaint;
   private final Paint paint;
 
   // Previous input variables.
@@ -96,6 +99,9 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
 
   // Derived drawing variables.
   private StaticLayout textLayout;
+  /** Non-null when {@link #trySetupSmartTubeDualSubtitleLayouts} handles the cue. */
+  private StaticLayout translationLayout;
+  private int translationGapPx;
   private int textLeft;
   private int textTop;
   private int textPaddingX;
@@ -119,6 +125,10 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
     textPaint = new TextPaint();
     textPaint.setAntiAlias(true);
     textPaint.setSubpixelText(true);
+
+    translationLinePaint = new TextPaint();
+    translationLinePaint.setAntiAlias(true);
+    translationLinePaint.setSubpixelText(true);
 
     paint = new Paint();
     paint.setAntiAlias(true);
@@ -235,6 +245,9 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
   }
 
   private void setupTextLayout() {
+    translationLayout = null;
+    translationGapPx = 0;
+
     int parentWidth = parentRight - parentLeft;
     int parentHeight = parentBottom - parentTop;
 
@@ -250,10 +263,16 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
       return;
     }
 
+    if (trySetupSmartTubeDualSubtitleLayouts(parentWidth, parentHeight, availableWidth, textPaddingX)) {
+      return;
+    }
+
     CharSequence cueText = this.cueText;
     // Remove embedded styling or font size if requested.
     if (!applyEmbeddedStyles) {
-      cueText = cueText.toString(); // Equivalent to erasing all spans.
+      if (!isSmartTubeDualMergedSubtitleCue(cueText)) {
+        cueText = cueText.toString(); // Equivalent to erasing all spans.
+      }
     } else if (!applyEmbeddedFontSizes) {
       SpannableStringBuilder newCueText = new SpannableStringBuilder(cueText);
       int cueLength = newCueText.length();
@@ -363,6 +382,165 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
     this.textPaddingX = textPaddingX;
   }
 
+  /**
+   * SmartTube dual subtitles: draw the translated line with its own {@link TextPaint} so size,
+   * color, and italic are visible regardless of {@link StaticLayout} span behavior on device.
+   */
+  private boolean trySetupSmartTubeDualSubtitleLayouts(
+      int parentWidth, int parentHeight, int availableWidth, int textPaddingX) {
+    CharSequence raw = this.cueText;
+    if (!isSmartTubeDualMergedSubtitleCue(raw)) {
+      return false;
+    }
+    int translationStartIndex = dualSubtitleTranslationStart(raw);
+    if (translationStartIndex <= 0
+        || translationStartIndex > raw.length()
+        || raw.charAt(translationStartIndex - 1) != '\n') {
+      return false;
+    }
+    String line1 = raw.subSequence(0, translationStartIndex - 1).toString();
+    String line2 = raw.subSequence(translationStartIndex, raw.length()).toString();
+    if (line2.isEmpty()) {
+      return false;
+    }
+
+    Alignment textAlignment = cueTextAlignment == null ? Alignment.ALIGN_CENTER : cueTextAlignment;
+
+    CharSequence primaryText = line1;
+    CharSequence translationText = line2;
+    if (Color.alpha(backgroundColor) > 0) {
+      SpannableStringBuilder b1 = new SpannableStringBuilder(line1);
+      b1.setSpan(
+          new PaddingBackgroundColorSpan(backgroundColor),
+          0,
+          b1.length(),
+          Spanned.SPAN_PRIORITY);
+      primaryText = b1;
+      SpannableStringBuilder b2 = new SpannableStringBuilder(line2);
+      b2.setSpan(
+          new PaddingBackgroundColorSpan(backgroundColor),
+          0,
+          b2.length(),
+          Spanned.SPAN_PRIORITY);
+      translationText = b2;
+    }
+
+    translationLinePaint.setAntiAlias(textPaint.isAntiAlias());
+    translationLinePaint.setSubpixelText(textPaint.isSubpixelText());
+    translationLinePaint.setLetterSpacing(textPaint.getLetterSpacing());
+    translationLinePaint.setTextScaleX(textPaint.getTextScaleX());
+    translationLinePaint.setTextSize(
+        defaultTextSizePx * DualSubtitleCueMarkers.TRANSLATION_RELATIVE_SIZE);
+    translationLinePaint.setColor(DualSubtitleCueMarkers.TRANSLATION_COLOR);
+    translationLinePaint.setTypeface(
+        Typeface.create(
+            textPaint.getTypeface() != null ? textPaint.getTypeface() : Typeface.DEFAULT,
+            Typeface.ITALIC));
+
+    textLayout =
+        new StaticLayout(
+            primaryText, textPaint, availableWidth, textAlignment, spacingMult, spacingAdd, true);
+    int firstLineHeightForAnchor = textLayout.getLineBottom(0) - textLayout.getLineTop(0);
+
+    translationLayout =
+        new StaticLayout(
+            translationText,
+            translationLinePaint,
+            availableWidth,
+            textAlignment,
+            spacingMult,
+            spacingAdd,
+            true);
+
+    translationGapPx =
+        Math.round(defaultTextSizePx * DualSubtitleCueMarkers.TRANSLATION_LINE_GAP_FRACTION);
+
+    int textHeight =
+        textLayout.getHeight() + translationGapPx + translationLayout.getHeight();
+    int textWidth = 0;
+    for (int i = 0; i < textLayout.getLineCount(); i++) {
+      textWidth = Math.max((int) Math.ceil(textLayout.getLineWidth(i)), textWidth);
+    }
+    for (int i = 0; i < translationLayout.getLineCount(); i++) {
+      textWidth = Math.max((int) Math.ceil(translationLayout.getLineWidth(i)), textWidth);
+    }
+    if (cueSize != Cue.DIMEN_UNSET && textWidth < availableWidth) {
+      textWidth = availableWidth;
+    }
+    textWidth += textPaddingX * 2;
+
+    int textLeft;
+    int textRight;
+    if (cuePosition != Cue.DIMEN_UNSET) {
+      int anchorPosition = Math.round(parentWidth * cuePosition) + parentLeft;
+      textLeft =
+          cuePositionAnchor == Cue.ANCHOR_TYPE_END
+              ? anchorPosition - textWidth
+              : cuePositionAnchor == Cue.ANCHOR_TYPE_MIDDLE
+                  ? (anchorPosition * 2 - textWidth) / 2
+                  : anchorPosition;
+      textLeft = Math.max(textLeft, parentLeft);
+      textRight = Math.min(textLeft + textWidth, parentRight);
+    } else {
+      textLeft = (parentWidth - textWidth) / 2 + parentLeft;
+      textRight = textLeft + textWidth;
+    }
+
+    textWidth = textRight - textLeft;
+    if (textWidth <= 0) {
+      Log.w(TAG, "Skipped drawing subtitle cue (invalid horizontal positioning)");
+      translationLayout = null;
+      translationGapPx = 0;
+      textLayout = null;
+      return false;
+    }
+
+    int textTop;
+    if (cueLine != Cue.DIMEN_UNSET) {
+      int anchorPosition;
+      if (cueLineType == Cue.LINE_TYPE_FRACTION) {
+        anchorPosition = Math.round(parentHeight * cueLine) + parentTop;
+      } else {
+        if (cueLine >= 0) {
+          anchorPosition = Math.round(cueLine * firstLineHeightForAnchor) + parentTop;
+        } else {
+          anchorPosition =
+              Math.round((cueLine + 1) * firstLineHeightForAnchor) + parentBottom;
+        }
+      }
+      textTop =
+          cueLineAnchor == Cue.ANCHOR_TYPE_END
+              ? anchorPosition - textHeight
+              : cueLineAnchor == Cue.ANCHOR_TYPE_MIDDLE
+                  ? (anchorPosition * 2 - textHeight) / 2
+                  : anchorPosition;
+      if (textTop + textHeight > parentBottom) {
+        textTop = parentBottom - textHeight;
+      } else if (textTop < parentTop) {
+        textTop = parentTop;
+      }
+    } else {
+      textTop = parentBottom - textHeight - (int) (parentHeight * bottomPaddingFraction);
+    }
+
+    this.textLayout =
+        new StaticLayout(
+            primaryText, textPaint, textWidth, textAlignment, spacingMult, spacingAdd, true);
+    this.translationLayout =
+        new StaticLayout(
+            translationText,
+            translationLinePaint,
+            textWidth,
+            textAlignment,
+            spacingMult,
+            spacingAdd,
+            true);
+    this.textLeft = textLeft;
+    this.textTop = textTop;
+    this.textPaddingX = textPaddingX;
+    return true;
+  }
+
   private void setupBitmapLayout() {
     int parentWidth = parentRight - parentLeft;
     int parentHeight = parentBottom - parentTop;
@@ -395,50 +573,108 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
   private void drawTextLayout(Canvas canvas) {
     StaticLayout layout = textLayout;
     if (layout == null) {
-      // Nothing to draw.
       return;
     }
 
     int saveCount = canvas.save();
     canvas.translate(textLeft, textTop);
 
-    if (Color.alpha(windowColor) > 0) {
-      paint.setColor(windowColor);
-      canvas.drawRect(-textPaddingX, 0, layout.getWidth() + textPaddingX, layout.getHeight(),
-          paint);
+    int blockHeight = layout.getHeight();
+    int blockWidth = layout.getWidth();
+    if (translationLayout != null) {
+      blockHeight += translationGapPx + translationLayout.getHeight();
+      blockWidth = Math.max(blockWidth, translationLayout.getWidth());
     }
 
+    if (Color.alpha(windowColor) > 0) {
+      paint.setColor(windowColor);
+      canvas.drawRect(-textPaddingX, 0, blockWidth + textPaddingX, blockHeight, paint);
+    }
+
+    drawLayoutEdgeAndFill(canvas, layout, textPaint, foregroundColor);
+
+    if (translationLayout != null) {
+      canvas.translate(0, layout.getHeight() + translationGapPx);
+      drawLayoutEdgeAndFill(
+          canvas,
+          translationLayout,
+          translationLinePaint,
+          DualSubtitleCueMarkers.TRANSLATION_COLOR);
+    }
+
+    textPaint.setShadowLayer(0, 0, 0, 0);
+    translationLinePaint.setShadowLayer(0, 0, 0, 0);
+
+    canvas.restoreToCount(saveCount);
+  }
+
+  /** Caption edge + fill for one {@link StaticLayout} using {@code fillColor} for the main pass. */
+  private void drawLayoutEdgeAndFill(
+      Canvas canvas, StaticLayout layout, TextPaint tp, int fillColor) {
     if (edgeType == CaptionStyleCompat.EDGE_TYPE_OUTLINE) {
-      textPaint.setStrokeJoin(Join.ROUND);
-      textPaint.setStrokeWidth(outlineWidth);
-      textPaint.setColor(edgeColor);
-      textPaint.setStyle(Style.FILL_AND_STROKE);
+      tp.setStrokeJoin(Join.ROUND);
+      tp.setStrokeWidth(outlineWidth);
+      tp.setColor(edgeColor);
+      tp.setStyle(Style.FILL_AND_STROKE);
       layout.draw(canvas);
     } else if (edgeType == CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW) {
-      textPaint.setShadowLayer(shadowRadius, shadowOffset, shadowOffset, edgeColor);
+      tp.setShadowLayer(shadowRadius, shadowOffset, shadowOffset, edgeColor);
     } else if (edgeType == CaptionStyleCompat.EDGE_TYPE_RAISED
         || edgeType == CaptionStyleCompat.EDGE_TYPE_DEPRESSED) {
       boolean raised = edgeType == CaptionStyleCompat.EDGE_TYPE_RAISED;
       int colorUp = raised ? Color.WHITE : edgeColor;
       int colorDown = raised ? edgeColor : Color.WHITE;
       float offset = shadowRadius / 2f;
-      textPaint.setColor(foregroundColor);
-      textPaint.setStyle(Style.FILL);
-      textPaint.setShadowLayer(shadowRadius, -offset, -offset, colorUp);
+      tp.setColor(fillColor);
+      tp.setStyle(Style.FILL);
+      tp.setShadowLayer(shadowRadius, -offset, -offset, colorUp);
       layout.draw(canvas);
-      textPaint.setShadowLayer(shadowRadius, offset, offset, colorDown);
+      tp.setShadowLayer(shadowRadius, offset, offset, colorDown);
     }
 
-    textPaint.setColor(foregroundColor);
-    textPaint.setStyle(Style.FILL);
+    tp.setColor(fillColor);
+    tp.setStyle(Style.FILL);
     layout.draw(canvas);
-    textPaint.setShadowLayer(0, 0, 0, 0);
-
-    canvas.restoreToCount(saveCount);
+    tp.setShadowLayer(0, 0, 0, 0);
   }
 
   private void drawBitmapLayout(Canvas canvas) {
     canvas.drawBitmap(cueBitmap, null, bitmapRect, null);
+  }
+
+  private static int dualSubtitleTranslationStart(CharSequence cueText) {
+    if (!(cueText instanceof Spanned)) {
+      return -1;
+    }
+    Spanned sp = (Spanned) cueText;
+    Annotation[] annotations = sp.getSpans(0, sp.length(), Annotation.class);
+    for (Annotation a : annotations) {
+      if (DualSubtitleCueMarkers.ANNOTATION_KEY.equals(a.getKey())
+          && DualSubtitleCueMarkers.ANNOTATION_VALUE.equals(a.getValue())) {
+        return sp.getSpanStart(a);
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Dual subtitles merge original + translation in one {@link CharSequence} with spans on the
+   * translation line and an {@link Annotation} marker; those must survive even when the view
+   * disables embedded WebVTT/TTML styling.
+   */
+  private static boolean isSmartTubeDualMergedSubtitleCue(CharSequence cueText) {
+    if (!(cueText instanceof Spanned)) {
+      return false;
+    }
+    Spanned sp = (Spanned) cueText;
+    Annotation[] annotations = sp.getSpans(0, sp.length(), Annotation.class);
+    for (Annotation a : annotations) {
+      if (DualSubtitleCueMarkers.ANNOTATION_KEY.equals(a.getKey())
+          && DualSubtitleCueMarkers.ANNOTATION_VALUE.equals(a.getValue())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
