@@ -508,7 +508,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        getPlayer().setPositionMs(getPlayer().getDurationMs() - 1_000); // show last frame
+        getPlayer().setPositionMs(getPlayer().getDurationMs());
         getPlayer().setPlayWhenReady(false);
         getPlayer().showSuggestions(true);
     }
