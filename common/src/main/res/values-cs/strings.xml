@@ -648,7 +648,7 @@
     <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
     <string name="hide_unwanted_content">Skrýt obsah</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
-    <string name="hide_watched_from_watch_later">Skrýt zhlédnutá videa ze seznamu Přehrát později</string>
+    <string name="hide_watched_from_watch_later">Odstranit zhlédnutá videa ze seznamu Přehrát později</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
     <string name="login_from_browser">Přihlášení přes prohlížeč</string>
     <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
@@ -744,6 +744,10 @@
     <string name="app_restore_desc">POZOR: Zálohu ZIP je nutné do této složky zkopírovat ručně nebo přes správce souborů, pomocí \'Otevřít v\'</string>
     <string name="app_backup_desc">POZOR: Záloha bude vytvořena ve formátu ZIP</string>
     <string name="add_video_to_watch_later">Přidat do Přehrát později</string>
+    <string name="enable_conscrypt">Povolit Conscrypt</string>
+    <string name="enable_conscrypt_desc">Vylepšuje HTTPS, TLS, and VPN kompatibilitu na některých zařízeních, ale občas může způsobit problémy s přehráváním nebo pomalejší výkon sítě</string>
+    <string name="network_settings">Nastavení sítě</string>
+    <string name="comments_disabled">Pro toto video jsou komentáře vypnuté</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>
