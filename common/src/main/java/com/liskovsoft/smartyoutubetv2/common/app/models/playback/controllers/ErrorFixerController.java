@@ -119,9 +119,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
             // Recently this message starting to show for other reasons
-            YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
+            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
             //switchNextEngine(); // ?
             //restartEngine = false;
+            if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                switchNextEngine();
+            }
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
                 // OkHttp has memory leak problems
