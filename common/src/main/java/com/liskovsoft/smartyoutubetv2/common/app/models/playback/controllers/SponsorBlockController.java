@@ -134,20 +134,19 @@ public class SponsorBlockController extends BasePlayerController {
         }
 
         if (buttonId == R.id.action_content_block) {
-            //List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments, true);
-            //
-            //if (foundSegments != null) {
-            //    SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
-            //    setPositionMs(lastSegment.getEndMs());
-            //    return;
-            //}
+            List<SponsorSegment> foundSegments = findMatchedSegments(getPlayer().getPositionMs(), mOriginalSegments, true);
 
-            Video video = getVideo();
-            String channelId = video != null ? video.channelId : null;
+            if (foundSegments != null) {
+                SponsorSegment lastSegment = foundSegments.get(foundSegments.size() - 1);
+                setPositionMs(lastSegment.getEndMs());
+            } else {
+                Video video = getVideo();
+                String channelId = video != null ? video.channelId : null;
 
-            getSponsorBlockData().setSponsorBlockEnabled(buttonState != PlayerUI.BUTTON_ON);
-            getSponsorBlockData().stopExcludingChannel(channelId);
-            onVideoLoaded(video);
+                getSponsorBlockData().setSponsorBlockEnabled(buttonState != PlayerUI.BUTTON_ON);
+                getSponsorBlockData().stopExcludingChannel(channelId);
+                onVideoLoaded(video);
+            }
         }
     }
 
