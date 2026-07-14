@@ -568,7 +568,14 @@ public final class Video {
         }
 
         // NOTE: Movies labeled as "Free with Ads" not supported yet
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie || isMembersOnly();
+    }
+
+    /**
+     * Members only videos appears as videos with a length badge but has only a channel id
+     */
+    private boolean isMembersOnly() {
+        return videoId == null && durationMs > 0;
     }
 
     public String getGroupTitle() {
