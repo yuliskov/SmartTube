@@ -4,31 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:background="@drawable/sidebar_item_pill"
-    android:paddingStart="16dp"
-    android:paddingEnd="20dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:gravity="center_vertical">
 
-    <ImageView
-        android:id="@+id/header_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:contentDescription="@string/header_icon" />
-
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
-        android:id="@+id/header_label"
+    <!-- Content-hugging pill: only wraps the icon+label instead of stretching
+         across the whole sidebar row, so it reads as a capsule, YouTube style. -->
+    <LinearLayout
+        android:id="@+id/header_pill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginStart="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/sidebar_item_pill"
+        android:paddingStart="16dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-        android:singleLine="true"
-        android:maxWidth="150sp"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:ellipsize="marquee"
-        android:scrollHorizontally="true"
+        <ImageView
+            android:id="@+id/header_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/header_icon" />
 
-        style="@style/TextAppearance.Leanback.Header"/>
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
+            android:id="@+id/header_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="10dp"
+
+            android:singleLine="true"
+            android:maxWidth="150sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
+
+            style="@style/TextAppearance.Leanback.Header"/>
+    </LinearLayout>
 </androidx.leanback.widget.NonOverlappingLinearLayout>

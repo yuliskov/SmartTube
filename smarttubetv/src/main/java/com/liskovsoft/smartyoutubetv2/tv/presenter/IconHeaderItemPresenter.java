@@ -69,11 +69,12 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         ImageView icon = view.findViewById(R.id.header_icon);
         TextView label = view.findViewById(R.id.header_label);
+        View pillView = view.findViewById(R.id.header_pill);
 
         // Rounded "pill" highlight behind the currently focused sidebar item, YouTube style.
         // Starts fully transparent; onSelectLevelChanged() fades it in.
-        GradientDrawable pill = view.getBackground() instanceof GradientDrawable
-                ? (GradientDrawable) view.getBackground().mutate() : null;
+        GradientDrawable pill = pillView != null && pillView.getBackground() instanceof GradientDrawable
+                ? (GradientDrawable) pillView.getBackground().mutate() : null;
         if (pill != null) {
             pill.setAlpha(0);
         }
