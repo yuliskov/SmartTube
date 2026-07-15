@@ -37,8 +37,10 @@ public class VideoCardPresenter extends LongClickPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
+    private int mDefaultContentTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
+    private int mSelectedContentTextColor = -1;
     private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
@@ -52,10 +54,14 @@ public class VideoCardPresenter extends LongClickPresenter {
             ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
+        mDefaultContentTextColor =
+                ContextCompat.getColor(context, R.color.card_default_content_text);
         mSelectedBackgroundColor =
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mSelectedContentTextColor =
+                ContextCompat.getColor(context, R.color.card_selected_content_text);
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
@@ -95,6 +101,9 @@ public class VideoCardPresenter extends LongClickPresenter {
     private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
+        // Dimmer than the title, so the metadata line (channel * views * time ago)
+        // reads as secondary instead of matching the title's brightness, YouTube style.
+        int contentTextColor = selected ? mSelectedContentTextColor : mDefaultContentTextColor;
 
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
@@ -112,7 +121,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
         TextView contentText = view.findViewById(R.id.content_text);
         if (contentText != null) {
-            contentText.setTextColor(textColor);
+            contentText.setTextColor(contentTextColor);
         }
     }
 

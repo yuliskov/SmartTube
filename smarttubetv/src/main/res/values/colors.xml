@@ -22,6 +22,9 @@
     <color name="card_default_background">#0096a6</color>
     <color name="card_default_background_dark">#004B53</color>
     <color name="card_default_text">#FFFFFF</color>
+    <!-- Dimmer metadata line (channel * views * time ago) so the title stands out, YouTube style -->
+    <color name="card_default_content_text">#B3FFFFFF</color>
+    <color name="card_selected_content_text">#75000000</color>
     <!-- Rounded "pill" duration/live/new badge background, YouTube style -->
     <color name="card_badge_background">#A6000000</color>
 

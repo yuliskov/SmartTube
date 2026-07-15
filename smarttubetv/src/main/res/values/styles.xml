@@ -24,6 +24,13 @@
         <item name="android:verticalSpacing">@dimen/browse_headers_vertical_spacing</item>
     </style>
 
+    <!-- Brighter, slightly larger, medium-weight shelf titles ("Recommended", "Shorts"), YouTube style -->
+    <style name="TextAppearance.Leanback.Row.Header" parent="TextAppearance.Leanback.Header">
+        <item name="android:textColor">#CCEEEEEE</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <!-- <item name="android:windowBackground">@null</item> -->
