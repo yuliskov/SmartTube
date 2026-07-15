@@ -23,7 +23,7 @@
     <color name="card_default_background_dark">#004B53</color>
     <color name="card_default_text">#FFFFFF</color>
     <!-- Rounded "pill" duration/live/new badge background, YouTube style -->
-    <color name="card_badge_background">#80000000</color>
+    <color name="card_badge_background">#A6000000</color>
 
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>
