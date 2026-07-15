@@ -136,7 +136,15 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        // NOP
+        // Cancel any in-flight remote-icon load so it can't land on this view after
+        // it's been rebound to a different section.
+        if (viewHolder instanceof IconViewHolder) {
+            ImageView icon = ((IconViewHolder) viewHolder).icon;
+
+            if (icon != null) {
+                Glide.with(icon.getContext().getApplicationContext()).clear(icon);
+            }
+        }
     }
 
     // TODO: This is a temporary fix. Remove me when leanback onCreateViewHolder no longer sets the

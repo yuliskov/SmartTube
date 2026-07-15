@@ -35,6 +35,10 @@ public class ComplexImageView extends RelativeLayout {
     private int mPreviewWidth;
     private int mPreviewHeight;
     private Runnable mCreateAndStartPlayer;
+    // Pending "finish the old preview player" cleanup scheduled by stopPlayback(false).
+    // Cached so a subsequent startPlayback() (rapid re-focus/re-select) can cancel it,
+    // instead of briefly having an old and a new preview player alive at the same time.
+    private Runnable mStopPreviewCleanup;
     private WeakReference<Video> mVideo;
     private boolean mIsPreviewUrlEnabled;
     private boolean mMute;
@@ -172,6 +176,15 @@ public class ComplexImageView extends RelativeLayout {
                     .apply(ViewUtil.glideOptions())
                     .into(mPreviewImage);
         } else if (getVideo().videoId != null) {
+            // A stop-then-start in quick succession (fast re-focus) would otherwise leave
+            // the old player's cleanup pending for another 500ms while a new player gets
+            // created, so run it immediately instead of waiting for the delayed callback.
+            if (mStopPreviewCleanup != null) {
+                Utils.removeCallbacks(mStopPreviewCleanup);
+                mStopPreviewCleanup.run();
+                mStopPreviewCleanup = null;
+            }
+
             if (mCreateAndStartPlayer == null) {
                 mCreateAndStartPlayer = this::createAndStartPlayer;
             }
@@ -229,10 +242,11 @@ public class ComplexImageView extends RelativeLayout {
                 } else {
                     EmbedPlayerView epv = mPreviewPlayer;
                     epv.setMute(true);
-                    Utils.postDelayed(() -> {
+                    mStopPreviewCleanup = () -> {
                         epv.finish();
                         mPreviewContainer.removeView(epv);
-                    }, 500);
+                    };
+                    Utils.postDelayed(mStopPreviewCleanup, 500);
                 }
                 mPreviewPlayer = null;
             }

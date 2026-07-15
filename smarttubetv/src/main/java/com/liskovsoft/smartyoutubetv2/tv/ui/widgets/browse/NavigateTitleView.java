@@ -325,14 +325,24 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     }
 
     private void loadIcon(SearchOrbView view, String url, boolean useCache) {
-        loadIcon(view, url, useCache, 0);
+        if (view == null) {
+            return;
+        }
+
+        // Supersede any retry chain still pending from an earlier call for this same view
+        // (e.g. onAccountChanged firing again before the previous chain finished waiting
+        // for layout), so a stale URL can't win a race and flash in after the new one.
+        Object token = new Object();
+        view.setTag(token);
+
+        loadIcon(view, url, useCache, 0, token);
     }
 
     // Cap retries so a view that's permanently hidden/never laid out doesn't get polled forever.
     private static final int MAX_LOAD_ICON_ATTEMPTS = 20; // 20 * 500ms = 10s
 
-    private void loadIcon(SearchOrbView view, String url, boolean useCache, int attempt) {
-        if (view == null) {
+    private void loadIcon(SearchOrbView view, String url, boolean useCache, int attempt, Object token) {
+        if (view == null || view.getTag() != token) {
             return;
         }
 
@@ -341,7 +351,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             if (attempt >= MAX_LOAD_ICON_ATTEMPTS) {
                 return;
             }
-            Utils.postDelayed(() -> loadIcon(view, url, useCache, attempt + 1), 500);
+            Utils.postDelayed(() -> loadIcon(view, url, useCache, attempt + 1, token), 500);
             return;
         }
 
