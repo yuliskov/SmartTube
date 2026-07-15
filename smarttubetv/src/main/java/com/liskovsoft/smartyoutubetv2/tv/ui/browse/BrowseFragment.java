@@ -236,7 +236,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private int getSelectedHeaderId() {
-        if (getSelectedPosition() >= mSectionRowAdapter.size()) {
+        if (getSelectedPosition() < 0 || getSelectedPosition() >= mSectionRowAdapter.size()) {
             return -1;
         }
 
@@ -442,6 +442,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onDestroyView() {
         mSectionFragmentFactory.cleanup();
+        mHandler.removeCallbacksAndMessages(null);
 
         super.onDestroyView();
     }

@@ -7,6 +7,10 @@
     <dimen name="card_height">110dp</dimen>
     <!-- text_badge_image_view.xml, default: 12sp -->
     <dimen name="card_badge_text_size">14sp</dimen>
+    <!-- Rounded "pill" duration/live/new badge, YouTube style -->
+    <dimen name="card_badge_corner_radius">4dp</dimen>
+    <dimen name="card_badge_margin">6dp</dimen>
+    <dimen name="card_badge_padding_horizontal">6dp</dimen>
 
     <dimen name="shorts_card_width">120dp</dimen>
     <dimen name="shorts_card_height">200dp</dimen>

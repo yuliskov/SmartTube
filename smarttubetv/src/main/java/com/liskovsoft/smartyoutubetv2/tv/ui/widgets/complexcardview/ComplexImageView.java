@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +111,14 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        mBadgeText.setBackgroundColor(color);
+        // Keep the rounded "pill" shape (card_badge_pill.xml) instead of
+        // replacing it with a flat rectangle via setBackgroundColor.
+        Drawable background = mBadgeText.getBackground();
+        if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background.mutate()).setColor(color);
+        } else {
+            mBadgeText.setBackgroundColor(color);
+        }
     }
 
     /**

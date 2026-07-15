@@ -32,7 +32,7 @@
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
-        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
@@ -53,7 +53,7 @@
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
-        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
         <item name="appLogo">@mipmap/app_logo</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
