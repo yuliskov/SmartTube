@@ -28,6 +28,11 @@
     <!-- Rounded "pill" duration/live/new badge background, YouTube style -->
     <color name="card_badge_background">#A6000000</color>
 
+    <!-- Sidebar (headers panel) nav item colors, YouTube style -->
+    <color name="sidebar_item_text">#FFFFFF</color>
+    <color name="sidebar_item_selected_background">#FFFFFF</color>
+    <color name="sidebar_item_selected_text">#1A1A1A</color>
+
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>
     <color name="shelf_background_dark">#131313</color>
