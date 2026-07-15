@@ -24,6 +24,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -40,6 +42,9 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         final ImageView icon;
         final TextView label;
         final GradientDrawable pill;
+        // True while this row is the currently open section (e.g. "Home"), independent
+        // of whether the sidebar itself currently has keyboard/D-pad focus.
+        boolean isActive;
 
         IconViewHolder(View view, ImageView icon, TextView label, GradientDrawable pill) {
             super(view);
@@ -115,6 +120,14 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         if (label != null) {
             label.setText(headerItem.getName());
         }
+
+        if (viewHolder instanceof IconViewHolder) {
+            IconViewHolder iconHolder = (IconViewHolder) viewHolder;
+            iconHolder.isActive = isActiveSection(headerItem, rootView.getContext());
+            // Rebinding (e.g. after switching sections) doesn't go through
+            // onSelectLevelChanged, so re-apply the highlight here too.
+            applyHighlight(iconHolder, Math.max(iconHolder.getSelectLevel(), iconHolder.isActive ? 1f : 0f));
+        }
     }
 
     @Override
@@ -136,25 +149,41 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         IconViewHolder iconHolder = (IconViewHolder) holder;
 
-        if (iconHolder.pill != null) {
-            iconHolder.pill.setAlpha(Math.round(255 * selectLevel));
+        // Keep the currently active section highlighted even as focus moves away from it,
+        // e.g. into the video grid, like the official app.
+        applyHighlight(iconHolder, Math.max(selectLevel, iconHolder.isActive ? 1f : 0f));
+    }
+
+    private void applyHighlight(IconViewHolder holder, float level) {
+        if (holder.pill != null) {
+            holder.pill.setAlpha(Math.round(255 * level));
         }
 
-        int textColor = ColorUtils.blendARGB(mUnselectedTextColor, mSelectedTextColor, selectLevel);
+        int textColor = ColorUtils.blendARGB(mUnselectedTextColor, mSelectedTextColor, level);
 
-        if (iconHolder.label != null) {
-            iconHolder.label.setTextColor(textColor);
+        if (holder.label != null) {
+            holder.label.setTextColor(textColor);
         }
 
         // Only tint the built-in monochrome icons. A remote icon (mIconUrl != null, e.g. a
         // pinned channel's avatar) keeps its real colors and shouldn't be flattened to a silhouette.
-        if (iconHolder.icon != null) {
+        if (holder.icon != null) {
             if (mIconUrl == null) {
-                iconHolder.icon.setColorFilter(textColor, PorterDuff.Mode.SRC_IN);
+                holder.icon.setColorFilter(textColor, PorterDuff.Mode.SRC_IN);
             } else {
-                iconHolder.icon.clearColorFilter();
+                holder.icon.clearColorFilter();
             }
         }
+    }
+
+    private boolean isActiveSection(HeaderItem headerItem, Context context) {
+        if (headerItem == null) {
+            return false;
+        }
+
+        BrowseSection currentSection = BrowsePresenter.instance(context).getCurrentSection();
+
+        return currentSection != null && currentSection.getId() == (int) headerItem.getId();
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
