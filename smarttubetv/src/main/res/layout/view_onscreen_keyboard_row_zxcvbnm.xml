@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView style="@style/OnScreenKeyboardKey" android:text="Z"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="X"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="C"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="V"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="B"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="N"/>
+    <TextView style="@style/OnScreenKeyboardKey" android:text="M"/>
+</LinearLayout>

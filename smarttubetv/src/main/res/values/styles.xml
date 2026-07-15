@@ -31,6 +31,21 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <!-- A single key on the embedded on-screen search keyboard -->
+    <style name="OnScreenKeyboardKey">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/search_keyboard_key_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">@dimen/search_keyboard_key_margin</item>
+        <item name="android:background">@drawable/keyboard_key_background</item>
+        <item name="android:textColor">@color/keyboard_key_text_color</item>
+        <item name="android:textSize">@dimen/search_keyboard_key_text_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <!-- <item name="android:windowBackground">@null</item> -->

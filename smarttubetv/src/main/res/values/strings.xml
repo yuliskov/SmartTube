@@ -118,4 +118,10 @@
     <string name="text_post_results_title">Posts for %s</string>
     <string name="text_no_results">No results</string>
     <string name="error_message_network_needed">Oops, you need a network connection to do that!</string>
+
+    <!-- On-screen search keyboard -->
+    <string name="keyboard_key_clear">CLEAR</string>
+    <string name="keyboard_key_space">SPACE</string>
+    <string name="keyboard_key_backspace">⌫</string>
+    <string name="keyboard_key_search">SEARCH</string>
 </resources>

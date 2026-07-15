@@ -61,6 +61,17 @@
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">600dp</dimen>
 
+    <!-- Embedded on-screen search keyboard, YouTube style -->
+    <dimen name="search_keyboard_width">460dp</dimen>
+    <dimen name="search_keyboard_margin_top">110dp</dimen>
+    <dimen name="search_keyboard_margin_start">27dp</dimen>
+    <dimen name="search_keyboard_key_height">44dp</dimen>
+    <dimen name="search_keyboard_key_margin">4dp</dimen>
+    <dimen name="search_keyboard_key_corner_radius">6dp</dimen>
+    <dimen name="search_keyboard_key_text_size">18sp</dimen>
+    <!-- search_keyboard_margin_start + search_keyboard_width + gap -->
+    <dimen name="search_results_margin_start">520dp</dimen>
+
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
 
