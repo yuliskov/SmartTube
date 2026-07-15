@@ -100,7 +100,13 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         View rootView = viewHolder.view;
         rootView.setFocusable(true);
 
-        ImageView iconView = rootView.findViewById(R.id.header_icon);
+        // IconViewHolder already caches these from onCreateViewHolder; avoid re-querying
+        // findViewById on every bind (this runs on every scroll/rebind of the sidebar).
+        boolean isIconHolder = viewHolder instanceof IconViewHolder;
+        IconViewHolder iconHolder = isIconHolder ? (IconViewHolder) viewHolder : null;
+        ImageView iconView = isIconHolder ? iconHolder.icon : rootView.findViewById(R.id.header_icon);
+        TextView label = isIconHolder ? iconHolder.label : rootView.findViewById(R.id.header_label);
+
         if (iconView != null) {
             if (mIconUrl != null) {
                 // Remote icon (e.g. a pinned channel's own avatar): keep its real colors, don't tint it.
@@ -116,13 +122,11 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
             }
         }
 
-        TextView label = rootView.findViewById(R.id.header_label);
         if (label != null) {
             label.setText(headerItem.getName());
         }
 
-        if (viewHolder instanceof IconViewHolder) {
-            IconViewHolder iconHolder = (IconViewHolder) viewHolder;
+        if (iconHolder != null) {
             iconHolder.isActive = isActiveSection(headerItem, rootView.getContext());
             // Rebinding (e.g. after switching sections) doesn't go through
             // onSelectLevelChanged, so re-apply the highlight here too.

@@ -6,9 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.util.Pair;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
@@ -110,19 +108,11 @@ public class VideoCardPresenter extends LongClickPresenter {
         // NOTE: has visual bug with rounded corners
         //view.setBackgroundColor(backgroundColor);
 
-        View infoField = view.findViewById(R.id.info_field);
-        if (infoField != null) {
-            infoField.setBackgroundColor(backgroundColor);
-        }
-
-        TextView titleText = view.findViewById(R.id.title_text);
-        if (titleText != null) {
-            titleText.setTextColor(textColor);
-        }
-        TextView contentText = view.findViewById(R.id.content_text);
-        if (contentText != null) {
-            contentText.setTextColor(contentTextColor);
-        }
+        // This runs on every focus change for every card, so use the view's cached
+        // field references instead of findViewById() (ComplexImageCardView caches them once).
+        view.setInfoAreaBackgroundColor(backgroundColor);
+        view.setTitleTextColor(textColor);
+        view.setContentTextColor(contentTextColor);
     }
 
     @Override
