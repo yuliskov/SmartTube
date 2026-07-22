@@ -150,6 +150,10 @@ public class VideoStateController extends BasePlayerController {
         // Channel info should be loaded at this point
         if (getVideo() != null && !getVideo().isRemote) {
             restoreSubtitleFormat();
+            // Channel id is set only now, so reapply the per channel format
+            if (getPlayerData().isFormatPerChannelEnabled() && getPlayerData().getFormatPerChannel(getVideo().channelId) != null) {
+                restoreVideoFormat();
+            }
         }
 
         // Need to contain channel id
@@ -412,8 +416,14 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        Video video = getPlayer().getVideo();
+        FormatItem formatPerChannel = getPlayerData().isFormatPerChannelEnabled() && video != null
+                ? getPlayerData().getFormatPerChannel(video.channelId) : null;
+
         if (getPlayerData().getTempVideoFormat() != null) {
             getPlayer().setFormat(getPlayerData().getTempVideoFormat());
+        } else if (formatPerChannel != null) {
+            getPlayer().setFormat(formatPerChannel);
         } else {
             getPlayer().setFormat(getPlayerData().getFormat(FormatItem.TYPE_VIDEO));
         }
