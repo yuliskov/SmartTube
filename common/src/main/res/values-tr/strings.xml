@@ -398,8 +398,8 @@
     <string name="audio_sync_fix">Ses senk. düzeltmesi</string>
     <string name="ambilight_ratio_fix_desc">Olmayan ön gerilim aydınlatmasını düzeltir. Yanlış en boy oranını ya da video ölçeğini düzeltir. Boş ekran görüntülerini düzeltir. Performansı etkiler!</string>
     <string name="ambilight_ratio_fix">Ambilight/En boy oranı/Video ölçeği/Ekran görüntüleri düzeltmesi</string>
-    <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 720p\'dir.</string>
-    <string name="force_legacy_codecs">Eski kod çözücüleri zorla (720p)</string>
+    <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 360p\'dir.</string>
+    <string name="force_legacy_codecs">Eski kod çözücüleri zorla (360p)</string>
     <string name="live_stream_fix_desc">Uyarı, bu ince ayar canlı yayınların geri sarılmasını devre dışı bırakır. Alt sınıf cihazlarda canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 1080p\'dir.</string>
     <string name="live_stream_fix_4k_desc">Uyarı, bu ince ayar canlı yayınların geri sarılmasını devre dışı bırakır. Canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 4K\'dır.</string>
     <string name="live_stream_fix">Canlı yayın düzeltmesi (1080p)</string>
@@ -745,6 +745,7 @@
     <string name="enable_conscrypt">Conscrypt\'i Etkinleştir</string>
     <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır, ancak bazen oynatma sorunlarına veya ağın yavaşlamasına neden olabilir</string>
     <string name="network_settings">Ağ ayarları</string>
+    <string name="comments_disabled">Bu videoda yorumlar devre dışı bırakıldı</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

@@ -566,7 +566,8 @@
     <string name="sort_by_date">Data di caricamento</string>
     <string name="sort_by_rating">Valutazione</string>
     <string name="clear_search_history">Cancella la Cronologia delle ricerche</string>
-    <string name="remove_from_subscriptions">Nascondi</string>
+    <string name="remove_from_search_history">Rimuovi dalla  Cronologia delle ricerche</string>
+	<string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Più velocità nell\'elenco delle velocità</string>
     <string name="player_extra_long_speed_list">Ancora più velocità nell\'elenco delle velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
@@ -746,6 +747,7 @@
     <string name="enable_conscrypt">Abilita Conscrypt</string>
     <string name="enable_conscrypt_desc">Migliora la compatibilità con HTTPS, TLS e VPN su alcuni dispositivi, ma può causare occasionalmente problemi di riproduzione o prestazioni di rete inferiori</string>
     <string name="network_settings">Impostazioni di rete</string>
+    <string name="comments_disabled">I commenti sono disabilitati per questo video</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>

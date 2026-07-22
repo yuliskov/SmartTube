@@ -722,18 +722,18 @@
   <string name="player_quick_skip_videos_alt">Pomijaj zwykłe wideo przyciskami w góra/dół</string>
   <string name="prefer_google_dns">Preferuj Google DNS</string>
   <string name="action_debug_info">Informacje debugowania</string>
-  <string name="dialog_block_channel">Zablokuj kanał</string>
-  <string name="dialog_unblock_channel">Odblokuj kanał</string>
+  <string name="dialog_block_channel">Zablokuj Kanał</string>
+  <string name="dialog_unblock_channel">Odblokuj Kanał</string>
   <string name="confirm_block_channel">Ukryć całą zawartość od %s\?</string>
   <string name="channel_blocked">Kanał zablokowany</string>
   <string name="channel_unblocked">Kanał odblokowany</string>
-  <string name="header_blocked_channels">Zablokowane kanały</string>
-  <string name="msg_no_blocked_channels">Brak zablokowanych kanałów</string>
+  <string name="header_blocked_channels">Zablokowane Kanały</string>
+  <string name="msg_no_blocked_channels">Brak zablokowanych Kanałów</string>
   <string name="player_time_stretching_desc">Zapewnia naturalny dźwięk przy zmianie prędkości. Może znacznie obniżyć wydajność niektórych urządzeń.</string>
   <string name="player_time_stretching">Korekcja czasu w sygnałach audio</string>
   <string name="queue_respects_playback_mode">Kolejka respektuje tryb odtwarzania</string>
   <string name="ignore_short_segments">Pomiń krótkie segmenty</string>
-  <string name="fix_empty_subs_and_channels">Napraw puste subskrypcje i kanały</string>
+  <string name="fix_empty_subs_and_channels">Napraw puste Subskrypcje i Kanały</string>
   <string name="local_backup_not_supported">Automatyczne tworzenie kopii zapasowych na telewizorach z systemem Android TV 11 i nowszym nie jest obsługiwane ze względu na ograniczenia systemowe. Zamiast tego użyj GDrive. </string>
   <string name="rounded_card_corners">Zaokrąglone rogi kart</string>
   <string name="install_bridge">Zainstaluj most ATV/Amazon</string>
@@ -747,4 +747,5 @@
   <string name="enable_conscrypt">Włącz Conscrypt</string>
   <string name="enable_conscrypt_desc">Poprawia zgodność z protokołami HTTPS,TLS i VPN na niektórych urządzeniach,ale może czasami powodować problemy z odtwarzaniem lub wolniejszą wydajność sieci</string>
   <string name="network_settings">Ustawienia sieciowe</string>
+  <string name="comments_disabled">Komentarze do tego wideo są wyłączone</string>
 </resources>

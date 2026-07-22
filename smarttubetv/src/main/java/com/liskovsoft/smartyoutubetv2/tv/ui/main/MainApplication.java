@@ -131,7 +131,8 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private boolean shouldIgnore(Throwable e) {
-        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture")) {
+        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture")
+                || e.getClass().getName().startsWith("org.chromium")) {
             // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
             // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
             // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
@@ -139,6 +140,10 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
             // java.lang.NoSuchMethodError: No interface method addListener(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)V
             // in class Lcom/google/common/util/concurrent/ListenableFuture; or its super classes
             // (declaration of 'com.google.common.util.concurrent.ListenableFuture' appears in /system/framework/libsetting.jar)
+
+            // Fatal Exception: org.chromium.base.JniAndroid$UncaughtExceptionException
+            // 1) Caused by java.lang.InterruptedException
+            // 2) Caused by java.lang.SecurityException: The calling process has already registered an InputDevicesChangedListener.
             return true;
         }
 

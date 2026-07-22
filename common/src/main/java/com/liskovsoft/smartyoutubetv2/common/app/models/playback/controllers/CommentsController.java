@@ -130,7 +130,7 @@ public class CommentsController extends BasePlayerController {
             }
 
             if (mCommentsKey == null && mLiveChatKey == null) {
-                MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                MessageHelpers.showMessage(getContext(), R.string.comments_disabled);
             }
         }
     }

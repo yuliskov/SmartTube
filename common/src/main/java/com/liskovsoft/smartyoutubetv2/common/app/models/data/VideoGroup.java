@@ -509,7 +509,11 @@ public class VideoGroup {
 
         int type = getType();
 
-        if (type != MediaGroup.TYPE_HOME && type != MediaGroup.TYPE_SUGGESTIONS) {
+        //if (type != MediaGroup.TYPE_HOME && type != MediaGroup.TYPE_SUGGESTIONS) {
+        //    return false;
+        //}
+
+        if (type != MediaGroup.TYPE_SUGGESTIONS) {
             return false;
         }
 

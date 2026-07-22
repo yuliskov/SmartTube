@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.os.Build.VERSION;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
@@ -457,7 +459,12 @@ public class VideoLoaderController extends BasePlayerController {
                 loadNext();
                 break;
             case PlayerConstants.PLAYBACK_MODE_ONE:
-                getPlayer().setPositionMs(100); // fix frozen image on Android 4?
+                if (VERSION.SDK_INT <= 19) {
+                    // Fix frozen image on Android 4
+                    restartEngine();
+                } else {
+                    getPlayer().setPositionMs(0);
+                }
                 break;
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown

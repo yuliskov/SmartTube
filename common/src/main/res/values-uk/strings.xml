@@ -394,8 +394,8 @@
     <string name="audio_sync_fix">Виправлення розсинхронізації звуку</string>
     <string name="ambilight_ratio_fix_desc">Виправляє відсутнє фонове підсвічування. Виправляє невірне співвідношення сторін або масштаб відео. Виправляє порожні скріншоти. Впливає на продуктивність пристрою!</string>
     <string name="ambilight_ratio_fix">Виправлення Ambilight, співвідношення сторін, масштабу відео та скріншотів</string>
-    <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 720p.</string>
-    <string name="force_legacy_codecs">Використовувати застарілі кодеки (720p)</string>
+    <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 360p.</string>
+    <string name="force_legacy_codecs">Використовувати застарілі кодеки (360p)</string>
     <string name="live_stream_fix_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій на слабких пристроях. Максимальна роздільна здатність 1080p.</string>
     <string name="live_stream_fix_4k_desc">Увага: перемотування прямих трансляцій буде недоступним. Значно покращує продуктивність трансляцій. Максимальна роздільна здатність 4K.</string>
     <string name="live_stream_fix">Виправлення прямих трансляцій (1080p)</string>
@@ -733,6 +733,7 @@
     <string name="enable_conscrypt">Увімкнути Conscrypt</string>
     <string name="enable_conscrypt_desc">Покращує сумісність HTTPS, TLS і VPN на деяких пристроях, але іноді може спричиняти проблеми з відтворенням або сповільнення мережі</string>
     <string name="network_settings">Налаштування мережі</string>
+    <string name="comments_disabled">Коментарі вимкнено для цього відео</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>

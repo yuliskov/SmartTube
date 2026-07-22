@@ -732,4 +732,8 @@
   <string name="enable_conscrypt_desc">Nâng cao khả năng tương thích với các giao thức HTTPS, TLS và VPN trên một số thiết bị, tuy nhiên đôi khi có thể gây ra các vấn đề về việc phát lại nội dung hoặc làm chậm hiệu suất mạng.</string>
   <string name="local_backup_not_supported">Tính năng sao lưu tự động trên Android TV phiên bản 11+ không được hỗ trợ do các hạn chế của hệ thống. Hãy sử dụng Google Drive thay thế.</string>
   <string name="app_backup_desc">LƯU Ý: Bản sao lưu sẽ được tạo dưới định dạng zip</string>
+  <string name="comments_disabled">Chức năng bình luận đã bị tắt cho video này</string>
+  <string name="app_restore_desc">LƯU Ý: Tệp zip chứa dữ liệu sao lưu cần được sao chép vào thư mục này theo cách thủ công hoặc sử dụng trình quản lý tệp, chọn \'Mở bằng\'</string>
+  <string name="ignore_short_segments">Bỏ qua các đoạn ngắn</string>
+  <string name="card_unlocalized_titles">Tiêu đề video chưa được bản địa hóa</string>
 </resources>
