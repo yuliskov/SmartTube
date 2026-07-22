@@ -11,7 +11,10 @@ android {
 
     compileSdkVersion project.properties.compileSdkVersion
     buildToolsVersion project.properties.buildToolsVersion
-    testOptions.unitTests.includeAndroidResources = true
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
 
     defaultConfig {
         minSdkVersion project.properties.minSdkVersion
@@ -57,6 +60,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXVersion
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion
+    testImplementation 'org.mockito:mockito-core:' + mockitoVersion
 
     implementation project(':sharedutils')
     implementation project(':fragment-1.1.0')
@@ -103,4 +107,7 @@ dependencies {
     implementation project(':appupdatechecker2')
 
     implementation project(':slidableactivity') // https://github.com/r0adkll/Slidr
+
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'org.nanohttpd:nanohttpd-websocket:2.3.1'
 }

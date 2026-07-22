@@ -46,7 +46,9 @@ public class SuggestionsController extends BasePlayerController {
     private Video mNextSectionVideo;
     private int mFocusCount;
     private int mNextRetryCount;
-    private List<ChapterItem> mChapters;
+    // Written on the main thread (metadata load), but also read from NanoHTTPD worker
+    // threads via the remote API (RemoteApiBridge.getChapters) — volatile for visibility.
+    private volatile List<ChapterItem> mChapters;
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
     private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
@@ -354,6 +356,9 @@ public class SuggestionsController extends BasePlayerController {
 
         // After video suggestions
         callListener(mediaItemMetadata);
+
+        // Notify remote API clients that suggestions have been updated
+        com.liskovsoft.smartyoutubetv2.common.misc.remoteapi.RemoteApiBridge.notifySuggestionsUpdated();
     }
 
     private void appendSuggestions(Video video, MediaItemMetadata mediaItemMetadata) {
@@ -544,6 +549,14 @@ public class SuggestionsController extends BasePlayerController {
         if (chapter != null) {
             Utils.postDelayed(mChapterHandler, (long) ((chapter.getStartTimeMs() - positionMs) * getPlayer().getSpeed()));
         }
+    }
+
+    /**
+     * Chapters of the currently playing video (parsed from YouTube metadata),
+     * or null when the video has none / nothing is playing. Used by the remote API.
+     */
+    public List<ChapterItem> getChapters() {
+        return mChapters;
     }
 
     private void appendChaptersIfNeeded(MediaItemMetadata mediaItemMetadata) {

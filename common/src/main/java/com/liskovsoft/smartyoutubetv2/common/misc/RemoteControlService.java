@@ -12,6 +12,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.remoteapi.RemoteApiServer;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteApiData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class RemoteControlService extends Service {
@@ -48,6 +50,10 @@ public class RemoteControlService extends Service {
 
         PlaybackPresenter.instance(getApplicationContext()); // init RemoteControlListener
         StreamReminderService.instance(getApplicationContext()).startStop(); // init reminder service
+
+        if (RemoteApiData.instance(this).isApiEnabled()) {
+            RemoteApiServer.startRemoteApi(this);
+        }
 
         return START_STICKY;
     }
