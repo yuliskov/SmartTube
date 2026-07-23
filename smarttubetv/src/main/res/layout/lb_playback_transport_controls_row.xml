@@ -16,11 +16,16 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
+        <!-- MOD: the title/subtitle rendered here moved to the top-left of the screen
+             (see top_title_dock in lb_playback_fragment.xml / VideoPlayerGlue.setTopTitleViews()),
+             so this whole block (which still receives the same title/subtitle bind calls
+             from PlaybackTransportRowPresenter) is hidden to avoid showing it twice. -->
         <LinearLayout
             android:id="@+id/controls_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:visibility="gone"
             android:clipToPadding="false"
             android:paddingStart="?attr/browsePaddingStart"
             android:paddingEnd="?attr/browsePaddingEnd"

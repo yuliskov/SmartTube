@@ -21,6 +21,11 @@
     <dimen name="player_secondary_controls_pill_padding_vertical">6dp</dimen>
     <dimen name="player_secondary_controls_pill_margin_top">8dp</dimen>
 
+    <!-- Top-left video title, YouTube style -->
+    <dimen name="player_top_title_margin_top">40dp</dimen>
+    <dimen name="player_top_title_text_size">28sp</dimen>
+    <dimen name="player_top_subtitle_text_size">18sp</dimen>
+
     <dimen name="shorts_card_width">120dp</dimen>
     <dimen name="shorts_card_height">200dp</dimen>
 

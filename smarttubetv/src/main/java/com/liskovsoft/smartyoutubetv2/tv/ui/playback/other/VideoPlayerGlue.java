@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -88,6 +89,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     private final PlayerTweaksData mPlayerTweaksData;
     private final GeneralData mGeneralData;
     private int mPreviousAction = KeyEvent.ACTION_UP;
+    // MOD: video title/subtitle moved to the top-left corner of the screen, YouTube style
+    // (was rendered inline with the bottom control row). See PlaybackFragment's
+    // initializeTopTitle(), which supplies these views right after this glue is created.
+    private View mTopTitleDock;
+    private TextView mTopTitleView;
+    private TextView mTopSubtitleView;
 
     public VideoPlayerGlue(
             Context context,
@@ -344,6 +351,56 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
     public void setNextTitle(CharSequence title) {
         mSkipNextAction.setLabel1(title != null ? title : getContext().getString(R.string.lb_playback_controls_skip_next));
         invalidateUi(mSkipNextAction);
+    }
+
+    /**
+     * MOD: called once by PlaybackFragment right after this glue is created, wiring up the
+     * top-left title/subtitle views (lb_playback_fragment.xml) so setTitle()/setSubtitle()
+     * and setControlsVisibility() below keep them in sync with the row's own title/subtitle,
+     * YouTube style.
+     */
+    public void setTopTitleViews(View dock, TextView title, TextView subtitle) {
+        mTopTitleDock = dock;
+        mTopTitleView = title;
+        mTopSubtitleView = subtitle;
+
+        // Sync current values immediately in case setTitle()/setSubtitle() already ran.
+        if (mTopTitleView != null) {
+            mTopTitleView.setText(getTitle());
+        }
+        if (mTopSubtitleView != null) {
+            mTopSubtitleView.setText(getSubtitle());
+        }
+        if (mTopTitleDock != null) {
+            mTopTitleDock.setVisibility(isControlsVisible() ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+
+        if (mTopTitleView != null) {
+            mTopTitleView.setText(title);
+        }
+    }
+
+    @Override
+    public void setSubtitle(CharSequence subtitle) {
+        super.setSubtitle(subtitle);
+
+        if (mTopSubtitleView != null) {
+            mTopSubtitleView.setText(subtitle);
+        }
+    }
+
+    @Override
+    public void setControlsVisibility(boolean show) {
+        super.setControlsVisibility(show);
+
+        if (mTopTitleDock != null) {
+            mTopTitleDock.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     @Override
