@@ -135,6 +135,7 @@
     com.liskovsoft.mediaserviceinterfaces.MediaItemService getMediaItemService();
 }
 # IncompatibleClassChangeError: androidx.recyclerview.widget.RecyclerView$Recycler
+-keep class androidx.recyclerview.widget.RecyclerView
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView$Recycler {
     <init>(...);
 }
@@ -158,6 +159,7 @@
 #}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.utils.Utils {
     boolean isFormatSupported(com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack);
+    boolean skipCronet();
 }
 -keepclassmembers class com.google.android.exoplayer2.video.VideoRendererEventListener {
     void onVideoDisabled(com.google.android.exoplayer2.decoder.DecoderCounters);
