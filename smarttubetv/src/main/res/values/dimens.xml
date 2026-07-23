@@ -15,6 +15,12 @@
     <!-- Rounded search suggestion "chip", YouTube style -->
     <dimen name="tag_chip_corner_radius">20dp</dimen>
 
+    <!-- Floating "pill" capsule around the player's secondary action buttons, YouTube style -->
+    <dimen name="player_secondary_controls_pill_corner_radius">28dp</dimen>
+    <dimen name="player_secondary_controls_pill_padding_horizontal">16dp</dimen>
+    <dimen name="player_secondary_controls_pill_padding_vertical">6dp</dimen>
+    <dimen name="player_secondary_controls_pill_margin_top">8dp</dimen>
+
     <dimen name="shorts_card_width">120dp</dimen>
     <dimen name="shorts_card_height">200dp</dimen>
 
