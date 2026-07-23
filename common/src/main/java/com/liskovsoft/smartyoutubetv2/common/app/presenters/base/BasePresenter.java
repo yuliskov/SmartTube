@@ -14,7 +14,11 @@ import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -24,9 +28,12 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
@@ -96,6 +103,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     @Override
     public void onViewInitialized() {
         enableSync();
+        enableScreenOffIfNeeded();
     }
 
     @Override
@@ -121,6 +129,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         }
 
         //showBootDialogs();
+        enableScreenOffIfNeeded();
     }
 
     @Override
@@ -196,6 +205,32 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private void enableSync() {
         if (this instanceof PlaybackPresenter) {
             Playlist.instance().onNewSession();
+        }
+    }
+
+    /**
+     * Seamless behavior with the player screen off feature
+     */
+    private void enableScreenOffIfNeeded() {
+        if (this instanceof BrowsePresenter
+                || this instanceof SearchPresenter
+                || this instanceof ChannelPresenter
+                || this instanceof ChannelUploadsPresenter) {
+            ScreensaverManager manager = getScreensaverManager();
+
+            if (manager == null) {
+                return;
+            }
+
+            manager.setBlocked(false);
+            manager.disable();
+
+            if (getPlayerTweaksData().isBootScreenOffEnabled()
+                    && getPlayerTweaksData().getScreenOffTimeoutSec() == 0
+                    && getPlayerTweaksData().getScreenOffDimmingPercents() < 100) {
+                manager.doScreenOff();
+                manager.setBlocked(true);
+            }
         }
     }
 
@@ -277,5 +312,18 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     protected PlaybackPresenter getPlaybackPresenter() {
         return PlaybackPresenter.instance(getContext());
+    }
+
+    protected PlayerTweaksData getPlayerTweaksData() {
+        return PlayerTweaksData.instance(getContext());
+    }
+
+    protected ScreensaverManager getScreensaverManager() {
+        Context context = getContext();
+        if (context instanceof MotherActivity) {
+            return ((MotherActivity) context).getScreensaverManager();
+        }
+
+        return null;
     }
 }
