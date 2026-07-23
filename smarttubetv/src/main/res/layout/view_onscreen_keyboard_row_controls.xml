@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/key_clear"
+        style="@style/OnScreenKeyboardKey"
+        android:layout_weight="2"
+        android:text="@string/keyboard_key_clear"/>
+
+    <TextView
+        android:id="@+id/key_space"
+        style="@style/OnScreenKeyboardKey"
+        android:layout_weight="4"
+        android:text="@string/keyboard_key_space"/>
+
+    <TextView
+        android:id="@+id/key_backspace"
+        style="@style/OnScreenKeyboardKey"
+        android:layout_weight="2"
+        android:text="@string/keyboard_key_backspace"/>
+
+    <TextView
+        android:id="@+id/key_search"
+        style="@style/OnScreenKeyboardKey"
+        android:layout_weight="2"
+        android:background="@drawable/keyboard_search_key_background"
+        android:text="@string/keyboard_key_search"/>
+</LinearLayout>

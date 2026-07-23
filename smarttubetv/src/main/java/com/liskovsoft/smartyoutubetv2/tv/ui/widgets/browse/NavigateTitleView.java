@@ -69,6 +69,10 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private boolean mIsAccountViewEnabled;
     private boolean mIsLanguageViewEnabled;
     private boolean mIsGlobalClockEnabled;
+    // Stable Runnable instances so repeated Utils.postDelayed calls reschedule
+    // (and can be cancelled), instead of stacking a new uncancellable lambda each time.
+    private final Runnable mUpdateAccountIcon = this::updateAccountIcon;
+    private final Runnable mUpdateLanguageIconNow = this::updateLanguageIconNow;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -237,9 +241,16 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
         mGlobalDate.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);
 
-        Utils.postDelayed(this::updateAccountIcon, 1_000); // give a time to engine to fetch an updated icon url
+        Utils.postDelayed(mUpdateAccountIcon, 1_000); // give a time to engine to fetch an updated icon url
         //updateAccountIcon();
         updateLanguageIcon();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        Utils.removeCallbacks(mUpdateAccountIcon, mUpdateLanguageIconNow);
     }
 
     @Override
@@ -304,11 +315,13 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         }
 
         // Use delay to fix icon initialization on app boot
-        Utils.postDelayed(() -> {
-            Locale locale = LocaleUtility.getCurrentLocale(getContext());
-            loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()), true); // flag server could be down
-            TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
-        }, 100);
+        Utils.postDelayed(mUpdateLanguageIconNow, 100);
+    }
+
+    private void updateLanguageIconNow() {
+        Locale locale = LocaleUtility.getCurrentLocale(getContext());
+        loadIcon(mLanguageView, Utils.getCountryFlagUrl(locale.getCountry()), true); // flag server could be down
+        TooltipCompatHandler.setTooltipText(mLanguageView, String.format("%s (%s)", locale.getDisplayCountry(), locale.getDisplayLanguage()));
     }
 
     private void loadIcon(SearchOrbView view, String url, boolean useCache) {
@@ -316,9 +329,29 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             return;
         }
 
+        // Supersede any retry chain still pending from an earlier call for this same view
+        // (e.g. onAccountChanged firing again before the previous chain finished waiting
+        // for layout), so a stale URL can't win a race and flash in after the new one.
+        Object token = new Object();
+        view.setTag(token);
+
+        loadIcon(view, url, useCache, 0, token);
+    }
+
+    // Cap retries so a view that's permanently hidden/never laid out doesn't get polled forever.
+    private static final int MAX_LOAD_ICON_ATTEMPTS = 20; // 20 * 500ms = 10s
+
+    private void loadIcon(SearchOrbView view, String url, boolean useCache, int attempt, Object token) {
+        if (view == null || view.getTag() != token) {
+            return;
+        }
+
         // The view with GONE visibility has zero width and height
         if (view.getWidth() <= 0 || view.getHeight() <= 0) {
-            Utils.postDelayed(() -> loadIcon(view, url, useCache), 500);
+            if (attempt >= MAX_LOAD_ICON_ATTEMPTS) {
+                return;
+            }
+            Utils.postDelayed(() -> loadIcon(view, url, useCache, attempt + 1, token), 500);
             return;
         }
 

@@ -13,6 +13,7 @@
  */
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips;
 
+import android.graphics.PorterDuff;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
@@ -112,6 +114,22 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                     vh.mIcon.setPadding(padding, padding, padding, padding);
                 }
             }
+
+            // MOD: give play/pause a persistent white circle + dark icon, YouTube style,
+            // instead of blending in with the surrounding transport buttons. mFocusableView's
+            // src already handles the focus ripple; this just adds a background behind it,
+            // so focus feedback for every button (including this one) is unaffected.
+            if (action instanceof PlaybackControlsRow.PlayPauseAction) {
+                vh.mFocusableView.setBackgroundResource(
+                        com.liskovsoft.smartyoutubetv2.tv.R.drawable.player_play_pause_button_bg);
+                vh.mIcon.setColorFilter(
+                        ContextCompat.getColor(vh.mIcon.getContext(),
+                                com.liskovsoft.smartyoutubetv2.tv.R.color.player_play_pause_icon_color),
+                        PorterDuff.Mode.SRC_IN);
+            } else {
+                vh.mFocusableView.setBackgroundResource(0);
+                vh.mIcon.clearColorFilter();
+            }
             if (vh.mLabel != null) {
                 if (action.getIcon() == null) {
                     vh.mLabel.setText(action.getLabel1());
@@ -137,6 +155,8 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         public void onUnbindViewHolder(ViewHolder viewHolder) {
             ActionViewHolder vh = (ActionViewHolder) viewHolder;
             vh.mIcon.setImageDrawable(null);
+            vh.mIcon.clearColorFilter();
+            vh.mFocusableView.setBackgroundResource(0);
             if (vh.mLabel != null) {
                 vh.mLabel.setText(null);
             }

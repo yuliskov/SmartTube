@@ -24,15 +24,37 @@
         <item name="android:verticalSpacing">@dimen/browse_headers_vertical_spacing</item>
     </style>
 
+    <!-- Brighter, slightly larger, medium-weight shelf titles ("Recommended", "Shorts"), YouTube style -->
+    <style name="TextAppearance.Leanback.Row.Header" parent="TextAppearance.Leanback.Header">
+        <item name="android:textColor">#CCEEEEEE</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- A single key on the embedded on-screen search keyboard -->
+    <style name="OnScreenKeyboardKey">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/search_keyboard_key_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">@dimen/search_keyboard_key_margin</item>
+        <item name="android:background">@drawable/keyboard_key_background</item>
+        <item name="android:textColor">@color/keyboard_key_text_color</item>
+        <item name="android:textSize">@dimen/search_keyboard_key_text_size</item>
+        <item name="android:gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <!-- <item name="android:windowBackground">@null</item> -->
         <!-- NOTE: don't use transparency because the BackgroundManager won't work (BackgroundManager:778) -->
         <item name="android:windowBackground">@android:color/black</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="cardDefaultBackground">@color/shelf_background_dark</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
-        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
@@ -51,9 +73,9 @@
         <item name="brandColor">@color/fastlane_background_dark</item>
         <item name="brandAccentColor">@color/fastlane_background</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="cardDefaultBackground">@color/shelf_background_dark</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
-        <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.Red</item>
         <item name="appLogo">@mipmap/app_logo</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>

@@ -43,6 +43,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.OnScreenKeyboardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,6 +219,7 @@ public class SearchSupportFragment extends Fragment {
     String mPendingQuery = null;
     SearchOrbView mSearchOrbView;
     SearchOrbView mSearchSettingsOrbView;
+    OnScreenKeyboardView mKeyboardView;
 
     OnItemViewSelectedListener mOnItemViewSelectedListener;
     private OnItemViewClickedListener mOnItemViewClickedListener;
@@ -454,6 +456,42 @@ public class SearchSupportFragment extends Fragment {
         if (null != mProvider) {
             onSetSearchResultProvider();
         }
+
+        // MOD: embedded on-screen keyboard (replaces reliance on the system IME popup)
+        mKeyboardView = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_keyboard);
+        if (mKeyboardView != null) {
+            mKeyboardView.setOnScreenKeyboardListener(new OnScreenKeyboardView.OnScreenKeyboardListener() {
+                @Override
+                public void onCharacter(char character) {
+                    setSearchQuery(getSearchBarText() + character, false);
+                }
+
+                @Override
+                public void onSpace() {
+                    setSearchQuery(getSearchBarText() + " ", false);
+                }
+
+                @Override
+                public void onBackspace() {
+                    String text = getSearchBarText();
+
+                    if (!TextUtils.isEmpty(text)) {
+                        setSearchQuery(text.substring(0, text.length() - 1), false);
+                    }
+                }
+
+                @Override
+                public void onClear() {
+                    setSearchQuery("", false);
+                }
+
+                @Override
+                public void onSubmit() {
+                    setSearchQuery(getSearchBarText(), true);
+                }
+            });
+        }
+
         return root;
     }
 
