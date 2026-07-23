@@ -40,6 +40,10 @@
     <color name="lb_search_bar_text">#FFFFFFFF</color>
     <color name="lb_search_bar_hint">#B3FFFFFF</color>
 
+    <!-- Persistent white circle behind the player's play/pause button, YouTube style -->
+    <color name="player_play_pause_background">#FFFFFFFF</color>
+    <color name="player_play_pause_icon_color">#1A1A1A</color>
+
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>
     <color name="shelf_background_dark">#131313</color>
