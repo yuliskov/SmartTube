@@ -33,6 +33,13 @@
     <color name="sidebar_item_selected_background">#FFFFFF</color>
     <color name="sidebar_item_selected_text">#1A1A1A</color>
 
+    <!-- Dark "glass" search box (was a light/white pill), YouTube style -->
+    <color name="search_bar_background">#26FFFFFF</color>
+    <color name="search_bar_border">#40FFFFFF</color>
+    <!-- Overrides of leanback's lb_search_bar_text/lb_search_bar_hint, tuned for the dark box above -->
+    <color name="lb_search_bar_text">#FFFFFFFF</color>
+    <color name="lb_search_bar_hint">#B3FFFFFF</color>
+
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>
     <color name="shelf_background_dark">#131313</color>

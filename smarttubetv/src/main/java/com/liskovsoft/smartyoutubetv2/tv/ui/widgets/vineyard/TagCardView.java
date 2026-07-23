@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -30,7 +32,7 @@ public class TagCardView extends BaseCardView {
         setFocusable(false);
         setFocusableInTouchMode(false);
         setCardType(CARD_TYPE_MAIN_ONLY);
-        setBackgroundResource(R.color.primary_light);
+        setBackgroundResource(R.drawable.tag_chip_background);
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.view_tag_card, this);
@@ -89,6 +91,21 @@ public class TagCardView extends BaseCardView {
     public void setTextColor(int color) {
         if (mTagNameText != null) {
             mTagNameText.setTextColor(color);
+        }
+    }
+
+    /**
+     * Keeps the rounded "chip" shape (tag_chip_background.xml) instead of replacing it
+     * with a flat rectangle via setBackgroundColor().
+     */
+    @Override
+    public void setBackgroundColor(int color) {
+        Drawable background = getBackground();
+
+        if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background.mutate()).setColor(color);
+        } else {
+            super.setBackgroundColor(color);
         }
     }
 }

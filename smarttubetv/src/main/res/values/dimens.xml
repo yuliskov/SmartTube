@@ -12,6 +12,9 @@
     <dimen name="card_badge_margin">6dp</dimen>
     <dimen name="card_badge_padding_horizontal">6dp</dimen>
 
+    <!-- Rounded search suggestion "chip", YouTube style -->
+    <dimen name="tag_chip_corner_radius">20dp</dimen>
+
     <dimen name="shorts_card_width">120dp</dimen>
     <dimen name="shorts_card_height">200dp</dimen>
 
