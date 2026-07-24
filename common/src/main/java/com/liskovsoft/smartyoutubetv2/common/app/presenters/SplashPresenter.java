@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -107,6 +108,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void runPerViewTasks() {
         Utils.postDelayed(mCheckForUpdates, APP_INIT_DELAY_MS);
         Utils.updateRemoteControlService(getContext());
+        Utils.updateRestApiService(getContext());
 
         checkMasterPassword(() -> applyNewIntent(getView().getNewIntent()));
 
@@ -205,6 +207,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             return false;
         });
+
+        mIntentChain.add(this::processControlIntent);
 
         mIntentChain.add(intent -> {
             String searchText = IntentExtractor.extractSearchText(intent);
@@ -370,5 +374,79 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (browseView != null) {
             browseView.updateBadge();
         }
+    }
+
+    private boolean processControlIntent(Intent intent) {
+        if (!IntentExtractor.isControlCommand(intent)) {
+            return false;
+        }
+
+        String area = IntentExtractor.extractControlArea(intent);
+        String action = IntentExtractor.extractControlAction(intent);
+        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+
+        if (Helpers.equals(area, "playback")) {
+            if (Helpers.equals(action, "play")) {
+                if (playbackPresenter.getPlayer() != null) {
+                    playbackPresenter.getPlayer().setPlayWhenReady(true);
+                }
+                return true;
+            }
+            if (Helpers.equals(action, "pause")) {
+                if (playbackPresenter.getPlayer() != null) {
+                    playbackPresenter.getPlayer().setPlayWhenReady(false);
+                }
+                return true;
+            }
+            if (Helpers.equals(action, "next")) {
+                playbackPresenter.onNextClicked();
+                return true;
+            }
+            if (Helpers.equals(action, "previous")) {
+                playbackPresenter.onPreviousClicked();
+                return true;
+            }
+            if (Helpers.equals(action, "seek")) {
+                long positionMs = IntentExtractor.extractControlPositionMs(intent);
+                long maxPositionMs = 24 * 60 * 60 * 1000L; // 24 hours in ms
+                if (positionMs >= 0 && positionMs <= maxPositionMs) {
+                    playbackPresenter.setPosition(positionMs);
+                }
+                return true;
+            }
+        } else if (Helpers.equals(area, "queue")) {
+            String videoId = IntentExtractor.extractControlVideoId(intent);
+            if (Helpers.equals(action, "add") && videoId != null) {
+                Playlist.instance().add(Video.from(videoId));
+                return true;
+            }
+            if (Helpers.equals(action, "remove") && videoId != null) {
+                Playlist.instance().remove(Video.from(videoId));
+                return true;
+            }
+            if (Helpers.equals(action, "clear")) {
+                Playlist.instance().clear();
+                return true;
+            }
+            if (Helpers.equals(action, "get")) {
+                return true;
+            }
+        } else if (Helpers.equals(area, "playlist")) {
+            if (Helpers.equals(action, "play")) {
+                String playlistId = IntentExtractor.extractControlPlaylistId(intent);
+                int index = IntentExtractor.extractControlIndex(intent);
+                if (playlistId != null) {
+                    Video video = new Video();
+                    video.playlistId = playlistId;
+                    if (index > 0) {
+                        video.playlistIndex = index;
+                    }
+                    ChannelUploadsPresenter.instance(getContext()).openChannel(video);
+                }
+                return true;
+            }
+        }
+
+        return false;
     }
 }
