@@ -421,9 +421,10 @@ public class MediaServiceManager implements OnAccountChange {
                         videoPlaylistInfos -> {
                             PlaylistInfo watchLater = videoPlaylistInfos.get(0);
 
-                            if (watchLater.isSelected() == isAdd) {
-                                return;
-                            }
+                            // BUG: YT not marked Watch later as selected
+                            //if (watchLater.isSelected() == isAdd) {
+                            //    return;
+                            //}
 
                             Observable<Void> editObserve = isAdd ? mItemService.addToPlaylistObserve(watchLater.getPlaylistId(), video.videoId)
                                    : mItemService.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);

@@ -730,6 +730,7 @@
     <string name="app_restore_desc">УВАГА: ZIP-бекап потрібно вручну скопіювати в цю папку або через файловий менеджер, використовуючи \'Відкрити за допомогою\'</string>
     <string name="app_backup_desc">УВАГА: Резервна копія буде створена у форматі zip</string>
     <string name="add_video_to_watch_later">Додати до \'Переглянути пізніше\'</string>
+    <string name="remove_video_to_watch_later">Видалити з \'Переглянути пізніше\'</string>
     <string name="enable_conscrypt">Увімкнути Conscrypt</string>
     <string name="enable_conscrypt_desc">Покращує сумісність HTTPS, TLS і VPN на деяких пристроях, але іноді може спричиняти проблеми з відтворенням або сповільнення мережі</string>
     <string name="network_settings">Налаштування мережі</string>
