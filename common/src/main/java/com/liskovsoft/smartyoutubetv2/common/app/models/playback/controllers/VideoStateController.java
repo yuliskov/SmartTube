@@ -79,6 +79,7 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayer() != null && getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
             getPlayer().setPositionMs(100);
+            mIsRestoreActualLive = false;
             return true;
         }
 
