@@ -285,6 +285,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             MessageHelpers.showLongMessage(getContext(), fullMsg);
         }
 
+        if (Utils.fixRetrofitErrors(getContext(), error)) {
+            return;
+        }
+
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
             YouTubeServiceManager.instance().applyNoPlaybackFix();

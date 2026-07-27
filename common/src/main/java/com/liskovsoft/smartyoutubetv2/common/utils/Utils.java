@@ -88,7 +88,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
@@ -1292,6 +1291,20 @@ public class Utils {
     public static boolean isSharedDirRestricted(Context context) {
         // Android 11+: only backup through the file manager (no shared dir)
         return AppInfoHelpers.getRealSdkVersion(context) > 29;
+    }
+
+    public static boolean fixRetrofitErrors(@NonNull Context context, Throwable error) {
+        if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
+            // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
+            PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+            if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
+                playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
+                // Restart app to reinit OkHttp internal objects
+                Utils.restartTheApp(context);
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void persistData(Context context) {
