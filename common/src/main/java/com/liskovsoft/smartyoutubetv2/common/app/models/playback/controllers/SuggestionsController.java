@@ -151,7 +151,7 @@ public class SuggestionsController extends BasePlayerController {
     }
 
     private void updateLiveDescription() {
-        if (getPlayer() == null) {
+        if (getPlayer() == null || !getPlayer().isPlaying()) {
             return;
         }
 
