@@ -137,6 +137,19 @@ blocker described above. Worth keeping regardless.
 | `smarttubetv/.../ui/playback/PlaybackActivity.java` | `onResume()` also calls `Utils.turnScreenOn(this)` with a real Activity context | Belt-and-braces: dismisses the keyguard using the officially correct Android API once the Activity actually resumes |
 | `MediaServiceCore/.../lounge/LoungeService.java` | Added a 2-second backoff delay in the reconnect loop's generic exception handler | Without it, a persistent failure (e.g. DNS not ready right after WiFi wakes from sleep) turned the reconnect loop into a tight busy-loop retrying every ~10ms — burning CPU and hammering DNS instead of giving the network a moment to recover |
 
+## Bonus: auto-launch SmartTube on every restart
+
+There's no OS-level "boot app" setting exposed on this device (checked
+`adb shell settings list global/secure` for anything boot/startup/launch-related — nothing
+usable was found), so this couldn't be done with an adb command alone. Instead,
+`RemoteControlReceiver` (which already listens for boot broadcasts to restart the background
+cast service) now also brings the app's UI to the foreground specifically on boot-related
+actions (`BOOT_COMPLETED`, `QUICKBOOT_POWERON`, `LOCKED_BOOT_COMPLETED` — not on the other
+actions it listens to like `SCREEN_ON` or `TIME_SET`, which would be far too aggressive).
+This relies on the same `SYSTEM_ALERT_WINDOW` permission exemption used elsewhere in this fix
+to start an Activity from a background `BroadcastReceiver` context. No extra setup needed
+beyond the permissions already covered in Step 3 above.
+
 ## Diagnosis notes (for the curious / for future debugging)
 
 We initially suspected — and partially fixed — an Android Background Activity Launch (BAL)
