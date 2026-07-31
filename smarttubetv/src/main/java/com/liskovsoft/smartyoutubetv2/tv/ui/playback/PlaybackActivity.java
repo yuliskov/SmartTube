@@ -223,6 +223,10 @@ public class PlaybackActivity extends LeanbackActivity {
     protected void onResume() {
         mIsBackPressed = false;
         super.onResume();
+
+        // Wake up + dismiss keyguard using a real Activity context (e.g. when opened remotely via cast).
+        // Utils.wakeUpScreen(Context) already lit up the display; this also drops the lock screen.
+        Utils.turnScreenOn(this);
     }
 
     @SuppressWarnings("deprecation")

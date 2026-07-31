@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.liskovsoft.smartyoutubetv2.common">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Lets the app request Doze/App Standby exemption so the background cast connection survives screen-off -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Android 14 (API 34): required to launch an Activity from background via a full-screen-intent notification -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <!-- Android 14 (API 34) -->
     <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" /> -->
     <!-- API level 34 -->

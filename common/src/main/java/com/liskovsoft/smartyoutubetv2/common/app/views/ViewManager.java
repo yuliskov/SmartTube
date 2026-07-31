@@ -481,9 +481,18 @@ public class ViewManager {
     }
 
     public void movePlayerToForeground() {
-        Utils.turnScreenOn(mContext);
-
         if (!isPlayerInForeground()) {
+            // NOTE: mContext here is always an Application context. A plain startActivity()
+            // (used by startView() below) only reliably reaches the foreground for a few
+            // seconds after the app was last visible (Background Activity Launch restrictions),
+            // so use a full-screen-intent notification to guarantee the wake-up regardless of
+            // how long the screen's been off.
+            Class<?> activityClass = mViewMapping.get(PlaybackView.class);
+
+            if (activityClass != null) {
+                Utils.wakeUpAndOpenActivity(mContext, activityClass.asSubclass(Activity.class));
+            }
+
             startView(PlaybackView.class);
         }
     }
