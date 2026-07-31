@@ -269,7 +269,10 @@ public class Utils {
     public static void startRemoteControlWorkRequest(Context context) {
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(
-                        RemoteControlWorker.class, 30, TimeUnit.MINUTES
+                        // 15 minutes is the minimum WorkManager allows for periodic work.
+                        // Restart faster so the cast/remote-control connection recovers sooner
+                        // if the OS kills the background service while the TV is asleep.
+                        RemoteControlWorker.class, 15, TimeUnit.MINUTES
                 ).build();
 
         WorkManager
@@ -476,6 +479,53 @@ public class Utils {
     }
 
     /**
+     * Wakes up the device screen from any context (Application or Activity), e.g. when
+     * a remote cast command arrives while the app has no foreground Activity yet.<br/>
+     * {@link #turnScreenOn(Context)} only works with an Activity context, so this is needed
+     * to actually light up the screen before/while the player Activity is being started.
+     */
+    @SuppressWarnings("deprecation")
+    public static void wakeUpScreen(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        try {
+            PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+
+            if (powerManager == null) {
+                return;
+            }
+
+            Log.d(TAG, "wakeUpScreen: acquiring wake locks...");
+
+            // SCREEN_BRIGHT_WAKE_LOCK is the modern, documented way to wake the display.
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
+                    Utils.class.getSimpleName() + ":wakeUpScreen"
+            );
+            wakeLock.acquire(10_000);
+            wakeLock.release();
+
+            // FULL_WAKE_LOCK is older/more forceful and historically more reliable on some OEM
+            // power HALs (e.g. Realtek/MStar TV chipsets) that don't fully honor SCREEN_BRIGHT.
+            // Acquired as a belt-and-braces fallback alongside the call above.
+            PowerManager.WakeLock fullWakeLock = powerManager.newWakeLock(
+                    PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,
+                    Utils.class.getSimpleName() + ":wakeUpScreenFull"
+            );
+            fullWakeLock.acquire(10_000);
+            fullWakeLock.release();
+
+            Log.d(TAG, "wakeUpScreen: wake locks acquired/released, isInteractive=%s", !isHardScreenOff(context));
+        } catch (Exception e) {
+            // SecurityException, missing WAKE_LOCK permission on some custom ROMs
+            Log.e(TAG, "wakeUpScreen error: %s", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
      */
     @SuppressWarnings("deprecation")
@@ -497,6 +547,134 @@ public class Utils {
                         WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 );
             }
+        }
+    }
+
+    private static final int WAKE_UP_NOTIFICATION_ID = Utils.class.getSimpleName().hashCode() + 1;
+
+    /**
+     * Reliably wakes the screen and brings the given Activity to the foreground from a
+     * background/Service context, e.g. when a cast command arrives while the app has no
+     * foreground Activity and the screen has been off for more than a few seconds.<br/>
+     * A plain {@code startActivity(FLAG_ACTIVITY_NEW_TASK)} call from a background context
+     * only works for a short grace period (a few seconds) after the app was last visible;
+     * Android's Background Activity Launch restrictions silently block it afterwards.<br/>
+     * A full-screen-intent notification is one of the few background activity starts Android
+     * always allows, regardless of how long the app has been backgrounded (the same mechanism
+     * incoming-call/alarm apps use), so it's used here instead of/along with a direct start.
+     */
+    public static void wakeUpAndOpenActivity(Context context, Class<? extends Activity> activityCls) {
+        if (context == null || activityCls == null) {
+            return;
+        }
+
+        Log.d(TAG, "wakeUpAndOpenActivity: called for %s", activityCls.getSimpleName());
+
+        wakeUpScreen(context);
+
+        try {
+            Context appContext = context.getApplicationContext();
+            NotificationManager notificationManager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (notificationManager == null) {
+                return;
+            }
+
+            Intent intent = new Intent(appContext, activityCls);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+
+            PendingIntent fullScreenIntent = PendingIntent.getActivity(appContext, WAKE_UP_NOTIFICATION_ID, intent, flags);
+
+            String channelId = appContext.getPackageName() + ".wakeup";
+
+            if (VERSION.SDK_INT >= 26) {
+                NotificationChannel channel = new NotificationChannel(channelId, "Cast wake up", NotificationManager.IMPORTANCE_HIGH);
+                channel.setSound(null, null);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, channelId)
+                    .setSmallIcon(appContext.getApplicationInfo().icon)
+                    .setContentTitle(appContext.getString(R.string.app_name))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_CALL)
+                    .setFullScreenIntent(fullScreenIntent, true)
+                    .setContentIntent(fullScreenIntent)
+                    .setAutoCancel(true);
+
+            notificationManager.notify(WAKE_UP_NOTIFICATION_ID, builder.build());
+
+            Log.d(TAG, "wakeUpAndOpenActivity: full-screen-intent notification posted");
+        } catch (Exception e) {
+            Log.e(TAG, "wakeUpAndOpenActivity error: %s", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Whitelists the app from Doze/App Standby battery optimizations, so the background
+     * cast/remote-control connection isn't killed by the OS while the TV is asleep.<br/>
+     * A held {@link PowerManager.WakeLock#PARTIAL_WAKE_LOCK} alone isn't enough: TVs still apply
+     * battery-optimization network suspension unless the app is explicitly exempted.
+     */
+    @SuppressWarnings("deprecation")
+    public static void requestIgnoreBatteryOptimizations(Context context) {
+        if (context == null || Build.VERSION.SDK_INT < 23) {
+            return;
+        }
+
+        try {
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+            if (powerManager == null || powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                return;
+            }
+
+            Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + context.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            // Some OEM ROMs don't support this intent
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Requests the "Draw over other apps" (SYSTEM_ALERT_WINDOW) special permission.<br/>
+     * Declaring this permission in the manifest alone does NOT grant it — it must be approved
+     * by the user via this settings screen. Once granted, the OS treats the app's process as
+     * exempt from several background-start restrictions (Android 10+ Background Activity Launch
+     * restrictions, and Android 12+ background foreground-service-start restrictions), which is
+     * why {@code RemoteControlService.onCreate()} can otherwise hit
+     * {@code ForegroundServiceStartNotAllowedException} and silently fail to promote itself to a
+     * foreground service after the app has been backgrounded for a while — leaving it unprotected
+     * and quickly killed by the OS.
+     */
+    public static void requestOverlayPermission(Context context) {
+        if (context == null || Build.VERSION.SDK_INT < 23) {
+            return;
+        }
+
+        try {
+            if (android.provider.Settings.canDrawOverlays(context)) {
+                return;
+            }
+
+            Intent intent = new Intent(
+                    android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + context.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            // Some OEM/TV ROMs don't expose this screen
+            e.printStackTrace();
         }
     }
 
