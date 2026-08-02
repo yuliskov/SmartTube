@@ -131,7 +131,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private boolean shouldIgnore(Throwable e) {
-        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture")
+        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture", "Missing android.support.FILE_PROVIDER_PATHS meta-data")
                 || e.getClass().getName().startsWith("org.chromium")) {
             // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
             // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
@@ -144,6 +144,8 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
             // Fatal Exception: org.chromium.base.JniAndroid$UncaughtExceptionException
             // 1) Caused by java.lang.InterruptedException
             // 2) Caused by java.lang.SecurityException: The calling process has already registered an InputDevicesChangedListener.
+
+            // IllegalArgumentException: Missing android.support.FILE_PROVIDER_PATHS meta-data (Shield Android TV 95%, MiTV-AFKR0 5%)
             return true;
         }
 
