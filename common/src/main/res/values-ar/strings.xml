@@ -460,7 +460,6 @@
   <string name="speech_recognizer_system">النظام (المفضل)</string>
   <string name="speech_recognizer_external_1">خارجي 1 (يحتوي على أخطاء كثيرة، لكي يعمل عليك تعطيل الوصول إلى الميكروفون)</string>
   <string name="speech_recognizer_external_2">خارجي 2 (يحتوي على أخطاء كثيرة)</string>
-  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="real_channel_icon">عرض شعار القناة على زر القناة</string>
   <string name="subtitle_yellow_semi_transparent">صفراء على خلفية شبه شفافة</string>
   <string name="subtitle_yellow_black">صفراء على خلفية سوداء</string>

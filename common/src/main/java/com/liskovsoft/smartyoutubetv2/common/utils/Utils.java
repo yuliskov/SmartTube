@@ -66,6 +66,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -93,12 +94,19 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Utils {
     public static final String[] KNOWN_PACKAGES = {
@@ -1305,6 +1313,30 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void testUrl(String url, Runnable onSuccess) {
+        if (onSuccess == null) {
+            return;
+        }
+
+        OkHttpClient okHttpClient = OkHttpManager.instance().getClient();
+        Request request = new Request.Builder().url(url).head().build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // NOP
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                try (Response ignored = response) {
+                    if (response.isSuccessful()) {
+                        post(onSuccess);
+                    }
+                }
+            }
+        });
     }
 
     private static void persistData(Context context) {

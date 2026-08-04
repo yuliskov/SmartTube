@@ -370,7 +370,6 @@
     <string name="proxy_not_supported">Usa proxy web (necessita di Android 4.4+)</string>
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Impostazioni server proxy</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
     <string name="proxy_test_cancelled">Test #%d: annullato.</string>
     <string name="proxy_type_invalid">Tipo di proxy non impostato.</string>
     <string name="proxy_host_invalid">Host proxy non impostato.</string>

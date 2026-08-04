@@ -146,7 +146,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        refresh(false);
+        Utils.testUrl("https://www.youtube.com", () -> refresh(false));
     }
 
     private void saveSelectedItems() {
