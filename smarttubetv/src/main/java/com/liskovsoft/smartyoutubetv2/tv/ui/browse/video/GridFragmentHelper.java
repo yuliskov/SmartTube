@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Build.VERSION;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.WindowManager;
@@ -65,7 +66,7 @@ public class GridFragmentHelper {
         int displayWidthPx;
 
         // Take into the account screen orientation (e.g. when running on phone)
-        if (Helpers.isCutoutMode(context)) {
+        if (VERSION.SDK_INT >= 30 && Helpers.isCutoutMode(context)) {
             // Take into the account screen cutout/notch area
             Rect bounds = context.getSystemService(WindowManager.class)
                     .getCurrentWindowMetrics().getBounds();
