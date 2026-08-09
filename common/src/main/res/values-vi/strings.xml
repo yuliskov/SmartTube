@@ -735,4 +735,5 @@
   <string name="app_restore_desc">LƯU Ý: Tệp zip chứa dữ liệu sao lưu cần được sao chép vào thư mục này theo cách thủ công hoặc sử dụng trình quản lý tệp, chọn \'Mở bằng\'</string>
   <string name="ignore_short_segments">Bỏ qua các đoạn ngắn</string>
   <string name="card_unlocalized_titles">Tiêu đề video chưa được bản địa hóa</string>
+  <string name="remove_video_to_watch_later">Xóa khỏi Xem sau</string>
 </resources>
