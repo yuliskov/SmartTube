@@ -98,7 +98,7 @@
   <string name="player_full_date">Pontos dátum a leírásban</string>
   <string name="open_channel">Csatorna megnyitása</string>
   <string name="not_interested">Nem érdekel</string>
-  <string name="you_wont_see_this_video">A videó eltávolítása került az ajánlottból</string>
+  <string name="you_wont_see_this_video">A videó eltávolítva az ajánlások közül</string>
   <string name="settings_search">Keresés</string>
   <string name="dialog_search">Keresés</string>
   <string name="instant_voice_search">Hangalapú keresés</string>
@@ -133,7 +133,7 @@
   <string name="app_exit_none">Ne lépjen ki</string>
   <string name="app_double_back_exit">Vissza gomb kétszer nyomva</string>
   <string name="app_single_back_exit">Vissza gomb egyszer nyomva</string>
-  <string name="action_video_zoom">Videózoom</string>
+  <string name="action_video_zoom">Videó zoom</string>
   <string name="video_zoom">Videó zoom</string>
   <string name="video_zoom_default">Alapértelmezett</string>
   <string name="video_zoom_fit_width">Szélességhez igazít</string>
@@ -423,7 +423,7 @@
   <string name="playlist_order_popularity">Népszerűség szerint</string>
   <string name="cant_do_this_for_foreign_playlist">Idegen videólisták esetén ez nem lehetséges</string>
   <string name="owned_playlist_warning">Hiba. Ez a művelet csak a saját videólistákra alkalmazható</string>
-  <string name="content_block_alt_server">Használjon alternatív szervert</string>
+  <string name="content_block_alt_server">Alternatív szerver használata</string>
   <string name="content_block_alt_server_desc">Engedélyezze ezt az opciót, ha a SponsorBlock különböző okok miatt megtagadja a munkát.</string>
   <string name="unset_stream_reminder">Stream emlékeztető visszavonása</string>
   <string name="set_stream_reminder">Stream emlékeztető beállítása</string>
@@ -544,7 +544,7 @@
   <string name="play_video_incognito">Lejátszás inkognitó módban</string>
   <string name="header_kids_home">Gyermekvideók</string>
   <string name="player_section_playlist">Az aktuális kategória tartalmának használata lejátszási listaként</string>
-  <string name="not_recommend_channel">Ne ajánl csatornát</string>
+  <string name="not_recommend_channel">Nem ajánlom a csatornát</string>
   <string name="you_wont_see_this_channel">Ez a csatorna nem jelenik meg az ajánlások között</string>
   <string name="header_trending">Felkapott</string>
   <string name="screensaver">Képernyővédő</string>
@@ -739,4 +739,13 @@
   <string name="create_playlist_note">MEGJEGYZÉS: Nem lesz látható a YouTube alkalmazásban</string>
   <string name="player_unexpected_error">Váratlan lejátszási hiba</string>
   <string name="player_toggle_speed">Lejátszási sebesség be/ki váltása</string>
+  <string name="remove_from_search_history">Eltávolítás a keresési előzményekből</string>
+  <string name="app_restore_desc">MEGJEGYZÉS: A biztonsági mentési zip fájlt ebbe a mappába kell másolni manuálisan vagy a fájlkezelőben, használja a \'Megnyitás ezzel\'</string>
+  <string name="app_backup_desc">MEGJEGYZÉS: A biztonsági mentés zip formátumban készül</string>
+  <string name="add_video_to_watch_later">Hozzáadás a Watchhoz később</string>
+  <string name="remove_video_to_watch_later">Eltávolítás a Watchból később</string>
+  <string name="enable_conscrypt">Conscrypt engedélyezése</string>
+  <string name="enable_conscrypt_desc">Javítja a HTTPS, TLS - és VPN-kompatibilitást egyes eszközökön, de esetenként lejátszási problémákat vagy lassabb hálózati teljesítményt okozhat</string>
+  <string name="network_settings">Hálózati beállítások</string>
+  <string name="comments_disabled">A komment szakasz letiltva</string>
 </resources>
