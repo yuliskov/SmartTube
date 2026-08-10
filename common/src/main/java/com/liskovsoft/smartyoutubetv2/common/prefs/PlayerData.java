@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -288,6 +289,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     }
 
     public void setLegacyCodecsForced(boolean forced) {
+        MediaServiceData.instance().setFormatEnabled(MediaServiceData.FORMATS_ALL, false);
+        MediaServiceData.instance().setFormatEnabled(forced ? MediaServiceData.FORMATS_URL : MediaServiceData.FORMATS_ADAPTIVE, true);
         mIsLegacyCodecsForced = forced;
         persistState();
     }
