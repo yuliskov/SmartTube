@@ -1,5 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Pair;
 
@@ -14,6 +15,7 @@ import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.misc.EnabledTrackTypes;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.SabrFormatMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
@@ -114,12 +116,42 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
         this.videoId = videoId;
-        this.serverAbrStreamingUrl = serverAbrStreamingUrl;
+        this.serverAbrStreamingUrl = preferAlternateCdn(serverAbrStreamingUrl);
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.clientInfo = clientInfo;
         this.poToken = poToken;
         this.sabrStreams = new HashMap<>();
         this.emptySelector = new FormatSelector("ignored", true);
+    }
+
+    /**
+     * The primary Googlevideo edge selected for some ISPs can serve the legacy
+     * DASH metadata but reject the corresponding SABR request. YouTube includes
+     * an ordered list of equivalent media networks in the signed {@code mn}
+     * parameter, so use the advertised secondary edge for this workaround build.
+     */
+    private static String preferAlternateCdn(String url) {
+        if (url == null) {
+            return null;
+        }
+
+        Uri uri = Uri.parse(url);
+        String networks = uri.getQueryParameter("mn");
+
+        if (networks == null) {
+            return url;
+        }
+
+        String[] candidates = networks.split(",");
+
+        if (candidates.length < 2 || candidates[1].isEmpty()) {
+            return url;
+        }
+
+        return uri.buildUpon()
+                .authority("rr2---" + candidates[1] + ".googlevideo.com")
+                .build()
+                .toString();
     }
 
     public final int getPeriodCount() {
@@ -223,6 +255,21 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             clientAbrStateBuilder
                     .setStickyResolution(height)
                     .setLastManualSelectedResolution(height);
+        }
+
+        if (trackType == C.TRACK_TYPE_AUDIO
+                && selectedAudioFormat != null
+                && selectedAudioFormat.metadata != null) {
+            for (int i = 0; i < selectedAudioFormat.metadata.length(); i++) {
+                if (selectedAudioFormat.metadata.get(i) instanceof SabrFormatMetadata) {
+                    String audioTrackId = ((SabrFormatMetadata)
+                            selectedAudioFormat.metadata.get(i)).audioTrackId;
+
+                    if (audioTrackId != null && !audioTrackId.isEmpty()) {
+                        clientAbrStateBuilder.setAudioTrackId(audioTrackId);
+                    }
+                }
+            }
         }
 
         ClientAbrState clientAbrState = clientAbrStateBuilder.build();

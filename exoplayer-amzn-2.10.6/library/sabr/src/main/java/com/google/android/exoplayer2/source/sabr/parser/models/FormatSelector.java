@@ -3,6 +3,7 @@ package com.google.android.exoplayer2.source.sabr.parser.models;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
@@ -64,10 +65,30 @@ public class FormatSelector {
     }
 
     private static FormatId createFormatId(Format format) {
-        FormatId formatId = FormatId.newBuilder()
-                .setItag(Helpers.parseInt(format.id))
-                .setLastModified(format.lastModified)
-                .build();
-        return formatId;
+        FormatId.Builder builder = FormatId.newBuilder()
+                .setItag(Helpers.parseInt(format.id));
+
+        // ExoPlayer uses -1 for an unset last-modified value. Encoding that
+        // sentinel produces an invalid SABR format tuple; protobuf's omitted/0
+        // default is what GoogleVideo uses when YouTube does not provide LMT.
+        if (format.lastModified > 0) {
+            builder.setLastModified(format.lastModified);
+        }
+
+        if (format.metadata != null) {
+            for (int i = 0; i < format.metadata.length(); i++) {
+                Metadata.Entry entry = format.metadata.get(i);
+
+                if (entry instanceof SabrFormatMetadata) {
+                    String xTags = ((SabrFormatMetadata) entry).xTags;
+
+                    if (xTags != null && !xTags.isEmpty()) {
+                        builder.setXtags(xTags);
+                    }
+                }
+            }
+        }
+
+        return builder.build();
     }
 }

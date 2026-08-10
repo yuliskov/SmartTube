@@ -237,7 +237,7 @@ public class SabrProcessor {
                 startMs,
                 initializedFormat,
                 actualDurationMs == 0 || actualDurationMs == NO_VALUE,
-                false,
+                initializedFormat.discard,
                 false,
                 mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE
         );
@@ -295,7 +295,7 @@ public class SabrProcessor {
                     segmentStartBytes
             );
         } else {
-            Log.e(TAG, "processMedia: part discarded. contentLength: %s, itag: %s", contentLength, segment.formatId.getItag());
+            Log.d(TAG, "processMedia: part discarded. contentLength: %s, itag: %s", contentLength, segment.formatId.getItag());
             data.skipFully(contentLength);
         }
 
@@ -459,7 +459,7 @@ public class SabrProcessor {
         // Given we only provide one FormatId currently, and this should not occur in this case,
         // we will mark this as not currently supported and bail.
         for (SelectedFormat selectedFormat : selectedFormats.values()) {
-            if (selectedFormat.formatSelector == formatSelector) {
+            if (selectedFormat.formatSelector == formatSelector && !formatSelector.isDiscardMedia()) {
                 throw new SabrStreamError("Server changed format. Changing formats is not currently supported");
             }
         }
@@ -688,20 +688,20 @@ public class SabrProcessor {
     //}
 
     public StreamerContext createStreamerContext() {
-        return StreamerContext.newBuilder()
-                .setPoToken(
-                        ByteString.copyFrom(
-                                Base64.decode(poToken, Base64.URL_SAFE)
-                        )
-                )
+        StreamerContext.Builder builder = StreamerContext.newBuilder()
                 .setPlaybackCookie(
                         nextRequestPolicy != null ?
                                 nextRequestPolicy.getPlaybackCookie().toByteString() : ByteString.EMPTY
                 )
                 .setClientInfo(clientInfo)
                 .addAllSabrContexts(createSabrContexts())
-                .addAllUnsentSabrContexts(createUnsentSabrContexts())
-                .build();
+                .addAllUnsentSabrContexts(createUnsentSabrContexts());
+
+        if (poToken != null && !poToken.isEmpty()) {
+            builder.setPoToken(ByteString.copyFrom(Base64.decode(poToken, Base64.URL_SAFE)));
+        }
+
+        return builder.build();
     }
 
     private List<SabrContext> createSabrContexts() {
@@ -742,7 +742,11 @@ public class SabrProcessor {
             return formatSelector;
         }
 
-        return null;
+        // Some SABR responses contain initialization data for the other enabled
+        // track even when this chunk source requested only audio or only video.
+        // Keep the server informed that the format was consumed, but do not pass
+        // cross-track media to this source's extractor.
+        return emptySelector;
     }
 
     public @NonNull FormatSelector getFormatSelector() {
