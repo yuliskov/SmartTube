@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeNormalizer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
@@ -52,6 +53,7 @@ public class ExoPlayerController implements Player.EventListener {
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
+    private VolumeNormalizer mVolumeNormalizer;
     private boolean mIsEnded;
     private Runnable mOnVideoLoaded;
 
@@ -200,8 +202,12 @@ public class ExoPlayerController implements Player.EventListener {
     }
     
     public void setPlayer(SimpleExoPlayer player) {
+        releaseVolumeNormalizer();
         mPlayer = player;
         player.addListener(this);
+        mVolumeNormalizer = new VolumeNormalizer(player);
+        player.addAudioListener(mVolumeNormalizer);
+        refreshVolumeNormalization();
     }
 
     //@Override
@@ -226,6 +232,25 @@ public class ExoPlayerController implements Player.EventListener {
     
     public void setVideo(Video video) {
         mVideo = new WeakReference<>(video);
+        refreshVolumeNormalization();
+    }
+
+    public void refreshVolumeNormalization() {
+        if (mVolumeNormalizer == null) {
+            return;
+        }
+
+        PlayerData playerData = PlayerData.instance(mContext);
+        Video video = getVideo();
+        String channelId = video != null ? video.getChannelIdOrName() : null;
+        boolean enabled = playerData.isVolumeNormalizationEnabled(channelId);
+        if (playerData.getVolumeNormalizationMode() != PlayerData.VOLUME_NORMALIZATION_OFF) {
+            Log.d(TAG, "Volume normalization mode=%s, channel=%s, enabled=%s",
+                    playerData.getVolumeNormalizationMode(), channelId, enabled);
+        }
+        mVolumeNormalizer.update(
+                enabled,
+                playerData.getVolumeNormalizationIntensity());
     }
     
     public Video getVideo() {
@@ -488,6 +513,7 @@ public class ExoPlayerController implements Player.EventListener {
         }
 
         try {
+            releaseVolumeNormalizer();
             mPlayer.removeListener(this);
             mPlayer.stop(true); // Cause input lags due to high cpu load?
             mPlayer.clearVideoSurface();
@@ -497,5 +523,18 @@ public class ExoPlayerController implements Player.EventListener {
         } finally {
             mPlayer = null;
         }
+    }
+
+    private void releaseVolumeNormalizer() {
+        if (mVolumeNormalizer == null) {
+            return;
+        }
+
+        if (mPlayer != null) {
+            mPlayer.removeAudioListener(mVolumeNormalizer);
+        }
+
+        mVolumeNormalizer.release();
+        mVolumeNormalizer = null;
     }
 }

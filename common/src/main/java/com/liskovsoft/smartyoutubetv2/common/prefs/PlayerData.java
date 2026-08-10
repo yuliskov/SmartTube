@@ -39,6 +39,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     public static final int SEEK_PREVIEW_SINGLE = 1;
     public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
     public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
+    public static final int VOLUME_NORMALIZATION_OFF = 0;
+    public static final int VOLUME_NORMALIZATION_GLOBAL = 1;
+    public static final int VOLUME_NORMALIZATION_SELECTED_CHANNELS = 2;
+    public static final int VOLUME_NORMALIZATION_SOFT = 0;
+    public static final int VOLUME_NORMALIZATION_BALANCED = 1;
+    public static final int VOLUME_NORMALIZATION_STRONG = 2;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
@@ -102,6 +108,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsLegacyCodecsForced;
     private boolean mIsAudioDelayEnabled;
+    private int mVolumeNormalizationMode;
+    private int mLastVolumeNormalizationMode;
+    private int mVolumeNormalizationIntensity;
+    private List<String> mVolumeNormalizationChannels = new ArrayList<>();
 
     private static class SpeedItem {
         public String channelId;
@@ -505,6 +515,110 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
+    public int getVolumeNormalizationMode() {
+        return mVolumeNormalizationMode;
+    }
+
+    public void setVolumeNormalizationMode(int mode) {
+        mVolumeNormalizationMode = sanitizeVolumeNormalizationMode(mode);
+        if (mVolumeNormalizationMode != VOLUME_NORMALIZATION_OFF) {
+            mLastVolumeNormalizationMode = mVolumeNormalizationMode;
+        }
+        persistState();
+    }
+
+    public int getLastVolumeNormalizationMode() {
+        return mLastVolumeNormalizationMode;
+    }
+
+    public int getVolumeNormalizationIntensity() {
+        return mVolumeNormalizationIntensity;
+    }
+
+    public void setVolumeNormalizationIntensity(int intensity) {
+        mVolumeNormalizationIntensity = sanitizeVolumeNormalizationIntensity(intensity);
+        persistState();
+    }
+
+    public boolean isVolumeNormalizationEnabled(String channelId) {
+        if (mVolumeNormalizationMode == VOLUME_NORMALIZATION_GLOBAL) {
+            return true;
+        }
+
+        String channelKey = normalizeChannelKey(channelId);
+        return mVolumeNormalizationMode == VOLUME_NORMALIZATION_SELECTED_CHANNELS &&
+                channelKey != null && mVolumeNormalizationChannels.contains(channelKey);
+    }
+
+    public boolean isVolumeNormalizationEnabledForChannel(String channelId) {
+        String channelKey = normalizeChannelKey(channelId);
+        return channelKey != null && mVolumeNormalizationChannels.contains(channelKey);
+    }
+
+    public void setVolumeNormalizationEnabledForChannel(String channelId, boolean enabled) {
+        String channelKey = normalizeChannelKey(channelId);
+
+        if (channelKey == null) {
+            return;
+        }
+
+        boolean changed;
+        if (enabled) {
+            changed = !mVolumeNormalizationChannels.contains(channelKey) && mVolumeNormalizationChannels.add(channelKey);
+        } else {
+            changed = mVolumeNormalizationChannels.remove(channelKey);
+        }
+
+        if (changed) {
+            persistState();
+        }
+    }
+
+    public void toggleVolumeNormalizationForChannel(String channelId) {
+        setVolumeNormalizationEnabledForChannel(channelId, !isVolumeNormalizationEnabledForChannel(channelId));
+    }
+
+    public List<String> getVolumeNormalizationChannels() {
+        return new ArrayList<>(mVolumeNormalizationChannels);
+    }
+
+    private static int sanitizeVolumeNormalizationMode(int mode) {
+        return mode >= VOLUME_NORMALIZATION_OFF && mode <= VOLUME_NORMALIZATION_SELECTED_CHANNELS ?
+                mode : VOLUME_NORMALIZATION_OFF;
+    }
+
+    private static int sanitizeLastVolumeNormalizationMode(int mode) {
+        return mode == VOLUME_NORMALIZATION_GLOBAL ?
+                VOLUME_NORMALIZATION_GLOBAL : VOLUME_NORMALIZATION_SELECTED_CHANNELS;
+    }
+
+    private static int sanitizeVolumeNormalizationIntensity(int intensity) {
+        return intensity >= VOLUME_NORMALIZATION_SOFT && intensity <= VOLUME_NORMALIZATION_STRONG ?
+                intensity : VOLUME_NORMALIZATION_BALANCED;
+    }
+
+    private static String normalizeChannelKey(String channelId) {
+        if (channelId == null) {
+            return null;
+        }
+
+        String result = channelId.trim();
+        return result.isEmpty() ? null : result;
+    }
+
+    private void normalizeVolumeNormalizationChannels() {
+        List<String> normalized = new ArrayList<>();
+
+        for (String channelId : mVolumeNormalizationChannels) {
+            String channelKey = normalizeChannelKey(channelId);
+            if (channelKey != null && !normalized.contains(channelKey)) {
+                normalized.add(channelKey);
+            }
+        }
+
+        mVolumeNormalizationChannels = normalized;
+    }
+
     public int getResizeMode() {
         return mResizeMode;
     }
@@ -850,6 +964,15 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        mVolumeNormalizationMode = sanitizeVolumeNormalizationMode(Helpers.parseInt(split, 63, VOLUME_NORMALIZATION_OFF));
+        mVolumeNormalizationIntensity = sanitizeVolumeNormalizationIntensity(Helpers.parseInt(split, 64, VOLUME_NORMALIZATION_BALANCED));
+        mVolumeNormalizationChannels = Helpers.parseStrList(split, 65);
+        mLastVolumeNormalizationMode = sanitizeLastVolumeNormalizationMode(Helpers.parseInt(
+                split,
+                66,
+                mVolumeNormalizationMode != VOLUME_NORMALIZATION_OFF ?
+                        mVolumeNormalizationMode : VOLUME_NORMALIZATION_SELECTED_CHANNELS));
+        normalizeVolumeNormalizationChannels();
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -887,7 +1010,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, mVolumeNormalizationMode, mVolumeNormalizationIntensity,
+                mVolumeNormalizationChannels, mLastVolumeNormalizationMode
         ));
     }
 
