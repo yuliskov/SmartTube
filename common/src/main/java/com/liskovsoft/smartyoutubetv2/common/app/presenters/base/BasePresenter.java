@@ -229,6 +229,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
                 manager.doScreenOff();
             } else {
                 manager.setBlocked(false);
+                manager.enable();
             }
         }
     }
