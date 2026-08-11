@@ -738,7 +738,7 @@
     <string name="ignore_short_segments">短いセグメントを無視する</string>
     <string name="install_bridge">ブリッジアプリをインストール</string>
     <string name="fix_empty_subs_and_channels">空白の登録チャンネルとチャンネル欄を修正</string>
-    <string name="local_backup_not_supported">システム制限のため、Android 11 以降では自動バックアップに対応していません。Google Driveを使用してください。</string>
+    <string name="local_backup_not_supported">システム制限のため、Android 11 以降では自動バックアップに対応していません。Google Drive を使用してください。</string>
     <string name="rounded_card_corners">カードを角丸にする</string>
     <string name="app_restore_desc">注意: バックアップの zip ファイルは、手動またはファイルマネージャーを使用してこのフォルダにコピーしてください (アプリから開くを使用してください)</string>
     <string name="app_backup_desc">注意: バックアップは zip 形式で生成されます</string>
