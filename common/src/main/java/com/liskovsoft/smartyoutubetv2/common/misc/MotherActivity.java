@@ -171,11 +171,21 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            if (VERSION.SDK_INT >= 21 && getViewManager().getTopView() != null) { // remain root activity in recents
-                super.finishAndRemoveTask();
-            } else {
-                super.finish();
-            }
+            //if (VERSION.SDK_INT >= 21 && getViewManager().getTopView() != null) { // remain root activity in recents
+            //    super.finishAndRemoveTask();
+            //} else {
+            //    super.finish();
+            //}
+
+            // finishAndRemoveTask() must be used carefully for intermediate activities:
+            // calling it right after starting a parent activity races with that
+            // startActivity() call. On slower devices, task removal can complete
+            // first, killing the process instead of navigating back. Use finish()
+            // when returning to an existing parent — the task cleans up automatically
+            // for singleInstance activities. Reserve finishAndRemoveTask() for actual
+            // app exit.
+            // The issue: https://github.com/yuliskov/SmartTube/issues/6010
+            super.finish();
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
