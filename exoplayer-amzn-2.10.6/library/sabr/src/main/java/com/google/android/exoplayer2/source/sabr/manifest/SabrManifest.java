@@ -1,6 +1,5 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Pair;
 
@@ -83,7 +82,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     public final long minUpdatePeriodMs;
 
     private final String videoId;
-    private final String serverAbrStreamingUrl;
+    private final SabrCdnSelector cdnSelector;
     private final String videoPlaybackUstreamerConfig;
     private final String poToken;
     private final ClientInfo clientInfo;
@@ -116,42 +115,12 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
         this.videoId = videoId;
-        this.serverAbrStreamingUrl = preferAlternateCdn(serverAbrStreamingUrl);
+        this.cdnSelector = new SabrCdnSelector(serverAbrStreamingUrl);
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.clientInfo = clientInfo;
         this.poToken = poToken;
         this.sabrStreams = new HashMap<>();
         this.emptySelector = new FormatSelector("ignored", true);
-    }
-
-    /**
-     * The primary Googlevideo edge selected for some ISPs can serve the legacy
-     * DASH metadata but reject the corresponding SABR request. YouTube includes
-     * an ordered list of equivalent media networks in the signed {@code mn}
-     * parameter, so use the advertised secondary edge for this workaround build.
-     */
-    private static String preferAlternateCdn(String url) {
-        if (url == null) {
-            return null;
-        }
-
-        Uri uri = Uri.parse(url);
-        String networks = uri.getQueryParameter("mn");
-
-        if (networks == null) {
-            return url;
-        }
-
-        String[] candidates = networks.split(",");
-
-        if (candidates.length < 2 || candidates[1].isEmpty()) {
-            return url;
-        }
-
-        return uri.buildUpon()
-                .authority("rr2---" + candidates[1] + ".googlevideo.com")
-                .build()
-                .toString();
     }
 
     public final int getPeriodCount() {
@@ -181,7 +150,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return videoId;
     }
 
-    public SabrStream getSabrStream(int trackType) {
+    public synchronized SabrStream getSabrStream(int trackType) {
         SabrStream sabrStream = sabrStreams.get(trackType);
 
         if (sabrStream != null) {
@@ -189,7 +158,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         sabrStream = new SabrStream(
-                serverAbrStreamingUrl,
+                cdnSelector.getCurrentUrl(),
                 videoPlaybackUstreamerConfig,
                 clientInfo,
                 -1,
@@ -206,11 +175,30 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return sabrStream;
     }
 
+    /**
+     * Moves all active SABR streams to the next media network advertised by the
+     * signed URL. A failure from an earlier in-flight request is also retryable
+     * after another track has already advanced the selector.
+     */
+    public synchronized boolean maybeUseNextCdn(String failedUrl) {
+        if (!cdnSelector.maybeAdvance(failedUrl)) {
+            return false;
+        }
+
+        String nextUrl = cdnSelector.getCurrentUrl();
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            sabrStream.setServerAbrStreamingUrl(nextUrl);
+        }
+
+        return true;
+    }
+
     public int getSabrRequestNumber() {
         return sabrRequestNumber;
     }
 
-    public String getRequestUrl(int trackType) {
+    public synchronized String getRequestUrl(int trackType) {
         SabrStream activeStream = sabrStreams.get(trackType);
 
         if (activeStream == null) {

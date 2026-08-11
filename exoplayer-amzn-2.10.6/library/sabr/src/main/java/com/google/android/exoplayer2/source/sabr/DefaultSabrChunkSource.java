@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Log;
@@ -426,6 +427,16 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         if (!cancelable) {
             return false;
         }
+        if (isEndpointConnectionFailure(chunk, e)) {
+            if (manifest.maybeUseNextCdn(chunk.dataSpec.uri.toString())) {
+                Log.w(TAG, "Retrying SABR request on an alternate media network");
+                return true;
+            }
+
+            // All representations use the same SABR endpoint. Do not rapidly
+            // blacklist qualities when the endpoint itself is unreachable.
+            return false;
+        }
         if (playerTrackEmsgHandler != null
                 && playerTrackEmsgHandler.maybeRefreshManifestOnLoadingError(chunk)) {
             return true;
@@ -447,6 +458,12 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
         return blacklistDurationMs != C.TIME_UNSET
                 && trackSelection.blacklist(trackSelection.indexOf(chunk.trackFormat), blacklistDurationMs);
+    }
+
+    private static boolean isEndpointConnectionFailure(Chunk chunk, Exception error) {
+        return chunk.bytesLoaded() == 0
+                && error instanceof IOException
+                && !(error instanceof InvalidResponseCodeException);
     }
 
     private ArrayList<Representation> getRepresentations() {
