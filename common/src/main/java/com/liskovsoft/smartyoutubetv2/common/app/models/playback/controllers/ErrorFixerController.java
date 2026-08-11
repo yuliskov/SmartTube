@@ -39,6 +39,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onLongBuffering() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (isStreamEnded()) {
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
@@ -48,13 +52,17 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             //if (!isFasterDataSourceEnabled()) {
             //    enableFasterDataSource();
-            //    restartEngine();
+            //    mVideoLoaderController.restartEngine();
             //}
 
-            //switchNextEngine();
-            //restartEngine();
-
-            lowerVideoQuality();
+            if (getPlayer().getPositionMs() <= 0) {
+                // Possibly ISP ban
+                switchNextEngine();
+                mVideoLoaderController.restartEngine();
+            } else {
+                lowerVideoQuality();
+                mVideoLoaderController.reloadVideo();
+            }
         }
     }
 
