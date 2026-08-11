@@ -60,6 +60,15 @@ public class SabrCdnSelectorTest {
     }
 
     @Test
+    public void malformedCandidateIsIgnoredDuringFailureHandling() {
+        String malformedUrl = "https://rr1---sn-primary.googlevideo.com/%";
+        SabrCdnSelector selector = new SabrCdnSelector(malformedUrl);
+
+        assertFalse(selector.maybeAdvance(PRIMARY_URL));
+        assertEquals(malformedUrl, selector.getCurrentUrl());
+    }
+
+    @Test
     public void urlWithoutMatchingNetworkHasNoFallback() {
         String url = "https://rr1---sn-other.googlevideo.com/videoplayback?"
                 + "mn=sn-primary%2Csn-secondary";

@@ -96,20 +96,14 @@ final class SabrCdnSelector {
     }
 
     private int findCandidateIndex(@Nullable String url) {
-        if (url == null) {
-            return -1;
-        }
+        String failedHost = getHost(url);
 
-        String failedHost;
-
-        try {
-            failedHost = URI.create(url).getHost();
-        } catch (IllegalArgumentException e) {
+        if (failedHost == null) {
             return -1;
         }
 
         for (int i = 0; i < candidateUrls.size(); i++) {
-            String candidateHost = URI.create(candidateUrls.get(i)).getHost();
+            String candidateHost = getHost(candidateUrls.get(i));
 
             if (candidateHost != null && candidateHost.equalsIgnoreCase(failedHost)) {
                 return i;
@@ -117,6 +111,18 @@ final class SabrCdnSelector {
         }
 
         return -1;
+    }
+
+    private static @Nullable String getHost(@Nullable String url) {
+        if (url == null) {
+            return null;
+        }
+
+        try {
+            return URI.create(url).getHost();
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     private static @Nullable String extractNetwork(@Nullable String host) {
