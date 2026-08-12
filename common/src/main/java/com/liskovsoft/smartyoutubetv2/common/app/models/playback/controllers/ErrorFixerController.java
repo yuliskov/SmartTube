@@ -55,7 +55,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //    mVideoLoaderController.restartEngine();
             //}
 
-            if (getPlayer().getPositionMs() <= 0) {
+            if (getPlayer().getPositionMs() <= 1_000) {
                 // Possibly ISP ban
                 switchNextEngine();
                 mVideoLoaderController.restartEngine();
