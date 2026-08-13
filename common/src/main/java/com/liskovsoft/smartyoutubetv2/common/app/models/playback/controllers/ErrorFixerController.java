@@ -60,8 +60,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 switchNextEngine();
                 mVideoLoaderController.restartEngine();
             } else {
+                // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
+                // This will change current format to 'Disabled'. Do restartEngine() instead.
                 lowerVideoQuality();
-                mVideoLoaderController.reloadVideo();
+                mVideoLoaderController.restartEngine();
             }
         }
     }
@@ -203,8 +205,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
             // IllegalStateException: Buffer too small (5242880 < 7208383)
             if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+                // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
+                // This will change current format to 'Disabled'. Do restartEngine() instead.
                 lowerVideoQuality();
-                //restartEngine = false;
             }
         }
 
@@ -371,6 +374,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         return !getVideo().isLive && !getVideo().isLiveEnd;
     }
 
+    /**
+     * NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.<br/>
+     * This will change current format to 'Disabled'. Do reloadEngine() instead.
+     */
     private void lowerVideoQuality() {
         if (getPlayer() == null) {
             return;
