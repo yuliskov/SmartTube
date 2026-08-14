@@ -385,8 +385,8 @@
   <string name="play_video">Reproducir</string>
   <string name="remember_position_of_short_videos">Recuerde la posición de los vídeos cortos (menos de 10 minutos)</string>
   <string name="player_show_tooltips">Mostrar información sobre los botones</string>
-  <string name="action_like_unset">Removido \"me gusta\"</string>
-  <string name="action_dislike_unset">Removido \"no me gusta\".</string>
+  <string name="action_like_unset">\"Me gusta\" removido</string>
+  <string name="action_dislike_unset">\"No me gusta\" removido</string>
   <string name="various_buttons">Botones en la parte superior de la ventana principal</string>
   <string name="not_compatible_with">La opción seleccionada no es compatible con</string>
   <string name="subtitle_position">Desplazamiento inferior de los subtítulos</string>

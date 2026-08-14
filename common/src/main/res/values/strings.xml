@@ -416,8 +416,8 @@
     <string name="remember_position_of_short_videos">Remember position of short videos (less than 5 min)</string>
     <string name="remember_position_of_live_videos">Remember live stream position</string>
     <string name="player_show_tooltips">Show button tooltips</string>
-    <string name="action_like_unset">removed like</string>
-    <string name="action_dislike_unset">removed dislike</string>
+    <string name="action_like_unset">Removed like</string>
+    <string name="action_dislike_unset">Removed dislike</string>
     <string name="various_buttons">Buttons at the top of the main window</string>
     <string name="not_compatible_with">Selected option isn\'t compatible with</string>
     <string name="subtitle_position">Subtitle bottom shift</string>
