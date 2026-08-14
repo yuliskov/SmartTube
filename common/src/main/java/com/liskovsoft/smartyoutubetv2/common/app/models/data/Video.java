@@ -745,7 +745,7 @@ public final class Video {
 
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (metadataTitle == null) {
+        if (!isUpcoming || metadataTitle == null) {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
