@@ -716,7 +716,7 @@ public class SabrManifestParser {
         MediaItemFormatInfo.ClientInfo clientInfo = formatInfo.getClientInfo();
 
         return ClientInfo.newBuilder()
-                .setClientName(ClientName.valueOf(clientInfo.getClientName()))
+                .setClientName(ClientName.valueOf(clientInfo.getClientName().toUpperCase()))
                 .setClientVersion(clientInfo.getClientVersion())
                 .setOsName(clientInfo.getOsName())
                 .setOsVersion(clientInfo.getOsVersion())

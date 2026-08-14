@@ -55,10 +55,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //    mVideoLoaderController.restartEngine();
             //}
 
-            if (getPlayer().getPositionMs() <= 1_000) {
+            if (!mBufferingDetector.isPlayable()) {
                 // Possibly ISP ban
-                switchNextEngine();
-                mVideoLoaderController.restartEngine();
+                //switchNextEngine();
+                //mVideoLoaderController.restartEngine();
+                YouTubeServiceManager.instance().applyNoPlaybackFix();
+                mVideoLoaderController.reloadVideo();
             } else {
                 // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
                 // This will change current format to 'Disabled'. Do restartEngine() instead.
@@ -76,6 +78,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onSeekEnd() {
         mBufferingDetector.reset();
+        // Needed to detect additional buffering (e.g. hanged clients).
+        // Don't worry this event will be canceled by subsequent onPlay() or onPause() if everything is ok.
+        mBufferingDetector.onStartBuffering();
     }
 
     @Override
@@ -90,7 +95,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onNewVideo(Video item) {
-        mBufferingDetector.reset();
+        mBufferingDetector.start();
     }
 
     @Override
