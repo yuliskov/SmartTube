@@ -24,6 +24,8 @@ public class GlobalKeyTranslator extends KeyTranslator {
         globalKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
         globalKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
+        // Fix long-press of A button. Source: https://github.com/yuliskov/SmartTube/issues/5851#issuecomment-5309139942
+        globalKeyMapping.put(KeyEvent.KEYCODE_BUTTON_A, KeyEvent.KEYCODE_DPAD_CENTER);
 
         // Could cause serious 'OK not working' bug (where Enter key is used as OK)
         // See: KeyHelpers#fixEnterKey
