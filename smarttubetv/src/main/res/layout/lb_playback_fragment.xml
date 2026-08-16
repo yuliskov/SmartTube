@@ -118,4 +118,14 @@
             android:transitionGroup="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
+
+    <!-- MOD: volume slider. Last child so the controls dim never covers it. -->
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.volume.VolumeView
+        android:id="@+id/volume_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="30sp"
+        android:focusable="false"
+        android:visibility="gone"/>
 </FrameLayout>
