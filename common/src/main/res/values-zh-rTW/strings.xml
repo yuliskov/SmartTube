@@ -731,4 +731,5 @@
   <string name="add_video_to_watch_later">添加到稍後觀看</string>
   <string name="remove_video_to_watch_later">從稍後觀看中移除</string>
   <string name="network_settings">網路設定</string>
+  <string name="color_scheme_dark_blue_oled">深藍色 (OLED)</string>
 </resources>
