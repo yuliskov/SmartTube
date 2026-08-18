@@ -376,7 +376,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                         && CronetManager.getEngine(mContext) != null ? "Cronet" : "Default";
         String protocol;
         Object manifest = mPlayer.getCurrentManifest();
-        if (manifest instanceof DashManifest) {
+        if (manifest == null) {
+            protocol = "NONE";
+        } else if (manifest instanceof DashManifest) {
             protocol = "DASH";
         } else if (manifest instanceof SabrManifest) {
             protocol = "SABR";
