@@ -311,6 +311,14 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     @Override
+    public void onTrackChanged(FormatItem track) {
+        if (getPlayerTweaksData().isNightlightEnabled() && track != null && track.getType() == FormatItem.TYPE_VIDEO) {
+            // The HDR flag may have flipped (Nightlight can be suppressed during HDR videos).
+            applyNightlightTint();
+        }
+    }
+
+    @Override
     public void onViewResumed() {
         if (getPlayer() == null) {
             return;
@@ -326,6 +334,7 @@ public class PlayerUIController extends BasePlayerController {
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
         applySoundOffButtonState();
+        applyNightlightButtonState();
     }
 
     @Override
@@ -586,6 +595,8 @@ public class PlayerUIController extends BasePlayerController {
             prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
+        } else if (buttonId == R.id.action_nightlight) {
+            applyNightlight(buttonState);
         } else if (buttonId == R.id.action_subscribe) {
             onSubscribe(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
@@ -627,6 +638,8 @@ public class PlayerUIController extends BasePlayerController {
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_dimming) {
             showScreenOffDialog();
+        } else if (buttonId == R.id.action_nightlight) {
+            showNightlightDialog();
         } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
             showNotificationsDialog();
         } else if (buttonId == R.id.action_sound_off) {
@@ -972,6 +985,56 @@ public class PlayerUIController extends BasePlayerController {
         manager.setBlocked(false);
         manager.disable();
         getPlayer().setButtonState(R.id.action_screen_dimming, PlayerUI.BUTTON_OFF);
+    }
+
+    private static int sLastNightlightWarmth = 3000;
+
+    private void applyNightlight(int buttonState) {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        int current = getPlayerTweaksData().getNightlightWarmth();
+        int next;
+        if (current != Utils.NIGHTLIGHT_NEUTRAL) {
+            sLastNightlightWarmth = current;
+            next = Utils.NIGHTLIGHT_NEUTRAL;
+        } else {
+            next = sLastNightlightWarmth;
+        }
+        getPlayerTweaksData().setNightlightWarmth(next);
+
+        applyNightlightButtonState();
+        applyNightlightTint();
+    }
+
+    private void applyNightlightButtonState() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        getPlayer().setButtonState(R.id.action_nightlight,
+                getPlayerTweaksData().isNightlightEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    /**
+     * Live re-tint, no restart: the video container (player fragment) and the whole window (decor view).
+     */
+    private void applyNightlightTint() {
+        if (getPlayer() != null) {
+            getPlayer().applyNightlight();
+        }
+
+        Utils.applyNightlight(getActivity());
+    }
+
+    private void showNightlightDialog() {
+        AppDialogPresenter settingsPresenter = getAppDialogPresenter();
+        AppDialogUtil.appendNightlightCategory(getContext(), settingsPresenter, () -> {
+            applyNightlightButtonState();
+            applyNightlightTint();
+        });
+        settingsPresenter.showDialog(getContext().getString(R.string.nightlight));
     }
 
     private void onRotate() {

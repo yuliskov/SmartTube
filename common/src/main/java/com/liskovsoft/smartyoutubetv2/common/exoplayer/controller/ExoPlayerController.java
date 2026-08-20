@@ -195,6 +195,8 @@ public class ExoPlayerController implements Player.EventListener {
     }
     
     public void release() {
+        // No video is playing anymore — never leave the Nightlight HDR suppression latched.
+        PlayerTweaksData.instance(mContext).setNightlightHdrActive(false);
         mTrackSelectorManager.release();
         mMediaSourceFactory.release();
         releasePlayer();
@@ -285,6 +287,17 @@ public class ExoPlayerController implements Player.EventListener {
 
         notifyOnVideoLoad();
 
+        // Update the Nightlight HDR flag before dispatching onTrackChanged, so listeners
+        // that re-apply the tint see the fresh state. Always tracked (even with the warmth off) —
+        // the user may enable warmth mid-video, and stale state would suppress or apply the tint wrongly.
+        boolean hdr = false;
+        for (TrackSelection selection : trackSelections.getAll()) {
+            if (selection != null && TrackSelectorUtil.isHdrFormat(selection.getFormat(0))) {
+                hdr = true;
+            }
+        }
+        PlayerTweaksData.instance(mContext).setNightlightHdrActive(hdr);
+
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
                 // EXO: 2.12.1
@@ -298,7 +311,7 @@ public class ExoPlayerController implements Player.EventListener {
                 mTrackFormatter.setFormat(format);
             }
         }
-        
+
         setQualityInfo(mTrackFormatter.getQualityLabel());
 
         // Manage audio focus. E.g. use Spotify when audio is disabled. (NOT NEEDED!!!)

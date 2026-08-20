@@ -253,6 +253,11 @@
     <string name="hide_shorts_channel">Hide shorts from a channel</string>
     <string name="key_remapping">Key remapping</string>
     <string name="screen_dimming">Screen dimming</string>
+    <string name="nightlight">Nightlight</string>
+    <string name="nightlight_warmth">Nightlight warmth</string>
+    <string name="nightlight_off">Off (neutral)</string>
+    <string name="nightlight_on_ui">Apply to UI / home screen</string>
+    <string name="nightlight_on_hdr">Apply during HDR videos (may look wrong)</string>
     <string name="removed_from_playback_queue">Removed from playback queue</string>
     <string name="added_to_playback_queue">Added to playback queue</string>
     <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>

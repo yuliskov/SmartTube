@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyCharacterMap.UnavailableException;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -219,6 +221,30 @@ public class MotherActivity extends FragmentActivity {
         // Remove screensaver from the previous activity when closing current one.
         // Called on player's next track. Reason unknown.
         mScreensaverManager.enable();
+
+        applyNightlight();
+    }
+
+    /**
+     * Warm-tint the whole window (UI and, when TextureView is used, the video too) via a
+     * hardware-layer ColorMatrix on the decor view. Only active when "Apply to UI" is on —
+     * otherwise the player tints just the video container. Reads prefs fresh so it applies
+     * on activity start and updates live on setting change.
+     */
+    public void applyNightlight() {
+        View decor = getWindow() != null ? getWindow().getDecorView() : null;
+        if (decor == null) {
+            return;
+        }
+
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(this);
+        Paint paint = (tweaks.isNightlightActive() && tweaks.isNightlightOnUi())
+                ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
+        if (paint != null) {
+            decor.setLayerType(View.LAYER_TYPE_HARDWARE, paint);
+        } else {
+            decor.setLayerType(View.LAYER_TYPE_NONE, null);
+        }
     }
 
     @Override
