@@ -49,24 +49,19 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // Long loading subtitles cause hangs
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
+        } else if (!mBufferingDetector.isPlayable()) {
+            // Some clients may just hang at the video start
+            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            mVideoLoaderController.reloadVideo();
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            //if (!isFasterDataSourceEnabled()) {
-            //    enableFasterDataSource();
-            //    mVideoLoaderController.restartEngine();
-            //}
+            // Possibly ISP ban
+            //switchNextEngine();
+            //mVideoLoaderController.restartEngine();
 
-            if (!mBufferingDetector.isPlayable()) {
-                // Possibly ISP ban
-                //switchNextEngine();
-                //mVideoLoaderController.restartEngine();
-                YouTubeServiceManager.instance().applyNoPlaybackFix();
-                mVideoLoaderController.reloadVideo();
-            } else {
-                // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
-                // This will change current format to 'Disabled'. Do restartEngine() instead.
-                lowerVideoQuality();
-                mVideoLoaderController.restartEngine();
-            }
+            // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
+            // This will change current format to 'Disabled'. Do restartEngine() instead.
+            lowerVideoQuality();
+            mVideoLoaderController.restartEngine();
         }
     }
 
@@ -394,7 +389,14 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        int idx = videoFormats.indexOf(getPlayer().getVideoFormat());
+        FormatItem videoFormat = getPlayer().getVideoFormat();
+
+        // Limit by 720p
+        if (Math.max(videoFormat.getWidth(), videoFormat.getHeight()) <= 1280) {
+            return;
+        }
+
+        int idx = videoFormats.indexOf(videoFormat);
         int nextIdx = idx + 1;
 
         if (videoFormats.size() > nextIdx) {
