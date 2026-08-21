@@ -52,7 +52,7 @@ Give it a try!
 
 ## Device support
 > [!IMPORTANT]  
-> Starting in October 2025 new Amazon FireTV devices no longer run Android under the hood. SmartTube will **not** be compatibile with the Fire Stick 4k Select and newer devices which run Amazon's own VegaOS.
+> Starting in October 2025 new Amazon FireTV devices no longer run Android under the hood. SmartTube will **not** be compatible with the Fire Stick 4k Select and newer devices which run Amazon's own VegaOS.
 
 ![Device support image](images/new/compatibility.png)
 * **Supported:** all Android TVs and TV boxes (incl. All FireTV devices released before Oct. 2025, NVIDIA Shield & Chromecast with Google TV), even older ones with Android 4.3 (Kitkat).
@@ -166,7 +166,7 @@ SmartTube supports playing videos in PiP mode. This needs to be enabled under _S
 
 ### Adjust Speed
 
-You can adjust the playback speed pressing the speed-indicator icon (gauge) in the top row of the player. This is remembered across videos. Some speeds may case frame drops, this is a known issue.
+You can adjust the playback speed pressing the speed-indicator icon (gauge) in the top row of the player. This is remembered across videos. Some speeds may cause frame drops, this is a known issue.
 
 
 ### Voice Search
@@ -338,7 +338,7 @@ A: It can be, but it takes someone to do it, similar to the above FAQ-entry. Sma
 
 ### Q: Can I install this on a Samsung Tizen TV / LG webOS TV / Roku / iOS / toaster?
 
-A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other plattforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
+A: No, this only works on **Android** devices. If you look at an Android TV's product page, it usually says clearly that it's based on Android. The app **cannot** easily be ported over to other platforms and we have no plans to even try. **Please do not ask**. Instead, you can connect a separate TV stick or TV box to your TV.
 
 
 ### Q: Can I install this on a smartphone? / Can you add portrait mode? / Scrolling doesn't work.
@@ -383,15 +383,15 @@ A: Please read the [Casting](#casting) section.
 
 ### Q: I get an error saying "Sign in to confirm you're not a bot"
 
-A: Your IP address range might be temporaily/permanently blocked by YouTube from watching videos if you not signed in to your account.
+A: Your IP address range might be temporarily/permanently blocked by YouTube from watching videos if you not signed in to your account.
 
 ### Q: The video is buffering a lot
 
-A: The issue might not be specific to SmartTube, as other unofficial YouTube apps also report this issue. It seems uncommon nowadays, but was very present in the 2nd quarter of 2021. Some users or devices seem to be more affected then others. The official YouTube app & website are apparently only rarely affected. The root cause of the issue is currently unclear, but it appears to be a server-side thing on YouTube's end. Possibly, YouTube is discriminating 3rd party apps.
+A: The issue might not be specific to SmartTube, as other unofficial YouTube apps also report this issue. It seems uncommon nowadays, but was very present in the 2nd quarter of 2021. Some users or devices seem to be more affected than others. The official YouTube app & website are apparently only rarely affected. The root cause of the issue is currently unclear, but it appears to be a server-side thing on YouTube's end. Possibly, YouTube is discriminating 3rd party apps.
 
 For now, try to see if it helps to:
 
-- Reduce the resolution (or chance it back)
+- Reduce the resolution (or change it back)
 - Change the video format to AVC
 - Increase the buffer in the settings
 - Hit the back button and try playing the video again
@@ -422,7 +422,7 @@ A: This is planned, but not available yet (sorry 🙇‍♀️). However, you ca
 
 ### Q: Why does it skip video segments?
 
-A: SmartTube has a feature called **SponsorBlock**. You can select categories should be skipped, if any. See the [SponsorBlock section](#sponsorblock) for more details.
+A: SmartTube has a feature called **SponsorBlock**. You can select which categories should be skipped, if any. See the [SponsorBlock section](#sponsorblock) for more details.
 
 
 ### Q: How to start the next video automatically / stop after every video?

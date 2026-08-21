@@ -24,6 +24,8 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
+import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -369,10 +371,21 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendVersion() {
         //appendRow("ExoPlayer version", ExoPlayerLibraryInfo.VERSION);
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(mContext);
-        appendRow("ExoPlayer engine",
-                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
-                        playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET
-                                && CronetManager.getEngine(mContext) != null ? "Cronet" : "Default");
+        String engine = playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? "OkHttp" :
+                playerTweaksData.getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET
+                        && CronetManager.getEngine(mContext) != null ? "Cronet" : "Default";
+        String protocol;
+        Object manifest = mPlayer.getCurrentManifest();
+        if (manifest == null) {
+            protocol = "NONE";
+        } else if (manifest instanceof DashManifest) {
+            protocol = "DASH";
+        } else if (manifest instanceof SabrManifest) {
+            protocol = "SABR";
+        } else {
+            protocol = "M3U8";
+        }
+        appendRow("ExoPlayer", "engine=" + engine + ";protocol=" + protocol);
         //appendRow("Cronet version", ApiVersion.getCronetVersion());
         //appendRow("OkHttp version", Version.userAgent());
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
