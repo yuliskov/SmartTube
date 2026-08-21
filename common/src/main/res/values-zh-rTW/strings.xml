@@ -740,7 +740,6 @@
   <string name="local_backup_not_supported">由於系統限制，Android TV 11 及以上版本不支援本機自動備份。請改用 Google 雲端硬碟。</string>
   <string name="sidebar_notification">在側邊欄顯示通知</string>
   <string name="rounded_card_corners">圓角卡片</string>
-  <string name="color_scheme_dark_blue_oled">深藍（OLED）</string>
   <string name="player_unexpected_error">非預期的播放錯誤</string>
   <string name="app_backup_desc">注意：備份檔案將以 zip 格式建立。</string>
   <string name="app_restore_desc">注意：備份的 zip 壓縮檔需手動複製到此資料夾，或在檔案管理器中使用「開啟方式」選項。</string>
