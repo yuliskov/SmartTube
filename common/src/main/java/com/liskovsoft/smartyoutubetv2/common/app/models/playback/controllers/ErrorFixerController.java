@@ -51,7 +51,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
             // Some clients may just hang at the video start
-            MessageHelpers.showMessage(getContext(), "Fixing stalled client...");
+            MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             mVideoLoaderController.reloadVideo();
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
