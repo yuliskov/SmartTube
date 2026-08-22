@@ -48,6 +48,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackModeAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.TwoStateAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VoiceTranslateAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
@@ -134,6 +135,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new RotateAction(context));
         putAction(new FlipAction(context));
         putAction(new SoundOffAction(context));
+        putAction(new VoiceTranslateAction(context));
     }
 
     @Override
@@ -189,6 +191,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SOUND_OFF)) {
             adapter.add(mActions.get(R.id.action_sound_off));
+        }
+        if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VOICE_TRANSLATE)) {
+            adapter.add(mActions.get(R.id.action_voice_translate));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_AFR)) {
             adapter.add(mActions.get(R.id.action_afr));
@@ -311,6 +316,16 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     public void setButtonState(int buttonId, int buttonState) {
         setActionIndex(mActions.get(buttonId), buttonState);
+    }
+
+    public void updateVoiceTranslatePendingEta(int remainingTimeSec) {
+        Action action = mActions.get(R.id.action_voice_translate);
+        if (!(action instanceof VoiceTranslateAction)) {
+            return;
+        }
+        VoiceTranslateAction votAction = (VoiceTranslateAction) action;
+        votAction.updatePendingLabel(remainingTimeSec);
+        invalidateUi(votAction);
     }
 
     public void setChannelIcon(String iconUrl) {
