@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /**
@@ -25,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private SurfaceWrapper mVideoSurfaceWrapper;
     private AspectRatioFrameLayout mVideoSurfaceRoot;
+    private View mNightlightOverlay;
     private SubtitleView mLeanbackSubtitles;
     private int mSubtitlesPadding;
     private int mBackgroundResId;
@@ -39,16 +42,94 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         if (root == null) {
             throw new IllegalStateException("Can't create root of SurfacePlaybackFragment");
         }
-        mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
-                PlayerData.instance(getContext()).getRotationAngle() != 0) ?
-                new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
+        mVideoSurfaceWrapper = createSurfaceWrapper(root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
         mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
+        applyNightlight();
         return root;
+    }
+
+    private SurfaceWrapper createSurfaceWrapper(ViewGroup root) {
+        // The Nightlight ColorMatrix only reaches the video when it lives in the view tree,
+        // i.e. a TextureView. A SurfaceView is a separate hardware layer below the window that
+        // view-level filters can't touch. So while a warmth is set use TextureView; with warmth
+        // off the stock SurfaceView (HDR passthrough / tunneling) is kept.
+        // Exception: tunneled playback only works on a SurfaceView, and devices that have it
+        // enabled usually need it for smooth playback — there the tint falls back to an overlay.
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        if (tweaks.isTextureViewEnabled()
+                || (tweaks.isNightlightEnabled() && !tweaks.isTunneledPlaybackEnabled())
+                || PlayerData.instance(getContext()).getRotationAngle() != 0) {
+            return new TextureViewWrapper(getContext(), root);
+        }
+        return new SurfaceViewWrapper(getContext(), root);
+    }
+
+    /**
+     * Warm-tint just the video via a hardware-layer ColorMatrix on the video container.
+     * Skipped when "Apply to UI" is on — the activity's decor layer already covers the video then.
+     */
+    protected void applyNightlight() {
+        if (mVideoSurfaceRoot == null) {
+            return;
+        }
+
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        boolean tintVideo = tweaks.isNightlightActive() && !tweaks.isNightlightOnUi();
+        boolean surfaceLocked = tweaks.isTunneledPlaybackEnabled(); // tunneling only works on a SurfaceView
+
+        // Warmth enabled mid-playback over a SurfaceView: a ColorMatrix can't reach a SurfaceView.
+        // The swap restarts the engine, and this method can be invoked from inside a player callback
+        // (onTrackChanged), so defer it — releasing the player while its own dispatch is still on the
+        // stack lets the released controller's loop push stale state into the new engine.
+        if (tintVideo && !surfaceLocked && !(mVideoSurfaceWrapper instanceof TextureViewWrapper)) {
+            mVideoSurfaceRoot.post(this::ensureTextureView);
+        }
+
+        // When the surface must stay a SurfaceView, tint with a translucent overlay instead:
+        // works on any device and keeps tunneling/HDR passthrough intact.
+        boolean useOverlay = tintVideo && surfaceLocked && !(mVideoSurfaceWrapper instanceof TextureViewWrapper);
+
+        Paint paint = tintVideo && !useOverlay ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
+        mVideoSurfaceRoot.setLayerType(paint != null ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, paint);
+        applyNightlightOverlay(useOverlay ? Utils.kelvinToOverlayColor(tweaks.getNightlightWarmth()) : 0);
+    }
+
+    private void applyNightlightOverlay(int color) {
+        if (color == 0) {
+            if (mNightlightOverlay != null) {
+                mVideoSurfaceRoot.removeView(mNightlightOverlay);
+                mNightlightOverlay = null;
+            }
+            return;
+        }
+
+        if (mNightlightOverlay == null) {
+            mNightlightOverlay = new View(getContext());
+            mVideoSurfaceRoot.addView(mNightlightOverlay,
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        mNightlightOverlay.setBackgroundColor(color);
+    }
+
+    /**
+     * Swap a plain SurfaceView for a TextureView (needed for view-level transforms/tints, since a
+     * SurfaceView is a separate hardware layer). No-op if already a TextureView. Restarts the engine.
+     */
+    private void ensureTextureView() {
+        if (mVideoSurfaceWrapper == null || mVideoSurfaceWrapper instanceof TextureViewWrapper || getView() == null) {
+            return;
+        }
+
+        mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
+        mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
+        mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+
+        ((PlayerEngine) this).restartEngine();
     }
 
     /**
@@ -107,16 +188,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setRotation(angle);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setRotation(angle);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setRotation(angle);
     }
 
     protected void setFlipEnabled(boolean enabled) {
@@ -126,16 +199,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setScaleX(scaleX);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setScaleX(scaleX);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setScaleX(scaleX);
     }
 
     private void scaleIfNeeded() {
