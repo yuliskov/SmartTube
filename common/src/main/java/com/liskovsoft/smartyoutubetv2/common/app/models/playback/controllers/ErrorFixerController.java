@@ -51,6 +51,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
             // Some clients may just hang at the video start
+            MessageHelpers.showMessage(getContext(), "Fixing stalled client...");
             YouTubeServiceManager.instance().applyNoPlaybackFix();
             mVideoLoaderController.reloadVideo();
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
@@ -186,7 +187,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             }
 
             restartEngine = false;
-            showMessage = false;
+            //showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
