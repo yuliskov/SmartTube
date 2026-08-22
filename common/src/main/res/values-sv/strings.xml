@@ -77,7 +77,7 @@
   <string name="dialog_player_ui">Videospelare</string>
   <string name="player_show_ui_on_pause">Visa användargränssnittet vid paus</string>
   <string name="player_pause_on_ok">OK-knappen pausar uppspelningen</string>
-  <string name="player_ok_button_behavior">OK-knappens beteende</string>
+  <string name="player_ok_button_behavior">Beteende för OK-knappen</string>
   <string name="player_only_ui">Endast användargränssnittet</string>
   <string name="player_ui_and_pause">Användargränssnittet och pausa</string>
   <string name="player_only_pause">Endast pausa</string>
@@ -131,7 +131,7 @@
   <string name="channels_section_sorting">Sortera avsnittet Kanaler</string>
   <string name="sorting_by_new_content">Nytt innehåll</string>
   <string name="sorting_alphabetically">Alfabetiskt</string>
-  <string name="sorting_last_viewed">Senast visat</string>
+  <string name="sorting_last_viewed">Senast tittat på</string>
   <string name="player_pause_when_seek">Pausa under sökning</string>
   <string name="playlists_style">Stil för spellistor</string>
   <string name="playlists_style_grid">Rutnät</string>
@@ -210,7 +210,7 @@
   <string name="video_preset_disabled">Utan förinställning</string>
   <string name="video_preset_enabled">Formatet för nästa video ställs in enligt förinställningen</string>
   <string name="player_sleep_timer">Sovtimer</string>
-  <string name="player_show_quality_info">Visa kvalitetsinfo i fältet för uppspelningsknappar</string>
+  <string name="player_show_quality_info">Visa kvalitetsinformation i fältet för uppspelningsknappar</string>
   <string name="player_remember_each_speed">Kom ihåg hastighet för varje video</string>
   <string name="player_remember_speed_none">Ingen</string>
   <string name="player_remember_speed_all">Samma för alla videor</string>
@@ -233,7 +233,7 @@
   <string name="uploads_old_look">Återställ det gamla utseendet för avsnittet Uppladdningar</string>
   <string name="background_playback_activation">Bakgrundsuppspelning (aktiverad)</string>
   <string name="channels_old_look">Återställ det gamla utseendet för avsnittet Kanaler</string>
-  <string name="channels_auto_load">Läs in innehållet automatiskt i avsnittet Kanaler</string>
+  <string name="channels_auto_load">Läs in innehåll automatiskt i avsnittet Kanaler</string>
   <string name="return_to_background_video">Återgå till videon som spelas upp i bakgrunden</string>
   <string name="pin_unpin_from_sidebar">Lägg till/ta bort från sidofältet</string>
   <string name="pin_unpin_playlist">Lägg till/ta bort spellista från sidofältet</string>
@@ -515,14 +515,14 @@
   <string name="chat_left">Vänster</string>
   <string name="chat_right">Höger</string>
   <string name="card_real_thumbnails">Byt ut miniatyrer mot en bildruta från videon</string>
-  <string name="card_content">Varifrån kortminiatyrer ska hämtas</string>
+  <string name="card_content">Varifrån kortminiatyrerna ska hämtas</string>
   <string name="thumb_quality_default">Standard</string>
   <string name="thumb_quality_start">Början av videon</string>
   <string name="thumb_quality_middle">Mitten av videon</string>
   <string name="thumb_quality_end">Slutet av videon</string>
   <string name="content_block_status">Kontrollera serverstatus för SponsorBlock</string>
   <string name="dearrow_status">Kontrollera serverstatus för DeArrow</string>
-  <string name="player_show_quality_info_bitrate">Lägg till bithastighet i kvalitetsinfon</string>
+  <string name="player_show_quality_info_bitrate">Lägg till bithastighet i kvalitetsinformationen</string>
   <string name="player_speed_button_old_behavior">Återställ det gamla beteendet för hastighetsknappen</string>
   <string name="protect_settings_with_password">Skydda alla inställningar med lösenord</string>
   <string name="enter_settings_password">Ange inställningslösenord</string>
@@ -585,8 +585,8 @@
   <string name="sony_frame_drop_fix">Korrigering för tappade bildrutor 1</string>
   <string name="sony_frame_drop_fix_desc">Åtgärdar hackig uppspelning på Sony-tv:ar och vissa andra enheter. OBS! Eventuella problem med ljudsynkronisering.</string>
   <string name="audio_language">Ljudspråk</string>
-  <string name="old_home_look">Det gamla utseendet för avsnittet Hem</string>
-  <string name="old_channel_look">Det gamla utseendet för kanalsidan</string>
+  <string name="old_home_look">Gammalt utseende för avsnittet Hem</string>
+  <string name="old_channel_look">Gammalt utseende för kanalsidan</string>
   <string name="hide_shorts_everywhere">Dölj Shorts-videor överallt</string>
   <string name="update_found">Uppdatering</string>
   <string name="volume_boost_warning">Inställningar över gränsen kan eventuellt skada högtalare</string>
@@ -667,7 +667,7 @@
   <string name="disable_channels_service">Inaktivera kanaler-tjänsten</string>
   <string name="replace_titles">Ersätt titlar</string>
   <string name="enable">Aktivera</string>
-  <string name="more_info">Mer info</string>
+  <string name="more_info">Mer information</string>
   <string name="about_sponsorblock">Om SponsorBlock</string>
   <string name="about_dearrow">Om DeArrow</string>
   <string name="replace_thumbnails">Ersätt miniatyrer</string>
