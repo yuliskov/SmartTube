@@ -236,8 +236,16 @@ public class SidebarService implements ProfileChangeListener {
     }
 
     private void initSections() {
-        mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
+        // Order matches YouTube TV's May 2026 sidebar redesign: Home at the top, then
+        // Subscriptions/Library-equivalent items (history, playlists, your videos, channels)
+        // promoted right below it, then content categories, then Settings pinned at the bottom.
+        // (Notifications/blocked channels/queue are hidden by default anyway - see initPinnedItems().)
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
+        mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
+        mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
+        mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
+        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_shorts, MediaGroup.TYPE_SHORTS);
         mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);
         mDefaultSections.put(R.string.header_kids_home, MediaGroup.TYPE_KIDS_HOME);
@@ -246,12 +254,8 @@ public class SidebarService implements ProfileChangeListener {
         mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
         mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
         mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
-        mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
-        mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
         mDefaultSections.put(R.string.header_blocked_channels, MediaGroup.TYPE_BLOCKED_CHANNELS);
-        mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
-        mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
         mDefaultSections.put(R.string.playback_queue_category_title, MediaGroup.TYPE_PLAYBACK_QUEUE);
         mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
     }

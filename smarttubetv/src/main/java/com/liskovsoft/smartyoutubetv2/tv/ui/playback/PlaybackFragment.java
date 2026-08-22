@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -472,6 +473,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         initializeGlobalEndingTime();
 
+        initializeTopTitle();
+
         initializePixelRatio();
 
         initializeDoubleTapHandler();
@@ -546,6 +549,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         EndingTimeView endingTime = getView().findViewById(R.id.global_ending_time);
         endingTime.setVisibility(getPlayerData().isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * MOD: video title/subtitle at the top-left of the screen, YouTube style, instead of
+     * inline with the bottom control row. See VideoPlayerGlue.setTopTitleViews().
+     */
+    private void initializeTopTitle() {
+        if (getView() == null || mPlayerGlue == null) {
+            return;
+        }
+
+        View dock = getView().findViewById(R.id.top_title_dock);
+        TextView title = getView().findViewById(R.id.top_title);
+        TextView subtitle = getView().findViewById(R.id.top_subtitle);
+
+        mPlayerGlue.setTopTitleViews(dock, title, subtitle);
     }
 
     private void initializePixelRatio() {

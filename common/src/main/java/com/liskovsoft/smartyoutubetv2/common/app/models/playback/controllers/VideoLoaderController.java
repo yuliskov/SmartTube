@@ -31,12 +31,19 @@ import io.reactivex.disposables.Disposable;
 public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final int MIN_SHUFFLE_SIZE = 30;
+    // Cap automatic engine restarts so a persistent error (e.g. no network, wrong clock)
+    // can't loop forever, hammering the player once a second.
+    private static final int MAX_RESTART_ENGINE_ATTEMPTS = 8;
+    private static final int MAX_RESTART_ENGINE_DELAY_MS = 16_000;
+    private static final long RESTART_ENGINE_RESET_INTERVAL_MS = 60_000;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private SuggestionsController mSuggestionsController;
     private ErrorFixerController mErrorFixerController;
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
+    private int mRestartEngineAttempts;
+    private long mLastRestartEngineMs;
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -390,8 +397,24 @@ public class VideoLoaderController extends BasePlayerController {
 
     private void restartEngine(int delayMs) {
         if (getPlayer() != null) {
-            Log.d(TAG, "Restarting the engine...");
-            Utils.postDelayed(mRestartEngine, delayMs);
+            long nowMs = System.currentTimeMillis();
+            if (nowMs - mLastRestartEngineMs > RESTART_ENGINE_RESET_INTERVAL_MS) {
+                // Errors are spaced far apart. Treat this as a fresh problem instead of
+                // carrying over the attempt count from an earlier, unrelated hiccup.
+                mRestartEngineAttempts = 0;
+            }
+            mLastRestartEngineMs = nowMs;
+            mRestartEngineAttempts++;
+
+            if (mRestartEngineAttempts > MAX_RESTART_ENGINE_ATTEMPTS) {
+                Log.e(TAG, "Too many consecutive engine restarts. Giving up to avoid an infinite restart loop.");
+                return;
+            }
+
+            int backoffDelayMs = (int) Math.min((long) delayMs << (mRestartEngineAttempts - 1), MAX_RESTART_ENGINE_DELAY_MS);
+
+            Log.d(TAG, "Restarting the engine... Attempt %s, delay %sms", mRestartEngineAttempts, backoffDelayMs);
+            Utils.postDelayed(mRestartEngine, backoffDelayMs);
         }
     }
 

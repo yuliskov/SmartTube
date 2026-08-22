@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: rounded "chip" background for search suggestion tags, YouTube style -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/white"/>
+    <corners android:radius="@dimen/tag_chip_corner_radius"/>
+</shape>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: lighter, more translucent scrim (was #E6000000/90% opaque), YouTube style:
+     "obscure less of the video" behind the controls overlay -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
             <gradient
                 android:angle="90"
                 android:centerY="0.2"
-                android:startColor="#E6000000"
-                android:centerColor="#E6000000"
+                android:startColor="#B3000000"
+                android:centerColor="#B3000000"
                 android:endColor="#00000000"
                 android:type="linear" />
         </shape>

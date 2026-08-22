@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
@@ -17,6 +18,11 @@ public class ComplexImageCardView extends ImageCardView {
     private Handler mHandler;
     private boolean mIsCardTextAutoScrollEnabled;
     private boolean mIsBadgeEnabled;
+    // Cached once in init() instead of re-running findViewById on every focus change
+    // (setSelected() fires on every card during scrolling, so this is a hot path).
+    private View mInfoField;
+    private TextView mTitleTextView;
+    private TextView mContentTextView;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -39,14 +45,17 @@ public class ComplexImageCardView extends ImageCardView {
     private void init() {
         mComplexImageView = findViewById(R.id.main_image_wrapper);
         mHandler = new Handler(Looper.getMainLooper());
+        mInfoField = findViewById(R.id.info_field);
+        mTitleTextView = findViewById(R.id.title_text);
+        mContentTextView = findViewById(R.id.content_text);
     }
 
     private void enableTitleAnimation(boolean enable) {
-        enableTextAnimation(findViewById(R.id.title_text), enable);
+        enableTextAnimation(mTitleTextView, enable);
     }
 
     private void enableContentAnimation(boolean enable) {
-        enableTextAnimation(findViewById(R.id.content_text), enable);
+        enableTextAnimation(mContentTextView, enable);
     }
 
     private void enableTextAnimation(TextView view, boolean enable) {
@@ -133,25 +142,21 @@ public class ComplexImageCardView extends ImageCardView {
     }
 
     public void setTitleLinesNum(int lines) {
-        TextView titleView = findViewById(R.id.title_text);
-
-        if (titleView == null || lines <= 0) {
+        if (mTitleTextView == null || lines <= 0) {
             return;
         }
 
-        titleView.setMaxLines(lines);
-        titleView.setLines(lines);
+        mTitleTextView.setMaxLines(lines);
+        mTitleTextView.setLines(lines);
     }
 
     public void setContentLinesNum(int lines) {
-        TextView contentView = findViewById(R.id.content_text);
-
-        if (contentView == null || lines <= 0) {
+        if (mContentTextView == null || lines <= 0) {
             return;
         }
 
-        contentView.setMaxLines(lines);
-        contentView.setLines(lines);
+        mContentTextView.setMaxLines(lines);
+        mContentTextView.setLines(lines);
     }
 
     public void enableBadge(boolean enabled) {
@@ -163,16 +168,37 @@ public class ComplexImageCardView extends ImageCardView {
     }
 
     public void setTextScrollSpeed(float speed) {
-        ViewUtil.setTextScrollSpeed(findViewById(R.id.title_text), speed);
-        ViewUtil.setTextScrollSpeed(findViewById(R.id.content_text), speed);
+        ViewUtil.setTextScrollSpeed(mTitleTextView, speed);
+        ViewUtil.setTextScrollSpeed(mContentTextView, speed);
     }
 
     public void enableTitle(boolean enabled) {
-        ViewUtil.enableView(findViewById(R.id.title_text), enabled);
+        ViewUtil.enableView(mTitleTextView, enabled);
     }
 
     public void enableContent(boolean enabled) {
-        ViewUtil.enableView(findViewById(R.id.content_text), enabled);
+        ViewUtil.enableView(mContentTextView, enabled);
+    }
+
+    /**
+     * Sets the background color of the title/metadata info area.
+     */
+    public void setInfoAreaBackgroundColor(int color) {
+        if (mInfoField != null) {
+            mInfoField.setBackgroundColor(color);
+        }
+    }
+
+    public void setTitleTextColor(int color) {
+        if (mTitleTextView != null) {
+            mTitleTextView.setTextColor(color);
+        }
+    }
+
+    public void setContentTextColor(int color) {
+        if (mContentTextView != null) {
+            mContentTextView.setTextColor(color);
+        }
     }
 
     /**

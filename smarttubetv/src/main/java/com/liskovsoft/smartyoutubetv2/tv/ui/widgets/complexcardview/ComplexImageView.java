@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,10 @@ public class ComplexImageView extends RelativeLayout {
     private int mPreviewWidth;
     private int mPreviewHeight;
     private Runnable mCreateAndStartPlayer;
+    // Pending "finish the old preview player" cleanup scheduled by stopPlayback(false).
+    // Cached so a subsequent startPlayback() (rapid re-focus/re-select) can cancel it,
+    // instead of briefly having an old and a new preview player alive at the same time.
+    private Runnable mStopPreviewCleanup;
     private WeakReference<Video> mVideo;
     private boolean mIsPreviewUrlEnabled;
     private boolean mMute;
@@ -109,7 +115,14 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        mBadgeText.setBackgroundColor(color);
+        // Keep the rounded "pill" shape (card_badge_pill.xml) instead of
+        // replacing it with a flat rectangle via setBackgroundColor.
+        Drawable background = mBadgeText.getBackground();
+        if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background.mutate()).setColor(color);
+        } else {
+            mBadgeText.setBackgroundColor(color);
+        }
     }
 
     /**
@@ -163,6 +176,15 @@ public class ComplexImageView extends RelativeLayout {
                     .apply(ViewUtil.glideOptions())
                     .into(mPreviewImage);
         } else if (getVideo().videoId != null) {
+            // A stop-then-start in quick succession (fast re-focus) would otherwise leave
+            // the old player's cleanup pending for another 500ms while a new player gets
+            // created, so run it immediately instead of waiting for the delayed callback.
+            if (mStopPreviewCleanup != null) {
+                Utils.removeCallbacks(mStopPreviewCleanup);
+                mStopPreviewCleanup.run();
+                mStopPreviewCleanup = null;
+            }
+
             if (mCreateAndStartPlayer == null) {
                 mCreateAndStartPlayer = this::createAndStartPlayer;
             }
@@ -220,10 +242,11 @@ public class ComplexImageView extends RelativeLayout {
                 } else {
                     EmbedPlayerView epv = mPreviewPlayer;
                     epv.setMute(true);
-                    Utils.postDelayed(() -> {
+                    mStopPreviewCleanup = () -> {
                         epv.finish();
                         mPreviewContainer.removeView(epv);
-                    }, 500);
+                    };
+                    Utils.postDelayed(mStopPreviewCleanup, 500);
                 }
                 mPreviewPlayer = null;
             }

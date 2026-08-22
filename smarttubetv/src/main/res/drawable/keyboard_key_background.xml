@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- On-screen search keyboard key background: white pill when focused, dark grey otherwise. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/card_selected_background_white"/>
+            <corners android:radius="@dimen/search_keyboard_key_corner_radius"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/default_light_grey"/>
+            <corners android:radius="@dimen/search_keyboard_key_corner_radius"/>
+        </shape>
+    </item>
+</selector>

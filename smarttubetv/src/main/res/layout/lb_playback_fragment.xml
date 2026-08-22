@@ -54,6 +54,47 @@
         />
     </LinearLayout>
 
+    <!-- MOD: video title/subtitle at the top-left of the screen, YouTube style
+         (was rendered inline with the bottom control row). Text is set from
+         VideoPlayerGlue.setTopTitleViews()/setTitle()/setSubtitle(), and its
+         visibility follows the same show/hide as the rest of the controls
+         overlay via VideoPlayerGlue.setControlsVisibility(). -->
+    <LinearLayout
+        android:id="@+id/top_title_dock"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="?attr/browsePaddingStart"
+        android:layout_marginTop="@dimen/player_top_title_margin_top"
+        android:visibility="invisible">
+        <TextView
+            android:id="@+id/top_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/player_top_title_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6" />
+        <TextView
+            android:id="@+id/top_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/player_top_subtitle_text_size"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
+            android:shadowRadius="1.6" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/player_overlay_wrapper"
         android:orientation="vertical"

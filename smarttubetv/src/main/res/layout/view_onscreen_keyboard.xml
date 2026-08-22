@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Embedded on-screen QWERTY keyboard for the search screen, YouTube style. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_onscreen_keyboard_row_digits"/>
+    <include layout="@layout/view_onscreen_keyboard_row_qwertyuiop"/>
+    <include layout="@layout/view_onscreen_keyboard_row_asdfghjkl"/>
+    <include layout="@layout/view_onscreen_keyboard_row_zxcvbnm"/>
+    <include layout="@layout/view_onscreen_keyboard_row_controls"/>
+</LinearLayout>

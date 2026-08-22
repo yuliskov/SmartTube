@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: persistent white circle behind the play/pause button specifically (not just on
+     focus, unlike every other control button), YouTube style -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/player_play_pause_background"/>
+</shape>
