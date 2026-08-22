@@ -1,5 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager;
 
+import androidx.annotation.Nullable;
+
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 
@@ -42,6 +45,9 @@ public interface PlayerEngine extends PlayerConstants {
     float getPitch();
     void setVolume(float volume);
     float getVolume();
+    @Nullable
+    SimpleExoPlayer getExoPlayer();
+    void refreshDualSubtitles();
     void setResizeMode(int mode);
     int getResizeMode();
     void setZoomPercents(int percents);
