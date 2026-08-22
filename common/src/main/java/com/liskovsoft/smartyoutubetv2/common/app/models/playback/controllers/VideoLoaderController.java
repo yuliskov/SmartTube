@@ -333,6 +333,9 @@ public class VideoLoaderController extends BasePlayerController {
             //} else { // 18+ video or the video is hidden/removed
             //    scheduleNextVideoTimer(5_000);
             //}
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats() && !formatInfo.isLive()) { // TODO: remove live check after fix
+            Log.d(TAG, "Loading video in sabr format...");
+            player.openSabr(formatInfo);
         } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
             Log.d(TAG, "Loading regular video in dash format...");
 
@@ -341,9 +344,6 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
-            Log.d(TAG, "Loading video in sabr format...");
-            player.openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
             Log.d(TAG, "Loading live video (current or past live stream) in dash format...");
             player.openDashUrl(formatInfo.getDashManifestUrl());
