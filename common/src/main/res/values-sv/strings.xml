@@ -415,7 +415,7 @@
   <string name="play_video">Spela upp</string>
   <string name="remember_position_of_short_videos">Kom ihåg plats för korta videor (kortare än 5 min.)</string>
   <string name="remember_position_of_live_videos">Kom ihåg plats för livestreamar</string>
-  <string name="player_show_tooltips">Visa beskrivning av knappar</string>
+  <string name="player_show_tooltips">Visa knappbeskrivningar</string>
   <string name="action_like_unset">Tog bort gilla-markering</string>
   <string name="action_dislike_unset">Tog bort ogilla-markering</string>
   <string name="various_buttons">Knapparna högst upp på huvudfönstret</string>
