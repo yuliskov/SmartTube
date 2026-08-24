@@ -383,7 +383,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         } else if (manifest instanceof SabrManifest) {
             protocol = "SABR";
         } else {
-            protocol = "M3U8";
+            protocol = "HLS";
         }
         appendRow("ExoPlayer", "engine=" + engine + ";protocol=" + protocol);
         //appendRow("Cronet version", ApiVersion.getCronetVersion());
