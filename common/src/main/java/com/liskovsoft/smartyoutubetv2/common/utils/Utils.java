@@ -1151,10 +1151,19 @@ public class Utils {
         void process(T listener);
     }
 
+    public static int getFasterDataSource() {
+        return skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : preferOkHttp()
+                ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
+    }
+
     public static boolean skipCronet() {
         // Android 6 and below may crash running Cronet???
         //return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
         return Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
+    }
+
+    private static boolean preferOkHttp() {
+        return Helpers.equalsAny(Build.MODEL, "SHIELD Android TV");
     }
 
     public static boolean isEnoughRam() {
