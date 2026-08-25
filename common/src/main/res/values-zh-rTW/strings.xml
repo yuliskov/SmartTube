@@ -749,5 +749,3 @@
   <string name="comments_disabled">此影片已關閉留言</string>
   <string name="color_scheme_dark_blue_oled">深藍色 (OLED)</string>
 </resources>
-    <string name="new_video_counter">在釘選頻道上顯示新影片計數器</string>
-</resources>

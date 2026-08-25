@@ -749,9 +749,5 @@
   <string name="network_settings">网络设置</string>
   <string name="comments_disabled">此视频已关闭评论</string>
   <string name="remove_video_to_watch_later">从稍后观看移除</string>
-  <string name="channel_blocked">频道已拉黑</string>
-  <string name="channel_unblocked">已从黑名单移除</string>
-  <string name="header_blocked_channels">黑名单频道</string>
-  <string name="msg_no_blocked_channels">没有拉黑的频道</string>
     <string name="new_video_counter">在置顶频道上显示新视频计数器</string>
 </resources>
