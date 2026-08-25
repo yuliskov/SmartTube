@@ -182,11 +182,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 disableSubtitles(); // Response code: 429
             } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
+            } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
+                switchNextEngine();
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
 
-            restartEngine = false;
+            //restartEngine = false;
             //showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
