@@ -925,16 +925,44 @@ public class AppDialogUtil {
         return OptionCategory.from(IGNORE_DURATION_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
     }
 
+    private static final float[] SLEEP_TIMER_PRESETS = {
+            0f,
+            PlayerData.SLEEP_TIMER_END_OF_VIDEO,
+            10 / 60f,
+            15 / 60f,
+            20 / 60f,
+            30 / 60f,
+            45 / 60f,
+            1.0f,
+            1.5f,
+            2.0f,
+            3.0f,
+            4.0f,
+            5.0f
+    };
+
+    public static String formatSleepTimerHours(Context context, float sleepHours) {
+        if (sleepHours == 0f) {
+            return context.getString(R.string.option_disabled);
+        } else if (sleepHours == PlayerData.SLEEP_TIMER_END_OF_VIDEO) {
+            return context.getString(R.string.sleep_timer_end_of_video);
+        } else if (sleepHours < 1.0f) {
+            int minutes = Math.round(sleepHours * 60f);
+            return context.getResources().getQuantityString(R.plurals.minutes, minutes, String.valueOf(minutes));
+        } else {
+            return context.getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours));
+        }
+    }
+
     public static OptionCategory createSleepTimerCategory(Context context) {
         PlayerData playerData = PlayerData.instance(context);
         String title = context.getString(R.string.player_sleep_timer);
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (float sleepHours : Helpers.range(0, 10, 0.5f)) {
+        for (float sleepHours : SLEEP_TIMER_PRESETS) {
             options.add(UiOptionItem.from(
-                    sleepHours == 0 ? context.getString(R.string.option_disabled)
-                            : context.getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)),
+                    formatSleepTimerHours(context, sleepHours),
                     option -> playerData.setSleepTimerHours(sleepHours),
                     Helpers.floatEquals(playerData.getSleepTimerHours(), sleepHours)));
         }
