@@ -71,7 +71,7 @@ public class BackupSettingsPresenter extends BasePresenter<Void> {
 
         appendCategories(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.app_backup_restore), BackupSettingsPresenter::unhold);
     }
 
     public void appendCategories(AppDialogPresenter settingsPresenter) {

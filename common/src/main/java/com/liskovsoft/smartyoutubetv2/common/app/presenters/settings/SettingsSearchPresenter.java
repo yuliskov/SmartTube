@@ -78,7 +78,7 @@ public class SettingsSearchPresenter extends BasePresenter<Void> {
 
             // Check each category and its option items
             for (OptionCategory category : categories) {
-                String categoryTitle = category.title;
+                String categoryTitle = category.title != null ? category.title.toString() : null;
 
                 // Check if the category title matches
                 if (categoryTitle != null && categoryTitle.toLowerCase().contains(lowerQuery)) {
