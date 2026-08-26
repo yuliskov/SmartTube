@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /**
@@ -25,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private SurfaceWrapper mVideoSurfaceWrapper;
     private AspectRatioFrameLayout mVideoSurfaceRoot;
+    private View mNightlightOverlay;
     private SubtitleView mLeanbackSubtitles;
     private int mSubtitlesPadding;
     private int mBackgroundResId;
@@ -39,16 +42,73 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         if (root == null) {
             throw new IllegalStateException("Can't create root of SurfacePlaybackFragment");
         }
-        mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
-                PlayerData.instance(getContext()).getRotationAngle() != 0) ?
-                new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
+        mVideoSurfaceWrapper = createSurfaceWrapper(root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
         mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
+        applyNightlight();
         return root;
+    }
+
+    private SurfaceWrapper createSurfaceWrapper(ViewGroup root) {
+        // Color filters don't work with SurfaceView. Keep it for tunneled playback.
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        if (tweaks.isTextureViewEnabled()
+                || (tweaks.isNightlightActive() && !tweaks.isTunneledPlaybackEnabled())
+                || PlayerData.instance(getContext()).getRotationAngle() != 0
+                || PlayerData.instance(getContext()).isVideoFlipEnabled()) {
+            return new TextureViewWrapper(getContext(), root);
+        }
+        return new SurfaceViewWrapper(getContext(), root);
+    }
+
+    protected void applyNightlight() {
+        if (mVideoSurfaceRoot == null) {
+            return;
+        }
+
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        boolean active = tweaks.isNightlightActive();
+        boolean tintVideo = active && !tweaks.isNightlightOnUi();
+
+        // Color filters don't work with SurfaceView, so use an overlay instead.
+        boolean useOverlay = active && !(mVideoSurfaceWrapper instanceof TextureViewWrapper);
+
+        Paint paint = tintVideo && !useOverlay ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
+        mVideoSurfaceRoot.setLayerType(paint != null ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, paint);
+        applyNightlightOverlay(useOverlay ? Utils.kelvinToOverlayColor(tweaks.getNightlightWarmth()) : 0);
+    }
+
+    private void applyNightlightOverlay(int color) {
+        if (color == 0) {
+            if (mNightlightOverlay != null) {
+                mVideoSurfaceRoot.removeView(mNightlightOverlay);
+                mNightlightOverlay = null;
+            }
+            return;
+        }
+
+        if (mNightlightOverlay == null) {
+            mNightlightOverlay = new View(getContext());
+            mVideoSurfaceRoot.addView(mNightlightOverlay,
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        mNightlightOverlay.setBackgroundColor(color);
+    }
+
+    private void ensureTextureView() {
+        if (mVideoSurfaceWrapper == null || mVideoSurfaceWrapper instanceof TextureViewWrapper || getView() == null) {
+            return;
+        }
+
+        mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
+        mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
+        mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+
+        ((PlayerEngine) this).restartEngine();
     }
 
     /**
@@ -107,16 +167,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setRotation(angle);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setRotation(angle);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setRotation(angle);
     }
 
     protected void setFlipEnabled(boolean enabled) {
@@ -126,16 +178,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setScaleX(scaleX);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setScaleX(scaleX);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setScaleX(scaleX);
     }
 
     private void scaleIfNeeded() {
