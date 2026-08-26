@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.material.RelayMaterialYou;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class UriBackgroundManager {
@@ -41,7 +43,9 @@ public class UriBackgroundManager {
     private void prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(mActivity);
         mBackgroundManager.attach(mActivity.getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(mActivity, Helpers.getThemeAttr(mActivity, R.attr.shelfBackground));
+        // Use the system's Monet neutral surface where available. Artwork remains the visual
+        // focus, while the empty/loading state feels native to the current Android TV profile.
+        mDefaultBackground = new ColorDrawable(RelayMaterialYou.surface(mActivity));
         mBackgroundTask = new UpdateBackgroundTask();
         mMetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
