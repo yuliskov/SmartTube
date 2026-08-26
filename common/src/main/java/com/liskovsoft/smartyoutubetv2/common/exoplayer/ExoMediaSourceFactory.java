@@ -30,12 +30,10 @@ import com.google.android.exoplayer2.source.sabr.manifest.SabrManifestParser;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DataSource.Factory;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
@@ -68,7 +66,7 @@ public class ExoMediaSourceFactory {
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
     private static final boolean USE_BANDWIDTH_METER = false;
     private TrackErrorFixer mTrackErrorFixer;
-    private Factory mMediaDataSourceFactory;
+    private DataSource.Factory mMediaDataSourceFactory;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
@@ -310,7 +308,7 @@ public class ExoMediaSourceFactory {
         return dataSourceFactory;
     }
 
-    private static void addCommonHeaders(BaseFactory dataSourceFactory) {
+    private static void addCommonHeaders(HttpDataSource.Factory dataSourceFactory) {
         // Doesn't work
         // Trying to fix 429 error (too many requests)
         //String authorization = RetrofitOkHttpHelper.getAuthHeaders().get("Authorization");
@@ -371,7 +369,7 @@ public class ExoMediaSourceFactory {
         return new DefaultDashChunkSource.Factory(getMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
     }
 
-    private Factory getMediaDataSourceFactory() {
+    private DataSource.Factory getMediaDataSourceFactory() {
         if (mMediaDataSourceFactory == null) {
             mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
         }
