@@ -178,7 +178,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //}
 
             restartEngine = false;
-            //showMessage = false;
+            showMessage = false;
 
             boolean isGeneralError = Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 500");
             if (isGeneralError && isSubtitlesEnabled()) {
@@ -188,6 +188,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
                 switchNextEngine();
                 restartEngine = true;
+                showMessage = true;
             } else {
                 YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             }
