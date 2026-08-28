@@ -52,7 +52,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         } else if (!mBufferingDetector.isPlayable()) {
             // Some clients may just hang at the video start
             MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            YouTubeServiceManager.instance().switchNextClient();
             mVideoLoaderController.reloadVideo();
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             // Possibly ISP ban
@@ -186,11 +186,14 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
-                switchNextEngine();
-                restartEngine = true;
-                showMessage = true;
+                // The stream fails instantly if nParam isn't correct.
+                // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
+                //switchNextEngine();
+                //restartEngine = true;
+                //showMessage = true;
+                YouTubeServiceManager.instance().switchNextClient();
             } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
+                YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
@@ -307,7 +310,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            YouTubeServiceManager.instance().switchNextClient();
             mVideoLoaderController.reloadVideo();
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();
