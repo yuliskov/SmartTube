@@ -50,10 +50,18 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
-            // Some clients may just hang at the video start
-            MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
-            YouTubeServiceManager.instance().switchNextClient();
-            mVideoLoaderController.reloadVideo();
+            if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                // Wrong DNS resolution could cause hanging at start
+                // Do switch to only engine that respects custom DNS settings
+                getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                mVideoLoaderController.restartEngine();
+            } else {
+                // Also, some clients like ANDROID_REEL may just hang at start
+                MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+                YouTubeServiceManager.instance().switchNextClient();
+                mVideoLoaderController.reloadVideo();
+            }
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             // Possibly ISP ban
             //switchNextEngine();
