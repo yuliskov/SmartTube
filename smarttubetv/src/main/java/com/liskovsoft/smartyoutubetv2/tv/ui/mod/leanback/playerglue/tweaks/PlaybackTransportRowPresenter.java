@@ -508,6 +508,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         //case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK? (handled somewhere else, inside player glue)
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
+                        case KeyEvent.KEYCODE_NUMPAD_ENTER:
                             if (!mInSeek) {
                                 return false; // use pause toggle handler
                             }
