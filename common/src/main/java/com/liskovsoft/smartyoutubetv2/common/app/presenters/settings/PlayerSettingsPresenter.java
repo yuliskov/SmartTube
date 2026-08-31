@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -513,6 +514,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_ipv4),
                 getContext().getString(R.string.prefer_ipv4_desc),
                 option -> {
+                    // OkHttp is the only engine that supports custom DNS
+                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : Utils.getFasterDataSource());
                     mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_IPV4 : PlayerTweaksData.DNS_TYPE_SYSTEM);
                     mRestartApp = true;
                 },
@@ -521,6 +524,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.prefer_google_dns),
                 getContext().getString(R.string.prefer_ipv4_desc),
                 option -> {
+                    // OkHttp is the only engine that supports custom DNS
+                    mPlayerTweaksData.setPlayerDataSource(option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : Utils.getFasterDataSource());
                     mPlayerTweaksData.setPreferredDnsType(option.isSelected() ? PlayerTweaksData.DNS_TYPE_GOOGLE : PlayerTweaksData.DNS_TYPE_SYSTEM);
                     mRestartApp = true;
                 },
