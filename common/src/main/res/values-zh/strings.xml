@@ -749,4 +749,7 @@
   <string name="network_settings">网络设置</string>
   <string name="comments_disabled">此视频已关闭评论</string>
   <string name="remove_video_to_watch_later">从稍后观看移除</string>
+    <string name="search_in_settings">在设置中搜索</string>
+    <string name="search_in_settings_hint">输入设置名称...</string>
+
 </resources>

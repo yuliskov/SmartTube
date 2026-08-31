@@ -754,4 +754,7 @@
     <plurals name="seconds">
         <item quantity="other">%s 秒</item>
     </plurals>
+    <string name="search_in_settings">設定を検索</string>
+    <string name="search_in_settings_hint">設定名を入力...</string>
+
 </resources>

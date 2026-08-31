@@ -746,4 +746,7 @@
   <string name="enable_conscrypt">Activar Conscrypt</string>
   <string name="enable_conscrypt_desc">Mellora a compatibilidade con HTTPS, TLS e VPN nalgúns dispositivos, pero ás veces pode causar problemas de reprodución ou un rendemento de rede máis lento</string>
   <string name="network_settings">Axustes de rede</string>
+    <string name="search_in_settings">Buscar na configuración</string>
+    <string name="search_in_settings_hint">Escriba o nome do axuste...</string>
+
 </resources>

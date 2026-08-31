@@ -756,4 +756,7 @@
     <item quantity="one">%s sekund</item>
     <item quantity="other">%s sekunder</item>
   </plurals>
+    <string name="search_in_settings">Sök i inställningar</string>
+    <string name="search_in_settings_hint">Skriv inställningsnamn...</string>
+
 </resources>

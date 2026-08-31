@@ -736,4 +736,7 @@
   <string name="ignore_short_segments">Bỏ qua các đoạn ngắn</string>
   <string name="card_unlocalized_titles">Tiêu đề video chưa được bản địa hóa</string>
   <string name="remove_video_to_watch_later">Xóa khỏi Xem sau</string>
+    <string name="search_in_settings">Tìm kiếm trong cài đặt</string>
+    <string name="search_in_settings_hint">Nhập tên cài đặt...</string>
+
 </resources>

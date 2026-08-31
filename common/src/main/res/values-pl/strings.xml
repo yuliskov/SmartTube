@@ -748,4 +748,7 @@
   <string name="network_settings">Ustawienia sieciowe</string>
   <string name="comments_disabled">Komentarze do tego wideo są wyłączone</string>
   <string name="remove_video_to_watch_later">Usuń z listy Do obejrzenia</string>
+    <string name="search_in_settings">Szukaj w ustawieniach</string>
+    <string name="search_in_settings_hint">Wpisz nazwę ustawienia...</string>
+
 </resources>

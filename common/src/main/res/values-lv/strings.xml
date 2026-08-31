@@ -119,4 +119,7 @@
     <string name="sorting_by_new_content">Jauns saturs</string>
     <string name="sorting_alphabetically">Alfabētiski</string>
     <string name="sorting_last_viewed">Pēdējais skatītais</string>
+    <string name="search_in_settings">Meklēt iestatījumos</string>
+    <string name="search_in_settings_hint">Ierakstiet iestatījuma nosaukumu...</string>
+
 </resources>

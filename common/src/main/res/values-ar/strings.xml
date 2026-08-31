@@ -748,4 +748,7 @@
         <item quantity="one">%s ثانية</item>
         <item quantity="other">%s ثانية</item>
     </plurals>
+    <string name="search_in_settings">البحث في الإعدادات</string>
+    <string name="search_in_settings_hint">أدخل اسم الإعداد...</string>
+
 </resources>

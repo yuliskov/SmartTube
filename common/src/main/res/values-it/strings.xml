@@ -756,4 +756,7 @@
         <item quantity="one">%s secondo</item>
         <item quantity="other">%s secondi</item>
     </plurals>
+    <string name="search_in_settings">Cerca nelle impostazioni</string>
+    <string name="search_in_settings_hint">Digita il nome dell'impostazione...</string>
+
 </resources>

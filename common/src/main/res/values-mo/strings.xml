@@ -127,4 +127,7 @@
     <string name="player_show_clock">Show clock</string>
     <string name="player_show_remaining_time">Show remaining time</string>
     <string name="open_channel_uploads">Open channel videos</string>
+    <string name="search_in_settings">Caută în setări</string>
+    <string name="search_in_settings_hint">Introduceți numele setării...</string>
+
 </resources>

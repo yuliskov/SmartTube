@@ -746,4 +746,7 @@
   <string name="comments_disabled">Τα σχόλια είναι απενεργοποιημένα για αυτό το βίντεο</string>
   <string name="remove_from_search_history">Αφαίρεση από το ιστορικό αναζήτησης</string>
   <string name="player_unexpected_error">Απροσδόκητο σφάλμα αναπαραγωγής</string>
+    <string name="search_in_settings">Αναζήτηση στις ρυθμίσεις</string>
+    <string name="search_in_settings_hint">Πληκτρολογήστε όνομα ρύθμισης...</string>
+
 </resources>

@@ -748,4 +748,7 @@
   <string name="network_settings">Paramètres réseau</string>
   <string name="comments_disabled">Les commentaires sont désactivés pour cette vidéo</string>
   <string name="remove_video_to_watch_later">Supprimer de \"À regarder plus tard\"</string>
+    <string name="search_in_settings">Rechercher dans les paramètres</string>
+    <string name="search_in_settings_hint">Entrez le nom du paramètre...</string>
+
 </resources>

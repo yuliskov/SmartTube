@@ -754,4 +754,7 @@
         <item quantity="one">%s saniye</item>
         <item quantity="other">%s saniye</item>
     </plurals>
+    <string name="search_in_settings">Ayarlarda ara</string>
+    <string name="search_in_settings_hint">Ayar adını yazın...</string>
+
 </resources>
