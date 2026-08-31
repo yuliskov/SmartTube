@@ -1,17 +1,48 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
+
+    private static final String[][] TRANSLATE_LANGUAGES = {
+            {"en", "English"},
+            {"es", "Español"},
+            {"fr", "Français"},
+            {"de", "Deutsch"},
+            {"it", "Italiano"},
+            {"pt", "Português"},
+            {"ru", "Русский"},
+            {"ja", "日本語"},
+            {"ko", "한국어"},
+            {"zh", "中文"},
+            {"ar", "العربية"},
+            {"hi", "हिन्दी"},
+            {"tr", "Türkçe"},
+            {"pl", "Polski"},
+            {"nl", "Nederlands"},
+            {"uk", "Українська"},
+            {"vi", "Tiếng Việt"},
+            {"th", "ไทย"},
+            {"id", "Bahasa Indonesia"},
+            {"fa", "فارسی"},
+    };
 
     public SubtitleSettingsPresenter(Context context) {
         super(context);
@@ -26,9 +57,19 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
-        // Can't work properly. There is no robust language detection.
-        //appendSubtitleLanguageCategory(settingsPresenter);
-        //appendMoreSubtitlesSwitch(settingsPresenter);
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.subtitle_dual_enable),
+                option -> {
+                    mPlayerData.setDualSubtitleEnabled(option.isSelected());
+                    if (option.isSelected()) {
+                        mPlayerData.setDualSubtitleSecondLineSuppressed(false);
+                    }
+                    PlaybackView v = PlaybackPresenter.instance(getContext()).getView();
+                    if (v != null) {
+                        v.refreshDualSubtitles();
+                    }
+                },
+                mPlayerData.isDualSubtitleEnabled()));
+        appendTranslationLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
         appendSubtitleSizeCategory(settingsPresenter);
         appendSubtitlePositionCategory(settingsPresenter);
@@ -63,6 +104,26 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     //
     //    settingsPresenter.appendRadioCategory(subtitleLanguageTitle, options);
     //}
+
+    private void appendTranslationLanguageCategory(AppDialogPresenter settingsPresenter) {
+        String title = getContext().getString(R.string.subtitle_dual_target_language);
+        String currentLang = mPlayerData.getDualSubtitleTargetLanguage();
+
+        List<OptionItem> options = new ArrayList<>();
+        for (String[] entry : TRANSLATE_LANGUAGES) {
+            String code = entry[0];
+            String name = entry[1];
+            options.add(UiOptionItem.from(name, option -> {
+                mPlayerData.setDualSubtitleTargetLanguage(code);
+                PlaybackView v = PlaybackPresenter.instance(getContext()).getView();
+                if (v != null) {
+                    v.refreshDualSubtitles();
+                }
+            }, Helpers.equals(code, currentLang)));
+        }
+
+        settingsPresenter.appendRadioCategory(title, options);
+    }
 
     private void appendSubtitleStyleCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createSubtitleStylesCategory(getContext());
