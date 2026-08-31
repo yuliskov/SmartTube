@@ -29,6 +29,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.UnlocalizedTitleData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
@@ -43,6 +45,8 @@ public class SuggestionsController extends BasePlayerController {
     private MediaItemService mMediaItemService;
     private ContentService mContentService;
     private BrowseProcessorManager mBrowseProcessor;
+    private MainUIData mMainUIData;
+    private UnlocalizedTitleData mTitleCache;
     private Video mNextSectionVideo;
     private int mFocusCount;
     private int mNextRetryCount;
@@ -64,6 +68,8 @@ public class SuggestionsController extends BasePlayerController {
         mBrowseProcessor = new BrowseProcessorManager(getContext(), PlaybackPresenter.instance(getContext())::syncItem);
         mMediaItemService = YouTubeServiceManager.instance().getMediaItemService();
         mContentService = YouTubeServiceManager.instance().getContentService();
+        mMainUIData = MainUIData.instance(getContext());
+        mTitleCache = UnlocalizedTitleData.instance(getContext());
     }
 
     @Override
@@ -225,11 +231,41 @@ public class SuggestionsController extends BasePlayerController {
         }
 
         video.sync(mediaItemMetadata);
+        resolveUnlocalizedTitle(video);
         getPlayer().setVideo(video);
 
         getPlayer().setNextTitle(getNext());
 
         appendDislikes(video);
+    }
+
+    private void resolveUnlocalizedTitle(Video video) {
+        if (!mMainUIData.isUnlocalizedTitlesEnabled() || video == null || video.videoId == null) {
+            return;
+        }
+
+        // Already resolved (e.g. from browse card processor)
+        if (video.deArrowTitle != null) {
+            return;
+        }
+
+        // Check persistent cache
+        String cachedTitle = mTitleCache.getTitle(video.videoId);
+        if (cachedTitle != null) {
+            video.deArrowTitle = cachedTitle;
+            return;
+        }
+
+        // Cache miss — fetch asynchronously, refresh player title on arrival
+        Disposable action = mMediaItemService.getUnlocalizedTitleObserve(video.videoId)
+                .subscribe(title -> {
+                    mTitleCache.putTitle(video.videoId, title);
+                    video.deArrowTitle = title;
+                    if (getPlayer() != null && !Helpers.equals(video.title, title)) {
+                        getPlayer().setVideo(video);
+                    }
+                }, error -> Log.d(TAG, "Unlocalized title: fetch failed for player video"));
+        mActions.add(action);
     }
 
     public void loadSuggestions(Video video) {
