@@ -54,12 +54,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
                 // Wrong DNS resolution could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
+                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
                 mVideoLoaderController.restartEngine();
             } else {
                 // Also, some clients like ANDROID_REEL may just hang at start
                 MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
-                YouTubeServiceManager.instance().switchNextClient();
+                YouTubeServiceManager.instance().switchNextClientNow();
                 mVideoLoaderController.reloadVideo();
             }
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
@@ -198,8 +199,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
                 //switchNextEngine();
                 //restartEngine = true;
-                //showMessage = true;
-                YouTubeServiceManager.instance().switchNextClient();
+                showMessage = true;
+                YouTubeServiceManager.instance().switchNextClientNow();
             } else {
                 YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
             }
