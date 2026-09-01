@@ -39,22 +39,39 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onLongBuffering() {
+        if (getPlayer() == null) {
+            return;
+        }
+
         if (isStreamEnded()) {
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
             // Long loading subtitles cause hangs
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
+        } else if (!mBufferingDetector.isPlayable()) {
+            if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                // Wrong DNS resolution could cause hanging at start
+                // Do switch to only engine that respects custom DNS settings
+                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
+                getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                mVideoLoaderController.restartEngine();
+            } else {
+                // Also, some clients like ANDROID_REEL may just hang at start
+                MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+                YouTubeServiceManager.instance().switchNextClientNow();
+                mVideoLoaderController.reloadVideo();
+            }
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            //if (!isFasterDataSourceEnabled()) {
-            //    enableFasterDataSource();
-            //    restartEngine();
-            //}
-
+            // Possibly ISP ban
             //switchNextEngine();
-            //restartEngine();
+            //mVideoLoaderController.restartEngine();
 
+            // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
+            // This will change current format to 'Disabled'. Do restartEngine() instead.
             lowerVideoQuality();
+            mVideoLoaderController.restartEngine();
         }
     }
 
@@ -66,6 +83,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onSeekEnd() {
         mBufferingDetector.reset();
+        // Needed to detect additional buffering (e.g. hanged clients).
+        // Don't worry this event will be canceled by subsequent onPlay() or onPause() if everything is ok.
+        mBufferingDetector.onStartBuffering();
     }
 
     @Override
@@ -80,7 +100,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onNewVideo(Video item) {
-        mBufferingDetector.reset();
+        mBufferingDetector.start();
     }
 
     @Override
@@ -119,9 +139,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
             // Recently this message starting to show for other reasons
-            YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
+            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
             //switchNextEngine(); // ?
             //restartEngine = false;
+            if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                switchNextEngine();
+            }
         } else if (error instanceof OutOfMemoryError || (error != null && error.getCause() instanceof OutOfMemoryError)) {
             if (getPlayerTweaksData().getPlayerDataSource() == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
                 // OkHttp has memory leak problems
@@ -163,17 +186,29 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
             //}
 
+            restartEngine = false;
+            showMessage = false;
+
             boolean isGeneralError = Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 500");
             if (isGeneralError && isSubtitlesEnabled()) {
                 disableSubtitles(); // Response code: 429
             } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
+            } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
+                // The stream fails instantly if nParam isn't correct.
+                // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
+                if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                        && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                    // OkHttp is the engine that respects custom DNS settings
+                    getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    restartEngine = true;
+                } else {
+                    YouTubeServiceManager.instance().switchNextClientNow();
+                }
+                showMessage = true;
             } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
+                YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
             }
-
-            restartEngine = false;
-            showMessage = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
             // "Response code: 500" (subtitle error)
@@ -192,8 +227,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
             // IllegalStateException: Buffer too small (5242880 < 7208383)
             if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+                // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
+                // This will change current format to 'Disabled'. Do restartEngine() instead.
                 lowerVideoQuality();
-                //restartEngine = false;
             }
         }
 
@@ -282,9 +318,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             MessageHelpers.showLongMessage(getContext(), fullMsg);
         }
 
+        if (Utils.fixRetrofitErrors(getContext(), error)) {
+            return;
+        }
+
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            YouTubeServiceManager.instance().switchNextClient();
             mVideoLoaderController.reloadVideo();
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();
@@ -303,18 +343,14 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        getPlayerTweaksData().setPlayerDataSource(getFasterDataSource());
-    }
-
-    private static int getFasterDataSource() {
-        return Utils.skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
+        getPlayerTweaksData().setPlayerDataSource(Utils.getFasterDataSource());
     }
 
     /**
      * Bad idea. Faster source is different among devices
      */
     private boolean isFasterDataSourceEnabled() {
-        int fasterDataSource = getFasterDataSource();
+        int fasterDataSource = Utils.getFasterDataSource();
         return getPlayerTweaksData().getPlayerDataSource() == fasterDataSource;
     }
 
@@ -356,6 +392,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         return !getVideo().isLive && !getVideo().isLiveEnd;
     }
 
+    /**
+     * NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.<br/>
+     * This will change current format to 'Disabled'. Do reloadEngine() instead.
+     */
     private void lowerVideoQuality() {
         if (getPlayer() == null) {
             return;
@@ -367,7 +407,14 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        int idx = videoFormats.indexOf(getPlayer().getVideoFormat());
+        FormatItem videoFormat = getPlayer().getVideoFormat();
+
+        // Limit by 720p
+        if (Math.max(videoFormat.getWidth(), videoFormat.getHeight()) <= 1280) {
+            return;
+        }
+
+        int idx = videoFormats.indexOf(videoFormat);
         int nextIdx = idx + 1;
 
         if (videoFormats.size() > nextIdx) {

@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Set;
 
 public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
-    private final SponsorBlockData mContentBlockData;
+    private final SponsorBlockData mSponsorBlockData;
 
     public SponsorBlockSettingsPresenter(Context context) {
         super(context);
-        mContentBlockData = SponsorBlockData.instance(context);
+        mSponsorBlockData = SponsorBlockData.instance(context);
     }
 
     public static SponsorBlockSettingsPresenter instance(Context context) {
@@ -60,14 +60,14 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         }
 
         final String channelId = video != null ? video.channelId : null;
-        boolean isChannelExcluded = SponsorBlockData.instance(getContext()).isChannelExcluded(channelId);
+        boolean isChannelExcluded = mSponsorBlockData.isChannelExcluded(channelId);
 
         OptionItem sponsorBlockOption = UiOptionItem.from(getContext().getString(R.string.enable),
                 option -> {
-                    mContentBlockData.setSponsorBlockEnabled(option.isSelected());
-                    SponsorBlockData.instance(getContext()).stopExcludingChannel(channelId);
+                    mSponsorBlockData.setSponsorBlockEnabled(option.isSelected());
+                    mSponsorBlockData.stopExcludingChannel(channelId);
                 },
-                !isChannelExcluded && mContentBlockData.isSponsorBlockEnabled()
+                !isChannelExcluded && mSponsorBlockData.isSponsorBlockEnabled()
         );
 
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
@@ -76,29 +76,29 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
     private void appendActionsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Set<SegmentAction> actions = mContentBlockData.getActions();
+        Set<SegmentAction> actions = mSponsorBlockData.getActions();
 
         for (SegmentAction action : actions) {
             options.add(UiOptionItem.from(
-                    getColoredString(mContentBlockData.getLocalizedRes(action.segmentCategory), mContentBlockData.getColorRes(action.segmentCategory)),
+                    getColoredString(mSponsorBlockData.getLocalizedRes(action.segmentCategory), mSponsorBlockData.getColorRes(action.segmentCategory)),
                     optionItem -> {
                         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
                         List<OptionItem> nestedOptions = new ArrayList<>();
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_none),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_DO_NOTHING),
+                                optionItem1 -> mSponsorBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_DO_NOTHING),
                                 action.actionType == SponsorBlockData.ACTION_DO_NOTHING));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_only_skip),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_ONLY),
+                                optionItem1 -> mSponsorBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_ONLY),
                                 action.actionType == SponsorBlockData.ACTION_SKIP_ONLY));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_toast),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_WITH_TOAST),
+                                optionItem1 -> mSponsorBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SKIP_WITH_TOAST),
                                 action.actionType == SponsorBlockData.ACTION_SKIP_WITH_TOAST));
                         nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_dialog),
-                                optionItem1 -> mContentBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SHOW_DIALOG),
+                                optionItem1 -> mSponsorBlockData.setAction(action.segmentCategory, SponsorBlockData.ACTION_SHOW_DIALOG),
                                 action.actionType == SponsorBlockData.ACTION_SHOW_DIALOG));
 
-                        String title = getContext().getString(mContentBlockData.getLocalizedRes(action.segmentCategory));
+                        String title = getContext().getString(mSponsorBlockData.getLocalizedRes(action.segmentCategory));
 
                         dialogPresenter.appendRadioCategory(title, nestedOptions);
                         dialogPresenter.showDialog(title);
@@ -111,16 +111,16 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
     private void appendColorMarkersCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (String segmentCategory : mContentBlockData.getAllCategories()) {
-            options.add(UiOptionItem.from(getColoredString(mContentBlockData.getLocalizedRes(segmentCategory), mContentBlockData.getColorRes(segmentCategory)),
+        for (String segmentCategory : mSponsorBlockData.getAllCategories()) {
+            options.add(UiOptionItem.from(getColoredString(mSponsorBlockData.getLocalizedRes(segmentCategory), mSponsorBlockData.getColorRes(segmentCategory)),
                     optionItem -> {
                         if (optionItem.isSelected()) {
-                            mContentBlockData.enableColorMarker(segmentCategory);
+                            mSponsorBlockData.enableColorMarker(segmentCategory);
                         } else {
-                            mContentBlockData.disableColorMarker(segmentCategory);
+                            mSponsorBlockData.disableColorMarker(segmentCategory);
                         }
                     },
-                    mContentBlockData.isColorMarkerEnabled(segmentCategory)));
+                    mSponsorBlockData.isColorMarkerEnabled(segmentCategory)));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
@@ -146,17 +146,17 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
         
         options.add(UiOptionItem.from(getContext().getString(R.string.paid_content_notification),
-                optionItem -> mContentBlockData.setPaidContentNotificationEnabled(optionItem.isSelected()),
-                mContentBlockData.isPaidContentNotificationEnabled()));
+                optionItem -> mSponsorBlockData.setPaidContentNotificationEnabled(optionItem.isSelected()),
+                mSponsorBlockData.isPaidContentNotificationEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
-                optionItem -> mContentBlockData.setDontSkipSegmentAgainEnabled(optionItem.isSelected()),
-                mContentBlockData.isDontSkipSegmentAgainEnabled()));
+                optionItem -> mSponsorBlockData.setDontSkipSegmentAgainEnabled(optionItem.isSelected()),
+                mSponsorBlockData.isDontSkipSegmentAgainEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.content_block_alt_server),
                 getContext().getString(R.string.content_block_alt_server_desc),
-                optionItem -> mContentBlockData.enableAltServer(optionItem.isSelected()),
-                mContentBlockData.isAltServerEnabled()));
+                optionItem -> mSponsorBlockData.enableAltServer(optionItem.isSelected()),
+                mSponsorBlockData.isAltServerEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

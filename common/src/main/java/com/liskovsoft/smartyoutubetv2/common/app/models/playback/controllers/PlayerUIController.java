@@ -769,6 +769,7 @@ public class PlayerUIController extends BasePlayerController {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
                 long positionMs = (long) (getPlayer().getDurationMs() * seekPercent);
                 getPlayer().setPositionMs(positionMs);
+                getController(VideoStateController.class).onSeekPositionChanged(positionMs); // disable live window
                 MessageHelpers.showMessage(getContext(), ServiceHelper.millisToTimeText(positionMs));
             }
         }

@@ -903,6 +903,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        // Fix interrupted progress (by suggestions, etc). The video player can handle these states correctly.
+        if (mExoPlayerController.isLoading() || mExoPlayerController.isBuffering()) {
+            return;
+        }
+
         if (show) {
             getProgressBarManager().show();
         } else {

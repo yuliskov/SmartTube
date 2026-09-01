@@ -182,7 +182,7 @@
   <string name="msg_skipping_segment">Παράλειψη τμήματος \"%s\"...</string>
   <string name="content_block_notification_type">Τύπος ειδοποίησης</string>
   <string name="content_block_notify_none">Χωρίς ειδοποίηση</string>
-  <string name="content_block_notify_toast">Toast</string>
+  <string name="content_block_notify_toast">Μήνυμα ειδοποίησης</string>
   <string name="content_block_notify_dialog">Ερώτηση για επιβεβαίωση</string>
   <string name="return_to_launcher">Επιστροφή στον εκκινητή από τα κανάλια ATV/αναζήτηση</string>
   <string name="intent_force_close">Βίαιη έξοδος αν το βίντεο έχει ανοιχθεί από εξωτερική πηγή</string>
@@ -332,7 +332,6 @@
   <string name="proxy_not_supported">Χρήση web proxy(απαιτείται Android 4.4+)</string>
   <string name="proxy_test_btn">Δοκιμή</string>
   <string name="proxy_settings_title">Ρυθμίσεις εξυπηρετητή server</string>
-  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="proxy_test_cancelled">Δοκιμή#%d: ακυρώθηκε.</string>
   <string name="proxy_type_invalid">Ο τύπος proxy δεν ρυθμίστηκε.</string>
   <string name="proxy_host_invalid">Ο proxy host δεν ρυθμίστηκε.</string>
@@ -375,7 +374,7 @@
   <string name="amlogic_fix">Επιδιόρθωση Amlogic 1080\@60fps</string>
   <string name="tunneled_video_playback_desc">ΣΗΜΕΊΩΣΗ: Η παύση μπορεί να μην λειτουργεί σωστά! Το Tunneled video playback υπόσχεται βελτιώσεις όπως καλύτερο συγχρονισμό ήχου/εικόνας (AV sync) και ομαλότερη αναπαραγωγή. Απαιτείται Android 5+</string>
   <string name="tunneled_video_playback">Αναπαραγωγή βίντεο μέσω tunneled (Android 5+)</string>
-  <string name="master_volume">Υπέρτατη ένταση</string>
+  <string name="master_volume">Κύρια ένταση ήχου</string>
   <string name="volume_limit">Όριο έντασης</string>
   <string name="play_video">Αναπαραγωγή</string>
   <string name="remember_position_of_short_videos">Να θυμάται τη θέση μικρών βίντεο (λιγότερο από 10λ)</string>
@@ -431,8 +430,8 @@
   <string name="skip_24_rate">Παράλειψη μορφής 24fps (Επιδιόρθωση λειτουργίας κινηματογράφου;)</string>
   <string name="action_subscribe_on">Εγγραφή ενεργή</string>
   <string name="action_subscribe_off">Εγγραφή ανενεργή</string>
-  <string name="playback_controls_repeat_list">Επανάληψη λίστας</string>
-  <string name="playback_controls_repeat_pause">επανάληψη παύσης</string>
+  <string name="playback_controls_repeat_list">Επανάληψη Λίστας</string>
+  <string name="playback_controls_repeat_pause">Επανάληψη Παύσης</string>
   <string name="add_device_view_description">Για να συνδέσετε αυτή τη συσκευή εισάγετε αυτόν τον κωδικό στην εφαρμογή YouTube στο τμήμα Ρυθμίσεις/Παρακολουθήστε σε TV\nΣΗΜΕΙΩΣΗ. Δουλεύει μόνο με το πληκτρολόγιο Gboard</string>
   <string name="badge_live">ΖΩΝΤΑΝΑ</string>
   <string name="badge_new_content">ΝΕΟ ΠΕΡΙΕΧΟΜΕΝΟ</string>
@@ -517,7 +516,7 @@
   <string name="sort_by_views">Πλήθος προβολών</string>
   <string name="sort_by_date">Ημερομηνία μεταμόρφωσης</string>
   <string name="sort_by_rating">Βαθμολογία </string>
-  <string name="clear_search_history">Διαγραφή ιστορικού αναζήτησης</string>
+  <string name="clear_search_history">Εκκαθάριση ιστορικού αναζήτησης</string>
   <string name="remove_from_subscriptions">Απόκρυψη</string>
   <string name="player_long_speed_list">Λίστα υψηλής ταχύτητας</string>
   <string name="alt_app_icon">Εναλλακτικό εικονίδιο εφαρμογής (απαιτείται επανεκκίνηση)</string>
@@ -721,4 +720,30 @@
   <string name="card_unlocalized_titles">Μη μεταφρασμένοι τίτλοι</string>
   <string name="dont_resize_video_to_fit_dialog">Διάλογος \"μη γίνεται προασαρμογή βίντεο για ταίριασμα\"</string>
   <string name="typing_corrections">Απενεργοποίηση αυτόματης διόρθωσης κατά την πληκτρολόγηση κειμένου</string>
+  <string name="action_debug_info">Πληροφορίες αποσφαλμάτωσης</string>
+  <string name="dialog_block_channel">Αποκλεισμός καναλιού</string>
+  <string name="dialog_unblock_channel">Άρση αποκλεισμού καναλιού</string>
+  <string name="confirm_block_channel">Απόκρυψη όλου του περιεχομένου από %s</string>
+  <string name="channel_blocked">Το κανάλι αποκλείστηκε</string>
+  <string name="channel_unblocked">Ο αποκλεισμός του καναλιού καταργήθηκε</string>
+  <string name="header_blocked_channels">Αποκλεισμένα κανάλια</string>
+  <string name="msg_no_blocked_channels">Δεν υπάρχουν αποκλεισμένα κανάλια</string>
+  <string name="player_time_stretching">Χρονική διαστολή ήχου</string>
+  <string name="player_time_stretching_desc">Διατηρεί τη φυσικότητα της φωνής όταν αλλάζετε την ταχύτητα. Ενδέχεται να μειώσει σημαντικά την απόδοση σε ορισμένες συσκευές.</string>
+  <string name="queue_respects_playback_mode">Η ουρά ακολουθεί τη λειτουργία αναπαραγωγής</string>
+  <string name="ignore_short_segments">Παράβλεψη σύντομων τμημάτων</string>
+  <string name="install_bridge">Εγκατάσταση γέφυρας ATV/Amazon</string>
+  <string name="fix_empty_subs_and_channels">Διόρθωση κενών Συνδρομών και Καναλιών</string>
+  <string name="local_backup_not_supported">Η αυτόματη δημιουργία αντιγράφων ασφαλείας σε Android TV 11+ δεν υποστηρίζεται λόγω περιορισμών του συστήματος. Χρησιμοποιήστε το GDrive.</string>
+  <string name="rounded_card_corners">Στρογγυλεμένες γωνίες καρτών</string>
+  <string name="app_restore_desc">ΣΗΜΕΙΩΣΗ: Το αρχείο zip του αντιγράφου ασφαλείας πρέπει να αντιγραφεί χειροκίνητα σε αυτόν τον φάκελο ή, μέσω του διαχειριστή αρχείων, να χρησιμοποιήσετε την επιλογή «Άνοιγμα με».</string>
+  <string name="app_backup_desc">ΣΗΜΕΙΩΣΗ: Το αντίγραφο ασφαλείας θα δημιουργηθεί σε μορφή zip.</string>
+  <string name="add_video_to_watch_later">Προσθήκη στα «Παρακολούθηση αργότερα»</string>
+  <string name="remove_video_to_watch_later">Αφαίρεση από τα «Παρακολούθηση αργότερα»</string>
+  <string name="enable_conscrypt">Ενεργοποίηση Conscrypt</string>
+  <string name="enable_conscrypt_desc">Βελτιώνει τη συμβατότητα με HTTPS, TLS και VPN σε ορισμένες συσκευές, αλλά ενδέχεται περιστασιακά να προκαλέσει προβλήματα αναπαραγωγής ή χαμηλότερη απόδοση δικτύου.</string>
+  <string name="network_settings">Ρυθμίσεις δικτύου</string>
+  <string name="comments_disabled">Τα σχόλια είναι απενεργοποιημένα για αυτό το βίντεο</string>
+  <string name="remove_from_search_history">Αφαίρεση από το ιστορικό αναζήτησης</string>
+  <string name="player_unexpected_error">Απροσδόκητο σφάλμα αναπαραγωγής</string>
 </resources>

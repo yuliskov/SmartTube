@@ -370,7 +370,6 @@
     <string name="proxy_not_supported">Usa proxy web (necessita di Android 4.4+)</string>
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Impostazioni server proxy</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
     <string name="proxy_test_cancelled">Test #%d: annullato.</string>
     <string name="proxy_type_invalid">Tipo di proxy non impostato.</string>
     <string name="proxy_host_invalid">Host proxy non impostato.</string>
@@ -566,7 +565,8 @@
     <string name="sort_by_date">Data di caricamento</string>
     <string name="sort_by_rating">Valutazione</string>
     <string name="clear_search_history">Cancella la Cronologia delle ricerche</string>
-    <string name="remove_from_subscriptions">Nascondi</string>
+    <string name="remove_from_search_history">Rimuovi dalla  Cronologia delle ricerche</string>
+	<string name="remove_from_subscriptions">Nascondi</string>
     <string name="player_long_speed_list">Più velocità nell\'elenco delle velocità</string>
     <string name="player_extra_long_speed_list">Ancora più velocità nell\'elenco delle velocità</string>
     <string name="alt_app_icon">Icona alternativa dell\'app (è necessario riavviare)</string>
@@ -743,9 +743,11 @@
     <string name="app_restore_desc">NOTA: Lo zip di backup dovrebbe essere copiato in questa cartella manualmente o tramite un gestore file, usa \'Apri con\'</string>
     <string name="app_backup_desc">NOTA: Il backup sarà creato in formato zip</string>
     <string name="add_video_to_watch_later">Aggiungi a Guarda più tardi</string>
+    <string name="remove_video_to_watch_later">Rimuovi da Guarda più tardi</string>
     <string name="enable_conscrypt">Abilita Conscrypt</string>
     <string name="enable_conscrypt_desc">Migliora la compatibilità con HTTPS, TLS e VPN su alcuni dispositivi, ma può causare occasionalmente problemi di riproduzione o prestazioni di rete inferiori</string>
     <string name="network_settings">Impostazioni di rete</string>
+    <string name="comments_disabled">I commenti sono disabilitati per questo video</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>

@@ -14,6 +14,7 @@ import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.misc.EnabledTrackTypes;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
+import com.google.android.exoplayer2.source.sabr.parser.models.SabrFormatMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.BufferedRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.ClientAbrState;
@@ -81,7 +82,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     public final long minUpdatePeriodMs;
 
     private final String videoId;
-    private final String serverAbrStreamingUrl;
+    private final SabrCdnSelector cdnSelector;
     private final String videoPlaybackUstreamerConfig;
     private final String poToken;
     private final ClientInfo clientInfo;
@@ -114,7 +115,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.publishTimeMs = publishTimeMs;
         this.periods = periods;
         this.videoId = videoId;
-        this.serverAbrStreamingUrl = serverAbrStreamingUrl;
+        this.cdnSelector = new SabrCdnSelector(serverAbrStreamingUrl);
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.clientInfo = clientInfo;
         this.poToken = poToken;
@@ -149,7 +150,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return videoId;
     }
 
-    public SabrStream getSabrStream(int trackType) {
+    public synchronized SabrStream getSabrStream(int trackType) {
         SabrStream sabrStream = sabrStreams.get(trackType);
 
         if (sabrStream != null) {
@@ -157,7 +158,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         sabrStream = new SabrStream(
-                serverAbrStreamingUrl,
+                cdnSelector.getCurrentUrl(),
                 videoPlaybackUstreamerConfig,
                 clientInfo,
                 -1,
@@ -174,11 +175,30 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return sabrStream;
     }
 
+    /**
+     * Moves all active SABR streams to the next media network advertised by the
+     * signed URL. A failure from an earlier in-flight request is also retryable
+     * after another track has already advanced the selector.
+     */
+    public synchronized boolean maybeUseNextCdn(String failedUrl) {
+        if (!cdnSelector.maybeAdvance(failedUrl)) {
+            return false;
+        }
+
+        String nextUrl = cdnSelector.getCurrentUrl();
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            sabrStream.setServerAbrStreamingUrl(nextUrl);
+        }
+
+        return true;
+    }
+
     public int getSabrRequestNumber() {
         return sabrRequestNumber;
     }
 
-    public String getRequestUrl(int trackType) {
+    public synchronized String getRequestUrl(int trackType) {
         SabrStream activeStream = sabrStreams.get(trackType);
 
         if (activeStream == null) {
@@ -189,6 +209,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
+        return createVideoPlaybackAbrRequest(trackType, isInit, C.TIME_UNSET);
+    }
+
+    public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit, long seekTimeUs) {
         SabrStream activeStream = sabrStreams.get(trackType);
 
         if (activeStream == null) {
@@ -203,7 +227,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
                 ? selectedVideoFormat.bitrate : selectedAudioFormat != null ? selectedAudioFormat.bitrate : -1;
 
         FormatId formatId = getFormatSelector(trackType).getSelectedFormatId();
-        long startTimeMs = isInit ? 0 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
+        long startTimeMs = isInit ? 0 : seekTimeUs != C.TIME_UNSET
+                ? seekTimeUs / 1_000 : activeStream.getSegmentStartTimeMs(formatId != null ? formatId.getItag() : -1);
 
         ClientAbrState.Builder clientAbrStateBuilder = ClientAbrState.newBuilder()
                 .setSabrForceMaxNetworkInterruptionDurationMs(0)
@@ -218,6 +243,21 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             clientAbrStateBuilder
                     .setStickyResolution(height)
                     .setLastManualSelectedResolution(height);
+        }
+
+        if (trackType == C.TRACK_TYPE_AUDIO
+                && selectedAudioFormat != null
+                && selectedAudioFormat.metadata != null) {
+            for (int i = 0; i < selectedAudioFormat.metadata.length(); i++) {
+                if (selectedAudioFormat.metadata.get(i) instanceof SabrFormatMetadata) {
+                    String audioTrackId = ((SabrFormatMetadata)
+                            selectedAudioFormat.metadata.get(i)).audioTrackId;
+
+                    if (audioTrackId != null && !audioTrackId.isEmpty()) {
+                        clientAbrStateBuilder.setAudioTrackId(audioTrackId);
+                    }
+                }
+            }
         }
 
         ClientAbrState clientAbrState = clientAbrStateBuilder.build();

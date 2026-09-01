@@ -18,6 +18,7 @@ package com.google.android.exoplayer2.audio;
 import android.annotation.TargetApi;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.util.Util;
 
 /**
  * Attributes for audio playback, which configure the underlying platform
@@ -42,6 +43,8 @@ public final class AudioAttributes {
     private @C.AudioContentType int contentType;
     private @C.AudioFlags int flags;
     private @C.AudioUsage int usage;
+    private @C.AudioAllowedCapturePolicy int allowedCapturePolicy;
+    private @C.SpatializationBehavior int spatializationBehavior;
 
     /**
      * Creates a new builder for {@link AudioAttributes}.
@@ -53,6 +56,8 @@ public final class AudioAttributes {
       contentType = C.CONTENT_TYPE_UNKNOWN;
       flags = 0;
       usage = C.USAGE_MEDIA;
+      allowedCapturePolicy = C.ALLOW_CAPTURE_BY_ALL;
+      spatializationBehavior = C.SPATIALIZATION_BEHAVIOR_AUTO;
     }
 
     /**
@@ -79,11 +84,23 @@ public final class AudioAttributes {
       return this;
     }
 
+    /** See {@link android.media.AudioAttributes.Builder#setAllowedCapturePolicy(int)}. */
+    public Builder setAllowedCapturePolicy(@C.AudioAllowedCapturePolicy int allowedCapturePolicy) {
+      this.allowedCapturePolicy = allowedCapturePolicy;
+      return this;
+    }
+
+    /** See {@link android.media.AudioAttributes.Builder#setSpatializationBehavior(int)}. */
+    public Builder setSpatializationBehavior(@C.SpatializationBehavior int spatializationBehavior) {
+      this.spatializationBehavior = spatializationBehavior;
+      return this;
+    }
+
     /**
      * Creates an {@link AudioAttributes} instance from this builder.
      */
     public AudioAttributes build() {
-      return new AudioAttributes(contentType, flags, usage);
+      return new AudioAttributes(contentType, flags, usage, allowedCapturePolicy, spatializationBehavior);
     }
 
   }
@@ -91,24 +108,36 @@ public final class AudioAttributes {
   public final @C.AudioContentType int contentType;
   public final @C.AudioFlags int flags;
   public final @C.AudioUsage int usage;
+  public final @C.AudioAllowedCapturePolicy int allowedCapturePolicy;
+  public final @C.SpatializationBehavior int spatializationBehavior;
 
   private @Nullable android.media.AudioAttributes audioAttributesV21;
 
+  // MOD: add allowedCapturePolicy and spatializationBehavior from newer exoplayer versions
   private AudioAttributes(@C.AudioContentType int contentType, @C.AudioFlags int flags,
-      @C.AudioUsage int usage) {
+      @C.AudioUsage int usage, @C.AudioAllowedCapturePolicy int allowedCapturePolicy, @C.SpatializationBehavior int spatializationBehavior) {
     this.contentType = contentType;
     this.flags = flags;
     this.usage = usage;
+    this.allowedCapturePolicy = allowedCapturePolicy;
+    this.spatializationBehavior = spatializationBehavior;
   }
 
   @TargetApi(21)
   public android.media.AudioAttributes getAudioAttributesV21() {
     if (audioAttributesV21 == null) {
-      audioAttributesV21 = new android.media.AudioAttributes.Builder()
+      android.media.AudioAttributes.Builder builder = new android.media.AudioAttributes.Builder()
           .setContentType(contentType)
           .setFlags(flags)
-          .setUsage(usage)
-          .build();
+          .setUsage(usage);
+      // MOD: add allowedCapturePolicy and spatializationBehavior from newer exoplayer versions
+      if (Util.SDK_INT >= 29) {
+        builder.setAllowedCapturePolicy(allowedCapturePolicy);
+      }
+      if (Util.SDK_INT >= 32) {
+        builder.setSpatializationBehavior(spatializationBehavior);
+      }
+      audioAttributesV21 = builder.build();
     }
     return audioAttributesV21;
   }

@@ -1,3 +1,13 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.prefs.common.DataSaverBase$$ExternalSyntheticLambda0 {
+    <init>(...);
+}
+-keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter
+-keepclassmembers class io.reactivex.internal.operators.observable.ObservableFlatMap$MergeObserver {
+    <init>(io.reactivex.Observer, io.reactivex.functions.Function, boolean, int, int);
+}
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity {
+    <init>(...);
+}
 -keep class kotlin.ranges.RangesKt___RangesKt
 -keep class kotlin.collections.builders.MapBuilder
 -keep class kotlin.collections.builders.MapBuilder$Companion
@@ -128,6 +138,7 @@
     com.liskovsoft.mediaserviceinterfaces.MediaItemService getMediaItemService();
 }
 # IncompatibleClassChangeError: androidx.recyclerview.widget.RecyclerView$Recycler
+-keep class androidx.recyclerview.widget.RecyclerView
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView$Recycler {
     <init>(...);
 }
@@ -151,6 +162,7 @@
 #}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.utils.Utils {
     boolean isFormatSupported(com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack);
+    boolean skipCronet();
 }
 -keepclassmembers class com.google.android.exoplayer2.video.VideoRendererEventListener {
     void onVideoDisabled(com.google.android.exoplayer2.decoder.DecoderCounters);

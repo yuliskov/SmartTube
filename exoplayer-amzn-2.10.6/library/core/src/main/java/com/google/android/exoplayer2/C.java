@@ -17,6 +17,7 @@ package com.google.android.exoplayer2;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.MediaCodec;
@@ -439,6 +440,42 @@ public final class C {
    */
   public static final int USAGE_VOICE_COMMUNICATION_SIGNALLING =
       android.media.AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING;
+
+  /**
+   * Capture policies for audio attributes. One of {@link #ALLOW_CAPTURE_BY_ALL}, {@link
+   * #ALLOW_CAPTURE_BY_NONE} or {@link #ALLOW_CAPTURE_BY_SYSTEM}.
+   */
+  // @Target list includes both 'default' targets and TYPE_USE, to ensure backwards compatibility
+  // with Kotlin usages from before TYPE_USE was added.
+  @Documented
+  @Retention(RetentionPolicy.SOURCE)
+  @IntDef({ALLOW_CAPTURE_BY_ALL, ALLOW_CAPTURE_BY_NONE, ALLOW_CAPTURE_BY_SYSTEM})
+  public @interface AudioAllowedCapturePolicy {}
+  /** See {@link AudioAttributes#ALLOW_CAPTURE_BY_ALL}. */
+  public static final int ALLOW_CAPTURE_BY_ALL = AudioAttributes.ALLOW_CAPTURE_BY_ALL;
+  /** See {@link AudioAttributes#ALLOW_CAPTURE_BY_NONE}. */
+  public static final int ALLOW_CAPTURE_BY_NONE = AudioAttributes.ALLOW_CAPTURE_BY_NONE;
+  /** See {@link AudioAttributes#ALLOW_CAPTURE_BY_SYSTEM}. */
+  public static final int ALLOW_CAPTURE_BY_SYSTEM = AudioAttributes.ALLOW_CAPTURE_BY_SYSTEM;
+
+  /**
+   * Represents the behavior affecting whether spatialization will be used. One of {@link
+   * #SPATIALIZATION_BEHAVIOR_AUTO} or {@link #SPATIALIZATION_BEHAVIOR_NEVER}.
+   */
+  @Documented
+  @Retention(RetentionPolicy.SOURCE)
+  @IntDef({SPATIALIZATION_BEHAVIOR_AUTO, SPATIALIZATION_BEHAVIOR_NEVER})
+  public @interface SpatializationBehavior {}
+  /**
+   * @see AudioAttributes#SPATIALIZATION_BEHAVIOR_AUTO
+   */
+  public static final int SPATIALIZATION_BEHAVIOR_AUTO =
+          AudioAttributes.SPATIALIZATION_BEHAVIOR_AUTO;
+  /**
+   * @see AudioAttributes#SPATIALIZATION_BEHAVIOR_NEVER
+   */
+  public static final int SPATIALIZATION_BEHAVIOR_NEVER =
+          AudioAttributes.SPATIALIZATION_BEHAVIOR_NEVER;
 
   /**
    * Audio focus types. One of {@link #AUDIOFOCUS_NONE}, {@link #AUDIOFOCUS_GAIN}, {@link

@@ -568,7 +568,14 @@ public final class Video {
         }
 
         // NOTE: Movies labeled as "Free with Ads" not supported yet
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie || isMembersOnly();
+    }
+
+    /**
+     * Members only videos appears as videos with a length badge but has only a channel id
+     */
+    private boolean isMembersOnly() {
+        return videoId == null && durationMs > 0;
     }
 
     public String getGroupTitle() {
@@ -738,7 +745,7 @@ public final class Video {
 
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (metadataTitle == null) {
+        if (!isUpcoming || metadataTitle == null) {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();

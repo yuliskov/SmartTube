@@ -65,6 +65,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -87,18 +88,24 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Utils {
     public static final String[] KNOWN_PACKAGES = {
@@ -131,7 +138,7 @@ public class Utils {
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
     public static final Handler sHandler = new Handler(Looper.getMainLooper());
     public static final float[] SPEED_LIST_LONG =
-            new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
+            new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f, 1.45f, 1.5f, 1.6f, 1.75f, 1.8f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
     public static final float[] SPEED_LIST_EXTRA_LONG = Helpers.range(0.05f, 4f, 0.05f);
     public static final float[] SPEED_LIST_SHORT =
             new float[] {0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.25f, 2.5f, 2.75f, 3.0f, 3.25f, 3.5f, 3.75f, 4.0f};
@@ -1186,10 +1193,19 @@ public class Utils {
         void process(T listener);
     }
 
+    public static int getFasterDataSource() {
+        return skipCronet() ? PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT : preferOkHttp()
+                ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET;
+    }
+
     public static boolean skipCronet() {
         // Android 6 and below may crash running Cronet???
         //return VERSION.SDK_INT <= 23 || Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
         return Helpers.equals(BuildConfig.FLAVOR, "strtarmenia");
+    }
+
+    private static boolean preferOkHttp() {
+        return Helpers.equalsAny(Build.MODEL, "SHIELD Android TV");
     }
 
     public static boolean isEnoughRam() {
@@ -1334,6 +1350,44 @@ public class Utils {
     public static boolean isSharedDirRestricted(Context context) {
         // Android 11+: only backup through the file manager (no shared dir)
         return AppInfoHelpers.getRealSdkVersion(context) > 29;
+    }
+
+    public static boolean fixRetrofitErrors(@NonNull Context context, Throwable error) {
+        if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
+            // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
+            PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+            if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
+                playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
+                // Restart app to reinit OkHttp internal objects
+                Utils.restartTheApp(context);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void testUrl(String url, Runnable onSuccess) {
+        if (onSuccess == null) {
+            return;
+        }
+
+        OkHttpClient okHttpClient = OkHttpManager.instance().getClient();
+        Request request = new Request.Builder().url(url).head().build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // NOP
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                try (Response ignored = response) {
+                    if (response.isSuccessful()) {
+                        post(onSuccess);
+                    }
+                }
+            }
+        });
     }
 
     private static void persistData(Context context) {

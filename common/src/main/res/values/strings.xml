@@ -370,7 +370,6 @@
     <string name="proxy_not_supported">Use Web Proxy (Needs Android 4.4+)</string>
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Proxy Server Settings</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
     <string name="proxy_test_cancelled">Test #%d: cancelled.</string>
     <string name="proxy_type_invalid">Proxy type not set.</string>
     <string name="proxy_host_invalid">Proxy host not set.</string>
@@ -398,8 +397,8 @@
     <string name="audio_sync_fix">Audio sync fix</string>
     <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio or video scale. Fixes blank screenshots. Affects performance!</string>
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio/Video scale/Screenshots fix</string>
-    <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 720p.</string>
-    <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
+    <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 360p.</string>
+    <string name="force_legacy_codecs">Force legacy codecs (360p)</string>
     <string name="live_stream_fix_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
     <string name="live_stream_fix_4k_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance. Maximum resolution is 4K.</string>
     <string name="live_stream_fix">Live stream fix (1080p)</string>
@@ -417,8 +416,8 @@
     <string name="remember_position_of_short_videos">Remember position of short videos (less than 5 min)</string>
     <string name="remember_position_of_live_videos">Remember live stream position</string>
     <string name="player_show_tooltips">Show button tooltips</string>
-    <string name="action_like_unset">removed like</string>
-    <string name="action_dislike_unset">removed dislike</string>
+    <string name="action_like_unset">Removed like</string>
+    <string name="action_dislike_unset">Removed dislike</string>
     <string name="various_buttons">Buttons at the top of the main window</string>
     <string name="not_compatible_with">Selected option isn\'t compatible with</string>
     <string name="subtitle_position">Subtitle bottom shift</string>
@@ -744,6 +743,7 @@
     <string name="app_restore_desc">NOTE: The backup zip should be copied to this folder manually or in file manager, use \'Open with\'</string>
     <string name="app_backup_desc">NOTE: The backup will be created in zip format</string>
     <string name="add_video_to_watch_later">Add to Watch later</string>
+    <string name="remove_video_to_watch_later">Remove from Watch later</string>
     <string name="enable_conscrypt">Enable Conscrypt</string>
     <string name="enable_conscrypt_desc">Improves HTTPS, TLS, and VPN compatibility on some devices, but may occasionally cause playback issues or slower network performance</string>
     <string name="network_settings">Network settings</string>

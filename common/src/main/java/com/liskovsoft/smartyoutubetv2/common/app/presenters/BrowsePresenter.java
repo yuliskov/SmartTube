@@ -43,7 +43,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountCha
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -147,7 +146,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        refresh(false);
+        Utils.testUrl("https://www.youtube.com", () -> refresh(false));
     }
 
     private void saveSelectedItems() {
@@ -1031,7 +1030,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 "News", // Top news
                 "news", // Top news
                 "NBA TV", // Sports
-                "The Life of a Showgirl" // Taylor Swift ADS
+                "The Life of a Showgirl", // Taylor Swift ADS
+                "FIFA", // Sports (FIFA World Cup 2026™)
+                "FORMULA 1" // Sports (FORMULA 1 BRITISH GRAND PRIX)
         ) || Helpers.equalsAny(
                 value.getTitle(),
                 //getContext().getString(R.string.news_row_name),
@@ -1194,18 +1195,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 errorFragmentData = new SignInError(getContext());
             }
 
-            // TODO: should we find a better place e.g. RetrofitHelper
-            // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
-            if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
-                PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
-                if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
-                    playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
-                    // Restart app to reinit okhttp internal objects
-                    Utils.restartTheApp(getContext());
-                }
+            getView().showError(errorFragmentData);
+
+            if (Utils.fixRetrofitErrors(getContext(), error)) {
+                return;
             }
 
-            getView().showError(errorFragmentData);
             Utils.postDelayed(mRefreshSection, 30_000);
         }
     }

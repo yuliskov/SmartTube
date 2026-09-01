@@ -370,7 +370,6 @@
     <string name="proxy_not_supported">Web Vekil Sunucu kullan (Android 4.4+ gerekli)</string>
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Vekil Sunucu Ayarları</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
     <string name="proxy_test_cancelled">Test#%d: iptal edildi.</string>
     <string name="proxy_type_invalid">Vekil Sunucu türü ayarlı değil.</string>
     <string name="proxy_host_invalid">Vekil Sunucu adı ayarlı değil</string>
@@ -398,8 +397,8 @@
     <string name="audio_sync_fix">Ses senk. düzeltmesi</string>
     <string name="ambilight_ratio_fix_desc">Olmayan ön gerilim aydınlatmasını düzeltir. Yanlış en boy oranını ya da video ölçeğini düzeltir. Boş ekran görüntülerini düzeltir. Performansı etkiler!</string>
     <string name="ambilight_ratio_fix">Ambilight/En boy oranı/Video ölçeği/Ekran görüntüleri düzeltmesi</string>
-    <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 720p\'dir.</string>
-    <string name="force_legacy_codecs">Eski kod çözücüleri zorla (720p)</string>
+    <string name="force_legacy_codecs_desc">Alt sınıf cihazlarda performansı önemli ölçüde artırır. Maksimum çözünürlük 360p\'dir.</string>
+    <string name="force_legacy_codecs">Eski kod çözücüleri zorla (360p)</string>
     <string name="live_stream_fix_desc">Uyarı, bu ince ayar canlı yayınların geri sarılmasını devre dışı bırakır. Alt sınıf cihazlarda canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 1080p\'dir.</string>
     <string name="live_stream_fix_4k_desc">Uyarı, bu ince ayar canlı yayınların geri sarılmasını devre dışı bırakır. Canlı yayın performansını önemli ölçüde artırır. Maksimum çözünürlük 4K\'dır.</string>
     <string name="live_stream_fix">Canlı yayın düzeltmesi (1080p)</string>
@@ -742,6 +741,7 @@
     <string name="app_restore_desc">NOT: Yedek ZIP dosyası bu klasöre manuel olarak veya dosya yöneticisi üzerinden \'Birlikte aç\' kullanılarak kopyalanmalıdır</string>
     <string name="app_backup_desc">NOT: Yedekleme dosyası zip formatında oluşturulacaktır</string>
     <string name="add_video_to_watch_later">Daha Sonra İzle listesine ekle</string>
+    <string name="remove_video_to_watch_later">Daha Sonra İzle\'den kaldır</string>
     <string name="enable_conscrypt">Conscrypt\'i Etkinleştir</string>
     <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır, ancak bazen oynatma sorunlarına veya ağın yavaşlamasına neden olabilir</string>
     <string name="network_settings">Ağ ayarları</string>

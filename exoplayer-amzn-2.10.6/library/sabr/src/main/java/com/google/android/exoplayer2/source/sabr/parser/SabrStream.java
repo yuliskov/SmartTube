@@ -516,6 +516,10 @@ public class SabrStream {
         return this.url;
     }
 
+    public void setServerAbrStreamingUrl(String url) {
+        setUrl(url);
+    }
+
     private void setUrl(String url) {
         Log.d(TAG, "New URL: %s", url);
         UrlQueryString newQueryString = UrlQueryStringFactory.parse(url);
