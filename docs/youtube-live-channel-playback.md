@@ -21,9 +21,9 @@ Only HTTP(S) YouTube hosts are accepted. Unsupported hosts, malformed identifier
 
 ## 3. Channel-to-active-broadcast resolution
 
-The debug route constructs `MediaServiceLiveChannelProvider` with the existing `YouTubeServiceManager` `ContentService`. A `UC…` input goes directly through `getChannelObserve`. A handle first uses the existing InnerTube search path with `SearchOptions.TYPE_CHANNEL`, then browses the returned channel ID. This reuses SmartTube's visitor/authenticated session and adds no Data API key, broadcaster OAuth scope, or HTML scraper.
+The debug route constructs `MediaServiceLiveChannelProvider` from SmartTube's existing authenticated content and media-item services. It preserves an exact handle or channel ID and probes bounded strategies in order: the explicit channel live tab, the canonical `/live` route, channel-scoped live search, and generic channel browse. Every candidate is verified with a fresh `/player` response before it may be classified as playable. This reuses SmartTube's visitor/account context and adds no Data API key, broadcaster OAuth scope, or HTML scraper.
 
-`LiveChannelResolver` disposes the backend observable when the user stops, exits, or supplies another input. A monotonically increasing request generation prevents an older completion from launching playback after a channel switch. Results are cached for 30 seconds; Refresh bypasses that cache. There is no background polling.
+`LiveChannelResolver` disposes the backend observable when the user stops, exits, or supplies another input. A monotonically increasing request generation prevents an older completion from launching playback after a channel switch. Successful live resolutions are cached for 30 seconds; offline/upcoming negatives are cached for no more than 10 seconds, while network and malformed-response failures are not cached. Refresh bypasses the cache. There is no background polling.
 
 ## 4. State classification
 
@@ -40,14 +40,14 @@ The subsequent `/player` result distinguishes ongoing live (`isLive`), post-live
 
 For one player-response generation, `LivePlaybackSourceSelector` chooses each available source at most once:
 
-1. SABR, only when the gate is enabled and formats, endpoint, ustreamer config, and client identity are present.
-2. Adaptive DASH formats, when accepted by existing device/preferences policy.
-3. A live DASH manifest.
-4. An HLS manifest.
+1. An HLS manifest.
+2. A live DASH manifest.
+3. Adaptive DASH formats, when accepted by existing device/preferences policy.
+4. SABR, only when the experimental gate is enabled and formats, endpoint, ustreamer config, and client identity are present.
 
 `VideoLoaderController` maps SABR capability, token/protection, protocol/correlation, initialization, reload, cancellation, DASH, and HLS errors to typed failure categories. It records a metadata-only fallback reason, opens the next untried source, and tells `ErrorFixerController` not to launch its generic retry at the same time. Exhaustion ends in a typed error instead of recursion.
 
-Production live SABR remains explicitly gated off because this checkout has no physical-TV or public-live capture evidence. The debug-only resolver sets a one-shot SABR gate before it launches the normal player. DASH/HLS production behavior therefore remains the safety path while the live SABR implementation can be exercised intentionally.
+Production live SABR remains explicitly gated off until a physical-device public-live session produces decoded frames and stable buffer observations. The debug-only resolver sets a one-shot SABR gate before it launches the normal player. HLS and DASH therefore remain the production safety path while the live SABR implementation can be exercised intentionally.
 
 ## 6. Existing SmartTube playback architecture
 
@@ -55,7 +55,9 @@ Playback continues through `PlaybackPresenter` → the normal `PlaybackActivity`
 
 ## 7. SABR requests, UMP, and ExoPlayer
 
-`SabrManifest` creates a protobuf `VideoPlaybackAbrRequest`; `DefaultSabrChunkSource` sends it with HTTP POST and `Content-Type: application/x-protobuf`. The request contains the decoded ustreamer configuration, the exact `ClientInfo` supplied by MediaServiceCore, current player time, rate, bandwidth estimate, enabled track type, preferred/selected format IDs, audio track ID when present, DRC state, buffered ranges, prior playback cookie, and active/unsent SABR contexts.
+`SabrManifest` creates a protobuf `VideoPlaybackAbrRequest`; `DefaultSabrChunkSource` sends it with HTTP POST, `Content-Type: application/x-protobuf`, `Accept: application/vnd.yt-ump`, and `Accept-Encoding: identity`. The request contains the decoded ustreamer configuration, the exact `ClientInfo` supplied by MediaServiceCore, current player time, rate, bandwidth estimate, enabled track type, preferred/selected format IDs, audio track ID when present, DRC state, buffered ranges, prior playback cookie, and active/unsent SABR contexts. The server-provided endpoint is deciphered through the same player-script context as the selected `/player` response, and `rn` is the only client-added SABR query parameter.
+
+Proof tokens are client-specific. WEB-family candidates retain their player/GVS proof binding. Authenticated TVHTML5 fallbacks retain the account, visitor, client version, player script, signature timestamp, and client playback nonce, but do not inject a separately minted WEB GVS token into TV HLS, DASH, or SABR requests.
 
 The response remains on SmartTube's existing `SabrStream`/`SabrProcessor` path. `UMPDecoder` parses type and length values independent of network read boundaries and enforces part/allocation limits. Media is correlated by header ID and format ID across `FORMAT_INITIALIZATION_METADATA`, `MEDIA_HEADER`, one or more `MEDIA` parts, and `MEDIA_END`; the existing fragmented-MP4 and WebM extractors feed ExoPlayer samples. Unknown future part IDs are skipped rather than rejected solely because their numeric ID is high.
 
@@ -104,7 +106,7 @@ Important evidence label: these are **source-derived synthetic fixtures**, not a
 Build/install the debug APK, then launch the resolver explicitly:
 
 ```powershell
-adb install -r .\smarttubetv\build\outputs\apk\stbeta\debug\SmartTube_beta_32.34_arm64-v8a.apk
+adb install -r .\smarttubetv\build\outputs\apk\stbeta\debug\SmartTube_beta_32.39_universal.apk
 adb shell am start -n org.smarttube.beta/com.liskovsoft.smartyoutubetv2.tv.ui.debug.SabrLivePlayerActivity --es live_input "@handle"
 ```
 
@@ -114,7 +116,7 @@ The debug resolver keeps up to eight successful local inputs in its private pref
 
 For each candidate, record whether the player response exposes SABR, DASH, and HLS, plus selected protocol, generation, request progress, A/V sync, live offset, DVR bounds, redirects/reloads, and typed fallback. Exercise a direct ID, channel ID, handle, upcoming channel, offline channel, DVR and non-DVR live broadcasts, Back/Home/resume, Play/Pause and CEC keys, quality/audio/captions, channel switching, network interruption, and another media app after exit. Run on Android/Google TV, supported Fire OS, a lower-memory AVC-only box, and a VP9/60-fps device where available. Never save raw diagnostic transport data.
 
-ADB exposed a physical Android 15/API 35 OnePlus NE2215 during final verification, but it is a touch device without the Leanback/television feature. The app version was advanced to 32.34/2424, above the installed 32.33/2423. The built APK and installed package had the same signing-certificate SHA-256, so `adb install -r` upgraded the app successfully while preserving its data. A direct public-live candidate reached `PlaybackActivity`, but the screen remained black, the media session stayed at `NONE`, and the player-response/format path supplied no usable `streamingData`; the SABR decoder was therefore not reached or proven. An ordinary VOD baseline also failed in the normal player with HTTP 403 and media-session `ERROR`, so the available device environment could not isolate this as a live/SABR-specific regression. No fatal application exception was observed. Android/Google TV and Fire TV rendering, remote/CEC behavior, and successful public-live SABR playback remain **unverified**.
+ADB exposed a physical Android 15/API 35 OnePlus NE2215 during verification, but it is a touch device without the Leanback/television feature. The app version was advanced exactly once to 32.39/2429, above the installed 32.34/2424, and `adb install -r` preserved account data. Ordinary VOD playback succeeded in the normal player with media-session `PLAYING`, a 5,240 ms buffer observation, correct metadata, and no player, HTTP-response, or video-renderer error, establishing a usable playback baseline. A direct active Lofi Girl broadcast (`JD-kMIpDfnY`) was correctly identified through the restored signed-in context. Playback attempted HLS first, adaptive DASH second, and debug-only SABR last; all three transports failed, buffer remained zero, and media-session state was `ERROR`. The 20-second live stall was handled once by the bounded live fallback, and no generic reload occurred during the following 45-second observation. The prior in-band seek/header-correlation fault did not recur. Successful public-live playback therefore remains **unverified**, the required two success observations were not obtained, and the production SABR gate remains disabled. Android/Google TV and Fire TV rendering, remote/CEC behavior, and long-duration live playback also remain unverified.
 
 ## 15. Known protocol uncertainties
 
@@ -123,7 +125,7 @@ ADB exposed a physical Android 15/API 35 OnePlus NE2215 during final verificatio
 - **Strong implementation inference:** a shared request/cookie/context coordinator matches current server-directed SABR behavior, but only a real capture can prove every cross-track expectation.
 - **Strong implementation inference:** the existing MediaServiceCore channel groups consistently surface the active broadcast before unrelated content; deterministic classification is tested, but live service ordering can evolve.
 - **Unknown:** atomic `/player` reload with returned reload context is not wired in this checkout; bounded typed fallback is used.
-- **Unknown:** absolute DVR position preservation across SABR→DASH/HLS is not proven.
+- **Unknown:** absolute DVR position preservation across HLS/DASH/SABR transport fallback is not proven.
 - **Unknown:** production live SABR remains gated until a public SABR-capable live test passes on target hardware.
 
 ## 16. Component diagram
@@ -140,9 +142,9 @@ flowchart LR
     VL --> PR[MediaServiceCore /player response]
     PR --> D[LivePlaybackDescriptor]
     D --> S[LivePlaybackSourceSelector]
-    S -->|SABR| SM[SabrMediaSource]
-    S -->|DASH| DM[Existing DASH source]
-    S -->|HLS| HM[Existing HLS source]
+    S -->|HLS first| HM[Existing HLS source]
+    S -->|DASH manifest/adaptive| DM[Existing DASH source]
+    S -->|Debug-gated SABR last| SM[SabrMediaSource]
     SM --> SC[Shared SabrSessionCoordinator]
     SC --> U[POST VideoPlaybackAbrRequest\nUMP control + media]
     U --> E[Existing ExoPlayer extractors/renderers]
@@ -173,32 +175,38 @@ sequenceDiagram
     P->>L: Normal SmartTube player path
     L->>Y: Load player response
     Y-->>L: Formats + live flags + bootstrap
-    L->>L: Select SABR/DASH/HLS
+    L->>L: Select HLS/DASH/adaptive/SABR
     L->>X: Prepare existing media source
     X-->>User: First rendered frame + normal TV controls
 ```
 
-## 18. SABR failure and fallback
+## 18. Live transport failure and fallback
 
 ```mermaid
 sequenceDiagram
     participant X as ExoPlayer
     participant L as VideoLoaderController
     participant S as LivePlaybackSession
-    participant D as DASH source
     participant H as HLS source
-    X-->>L: Typed SABR source/protocol/token error
-    L->>S: fail(category)
-    S-->>L: Next untried DASH decision
-    L->>D: Prepare same video player response
-    alt DASH succeeds
-        D-->>X: Media
-    else DASH fails
-        X-->>L: DASH source error
-        L->>S: fail(DASH)
-        S-->>L: Next untried HLS decision
-        L->>H: Prepare HLS manifest
-        H-->>X: Media or final typed error
+    participant D as DASH source
+    participant B as Debug-gated SABR source
+    L->>H: Prepare HLS from verified player response
+    alt HLS succeeds
+        H-->>X: Media
+    else Typed HLS failure
+        X-->>L: HLS source error
+        L->>S: fail(HLS)
+        S-->>L: Next untried DASH decision
+        L->>D: Prepare manifest or adaptive DASH
+        alt DASH succeeds
+            D-->>X: Media
+        else Typed DASH failure
+            X-->>L: DASH source error
+            L->>S: fail(DASH)
+            S-->>L: Optional SABR decision (debug gate only)
+            L->>B: Prepare SABR
+            B-->>X: Media or final typed error
+        end
     end
 ```
 
@@ -248,12 +256,12 @@ Protocol statements in this document use these labels:
 - **Strong implementation inference:** consistent across the checkout and independent reference implementation, but not official protocol documentation.
 - **Unknown:** not established by current source or evidence.
 
-Primary sources inspected on 2026-08-31:
+Primary sources and repository pins inspected on 2026-09-01:
 
-- CryptoDragonLady/SmartTube implementation base: [`b2403052e67189f2ce826078c9d4e8ea164243ba`](https://github.com/CryptoDragonLady/SmartTube/commit/b2403052e67189f2ce826078c9d4e8ea164243ba).
-- Upstream yuliskov/SmartTube reference head: [`26076c93237172af8e09656d2cfe06ab0d9eb872`](https://github.com/yuliskov/SmartTube/commit/26076c93237172af8e09656d2cfe06ab0d9eb872).
-- Checked-out MediaServiceCore submodule compiled here: [`e37774d7ac2a34811bbfe5f25da9e8fc39fbc163`](https://github.com/yuliskov/MediaServiceCore/commit/e37774d7ac2a34811bbfe5f25da9e8fc39fbc163); reference repository head recorded as [`082e2e488cce739f224d0854773fc8d1cf14a48e`](https://github.com/yuliskov/MediaServiceCore/commit/082e2e488cce739f224d0854773fc8d1cf14a48e).
-- Checked-out SharedModules submodule: `9a590e4acb0306eb3fe5b75bdb3c7bfe0db6efb8`.
+- Clean upstream SmartTube base: [`26076c93237172af8e09656d2cfe06ab0d9eb872`](https://github.com/yuliskov/SmartTube/commit/26076c93237172af8e09656d2cfe06ab0d9eb872).
+- Local implementation checkpoint before this verification record: `3ff7f35c7887256b0dbcebf0d6a720980fc4f825`.
+- Checked-out MediaServiceCore implementation compiled here: `1a44d6d9c1db356ae7eb590d67d2535b2d3a8118`; its clean upstream starting pin was [`082e2e488cce739f224d0854773fc8d1cf14a48e`](https://github.com/yuliskov/MediaServiceCore/commit/082e2e488cce739f224d0854773fc8d1cf14a48e).
+- Checked-out SharedModules submodule: `11116d27ed61b25b959f5e6cda17b0090688a131`.
 - LuanRT/googlevideo reference: [`58f92b7ba8fc252a510963f003088279a00d4ab0`](https://github.com/LuanRT/googlevideo/commit/58f92b7ba8fc252a510963f003088279a00d4ab0), especially [`SabrStreamingAdapter.ts`](https://github.com/LuanRT/googlevideo/blob/58f92b7ba8fc252a510963f003088279a00d4ab0/src/core/SabrStreamingAdapter.ts), [`SabrUmpProcessor.ts`](https://github.com/LuanRT/googlevideo/blob/58f92b7ba8fc252a510963f003088279a00d4ab0/src/core/SabrUmpProcessor.ts), [`UmpReader.ts`](https://github.com/LuanRT/googlevideo/blob/58f92b7ba8fc252a510963f003088279a00d4ab0/src/core/UmpReader.ts), and the [video-streaming protos](https://github.com/LuanRT/googlevideo/tree/58f92b7ba8fc252a510963f003088279a00d4ab0/protos/video_streaming).
 - LuanRT/kira live limitation reference: [`7a41cdc541cc80235a88314383b29a4a4ea712d1`](https://github.com/LuanRT/kira/commit/7a41cdc541cc80235a88314383b29a4a4ea712d1). Its README routes live/post-live through ordinary HLS/DASH, so it is not evidence that live SABR works.
 - Official Android TV [playback controls](https://developer.android.com/training/tv/playback/controls), [playback overview](https://developer.android.com/training/tv/playback/), and [TV navigation](https://developer.android.com/training/tv/get-started/navigation).
@@ -261,38 +269,35 @@ Primary sources inspected on 2026-08-31:
 
 ## Verification record
 
-Environment: Windows 11, Oracle JDK 17.0.10, Gradle 7.5, Android SDK at the local user's standard SDK directory. Commands run from the feature worktree:
+Environment: Windows 11, Oracle JDK 17.0.10, Gradle 7.5, Android SDK at the local user's standard SDK directory. Commands ran from the clean integration worktree:
 
 ```text
-.\gradlew.bat :exoplayer-library-sabr:testStbetaDebugUnitTest --console=plain
-PASS — 175 actionable tasks, 1m43s (after porting the SABR changes to the clean base)
+Targeted authenticated fallback policy test + :smarttubetv:assembleStbetaDebug
+PASS — 509 actionable tasks, 3m54s
 
-.\gradlew.bat :common:testStbetaDebugUnitTest --tests "com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.*" --console=plain
-PASS — 348 actionable tasks, 2m45s
-
-.\gradlew.bat :common:compileStbetaDebugJavaWithJavac :common:testStbetaDebugUnitTest --tests "com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.*" --console=plain
-PASS — 348 actionable tasks, 3m39s
-
-.\gradlew.bat lintStbetaRelease --console=plain
-PASS — 849 actionable tasks, 6m02s (after replacing two new parser calls that exceeded minSdk 17)
-
-.\gradlew.bat clean assembleStbetaRelease --console=plain
-PASS — 852 actionable tasks, 10m05s
+Targeted LivePlaybackSessionTest + :smarttubetv:assembleStbetaDebug
+PASS — 492 actionable tasks, 4m21s
 
 .\gradlew.bat :exoplayer-library-sabr:testStbetaDebugUnitTest :common:testStbetaDebugUnitTest :smarttubetv:assembleStbetaDebug --console=plain
-PASS — 544 actionable tasks, 6m32s
+PASS — 544 actionable tasks, 3m23s
 
-.\gradlew.bat :exoplayer-library-sabr:testStbetaDebugUnitTest :youtubeapi:testStbetaDebugUnitTest :common:testStbetaDebugUnitTest --console=plain
-PARTIAL — SABR passed; `youtubeapi` stopped the build with 108 failures and 60 skips out of 170 tests. The sampled failures share the checkout's old Robolectric/ASM class-loading failure (`NoClassDefFoundError` from `Shadows`, caused by `ClassNotFoundException`/`ClassReader`) under JDK 17. MediaServiceCore remained at its pinned, unmodified commit, so this is recorded as test-infrastructure evidence rather than a live-player pass.
+.\gradlew.bat lintStbetaRelease --console=plain
+PASS — 849 actionable tasks, 7m52s
 
-.\gradlew.bat :smarttubetv:assembleStbetaDebug --console=plain
-PASS — 479 actionable tasks, 4m47s. The arm64-v8a APK contains version 32.34/2424.
+.\gradlew.bat clean assembleStbetaRelease --console=plain
+PASS — 852 actionable tasks, 6m50s
 
 adb kill-server; adb start-server; adb devices -l
-PASS — daemon restarted and device `6012a36c` returned online.
+PASS — daemon restarted and OnePlus NE2215/API 35 device `6012a36c` returned online.
 
 Device install/manual live playback
-PARTIAL/FAIL — the matching signing certificate allowed a data-preserving upgrade from 32.33/2423 to 32.34/2424 on device `6012a36c`. The debug resolver rendered a typed `UNAVAILABLE` state for `@SkyNews`. A direct public-live candidate reached the normal player without a fatal crash, but produced no frame or active media session and never supplied usable `streamingData`, so actual live playback and SABR decoding failed to validate. A non-live VOD baseline also reached the normal player but failed with HTTP 403 and media-session `ERROR`, showing that playback on this device was broadly impaired rather than establishing a SABR-specific fault. The app was force-stopped after testing. The phone is not TV hardware, so D-pad, remote, and CEC behavior were not tested.
+PARTIAL/FAIL — `adb install -r` preserved the signed-in app state and installed version 32.39/2429. VOD `dQw4w9WgXcQ` passed in the normal player with media-session PLAYING, correct metadata, a 5,240 ms buffer observation, and no player/HTTP-response/video-renderer error. Active live `JD-kMIpDfnY` resolved correctly and attempted HLS, adaptive DASH, then debug-only SABR. All failed, the session ended at zero buffer with media-session ERROR, and no two live success observations were possible. The bounded 20-second terminal-live handler ran once and no generic reload occurred over the next 45 seconds. The phone is not TV hardware, so D-pad, remote, and CEC behavior were not tested.
+
+Release artifact inspection
+PASS/PARTIAL — SmartTube_beta_32.39_universal.apk SHA-256 is 95E99D2EE323D5BB2FC67E7E2AD9C88088B9E1C25346495C65C8C0CA2DBD2161. The repository's release configuration produced unsigned APKs; apksigner correctly reported DOES NOT VERIFY for the inspected arm64-v8a artifact. The signed debug APK, not the unsigned release artifact, was used for the data-preserving device test.
+
+git diff --check
+PASS — no whitespace errors.
 ```
 
-Verdict: **partial verification with a failed device-playback check**. Parser/resolution/session behavior, SABR protocol components, app compilation, lint, clean release assembly, versioned debug packaging, signature-compatible installation, and typed unavailable behavior are verified. Successful playback failed on the available phone for both the public-live candidate and a VOD baseline, before the live SABR decoder could be demonstrated. Actual public-live SABR playback, long-duration A/V sync, DVR/live-edge accuracy, TV remote/CEC behavior, and recovery on physical TV hardware are not verified and must not be inferred from these results.
+Verdict: **build, unit, VOD, source-ordering, and bounded-failure behavior verified; active live media delivery failed**. Parser/resolver/session behavior, immutable request context, authenticated bounded fallback, SABR framing/correlation components, compilation, lint, clean release assembly, versioned debug installation, ordinary VOD playback, and prevention of an unbounded generic reload loop are verified. Actual public-live playback, successful SABR decoding, long-duration A/V sync, DVR/live-edge accuracy, TV remote/CEC behavior, and recovery on physical TV hardware are not verified and must not be inferred. Production live SABR remains disabled.
