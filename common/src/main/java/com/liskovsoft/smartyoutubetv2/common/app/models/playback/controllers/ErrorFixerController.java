@@ -197,10 +197,15 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
                 // The stream fails instantly if nParam isn't correct.
                 // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
-                //switchNextEngine();
-                //restartEngine = true;
+                if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                        && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                    // OkHttp is the engine that respects custom DNS settings
+                    getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    restartEngine = true;
+                } else {
+                    YouTubeServiceManager.instance().switchNextClientNow();
+                }
                 showMessage = true;
-                YouTubeServiceManager.instance().switchNextClientNow();
             } else {
                 YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
             }
