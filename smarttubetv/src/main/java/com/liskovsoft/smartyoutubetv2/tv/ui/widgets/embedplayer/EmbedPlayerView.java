@@ -256,6 +256,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void setRequestContext(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.setRequestContext(formatInfo);
+    }
+
+    @Override
     public void openSabr(MediaItemFormatInfo formatInfo) {
         mExoPlayerController.openSabr(formatInfo);
     }

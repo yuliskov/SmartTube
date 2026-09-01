@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaybackRequestContext;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -57,7 +58,6 @@ public class ExoMediaSourceFactory {
     @SuppressLint("StaticFieldLeak")
     //private static ExoMediaSourceFactory sInstance;
     private static final int MAX_SEGMENTS_PER_LOAD = 1; // default - 1 (1-5)
-    private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Context mContext;
@@ -67,9 +67,28 @@ public class ExoMediaSourceFactory {
     private static final boolean USE_BANDWIDTH_METER = false;
     private TrackErrorFixer mTrackErrorFixer;
     private DataSource.Factory mMediaDataSourceFactory;
+    private String mUserAgent = DefaultHeaders.APP_USER_AGENT;
+    private long mRequestGeneration = -1;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
+    }
+
+    public void setRequestContext(MediaItemFormatInfo formatInfo) {
+        PlaybackRequestContext context = formatInfo != null ? formatInfo.getPlaybackRequestContext() : null;
+        MediaItemFormatInfo.ClientInfo clientInfo = context != null ?
+                context.getRequestClient() : formatInfo != null ? formatInfo.getClientInfo() : null;
+        String userAgent = PlaybackRequestHeaders.resolveUserAgent(
+                clientInfo,
+                DefaultHeaders.APP_USER_AGENT);
+        long requestGeneration = context != null ? context.getGenerationId() : -1;
+
+        if (PlaybackRequestHeaders.shouldRebuildFactory(
+                mUserAgent, userAgent, mRequestGeneration, requestGeneration)) {
+            mUserAgent = userAgent;
+            mRequestGeneration = requestGeneration;
+            mMediaDataSourceFactory = null;
+        }
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -275,7 +294,7 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), USER_AGENT,
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), mUserAgent,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
@@ -291,7 +310,10 @@ public class ExoMediaSourceFactory {
                         (int) OkHttpManager.getConnectTimeoutMs(),
                         (int) OkHttpManager.getReadTimeoutMs(),
                         true,
-                        USER_AGENT);
+                        mUserAgent);
+        // Cronet uses the constructor UA only for its fallback source. Real Cronet requests
+        // take headers from request properties.
+        PlaybackRequestHeaders.applyUserAgent(dataSourceFactory.getDefaultRequestProperties(), mUserAgent);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }
@@ -301,7 +323,7 @@ public class ExoMediaSourceFactory {
      */
     private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                USER_AGENT, bandwidthMeter, (int) OkHttpManager.getConnectTimeoutMs(),
+                mUserAgent, bandwidthMeter, (int) OkHttpManager.getConnectTimeoutMs(),
                 (int) OkHttpManager.getReadTimeoutMs(), true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users

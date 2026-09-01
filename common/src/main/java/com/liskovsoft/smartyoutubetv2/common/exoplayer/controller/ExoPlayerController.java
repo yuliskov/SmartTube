@@ -79,6 +79,10 @@ public class ExoPlayerController implements Player.EventListener {
         mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_SUBTITLE)));
     }
 
+    public void setRequestContext(MediaItemFormatInfo formatInfo) {
+        mMediaSourceFactory.setRequestContext(formatInfo);
+    }
+
     public void openSabr(MediaItemFormatInfo formatInfo) {
         MediaSource mediaSource = mMediaSourceFactory.fromSabrFormatInfo(formatInfo);
         openMediaSource(mediaSource);

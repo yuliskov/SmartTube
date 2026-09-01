@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface PlayerEngine extends PlayerConstants {
+    void setRequestContext(MediaItemFormatInfo formatInfo);
     void openSabr(MediaItemFormatInfo formatInfo);
     void openDash(MediaItemFormatInfo formatInfo);
     void openDash(InputStream dashManifest);

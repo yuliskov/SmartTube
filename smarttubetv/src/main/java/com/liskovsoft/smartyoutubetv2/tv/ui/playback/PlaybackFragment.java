@@ -943,6 +943,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     // Begin Engine Events
 
     @Override
+    public void setRequestContext(MediaItemFormatInfo formatInfo) {
+        mExoPlayerController.setRequestContext(formatInfo);
+    }
+
+    @Override
     public void openSabr(MediaItemFormatInfo formatInfo) {
         mExoPlayerController.openSabr(formatInfo);
     }
