@@ -39,7 +39,13 @@ android {
         // }
     }
 
-    testOptions.unitTests.includeAndroidResources = true
+    testOptions {
+        unitTests.includeAndroidResources = true
+        // SABR protocol tests are plain JVM tests. The production logger delegates to
+        // android.util.Log, so use harmless Android stub defaults rather than requiring
+        // the repository's legacy Robolectric version under JDK 17.
+        unitTests.returnDefaultValues = true
+    }
 
     // gradle 4.6 migration: disable dimensions mechanism
     // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb

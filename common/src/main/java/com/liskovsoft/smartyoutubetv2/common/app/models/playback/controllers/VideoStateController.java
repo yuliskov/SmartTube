@@ -753,6 +753,17 @@ public class VideoStateController extends BasePlayerController {
         }
     }
 
+    /** Explicit player action: seek a seekable live timeline to its guarded live edge. */
+    public boolean goLive() {
+        if (getPlayer() == null || getVideo() == null || !getVideo().isLive
+                || getPlayer().getDurationMs() <= 0) {
+            return false;
+        }
+        getPlayer().setPositionMs(Math.max(0, getPlayer().getDurationMs() - getLiveBuffer()));
+        mIsRestoreActualLive = true;
+        return true;
+    }
+
     private boolean isRestoreActualLive() {
         return mIsRestoreActualLive != null && mIsRestoreActualLive && isBehindActualLive();
     }

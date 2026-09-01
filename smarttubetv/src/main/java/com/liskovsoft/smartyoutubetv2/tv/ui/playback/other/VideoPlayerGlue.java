@@ -34,6 +34,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ContentBlockAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.FlipAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.GoLiveAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RotateAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenDimmingAction;
@@ -134,6 +135,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new RotateAction(context));
         putAction(new FlipAction(context));
         putAction(new SoundOffAction(context));
+        putAction(new GoLiveAction(context));
     }
 
     @Override
@@ -311,6 +313,16 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     public void setButtonState(int buttonId, int buttonState) {
         setActionIndex(mActions.get(buttonId), buttonState);
+    }
+
+    /** Keeps the live-edge affordance out of VOD controls. */
+    public void setLiveActionVisible(boolean visible) {
+        Action action = mActions.get(R.id.action_go_live);
+        if (visible) {
+            addPrimaryAction(action, 1);
+        } else {
+            removePrimaryAction(action);
+        }
     }
 
     public void setChannelIcon(String iconUrl) {

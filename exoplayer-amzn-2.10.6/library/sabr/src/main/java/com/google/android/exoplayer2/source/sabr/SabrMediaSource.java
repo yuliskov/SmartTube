@@ -20,6 +20,10 @@ import com.google.android.exoplayer2.source.ads.AdsMediaSource;
 import com.google.android.exoplayer2.source.sabr.PlayerEmsgHandler.PlayerEmsgCallback;
 import com.google.android.exoplayer2.source.sabr.manifest.AdaptationSet;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
+import com.google.android.exoplayer2.source.sabr.session.SabrLiveWindowState;
+import com.google.android.exoplayer2.source.sabr.session.SabrLiveWindowTracker;
+import com.google.android.exoplayer2.source.sabr.session.SabrDiagnostics;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionSnapshot;
 import com.google.android.exoplayer2.upstream.Allocator;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy;
@@ -30,6 +34,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Assertions;
 
 import java.io.IOException;
+import java.util.List;
 
 public final class SabrMediaSource extends BaseMediaSource {
     /**
@@ -57,6 +62,8 @@ public final class SabrMediaSource extends BaseMediaSource {
     private long elapsedRealtimeOffsetMs;
     private int firstPeriodId;
     private final boolean livePresentationDelayOverridesManifest;
+    private @Nullable Handler liveWindowHandler;
+    private final SabrLiveWindowTracker.Listener liveWindowListener;
 
     /**
      * The default presentation delay for live streams. The presentation delay is the duration by
@@ -83,12 +90,20 @@ public final class SabrMediaSource extends BaseMediaSource {
         periodsById = new SparseArray<>();
         playerEmsgCallback = new DefaultPlayerEmsgCallback();
         manifestLoadErrorThrower = new ManifestLoadErrorThrower();
+        liveWindowListener = state -> {
+            Handler handler = liveWindowHandler;
+            if (handler != null) {
+                handler.post(this::processManifest);
+            }
+        };
     }
 
     @Override
     protected void prepareSourceInternal(@Nullable TransferListener mediaTransferListener) {
         this.mediaTransferListener = mediaTransferListener;
         loader = new Loader("Loader:SabrMediaSource");
+        liveWindowHandler = new Handler();
+        manifest.getSessionCoordinator().getLiveWindowTracker().addListener(liveWindowListener);
         processManifest();
     }
 
@@ -102,6 +117,9 @@ public final class SabrMediaSource extends BaseMediaSource {
         manifestFatalError = null;
         firstPeriodId = 0;
         periodsById.clear();
+        manifest.getSessionCoordinator().getLiveWindowTracker().removeListener(liveWindowListener);
+        manifest.close();
+        liveWindowHandler = null;
     }
 
     @Override
@@ -147,6 +165,19 @@ public final class SabrMediaSource extends BaseMediaSource {
             } else {
                 // This period has been removed from the manifest so it doesn't need to be updated.
             }
+        }
+        SabrLiveWindowState liveWindow = manifest.getSessionCoordinator()
+                .getLiveWindowTracker().snapshot();
+        if (manifest.dynamic) {
+            if (liveWindow.isSeekable()) {
+                publishLiveTimeline(liveWindow);
+            } else {
+                SabrTimeline pendingTimeline = new SabrTimeline(
+                        C.TIME_UNSET, C.TIME_UNSET, firstPeriodId, 0, 0, 0,
+                        manifest, tag, false, false, C.TIME_UNSET);
+                refreshSourceInfo(pendingTimeline, manifest);
+            }
+            return;
         }
         // Update the window.
         boolean windowChangingImplicitly = false;
@@ -214,8 +245,69 @@ public final class SabrMediaSource extends BaseMediaSource {
                         windowDurationUs,
                         windowDefaultStartPositionUs,
                         manifest,
-                        tag);
+                        tag,
+                        false,
+                        true,
+                        C.TIME_UNSET);
         refreshSourceInfo(timeline, manifest);
+    }
+
+    private void publishLiveTimeline(SabrLiveWindowState liveWindow) {
+        long windowStartUs = C.msToUs(liveWindow.getWindowStartMs());
+        long windowEndUs = C.msToUs(liveWindow.getWindowEndMs());
+        long durationUs = Math.max(0, windowEndUs - windowStartUs);
+        long defaultPositionUs = C.msToUs(Math.max(
+                0, liveWindow.getGoLiveTargetMs() - liveWindow.getWindowStartMs()));
+        long presentationStartTimeMs = C.TIME_UNSET;
+        long windowStartTimeMs = C.TIME_UNSET;
+        if (liveWindow.getWallTimeMs() >= 0 && liveWindow.getLiveHeadMs() >= 0) {
+            presentationStartTimeMs = liveWindow.getWallTimeMs() - liveWindow.getLiveHeadMs();
+            windowStartTimeMs = liveWindow.getWallTimeMs()
+                    - (liveWindow.getLiveHeadMs() - liveWindow.getWindowStartMs());
+        }
+        SabrTimeline timeline = new SabrTimeline(
+                presentationStartTimeMs,
+                windowStartTimeMs,
+                firstPeriodId,
+                windowStartUs,
+                durationUs,
+                Math.min(defaultPositionUs, durationUs),
+                manifest,
+                tag,
+                liveWindow.isDynamic(),
+                liveWindow.isSeekable(),
+                windowEndUs);
+        refreshSourceInfo(timeline, manifest);
+    }
+
+    public SabrSessionSnapshot getSessionSnapshot() {
+        return manifest.getSessionSnapshot();
+    }
+
+    public long getGoLivePositionMs() {
+        return manifest.getSessionCoordinator().getLiveWindowTracker().getGoLiveTargetMs();
+    }
+
+    public long getBackoffRemainingMs() {
+        long deadlineMs = manifest.getSessionCoordinator().getScheduler()
+                .getBackoffDeadlineElapsedMs();
+        return Math.max(0, deadlineMs - SystemClock.elapsedRealtime());
+    }
+
+    public long getBufferedDurationMs(int trackType) {
+        return manifest.getBufferedDurationMs(trackType);
+    }
+
+    public List<SabrDiagnostics.Event> getRecentDiagnostics() {
+        return manifest.getSessionCoordinator().getDiagnostics().snapshot();
+    }
+
+    public String getProtectionStatusName() {
+        return manifest.getSessionSnapshot().protectionStatus.name();
+    }
+
+    public void closeSession() {
+        manifest.close();
     }
 
     private long getNowUnixTimeUs() {
@@ -422,6 +514,9 @@ public final class SabrMediaSource extends BaseMediaSource {
         private final long windowDefaultStartPositionUs;
         private final SabrManifest manifest;
         private final @Nullable Object windowTag;
+        private final boolean dynamic;
+        private final boolean seekable;
+        private final long periodDurationOverrideUs;
 
         public SabrTimeline(
                 long presentationStartTimeMs,
@@ -431,7 +526,10 @@ public final class SabrMediaSource extends BaseMediaSource {
                 long windowDurationUs,
                 long windowDefaultStartPositionUs,
                 SabrManifest manifest,
-                @Nullable Object windowTag) {
+                @Nullable Object windowTag,
+                boolean dynamic,
+                boolean seekable,
+                long periodDurationOverrideUs) {
             this.presentationStartTimeMs = presentationStartTimeMs;
             this.windowStartTimeMs = windowStartTimeMs;
             this.firstPeriodId = firstPeriodId;
@@ -440,6 +538,9 @@ public final class SabrMediaSource extends BaseMediaSource {
             this.windowDefaultStartPositionUs = windowDefaultStartPositionUs;
             this.manifest = manifest;
             this.windowTag = windowTag;
+            this.dynamic = dynamic;
+            this.seekable = seekable;
+            this.periodDurationOverrideUs = periodDurationOverrideUs;
         }
 
         @Override
@@ -452,7 +553,10 @@ public final class SabrMediaSource extends BaseMediaSource {
             Assertions.checkIndex(periodIndex, 0, getPeriodCount());
             Object id = setIdentifiers ? manifest.getPeriod(periodIndex).id : null;
             Object uid = setIdentifiers ? (firstPeriodId + periodIndex) : null;
-            return period.set(id, uid, 0, manifest.getPeriodDurationUs(periodIndex),
+            long periodDurationUs = periodDurationOverrideUs != C.TIME_UNSET
+                    && getPeriodCount() == 1 ? periodDurationOverrideUs
+                    : manifest.getPeriodDurationUs(periodIndex);
+            return period.set(id, uid, 0, periodDurationUs,
                     C.msToUs(manifest.getPeriod(periodIndex).startMs - manifest.getPeriod(0).startMs)
                             - offsetInFirstPeriodUs);
         }
@@ -469,16 +573,12 @@ public final class SabrMediaSource extends BaseMediaSource {
             long windowDefaultStartPositionUs = getAdjustedWindowDefaultStartPositionUs(
                     defaultPositionProjectionUs);
             Object tag = setTag ? windowTag : null;
-            boolean isDynamic =
-                    manifest.dynamic
-                            && manifest.minUpdatePeriodMs != C.TIME_UNSET
-                            && manifest.durationMs == C.TIME_UNSET;
             return window.set(
                     tag,
                     presentationStartTimeMs,
                     windowStartTimeMs,
-                    /* isSeekable= */ true,
-                    isDynamic,
+                    seekable,
+                    dynamic,
                     windowDefaultStartPositionUs,
                     windowDurationUs,
                     /* firstPeriodIndex= */ 0,
@@ -498,7 +598,7 @@ public final class SabrMediaSource extends BaseMediaSource {
 
         private long getAdjustedWindowDefaultStartPositionUs(long defaultPositionProjectionUs) {
             long windowDefaultStartPositionUs = this.windowDefaultStartPositionUs;
-            if (!manifest.dynamic) {
+            if (!dynamic) {
                 return windowDefaultStartPositionUs;
             }
             if (defaultPositionProjectionUs > 0) {
@@ -508,39 +608,9 @@ public final class SabrMediaSource extends BaseMediaSource {
                     return C.TIME_UNSET;
                 }
             }
-            // Attempt to snap to the start of the corresponding video segment.
-            int periodIndex = 0;
-            long defaultStartPositionInPeriodUs = offsetInFirstPeriodUs + windowDefaultStartPositionUs;
-            long periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
-            while (periodIndex < manifest.getPeriodCount() - 1
-                    && defaultStartPositionInPeriodUs >= periodDurationUs) {
-                defaultStartPositionInPeriodUs -= periodDurationUs;
-                periodIndex++;
-                periodDurationUs = manifest.getPeriodDurationUs(periodIndex);
-            }
-            com.google.android.exoplayer2.source.sabr.manifest.Period period =
-                    manifest.getPeriod(periodIndex);
-            int videoAdaptationSetIndex = period.getAdaptationSetIndex(C.TRACK_TYPE_VIDEO);
-            if (videoAdaptationSetIndex == C.INDEX_UNSET) {
-                // No video adaptation set for snapping.
-                return windowDefaultStartPositionUs;
-            }
-            // If there are multiple video adaptation sets with unaligned segments, the initial time may
-            // not correspond to the start of a segment in both, but this is an edge case.
-            //SabrSegmentIndex snapIndex = period.adaptationSets.get(videoAdaptationSetIndex)
-            //        .representations.get(0).getIndex();
-            //if (snapIndex == null || snapIndex.getSegmentCount(periodDurationUs) == 0) {
-            //    // Video adaptation set does not include a non-empty index for snapping.
-            //    return windowDefaultStartPositionUs;
-            //}
-            //long segmentNum = snapIndex.getSegmentNum(defaultStartPositionInPeriodUs, periodDurationUs);
-            //return windowDefaultStartPositionUs + snapIndex.getTimeUs(segmentNum)
-            //        - defaultStartPositionInPeriodUs;
-
-            long startTimeUs = 0; // TODO: calc SABR start time
-
-            return windowDefaultStartPositionUs + startTimeUs
-                    - defaultStartPositionInPeriodUs;
+            // SABR media is addressed dynamically rather than through a locally enumerable segment
+            // index. Preserve the server-derived live target instead of fabricating a segment snap.
+            return windowDefaultStartPositionUs;
         }
 
         @Override

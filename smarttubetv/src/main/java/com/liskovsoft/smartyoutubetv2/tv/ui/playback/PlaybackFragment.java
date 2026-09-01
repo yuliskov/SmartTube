@@ -835,6 +835,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     public void setVideo(Video video) {
         mExoPlayerController.setVideo(video);
 
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setLiveActionVisible(video != null && video.isLive);
+        }
+
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
             mPlayerGlue.setTitle(video.getTitleFull() != null ? video.getTitleFull() : "...");

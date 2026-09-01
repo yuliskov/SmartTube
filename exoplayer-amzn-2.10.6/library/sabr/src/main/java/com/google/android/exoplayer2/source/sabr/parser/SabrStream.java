@@ -35,6 +35,8 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.SabrSeek;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamProtectionStatus;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionCoordinator;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionException;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
@@ -55,8 +57,8 @@ public class SabrStream {
             UMPPartId.SABR_REDIRECT,
             UMPPartId.FORMAT_INITIALIZATION_METADATA,
             UMPPartId.NEXT_REQUEST_POLICY,
-            //UMPPartId.LIVE_METADATA,
-            //UMPPartId.SABR_SEEK,
+            UMPPartId.LIVE_METADATA,
+            UMPPartId.SABR_SEEK,
             UMPPartId.SABR_ERROR,
             UMPPartId.SABR_CONTEXT_UPDATE,
             UMPPartId.SABR_CONTEXT_SENDING_POLICY,
@@ -76,6 +78,7 @@ public class SabrStream {
     };
     private final UMPDecoder decoder;
     private final SabrProcessor processor;
+    private final SabrSessionCoordinator sessionCoordinator;
     private final NoSegmentsTracker noNewSegmentsTracker;
     private final Set<Integer> unknownPartTypes;
     private int sqMismatchForwardCount;
@@ -115,7 +118,28 @@ public class SabrStream {
             boolean postLive,
             String videoId,
             long durationMs) {
+        this(serverAbrStreamingUrl, videoPlaybackUstreamerConfig, clientInfo,
+                liveSegmentTargetDurationSec, liveSegmentTargetDurationToleranceMs, startTimeMs,
+                poToken, postLive, videoId, durationMs,
+                new SabrSessionCoordinator(serverAbrStreamingUrl, poToken,
+                        videoId != null ? videoId : "", postLive,
+                        android.os.SystemClock::elapsedRealtime));
+    }
+
+    public SabrStream(
+            @NonNull String serverAbrStreamingUrl,
+            @NonNull String videoPlaybackUstreamerConfig,
+            @NonNull ClientInfo clientInfo,
+            int liveSegmentTargetDurationSec,
+            int liveSegmentTargetDurationToleranceMs,
+            long startTimeMs,
+            String poToken,
+            boolean postLive,
+            String videoId,
+            long durationMs,
+            @NonNull SabrSessionCoordinator sessionCoordinator) {
         decoder = new UMPDecoder();
+        this.sessionCoordinator = sessionCoordinator;
         processor = new SabrProcessor(
                 videoPlaybackUstreamerConfig,
                 clientInfo,
@@ -125,7 +149,8 @@ public class SabrStream {
                 poToken,
                 postLive,
                 videoId,
-                durationMs
+                durationMs,
+                sessionCoordinator
         );
         url = serverAbrStreamingUrl;
 
@@ -166,12 +191,21 @@ public class SabrStream {
         processor.reset(iTag);
     }
 
+    public long seekToMs(long requestedPositionMs) {
+        return processor.seekToMs(requestedPositionMs);
+    }
+
     public FormatSelector getFormatSelector() {
         return processor.getFormatSelector();
     }
 
     public void setFormatSelector(FormatSelector formatSelector) {
         processor.setFormatSelector(formatSelector);
+    }
+
+    /** Seeds live semantics before the first response's LiveMetadata frame arrives. */
+    public void setLive(boolean live) {
+        processor.setLive(live);
     }
 
     public long getSegmentStartTimeMs(int iTag) {
@@ -337,7 +371,7 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process SabrRedirect: %s", sabrRedirect);
+        Log.d(TAG, "Process SABR redirect: urlPresent=%s", sabrRedirect.hasRedirectUrl());
 
         if (!sabrRedirect.hasRedirectUrl()) {
             Log.d(TAG, "Server requested to redirect to an invalid URL");
@@ -371,7 +405,9 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process NextRequestPolicy: %s", nextRequestPolicy);
+        Log.d(TAG, "Process NextRequestPolicy: backoffMs=%s, cookiePresent=%s",
+                nextRequestPolicy.hasBackoffTimeMs() ? nextRequestPolicy.getBackoffTimeMs() : 0,
+                nextRequestPolicy.hasPlaybackCookie());
         processor.processNextRequestPolicy(nextRequestPolicy);
     }
 
@@ -397,7 +433,9 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process SabrContextUpdate: %s", sabrCtxUpdate);
+        Log.d(TAG, "Process opaque SabrContextUpdate: type=%s, valueBytes=%s",
+                sabrCtxUpdate.hasType() ? sabrCtxUpdate.getType() : -1,
+                sabrCtxUpdate.hasValue() ? sabrCtxUpdate.getValue().size() : 0);
         processor.processSabrContextUpdate(sabrCtxUpdate);
     }
 
@@ -410,7 +448,10 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process SabrContextSendingPolicy: %s", sabrCtxSendingPolicy);
+        Log.d(TAG, "Process SabrContextSendingPolicy: start=%s, stop=%s, discard=%s",
+                sabrCtxSendingPolicy.getStartPolicyCount(),
+                sabrCtxSendingPolicy.getStopPolicyCount(),
+                sabrCtxSendingPolicy.getDiscardPolicyCount());
         processor.processSabrContextSendingPolicy(sabrCtxSendingPolicy);
     }
 
@@ -436,7 +477,13 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process ReloadPlayerResponse: %s", reloadPlayerResponse);
+        Log.d(TAG, "Process ReloadPlayerResponse: paramsPresent=%s",
+                reloadPlayerResponse.hasReloadPlaybackParams());
+        try {
+            sessionCoordinator.markReloadRequired();
+        } catch (SabrSessionException reloadFailure) {
+            throw new SabrStreamError(reloadFailure.getMessage());
+        }
         return new RefreshPlayerResponseSabrPart(
                 RefreshPlayerResponseSabrPart.Reason.SABR_RELOAD_PLAYER_RESPONSE,
                 reloadPlayerResponse.hasReloadPlaybackParams() && reloadPlayerResponse.getReloadPlaybackParams().hasToken()
@@ -453,7 +500,9 @@ public class SabrStream {
             throw new IllegalStateException(e);
         }
 
-        Log.d(TAG, "Process LiveMetadata: %s", liveMetadata);
+        Log.d(TAG, "Process LiveMetadata: head=%s, minWindowPresent=%s, maxWindowPresent=%s",
+                liveMetadata.hasHeadSequenceNumber() ? liveMetadata.getHeadSequenceNumber() : -1,
+                liveMetadata.hasMinSeekableTimeTicks(), liveMetadata.hasMaxSeekableTimeTicks());
         return processor.processLiveMetadata(liveMetadata).seekSabrParts;
     }
 
@@ -496,11 +545,7 @@ public class SabrStream {
                 break;
             } else {
                 String msg = String.format("Unknown part encountered: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
-                if (part.partId > 100) {
-                    throw new IllegalStateException(msg);
-                }
-
-                Log.e(TAG, msg);
+                Log.d(TAG, msg);
                 part.skip(); // an essential part to continue reading
             }
 
@@ -513,25 +558,29 @@ public class SabrStream {
     }
 
     public String getUrl() {
-        return this.url;
+        return sessionCoordinator.getEndpoint();
     }
 
     public void setServerAbrStreamingUrl(String url) {
-        setUrl(url);
+        this.url = url;
+        sessionCoordinator.setEndpointFromCdnFailover(url);
     }
 
     private void setUrl(String url) {
-        Log.d(TAG, "New URL: %s", url);
+        Log.d(TAG, "Applying SABR endpoint update");
         UrlQueryString newQueryString = UrlQueryStringFactory.parse(url);
-        UrlQueryString oldQueryString = UrlQueryStringFactory.parse(this.url);
-        String bn = newQueryString.get("id");
-        String bc = oldQueryString.get("id");
-        if (processor.isLive() && this.url != null && !Helpers.equals(bn, bc)) {
-            throw new SabrStreamError(String.format("Broadcast ID changed from %s to %s. The download will need to be restarted.", bc, bn));
+        try {
+            sessionCoordinator.redirect(url);
+        } catch (SabrSessionException redirectFailure) {
+            throw new SabrStreamError(redirectFailure.getMessage());
         }
         this.url = url;
         if (Helpers.equals(newQueryString.get("source"), "yt_live_broadcast")) {
             processor.setLive(true);
         }
+    }
+
+    public SabrSessionCoordinator getSessionCoordinator() {
+        return sessionCoordinator;
     }
 }

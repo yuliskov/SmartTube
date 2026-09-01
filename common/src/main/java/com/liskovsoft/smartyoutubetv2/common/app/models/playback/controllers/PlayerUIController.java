@@ -578,7 +578,10 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        if (buttonId == R.id.action_rotate) {
+        if (buttonId == R.id.action_go_live) {
+            VideoStateController stateController = getController(VideoStateController.class);
+            if (stateController != null) stateController.goLive();
+        } else if (buttonId == R.id.action_rotate) {
             onRotate();
         } else if (buttonId == R.id.action_flip) {
             onFlip();

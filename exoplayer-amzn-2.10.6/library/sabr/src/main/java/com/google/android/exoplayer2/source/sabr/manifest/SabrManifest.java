@@ -23,6 +23,9 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerC
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionCoordinator;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionException;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionSnapshot;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
@@ -87,8 +90,24 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final String poToken;
     private final ClientInfo clientInfo;
     private final Map<Integer, SabrStream> sabrStreams;
-    private int sabrRequestNumber = -1;
     private final FormatSelector emptySelector;
+    private final SabrSessionCoordinator sessionCoordinator;
+    private final Map<Integer, Long> bufferedDurationByTrackMs = new HashMap<>();
+    private final Map<Long, SabrSessionCoordinator.RequestTicket> pendingRequests = new HashMap<>();
+
+    public static final class Request {
+        public final String url;
+        public final byte[] body;
+        public final long requestNumber;
+        public final long generation;
+
+        private Request(String url, byte[] body, long requestNumber, long generation) {
+            this.url = url;
+            this.body = body;
+            this.requestNumber = requestNumber;
+            this.generation = generation;
+        }
+    }
 
     public SabrManifest(
             long availabilityStartTimeMs,
@@ -104,7 +123,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             String videoPlaybackUstreamerConfig,
             String poToken,
             String videoId,
-            ClientInfo clientInfo) {
+            ClientInfo clientInfo,
+            boolean postLive) {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
@@ -121,6 +141,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.poToken = poToken;
         this.sabrStreams = new HashMap<>();
         this.emptySelector = new FormatSelector("ignored", true);
+        this.sessionCoordinator = new SabrSessionCoordinator(
+                serverAbrStreamingUrl, poToken, videoId, postLive,
+                android.os.SystemClock::elapsedRealtime);
     }
 
     public final int getPeriodCount() {
@@ -167,8 +190,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
                 poToken,
                 false,
                 videoId,
-                durationMs
+                durationMs,
+                sessionCoordinator
         );
+        sabrStream.setLive(dynamic);
 
         sabrStreams.put(trackType, sabrStream);
 
@@ -195,7 +220,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public int getSabrRequestNumber() {
-        return sabrRequestNumber;
+        return (int) sessionCoordinator.getLastRequestNumber();
     }
 
     public synchronized String getRequestUrl(int trackType) {
@@ -205,7 +230,30 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
         }
 
-        return Utils.updateQuery(activeStream.getUrl(), "rn", ++sabrRequestNumber);
+        try {
+            SabrSessionCoordinator.RequestTicket ticket = sessionCoordinator.beginRequest();
+            pendingRequests.put(ticket.requestNumber, ticket);
+            return Utils.updateQuery(ticket.getEndpoint(), "rn", ticket.requestNumber);
+        } catch (SabrSessionException unavailable) {
+            throw new IllegalStateException(unavailable);
+        }
+    }
+
+    public synchronized Request createRequest(
+            int trackType, boolean isInit, long seekTimeUs) {
+        if (!sabrStreams.containsKey(trackType)) {
+            throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
+        }
+        try {
+            SabrSessionCoordinator.RequestTicket ticket = sessionCoordinator.beginRequest();
+            VideoPlaybackAbrRequest request = createVideoPlaybackAbrRequest(trackType, isInit, seekTimeUs);
+            pendingRequests.put(ticket.requestNumber, ticket);
+            return new Request(
+                    Utils.updateQuery(ticket.getEndpoint(), "rn", ticket.requestNumber),
+                    request.toByteArray(), ticket.requestNumber, ticket.generation);
+        } catch (SabrSessionException unavailable) {
+            throw new IllegalStateException(unavailable);
+        }
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
@@ -283,7 +331,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
                 .addAllBufferedRanges(bufferRanges.first)
                 .setVideoPlaybackUstreamerConfig(
                         ByteString.copyFrom(
-                                Base64.decode(videoPlaybackUstreamerConfig, Base64.URL_SAFE)
+                                decodeUrlSafeBase64(videoPlaybackUstreamerConfig)
                         )
                 )
                 .setStreamerContext(createStreamerContext(trackType))
@@ -433,5 +481,71 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         return activeStream.createStreamerContext();
+    }
+
+    public SabrSessionCoordinator getSessionCoordinator() {
+        return sessionCoordinator;
+    }
+
+    public SabrSessionSnapshot getSessionSnapshot() {
+        return sessionCoordinator.snapshot();
+    }
+
+    public synchronized boolean shouldIssueRequest(int trackType, long bufferedDurationUs) {
+        bufferedDurationByTrackMs.put(trackType, Math.max(0, C.usToMs(bufferedDurationUs)));
+        boolean audioEnabled = sabrStreams.containsKey(C.TRACK_TYPE_AUDIO);
+        boolean videoEnabled = sabrStreams.containsKey(C.TRACK_TYPE_VIDEO);
+        return sessionCoordinator.getScheduler().shouldRequest(
+                bufferedDurationByTrackMs.containsKey(C.TRACK_TYPE_AUDIO)
+                        ? bufferedDurationByTrackMs.get(C.TRACK_TYPE_AUDIO) : 0,
+                bufferedDurationByTrackMs.containsKey(C.TRACK_TYPE_VIDEO)
+                        ? bufferedDurationByTrackMs.get(C.TRACK_TYPE_VIDEO) : 0,
+                audioEnabled, videoEnabled);
+    }
+
+    public synchronized long getBufferedDurationMs(int trackType) {
+        Long durationMs = bufferedDurationByTrackMs.get(trackType);
+        return durationMs != null ? durationMs : 0;
+    }
+
+    public synchronized boolean completeRequest(long requestNumber) {
+        SabrSessionCoordinator.RequestTicket ticket = pendingRequests.remove(requestNumber);
+        return ticket != null && sessionCoordinator.completeRequest(ticket);
+    }
+
+    public synchronized long seekToUs(long positionUs) {
+        long requestedMs = Math.max(0, C.usToMs(positionUs));
+        long clampedMs = sessionCoordinator.getLiveWindowTracker()
+                .clampSeekPositionMs(requestedMs);
+        for (SabrStream stream : sabrStreams.values()) {
+            clampedMs = stream.seekToMs(clampedMs);
+        }
+        bufferedDurationByTrackMs.clear();
+        pendingRequests.clear();
+        return C.msToUs(clampedMs);
+    }
+
+    public synchronized void close() {
+        pendingRequests.clear();
+        bufferedDurationByTrackMs.clear();
+        sessionCoordinator.close();
+    }
+
+    public long clampSeekPositionUs(long positionUs) {
+        return C.msToUs(sessionCoordinator.getLiveWindowTracker()
+                .clampSeekPositionMs(Math.max(0, C.usToMs(positionUs))));
+    }
+
+    public long getGoLivePositionUs() {
+        long targetMs = sessionCoordinator.getLiveWindowTracker().getGoLiveTargetMs();
+        return targetMs >= 0 ? C.msToUs(targetMs) : C.TIME_UNSET;
+    }
+
+    private static byte[] decodeUrlSafeBase64(String value) {
+        StringBuilder padded = new StringBuilder(value != null ? value : "");
+        while (padded.length() % 4 != 0) {
+            padded.append('=');
+        }
+        return Base64.decode(padded.toString(), Base64.URL_SAFE | Base64.NO_WRAP);
     }
 }

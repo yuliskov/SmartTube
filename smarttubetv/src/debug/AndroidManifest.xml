@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.liskovsoft.smartyoutubetv2.tv">
+    <application>
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.debug.SabrLivePlayerActivity"
+            android:exported="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/App.Theme.Leanback.Player">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="smarttube-debug" android:host="live" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

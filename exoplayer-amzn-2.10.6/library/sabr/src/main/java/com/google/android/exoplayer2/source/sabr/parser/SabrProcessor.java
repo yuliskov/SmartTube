@@ -25,6 +25,8 @@ import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaHead
 import com.google.android.exoplayer2.source.sabr.parser.results.ProcessMediaResult;
 import com.google.android.exoplayer2.source.sabr.parser.results.ProcessSabrSeekResult;
 import com.google.android.exoplayer2.source.sabr.parser.results.ProcessStreamProtectionStatusResult;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionCoordinator;
+import com.google.android.exoplayer2.source.sabr.session.SabrSessionException;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.FormatInitializationMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.LiveMetadata;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.MediaHeader;
@@ -53,6 +55,7 @@ import java.util.Set;
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
     private static final int NO_VALUE = -1;
+    private static final int MAX_PARTIAL_SEGMENTS = 64;
     private final String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
     private FormatSelector formatSelector;
@@ -74,6 +77,7 @@ public class SabrProcessor {
     private final Set<Integer> sabrContextsToSend;
     private final Map<Integer, MediaHeader> initializedFormats;
     private final FormatSelector emptySelector;
+    private final SabrSessionCoordinator sessionCoordinator;
 
     public SabrProcessor(
             @NonNull String videoPlaybackUstreamerConfig,
@@ -85,6 +89,23 @@ public class SabrProcessor {
             boolean postLive,
             String videoId,
             long durationMs
+    ) {
+        this(videoPlaybackUstreamerConfig, clientInfo, liveSegmentTargetDurationSec,
+                liveSegmentTargetDurationToleranceMs, playerTimeMs, poToken, postLive,
+                videoId, durationMs, null);
+    }
+
+    public SabrProcessor(
+            @NonNull String videoPlaybackUstreamerConfig,
+            @NonNull ClientInfo clientInfo,
+            int liveSegmentTargetDurationSec,
+            int liveSegmentTargetDurationToleranceMs,
+            long playerTimeMs,
+            String poToken,
+            boolean postLive,
+            String videoId,
+            long durationMs,
+            SabrSessionCoordinator sessionCoordinator
     ) {
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.poToken = poToken;
@@ -117,6 +138,9 @@ public class SabrProcessor {
         sabrContextUpdates = new HashMap<>();
         initializedFormats = new HashMap<>();
         emptySelector = new FormatSelector("ignore", true);
+        this.sessionCoordinator = sessionCoordinator != null ? sessionCoordinator
+                : new SabrSessionCoordinator(null, poToken, videoId != null ? videoId : "",
+                        postLive, android.os.SystemClock::elapsedRealtime);
         initializeFormatSelector();
     }
 
@@ -126,6 +150,19 @@ public class SabrProcessor {
 
     public void setPlayerTimeMs(long playerTimeMs) {
         this.playerTimeMs = playerTimeMs;
+    }
+
+    public long seekToMs(long requestedPositionMs) {
+        try {
+            playerTimeMs = sessionCoordinator.seek(requestedPositionMs);
+            partialSegments.clear();
+            for (SelectedFormat selectedFormat : selectedFormats.values()) {
+                selectedFormat.currentSegment = null;
+            }
+            return playerTimeMs;
+        } catch (SabrSessionException seekFailure) {
+            throw new SabrStreamError(seekFailure.getMessage());
+        }
     }
 
     private void initializeFormatSelector() {
@@ -163,11 +200,13 @@ public class SabrProcessor {
             throw new SabrStreamError(String.format("FormatId not found in MediaHeader (media_header=%s)", mediaHeader));
         }
 
-        // MOD: triggered even when no match found (probably multi thread issue?)
-        // Guard. This should not happen, except if we don't clear partial segments
-        //if (partialSegments.containsKey(Utils.toLong(mediaHeader.getHeaderId()))) {
-        //    throw new SabrStreamError(String.format("Header ID %s already exists", mediaHeader.getHeaderId()));
-        //}
+        long headerId = Utils.toLong(mediaHeader.getHeaderId());
+        if (partialSegments.containsKey(headerId)) {
+            throw new SabrStreamError("Duplicate MediaHeader ID");
+        }
+        if (partialSegments.size() >= MAX_PARTIAL_SEGMENTS) {
+            throw new SabrStreamError("Partial media segment limit exceeded");
+        }
 
         SelectedFormat initializedFormat = selectedFormats.get(mediaHeader.getFormatId().toString());
 
@@ -222,7 +261,8 @@ public class SabrProcessor {
 
         long estimatedContentLength = NO_VALUE;
         if (isLive() && !mediaHeader.hasContentLength() && mediaHeader.hasBitrateBps()) {
-            estimatedContentLength = (long) Math.ceil(mediaHeader.getBitrateBps() * ((double) durationMs / 1_000));
+            estimatedContentLength = (long) Math.ceil(
+                    mediaHeader.getBitrateBps() * ((double) durationMs / 1_000) / 8.0);
         }
 
         Segment segment = new Segment(
@@ -242,7 +282,7 @@ public class SabrProcessor {
                 mediaHeader.hasSequenceLmt() ? mediaHeader.getSequenceLmt() : NO_VALUE
         );
 
-        partialSegments.put(Utils.toLong(mediaHeader.getHeaderId()), segment);
+        partialSegments.put(headerId, segment);
 
         ProcessMediaHeaderResult result = new ProcessMediaHeaderResult();
 
@@ -316,18 +356,16 @@ public class SabrProcessor {
         Log.d(TAG, "MediaEnd for %s (sequence %s, data length = %s)",
                 segment.formatId, segment.sequenceNumber, segment.receivedDataLength);
 
-        // MOD: remove. receivedDataLength != segment.contentLength
-        //if (segment.contentLength != -1 && segment.receivedDataLength != segment.contentLength) {
-        //    if (segment.contentLengthEstimated) {
-        //        Log.d(TAG, "Content length for %s (sequence %s) was estimated, " +
-        //                "estimated %s bytes, got %s bytes",
-        //                segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength);
-        //    } else {
-        //        throw new SabrStreamError(String.format("Content length mismatch for %s (sequence %s): " +
-        //                "expected %s bytes, got %s bytes",
-        //                segment.formatId, segment.sequenceNumber, segment.contentLength, segment.receivedDataLength));
-        //    }
-        //}
+        if (segment.contentLength != -1 && segment.receivedDataLength != segment.contentLength) {
+            if (segment.contentLengthEstimated) {
+                Log.d(TAG, "Estimated content length differed: expectedBytes=%s, receivedBytes=%s",
+                        segment.contentLength, segment.receivedDataLength);
+            } else {
+                throw new SabrStreamError(String.format(
+                        "Content length mismatch: expected %s bytes, got %s bytes",
+                        segment.contentLength, segment.receivedDataLength));
+            }
+        }
 
         ProcessMediaEndResult result = new ProcessMediaEndResult();
 
@@ -409,6 +447,11 @@ public class SabrProcessor {
 
     public ProcessStreamProtectionStatusResult processStreamProtectionStatus(StreamProtectionStatus streamProtectionStatus) {
         this.streamProtectionStatus = streamProtectionStatus.hasStatus() ? streamProtectionStatus.getStatus() : null;
+        try {
+            sessionCoordinator.processProtectionStatus(streamProtectionStatus, null);
+        } catch (SabrSessionException protectionFailure) {
+            throw new SabrStreamError(protectionFailure.getMessage());
+        }
         Status status = streamProtectionStatus.getStatus();
         String poToken = this.poToken;
         PoTokenStatus resultStatus = null;
@@ -522,11 +565,19 @@ public class SabrProcessor {
 
     public void processNextRequestPolicy(NextRequestPolicy nextRequestPolicy) {
         this.nextRequestPolicy = nextRequestPolicy;
-        Log.d(TAG, "Registered new NextRequestPolicy: %s", nextRequestPolicy);
+        sessionCoordinator.processNextRequestPolicy(nextRequestPolicy);
+        Log.d(TAG, "Registered NextRequestPolicy: backoffMs=%s, cookiePresent=%s",
+                nextRequestPolicy.hasBackoffTimeMs() ? nextRequestPolicy.getBackoffTimeMs() : 0,
+                nextRequestPolicy.hasPlaybackCookie());
     }
 
     public ProcessLiveMetadataResult processLiveMetadata(LiveMetadata liveMetadata) {
         this.liveMetadata = liveMetadata;
+        try {
+            sessionCoordinator.processLiveMetadata(liveMetadata);
+        } catch (SabrSessionException metadataFailure) {
+            throw new SabrStreamError(metadataFailure.getMessage());
+        }
 
         if (liveMetadata.hasHeadSequenceTimeMs()) {
             totalDurationMs = liveMetadata.getHeadSequenceTimeMs();
@@ -571,8 +622,14 @@ public class SabrProcessor {
         if (seekTo == -1) {
             throw new SabrStreamError(String.format("Server sent a SabrSeek part that is missing required seek data: %s", sabrSeek));
         }
-        Log.d(TAG, "Seeking to %sms", seekTo);
+        try {
+            seekTo = sessionCoordinator.seek(seekTo);
+        } catch (SabrSessionException seekFailure) {
+            throw new SabrStreamError(seekFailure.getMessage());
+        }
+        Log.d(TAG, "Applying server seek to %sms", seekTo);
         playerTimeMs = seekTo;
+        partialSegments.clear();
 
         ProcessSabrSeekResult result = new ProcessSabrSeekResult();
 
@@ -597,44 +654,16 @@ public class SabrProcessor {
             return;
         }
 
-        if (sabrCtxUpdate.getWritePolicy() == SabrContextUpdate.SabrContextWritePolicy.SABR_CONTEXT_WRITE_POLICY_KEEP_EXISTING
-                && sabrContextUpdates.containsKey(sabrCtxUpdate.getType())) {
-            Log.d(TAG, "Received a SABR Context Update with write_policy=KEEP_EXISTING" +
-                    " matching an existing SABR Context Update. Ignoring update");
-            return;
-        }
-
-        Log.w(TAG, "Received a SABR Context Update. YouTube is likely trying to force ads on the client. " +
-                "This may cause issues with playback.");
-
-        sabrContextUpdates.put(sabrCtxUpdate.getType(), sabrCtxUpdate);
-        if (sabrCtxUpdate.hasSendByDefault()) {
-            sabrContextsToSend.add(sabrCtxUpdate.getType());
-        }
-        Log.d(TAG, "Registered SabrContextUpdate %s", sabrCtxUpdate);
+        sessionCoordinator.processContextUpdate(sabrCtxUpdate);
+        Log.d(TAG, "Registered opaque SabrContextUpdate type=%s", sabrCtxUpdate.getType());
     }
 
     public void processSabrContextSendingPolicy(SabrContextSendingPolicy sabrCtxSendingPolicy) {
-        for (int startType : sabrCtxSendingPolicy.getStartPolicyList()) {
-            if (!sabrContextsToSend.contains(startType)) {
-                Log.d(TAG, "Server requested to enable SABR Context Update for type %s", startType);
-                sabrContextsToSend.add(startType);
-            }
-        }
-
-        for (int stopType : sabrCtxSendingPolicy.getStopPolicyList()) {
-            if (!sabrContextsToSend.contains(stopType)) {
-                Log.d(TAG, "Server requested to disable SABR Context Update for type %s", stopType);
-                sabrContextsToSend.remove(stopType);
-            }
-        }
-
-        for (int discardType : sabrCtxSendingPolicy.getDiscardPolicyList()) {
-            if (!sabrContextsToSend.contains(discardType)) {
-                Log.d(TAG, "Server requested to discard SABR Context Update for type %s", discardType);
-                sabrContextUpdates.remove(discardType);
-            }
-        }
+        sessionCoordinator.processContextSendingPolicy(sabrCtxSendingPolicy);
+        Log.d(TAG, "Applied SABR context policy: start=%s, stop=%s, discard=%s",
+                sabrCtxSendingPolicy.getStartPolicyCount(),
+                sabrCtxSendingPolicy.getStopPolicyCount(),
+                sabrCtxSendingPolicy.getDiscardPolicyCount());
     }
 
     public boolean isLive() {
@@ -674,7 +703,8 @@ public class SabrProcessor {
     }
 
     public int getBackoffTimeMs() {
-        return nextRequestPolicy != null ? nextRequestPolicy.getBackoffTimeMs() : 0;
+        NextRequestPolicy sharedPolicy = sessionCoordinator.getNextRequestPolicy();
+        return sharedPolicy.hasBackoffTimeMs() ? sharedPolicy.getBackoffTimeMs() : 0;
     }
 
     //private List<FormatId> createSelectedFormatIds() {
@@ -688,20 +718,11 @@ public class SabrProcessor {
     //}
 
     public StreamerContext createStreamerContext() {
-        StreamerContext.Builder builder = StreamerContext.newBuilder()
-                .setPlaybackCookie(
-                        nextRequestPolicy != null ?
-                                nextRequestPolicy.getPlaybackCookie().toByteString() : ByteString.EMPTY
-                )
-                .setClientInfo(clientInfo)
-                .addAllSabrContexts(createSabrContexts())
-                .addAllUnsentSabrContexts(createUnsentSabrContexts());
+        return sessionCoordinator.createStreamerContext(clientInfo);
+    }
 
-        if (poToken != null && !poToken.isEmpty()) {
-            builder.setPoToken(ByteString.copyFrom(Base64.decode(poToken, Base64.URL_SAFE)));
-        }
-
-        return builder.build();
+    public SabrSessionCoordinator getSessionCoordinator() {
+        return sessionCoordinator;
     }
 
     private List<SabrContext> createSabrContexts() {

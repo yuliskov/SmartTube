@@ -196,6 +196,7 @@ dependencies {
 
     implementation project(':exoplayer-library-core')
     implementation project(':exoplayer-library-ui')
+    debugImplementation project(':exoplayer-library-sabr')
     implementation project(':exoplayer-extension-leanback')
     implementation project(':exoplayer-extension-mediasession')
 

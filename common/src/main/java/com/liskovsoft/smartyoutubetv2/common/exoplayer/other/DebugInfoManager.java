@@ -34,6 +34,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlaybackStatus;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
@@ -319,6 +320,15 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //appendRow("Playback state", state);
         float boost = mPlayerInitializer.getVolumeBoost();
         appendRow("Playback info", String.format("paused=%s;state=%s", !mPlayer.getPlayWhenReady(), state));
+        LivePlaybackStatus.Snapshot live = LivePlaybackStatus.snapshot();
+        if (live.redactedVideoId != null) {
+            appendRow("Live source", String.format("id=%s;state=%s;protocol=%s;generation=%s",
+                    live.redactedVideoId, live.state,
+                    live.source != null ? live.source : "NONE", live.generation));
+            if (live.fallbackReason != null) {
+                appendRow("Live fallback", live.fallbackReason);
+            }
+        }
         appendRow("Volume",
                 String.format("original=%s;normalized=%s", PlayerData.instance(mContext).getPlayerVolume(), Helpers.formatFloat(boost * mPlayer.getVolume())));
     }

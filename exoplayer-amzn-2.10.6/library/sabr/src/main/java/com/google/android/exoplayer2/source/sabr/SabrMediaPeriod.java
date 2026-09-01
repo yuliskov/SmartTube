@@ -179,6 +179,7 @@ final class SabrMediaPeriod
 
     @Override
     public long seekToUs(long positionUs) {
+        positionUs = manifest.seekToUs(positionUs);
         for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
             sampleStream.seekToUs(positionUs);
         }
@@ -190,6 +191,7 @@ final class SabrMediaPeriod
 
     @Override
     public long getAdjustedSeekPositionUs(long positionUs, SeekParameters seekParameters) {
+        positionUs = manifest.clampSeekPositionUs(positionUs);
         for (ChunkSampleStream<SabrChunkSource> sampleStream : sampleStreams) {
             if (sampleStream.primaryTrackType == C.TRACK_TYPE_VIDEO) {
                 return sampleStream.getAdjustedSeekPositionUs(positionUs, seekParameters);

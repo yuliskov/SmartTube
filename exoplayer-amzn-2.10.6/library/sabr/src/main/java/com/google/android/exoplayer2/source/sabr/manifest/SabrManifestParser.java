@@ -39,7 +39,6 @@ public class SabrManifestParser {
     private int mId;
     private static final String NULL_INDEX_RANGE = "0-0";
     private static final String NULL_CONTENT_LENGTH = "0";
-    private static final int MAX_DURATION_SEC = 48 * 60 * 60;
     private MediaItemFormatInfo mFormatInfo;
     private Set<MediaFormat> mMP4Videos;
     private Set<MediaFormat> mWEBMVideos;
@@ -65,8 +64,8 @@ public class SabrManifestParser {
         long timeShiftBufferDepthMs = C.TIME_UNSET;
         long suggestedPresentationDelayMs = C.TIME_UNSET;
         long publishTimeMs = C.TIME_UNSET;
-        boolean dynamic = false;
-        long minUpdateTimeMs = C.TIME_UNSET; // 3155690800000L, "P100Y" no refresh (there is no dash url)
+        boolean dynamic = formatInfo.isLive();
+        long minUpdateTimeMs = dynamic ? 1_000 : C.TIME_UNSET;
 
         List<Period> periods = new ArrayList<>();
 
@@ -90,7 +89,8 @@ public class SabrManifestParser {
                 formatInfo.getVideoPlaybackUstreamerConfig(),
                 formatInfo.getPoToken(),
                 formatInfo.getVideoId(),
-                createClientInfo(formatInfo));
+                createClientInfo(formatInfo),
+                formatInfo.isLiveContent() && !formatInfo.isLive());
     }
 
     private static long getDurationMs(MediaItemFormatInfo formatInfo) {
@@ -206,20 +206,18 @@ public class SabrManifestParser {
             segmentDurationUs = format.getTargetDurationSec() * 1_000_000;
         }
 
-        int lengthSeconds = Integer.parseInt(mFormatInfo.getLengthSeconds());
-
-        if (mFormatInfo.isLive() || lengthSeconds <= 0) {
-            // For premiere streams (length > 0) or regular streams (length == 0) set window that exceeds normal limits - 48hrs
-            lengthSeconds = MAX_DURATION_SEC;
-        }
+        int lengthSeconds = Helpers.parseInt(mFormatInfo.getLengthSeconds(), 0);
 
         // To make long streams (12hrs) seekable we should decrease size of the segment a bit
         //long segmentDurationUnits = (long) targetDurationSec * unitsPerSecond * 9999 / 10000;
-        int segmentDurationUnits = (int)(segmentDurationUs * (long) unitsPerSecond / 1_000_000);
+        int segmentDurationUnits = Math.max(1,
+                (int)(segmentDurationUs * (long) unitsPerSecond / 1_000_000));
         // Increase count a bit to compensate previous tweak
         //long segmentCount = (long) lengthSeconds / targetDurationSec * 10000 / 9999;
         //int segmentCount = (int)(lengthSeconds * (long) unitsPerSecond / segmentDurationUnits);
-        int segmentCount = (int) Math.ceil(lengthSeconds * (double) unitsPerSecond / segmentDurationUnits);
+        int segmentCount = mFormatInfo.isLive() ? 0
+                : (int) Math.ceil(Math.max(0, lengthSeconds) * (double) unitsPerSecond
+                        / segmentDurationUnits);
         // Increase offset a bit to compensate previous tweaks
         // Streams to check:
         // https://www.youtube.com/watch?v=drdemkJpgao
@@ -231,7 +229,9 @@ public class SabrManifestParser {
         long startNumber = mFormatInfo.getStartSegmentNum();
         long endNumber = C.INDEX_UNSET;
         String url = mFormatInfo.getServerAbrStreamingUrl();
-        UrlTemplate mediaTemplate = UrlTemplate.compile(url + "&sq=$Number$");
+        // Compatibility catalog only: normal SABR retrieval is a POST driven by ABR state,
+        // selected formats, and buffered ranges, never by an appended sq parameter.
+        UrlTemplate mediaTemplate = UrlTemplate.compile(url);
         //UrlTemplate initializationTemplate = UrlTemplate.compile(format.getOtfInitUrl()); // ?
         UrlTemplate initializationTemplate = null; // ?
 
