@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.source.sabr.SabrLiveFeatureFlags;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaybackDebugMode;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LiveChannelResolution;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LiveChannelResolver;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LiveInput;
@@ -75,6 +76,7 @@ public final class SabrLivePlayerActivity extends Activity {
         if (playbackLaunched) {
             playbackLaunched = false;
             SabrLiveFeatureFlags.setSabrLiveHarnessEnabledForDebug(false);
+            PlaybackDebugMode.clear();
             showState("READY", "Playback closed. Refresh the channel or resolve another input.");
         }
     }
@@ -176,7 +178,9 @@ public final class SabrLivePlayerActivity extends Activity {
         }
         cancelResolution();
         showState("LIVE PLAYER", source + " · video …" + suffix(videoId));
-        SabrLiveFeatureFlags.setSabrLiveHarnessEnabledForDebug(true);
+        SabrLiveFeatureFlags.setSabrLiveHarnessEnabledForDebug(false);
+        PlaybackDebugMode.setForDebug(
+                PlaybackDebugMode.Mode.FORCE_VISIONOS_HLS_REFERENCE);
         playbackLaunched = true;
         PlaybackPresenter.instance(this).openVideo(videoId);
     }
@@ -186,6 +190,7 @@ public final class SabrLivePlayerActivity extends Activity {
         cancelResolution();
         setBusy(false);
         SabrLiveFeatureFlags.setSabrLiveHarnessEnabledForDebug(false);
+        PlaybackDebugMode.clear();
         showState("STOPPED", "No channel resolution is active.");
     }
 
@@ -258,6 +263,7 @@ public final class SabrLivePlayerActivity extends Activity {
         cancelResolution();
         if (!playbackLaunched) {
             SabrLiveFeatureFlags.setSabrLiveHarnessEnabledForDebug(false);
+            PlaybackDebugMode.clear();
         }
         super.onDestroy();
     }

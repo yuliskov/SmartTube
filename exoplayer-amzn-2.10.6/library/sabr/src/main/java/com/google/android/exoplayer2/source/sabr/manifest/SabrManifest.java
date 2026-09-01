@@ -94,6 +94,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     private final SabrSessionCoordinator sessionCoordinator;
     private final Map<Integer, Long> bufferedDurationByTrackMs = new HashMap<>();
     private final Map<Long, SabrSessionCoordinator.RequestTicket> pendingRequests = new HashMap<>();
+    private int vodRequestNumber = -1;
 
     public static final class Request {
         public final String url;
@@ -180,19 +181,34 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             return sabrStream;
         }
 
-        sabrStream = new SabrStream(
-                cdnSelector.getCurrentUrl(),
-                videoPlaybackUstreamerConfig,
-                clientInfo,
-                -1,
-                -1,
-                -1,
-                poToken,
-                false,
-                videoId,
-                durationMs,
-                sessionCoordinator
-        );
+        if (dynamic) {
+            sabrStream = new SabrStream(
+                    cdnSelector.getCurrentUrl(),
+                    videoPlaybackUstreamerConfig,
+                    clientInfo,
+                    -1,
+                    -1,
+                    -1,
+                    poToken,
+                    false,
+                    videoId,
+                    durationMs,
+                    sessionCoordinator
+            );
+        } else {
+            sabrStream = new SabrStream(
+                    cdnSelector.getCurrentUrl(),
+                    videoPlaybackUstreamerConfig,
+                    clientInfo,
+                    -1,
+                    -1,
+                    -1,
+                    poToken,
+                    false,
+                    videoId,
+                    durationMs
+            );
+        }
         sabrStream.setLive(dynamic);
 
         sabrStreams.put(trackType, sabrStream);
@@ -220,7 +236,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public int getSabrRequestNumber() {
-        return (int) sessionCoordinator.getLastRequestNumber();
+        return dynamic ? (int) sessionCoordinator.getLastRequestNumber() : vodRequestNumber;
     }
 
     public synchronized String getRequestUrl(int trackType) {
@@ -228,6 +244,10 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
         if (activeStream == null) {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
+        }
+
+        if (!dynamic) {
+            return Utils.updateQuery(activeStream.getUrl(), "rn", ++vodRequestNumber);
         }
 
         try {
@@ -241,8 +261,17 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
     public synchronized Request createRequest(
             int trackType, boolean isInit, long seekTimeUs) {
-        if (!sabrStreams.containsKey(trackType)) {
+        SabrStream activeStream = sabrStreams.get(trackType);
+        if (activeStream == null) {
             throw new IllegalStateException("Active SabrStream not found for track type " + trackType);
+        }
+        if (!dynamic) {
+            long requestNumber = ++vodRequestNumber;
+            VideoPlaybackAbrRequest request = createVideoPlaybackAbrRequest(
+                    trackType, isInit, seekTimeUs);
+            return new Request(
+                    Utils.updateQuery(activeStream.getUrl(), "rn", requestNumber),
+                    request.toByteArray(), requestNumber, 0);
         }
         try {
             SabrSessionCoordinator.RequestTicket ticket = sessionCoordinator.beginRequest();
@@ -492,6 +521,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public synchronized boolean shouldIssueRequest(int trackType, long bufferedDurationUs) {
+        if (!dynamic) {
+            return true;
+        }
         bufferedDurationByTrackMs.put(trackType, Math.max(0, C.usToMs(bufferedDurationUs)));
         boolean audioEnabled = sabrStreams.containsKey(C.TRACK_TYPE_AUDIO);
         boolean videoEnabled = sabrStreams.containsKey(C.TRACK_TYPE_VIDEO);
@@ -509,6 +541,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
     }
 
     public synchronized boolean completeRequest(long requestNumber) {
+        if (!dynamic) {
+            return true;
+        }
         SabrSessionCoordinator.RequestTicket ticket = pendingRequests.remove(requestNumber);
         return ticket != null && sessionCoordinator.completeRequest(ticket);
     }

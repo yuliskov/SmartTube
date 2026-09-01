@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.live;
 import android.text.TextUtils;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaybackRequestContext;
 
 /** Immutable source-capability snapshot derived from one player response generation. */
@@ -46,8 +47,26 @@ public final class LivePlaybackDescriptor {
         return new LivePlaybackDescriptor(
                 info.getVideoId(), info.isLive(), info.isLiveContent(), info.isStreamSeekable(),
                 info.isUnplayable(), info.getPlayabilityReason(), sabr,
-                info.containsDashFormats(),
+                hasPlayableAdaptivePair(info, context),
                 info.containsDashUrl() && LiveManifestValidator.isValid(info.getDashManifestUrl()),
                 info.containsHlsUrl() && LiveManifestValidator.isValid(info.getHlsManifestUrl()));
+    }
+
+    private static boolean hasPlayableAdaptivePair(MediaItemFormatInfo info,
+                                                   PlaybackRequestContext context) {
+        if (!info.containsDashFormats() || context == null ||
+                context.isExpired(System.currentTimeMillis()) || info.getAdaptiveFormats() == null) {
+            return false;
+        }
+        boolean audio = false;
+        boolean video = false;
+        for (MediaFormat format : info.getAdaptiveFormats()) {
+            if (format == null || TextUtils.isEmpty(format.getUrl()) ||
+                    TextUtils.isEmpty(format.getMimeType())) continue;
+            String mime = format.getMimeType();
+            audio |= mime.startsWith("audio/");
+            video |= mime.startsWith("video/");
+        }
+        return audio && video;
     }
 }

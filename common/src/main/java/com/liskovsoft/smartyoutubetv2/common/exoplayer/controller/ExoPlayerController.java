@@ -16,13 +16,16 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.video.VideoListener;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaybackRequestContext;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.telemetry.PlaybackTransportTrace;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -39,7 +42,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class ExoPlayerController implements Player.EventListener {
+public class ExoPlayerController implements Player.EventListener, VideoListener {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final Context mContext;
     private final ExoMediaSourceFactory mMediaSourceFactory;
@@ -54,6 +57,7 @@ public class ExoPlayerController implements Player.EventListener {
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
     private Runnable mOnVideoLoaded;
+    private PlaybackRequestContext mRequestContext;
 
     public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
@@ -80,6 +84,7 @@ public class ExoPlayerController implements Player.EventListener {
     }
 
     public void setRequestContext(MediaItemFormatInfo formatInfo) {
+        mRequestContext = formatInfo != null ? formatInfo.getPlaybackRequestContext() : null;
         mMediaSourceFactory.setRequestContext(formatInfo);
     }
 
@@ -210,6 +215,7 @@ public class ExoPlayerController implements Player.EventListener {
     public void setPlayer(SimpleExoPlayer player) {
         mPlayer = player;
         player.addListener(this);
+        player.addVideoListener(this);
     }
 
     //@Override
@@ -288,6 +294,9 @@ public class ExoPlayerController implements Player.EventListener {
         }
 
         notifyOnVideoLoad();
+        Log.d("PlaybackTransport", "event=TRACKS_READY,%s,groups=%s,selections=%s",
+                PlaybackTransportTrace.describeContext(mRequestContext),
+                trackGroups.length, trackSelections.length);
 
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
@@ -348,6 +357,14 @@ public class ExoPlayerController implements Player.EventListener {
         boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
         boolean isBuffering = Player.STATE_BUFFERING == playbackState && playWhenReady;
 
+        if (playbackState == Player.STATE_READY && mPlayer != null) {
+            long bufferMs = Math.max(0, mPlayer.getBufferedPosition() - mPlayer.getCurrentPosition());
+            Log.d("PlaybackTransport",
+                    "event=PLAYER_READY,%s,positionMs=%s,bufferMs=%s,playWhenReady=%s",
+                    PlaybackTransportTrace.describeContext(mRequestContext),
+                    mPlayer.getCurrentPosition(), bufferMs, playWhenReady);
+        }
+
         // Fix chapters (seek and play) after playback ends
         if (isPlaybackEnded && mIsEnded) {
             return;
@@ -383,6 +400,16 @@ public class ExoPlayerController implements Player.EventListener {
     @Override
     public void onSeekProcessed() {
         mEventListener.onSeekEnd();
+    }
+
+    @Override
+    public void onRenderedFirstFrame() {
+        long positionMs = mPlayer != null ? mPlayer.getCurrentPosition() : -1;
+        long bufferMs = mPlayer != null ?
+                Math.max(0, mPlayer.getBufferedPosition() - positionMs) : -1;
+        Log.d("PlaybackTransport",
+                "event=FIRST_FRAME,%s,positionMs=%s,bufferMs=%s",
+                PlaybackTransportTrace.describeContext(mRequestContext), positionMs, bufferMs);
     }
 
     public float getSpeed() {
@@ -497,6 +524,7 @@ public class ExoPlayerController implements Player.EventListener {
 
         try {
             mPlayer.removeListener(this);
+            mPlayer.removeVideoListener(this);
             mPlayer.stop(true); // Cause input lags due to high cpu load?
             mPlayer.clearVideoSurface();
             mPlayer.release();
@@ -504,6 +532,7 @@ public class ExoPlayerController implements Player.EventListener {
             e.printStackTrace();
         } finally {
             mPlayer = null;
+            mRequestContext = null;
         }
     }
 }

@@ -6,10 +6,13 @@ import com.google.android.exoplayer2.source.sabr.SabrLiveFeatureFlags;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrMediaCorrelationException;
 import com.google.android.exoplayer2.source.sabr.parser.ump.UMPProtocolException;
 import com.google.android.exoplayer2.source.sabr.session.SabrSessionException;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaybackDebugMode;
+import com.liskovsoft.mediaserviceinterfaces.data.PlaybackRequestContext;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -22,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlaybackDescriptor;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlayerResponseRetryPolicy;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlaybackSession;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlaybackSourceSelector;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.live.LivePlaybackStatus;
@@ -39,6 +43,7 @@ import io.reactivex.disposables.Disposable;
 public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final int MIN_SHUFFLE_SIZE = 30;
+    private static final int MAX_LIVE_PLAYER_RESPONSES = 3;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private SuggestionsController mSuggestionsController;
@@ -47,6 +52,8 @@ public class VideoLoaderController extends BasePlayerController {
     private Disposable mFormatInfoAction;
     private final LivePlaybackSession mLivePlaybackSession =
             new LivePlaybackSession(new LivePlaybackSourceSelector());
+    private final LivePlayerResponseRetryPolicy mLivePlayerResponseRetryPolicy =
+            new LivePlayerResponseRetryPolicy(MAX_LIVE_PLAYER_RESPONSES);
     private MediaItemFormatInfo mLiveFormatInfo;
     private boolean mLiveFallbackHandled;
     private boolean mLiveTerminalFailure;
@@ -93,6 +100,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         mLiveTerminalFailure = false;
+        mLivePlayerResponseRetryPolicy.reset();
         stopLivePlaybackSession();
 
         item.isShuffled = false;
@@ -126,6 +134,7 @@ public class VideoLoaderController extends BasePlayerController {
     @Override
     public void onEngineReleased() {
         disposeActions();
+        mLivePlayerResponseRetryPolicy.reset();
         stopLivePlaybackSession();
     }
 
@@ -137,6 +146,10 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
         boolean sourceFailure = type == com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener.ERROR_TYPE_SOURCE;
+        if (sourceFailure && findHttpResponseCode(error) == 403) {
+            mLiveFallbackHandled = handleForbiddenLiveGeneration();
+            return;
+        }
         LivePlaybackSession.Failure failure = classifyLiveFailure(error);
         if (!sourceFailure && failure == LivePlaybackSession.Failure.UNKNOWN) {
             return;
@@ -169,6 +182,34 @@ public class VideoLoaderController extends BasePlayerController {
         Log.e(TAG, "Live source fallback: %s -> %s", failure, fallback.source);
         getPlayer().showProgressBar(true);
         openLiveSource(fallback);
+        return true;
+    }
+
+    /** Retires every URL from a forbidden player response and requests the next client once. */
+    private boolean handleForbiddenLiveGeneration() {
+        PlaybackRequestContext context = mLiveFormatInfo != null ?
+                mLiveFormatInfo.getPlaybackRequestContext() : null;
+        long playerGeneration = context != null ? context.getGenerationId() : -1;
+        if (!mLivePlayerResponseRetryPolicy.tryRetireForbiddenGeneration(playerGeneration)) {
+            mLiveTerminalFailure = true;
+            getPlayer().showProgressBar(false);
+            getPlayer().setTitle("No untried live player response is available after HTTP 403");
+            getPlayer().showOverlay(true);
+            Log.e(TAG, "Live player-response budget exhausted after HTTP 403; responses=%s",
+                    mLivePlayerResponseRetryPolicy.getPlayerResponseCount());
+            return true;
+        }
+
+        Log.e(TAG, "Retiring forbidden live player response; generation=%s, response=%s/%s",
+                playerGeneration, mLivePlayerResponseRetryPolicy.getPlayerResponseCount(),
+                MAX_LIVE_PLAYER_RESPONSES);
+        mLivePlaybackSession.stop();
+        LivePlaybackStatus.clear();
+        mLiveFormatInfo = null;
+        mLiveTerminalFailure = false;
+        getPlayer().showProgressBar(true);
+        YouTubeServiceManager.instance().switchNextClientNow();
+        loadFormatInfo(getVideo());
         return true;
     }
 
@@ -471,7 +512,12 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void processLiveFormatInfo(MediaItemFormatInfo formatInfo) {
+        PlaybackRequestContext context = formatInfo.getPlaybackRequestContext();
+        mLivePlayerResponseRetryPolicy.onPlayerResponse(
+                context != null ? context.getGenerationId() : -1);
         mLiveFormatInfo = formatInfo;
+        boolean forceVisionOsHls = PlaybackDebugMode.get() ==
+                PlaybackDebugMode.Mode.FORCE_VISIONOS_HLS_REFERENCE;
         boolean debugHarnessEnabled = SabrLiveFeatureFlags.enableSabrLiveHarness();
         boolean sabrEnabled = SabrLiveFeatureFlags.enableSabrLiveProduction()
                 || debugHarnessEnabled;
@@ -484,7 +530,12 @@ public class VideoLoaderController extends BasePlayerController {
                         sabrEnabled,
                         acceptAdaptiveFormats(formatInfo),
                         acceptDashLive(formatInfo),
-                        formatInfo.containsHlsUrl());
+                        formatInfo.containsHlsUrl(),
+                        forceVisionOsHls ? LivePlaybackSourceSelector.Mode.FORCE_HLS :
+                                LivePlaybackSourceSelector.Mode.AUTO);
+        if (forceVisionOsHls) {
+            PlaybackDebugMode.clear();
+        }
         LivePlaybackSourceSelector.Decision decision = mLivePlaybackSession.start(
                 LivePlaybackDescriptor.from(formatInfo), configuration);
         LivePlaybackStatus.update(formatInfo.getVideoId(), mLivePlaybackSession);
@@ -566,6 +617,15 @@ public class VideoLoaderController extends BasePlayerController {
             return LivePlaybackSession.Failure.HLS;
         }
         return LivePlaybackSession.Failure.UNKNOWN;
+    }
+
+    private static int findHttpResponseCode(Throwable error) {
+        for (Throwable cause = error; cause != null; cause = cause.getCause()) {
+            if (cause instanceof HttpDataSource.InvalidResponseCodeException) {
+                return ((HttpDataSource.InvalidResponseCodeException) cause).responseCode;
+            }
+        }
+        return -1;
     }
 
     private void stopLivePlaybackSession() {

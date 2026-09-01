@@ -36,14 +36,18 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaFormat;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaybackRequestContext;
 import com.liskovsoft.sharedutils.cronet.CronetManager;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpDNSSelector;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.telemetry.PlaybackTransportEventListener;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.telemetry.PlaybackTransportTrace;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
@@ -52,6 +56,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import okhttp3.OkHttpClient;
 
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
@@ -69,6 +75,11 @@ public class ExoMediaSourceFactory {
     private DataSource.Factory mMediaDataSourceFactory;
     private String mUserAgent = DefaultHeaders.APP_USER_AGENT;
     private long mRequestGeneration = -1;
+    private PlaybackRequestContext mRequestContext;
+    private String mLastSourceEngine;
+    private int mSourceAttempt;
+    private boolean mIpv4BoundMedia;
+    private static volatile String sLastEffectiveEngine;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
@@ -88,14 +99,19 @@ public class ExoMediaSourceFactory {
             mUserAgent = userAgent;
             mRequestGeneration = requestGeneration;
             mMediaDataSourceFactory = null;
+            mSourceAttempt = 0;
         }
+        setIpv4BoundMedia(false);
+        mRequestContext = context;
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
+        setIpv4BoundMedia(false);
         return buildSabrMediaSource(formatInfo);
     }
 
     public MediaSource fromDashFormatInfo(MediaItemFormatInfo formatInfo) {
+        setIpv4BoundMedia(hasIpv4BoundMediaUrl(formatInfo != null ? formatInfo.getAdaptiveFormats() : null));
         return buildDashMediaSource(formatInfo);
     }
 
@@ -104,14 +120,24 @@ public class ExoMediaSourceFactory {
     }
 
     public MediaSource fromDashManifestUrl(String dashManifestUrl) {
+        setIpv4BoundMedia(PlaybackNetworkRoute.isIpv4BoundGoogleVideoUrl(dashManifestUrl));
         return buildMediaSource(Uri.parse(dashManifestUrl), DASH_MANIFEST_EXTENSION);
     }
 
     public MediaSource fromHlsPlaylist(String hlsPlaylist) {
+        setIpv4BoundMedia(PlaybackNetworkRoute.isIpv4BoundGoogleVideoUrl(hlsPlaylist));
         return buildMediaSource(Uri.parse(hlsPlaylist), HLS_PLAYLIST_EXTENSION);
     }
 
     public MediaSource fromUrlList(List<String> urlList) {
+        boolean ipv4Bound = false;
+        for (String url : urlList) {
+            if (PlaybackNetworkRoute.isIpv4BoundGoogleVideoUrl(url)) {
+                ipv4Bound = true;
+                break;
+            }
+        }
+        setIpv4BoundMedia(ipv4Bound);
         MediaSource[] mediaSources = new MediaSource[urlList.size()];
 
         for (int i = 0; i < urlList.size(); i++) {
@@ -131,7 +157,8 @@ public class ExoMediaSourceFactory {
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultDataSourceFactory(mContext, bandwidthMeter, buildHttpDataSourceFactory(useBandwidthMeter));
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter,
+                buildHttpDataSourceFactory(useBandwidthMeter));
     }
 
     /**
@@ -142,8 +169,14 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
-        int source = tweaksData.getPlayerDataSource();
+        int configuredSource = getConfiguredDataSource();
+        int source = mIpv4BoundMedia ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : configuredSource;
+        mLastSourceEngine = mIpv4BoundMedia ? "OkHttp-IPv4Bound" : engineName(mContext, source);
+        sLastEffectiveEngine = mLastSourceEngine;
+        if (mIpv4BoundMedia && configuredSource != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
+            Log.w(TAG, "Playback network route: configured=%s, effective=%s, reason=IPV4_BOUND_GVS",
+                    engineName(mContext, configuredSource), mLastSourceEngine);
+        }
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
         return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
                         source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
@@ -166,10 +199,12 @@ public class ExoMediaSourceFactory {
                 }
                 return ssSource;
             case C.TYPE_DASH:
+                DataSource.Factory dashDataSourceFactory = getMediaDataSourceFactory();
+                String dashEngine = mLastSourceEngine;
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
                                 getDashChunkSourceFactory(),
-                                getMediaDataSourceFactory()
+                                dashDataSourceFactory
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
                                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -177,12 +212,16 @@ public class ExoMediaSourceFactory {
                 if (mTrackErrorFixer != null) {
                     dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
                 }
+                observe(dashSource, PlaybackTransportTrace.Protocol.DASH, dashEngine);
                 return dashSource;
             case C.TYPE_HLS:
-                HlsMediaSource hlsSource = new HlsMediaSource.Factory(getMediaDataSourceFactory()).createMediaSource(uri);
+                DataSource.Factory hlsDataSourceFactory = getMediaDataSourceFactory();
+                String hlsEngine = mLastSourceEngine;
+                HlsMediaSource hlsSource = new HlsMediaSource.Factory(hlsDataSourceFactory).createMediaSource(uri);
                 if (mTrackErrorFixer != null) {
                     hlsSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
                 }
+                observe(hlsSource, PlaybackTransportTrace.Protocol.HLS, hlsEngine);
                 return hlsSource;
             case C.TYPE_OTHER:
                 ExtractorMediaSource extractorSource = new ExtractorMediaSource.Factory(getMediaDataSourceFactory())
@@ -191,6 +230,7 @@ public class ExoMediaSourceFactory {
                 if (mTrackErrorFixer != null) {
                     extractorSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
                 }
+                observe(extractorSource, PlaybackTransportTrace.Protocol.DIRECT, mLastSourceEngine);
                 return extractorSource;
             default: {
                 throw new IllegalStateException("Unsupported type: " + type);
@@ -200,8 +240,10 @@ public class ExoMediaSourceFactory {
 
     private MediaSource buildSabrMediaSource(MediaItemFormatInfo formatInfo) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        SabrChunkSource.Factory chunkSourceFactory = getSabrChunkSourceFactory();
+        String engine = mLastSourceEngine;
         SabrMediaSource sabrSource = new SabrMediaSource.Factory(
-                getSabrChunkSourceFactory(),
+                chunkSourceFactory,
                 null
         )
                 .setLoadErrorHandlingPolicy(new SabrDefaultLoadErrorHandlingPolicy())
@@ -209,11 +251,14 @@ public class ExoMediaSourceFactory {
         if (mTrackErrorFixer != null) {
             sabrSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
+        observe(sabrSource, PlaybackTransportTrace.Protocol.SABR, engine);
         return sabrSource;
     }
 
     private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        DataSource.Factory dataSourceFactory = getMediaDataSourceFactory();
+        String engine = mLastSourceEngine;
         DashMediaSource dashSource = new DashMediaSource.Factory(
                 getDashChunkSourceFactory(),
                 null
@@ -223,11 +268,14 @@ public class ExoMediaSourceFactory {
         if (mTrackErrorFixer != null) {
             dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
+        observe(dashSource, PlaybackTransportTrace.Protocol.DASH, engine);
         return dashSource;
     }
 
     private MediaSource buildMPDMediaSource(Uri uri, InputStream mpdContent) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        DataSource.Factory dataSourceFactory = getMediaDataSourceFactory();
+        String engine = mLastSourceEngine;
         DashMediaSource dashSource = new DashMediaSource.Factory(
                 getDashChunkSourceFactory(),
                 null
@@ -237,6 +285,7 @@ public class ExoMediaSourceFactory {
         if (mTrackErrorFixer != null) {
             dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
+        observe(dashSource, PlaybackTransportTrace.Protocol.DASH, engine);
         return dashSource;
     }
 
@@ -247,14 +296,17 @@ public class ExoMediaSourceFactory {
         }
 
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
+        DataSource.Factory dataSourceFactory = getMediaDataSourceFactory();
+        String engine = mLastSourceEngine;
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(getMediaDataSourceFactory()),
+                new DefaultDashChunkSource.Factory(dataSourceFactory),
                 null
         )
                 .createMediaSource(getManifest(uri, mpdContent));
         if (mTrackErrorFixer != null) {
             dashSource.addEventListener(Utils.sHandler, mTrackErrorFixer);
         }
+        observe(dashSource, PlaybackTransportTrace.Protocol.DASH, engine);
         return dashSource;
     }
 
@@ -294,7 +346,13 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), mUserAgent,
+        OkHttpClient client = OkHttpManager.instance().getClient();
+        if (mIpv4BoundMedia) {
+            client = client.newBuilder()
+                    .dns(new OkHttpDNSSelector(OkHttpDNSSelector.IPvMode.IPV4_ONLY))
+                    .build();
+        }
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(client, mUserAgent,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
@@ -374,6 +432,15 @@ public class ExoMediaSourceFactory {
 
     public void release() {
         mMediaDataSourceFactory = null;
+        mRequestContext = null;
+        mLastSourceEngine = null;
+        mSourceAttempt = 0;
+        mIpv4BoundMedia = false;
+    }
+
+    private void observe(MediaSource source, PlaybackTransportTrace.Protocol protocol, String engine) {
+        source.addEventListener(Utils.sHandler,
+                new PlaybackTransportEventListener(mRequestContext, protocol, engine, ++mSourceAttempt));
     }
 
     @NonNull
@@ -395,8 +462,51 @@ public class ExoMediaSourceFactory {
         if (mMediaDataSourceFactory == null) {
             mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
         }
-
+        if (mLastSourceEngine == null) {
+            mLastSourceEngine = engineName(mContext, getConfiguredDataSource());
+            sLastEffectiveEngine = mLastSourceEngine;
+        }
         return mMediaDataSourceFactory;
+    }
+
+    private int getConfiguredDataSource() {
+        return PlayerTweaksData.instance(mContext).getPlayerDataSource();
+    }
+
+    public static String getLastEffectiveEngine(Context context) {
+        String effectiveEngine = sLastEffectiveEngine;
+        return effectiveEngine != null ? effectiveEngine :
+                engineName(context, PlayerTweaksData.instance(context).getPlayerDataSource());
+    }
+
+    private void setIpv4BoundMedia(boolean ipv4BoundMedia) {
+        if (mIpv4BoundMedia != ipv4BoundMedia) {
+            mIpv4BoundMedia = ipv4BoundMedia;
+            mMediaDataSourceFactory = null;
+            mLastSourceEngine = null;
+        }
+    }
+
+    private static boolean hasIpv4BoundMediaUrl(List<MediaFormat> formats) {
+        if (formats == null) {
+            return false;
+        }
+        for (MediaFormat format : formats) {
+            if (format != null && PlaybackNetworkRoute.isIpv4BoundGoogleVideoUrl(format.getUrl())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String engineName(Context context, int source) {
+        if (source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP) {
+            return "OkHttp";
+        }
+        if (source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(context) != null) {
+            return "Cronet";
+        }
+        return "Default";
     }
 
     // EXO: 2.10 - 2.12
