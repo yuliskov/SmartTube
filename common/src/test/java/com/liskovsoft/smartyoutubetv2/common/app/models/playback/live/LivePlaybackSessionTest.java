@@ -22,6 +22,7 @@ public class LivePlaybackSessionTest {
         assertEquals(LivePlaybackSourceSelector.Source.SABR,
                 session.fail(LivePlaybackSession.Failure.DASH).source);
         assertFalse(session.fail(LivePlaybackSession.Failure.PROTOCOL).isAvailable());
+        assertTrue(session.isTerminal());
         assertEquals(4, session.getFallbackReasons().size());
     }
 
@@ -65,6 +66,7 @@ public class LivePlaybackSessionTest {
         session.stop();
         session.updatePlaybackState(LivePlaybackSession.State.PLAYING_LIVE_EDGE);
         assertEquals(LivePlaybackSession.State.STOPPED, session.getState());
+        assertFalse(session.isTerminal());
     }
 
     private static LivePlaybackDescriptor descriptor(boolean sabr, boolean dashFormats,

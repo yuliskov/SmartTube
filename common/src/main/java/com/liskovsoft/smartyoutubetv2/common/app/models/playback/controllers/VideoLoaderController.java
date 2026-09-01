@@ -49,6 +49,7 @@ public class VideoLoaderController extends BasePlayerController {
             new LivePlaybackSession(new LivePlaybackSourceSelector());
     private MediaItemFormatInfo mLiveFormatInfo;
     private boolean mLiveFallbackHandled;
+    private boolean mLiveTerminalFailure;
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -91,6 +92,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
+        mLiveTerminalFailure = false;
         stopLivePlaybackSession();
 
         item.isShuffled = false;
@@ -144,6 +146,9 @@ public class VideoLoaderController extends BasePlayerController {
 
     /** Routes live stalls through the same bounded source budget as explicit engine failures. */
     public boolean handleLiveNoProgress() {
+        if (mLiveTerminalFailure) {
+            return true;
+        }
         return advanceLiveFallback(LivePlaybackSession.Failure.NO_PROGRESS);
     }
 
@@ -155,6 +160,7 @@ public class VideoLoaderController extends BasePlayerController {
         LivePlaybackSourceSelector.Decision fallback = mLivePlaybackSession.fail(failure);
         LivePlaybackStatus.update(mLiveFormatInfo.getVideoId(), mLivePlaybackSession);
         if (!fallback.isAvailable()) {
+            mLiveTerminalFailure = true;
             getPlayer().showProgressBar(false);
             getPlayer().setTitle(fallback.reason);
             getPlayer().showOverlay(true);
@@ -167,7 +173,12 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     public boolean consumeLiveFallbackHandled() {
-        boolean handled = mLiveFallbackHandled;
+        // ExoPlayer may report more than one callback for the same terminal source error. Keep
+        // those callbacks inside the exhausted live session instead of handing the duplicate to
+        // the legacy generic fixer, which would reload the video and restart the source budget.
+        boolean handled = mLiveFallbackHandled ||
+                mLiveTerminalFailure ||
+                (mLiveFormatInfo != null && mLivePlaybackSession.isTerminal());
         mLiveFallbackHandled = false;
         return handled;
     }
@@ -483,6 +494,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
         PlaybackView player = getPlayer();
         if (player != null) {
+            mLiveTerminalFailure = true;
             player.setTitle(formatInfo.getPlayabilityReason() != null
                     ? formatInfo.getPlayabilityReason() : decision.reason);
             player.showProgressBar(false);

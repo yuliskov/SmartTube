@@ -79,6 +79,11 @@ public final class LivePlaybackSession {
         return currentSource;
     }
 
+    /** True after this generation has exhausted its finite source budget. */
+    public boolean isTerminal() {
+        return descriptor != null && state == State.ERROR;
+    }
+
     public List<String> getFallbackReasons() {
         return Collections.unmodifiableList(fallbackReasons);
     }

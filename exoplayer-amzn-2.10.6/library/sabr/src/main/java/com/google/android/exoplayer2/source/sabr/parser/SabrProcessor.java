@@ -629,7 +629,6 @@ public class SabrProcessor {
         }
         Log.d(TAG, "Applying server seek to %sms", seekTo);
         playerTimeMs = seekTo;
-        partialSegments.clear();
 
         ProcessSabrSeekResult result = new ProcessSabrSeekResult();
 

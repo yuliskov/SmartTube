@@ -173,10 +173,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //this.sabrStream.setCaptionSelection(createCaptionSelection(trackType, trackSelection));
         this.sabrStream.setFormatSelector(formatSelector);
 
-        sabrHeaders = new HashMap<>();
-        sabrHeaders.put("Content-Type", "application/x-protobuf");
-        //sabrHeaders.put("Accept-Encoding", "identity");
-        sabrHeaders.put("Accept", "application/vnd.yt-ump");
+        sabrHeaders = createSabrRequestHeaders();
 
         List<Representation> representations = getRepresentations();
         representationHolders = new RepresentationHolder[trackSelection.length()];
@@ -474,6 +471,14 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
         return blacklistDurationMs != C.TIME_UNSET
                 && trackSelection.blacklist(trackSelection.indexOf(chunk.trackFormat), blacklistDurationMs);
+    }
+
+    static Map<String, String> createSabrRequestHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/x-protobuf");
+        headers.put("Accept-Encoding", "identity");
+        headers.put("Accept", "application/vnd.yt-ump");
+        return headers;
     }
 
     private void completeSessionRequest(Chunk chunk) {
