@@ -139,15 +139,31 @@ public class VideoLoaderController extends BasePlayerController {
         if (!sourceFailure && failure == LivePlaybackSession.Failure.UNKNOWN) {
             return;
         }
+        mLiveFallbackHandled = advanceLiveFallback(failure);
+    }
+
+    /** Routes live stalls through the same bounded source budget as explicit engine failures. */
+    public boolean handleLiveNoProgress() {
+        return advanceLiveFallback(LivePlaybackSession.Failure.NO_PROGRESS);
+    }
+
+    private boolean advanceLiveFallback(LivePlaybackSession.Failure failure) {
+        if (mLiveFormatInfo == null || getPlayer() == null
+                || mLivePlaybackSession.getCurrentSource() == null) {
+            return false;
+        }
         LivePlaybackSourceSelector.Decision fallback = mLivePlaybackSession.fail(failure);
         LivePlaybackStatus.update(mLiveFormatInfo.getVideoId(), mLivePlaybackSession);
         if (!fallback.isAvailable()) {
-            return;
+            getPlayer().showProgressBar(false);
+            getPlayer().setTitle(fallback.reason);
+            getPlayer().showOverlay(true);
+            return true;
         }
         Log.e(TAG, "Live source fallback: %s -> %s", failure, fallback.source);
-        mLiveFallbackHandled = true;
         getPlayer().showProgressBar(true);
         openLiveSource(fallback);
+        return true;
     }
 
     public boolean consumeLiveFallbackHandled() {

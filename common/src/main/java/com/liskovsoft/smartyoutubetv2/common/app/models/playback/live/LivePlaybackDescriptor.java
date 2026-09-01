@@ -46,6 +46,8 @@ public final class LivePlaybackDescriptor {
         return new LivePlaybackDescriptor(
                 info.getVideoId(), info.isLive(), info.isLiveContent(), info.isStreamSeekable(),
                 info.isUnplayable(), info.getPlayabilityReason(), sabr,
-                info.containsDashFormats(), info.containsDashUrl(), info.containsHlsUrl());
+                info.containsDashFormats(),
+                info.containsDashUrl() && LiveManifestValidator.isValid(info.getDashManifestUrl()),
+                info.containsHlsUrl() && LiveManifestValidator.isValid(info.getHlsManifestUrl()));
     }
 }
