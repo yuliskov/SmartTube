@@ -44,9 +44,31 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mWidth;
     private int mHeight;
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Context context = parent.getContext();
+    private boolean mIsConfigInitialized = false;
+    private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardMultilineSubtitleEnabled;
+    private boolean mIsCardTextAutoScrollEnabled;
+    private float mCardTextScrollSpeed;
+
+    private static class CardViewHolder extends ViewHolder {
+        final ComplexImageCardView cardView;
+        final View infoField;
+        final TextView titleText;
+        final TextView contentText;
+
+        CardViewHolder(ComplexImageCardView view) {
+            super(view);
+            this.cardView = view;
+            this.infoField = view.findViewById(R.id.info_field);
+            this.titleText = view.findViewById(R.id.title_text);
+            this.contentText = view.findViewById(R.id.content_text);
+        }
+    }
+
+    private void ensureConfigInitialized(Context context) {
+        if (mIsConfigInitialized) {
+            return;
+        }
 
         mDefaultBackgroundColor =
             ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
@@ -60,59 +82,52 @@ public class VideoCardPresenter extends LongClickPresenter {
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
 
-        boolean isCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
-        boolean isCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
-        boolean isCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
-        float cardTextScrollSpeed = getCardTextScrollSpeed(context);
+        mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
+        mIsCardMultilineSubtitleEnabled = isCardMultilineSubtitleEnabled(context);
+        mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
+        mCardTextScrollSpeed = getCardTextScrollSpeed(context);
 
         updateDimensions(context);
+        mIsConfigInitialized = true;
+    }
 
-        ComplexImageCardView cardView = new ComplexImageCardView(context) {
-            @Override
-            public void setSelected(boolean selected) {
-                updateCardBackgroundColor(this, selected);
-                super.setSelected(selected);
-            }
-        };
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        Context context = parent.getContext();
+        ensureConfigInitialized(context);
 
-        cardView.setTitleLinesNum(isCardMultilineTitleEnabled ? 2 : 1);
-        cardView.setContentLinesNum(isCardMultilineSubtitleEnabled ? 2 : 1);
-        cardView.enableTextAutoScroll(isCardTextAutoScrollEnabled);
-        cardView.setTextScrollSpeed(cardTextScrollSpeed);
+        ComplexImageCardView cardView = new ComplexImageCardView(context);
+        CardViewHolder holder = new CardViewHolder(cardView);
+
+        cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setContentLinesNum(mIsCardMultilineSubtitleEnabled ? 2 : 1);
+        cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
+        cardView.setTextScrollSpeed(mCardTextScrollSpeed);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         cardView.enableBadge(isBadgeEnabled());
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
-        cardView.setBackgroundColor(mDefaultBackgroundColor); // background is temporarily visible during animations
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    cardView.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
-        //}
-        updateCardBackgroundColor(cardView, false);
-        return new ViewHolder(cardView);
+        cardView.setBackgroundColor(mDefaultBackgroundColor);
+
+        cardView.setOnFocusChangeListener((v, hasFocus) -> updateCardBackgroundColor(holder, hasFocus));
+
+        updateCardBackgroundColor(holder, false);
+        return holder;
     }
 
-    private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
+    private void updateCardBackgroundColor(CardViewHolder holder, boolean selected) {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
-        // Both background colors should be set because the view's
-        // background is temporarily visible during animations.
-        // NOTE: has visual bug with rounded corners
-        //view.setBackgroundColor(backgroundColor);
-
-        View infoField = view.findViewById(R.id.info_field);
-        if (infoField != null) {
-            infoField.setBackgroundColor(backgroundColor);
+        if (holder.infoField != null) {
+            holder.infoField.setBackgroundColor(backgroundColor);
         }
-
-        TextView titleText = view.findViewById(R.id.title_text);
-        if (titleText != null) {
-            titleText.setTextColor(textColor);
+        if (holder.titleText != null) {
+            holder.titleText.setTextColor(textColor);
         }
-        TextView contentText = view.findViewById(R.id.content_text);
-        if (contentText != null) {
-            contentText.setTextColor(textColor);
+        if (holder.contentText != null) {
+            holder.contentText.setTextColor(textColor);
         }
     }
 
