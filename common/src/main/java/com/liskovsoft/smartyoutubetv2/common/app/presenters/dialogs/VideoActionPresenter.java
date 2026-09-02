@@ -29,9 +29,9 @@ public class VideoActionPresenter extends BasePresenter<Void> {
 
         // Show playlist contents in channel instead of instant playback
         if (item.hasVideo() && !item.isBadgePlaylistInChannel()) {
-            // Resolve formats while the playback activity is being created. The media service
-            // shares this in-flight request with the player, so it does not duplicate work.
-            MediaServiceManager.instance().loadFormatInfo(item, formatInfo -> {});
+            // Resolve formats while the playback activity is being created without interrupting
+            // format loads owned by menus or other UI flows.
+            MediaServiceManager.instance().prefetchFormatInfo(item);
             PlaybackPresenter.instance(getContext()).openVideo(item);
         } else if (item.hasChannel() || (item.belongsToChannelUploads() && item.hasNestedItems())) {
             MediaServiceManager.chooseChannelPresenter(getContext(), item);

@@ -260,6 +260,22 @@ public class MediaServiceManager implements OnAccountChange {
                 );
     }
 
+    /**
+     * Starts format resolution without replacing the action owned by loadFormatInfo.
+     * The media service shares an in-flight request for the same video with playback.
+     */
+    public void prefetchFormatInfo(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mItemService.getFormatInfoObserve(item.videoId)
+                .subscribe(
+                        formatInfo -> { },
+                        error -> Log.e(TAG, "prefetchFormatInfo error: %s", error.getMessage())
+                );
+    }
+
     public void loadPlaylists(Video item, OnMediaGroup onPlaylistGroup) {
         if (item == null) {
             return;
