@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -41,7 +40,7 @@ import java.security.Security;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
-        // fix youtube bandwidth throttling (best - false)???
+        // fix YouTube bandwidth throttling (best - false)???
         // false is better for streams (less buffering)
         System.setProperty("http.keepAlive", "false");
         // fix ipv6 infinite video buffering???
@@ -88,27 +87,41 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
 
-        Class<? extends AppDialogActivity> dialogClazz;
-
-        if (VERSION.SDK_INT == 26
-                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(), "4S806_Z51S1 (Panasonic)")) {
-            // The fix: Only fullscreen opaque activities can request orientation
-            dialogClazz = AppDialogActivityOpaque.class;
-        } else {
-            dialogClazz = AppDialogActivity.class;
-        }
+        Class<? extends AppDialogActivity> dialogClass = getDialogClass();
 
         viewManager.setRoot(BrowseActivity.class);
         viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
         viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
         viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppDialogView.class, dialogClazz, BrowseActivity.class);
+        viewManager.register(AppDialogView.class, dialogClass, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
         viewManager.register(WebBrowserView.class, WebBrowserActivity.class, BrowseActivity.class);
+    }
+
+    /**
+     * Fix for the 'IllegalStateException: Only fullscreen opaque activities can request orientation'
+     */
+    private static Class<? extends AppDialogActivity> getDialogClass() {
+        Class<? extends AppDialogActivity> dialogClass;
+
+        if (VERSION.SDK_INT == 26
+                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(),
+                "4S806_Z51S1 (Panasonic)",
+                "5S72Z_G20S (Panasonic)",
+                "9S60Z_ZQ21S (Panasonic)",
+                "Android Smart TV (MStar)",
+                "Xgimi TV (Xgimi Technology Co.,Ltd)"
+        )) {
+            // The fix: Only fullscreen opaque activities can request orientation
+            dialogClass = AppDialogActivityOpaque.class;
+        } else {
+            dialogClass = AppDialogActivity.class;
+        }
+        return dialogClass;
     }
 
     private void setupGlobalExceptionHandler() {

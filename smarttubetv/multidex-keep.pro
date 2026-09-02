@@ -1,3 +1,6 @@
+-keepclassmembers class com.liskovsoft.smartyoutubetv2.common.prefs.common.DataSaverBase$$ExternalSyntheticLambda0 {
+    <init>(...);
+}
 -keep class com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter
 -keepclassmembers class io.reactivex.internal.operators.observable.ObservableFlatMap$MergeObserver {
     <init>(io.reactivex.Observer, io.reactivex.functions.Function, boolean, int, int);

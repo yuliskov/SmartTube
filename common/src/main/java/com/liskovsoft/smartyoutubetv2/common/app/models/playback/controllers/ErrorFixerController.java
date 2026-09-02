@@ -50,10 +50,19 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
-            // Some clients may just hang at the video start
-            MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
-            mVideoLoaderController.reloadVideo();
+            if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                // Wrong DNS resolution could cause hanging at start
+                // Do switch to only engine that respects custom DNS settings
+                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
+                getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                mVideoLoaderController.restartEngine();
+            } else {
+                // Also, some clients like ANDROID_REEL may just hang at start
+                MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+                YouTubeServiceManager.instance().switchNextClientNow();
+                mVideoLoaderController.reloadVideo();
+            }
         } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             // Possibly ISP ban
             //switchNextEngine();
@@ -186,11 +195,19 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (isGeneralError && getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
                 getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
             } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
-                switchNextEngine();
-                restartEngine = true;
+                // The stream fails instantly if nParam isn't correct.
+                // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
+                if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
+                        && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
+                    // OkHttp is the engine that respects custom DNS settings
+                    getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    restartEngine = true;
+                } else {
+                    YouTubeServiceManager.instance().switchNextClientNow();
+                }
                 showMessage = true;
             } else {
-                YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
+                YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
             }
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_SUBTITLE) {
             // "Response code: 429" (subtitle error)
@@ -307,7 +324,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
-            YouTubeServiceManager.instance().applyNoPlaybackFix();
+            YouTubeServiceManager.instance().switchNextClient();
             mVideoLoaderController.reloadVideo();
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();

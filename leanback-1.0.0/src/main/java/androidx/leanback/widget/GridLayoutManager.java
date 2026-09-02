@@ -2310,11 +2310,12 @@ final class GridLayoutManager extends RecyclerView.LayoutManager {
                     while (appendOneColumnVisibleItems() && findViewByPosition(endPos) == null) {
                         // continuously append items until endPos
                     }
-                } catch (IndexOutOfBoundsException | NullPointerException | InflateException | IllegalStateException e) {
+                } catch (IndexOutOfBoundsException | NullPointerException | InflateException | IllegalStateException | ClassCastException e) {
                     // IndexOutOfBoundsException: Invalid item position 20(20). Item count:6 androidx.leanback.widget.VerticalGridView
                     // NullPointerException: Attempt to invoke virtual method 'android.content.res.StringBlock.get(int)' on a null object reference
                     // InflateException: Binary XML file line #60: Binary XML file line #60: Error inflating class <unknown>
-                    // IllegalStateException: Layout state should be one of 100 but it is 10 (Chromecast with Android 14)
+                    // IllegalStateException: Layout state should be one of 100, but it is 10 (Chromecast with Android 14)
+                    // ClassCastException: android.widget.RelativeLayout cannot be cast to com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView
                     e.printStackTrace();
                 }
             }
