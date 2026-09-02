@@ -91,6 +91,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             RxHelper.setupGlobalErrorHandler();
             initGlobalPrefs();
             initProxy();
+            YouTubeServiceManager.instance().warmUpPlaybackToken();
             initVideoStateService();
             initStreamReminderService();
         }

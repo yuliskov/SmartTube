@@ -109,7 +109,9 @@ public class ExoPlayerInitializer {
         // Default values
         int minBufferMs = 30_000;
         int maxBufferMs = 30_000;
-        int bufferForPlaybackMs = 2_500;
+        // Reduce initial wait without changing the conservative rebuffer threshold used by
+        // high-bitrate streams.
+        int bufferForPlaybackMs = 1_500;
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {
