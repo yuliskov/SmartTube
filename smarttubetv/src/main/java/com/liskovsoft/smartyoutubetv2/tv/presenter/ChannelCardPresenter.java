@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.os.Build.VERSION;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.material.MaterialYouColors;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -40,28 +42,26 @@ public class ChannelCardPresenter extends LongClickPresenter {
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Context context = parent.getContext();
 
-        mDefaultBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
+        mDefaultBackgroundColor = MaterialYouColors.surfaceContainerHigh(context);
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
         mNewContentBackgroundColor =
                 ContextCompat.getColor(context, R.color.dark_red);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mSelectedBackgroundColor = MaterialYouColors.focusedCardSurface(context);
+        mSelectedTextColor = Color.WHITE;
 
         updateDimensions(context);
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
-        container.setBackgroundColor(mDefaultBackgroundColor);
+        container.setBackground(MaterialYouColors.roundedSurface(
+                context, mDefaultBackgroundColor, 20));
         //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
         //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
         //}
 
         TextView textView = container.findViewById(R.id.channel_title);
-        textView.setBackgroundColor(mDefaultBackgroundColor);
+        textView.setBackgroundColor(Color.TRANSPARENT);
         textView.setTextColor(mDefaultTextColor);
 
         boolean autoScrollEnabled = isCardTextAutoScrollEnabled(context);
@@ -73,8 +73,18 @@ public class ChannelCardPresenter extends LongClickPresenter {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor :
                     textView.getTag(R.id.channel_new_content) != null ? mNewContentBackgroundColor : mDefaultBackgroundColor;
             int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
+            v.setBackground(MaterialYouColors.roundedSurface(
+                    context, backgroundColor, 20));
+            if (VERSION.SDK_INT >= 23) {
+                v.setForeground(MaterialYouColors.outlinedSurface(
+                        context,
+                        Color.TRANSPARENT,
+                        20,
+                        hasFocus ? MaterialYouColors.focusedCardOutline(context) : Color.TRANSPARENT,
+                        hasFocus ? 2.0f : 0.0f));
+            }
             
-            textView.setBackgroundColor(backgroundColor);
+            textView.setBackgroundColor(Color.TRANSPARENT);
             textView.setTextColor(textColor);
 
             if (!autoScrollEnabled) {
@@ -102,9 +112,13 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.getTitle());
+        viewHolder.view.setContentDescription(video.getTitle());
 
         // We should setup props each time because object may be reused by the underlying RecyclerView
-        textView.setBackgroundColor(video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
+        int backgroundColor = video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor;
+        viewHolder.view.setBackground(MaterialYouColors.roundedSurface(
+                context, backgroundColor, 20));
+        textView.setBackgroundColor(Color.TRANSPARENT);
         textView.setTag(R.id.channel_new_content, video.hasNewContent ? true : null);
 
 

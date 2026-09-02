@@ -12,6 +12,12 @@
     <color name="search_opaque">#A970FF</color>
     <color name="search_opaque_yellow">#ffaa3f</color>
 
+    <!-- Material You fallback palette. Android 12+ replaces these in values-v31. -->
+    <color name="relay_dynamic_accent">#F04A48</color>
+    <color name="relay_dynamic_accent_soft">#7A3437</color>
+    <color name="relay_dynamic_surface">#0D0B0E</color>
+    <color name="relay_dynamic_surface_variant">#242126</color>
+
     <!-- Card view colors -->
     <color name="card_selected_background_white">#FFFFFF</color>
     <color name="card_selected_background_white_grey">#D3D3D3</color>
@@ -31,16 +37,17 @@
     <color name="player_background">#FF000000</color>
 
     <!-- Dark color scheme -->
-    <color name="scheme_grey_background">#15111C</color>
-    <color name="scheme_grey_background_dark">#15111C</color>
-    <color name="scheme_grey_shelf_background_dark">#09070D</color>
-    <color name="scheme_grey_card_background_dark">#17121F</color>
+    <color name="scheme_grey_background">#202124</color>
+    <color name="scheme_grey_background_dark">#17181A</color>
+    <color name="scheme_grey_shelf_background_dark">#0F1011</color>
+    <color name="scheme_grey_card_background_dark">#242527</color>
+    <color name="scheme_grey_accent">#D5D7DA</color>
 
     <!-- Red color scheme -->
-    <color name="scheme_red_background">#131313</color>
-    <color name="scheme_red_background_dark">@color/dark_red</color>
-    <color name="scheme_red_shelf_background_dark">#131313</color>
-    <color name="scheme_red_card_background_dark">#36474f</color>
+    <color name="scheme_red_background">#D9272E</color>
+    <color name="scheme_red_background_dark">#8F1117</color>
+    <color name="scheme_red_shelf_background_dark">#12090A</color>
+    <color name="scheme_red_card_background_dark">#2B1719</color>
 
     <!-- Blue color scheme -->
     <color name="scheme_blue_background">#33B5E5</color>

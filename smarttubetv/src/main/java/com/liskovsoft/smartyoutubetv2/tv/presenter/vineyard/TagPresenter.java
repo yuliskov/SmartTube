@@ -1,15 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard;
 
-import android.os.Build.VERSION;
+import android.graphics.Color;
+import android.os.Build;
 import android.view.ViewGroup;
 
 import androidx.core.content.ContextCompat;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.User;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.material.MaterialYouColors;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView;
 
 public class TagPresenter extends LongClickPresenter {
@@ -20,19 +20,16 @@ public class TagPresenter extends LongClickPresenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        sDefaultBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardDefaultBackground));
+        sDefaultBackgroundColor = MaterialYouColors.surfaceContainerHigh(parent.getContext());
         sDefaultTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
-        sSelectedBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background_white);
-        sSelectedTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
+        sSelectedBackgroundColor = MaterialYouColors.focusedCardSurface(parent.getContext());
+        sSelectedTextColor = Color.WHITE;
 
         TagCardView cardView = new TagCardView(parent.getContext()) {
             @Override
             public void setSelected(boolean selected) {
-                updateCardBackgroundColor(this, selected);
+                updateCardSurface(this, selected);
                 updateCardTextColor(this, selected);
                 super.setSelected(selected);
             }
@@ -40,16 +37,30 @@ public class TagPresenter extends LongClickPresenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
-        updateCardBackgroundColor(cardView, false);
+        updateCardSurface(cardView, false);
         updateCardTextColor(cardView, false);
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(parent.getContext()).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    cardView.setForeground(ContextCompat.getDrawable(parent.getContext(), R.drawable.lb_card_outline));
-        //}
         return new ViewHolder(cardView);
     }
 
-    private static void updateCardBackgroundColor(TagCardView view, boolean selected) {
-        view.setBackgroundColor(selected ? sSelectedBackgroundColor : sDefaultBackgroundColor);
+    private static void updateCardSurface(TagCardView view, boolean selected) {
+        view.setBackground(MaterialYouColors.roundedSurface(
+                view.getContext(),
+                selected ? sSelectedBackgroundColor : sDefaultBackgroundColor,
+                18));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            view.setForeground(MaterialYouColors.outlinedSurface(
+                    view.getContext(),
+                    Color.TRANSPARENT,
+                    18,
+                    selected ? MaterialYouColors.focusedCardOutline(view.getContext()) : Color.TRANSPARENT,
+                    selected ? 2.0f : 0.0f));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            float density = view.getResources().getDisplayMetrics().density;
+            view.setElevation((selected ? 8 : 1) * density);
+        }
     }
 
     private static void updateCardTextColor(TagCardView view, boolean selected) {
@@ -66,6 +77,7 @@ public class TagPresenter extends LongClickPresenter {
 
             if (post.tag != null) {
                 cardView.setCardText(post.tag);
+                cardView.setContentDescription(post.tag);
                 //cardView.setCardIcon(R.drawable.ic_tag);
             }
         } else if (item instanceof User) {
@@ -75,6 +87,7 @@ public class TagPresenter extends LongClickPresenter {
             if (post.username != null) {
                 cardView.setCardText(post.username);
                 cardView.setCardIcon(R.drawable.ic_user);
+                cardView.setContentDescription(post.username);
             }
         }
     }

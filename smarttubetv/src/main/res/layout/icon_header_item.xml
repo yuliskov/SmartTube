@@ -3,23 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:minHeight="64dp"
     android:orientation="horizontal">
+
+    <!-- Padding lives on the rail item so focus has a generous TV-safe target. -->
 
     <ImageView
         android:id="@+id/header_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:contentDescription="@string/header_icon" />
+        android:layout_marginStart="18dp"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no" />
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
         android:id="@+id/header_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="22dp"
 
         android:singleLine="true"
-        android:maxWidth="150sp"
+        android:maxWidth="180dp"
         android:marqueeRepeatLimit="marquee_forever"
         android:ellipsize="marquee"
         android:scrollHorizontally="true"

@@ -12,9 +12,14 @@
         android:layout_width="@dimen/settings_image_size"
         android:layout_height="@dimen/settings_image_size"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/settings_image_padding"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
         android:visibility="invisible"
-        tools:ignore="ContentDescription"/>
+        />
     <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat
         android:id="@+id/settings_title"
         android:singleLine="true"
@@ -23,5 +28,7 @@
         android:layout_width="@dimen/settings_card_width"
         android:layout_height="wrap_content"
         android:padding="@dimen/lb_basic_card_info_padding"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="15sp"
         android:textAlignment="center"/>
 </LinearLayout>

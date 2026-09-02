@@ -4,13 +4,18 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
+    android:minHeight="60dp"
+    android:background="@drawable/relay_settings_item_background"
     android:clickable="true"
     android:focusable="true"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/lb_preference_item_padding_start"
-    android:paddingEnd="@dimen/lb_preference_item_padding_end" >
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp" >
 
     <CheckBox
         android:id="@+id/button"
@@ -31,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/lb_preference_item_primary_text_margin_bottom"
-            android:fontFamily="sans-serif"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/lb_preference_item_primary_text_color"
-            android:textSize="@dimen/lb_preference_item_primary_text_size"/>
+            android:textSize="15sp"/>
         <Space android:layout_width="0dp" android:layout_height="@dimen/lb_preference_item_text_space_bottom" />
     </LinearLayout>
 

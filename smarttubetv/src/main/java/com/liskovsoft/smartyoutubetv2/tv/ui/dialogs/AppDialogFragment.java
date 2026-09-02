@@ -223,17 +223,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment implements AppDi
     public void startPreferenceFragment(@NonNull Fragment fragment) {
         final FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         final Fragment prevFragment =
-                getChildFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
+                getChildFragmentManager().findFragmentById(R.id.settings_preference_fragment_container);
         if (prevFragment != null) {
-            transaction
-                    .addToBackStack(null)
-                    .replace(R.id.settings_preference_fragment_container, fragment,
-                            PREFERENCE_FRAGMENT_TAG);
-        } else {
-            transaction
-                    .add(R.id.settings_preference_fragment_container, fragment,
-                            PREFERENCE_FRAGMENT_TAG);
+            transaction.addToBackStack(null);
         }
+
+        // Always replace the visible settings content. Some nested preference
+        // fragments use their own tag, so looking up only the Leanback tag can
+        // miss the current fragment and add the next page on top of it.
+        transaction.replace(R.id.settings_preference_fragment_container, fragment,
+                PREFERENCE_FRAGMENT_TAG);
         // Fix possible state loss!!!
         transaction.commitAllowingStateLoss();
     }

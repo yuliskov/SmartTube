@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
@@ -76,8 +77,28 @@ public class AppDialogActivity extends MotherActivity {
     protected void onResume() {
         mIsBackPressed = false;
         super.onResume();
+        enforceOpaqueSettingsPanel();
     }
-    
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            enforceOpaqueSettingsPanel();
+        }
+    }
+
+    private void enforceOpaqueSettingsPanel() {
+        View decorView = getWindow().getDecorView();
+        decorView.post(() -> {
+            View panel = decorView.findViewById(R.id.settings_preference_fragment_container);
+            if (panel != null) {
+                panel.setBackgroundResource(R.drawable.relay_settings_panel);
+            }
+        });
+    }
+
     private boolean handleNavigation(KeyEvent event) {
         if (event == null) {
             return false;

@@ -94,6 +94,8 @@
     <string name="scale_ui">UI scale</string>
     <string name="color_scheme">Color scheme</string>
     <string name="color_scheme_default">Default</string>
+    <string name="color_scheme_automatic">Automatic (Material You)</string>
+    <string name="color_scheme_automatic_description">Uses your Android TV wallpaper colors on Android 12 and newer</string>
     <string name="color_scheme_red_grey">Red-grey</string>
     <string name="color_scheme_red">Red</string>
     <string name="color_scheme_dark_grey">Dark Grey</string>
@@ -338,6 +340,7 @@
     <string name="content_block_action_toast">Skip with notification</string>
     <string name="content_block_action_dialog">Show confirmation dialog</string>
     <string name="content_block_filler">Off-topic (filler)</string>
+    <string name="content_block_exclusive_access">Exclusive access</string>
     <string name="keyboard_auto_show">Show keyboard automatically</string>
     <string name="cancel_dialog">Cancel</string>
     <string name="msg_player_error_source2">URL isn\'t working or incorrect device time.\nUsually, it\'s a bug in the app.</string>
@@ -490,6 +493,10 @@
     <string name="feedback">Feedback</string>
     <string name="sources">Sources</string>
     <string name="releases">Releases</string>
+    <string name="relay_update_channel">RelayTube update channel</string>
+    <string name="relay_update_channel_stable">Stable — production releases</string>
+    <string name="relay_update_channel_beta">Beta — early RelayTube builds</string>
+    <string name="relay_update_feed_error">RelayTube could not read its update feed. Check your connection and try again later.</string>
     <string name="prefer_avc_over_vp9">Codec selection: prefer avc over vp9</string>
     <string name="open_chat">Chat/Comments</string>
     <string name="open_comments">Open comments</string>

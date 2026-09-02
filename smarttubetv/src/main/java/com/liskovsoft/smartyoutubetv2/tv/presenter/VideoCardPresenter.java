@@ -3,8 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +27,12 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.material.MaterialYouColors;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
+
+import java.util.Locale;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -48,14 +53,11 @@ public class VideoCardPresenter extends LongClickPresenter {
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Context context = parent.getContext();
 
-        mDefaultBackgroundColor =
-            ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
+        mDefaultBackgroundColor = MaterialYouColors.surfaceContainerHigh(context);
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mSelectedBackgroundColor = MaterialYouColors.focusedCardSurface(context);
+        mSelectedTextColor = Color.WHITE;
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
@@ -71,6 +73,9 @@ public class VideoCardPresenter extends LongClickPresenter {
             @Override
             public void setSelected(boolean selected) {
                 updateCardBackgroundColor(this, selected);
+                if (VERSION.SDK_INT >= 21) {
+                    setElevation(selected ? dp(getContext(), 12) : dp(getContext(), 2));
+                }
                 super.setSelected(selected);
             }
         };
@@ -84,7 +89,12 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.enableBadge(isBadgeEnabled());
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
-        cardView.setBackgroundColor(mDefaultBackgroundColor); // background is temporarily visible during animations
+        cardView.setBackground(MaterialYouColors.roundedSurface(
+                context, mDefaultBackgroundColor, 16));
+        if (VERSION.SDK_INT >= 21) {
+            cardView.setClipToOutline(true);
+            cardView.setElevation(dp(context, 2));
+        }
         //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
         //    cardView.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
         //}
@@ -96,14 +106,24 @@ public class VideoCardPresenter extends LongClickPresenter {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
-        // Both background colors should be set because the view's
-        // background is temporarily visible during animations.
-        // NOTE: has visual bug with rounded corners
-        //view.setBackgroundColor(backgroundColor);
+        view.setBackground(MaterialYouColors.roundedSurface(
+                view.getContext(), backgroundColor, 16));
+        if (VERSION.SDK_INT >= 23) {
+            view.setForeground(MaterialYouColors.outlinedSurface(
+                    view.getContext(),
+                    Color.TRANSPARENT,
+                    16,
+                    selected ? MaterialYouColors.focusedCardOutline(view.getContext()) : Color.TRANSPARENT,
+                    selected ? 2.0f : 0.0f));
+        }
 
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
-            infoField.setBackgroundColor(backgroundColor);
+            int infoColor = selected ?
+                    MaterialYouColors.blend(mDefaultBackgroundColor,
+                            MaterialYouColors.accent(view.getContext()), 0.12f) :
+                    mDefaultBackgroundColor;
+            infoField.setBackground(MaterialYouColors.roundedSurface(view.getContext(), infoColor, 14));
         }
 
         TextView titleText = view.findViewById(R.id.title_text);
@@ -127,12 +147,15 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         cardView.setTitleText(video.getTitle());
         cardView.setContentText(video.getSecondTitle());
+        CharSequence spokenDetails = video.getSecondTitle();
+        cardView.setContentDescription(TextUtils.isEmpty(spokenDetails) ?
+                video.getTitle() : video.getTitle() + ". " + spokenDetails);
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(
                 video.hasNewContent ? context.getString(R.string.badge_new_content) :
                 video.isLive ? context.getString(R.string.badge_live) :
-                video.isShorts ? context.getString(R.string.header_shorts).toUpperCase() :
+                video.isShorts ? context.getString(R.string.header_shorts).toUpperCase(Locale.getDefault()) :
                 video.badge
         );
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
@@ -192,6 +215,10 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         mWidth = dimens.first;
         mHeight = dimens.second;
+    }
+
+    private static float dp(Context context, float value) {
+        return value * context.getResources().getDisplayMetrics().density;
     }
     
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {

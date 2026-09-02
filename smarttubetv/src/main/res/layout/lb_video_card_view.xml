@@ -32,7 +32,7 @@
                 android:layout_marginLeft="@dimen/lb_basic_card_info_text_margin"
                 android:layout_marginTop="@dimen/lb_basic_card_info_text_margin"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:textColor="@color/lb_basic_card_title_text_color"
                 android:textSize="@dimen/lb_basic_card_title_text_size" />
@@ -46,7 +46,7 @@
                 android:layout_marginBottom="@dimen/lb_basic_card_info_text_margin"
                 android:layout_marginLeft="@dimen/lb_basic_card_info_text_margin"
                 android:ellipsize="end"
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="sans-serif"
                 android:maxLines="1"
                 android:textColor="@color/lb_basic_card_content_text_color"
                 android:textSize="@dimen/lb_basic_card_content_text_size" />

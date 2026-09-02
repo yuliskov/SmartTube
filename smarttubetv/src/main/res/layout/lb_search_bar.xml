@@ -16,7 +16,9 @@
 -->
 <!-- MOD: Enable single click touch mode (focusableInTouchMode=false) -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:app="http://schemas.android.com/apk/res-auto">
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:ignore="UnusedResources">
     <androidx.leanback.widget.SpeechOrbView
             android:id="@+id/lb_search_bar_speech_orb"
             android:layout_width="wrap_content"
@@ -52,6 +54,8 @@
                 android:layout_marginStart="@dimen/lb_search_bar_icon_margin_start"
                 android:src="@null"
                 android:visibility="gone"
+                android:contentDescription="@null"
+                android:importantForAccessibility="no"
                 style="?attr/browseTitleIconStyle"/>
 
         <androidx.leanback.widget.SearchEditText
@@ -63,7 +67,6 @@
                     android:layout_centerVertical="true"
                     android:cursorVisible="true"
                     android:layout_toEndOf="@+id/lb_search_bar_badge"
-                    android:editable="true"
                     android:background="@null"
                     android:fontFamily="sans-serif"
                     android:focusable="true"
@@ -90,8 +93,8 @@
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"
-        app:searchOrbColor="@color/orb_color"
-        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbColor="?attr/cardDefaultBackground"
+        app:searchOrbBrightColor="?attr/brandAccentColor"
         app:searchOrbIconColor="@color/orb_icon_color" />
 
     <!-- Start search button -->
@@ -104,7 +107,7 @@
         android:layout_alignParentEnd="true"
         android:focusable="true"
         android:focusableInTouchMode="false"
-        app:searchOrbColor="@color/orb_color"
-        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbColor="?attr/cardDefaultBackground"
+        app:searchOrbBrightColor="?attr/brandAccentColor"
         app:searchOrbIconColor="@color/orb_icon_color" />
 </merge>

@@ -1,7 +1,11 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#EEEEEE"/>
+    <solid android:color="?attr/cardDefaultBackground"/>
 
-    <corners android:radius="30dp"/>
+    <stroke
+        android:width="2dp"
+        android:color="?attr/brandAccentColor"/>
+
+    <corners android:radius="28dp"/>
 
     <padding
         android:left="6dp"

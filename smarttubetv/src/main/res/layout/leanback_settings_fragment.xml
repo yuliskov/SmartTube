@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.leanback.preference.LeanbackSettingsRootView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_dialog_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#73000000"
+    tools:ignore="Overdraw,UnusedResources">
+
+    <FrameLayout
+        android:id="@+id/settings_preference_fragment_container"
+        android:layout_width="@dimen/relay_settings_pane_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/relay_settings_panel" />
+</androidx.leanback.preference.LeanbackSettingsRootView>
