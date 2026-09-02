@@ -346,7 +346,8 @@ public class ExoMediaSourceFactory {
      * Use OkHttp for networking
      */
     private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpClient client = OkHttpManager.instance().getClient();
+        OkHttpClient client = PlaybackOkHttpClient.withoutUnsafeDebugInterceptors(
+                OkHttpManager.instance().getClient());
         if (mIpv4BoundMedia) {
             client = client.newBuilder()
                     .dns(new OkHttpDNSSelector(OkHttpDNSSelector.IPvMode.IPV4_ONLY))
