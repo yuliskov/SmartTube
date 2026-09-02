@@ -340,7 +340,18 @@ public class UhdHelper {
      */
     @TargetApi(17)
     public void setPreferredDisplayModeId(Window targetWindow, int modeId, boolean allowOverlayDisplay) {
-        if (modeId == 0) { // mode is not set
+        if (modeId == 0) { // reset mode
+            if (targetWindow != null) {
+                try {
+                    WindowManager.LayoutParams layoutParams = targetWindow.getAttributes();
+                    Class<?> cLayoutParams = layoutParams.getClass();
+                    Field attributeFlags = cLayoutParams.getDeclaredField(sPreferredDisplayModeIdFieldName);
+                    attributeFlags.setInt(layoutParams, 0);
+                    targetWindow.setAttributes(layoutParams);
+                } catch (Exception e) {
+                    Log.e(TAG, "error resetting mode", e);
+                }
+            }
             return;
         }
 
