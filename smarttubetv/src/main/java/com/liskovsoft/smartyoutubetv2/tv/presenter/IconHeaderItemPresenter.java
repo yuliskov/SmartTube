@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,8 +114,13 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                 MaterialYouColors.accent(holder.view.getContext()),
                 0.24f);
         int background = MaterialYouColors.withAlpha(selectedSurface, Math.round(0xF2 * level));
-        holder.view.setBackground(MaterialYouColors.roundedSurface(
-                holder.view.getContext(), background, 22));
+        Drawable currentBackground = holder.view.getBackground();
+        if (currentBackground instanceof GradientDrawable) {
+            ((GradientDrawable) currentBackground).setColor(background);
+        } else {
+            holder.view.setBackground(MaterialYouColors.roundedSurface(
+                    holder.view.getContext(), background, 22));
+        }
 
         TextView label = holder.view.findViewById(R.id.header_label);
         if (label != null) {

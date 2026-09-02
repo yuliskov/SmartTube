@@ -71,9 +71,9 @@ public class SettingsGridFragment extends GridFragment implements SettingsSectio
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.FOCUS_DIMMER_ENABLED);
         presenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
-        // The navigation rail collapses when focus enters the grid, leaving room for a balanced
-        // five-column TV layout at both 1080p and 4K logical resolutions.
-        presenter.setNumberOfColumns(5);
+        // Keep the existing responsive sizing while preventing overly dense 4K grids.
+        presenter.setNumberOfColumns(Math.min(5,
+                GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.settings_card_width)));
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {
