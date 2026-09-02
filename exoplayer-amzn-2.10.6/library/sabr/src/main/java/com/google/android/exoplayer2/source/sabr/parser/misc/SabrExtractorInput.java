@@ -4,6 +4,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -19,6 +20,7 @@ public final class SabrExtractorInput implements ExtractorInput {
     private long startPosition;
     private int remaining;
     private MediaSegmentDataSabrPart data;
+    private boolean mediaSeen;
 
     public SabrExtractorInput(SabrStream sabrStream) {
         this.sabrStream = sabrStream;
@@ -39,6 +41,7 @@ public final class SabrExtractorInput implements ExtractorInput {
         position = input.getPosition();
         startPosition = position;
         remaining = C.LENGTH_UNSET;
+        mediaSeen = false;
     }
 
     public void dispose() {
@@ -152,7 +155,7 @@ public final class SabrExtractorInput implements ExtractorInput {
         return -1;
     }
 
-    private void fetchData() {
+    private void fetchData() throws IOException {
         while (true) {
             if (data != null) {
                 long advance = getAdvance();
@@ -169,6 +172,17 @@ public final class SabrExtractorInput implements ExtractorInput {
             SabrPart sabrPart = sabrStream.parse(input);
 
             if (sabrPart == null) {
+                // The stream ended without ever handing us media. If the server told us to
+                // back off, honour it instead of re-requesting immediately - otherwise we
+                // burn exactly the waiting period the server asked for.
+                if (!mediaSeen) {
+                    int backoffMs = sabrStream.getBackoffTimeMs();
+
+                    if (backoffMs > 0) {
+                        throwBackoffRequested(backoffMs);
+                    }
+                }
+
                 break;
             }
 
@@ -183,7 +197,15 @@ public final class SabrExtractorInput implements ExtractorInput {
             if (sabrPart instanceof MediaSegmentDataSabrPart) {
                 data = (MediaSegmentDataSabrPart) sabrPart;
                 startPosition = position;
+                mediaSeen = true;
                 break;
+            }
+
+            // The server asked us to fetch a fresh player response. Nothing consumes this part,
+            // so without surfacing it the UMP stream just ends and the player goes idle.
+            // Turn it into a load error, so the app level can reload the video.
+            if (sabrPart instanceof RefreshPlayerResponseSabrPart) {
+                throwPlayerResponseReloadRequested((RefreshPlayerResponseSabrPart) sabrPart);
             }
         }
     }
@@ -311,6 +333,31 @@ public final class SabrExtractorInput implements ExtractorInput {
         String msg = "The peek methods shouldn't be called in SABR extractor";
         Log.e(TAG, msg);
         throw new UnsupportedOperationException(msg);
+    }
+
+    /**
+     * The token has to reach the next player request. This module can't see the api layer,
+     * so it travels in the message and is picked up by the load error policy.
+     */
+    public static final String RELOAD_MARKER = "SABR player response reload requested";
+    public static final String RELOAD_TOKEN_MARKER = " token=";
+    public static final String BACKOFF_MARKER = "SABR backoff requested, ms=";
+
+    private static void throwPlayerResponseReloadRequested(RefreshPlayerResponseSabrPart part) throws IOException {
+        String msg = RELOAD_MARKER + ", reason: " + part.reason;
+
+        if (part.reloadPlaybackToken != null) {
+            msg += RELOAD_TOKEN_MARKER + part.reloadPlaybackToken;
+        }
+
+        Log.e(TAG, RELOAD_MARKER + ", reason: " + part.reason + ", hasToken: " + (part.reloadPlaybackToken != null));
+        throw new IOException(msg);
+    }
+
+    private static void throwBackoffRequested(int backoffMs) throws IOException {
+        String msg = BACKOFF_MARKER + backoffMs;
+        Log.e(TAG, "Server asked to back off for %s ms, no media in this response", backoffMs);
+        throw new IOException(msg);
     }
 
     private static void throwChunkBoundaryExceeded() {

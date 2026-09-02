@@ -31,6 +31,15 @@ public class SabrMatroskaAdapter extends MatroskaExtractor {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
         } catch (Exception e) {
+            // Don't swallow the server's reload request. Swallowing it ends the stream
+            // silently, the player gets no tracks and stalls forever.
+            if (e instanceof IOException && e.getMessage() != null
+                    && (e.getMessage().contains(SabrExtractorInput.RELOAD_MARKER)
+                        || e.getMessage().contains(SabrExtractorInput.BACKOFF_MARKER))) {
+                Log.e(TAG, "Propagating SABR control signal: %s", e.getMessage());
+                throw (IOException) e;
+            }
+
             Log.e(TAG, "User doing seek? %s: %s", e.getClass().getSimpleName(), e.getMessage());
             e.printStackTrace();
         } finally {
