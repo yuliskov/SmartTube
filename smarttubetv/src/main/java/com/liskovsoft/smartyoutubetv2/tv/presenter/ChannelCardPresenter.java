@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.Color;
 import android.os.Build.VERSION;
 import android.util.Pair;
@@ -73,8 +74,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor :
                     textView.getTag(R.id.channel_new_content) != null ? mNewContentBackgroundColor : mDefaultBackgroundColor;
             int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-            v.setBackground(MaterialYouColors.roundedSurface(
-                    context, backgroundColor, 20));
+            setCardBackground(v, context, backgroundColor);
             if (VERSION.SDK_INT >= 23) {
                 v.setForeground(MaterialYouColors.outlinedSurface(
                         context,
@@ -116,8 +116,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         // We should setup props each time because object may be reused by the underlying RecyclerView
         int backgroundColor = video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor;
-        viewHolder.view.setBackground(MaterialYouColors.roundedSurface(
-                context, backgroundColor, 20));
+        setCardBackground(viewHolder.view, context, backgroundColor);
         textView.setBackgroundColor(Color.TRANSPARENT);
         textView.setTag(R.id.channel_new_content, video.hasNewContent ? true : null);
 
@@ -161,6 +160,15 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
     protected float getCardTextScrollSpeed(Context context) {
         return MainUIData.instance(context).getCardTextScrollSpeed();
+    }
+
+    private static void setCardBackground(View view, Context context, int color) {
+        Drawable background = view.getBackground();
+        if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(color);
+        } else {
+            view.setBackground(MaterialYouColors.roundedSurface(context, color, 20));
+        }
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build.VERSION;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +53,7 @@ public class SettingsCardPresenter extends Presenter {
         container.setOnFocusChangeListener((v, hasFocus) -> {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
             int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-            v.setBackground(MaterialYouColors.roundedSurface(
-                    context, backgroundColor, 20));
+            setCardBackground(v, context, backgroundColor);
             if (VERSION.SDK_INT >= 23) {
                 v.setForeground(MaterialYouColors.outlinedSurface(
                         context,
@@ -108,5 +109,14 @@ public class SettingsCardPresenter extends Presenter {
 
     private static float dp(Context context, float value) {
         return value * context.getResources().getDisplayMetrics().density;
+    }
+
+    private static void setCardBackground(View view, Context context, int color) {
+        Drawable background = view.getBackground();
+        if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(color);
+        } else {
+            view.setBackground(MaterialYouColors.roundedSurface(context, color, 20));
+        }
     }
 }
