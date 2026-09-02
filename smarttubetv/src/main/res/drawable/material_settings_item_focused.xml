@@ -2,7 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="18dp" />
     <solid android:color="@color/default_light_grey" />
-    <stroke
-        android:width="2dp"
-        android:color="@color/fastlane_background" />
+    <stroke android:width="2dp" android:color="@color/fastlane_background" />
 </shape>

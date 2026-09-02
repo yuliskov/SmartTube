@@ -123,26 +123,26 @@
     <!-- Automatic Material You scheme. Values-v31 binds these tokens to Monet; older TVs use
          the Relay fallback palette while preserving the same component behavior. -->
     <style name="App.Theme.Automatic.Player" parent="App.Theme.DarkGrey.Player">
-        <item name="playbackProgressPrimaryColor">@color/relay_dynamic_accent</item>
-        <item name="playbackProgressSecondaryColor">@color/relay_dynamic_accent_soft</item>
-        <item name="playbackControlsIconHighlightColor">@color/relay_dynamic_accent</item>
+        <item name="playbackProgressPrimaryColor">@color/material_dynamic_accent</item>
+        <item name="playbackProgressSecondaryColor">@color/material_dynamic_accent_soft</item>
+        <item name="playbackControlsIconHighlightColor">@color/material_dynamic_accent</item>
         <item name="cardProgressStyle">@style/ProgressBarHorizontal.Automatic</item>
-        <item name="shelfBackground">@color/relay_dynamic_surface</item>
-        <item name="cardDefaultBackground">@color/relay_dynamic_surface_variant</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/relay_dynamic_accent</item>
+        <item name="shelfBackground">@color/material_dynamic_surface</item>
+        <item name="cardDefaultBackground">@color/material_dynamic_surface_variant</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/material_dynamic_accent</item>
     </style>
     <style name="App.Theme.Automatic.Browse" parent="App.Theme.DarkGrey.Browse">
-        <item name="android:windowBackground">@color/relay_dynamic_surface</item>
-        <item name="brandColor">@color/relay_dynamic_surface</item>
-        <item name="brandAccentColor">@color/relay_dynamic_accent</item>
+        <item name="android:windowBackground">@color/material_dynamic_surface</item>
+        <item name="brandColor">@color/material_dynamic_surface</item>
+        <item name="brandAccentColor">@color/material_dynamic_accent</item>
         <item name="cardProgressStyle">@style/ProgressBarHorizontal.Automatic</item>
-        <item name="shelfBackground">@color/relay_dynamic_surface</item>
-        <item name="cardDefaultBackground">@color/relay_dynamic_surface_variant</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/relay_dynamic_accent</item>
+        <item name="shelfBackground">@color/material_dynamic_surface</item>
+        <item name="cardDefaultBackground">@color/material_dynamic_surface_variant</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/material_dynamic_accent</item>
     </style>
     <style name="App.Theme.Automatic.Preferences" parent="App.Theme.DarkGrey.Preferences">
-        <item name="android:colorPrimary" tools:targetApi="21">@color/relay_dynamic_surface_variant</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/relay_dynamic_accent</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/material_dynamic_surface_variant</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/material_dynamic_accent</item>
     </style>
     <style name="ProgressBarHorizontal.Automatic" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_automatic</item>

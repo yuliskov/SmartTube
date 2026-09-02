@@ -10,12 +10,12 @@
 
     <FrameLayout
         android:id="@+id/settings_preference_fragment_container"
-        android:layout_width="@dimen/relay_settings_pane_width"
+        android:layout_width="@dimen/material_settings_pane_width"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/relay_settings_panel"
+        android:background="@drawable/material_settings_panel"
         android:elevation="12dp"
         android:outlineProvider="background" />
 </androidx.leanback.preference.LeanbackSettingsRootView>

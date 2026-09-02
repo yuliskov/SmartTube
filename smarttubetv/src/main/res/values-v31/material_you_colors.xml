@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_dynamic_accent">@android:color/system_accent1_500</color>
+    <color name="material_dynamic_accent_soft">@android:color/system_accent2_700</color>
+    <color name="material_dynamic_surface">@android:color/system_neutral1_900</color>
+    <color name="material_dynamic_surface_variant">@android:color/system_neutral2_800</color>
+</resources>

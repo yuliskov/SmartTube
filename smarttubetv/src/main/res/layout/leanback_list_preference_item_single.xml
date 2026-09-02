@@ -8,7 +8,7 @@
     android:layout_marginTop="3dp"
     android:layout_marginBottom="3dp"
     android:minHeight="60dp"
-    android:background="@drawable/relay_settings_item_background"
+    android:background="@drawable/material_settings_item_background"
     android:clickable="true"
     android:focusable="true"
     android:descendantFocusability="blocksDescendants"

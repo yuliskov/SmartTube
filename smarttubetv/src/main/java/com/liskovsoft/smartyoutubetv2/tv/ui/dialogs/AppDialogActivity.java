@@ -94,7 +94,7 @@ public class AppDialogActivity extends MotherActivity {
         decorView.post(() -> {
             View panel = decorView.findViewById(R.id.settings_preference_fragment_container);
             if (panel != null) {
-                panel.setBackgroundResource(R.drawable.relay_settings_panel);
+                panel.setBackgroundResource(R.drawable.material_settings_panel);
             }
         });
     }

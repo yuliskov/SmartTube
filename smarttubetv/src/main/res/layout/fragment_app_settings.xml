@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Opaque backing for RelayTube's side sheet. The leanback preference fragment is hosted
+    <!-- Opaque backing for the side sheet. The leanback preference fragment is hosted
          in a translucent activity, so relying on the fragment container alone can expose the
          screen below on some Android TV renderers. -->
     <View
-        android:layout_width="@dimen/relay_settings_pane_width"
+        android:layout_width="@dimen/material_settings_pane_width"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/relay_settings_panel" />
+        android:background="@drawable/material_settings_panel" />
 
     <fragment
         android:id="@+id/app_settings_fragment"

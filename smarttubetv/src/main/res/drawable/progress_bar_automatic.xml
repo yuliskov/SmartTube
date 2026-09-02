@@ -10,7 +10,7 @@
         <clip>
             <shape>
                 <corners android:radius="3dp" />
-                <solid android:color="@color/relay_dynamic_accent" />
+                <solid android:color="@color/material_dynamic_accent" />
             </shape>
         </clip>
     </item>
