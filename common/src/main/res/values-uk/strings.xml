@@ -746,4 +746,5 @@
         <item quantity="many">%s секунд</item>
         <item quantity="other">%s секунди</item>
     </plurals>
+    <string name="new_video_counter">Показувати лічильник нових відео на закріплених каналах</string>
 </resources>

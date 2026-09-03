@@ -754,4 +754,5 @@
         <item quantity="one">%s saniye</item>
         <item quantity="other">%s saniye</item>
     </plurals>
+    <string name="new_video_counter">Sabitlenmiş kanallarda yeni video sayacını göster</string>
 </resources>

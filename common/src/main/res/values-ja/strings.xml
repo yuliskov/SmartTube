@@ -754,4 +754,5 @@
     <plurals name="seconds">
         <item quantity="other">%s 秒</item>
     </plurals>
+    <string name="new_video_counter">固定されたチャンネルに新しい動画のカウンターを表示</string>
 </resources>

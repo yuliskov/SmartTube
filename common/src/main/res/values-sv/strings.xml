@@ -756,4 +756,5 @@
     <item quantity="one">%s sekund</item>
     <item quantity="other">%s sekunder</item>
   </plurals>
+    <string name="new_video_counter">Visa räknare för nya videor på fästa kanaler</string>
 </resources>

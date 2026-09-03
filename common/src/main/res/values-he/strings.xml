@@ -749,4 +749,5 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
         <item quantity="one">שנייה אחת</item>
         <item quantity="other">%s שניות</item>
     </plurals>
+    <string name="new_video_counter">הצג מונה סרטונים חדשים בערוצים מוצמדים</string>
 </resources>

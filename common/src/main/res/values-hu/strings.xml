@@ -748,4 +748,5 @@
   <string name="enable_conscrypt_desc">Javítja a HTTPS, TLS - és VPN-kompatibilitást egyes eszközökön, de esetenként lejátszási problémákat vagy lassabb hálózati teljesítményt okozhat</string>
   <string name="network_settings">Hálózati beállítások</string>
   <string name="comments_disabled">A komment szakasz letiltva</string>
+    <string name="new_video_counter">Új videók számlálójának megjelenítése a rögzített csatornákon</string>
 </resources>
