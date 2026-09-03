@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
@@ -199,7 +200,7 @@ public class VideoLoaderController extends BasePlayerController {
         mSleepTimerStartMs = System.currentTimeMillis();
 
         // Remove error msg if needed
-        if (getPlayer() != null && getPlayerData().getSleepTimerHours() > 0) {
+        if (getPlayer() != null && getPlayerData().getSleepTimerHours() != 0) {
             getPlayer().setVideo(getVideo());
         }
 
@@ -222,7 +223,7 @@ public class VideoLoaderController extends BasePlayerController {
         if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000) {
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.player_sleep_timer)
-                    + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
+                    + " (" + AppDialogUtil.formatSleepTimerHours(getContext(), sleepHours) + ")");
             getPlayer().showOverlay(true);
             Helpers.enableScreensaver(getActivity());
         }
@@ -620,7 +621,11 @@ public class VideoLoaderController extends BasePlayerController {
         int playbackMode = getPlayerData().getPlaybackMode();
 
         Video video = getVideo();
-        if (video != null && video.finishOnEnded) {
+        if (getPlayerData().getSleepTimerHours() == PlayerData.SLEEP_TIMER_END_OF_VIDEO) {
+            getPlayerData().setSleepTimerHours(0);
+            playbackMode = PlayerConstants.PLAYBACK_MODE_PAUSE;
+            Helpers.enableScreensaver(getActivity());
+        } else if (video != null && video.finishOnEnded) {
             playbackMode = PlayerConstants.PLAYBACK_MODE_CLOSE;
         } else if (video != null && video.belongsToShortsGroup() && getPlayerTweaksData().isLoopShortsEnabled()) {
             playbackMode = PlayerConstants.PLAYBACK_MODE_ONE;
