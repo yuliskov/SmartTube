@@ -229,7 +229,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         if (showMessage) {
             MessageHelpers.showLongMessage(getContext(), errorMessage);
             if (getPlayer() != null) {
-                getPlayer().setTitle(errorContent);
+                getPlayer().showControls(true);
+                getPlayer().setTitle(errorMessage);
             }
         }
 
@@ -309,6 +310,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (!Helpers.containsAny(message, "fromNullable result is null")) {
             MessageHelpers.showLongMessage(getContext(), fullMsg);
+            if (getPlayer() != null) {
+                getPlayer().showControls(true);
+                getPlayer().setTitle(fullMsg);
+            }
         }
 
         if (Utils.fixRetrofitErrors(getContext(), error)) {
