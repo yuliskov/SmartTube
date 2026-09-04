@@ -22,8 +22,11 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final int MAX_FORMAT_RELOAD_NUM = 3;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
+    private String mFormatErrorVideoId;
+    private int mFormatErrorNum;
 
     @Override
     public void onInit() {
@@ -101,6 +104,18 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onNewVideo(Video item) {
         mBufferingDetector.start();
+
+        // NOTE: reloadVideo() fires onNewVideo() with the same item, so compare the ids
+        String videoId = item != null ? item.videoId : null;
+        if (!Helpers.equals(videoId, mFormatErrorVideoId)) {
+            mFormatErrorVideoId = videoId;
+            mFormatErrorNum = 0;
+        }
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        mFormatErrorNum = 0;
     }
 
     @Override
@@ -111,6 +126,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onEngineReleased() {
         mBufferingDetector.reset();
+        mFormatErrorVideoId = null;
+        mFormatErrorNum = 0;
     }
 
     private void runEngineErrorAction(int type, int rendererIndex, Throwable error) {
@@ -320,6 +337,14 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
+        // Don't reload the same video endlessly. Some videos can't be played at all
+        // (e.g. members only content) and the reload below produces an infinite loading spinner.
+        if (++mFormatErrorNum > MAX_FORMAT_RELOAD_NUM) {
+            Log.e(TAG, "Can't load the video after %s attempts. Giving up...", MAX_FORMAT_RELOAD_NUM);
+            showFormatError();
+            return;
+        }
+
         if (Helpers.containsAny(message, "Unexpected token", "Syntax error", "invalid argument") || // temporal fix
                 Helpers.equalsAny(className, "PoTokenException", "BadWebViewException")) {
             YouTubeServiceManager.instance().switchNextClient();
@@ -331,6 +356,22 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             Log.e(TAG, "Probably no internet connection");
             mVideoLoaderController.reloadVideo();
         }
+    }
+
+    /**
+     * Stop the loading indicator and tell the user why nothing is playing.
+     */
+    private void showFormatError() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        String errorMessage = getContext().getString(R.string.msg_player_error_source);
+
+        getPlayer().showProgressBar(false);
+        getPlayer().setTitle(errorMessage);
+        getPlayer().showOverlay(true);
+        MessageHelpers.showLongMessage(getContext(), errorMessage);
     }
 
     /**
