@@ -355,7 +355,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public void onSearchSettingsClicked() {
         Observable<List<MediaGroup>> sorting = getContentService().getChannelSortingOptionsObserve(getChannelId());
-        Disposable result = sorting.subscribe(
+        mUpdateAction = sorting.subscribe(
                 items -> {
                     AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                     List<OptionItem> options = new ArrayList<>();
@@ -365,7 +365,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         options.add(UiOptionItem.from(group.getTitle(), item -> {
                             //dialogPresenter.closeDialog();
                             Observable<MediaGroup> continuation = getContentService().continueGroupObserve(group);
-                            Disposable result2 = continuation.subscribe(mediaGroup -> {
+                            mUpdateAction = continuation.subscribe(mediaGroup -> {
                                 if (getView() == null) {
                                     return;
                                 }
@@ -390,7 +390,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public boolean onSearchSubmit(String query) {
         Observable<MediaGroup> search = getContentService().getChannelSearchObserve(getChannelId(), query);
-        Disposable result = search.subscribe(
+        mUpdateAction = search.subscribe(
                 items -> {
                     if (getView() == null) {
                         return;

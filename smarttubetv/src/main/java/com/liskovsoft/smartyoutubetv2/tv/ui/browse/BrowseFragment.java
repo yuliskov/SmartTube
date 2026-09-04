@@ -133,7 +133,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                         getHeadersSupportFragment().setSelectedPosition(newPosition);
                     } else {
                         // update section when clicked or pressed
-                        mBrowsePresenter.onSectionFocused((int) headerId);
+                        onSectionFocusedInt((int) headerId);
                         startHeadersTransitionSafe(false);
                     }
                 }
@@ -154,11 +154,21 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory = new BrowseSectionFragmentFactory(
                 (row) -> {
                     focusOnContentIfNeeded();
-                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+                    onSectionFocusedInt(getSelectedHeaderId());
                 }
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
+    }
+
+    private void onSectionFocusedInt(int headerId) {
+        mBrowsePresenter.onSectionFocused(headerId);
+
+        // Re-bind every sidebar row so IconHeaderItemPresenter can recompute which
+        // one is the persistently-highlighted "active" section (see isActiveSection()).
+        if (mSectionRowAdapter != null && mSectionRowAdapter.size() > 0) {
+            mSectionRowAdapter.notifyArrayItemRangeChanged(0, mSectionRowAdapter.size());
+        }
     }
 
     private int indexOf(long headerId) {
@@ -236,7 +246,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private int getSelectedHeaderId() {
-        if (getSelectedPosition() >= mSectionRowAdapter.size()) {
+        if (getSelectedPosition() < 0 || getSelectedPosition() >= mSectionRowAdapter.size()) {
             return -1;
         }
 
@@ -332,7 +342,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 // update section manually
                 // headers transition event not fired on the same index
                 focusOnContentIfNeeded();
-                mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
+                onSectionFocusedInt(getSelectedHeaderId());
             }
 
             // Need select again if current header is removed previously (can't check for it right now)
@@ -442,6 +452,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onDestroyView() {
         mSectionFragmentFactory.cleanup();
+        mHandler.removeCallbacksAndMessages(null);
 
         super.onDestroyView();
     }

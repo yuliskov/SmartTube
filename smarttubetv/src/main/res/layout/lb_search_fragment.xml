@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: added an embedded on-screen keyboard (search_keyboard) docked to the start, below the
+     search bar, so typing doesn't need to rely on the system IME popup, YouTube style.
+     Results are pushed right (via lb_results_frame's marginStart) to make room for it.
+     NOTE: root must stay a FrameLayout - SearchSupportFragment.onCreateView() casts it directly. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/lb_search_frame"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:clipChildren="false"
+        >
+        <FrameLayout
+                android:id="@+id/lb_results_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/search_results_margin_start"/>
+
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.OnScreenKeyboardView
+                android:id="@+id/search_keyboard"
+                android:layout_width="@dimen/search_keyboard_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/search_keyboard_margin_top"
+                android:layout_marginStart="@dimen/search_keyboard_margin_start"/>
+
+    <androidx.leanback.widget.SearchBar
+            android:id="@+id/lb_search_bar"
+            android:layout_marginTop="@dimen/lb_search_bar_padding_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            />
+</FrameLayout>

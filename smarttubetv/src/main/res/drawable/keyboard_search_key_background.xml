@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The submit/"Search" key on the on-screen keyboard: stands out with the brand red,
+     white when focused (like the other keys). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/card_selected_background_white"/>
+            <corners android:radius="@dimen/search_keyboard_key_corner_radius"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/semi_red"/>
+            <corners android:radius="@dimen/search_keyboard_key_corner_radius"/>
+        </shape>
+    </item>
+</selector>

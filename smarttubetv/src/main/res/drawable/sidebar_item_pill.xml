@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: rounded "pill" highlight behind the focused sidebar item, YouTube style. -->
+<!-- Alpha is animated in code (IconHeaderItemPresenter) based on select level. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/sidebar_item_selected_background"/>
+    <corners android:radius="24dp"/>
+</shape>

@@ -30,6 +30,9 @@ public class UriBackgroundManager {
     private final Activity mActivity;
     private final Handler mHandler;
     private int mBackgroundColor = -1;
+    // Lazily cached: this manager is constructed before setContentView() runs, so the
+    // view doesn't exist yet at construction time and must be looked up on first use.
+    private View mVideoSurfaceView;
 
     public UriBackgroundManager(Activity activity) {
         mActivity = activity;
@@ -108,8 +111,16 @@ public class UriBackgroundManager {
         return mBackgroundManager;
     }
 
+    private View getVideoSurfaceView() {
+        if (mVideoSurfaceView == null) {
+            mVideoSurfaceView = mActivity.findViewById(R.id.video_surface);
+        }
+
+        return mVideoSurfaceView;
+    }
+
     public void showBackground(String uri) {
-        View videoView = mActivity.findViewById(R.id.video_surface);
+        View videoView = getVideoSurfaceView();
 
         if (videoView != null) {
             videoView.setVisibility(uri == null ? View.VISIBLE : View.INVISIBLE);
@@ -142,7 +153,7 @@ public class UriBackgroundManager {
     }
 
     public void showBackgroundColor(int colorResId) {
-        View videoView = mActivity.findViewById(R.id.video_surface);
+        View videoView = getVideoSurfaceView();
 
         if (videoView != null) {
             videoView.setVisibility(colorResId == -1 ? View.VISIBLE : View.INVISIBLE);

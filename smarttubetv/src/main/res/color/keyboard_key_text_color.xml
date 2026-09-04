@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- On-screen search keyboard key text: dark when focused (white pill background), white otherwise. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/card_selected_text_black" android:state_focused="true"/>
+    <item android:color="@color/card_default_text"/>
+</selector>

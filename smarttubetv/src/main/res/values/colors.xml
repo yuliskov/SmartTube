@@ -22,6 +22,27 @@
     <color name="card_default_background">#0096a6</color>
     <color name="card_default_background_dark">#004B53</color>
     <color name="card_default_text">#FFFFFF</color>
+    <!-- Dimmer metadata line (channel * views * time ago) so the title stands out, YouTube style -->
+    <color name="card_default_content_text">#B3FFFFFF</color>
+    <color name="card_selected_content_text">#75000000</color>
+    <!-- Rounded "pill" duration/live/new badge background, YouTube style -->
+    <color name="card_badge_background">#A6000000</color>
+
+    <!-- Sidebar (headers panel) nav item colors, YouTube style -->
+    <color name="sidebar_item_text">#FFFFFF</color>
+    <color name="sidebar_item_selected_background">#FFFFFF</color>
+    <color name="sidebar_item_selected_text">#1A1A1A</color>
+
+    <!-- Dark "glass" search box (was a light/white pill), YouTube style -->
+    <color name="search_bar_background">#26FFFFFF</color>
+    <color name="search_bar_border">#40FFFFFF</color>
+    <!-- Overrides of leanback's lb_search_bar_text/lb_search_bar_hint, tuned for the dark box above -->
+    <color name="lb_search_bar_text">#FFFFFFFF</color>
+    <color name="lb_search_bar_hint">#B3FFFFFF</color>
+
+    <!-- Persistent white circle behind the player's play/pause button, YouTube style -->
+    <color name="player_play_pause_background">#FFFFFFFF</color>
+    <color name="player_play_pause_icon_color">#1A1A1A</color>
 
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>

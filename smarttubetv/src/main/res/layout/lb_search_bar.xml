@@ -43,6 +43,8 @@
             android:background="@drawable/rounded_search_bg"
             >
 
+        <!-- MOD: show the magnifying-glass icon inline in the box (was hidden/@null),
+             YouTube style -->
         <ImageView
                 android:id="@+id/lb_search_bar_badge"
                 android:layout_width="@dimen/lb_search_bar_icon_width"
@@ -50,8 +52,8 @@
                 android:layout_gravity="center_vertical|start"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/lb_search_bar_icon_margin_start"
-                android:src="@null"
-                android:visibility="gone"
+                android:src="@drawable/lb_ic_in_app_search"
+                android:tint="@color/lb_search_bar_text"
                 style="?attr/browseTitleIconStyle"/>
 
         <androidx.leanback.widget.SearchEditText

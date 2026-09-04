@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: floating translucent "pill" capsule behind the secondary player action buttons
+     (thumbs up/down, subtitles, share, etc.), YouTube style -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/search_bar_background"/>
+
+    <stroke
+        android:width="1dp"
+        android:color="@color/search_bar_border"/>
+
+    <corners android:radius="@dimen/player_secondary_controls_pill_corner_radius"/>
+</shape>

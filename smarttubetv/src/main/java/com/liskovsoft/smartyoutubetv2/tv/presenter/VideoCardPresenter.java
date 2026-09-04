@@ -6,9 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.util.Pair;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
@@ -37,8 +35,10 @@ public class VideoCardPresenter extends LongClickPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
+    private int mDefaultContentTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
+    private int mSelectedContentTextColor = -1;
     private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
@@ -52,10 +52,14 @@ public class VideoCardPresenter extends LongClickPresenter {
             ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
+        mDefaultContentTextColor =
+                ContextCompat.getColor(context, R.color.card_default_content_text);
         mSelectedBackgroundColor =
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mSelectedContentTextColor =
+                ContextCompat.getColor(context, R.color.card_selected_content_text);
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
@@ -95,25 +99,20 @@ public class VideoCardPresenter extends LongClickPresenter {
     private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
+        // Dimmer than the title, so the metadata line (channel * views * time ago)
+        // reads as secondary instead of matching the title's brightness, YouTube style.
+        int contentTextColor = selected ? mSelectedContentTextColor : mDefaultContentTextColor;
 
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
         // NOTE: has visual bug with rounded corners
         //view.setBackgroundColor(backgroundColor);
 
-        View infoField = view.findViewById(R.id.info_field);
-        if (infoField != null) {
-            infoField.setBackgroundColor(backgroundColor);
-        }
-
-        TextView titleText = view.findViewById(R.id.title_text);
-        if (titleText != null) {
-            titleText.setTextColor(textColor);
-        }
-        TextView contentText = view.findViewById(R.id.content_text);
-        if (contentText != null) {
-            contentText.setTextColor(textColor);
-        }
+        // This runs on every focus change for every card, so use the view's cached
+        // field references instead of findViewById() (ComplexImageCardView caches them once).
+        view.setInfoAreaBackgroundColor(backgroundColor);
+        view.setTitleTextColor(textColor);
+        view.setContentTextColor(contentTextColor);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                 video.badge
         );
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
-                ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
+                ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.card_badge_background));
 
         if (mCardPreviewType != MainUIData.CARD_PREVIEW_DISABLED) {
             cardView.setPreview(video);

@@ -86,6 +86,11 @@ public final class SeekBar extends View {
     private int mBarHeight;
     private int mActiveBarHeight;
     private final List<SeekBarRectangle> mSeekBarRectangles = new ArrayList<>();
+    // MOD: keep the last segments around so onSizeChanged() can recompute their horizontal
+    // positions -- they're cached from getWidth() at the time setSegments() was called, so a
+    // resize afterward (e.g. the view's first layout pass hasn't settled yet) would otherwise
+    // leave them stuck at stale/zero-width positions forever, hiding SponsorBlock markers.
+    private List<SeekBarSegment> mSegments;
 
     private AccessibilitySeekListener mAccessibilitySeekListener;
 
@@ -140,6 +145,10 @@ public final class SeekBar extends View {
     protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         calculate();
+        // MOD: see mSegments field comment -- recompute segment rectangles for the new width too.
+        if (mSegments != null) {
+            calculateSegments(mSegments);
+        }
     }
 
     @Override
@@ -287,12 +296,17 @@ public final class SeekBar extends View {
     }
 
     public void setSegments(List<SeekBarSegment> segments) {
+        mSegments = segments;
         calculateSegments(segments);
     }
 
     private void calculateSegments(List<SeekBarSegment> segments) {
+        // MOD: clear stale rectangles before repopulating -- previously this only happened
+        // when segments == null, so recalculating a non-null list (e.g. from onSizeChanged)
+        // kept appending duplicates on top of the old ones instead of replacing them.
+        mSeekBarRectangles.clear();
+
         if (segments == null) {
-            mSeekBarRectangles.clear();
             //invalidate();
             return;
         }
