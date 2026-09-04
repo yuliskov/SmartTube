@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -31,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final MediaServiceData mMediaServiceData;
     private final NetworkData mNetworkData;
     private final SidebarService mSidebarService;
+    private final AppPrefs mAppPrefs;
     private boolean mRestartApp;
     private final Runnable mOnFinish = () -> {
         if (mRestartApp) {
@@ -65,6 +68,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         mMediaServiceData = MediaServiceData.instance();
         mNetworkData = NetworkData.instance(context);
         mSidebarService = SidebarService.instance(context);
+        mAppPrefs = AppPrefs.instance(context);
     }
 
     public static GeneralSettingsPresenter instance(Context context) {
@@ -630,7 +634,104 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.setSelectChannelSectionEnabled(option.isSelected()),
                 mGeneralData.isSelectChannelSectionEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.rest_api_settings),
+                option -> showRestApiSettingsDialog(settingsPresenter), false));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void showRestApiSettingsDialog(AppDialogPresenter parentPresenter) {
+        AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+
+        presenter.appendSingleSwitch(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_enabled),
+                option -> {
+                    mAppPrefs.setRestApiEnabled(option.isSelected());
+                    Utils.updateRestApiService(getContext());
+                },
+                mAppPrefs.isRestApiEnabled()
+        ));
+
+        presenter.appendSingleSwitch(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_show_notifications),
+                option -> mAppPrefs.setRestApiShowNotifications(option.isSelected()),
+                mAppPrefs.isRestApiShowNotifications()
+        ));
+
+        presenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_port) + ": " + mAppPrefs.getRestApiPort(),
+                option -> showRestApiPortDialog(parentPresenter)
+        ));
+
+        presenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_username) + ": " + mAppPrefs.getRestApiUsername(),
+                option -> showRestApiUsernameDialog(parentPresenter)
+        ));
+
+        presenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_password),
+                option -> showRestApiPasswordDialog(parentPresenter)
+        ));
+
+        presenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.rest_api_show_password),
+                option -> MessageHelpers.showLongMessage(getContext(),
+                        getContext().getString(R.string.rest_api_password) + ": " + mAppPrefs.getRestApiPassword())
+        ));
+
+        presenter.showDialog(getContext().getString(R.string.rest_api_settings));
+    }
+
+    private void showRestApiPortDialog(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                getContext().getString(R.string.rest_api_port),
+                String.valueOf(mAppPrefs.getRestApiPort()),
+                newValue -> {
+                    int port = Helpers.parseInt(newValue);
+                    if (port < 1024 || port > 65535) {
+                        MessageHelpers.showLongMessage(getContext(), getContext().getString(R.string.rest_api_port_invalid));
+                        return false;
+                    }
+
+                    mAppPrefs.setRestApiPort(port);
+                    Utils.updateRestApiService(getContext());
+                    return true;
+                }
+        );
+    }
+
+    private void showRestApiUsernameDialog(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.show(
+                getContext(),
+                getContext().getString(R.string.rest_api_username),
+                mAppPrefs.getRestApiUsername(),
+                newValue -> {
+                    if (TextUtils.isEmpty(newValue.trim())) {
+                        return false;
+                    }
+                    mAppPrefs.setRestApiUsername(newValue.trim());
+                    return true;
+                }
+        );
+    }
+
+    private void showRestApiPasswordDialog(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.closeDialog();
+        SimpleEditDialog.showPassword(
+                getContext(),
+                getContext().getString(R.string.rest_api_password),
+                mAppPrefs.getRestApiPassword(),
+                newValue -> {
+                    if (TextUtils.isEmpty(newValue.trim())) {
+                        return false;
+                    }
+                    mAppPrefs.setRestApiPassword(newValue.trim());
+                    return true;
+                }
+        );
     }
 
     private void appendInternetCensorship(AppDialogPresenter settingsPresenter) {
