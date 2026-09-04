@@ -311,6 +311,13 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     @Override
+    public void onTrackChanged(FormatItem track) {
+        if (getPlayerTweaksData().isNightlightEnabled() && track != null && track.getType() == FormatItem.TYPE_VIDEO) {
+            applyNightlightTint();
+        }
+    }
+
+    @Override
     public void onViewResumed() {
         if (getPlayer() == null) {
             return;
@@ -326,6 +333,7 @@ public class PlayerUIController extends BasePlayerController {
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
         applySoundOffButtonState();
+        applyNightlightButtonState();
     }
 
     @Override
@@ -586,6 +594,8 @@ public class PlayerUIController extends BasePlayerController {
             prepareScreenOff();
             applyScreenOff(buttonState);
             applyScreenOffTimeout(buttonState);
+        } else if (buttonId == R.id.action_nightlight) {
+            applyNightlight();
         } else if (buttonId == R.id.action_subscribe) {
             onSubscribe(buttonState);
         } else if (buttonId == R.id.action_sound_off) {
@@ -627,6 +637,8 @@ public class PlayerUIController extends BasePlayerController {
     public void onButtonLongClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_screen_dimming) {
             showScreenOffDialog();
+        } else if (buttonId == R.id.action_nightlight) {
+            showNightlightDialog();
         } else if (buttonId == R.id.action_subscribe || buttonId == R.id.action_channel) {
             showNotificationsDialog();
         } else if (buttonId == R.id.action_sound_off) {
@@ -972,6 +984,47 @@ public class PlayerUIController extends BasePlayerController {
         manager.setBlocked(false);
         manager.disable();
         getPlayer().setButtonState(R.id.action_screen_dimming, PlayerUI.BUTTON_OFF);
+    }
+
+    private void applyNightlight() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        int current = getPlayerTweaksData().getNightlightWarmth();
+        int next = current != Utils.NIGHTLIGHT_NEUTRAL ?
+                Utils.NIGHTLIGHT_NEUTRAL : getPlayerTweaksData().getNightlightLastWarmth();
+        getPlayerTweaksData().setNightlightWarmth(next);
+
+        applyNightlightButtonState();
+        applyNightlightTint();
+    }
+
+    private void applyNightlightButtonState() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        getPlayer().setButtonState(R.id.action_nightlight,
+                getPlayerTweaksData().isNightlightEnabled() ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void applyNightlightTint() {
+        if (getPlayer() != null) {
+            getPlayer().applyNightlight();
+        }
+
+        Utils.applyNightlight(getActivity());
+    }
+
+    private void showNightlightDialog() {
+        AppDialogPresenter settingsPresenter = getAppDialogPresenter();
+        AppDialogUtil.appendNightlightCategory(getContext(), settingsPresenter, () -> {
+            applyNightlightButtonState();
+            applyNightlightTint();
+            Utils.applyNightlight(settingsPresenter.getContext());
+        });
+        settingsPresenter.showDialog(getContext().getString(R.string.nightlight));
     }
 
     private void onRotate() {
