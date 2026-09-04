@@ -105,6 +105,7 @@
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>
     <string name="open_playlist">Open playlist</string>
+    <string name="play_playlist_in_reverse">Play playlist in reverse</string>
     <string name="not_interested">Not interested</string>
     <string name="not_recommend_channel">Don\'t recommend channel</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
