@@ -71,7 +71,12 @@ android {
 
         // The content of Universal apk
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
+            // Must list every ABI built by the splits block below, otherwise the
+            // universal APK ships no native libs for the missing ones. Devices
+            // running Android-x86 (and other x86 targets) then fall back to
+            // translating the ARM libj2v8.so, which cannot JIT and hangs the
+            // nsig challenge solver, leaving playback stuck on a spinner forever.
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
         }
     }
 
