@@ -75,6 +75,13 @@ public class RestApiManagerTest {
         assertNull(manager.extractVideoId("https://example.com/video"));
     }
 
+    @Test
+    public void extractVideoId_bareIdInvalidChars_returnsNull() {
+        assertNull(manager.extractVideoId("!!!!!!!!!!!")); // 11 chars but not a valid video ID
+        assertNull(manager.extractVideoId("dQw4w9WgXc")); // too short
+        assertNull(manager.extractVideoId("dQw4w9WgXcQextra")); // too long
+    }
+
     // --- Playlist ID extraction ---
 
     @Test

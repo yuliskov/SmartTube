@@ -17,6 +17,9 @@ servers:
 security:
   - basicAuth: []
 
+# CORS: all responses carry Access-Control-Allow-Origin: * and OPTIONS (preflight)
+# requests are answered with 204. 401 responses include a WWW-Authenticate header.
+
 paths:
   /playback/play:
     post:
@@ -113,6 +116,14 @@ paths:
                 $ref: '#/components/schemas/MessageResponse'
               example:
                 message: Next requested
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -132,6 +143,14 @@ paths:
                 $ref: '#/components/schemas/MessageResponse'
               example:
                 message: Previous requested
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -169,6 +188,14 @@ paths:
                 $ref: '#/components/schemas/MessageResponse'
               example:
                 message: Missing or invalid positionMs
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
         '401':
           $ref: '#/components/responses/Unauthorized'
 
@@ -284,7 +311,7 @@ paths:
   /queue/items:
     post:
       summary: Add video or playlist to queue
-      description: Adds a single video or all videos from a playlist to the playback queue.
+      description: Adds a single video or all videos from a playlist to the playback queue. At most as many videos are loaded as the queue can hold (300 on high-RAM devices, 50 otherwise); larger playlists are truncated. If the queue is cleared while a playlist is still loading, the add is cancelled.
       operationId: queueAdd
       tags:
         - Queue
@@ -514,7 +541,7 @@ paths:
           schema:
             type: integer
             minimum: 0
-          description: Zero-based index of the video to start from. Only applies when playing a playlist.
+          description: Zero-based index of the video to start from. Only applies when playing a playlist. When shuffle is also set, the index refers to the shuffled order.
           example: 3
         - name: shuffle
           in: query
@@ -554,7 +581,7 @@ paths:
   /recommendations:
     get:
       summary: Get video recommendations
-      description: Returns the recommendation/suggestion rows for the currently playing video.
+      description: Returns videos related to the currently playing video. Shorts and the playback-queue row are excluded; the remaining suggestion rows are merged and de-duplicated (at most 30 items). Returns an empty list when nothing is playing.
       operationId: recommendationsGet
       tags:
         - Playback
@@ -575,6 +602,14 @@ paths:
                       thumbnail: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Failed to load recommendations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Failed to load recommendations
 
 components:
   securitySchemes:
@@ -714,7 +749,7 @@ components:
 
   responses:
     Unauthorized:
-      description: Authentication failed
+      description: Authentication failed. Includes a WWW-Authenticate header so browsers prompt for credentials.
       content:
         application/json:
           schema:

@@ -17,6 +17,7 @@ public class Playlist {
     private final List<Video> mSyncedItems;
     private int mCurrentIndex;
     private volatile int mGeneration;
+    private volatile int mResetCount;
     private static Playlist sInstance;
 
     private Playlist() {
@@ -41,6 +42,7 @@ public class Playlist {
         mPlaylist.clear();
         mCurrentIndex = -1;
         mGeneration++;
+        mResetCount++;
     }
 
     public void clearPosition() {
@@ -358,6 +360,17 @@ public class Playlist {
 
     public int getGeneration() {
         return mGeneration;
+    }
+
+    /**
+     * Bumped only by {@link #clear()}. Use to detect queue resets while async loads are in flight.
+     */
+    public int getResetCount() {
+        return mResetCount;
+    }
+
+    public int getMaxSize() {
+        return mPlaylistMaxSize;
     }
 
     public void onNewSession() {

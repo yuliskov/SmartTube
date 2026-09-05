@@ -298,6 +298,7 @@
     <string name="rest_api_notification_playlist_added_no_title">Queue: Added %d tracks</string>
     <string name="rest_api_notification_shuffled">Queue: Shuffled (%d items)</string>
     <string name="rest_api_notification_reordered">Queue: Reordered</string>
+    <string name="rest_api_notification_add_failed">Queue: Failed to add \'%s\'</string>
     <string name="dialog_add_to">Add to %s</string>
     <string name="dialog_remove_from">Remove from %s</string>
     <string name="added_to">Added to %s</string>

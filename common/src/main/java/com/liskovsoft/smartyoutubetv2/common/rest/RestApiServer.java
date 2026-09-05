@@ -36,10 +36,16 @@ class RestApiServer extends NanoHTTPD {
     static final class RestResponse {
         final int status;
         final String body;
+        final Map<String, String> headers;
 
         RestResponse(int status, String body) {
+            this(status, body, null);
+        }
+
+        RestResponse(int status, String body, Map<String, String> headers) {
             this.status = status;
             this.body = body;
+            this.headers = headers;
         }
     }
 
@@ -51,6 +57,13 @@ class RestApiServer extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
         try {
+            // Handle CORS preflight before auth/routing
+            if (Method.OPTIONS.equals(session.getMethod())) {
+                Response response = newFixedLengthResponse(Status.NO_CONTENT, "application/json", "");
+                addCorsHeaders(response);
+                return response;
+            }
+
             RestRequest request = parseRequest(session);
             RestResponse response = mRequestHandler.handle(request);
             return buildNanoResponse(response);
@@ -83,10 +96,19 @@ class RestApiServer extends NanoHTTPD {
         }
         String body = response.body != null ? response.body : "{}";
         Response nanoResponse = newFixedLengthResponse(nanoStatus, "application/json; charset=utf-8", body);
-        nanoResponse.addHeader("Access-Control-Allow-Origin", "*");
-        nanoResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-        nanoResponse.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+        addCorsHeaders(nanoResponse);
+        if (response.headers != null) {
+            for (Map.Entry<String, String> entry : response.headers.entrySet()) {
+                nanoResponse.addHeader(entry.getKey(), entry.getValue());
+            }
+        }
         return nanoResponse;
+    }
+
+    private static void addCorsHeaders(Response response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+        response.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
     }
 
     private static final class CustomStatus implements IStatus {

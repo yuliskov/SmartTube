@@ -30,7 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -70,11 +70,22 @@ public class RestApiManager {
         MessageHelpers.showLongMessage(mContext, mContext.getString(resId, formatArgs));
     }
 
-    public static RestApiManager instance(Context context) {
+    public static synchronized RestApiManager instance(Context context) {
         if (sInstance == null) {
             sInstance = new RestApiManager(context);
         }
         return sInstance;
+    }
+
+    /**
+     * Tracks a disposable belonging to the current server run. Disposes it immediately if the server was stopped.
+     */
+    private synchronized void addDisposable(io.reactivex.disposables.Disposable disposable) {
+        if (mDisposables != null) {
+            mDisposables.add(disposable);
+        } else {
+            disposable.dispose();
+        }
     }
 
     public synchronized void start() {
@@ -112,7 +123,9 @@ public class RestApiManager {
 
     private RestApiServer.RestResponse handleRequest(RestApiServer.RestRequest request) {
         if (!isAuthorized(request)) {
-            return response(HTTP_UNAUTHORIZED, "Unauthorized");
+            java.util.Map<String, String> headers = new java.util.HashMap<>();
+            headers.put("WWW-Authenticate", "Basic realm=\"SmartTube\"");
+            return new RestApiServer.RestResponse(HTTP_UNAUTHORIZED, sGson.toJson(new MessageResponse("Unauthorized")), headers);
         }
 
         try {
@@ -202,8 +215,8 @@ public class RestApiManager {
         }
         if ("DELETE".equals(method) && path.startsWith("/api/v1/queue/items/")) {
             String videoId = path.substring("/api/v1/queue/items/".length());
-            if (videoId.isEmpty()) {
-                return response(HTTP_BAD_REQUEST, "Missing videoId");
+            if (videoId.isEmpty() || "move".equals(videoId)) {
+                return response(HTTP_NOT_FOUND, "Unknown endpoint");
             }
             return runOnMain(() -> queueRemove(videoId));
         }
@@ -260,7 +273,7 @@ public class RestApiManager {
         playlist.clear();
         Video video = Video.from(videoId);
 
-        MediaServiceManager.instance().loadMetadata(video, metadata -> {
+        addDisposable(MediaServiceManager.instance().loadMetadataConcurrent(video, metadata -> {
             video.sync(metadata);
             if (video.title == null) {
                 video.title = metadata.getTitle();
@@ -277,7 +290,7 @@ public class RestApiManager {
                     Log.e(TAG, "playVideo callback failed: %s", e.getMessage());
                 }
             });
-        });
+        }, error -> showQueueNotification(R.string.rest_api_notification_add_failed, video.title != null ? video.title : videoId)));
 
         return response(HTTP_ACCEPTED, "Playback started");
     }
@@ -304,18 +317,28 @@ public class RestApiManager {
 
     private RestApiServer.RestResponse next() {
         PlaybackPresenter presenter = PlaybackPresenter.instance(mContext);
+        if (presenter.getPlayer() == null) {
+            return response(HTTP_UNPROCESSABLE, "Player is not active");
+        }
         presenter.onNextClicked();
         return response(HTTP_OK, "Next requested");
     }
 
     private RestApiServer.RestResponse previous() {
         PlaybackPresenter presenter = PlaybackPresenter.instance(mContext);
+        if (presenter.getPlayer() == null) {
+            return response(HTTP_UNPROCESSABLE, "Player is not active");
+        }
         presenter.onPreviousClicked();
         return response(HTTP_OK, "Previous requested");
     }
 
     private RestApiServer.RestResponse seek(long positionMs) {
-        PlaybackPresenter.instance(mContext).setPosition(positionMs);
+        PlaybackPresenter presenter = PlaybackPresenter.instance(mContext);
+        if (presenter.getPlayer() == null) {
+            return response(HTTP_UNPROCESSABLE, "Player is not active");
+        }
+        presenter.setPosition(positionMs);
         return response(HTTP_OK, "Seek requested");
     }
 
@@ -401,7 +424,7 @@ public class RestApiManager {
         boolean wasEmpty = playlist.getAll().isEmpty();
         Video video = Video.from(videoId);
 
-        MediaServiceManager.instance().loadMetadata(video, metadata -> {
+        addDisposable(MediaServiceManager.instance().loadMetadataConcurrent(video, metadata -> {
             video.sync(metadata);
             if (video.title == null) {
                 video.title = metadata.getTitle();
@@ -421,19 +444,19 @@ public class RestApiManager {
                     }
                 }
             });
-        });
+        }, error -> showQueueNotification(R.string.rest_api_notification_add_failed, video.title != null ? video.title : videoId)));
 
         return response(HTTP_ACCEPTED, "Added to queue");
     }
 
     private RestApiServer.RestResponse queueAddPlaylist(String playlistId, boolean shuffle) {
         showQueueNotification(R.string.rest_api_notification_queuing_playlist);
-        final int generationBeforeLoad = Playlist.instance().getGeneration();
+        final int resetsBeforeLoad = Playlist.instance().getResetCount();
         Video video = new Video();
         video.playlistId = playlistId;
-        MediaServiceManager.instance().loadMetadata(video, metadata -> {
-            if (Playlist.instance().getGeneration() != generationBeforeLoad) {
-                Log.d(TAG, "queueAddPlaylist: playlist generation changed during load, skipping add");
+        addDisposable(MediaServiceManager.instance().loadMetadataConcurrent(video, metadata -> {
+            if (Playlist.instance().getResetCount() != resetsBeforeLoad) {
+                Log.d(TAG, "queueAddPlaylist: queue cleared during load, skipping add");
                 return;
             }
             MediaGroup playlistGroup = findPlaylistRow(metadata);
@@ -442,8 +465,8 @@ public class RestApiManager {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(allItems -> {
-                        if (Playlist.instance().getGeneration() != generationBeforeLoad) {
-                            Log.d(TAG, "queueAddPlaylist: playlist generation changed during load, skipping add");
+                        if (Playlist.instance().getResetCount() != resetsBeforeLoad) {
+                            Log.d(TAG, "queueAddPlaylist: queue cleared during load, skipping add");
                             showQueueNotification(R.string.rest_api_notification_playlist_cancelled);
                             return;
                         }
@@ -482,11 +505,12 @@ public class RestApiManager {
                             }
                         }
                         Log.d(TAG, "queueAddPlaylist: added %s videos from playlist %s (shuffle=%s)", added, playlistId, shuffle);
-                    }, error -> Log.e(TAG, "queueAddPlaylist: error loading items: %s", error.getMessage()));
-            if (mDisposables != null) {
-                mDisposables.add(d);
-            }
-        });
+                    }, error -> {
+                        Log.e(TAG, "queueAddPlaylist: error loading items: %s", error.getMessage());
+                        showQueueNotification(R.string.rest_api_notification_add_failed, playlistTitle != null ? playlistTitle : playlistId);
+                    });
+            addDisposable(d);
+        }, error -> showQueueNotification(R.string.rest_api_notification_add_failed, playlistId)));
         return response(HTTP_ACCEPTED, "Playlist queue update scheduled");
     }
 
@@ -545,12 +569,21 @@ public class RestApiManager {
             return new RestApiServer.RestResponse(HTTP_OK, sGson.toJson(new java.util.ArrayList<>()));
         }
 
-        // Load metadata on a background thread to avoid blocking the HTTP worker
-        MediaItemMetadata metadata = Observable.fromCallable(() -> {
-            com.liskovsoft.mediaserviceinterfaces.MediaItemService itemService =
-                    com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance().getMediaItemService();
-            return itemService.getMetadata(video.videoId);
-        }).subscribeOn(Schedulers.io()).blockingFirst();
+        // Load metadata with full playback context (same call the player's SuggestionsController
+        // uses). The single-arg variant returns generic homepage-style rows instead of related videos.
+        final Video currentVideo = video;
+        MediaItemMetadata metadata;
+        try {
+            metadata = Observable.fromCallable(() -> {
+                com.liskovsoft.mediaserviceinterfaces.MediaItemService itemService =
+                        com.liskovsoft.youtubeapi.service.YouTubeServiceManager.instance().getMediaItemService();
+                return itemService.getMetadata(currentVideo.videoId, currentVideo.getPlaylistId(),
+                        currentVideo.playlistIndex, currentVideo.playlistParams);
+            }).subscribeOn(Schedulers.io()).timeout(10, TimeUnit.SECONDS).blockingFirst();
+        } catch (Exception e) {
+            Log.e(TAG, "recommendationsGet: metadata load failed: %s", e.getMessage());
+            return response(HTTP_INTERNAL_ERROR, "Failed to load recommendations");
+        }
 
         if (metadata == null || metadata.getSuggestions() == null) {
             return new RestApiServer.RestResponse(HTTP_OK, sGson.toJson(new java.util.ArrayList<>()));
@@ -558,15 +591,26 @@ public class RestApiManager {
 
         String currentPlaylistId = video.getPlaylistId();
 
-        // Find the largest non-playlist group (the "Related" section).
-        // Playlist row items all share the video's playlistId; related videos have none.
-        // General recommendation sections have ~6 items; related has ~30 items.
-        MediaGroup relatedGroup = null;
-        int maxSize = 0;
+        // YouTube splits the watch-next "related" section into multiple small rows (observed: ~10
+        // rows of 3 long videos) followed by a larger all-shorts shelf. Merge the non-shorts,
+        // non-playlist rows; never pick a row by size alone (the all-shorts shelf is the largest).
+        final int maxRecommendations = 30;
+        java.util.LinkedHashMap<String, MediaItem> related = new java.util.LinkedHashMap<>();
 
-        for (MediaGroup group : metadata.getSuggestions()) {
-            List<MediaItem> items = group.getMediaItems();
+        for (MediaGroup mediaGroup : metadata.getSuggestions()) {
+            List<MediaItem> items = mediaGroup.getMediaItems();
             if (items == null || items.isEmpty()) {
+                continue;
+            }
+
+            boolean allShorts = true;
+            for (MediaItem item : items) {
+                if (!item.isShorts()) {
+                    allShorts = false;
+                    break;
+                }
+            }
+            if (allShorts) {
                 continue;
             }
 
@@ -584,22 +628,26 @@ public class RestApiManager {
                 }
             }
 
-            int size = items.size();
-            if (size > maxSize) {
-                maxSize = size;
-                relatedGroup = group;
+            for (MediaItem item : items) {
+                if (item.isShorts() || related.size() >= maxRecommendations) {
+                    continue;
+                }
+                String id = item.getVideoId();
+                if (id == null || id.isEmpty() || id.equals(video.videoId) || related.containsKey(id)) {
+                    continue;
+                }
+                related.put(id, item);
             }
         }
 
-        if (relatedGroup == null || relatedGroup.getMediaItems() == null || relatedGroup.getMediaItems().isEmpty()) {
+        if (related.isEmpty()) {
             return new RestApiServer.RestResponse(HTTP_OK, sGson.toJson(new java.util.ArrayList<>()));
         }
 
-        List<MediaItem> items = relatedGroup.getMediaItems();
         RecommendationGroup group = new RecommendationGroup();
-        group.title = relatedGroup.getTitle();
+        group.title = "";
         group.videos = new java.util.ArrayList<>();
-        for (MediaItem item : items) {
+        for (MediaItem item : related.values()) {
             Video v = Video.from(item);
             RecommendationVideo rv = new RecommendationVideo();
             rv.videoId = videoId(v);
@@ -612,20 +660,30 @@ public class RestApiManager {
 
     private RestApiServer.RestResponse playPlaylist(String playlistId, int index, boolean shuffle) {
         Log.d(TAG, "playPlaylist: playlistId=%s, index=%s, shuffle=%s", playlistId, index, shuffle);
+        final int resetsBeforeLoad = Playlist.instance().getResetCount();
         Video video = new Video();
         video.playlistId = playlistId;
         if (index > 0) {
             video.playlistIndex = index;
         }
 
-        MediaServiceManager.instance().loadMetadata(video, metadata -> {
+        addDisposable(MediaServiceManager.instance().loadMetadataConcurrent(video, metadata -> {
+            if (Playlist.instance().getResetCount() != resetsBeforeLoad) {
+                Log.d(TAG, "playPlaylist: queue cleared during load, skipping");
+                return;
+            }
             MediaGroup playlistGroup = findPlaylistRow(metadata);
             io.reactivex.disposables.Disposable d = Observable.fromCallable(() -> loadAllPlaylistItems(playlistGroup))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(allItems -> {
+                        if (Playlist.instance().getResetCount() != resetsBeforeLoad) {
+                            Log.d(TAG, "playPlaylist: queue cleared during load, skipping");
+                            return;
+                        }
                         if (allItems == null || allItems.isEmpty()) {
                             Log.w(TAG, "playPlaylist: no videos found in playlist %s", playlistId);
+                            showQueueNotification(R.string.rest_api_notification_playlist_empty);
                             return;
                         }
 
@@ -639,17 +697,19 @@ public class RestApiManager {
 
                         if (playlistVideos.isEmpty()) {
                             Log.w(TAG, "playPlaylist: no videos found in playlist %s", playlistId);
+                            showQueueNotification(R.string.rest_api_notification_playlist_empty);
                             return;
+                        }
+
+                        // Apply shuffle first so that index refers to the shuffled order
+                        if (shuffle) {
+                            java.util.Collections.shuffle(playlistVideos);
                         }
 
                         Playlist playlist = Playlist.instance();
                         playlist.clear();
                         for (Video v : playlistVideos) {
                             playlist.add(v);
-                        }
-
-                        if (shuffle) {
-                            playlist.shuffle();
                         }
 
                         Video first = null;
@@ -673,11 +733,12 @@ public class RestApiManager {
                             PlaybackPresenter.instance(mContext).openVideo(first);
                             Log.d(TAG, "playPlaylist: started playback of %s (shuffle=%s)", first.videoId, shuffle);
                         }
-                    }, error -> Log.e(TAG, "playPlaylist: error loading items: %s", error.getMessage()));
-            if (mDisposables != null) {
-                mDisposables.add(d);
-            }
-        });
+                    }, error -> {
+                        Log.e(TAG, "playPlaylist: error loading items: %s", error.getMessage());
+                        showQueueNotification(R.string.rest_api_notification_add_failed, playlistId);
+                    });
+            addDisposable(d);
+        }, error -> showQueueNotification(R.string.rest_api_notification_add_failed, playlistId)));
 
         return response(HTTP_OK, "Playlist playback started");
     }
@@ -729,7 +790,7 @@ public class RestApiManager {
         String encoded = header.substring("Basic ".length()).trim();
         String decoded;
         try {
-            decoded = new String(Base64.decode(encoded, Base64.DEFAULT), StandardCharsets.UTF_8);
+            decoded = new String(Base64.decode(encoded, Base64.DEFAULT), Charset.forName("UTF-8"));
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -762,6 +823,8 @@ public class RestApiManager {
         return video != null && video.getCardImageUrl() != null ? video.getCardImageUrl() : "";
     }
 
+    private static final java.util.regex.Pattern VIDEO_ID_PATTERN = java.util.regex.Pattern.compile("[A-Za-z0-9_-]{11}");
+
     String extractVideoId(String... sources) {
         for (String source : sources) {
             if (source == null) {
@@ -772,7 +835,7 @@ public class RestApiManager {
                 continue;
             }
             // Bare video ID
-            if (trimmed.length() == 11 && !trimmed.contains("/") && !trimmed.contains("?")) {
+            if (!trimmed.contains("/") && !trimmed.contains("?") && VIDEO_ID_PATTERN.matcher(trimmed).matches()) {
                 return trimmed;
             }
             // Parse as URL
@@ -858,14 +921,20 @@ public class RestApiManager {
         if (playlistGroup == null) {
             return null;
         }
+        // Don't load more than the Playlist can hold: Playlist.trimPlaylist() evicts from the
+        // front (potentially the currently playing video) when the size exceeds the cap.
+        int maxItems = Math.min(MAX_TOTAL_PLAYLIST_ITEMS, Playlist.instance().getMaxSize());
         List<MediaItem> allItems = new java.util.ArrayList<>();
         List<MediaItem> firstItems = playlistGroup.getMediaItems();
         if (firstItems != null) {
             allItems.addAll(firstItems);
+            if (allItems.size() > maxItems) {
+                allItems = new java.util.ArrayList<>(allItems.subList(0, maxItems));
+            }
         }
         MediaGroup currentGroup = playlistGroup;
         ContentService contentService = YouTubeServiceManager.instance().getContentService();
-        for (int i = 0; i < MAX_PLAYLIST_CONTINUATIONS && allItems.size() < MAX_TOTAL_PLAYLIST_ITEMS; i++) {
+        for (int i = 0; i < MAX_PLAYLIST_CONTINUATIONS && allItems.size() < maxItems; i++) {
             try {
                 String nextPageKey = currentGroup.getNextPageKey();
                 if (nextPageKey == null || nextPageKey.isEmpty()) {
@@ -877,7 +946,7 @@ public class RestApiManager {
                 }
                 List<MediaItem> nextItems = nextGroup.getMediaItems();
                 if (nextItems != null) {
-                    int remaining = MAX_TOTAL_PLAYLIST_ITEMS - allItems.size();
+                    int remaining = maxItems - allItems.size();
                     if (nextItems.size() > remaining) {
                         allItems.addAll(nextItems.subList(0, remaining));
                         break;
