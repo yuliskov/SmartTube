@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 public class IntentExtractor {
     public static final String RESTART_INTENT = "RESTART_INTENT";
     public static final String INCOGNITO_INTENT = "INCOGNITO_INTENT";
-    private static final String TAG = IntentExtractor.class.getSimpleName();
     /**
      * Browser: https://www.youtube.com/results?search_query=twice<br/>
      * Amazon: youtube://search?query=linkin+park&isVoice=true
