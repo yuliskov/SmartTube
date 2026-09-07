@@ -22,8 +22,11 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final int MAX_BOT_BLOCK_RETRIES = 3;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
+    private String mBotBlockedVideoId;
+    private int mBotBlockRetryCount;
 
     @Override
     public void onInit() {
@@ -105,8 +108,15 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     }
 
     @Override
+    public void onVideoLoaded(Video item) {
+        // Successful playback clears any pending bot-block retry state.
+        resetBotBlockRetry();
+    }
+
+    @Override
     public void onFinish() {
         mBufferingDetector.reset();
+        resetBotBlockRetry();
     }
 
     @Override
@@ -326,10 +336,62 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         } else if (Helpers.containsAny(message, "is not defined")) {
             YouTubeServiceManager.instance().invalidateCache();
             mVideoLoaderController.reloadVideo();
+        } else if (isBotBlocked(message)) {
+            runBotBlockRetry();
         } else {
             Log.e(TAG, "Probably no internet connection");
             mVideoLoaderController.reloadVideo();
         }
+    }
+
+    private boolean isBotBlocked(String message) {
+        // YouTube returned no playable format (e.g. LOGIN_REQUIRED "Sign in to confirm that you're not a bot").
+        // RxHelper reports the empty result as "fromNullable result is null".
+        return Helpers.containsAny(message, "fromNullable result is null");
+    }
+
+    private void runBotBlockRetry() {
+        String videoId = getVideo() != null ? getVideo().videoId : null;
+
+        if (!Helpers.equals(videoId, mBotBlockedVideoId)) {
+            mBotBlockedVideoId = videoId;
+            mBotBlockRetryCount = 0;
+        }
+
+        mBotBlockRetryCount++;
+
+        if (mBotBlockRetryCount > MAX_BOT_BLOCK_RETRIES) {
+            showPlaybackBlockedError();
+            return;
+        }
+
+        Log.e(TAG, "Playback blocked by YouTube. Retry %s/%s: switching client and refreshing poToken...",
+                mBotBlockRetryCount, MAX_BOT_BLOCK_RETRIES);
+
+        // Force a fresh poToken/visitor data and advance to the next client before retrying.
+        YouTubeServiceManager.instance().invalidateCache();      // resets poToken cache + resets client to default
+        YouTubeServiceManager.instance().switchNextClientNow();  // then advances to the next client
+
+        mVideoLoaderController.reloadVideo();
+    }
+
+    private void showPlaybackBlockedError() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        Log.e(TAG, "Giving up. Showing playback blocked error...");
+
+        String message = getContext().getString(R.string.msg_player_error_bot_blocked);
+        getPlayer().setTitle(message);
+        getPlayer().showProgressBar(false);
+        getPlayer().showOverlay(true);
+        MessageHelpers.showLongMessage(getContext(), message);
+    }
+
+    private void resetBotBlockRetry() {
+        mBotBlockedVideoId = null;
+        mBotBlockRetryCount = 0;
     }
 
     /**
