@@ -13,6 +13,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.PlaylistPanelExtractor;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -78,6 +79,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         item.isShuffled = false;
+        item.isReversed = false;
 
         if (!item.fromQueue && !item.belongsToPlaybackQueue()) {
             mPlaylist.add(item);
@@ -418,12 +420,10 @@ public class VideoLoaderController extends BasePlayerController {
         switch (playbackMode) {
             case PlayerConstants.PLAYBACK_MODE_REVERSE_LIST:
                 if (video.hasPlaylist() || video.belongsToChannelUploads() || video.belongsToChannel()) {
-                    VideoGroup group = video.getGroup();
-                    if (group != null && group.indexOf(video) != 0) { // stop after first
-                        onPreviousClicked();
-                    }
+                    applyReverseList(video);
                     break;
                 }
+                // fall through for non-playlist videos
             case PlayerConstants.PLAYBACK_MODE_ALL:
             case PlayerConstants.PLAYBACK_MODE_SHUFFLE:
                 loadNext();
@@ -536,6 +536,7 @@ public class VideoLoaderController extends BasePlayerController {
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         initRandomNext();
+        markReversed();
     }
 
     private void initRandomNext() {
@@ -584,6 +585,97 @@ public class VideoLoaderController extends BasePlayerController {
         //        }
         //    }
         //}
+    }
+
+    /**
+     * Reverse playlist playback. The previous item is resolved lazily when the current video ends
+     * (see {@link #applyReverseList(Video)}); here we only flag the video so the rest of the
+     * pipeline (e.g. the "next section" lookup) leaves it alone.
+     */
+    private void markReversed() {
+        Video current = getVideo();
+        PlayerData playerData = getPlayerData();
+
+        if (current != null && playerData != null
+                && playerData.getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_REVERSE_LIST
+                && (current.hasPlaylist() || current.belongsToChannelUploads() || current.belongsToChannel())) {
+            current.isReversed = true;
+        }
+    }
+
+    /**
+     * Move one step backwards through the playlist. Tries the already loaded playlist row first
+     * (it re-centres on every open); if that window doesn't reach far enough back, fetches a fresh
+     * window centred on the wanted index.
+     */
+    private void applyReverseList(Video video) {
+        int currentIndex = video.playlistInfo != null ? video.playlistInfo.getCurrentIndex() : -1;
+
+        if (currentIndex == 0) {
+            stopPlayback(); // start of the playlist
+            return;
+        }
+
+        Video prev = prevInLoadedPanel(video);
+
+        if (prev != null && prev.hasVideo()) {
+            openVideoInt(prev);
+            return;
+        }
+
+        if (currentIndex > 0) {
+            loadReversePrevByIndex(video, currentIndex - 1);
+            return;
+        }
+
+        // No playlist index info (some channel rows): walk the loaded row, stop at its start.
+        VideoGroup group = video.getGroup();
+        if (group != null && group.indexOf(video) != 0) {
+            onPreviousClicked();
+        } else {
+            stopPlayback();
+        }
+    }
+
+    /** Item right before {@code current} in its loaded playlist row. */
+    private Video prevInLoadedPanel(Video current) {
+        VideoGroup group = current.getGroup();
+
+        if (group == null || group.isEmpty()) {
+            return null;
+        }
+
+        Video prev = null;
+        for (Video item : group.getVideos()) {
+            if (item.equals(current)) {
+                return prev;
+            }
+            if (item.hasVideo() && !item.isUpcoming) {
+                prev = item;
+            }
+        }
+
+        return null;
+    }
+
+    private void loadReversePrevByIndex(Video from, int targetIndex) {
+        Video probe = new Video();
+        probe.playlistId = from.getPlaylistId();
+        probe.playlistIndex = Math.max(0, targetIndex);
+
+        MediaServiceManager.instance().loadMetadata(probe, metadata -> {
+            Video prev = PlaylistPanelExtractor.itemBefore(metadata, from.videoId, from.getPlaylistId());
+
+            if (prev != null && prev.hasVideo()) {
+                prev.playlistId = from.getPlaylistId();
+                openVideoInt(prev);
+            } else {
+                stopPlayback();
+            }
+        }, error -> {
+            Log.e(TAG, "reverse playlist error: %s", error.getMessage());
+            stopPlayback();
+        }, () -> {});
     }
 
     private int getPlaybackMode() {
