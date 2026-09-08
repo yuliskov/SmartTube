@@ -80,6 +80,7 @@ public class AppDialogUtil {
     private static final int PLAYER_ENGINE_ID = 147;
     private static final int IGNORE_DURATION_ID = 148;
     private static final int SLEEP_TIMER_ID = 149;
+    private static final int VIDEO_PRESETS_PER_CHANNEL_ID = 150;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -305,6 +306,60 @@ public class AppDialogUtil {
                 context.getString(R.string.option_disabled),
                 optionItem -> setFormat(playerData.getDefaultVideoFormat(), playerData, onFormatSelected),
                 !isPresetSelection));
+
+        return result;
+    }
+
+    public static OptionItem createVideoPresetChannelOption(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        return UiOptionItem.from(context.getString(R.string.video_preset_per_channel),
+                optionItem -> playerData.setFormatPerChannelEnabled(optionItem.isSelected()),
+                playerData.isFormatPerChannelEnabled()
+        );
+    }
+
+    public static OptionCategory createVideoPresetsPerChannelCategory(Context context, String channelId, Runnable onFormatSelected) {
+        return OptionCategory.from(
+                VIDEO_PRESETS_PER_CHANNEL_ID,
+                OptionCategory.TYPE_RADIO_LIST,
+                context.getString(R.string.title_video_presets),
+                fromChannelPresets(
+                        context,
+                        AppDataSourceManager.instance().getVideoPresets(),
+                        channelId,
+                        onFormatSelected
+                )
+        );
+    }
+
+    private static List<OptionItem> fromChannelPresets(Context context, VideoPreset[] presets, String channelId, Runnable onFormatSelected) {
+        List<OptionItem> result = new ArrayList<>();
+
+        PlayerData playerData = PlayerData.instance(context);
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+        FormatItem selectedFormat = playerData.getFormatPerChannel(channelId);
+        boolean isAllFormatsUnlocked = playerTweaksData.isAllFormatsUnlocked();
+
+        for (VideoPreset preset : presets) {
+            if (!isAllFormatsUnlocked && !Utils.isPresetSupported(preset)) {
+                continue;
+            }
+
+            result.add(0, UiOptionItem.from(preset.name,
+                    option -> {
+                        playerData.setFormatPerChannel(channelId, preset.format);
+                        onFormatSelected.run();
+                    },
+                    preset.format.equals(selectedFormat)));
+        }
+
+        result.add(0, UiOptionItem.from(
+                context.getString(R.string.option_disabled),
+                optionItem -> {
+                    playerData.setFormatPerChannel(channelId, null);
+                    onFormatSelected.run();
+                },
+                selectedFormat == null));
 
         return result;
     }

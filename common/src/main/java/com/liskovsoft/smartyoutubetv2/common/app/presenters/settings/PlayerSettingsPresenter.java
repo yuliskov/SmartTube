@@ -487,6 +487,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setQueueRespectsPlaybackMode(option.isSelected()),
                 mPlayerTweaksData.isQueueRespectsPlaybackMode()));
 
+        options.add(AppDialogUtil.createVideoPresetChannelOption(getContext()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 

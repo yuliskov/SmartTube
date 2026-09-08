@@ -95,6 +95,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private boolean mIsSubtitlesPerChannelEnabled;
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
+    private final Map<String, ChannelFormat> mFormatsPerChannel = new HashMap<>();
+    private boolean mIsFormatPerChannelEnabled;
     private float mPitch;
     private long mAfrSwitchTimeMs;
     private List<String> mLastAudioLanguages;
@@ -125,6 +127,32 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         @Override
         public String toString() {
             return Helpers.mergeObj(channelId, speed);
+        }
+    }
+
+    private static class ChannelFormat {
+        public String channelId;
+        public FormatItem format;
+
+        public ChannelFormat(String channelId, FormatItem format) {
+            this.channelId = channelId;
+            this.format = format;
+        }
+
+        public static ChannelFormat fromString(String specs) {
+            String[] split = Helpers.splitObj(specs);
+
+            if (split == null || split.length != 2) {
+                return new ChannelFormat(null, null);
+            }
+
+            return new ChannelFormat(Helpers.parseStr(split[0]), ExoFormatItem.from(Helpers.parseStr(split[1])));
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return Helpers.mergeObj(channelId, format);
         }
     }
 
@@ -406,6 +434,39 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     public FormatItem getTempVideoFormat() {
         return mTempVideoFormat;
+    }
+
+    public FormatItem getFormatPerChannel(String channelId) {
+        if (channelId == null) {
+            return null;
+        }
+
+        ChannelFormat format = mFormatsPerChannel.get(channelId);
+
+        return format != null ? format.format : null;
+    }
+
+    public void setFormatPerChannel(String channelId, FormatItem format) {
+        if (channelId == null) {
+            return;
+        }
+
+        if (format == null) {
+            mFormatsPerChannel.remove(channelId);
+        } else {
+            mFormatsPerChannel.put(channelId, new ChannelFormat(channelId, format));
+        }
+
+        persistState();
+    }
+
+    public boolean isFormatPerChannelEnabled() {
+        return mIsFormatPerChannelEnabled;
+    }
+
+    public void setFormatPerChannelEnabled(boolean enable) {
+        mIsFormatPerChannelEnabled = enable;
+        persistState();
     }
 
     public FormatItem getLastSubtitleFormat() {
@@ -847,11 +908,20 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        String[] formatsPerChannel = Helpers.parseArray(split, 63);
+        mIsFormatPerChannelEnabled = Helpers.parseBoolean(split, 64, false);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
                 SpeedItem item = SpeedItem.fromString(speedSpec);
                 mSpeeds.put(item.channelId, item);
+            }
+        }
+
+        if (formatsPerChannel != null) {
+            for (String formatSpec : formatsPerChannel) {
+                ChannelFormat item = ChannelFormat.fromString(formatSpec);
+                mFormatsPerChannel.put(item.channelId, item);
             }
         }
 
@@ -884,7 +954,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, Helpers.mergeArray(mFormatsPerChannel.values().toArray()),
+                mIsFormatPerChannelEnabled
         ));
     }
 
@@ -894,6 +965,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
         // reset on profile change
         mSpeeds.clear();
+        mFormatsPerChannel.clear();
 
         restoreState();
     }
