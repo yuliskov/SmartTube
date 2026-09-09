@@ -33,7 +33,7 @@ public class VideoStateController extends BasePlayerController {
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 3; // Sync history every x minutes
     private boolean mIsPlayEnabled;
     private boolean mIsPlayBlocked;
-    private int mTickleLeft;
+    private int mTickleCount;
     private boolean mIncognito;
     private final Runnable mUpdateHistory = this::saveState;
     private long mNewVideoTimeMs;
@@ -58,7 +58,7 @@ public class VideoStateController extends BasePlayerController {
 
             // NOTE: even for the same videos it's good to save state (switch from embed, video reload etc)
             // Reset auto-save history timer
-            mTickleLeft = 0;
+            mTickleCount = 0;
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
             saveState();
@@ -119,7 +119,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onEngineInitialized() {
         // Reset auto-save history timer
-        mTickleLeft = 0;
+        mTickleCount = 0;
 
         // Show user info instead of black screen.
         //if (getPlayer() != null && !getPlayEnabled()) {
@@ -160,8 +160,8 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
-            mTickleLeft = 0;
+        if (++mTickleCount > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
+            mTickleCount = 0;
             saveState();
         }
 

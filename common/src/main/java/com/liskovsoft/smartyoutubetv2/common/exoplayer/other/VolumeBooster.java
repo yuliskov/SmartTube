@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 
 public class VolumeBooster implements AudioListener, TickleListener {
     private static final String TAG = VolumeBooster.class.getSimpleName();
+    private static final int DRIFT_FIX_INTERVAL_MINUTES = 5;
     private boolean mIsEnabled;
     private final float mVolume;
     private final SimpleExoPlayer mPlayer;
@@ -21,6 +22,7 @@ public class VolumeBooster implements AudioListener, TickleListener {
     private boolean mIsSupported;
     private int mCurrentSessionId = -1;
     private int mGainMb;
+    private int mTickleCount;
 
     public VolumeBooster(boolean enabled, float volume, @Nullable SimpleExoPlayer player) {
         mIsEnabled = enabled;
@@ -67,6 +69,7 @@ public class VolumeBooster implements AudioListener, TickleListener {
 
             // DRIFT FIX: periodically reset the native compressor state.
             TickleManager.instance().addListener(this);
+            mTickleCount = 0;
         } catch (RuntimeException | UnsatisfiedLinkError | NoClassDefFoundError | NoSuchFieldError e) { // Cannot initialize effect engine
             e.printStackTrace();
             mIsSupported = false;
@@ -82,7 +85,8 @@ public class VolumeBooster implements AudioListener, TickleListener {
     @RequiresApi(19)
     @Override
     public void onTickle() {
-        if (mBooster != null && mIsSupported) {
+        if (++mTickleCount > DRIFT_FIX_INTERVAL_MINUTES && mBooster != null && mIsSupported) {
+            mTickleCount = 0;
             try {
                 mBooster.setTargetGain(mGainMb);
                 Log.d(TAG, "Drift fix: re-applied target gain %s mB", mGainMb);
