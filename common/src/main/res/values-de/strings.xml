@@ -728,4 +728,29 @@
     <string name="channel_unblocked">Blockierung aufgehoben</string>
     <string name="header_blocked_channels">Blockierte Kanäle</string>
     <string name="msg_no_blocked_channels">Keine blockierten Kanäle</string>
+    <string name="player_time_stretching">Audio-Time-Stretching</string>
+    <string name="player_time_stretching_desc">Die Stimme klingt auch bei Geschwindigkeitsänderungen natürlich. Auf einigen Geräten kann dies zu einer erheblichen Leistungseinbuße führen.</string>
+    <string name="queue_respects_playback_mode">Warteschlange berücksichtigt Wiedergabemodus</string>
+    <string name="ignore_short_segments">Kurze Segmente ignorieren</string>
+    <string name="install_bridge">ATV/Amazon Bridge installieren</string>
+    <string name="fix_empty_subs_and_channels">Fix empty Subscriptions and Channels</string>
+    <string name="local_backup_not_supported">Die automatische Sicherung auf Android TV 11+ wird aufgrund von Systembeschränkungen nicht unterstützt. Verwenden Sie stattdessen GDrive.</string>
+    <string name="rounded_card_corners">Abgerundete Kartenecken</string>
+    <string name="app_restore_desc">HINWEIS: Die Zip-Sicherungsdatei sollte manuell oder über den Dateimanager in diesen Ordner kopiert werden; verwenden Sie dazu die Option \'Öffnen mit\'</string>
+    <string name="app_backup_desc">HINWEIS: Die Sicherung wird im Zip-Format erstellt</string>
+    <string name="add_video_to_watch_later">Zu Später ansehen hinzufügen</string>
+    <string name="remove_video_to_watch_later">Von Später ansehen entfernen</string>
+    <string name="enable_conscrypt">Conscrypt verwenden</string>
+    <string name="enable_conscrypt_desc">Verbessert die HTTPS-, TLS- und VPN-Kompatibilität auf einigen Geräten, kann jedoch gelegentlich zu Wiedergabeproblemen oder einer verlangsamten Netzwerkleistung führen</string>
+    <string name="network_settings">Netzwerkeinstellungen</string>
+    <string name="comments_disabled">Kommentare sind für dieses Video deaktiviert</string>
+    <plurals name="hours">
+        <item quantity="one">%s Stunde</item>
+        <item quantity="other">%s Stunden</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s Sekunde</item>
+        <item quantity="other">%s Sekunden</item>
+    </plurals>
+    <string name="remove_from_search_history">Aus Suchverlauf entfernen</string>
 </resources>
