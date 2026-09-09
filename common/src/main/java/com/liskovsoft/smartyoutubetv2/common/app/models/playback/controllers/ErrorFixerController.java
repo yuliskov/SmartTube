@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
+import com.liskovsoft.youtubeapi.videoinfo.LoginRequiredException;
 
 import java.util.List;
 
@@ -300,6 +301,20 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (isEmbedPlayer()) {
             getPlayer().finish();
+            return;
+        }
+
+        if (error instanceof LoginRequiredException) {
+            mBufferingDetector.reset();
+            String reason = error.getMessage();
+            if (reason == null || reason.trim().isEmpty()) {
+                reason = getContext().getString(R.string.action_signin);
+            }
+            Log.e(TAG, "Playback requires sign-in: %s", reason);
+            getPlayer().showProgressBar(false);
+            getPlayer().setTitle(reason);
+            getPlayer().showOverlay(true);
+            MessageHelpers.showLongMessage(getContext(), reason);
             return;
         }
 
