@@ -4,12 +4,15 @@ import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build.VERSION;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioListener;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 
-public class VolumeBooster implements AudioListener {
+public class VolumeBooster implements AudioListener, TickleListener {
     private static final String TAG = VolumeBooster.class.getSimpleName();
     private boolean mIsEnabled;
     private final float mVolume;
@@ -17,6 +20,7 @@ public class VolumeBooster implements AudioListener {
     private LoudnessEnhancer mBooster;
     private boolean mIsSupported;
     private int mCurrentSessionId = -1;
+    private int mGainMb;
 
     public VolumeBooster(boolean enabled, float volume, @Nullable SimpleExoPlayer player) {
         mIsEnabled = enabled;
@@ -54,14 +58,37 @@ public class VolumeBooster implements AudioListener {
             //mBooster.setTargetGain((int) gainMb);
 
             double gainMb = 20 * Math.log10(mVolume * 3) * 100;
-            mBooster.setTargetGain((int) gainMb);
+            mGainMb = (int) gainMb;
+            mBooster.setTargetGain(mGainMb);
 
             //mBooster.setTargetGain((int) (1000 * mVolume));
 
             mIsSupported = true;
+
+            // DRIFT FIX: periodically reset the native compressor state.
+            TickleManager.instance().addListener(this);
         } catch (RuntimeException | UnsatisfiedLinkError | NoClassDefFoundError | NoSuchFieldError e) { // Cannot initialize effect engine
             e.printStackTrace();
             mIsSupported = false;
+        }
+    }
+
+    /**
+     * DRIFT FIX: AOSP's le_fx::AdaptiveDynamicRangeCompression accumulates compressor_gain_ <br/>
+     * multiplicatively using a Taylor-approximated exp(), so it drifts downward over long <br/>
+     * sessions and never recovers. Re-applying the target gain triggers <br/>
+     * EFFECT_CMD_SET_PARAM -> LE_reset() -> Initialize(), which resets compressor_gain_ to 1.0f.
+     */
+    @RequiresApi(19)
+    @Override
+    public void onTickle() {
+        if (mBooster != null && mIsSupported) {
+            try {
+                mBooster.setTargetGain(mGainMb);
+                Log.d(TAG, "Drift fix: re-applied target gain %s mB", mGainMb);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -81,6 +108,7 @@ public class VolumeBooster implements AudioListener {
     }
 
     public void release() {
+        TickleManager.instance().removeListener(this);
         if (mBooster != null) {
             mBooster.release();
             mBooster = null;
