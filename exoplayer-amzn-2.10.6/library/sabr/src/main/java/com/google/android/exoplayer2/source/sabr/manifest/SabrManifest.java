@@ -81,6 +81,8 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
      */
     public final long minUpdatePeriodMs;
 
+    @Nullable public final String visitorCookie;
+
     private final String videoId;
     private final SabrCdnSelector cdnSelector;
     private final String videoPlaybackUstreamerConfig;
@@ -105,6 +107,29 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
             String poToken,
             String videoId,
             ClientInfo clientInfo) {
+        this(
+                availabilityStartTimeMs, durationMs, minBufferTimeMs, dynamic, minUpdatePeriodMs,
+                timeShiftBufferDepthMs, suggestedPresentationDelayMs, publishTimeMs, periods,
+                serverAbrStreamingUrl, videoPlaybackUstreamerConfig, poToken, videoId, clientInfo,
+                null);
+    }
+
+    public SabrManifest(
+            long availabilityStartTimeMs,
+            long durationMs,
+            long minBufferTimeMs,
+            boolean dynamic,
+            long minUpdatePeriodMs,
+            long timeShiftBufferDepthMs,
+            long suggestedPresentationDelayMs,
+            long publishTimeMs,
+            List<Period> periods,
+            String serverAbrStreamingUrl,
+            String videoPlaybackUstreamerConfig,
+            String poToken,
+            String videoId,
+            ClientInfo clientInfo,
+            @Nullable String visitorCookie) {
         this.availabilityStartTimeMs = availabilityStartTimeMs;
         this.durationMs = durationMs;
         this.minBufferTimeMs = minBufferTimeMs;
@@ -119,6 +144,7 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
         this.clientInfo = clientInfo;
         this.poToken = poToken;
+        this.visitorCookie = visitorCookie;
         this.sabrStreams = new HashMap<>();
         this.emptySelector = new FormatSelector("ignored", true);
     }
