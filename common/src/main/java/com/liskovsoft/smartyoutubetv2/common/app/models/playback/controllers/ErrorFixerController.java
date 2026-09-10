@@ -64,14 +64,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 YouTubeServiceManager.instance().switchNextClientNow();
                 mVideoLoaderController.reloadVideo();
             }
-        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            // Possibly ISP ban
-            //switchNextEngine();
-            //mVideoLoaderController.restartEngine();
-
+        } else {
             // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
             // This will change current format to 'Disabled'. Do restartEngine() instead.
-            lowerVideoQuality();
+            //lowerVideoQuality();
+            //mVideoLoaderController.restartEngine();
+
+            // SABR may hang if the server issues a high backoffTime
             mVideoLoaderController.restartEngine();
         }
     }
