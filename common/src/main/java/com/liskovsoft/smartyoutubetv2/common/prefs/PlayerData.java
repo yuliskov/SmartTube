@@ -101,6 +101,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsLegacyCodecsForced;
     private boolean mIsAudioDelayEnabled;
+    private boolean mIsDualSubtitleEnabled;
+    private FormatItem mSecondarySubtitleFormat = FormatItem.SUBTITLE_NONE;
+    private boolean mDualSubtitleSecondLineSuppressed;
+    private String mDualSubtitleTargetLanguage;
 
     private static class SpeedItem {
         public String channelId;
@@ -619,6 +623,46 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
+    public boolean isDualSubtitleEnabled() {
+        return mIsDualSubtitleEnabled;
+    }
+
+    public void setDualSubtitleEnabled(boolean enabled) {
+        mIsDualSubtitleEnabled = enabled;
+        persistState();
+    }
+
+    @NonNull
+    public FormatItem getSecondarySubtitleFormat() {
+        return mSecondarySubtitleFormat != null ? mSecondarySubtitleFormat : FormatItem.SUBTITLE_NONE;
+    }
+
+    public void setSecondarySubtitleFormat(FormatItem format) {
+        if (format == null) {
+            return;
+        }
+        mSecondarySubtitleFormat = format;
+        persistState();
+    }
+
+    public boolean isDualSubtitleSecondLineSuppressed() {
+        return mDualSubtitleSecondLineSuppressed;
+    }
+
+    public void setDualSubtitleSecondLineSuppressed(boolean suppressed) {
+        mDualSubtitleSecondLineSuppressed = suppressed;
+        persistState();
+    }
+
+    public String getDualSubtitleTargetLanguage() {
+        return mDualSubtitleTargetLanguage;
+    }
+
+    public void setDualSubtitleTargetLanguage(String language) {
+        mDualSubtitleTargetLanguage = language;
+        persistState();
+    }
+
     public int getAudioDelayMs() {
         return mAudioDelayMs;
     }
@@ -847,6 +891,11 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        mIsDualSubtitleEnabled = Helpers.parseBoolean(split, 63, false);
+        mSecondarySubtitleFormat =
+                Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 64)), FormatItem.SUBTITLE_NONE);
+        mDualSubtitleSecondLineSuppressed = Helpers.parseBoolean(split, 65, false);
+        mDualSubtitleTargetLanguage = Helpers.parseStr(split, 66, LocaleUtility.getCurrentLanguage(mPrefs.getContext()));
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -884,7 +933,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, mIsDualSubtitleEnabled, mSecondarySubtitleFormat,
+                mDualSubtitleSecondLineSuppressed, mDualSubtitleTargetLanguage
         ));
     }
 

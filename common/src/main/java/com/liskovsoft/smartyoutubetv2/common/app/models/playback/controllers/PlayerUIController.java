@@ -243,6 +243,36 @@ public class PlayerUIController extends BasePlayerController {
         OptionCategory positionCategory = AppDialogUtil.createSubtitlePositionCategory(getContext());
         settingsPresenter.appendRadioCategory(positionCategory.title, positionCategory.options);
 
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.subtitle_dual_select_title),
+                optionItem -> {
+                    if (!getPlayerData().isDualSubtitleEnabled()) {
+                        MessageHelpers.showMessage(getContext(), R.string.subtitle_dual_enable_first);
+                        return;
+                    }
+                    String currentLang = getPlayerData().getDualSubtitleTargetLanguage();
+                    String[][] languages = {
+                            {"en", "English"}, {"es", "Español"}, {"fr", "Français"},
+                            {"de", "Deutsch"}, {"it", "Italiano"}, {"pt", "Português"},
+                            {"ru", "Русский"}, {"ja", "日本語"}, {"ko", "한국어"},
+                            {"zh", "中文"}, {"ar", "العربية"}, {"hi", "हिन्दी"},
+                            {"tr", "Türkçe"}, {"pl", "Polski"}, {"nl", "Nederlands"},
+                            {"uk", "Українська"}, {"vi", "Tiếng Việt"}, {"th", "ไทย"},
+                            {"id", "Bahasa Indonesia"}, {"fa", "فارسی"},
+                    };
+                    List<OptionItem> langOptions = new ArrayList<>();
+                    for (String[] entry : languages) {
+                        String code = entry[0];
+                        String name = entry[1];
+                        langOptions.add(UiOptionItem.from(name, option -> {
+                            getPlayerData().setDualSubtitleTargetLanguage(code);
+                            getPlayer().refreshDualSubtitles();
+                        }, Helpers.equals(code, currentLang)));
+                    }
+                    settingsPresenter.appendRadioCategory(
+                            getContext().getString(R.string.subtitle_dual_select_title), langOptions);
+                    settingsPresenter.showDialog();
+                }));
+
         settingsPresenter.showDialog(subtitlesOrigCategoryTitle, mSetSubtitleButtonState);
     }
 

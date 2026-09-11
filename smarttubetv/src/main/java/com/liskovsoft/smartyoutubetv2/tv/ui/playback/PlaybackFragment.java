@@ -46,6 +46,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaSubtitle;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -58,7 +59,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleFormatInfoUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleTranslator;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.YoutubeTimedTextDualSubtitleSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
@@ -113,6 +117,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private ExoPlayerController mExoPlayerController;
     private ExoPlayerInitializer mPlayerInitializer;
     private SubtitleManager mSubtitleManager;
+    private SubtitleTranslator mSubtitleTranslator;
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
@@ -443,6 +448,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
         mPlayer = null;
+        releaseSubtitleTranslator();
         mSubtitleManager = null;
         if (mYouTubeOverlay != null) {
             mYouTubeOverlay
@@ -517,6 +523,109 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
             }
         }
+    }
+
+    private void releaseSubtitleTranslator() {
+        if (mSubtitleTranslator != null) {
+            mSubtitleTranslator.release();
+            mSubtitleTranslator = null;
+        }
+        if (mSubtitleManager != null) {
+            mSubtitleManager.setOnCuesProcessedListener(null);
+        }
+    }
+
+    /**
+     * Translates the primary subtitle cues via Google Translate and merges
+     * the translation into the same subtitle block when dual subtitles are enabled.
+     */
+    private void updateDualSubtitlePlayback() {
+        releaseSubtitleTranslator();
+        if (getView() == null || mPlayer == null) {
+            Log.d(TAG, "updateDualSubtitlePlayback: no view or player");
+            return;
+        }
+
+        createSubtitleManager();
+
+        PlayerData data = PlayerData.instance(getContext());
+        if (!data.isDualSubtitleEnabled()) {
+            return;
+        }
+
+        String targetLang = data.getDualSubtitleTargetLanguage();
+        if (targetLang == null || targetLang.isEmpty()) {
+            Log.d(TAG, "updateDualSubtitlePlayback: no target language configured");
+            return;
+        }
+
+        FormatItem primarySub = mExoPlayerController.getSubtitleFormat();
+        if (primarySub == null || primarySub.isDefault()) {
+            Log.d(TAG, "updateDualSubtitlePlayback: no primary subtitle selected");
+            return;
+        }
+
+        Log.d(TAG, "updateDualSubtitlePlayback: translating to %s", targetLang);
+        YoutubeTimedTextDualSubtitleSource timedSource = null;
+        MediaItemFormatInfo formatInfo = mExoPlayerController.getLastFormatInfo();
+        MediaSubtitle sub = SubtitleFormatInfoUtil.findSubtitle(formatInfo, primarySub.getFormatId());
+        String baseUrl = sub != null ? sub.getBaseUrl() : null;
+        if (sub == null) {
+            Log.d(
+                    TAG,
+                    "updateDualSubtitlePlayback: subtitle not found in format info (dual will use web translate only). "
+                            + "vssId=%s formatInfoPresent=%s",
+                    primarySub.getFormatId(),
+                    formatInfo != null);
+        } else if (!sub.isTranslatable()) {
+            Log.d(
+                    TAG,
+                    "updateDualSubtitlePlayback: subtitle track is not translatable by YouTube "
+                            + "(isTranslatable=false) — tlang skipped, dual will use web translate only. "
+                            + "vssId=%s",
+                    primarySub.getFormatId());
+        } else if (baseUrl != null && !baseUrl.isEmpty()) {
+            String poToken = formatInfo != null ? formatInfo.getPoToken() : null;
+            timedSource =
+                    new YoutubeTimedTextDualSubtitleSource(
+                            baseUrl,
+                            YoutubeTimedTextDualSubtitleSource.appLanguageToYoutubeTlang(targetLang),
+                            poToken);
+        } else {
+            Log.d(
+                    TAG,
+                    "updateDualSubtitlePlayback: no caption base URL (dual will use web translate only). "
+                            + "vssId=%s",
+                    primarySub.getFormatId());
+        }
+        mSubtitleTranslator =
+                new SubtitleTranslator(
+                        targetLang,
+                        mSubtitleManager,
+                        timedSource,
+                        mExoPlayerController::getPositionMs);
+        mSubtitleManager.setOnCuesProcessedListener(mSubtitleTranslator);
+        if (timedSource != null) {
+            timedSource.loadAsync(
+                    () -> {
+                        if (mSubtitleTranslator != null) {
+                            mSubtitleTranslator.onYoutubeTimedTextPrefetchComplete();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public SimpleExoPlayer getExoPlayer() {
+        return mPlayer;
+    }
+
+    @Override
+    public void refreshDualSubtitles() {
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().runOnUiThread(this::updateDualSubtitlePlayback);
     }
 
     private void createDebugManager() {
