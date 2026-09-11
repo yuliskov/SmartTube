@@ -165,7 +165,7 @@ public class VideoStateService implements ProfileChangeListener {
 
             String videoId = Helpers.parseStr(split, 0);
             long positionMs = Helpers.parseLong(split, 1);
-            long lengthMs = Helpers.parseLong(split, 2);
+            long durationMs = Helpers.parseLong(split, 2);
             float speed = Helpers.parseFloat(split, 3);
 
             Video video = Video.fromString(videoId);
@@ -176,9 +176,15 @@ public class VideoStateService implements ProfileChangeListener {
                 video.videoId = videoId;
             }
 
-            video.percentWatched = (positionMs * 100f) / lengthMs;
+            if (durationMs == -1) {
+                durationMs = video.getDurationMs();
+            }
 
-            return new State(video, positionMs, lengthMs, speed);
+            if (durationMs > 0) {
+                video.percentWatched = (positionMs * 100f) / durationMs;
+            }
+
+            return new State(video, positionMs, durationMs, speed);
         }
 
         @NonNull
