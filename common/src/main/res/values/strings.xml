@@ -86,6 +86,8 @@
     <string name="update_not_found">You\'re using the latest version</string>
     <string name="update_in_progress">Wait…</string>
     <string name="player_ui_hide_behavior">Auto-hide UI</string>
+    <string name="auto_hide_ui_when_paused">Auto-hide UI when paused</string>
+    <string name="auto_hide_ui_when_paused_desc">Automatically hides playback controls after timeout even while playback is paused to prevent OLED screen burn-in</string>
     <string name="option_never">Never</string>
     <string name="side_panel_sections">Set-up sections</string>
     <string name="boot_to_section">Boot to section</string>
