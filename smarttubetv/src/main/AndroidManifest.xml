@@ -90,6 +90,7 @@
 
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
+                <data android:scheme="smarttube" android:host="control"/>
                 <data android:host="youtube.com"/>
                 <data android:host="www.youtube.com"/>
                 <data android:host="m.youtube.com"/>
