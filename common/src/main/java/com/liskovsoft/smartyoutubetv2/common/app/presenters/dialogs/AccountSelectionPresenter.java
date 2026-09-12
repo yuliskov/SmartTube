@@ -85,11 +85,13 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     private void appendAccountSelection(List<Account> accounts, List<Drawable> icons, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
+        // "None" is selected only when no account is currently selected — otherwise the
+        // radio category renders two filled buttons (None + the active account).
         optionItems.add(UiOptionItem.from(
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
                     selectAccount(null);
                     settingsPresenter.closeDialog();
-                }, true
+                }, mSignInService.getSelectedAccount() == null
         ));
 
         int index = -1;
