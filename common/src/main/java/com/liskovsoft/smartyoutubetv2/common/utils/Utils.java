@@ -22,6 +22,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -900,6 +904,62 @@ public class Utils {
         color = ColorUtils.setAlphaComponent(color, (int)(255f / 100 * dimPercents));
 
         return color;
+    }
+
+    public static final int NIGHTLIGHT_NEUTRAL = 6500;
+    public static final int[] NIGHTLIGHT_PRESETS = {NIGHTLIGHT_NEUTRAL, 5200, 4500, 3700, 3000, 2500, 1900};
+
+    // Tanner Helland color temperature approximation.
+    public static float[] kelvinToRgb(int kelvin) {
+        if (kelvin >= NIGHTLIGHT_NEUTRAL || kelvin <= 0) {
+            return new float[] {1f, 1f, 1f};
+        }
+
+        float k = kelvin / 100f;
+        float r = k <= 66f ? 255f : 329.698727446f * (float) Math.pow(k - 60f, -0.1332047592);
+        float g = k <= 66f ? 99.4708025861f * (float) Math.log(k) - 161.1195681661f
+                           : 288.1221695283f * (float) Math.pow(k - 60f, -0.0755148492);
+        float b = k >= 66f ? 255f : k <= 19f ? 0f : 138.5177312231f * (float) Math.log(k - 10f) - 305.0447927307f;
+
+        return new float[] {clampUnit(r / 255f), clampUnit(g / 255f), clampUnit(b / 255f)};
+    }
+
+    public static Paint kelvinToPaint(int kelvin) {
+        if (kelvin >= NIGHTLIGHT_NEUTRAL || kelvin <= 0) {
+            return null;
+        }
+
+        float[] rgb = kelvinToRgb(kelvin);
+        ColorMatrix matrix = new ColorMatrix(new float[] {
+                rgb[0], 0f, 0f, 0f, 0f,
+                0f, rgb[1], 0f, 0f, 0f,
+                0f, 0f, rgb[2], 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+        });
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(matrix));
+        return paint;
+    }
+
+    public static int kelvinToOverlayColor(int kelvin) {
+        float[] rgb = kelvinToRgb(kelvin);
+        if (rgb[1] == 1f && rgb[2] == 1f) {
+            return 0;
+        }
+
+        float strength = 1f - (rgb[1] + rgb[2]) / 2f;
+        int alpha = (int) (clampUnit(strength) * 0.5f * 255f);
+        return Color.argb(alpha, 255, (int) (rgb[1] * 255f), (int) (rgb[2] * 255f));
+    }
+
+    private static float clampUnit(float v) {
+        return v < 0f ? 0f : v > 1f ? 1f : v;
+    }
+
+    public static void applyNightlight(Context context) {
+        if (context instanceof MotherActivity) {
+            ((MotherActivity) context).applyNightlight();
+        }
     }
 
     /**

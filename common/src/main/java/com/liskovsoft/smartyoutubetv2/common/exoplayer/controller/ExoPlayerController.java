@@ -195,6 +195,7 @@ public class ExoPlayerController implements Player.EventListener {
     }
     
     public void release() {
+        PlayerTweaksData.instance(mContext).setNightlightHdrActive(false);
         mTrackSelectorManager.release();
         mMediaSourceFactory.release();
         releasePlayer();
@@ -277,6 +278,15 @@ public class ExoPlayerController implements Player.EventListener {
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
+
+        // Update HDR state before notifying listeners.
+        boolean hdr = false;
+        for (TrackSelection selection : trackSelections.getAll()) {
+            if (selection != null && TrackSelectorUtil.isHdrFormat(selection.getFormat(0))) {
+                hdr = true;
+            }
+        }
+        PlayerTweaksData.instance(mContext).setNightlightHdrActive(hdr);
 
         if (trackGroups.length == 0) {
             Log.i(TAG, "onTracksChanged: Hmm. Strange. Received empty groups, no selections. Why is this happens only on next/prev videos?");
