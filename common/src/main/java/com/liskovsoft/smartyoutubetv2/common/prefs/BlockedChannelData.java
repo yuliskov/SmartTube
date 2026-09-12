@@ -12,17 +12,17 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListene
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 public class BlockedChannelData implements ProfileChangeListener {
     private static final String BLOCKED_CHANNEL_DATA = "blocked_channel_data";
     @SuppressLint("StaticFieldLeak")
     private static BlockedChannelData sInstance;
     private final AppPrefs mPrefs;
-    private List<Channel> mChannels;
+    private final TreeSet<Channel> mChannels = new TreeSet<>((channel1, channel2) -> channel1.channelName.compareToIgnoreCase(channel2.channelName));
     private final Runnable mPersistStateInt = this::persistStateInt;
     private final List<BlockedChannelListener> mListeners = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public class BlockedChannelData implements ProfileChangeListener {
 
         Channel channel = new Channel(channelId, channelName);
         mChannels.remove(channel);
-        mChannels.add(0, channel);
+        mChannels.add(channel);
 
         persistState();
         notifyListeners();
@@ -174,10 +174,10 @@ public class BlockedChannelData implements ProfileChangeListener {
 
         String[] split = Helpers.splitData(data);
 
-        mChannels = Helpers.parseList(split, 0, Channel::fromString);
+        mChannels.clear();
+        mChannels.addAll(Helpers.parseList(split, 0, Channel::fromString));
         // null
 
-        sortAlphabetically(mChannels);
         restoreOldData(split);
     }
 
@@ -222,10 +222,6 @@ public class BlockedChannelData implements ProfileChangeListener {
         for (BlockedChannelListener listener : mListeners) {
             listener.onChanged();
         }
-    }
-
-    private static void sortAlphabetically(List<Channel> channels) {
-        Collections.sort(channels, (channel1, channel2) -> channel1.channelName.compareToIgnoreCase(channel2.channelName));
     }
 
     @Override
