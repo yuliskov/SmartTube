@@ -1,0 +1,1335 @@
+openapi: 3.0.3
+info:
+  title: SmartTube Remote Control API
+  description: |
+    Local HTTP + WebSocket API for remotely controlling a SmartTube instance on
+    Android TV — Chromecast-style playback control, browsing/search, queue
+    management, track/quality selection, video transforms, and TV volume/power.
+
+    The server (`RemoteApiServer`, NanoWSD) listens on **port 8497** by default and
+    also answers a UDP discovery probe on the same port.
+
+    ## Authentication
+
+    Two modes, controlled by the *"Allow all local connections (no pairing)"*
+    switch in *SmartTube → Settings → Remote API*:
+
+    - **Open mode (default):** `pairing_required: false`. Any device on the LAN may
+      call the API with **no token** (like Chromecast on a trusted home network).
+      The `Authorization` header is ignored if sent.
+    - **Paired mode:** `pairing_required: true`. Clients must pair (6-digit code via
+      `GET /api/pair` + `POST /api/pair/verify`) and send
+      `Authorization: Bearer <token>` on every request except `ping` and `pair`.
+
+    Discover the active mode from `GET /api/system/ping` → `pairing_required`.
+    The `bearerAuth` security scheme below is therefore **conditionally required**:
+    enforced only in paired mode.
+
+    ## Real-time updates (WebSocket)
+
+    OpenAPI 3.0 cannot describe WebSockets. In addition to the REST endpoints here,
+    the server exposes:
+
+        ws://<TV_IP>:8497/ws?token=<token>   (token omitted/empty in open mode)
+
+    On connect it sends a `hello` message, then streams `state_update` messages
+    (the `PlayerState` schema, wrapped as `{ "type": "state_update", "data": {...} }`)
+    at ~2 Hz. Clients may send the same actions as the REST endpoints as JSON
+    `{ "action": "...", ... }` frames. See `docs/remote-control-api.md` §4.10 for the
+    full command list.
+
+    ## Service discovery (UDP)
+
+    Broadcast `{"action":"discover"}` to `255.255.255.255:8497`; each instance
+    replies (unicast UDP) with `{ device_name, device_id, api_port, app_version, api_version }`.
+  version: "1.0.0"
+  license:
+    name: SmartTube project
+    url: https://github.com/yuliskov/SmartTube
+
+servers:
+  - url: http://{host}:{port}
+    description: SmartTube instance on the local network
+    variables:
+      host:
+        default: 192.168.1.100
+        description: TV IP address (find via UDP discovery or manual entry)
+      port:
+        default: "8497"
+        description: Remote API port
+
+security:
+  - bearerAuth: []   # Enforced only in paired mode; ignored in open mode.
+
+tags:
+  - name: System
+    description: Health, discovery, D-pad, and voice
+  - name: Pairing
+    description: 6-digit pairing flow (paired mode only)
+  - name: Player
+    description: Playback state and transport controls
+  - name: Playback Settings
+    description: Speed, volume, pitch, mute, subtitles
+  - name: Tracks
+    description: Video / audio / subtitle track selection
+  - name: Video Transform
+    description: Resize, zoom, rotation, flip
+  - name: Content
+    description: Open videos, search, suggestions, recommendations
+  - name: Queue
+    description: Playback queue management
+  - name: Home Theater
+    description: TV volume, mute, and power (via AudioManager)
+
+paths:
+  # ─────────────────────────── System ───────────────────────────
+  /api/system/ping:
+    get:
+      tags: [System]
+      summary: Health check + device info
+      description: Always reachable without auth. Use `pairing_required` to decide whether to run the pairing flow.
+      security: []
+      responses:
+        "200":
+          description: Device info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ping"
+
+  /api/system/dpad:
+    get:
+      tags: [System]
+      summary: Send a D-pad key
+      parameters:
+        - name: key
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [up, down, left, right, enter, back]
+      responses:
+        "200":
+          $ref: "#/components/responses/Ok"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/system/voice:
+    post:
+      tags: [System]
+      summary: Voice search control
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action:
+                  type: string
+                  enum: [start, stop]
+                  example: start
+      responses:
+        "200":
+          $ref: "#/components/responses/Ok"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ─────────────────────────── Pairing ──────────────────────────
+  /api/pair:
+    get:
+      tags: [Pairing]
+      summary: Get a pairing code
+      description: Returns a 6-digit code (also shown on the TV) valid for 5 minutes. Paired mode only, but works in open mode too.
+      security: []
+      responses:
+        "200":
+          description: Pairing code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "482 917"
+                  expires_in:
+                    type: integer
+                    description: Seconds until the code expires
+                    example: 300
+
+  /api/pair/verify:
+    post:
+      tags: [Pairing]
+      summary: Verify a code and obtain a token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code:
+                  type: string
+                  example: "482 917"
+      responses:
+        "200":
+          description: Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: 32-byte hex bearer token; persists until revoked
+                    example: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+                  device_name:
+                    type: string
+                    example: Living Room TV
+        "401":
+          description: Invalid pairing code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+
+  # ─────────────────────────── Player state ─────────────────────
+  /api/player:
+    get:
+      tags: [Player]
+      summary: Full playback state
+      responses:
+        "200":
+          description: Current player state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerState"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ─────────────────────────── Transport ────────────────────────
+  /api/player/play:
+    post:
+      tags: [Player]
+      summary: Resume playback
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/pause:
+    post:
+      tags: [Player]
+      summary: Pause playback
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/toggle:
+    post:
+      tags: [Player]
+      summary: Toggle play/pause
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/seek:
+    post:
+      tags: [Player]
+      summary: Seek to an absolute position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [position_ms]
+              properties:
+                position_ms:
+                  type: integer
+                  format: int64
+                  example: 60000
+      responses:
+        "200":
+          description: Seek accepted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Ok"
+                  - type: object
+                    properties:
+                      position_ms:
+                        type: integer
+                        format: int64
+                        example: 60000
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/next:
+    post:
+      tags: [Player]
+      summary: Next track
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/previous:
+    post:
+      tags: [Player]
+      summary: Previous track
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/stop:
+    post:
+      tags: [Player]
+      summary: Close the player
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/reload:
+    post:
+      tags: [Player]
+      summary: Reload the current source
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/pip:
+    get:
+      tags: [Player]
+      summary: Get Picture-in-Picture status
+      responses:
+        "200":
+          description: PIP state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active: { type: boolean, example: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    post:
+      tags: [Player]
+      summary: Toggle Picture-in-Picture (alias of /api/player/pip/toggle)
+      description: Back-compat alias for `POST /api/player/pip/toggle`.
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/pip/toggle:
+    post:
+      tags: [Player]
+      summary: Toggle Picture-in-Picture
+      description: |
+        Enters PIP when the player is in fullscreen; exits PIP (re-expands the player to
+        fullscreen) when already in PIP.
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/chapters:
+    get:
+      tags: [Player]
+      summary: Chapters of the current video
+      description: |
+        Chapters parsed from the playing video's YouTube metadata. Returns `[]` when
+        nothing is playing or the video has no chapters.
+      responses:
+        "200":
+          description: Chapter list
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Chapter" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ─────────────────────── Playback settings ────────────────────
+  /api/player/speed:
+    get:
+      tags: [Playback Settings]
+      summary: Get playback speed
+      responses:
+        "200":
+          description: Current speed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  speed: { type: number, format: float, example: 1.0 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Playback Settings]
+      summary: Set playback speed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [speed]
+              properties:
+                speed: { type: number, format: float, example: 1.5 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/volume:
+    get:
+      tags: [Playback Settings]
+      summary: Get player volume (0.0–1.0)
+      responses:
+        "200":
+          description: Current volume
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  volume: { type: number, format: float, minimum: 0, maximum: 1, example: 0.85 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Playback Settings]
+      summary: Set player volume (0.0–1.0)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [volume]
+              properties:
+                volume: { type: number, format: float, minimum: 0, maximum: 1, example: 0.85 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/pitch:
+    get:
+      tags: [Playback Settings]
+      summary: Get pitch
+      responses:
+        "200":
+          description: Current pitch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pitch: { type: number, format: float, example: 1.0 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Playback Settings]
+      summary: Set pitch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pitch]
+              properties:
+                pitch: { type: number, format: float, example: 1.0 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/mute:
+    get:
+      tags: [Playback Settings]
+      summary: Get mute state
+      responses:
+        "200":
+          description: Mute state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  muted: { type: boolean, example: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/mute/toggle:
+    post:
+      tags: [Playback Settings]
+      summary: Toggle mute/unmute
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/subtitle:
+    get:
+      tags: [Playback Settings]
+      summary: Get subtitle (closed caption) on/off state
+      description: '"subtitle" and "closed captions" are the same thing here — `enabled` reflects whether captions are showing.'
+      responses:
+        "200":
+          description: Subtitle state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled: { type: boolean, example: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Playback Settings]
+      summary: Enable or disable subtitles (closed captions)
+      description: Deterministically turns captions on or off, unlike `POST /api/player/subtitle/toggle`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean, example: true }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/subtitle/toggle:
+    post:
+      tags: [Playback Settings]
+      summary: Toggle subtitles (closed captions) on/off
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ─────────────────────────── Tracks ───────────────────────────
+  /api/player/formats/video:
+    get:
+      tags: [Tracks]
+      summary: List available video tracks
+      responses:
+        "200":
+          description: Video formats
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/VideoFormat" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Tracks]
+      summary: Select a video track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [format_id]
+              properties:
+                format_id: { type: string, example: "30232" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/formats/audio:
+    get:
+      tags: [Tracks]
+      summary: List available audio tracks
+      responses:
+        "200":
+          description: Audio formats
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/AudioFormat" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Tracks]
+      summary: Select an audio track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [format_id]
+              properties:
+                format_id: { type: string, example: "251" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/formats/subtitle:
+    get:
+      tags: [Tracks]
+      summary: List available subtitle tracks
+      responses:
+        "200":
+          description: Subtitle formats
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/SubtitleFormat" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Tracks]
+      summary: Select a subtitle track (null to disable)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format_id:
+                  type: string
+                  nullable: true
+                  description: Subtitle format id, or null to turn subtitles off
+                  example: en
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/formats/selected:
+    get:
+      tags: [Tracks]
+      summary: Get the currently selected tracks
+      responses:
+        "200":
+          description: Selected tracks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SelectedTracks"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ──────────────────────── Video transform ─────────────────────
+  /api/player/video/resize:
+    get:
+      tags: [Video Transform]
+      summary: Get resize mode
+      responses:
+        "200":
+          description: Resize mode
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resize_mode: { type: integer, enum: [0, 1, 2], example: 0 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Video Transform]
+      summary: Set resize mode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mode]
+              properties:
+                mode:
+                  type: integer
+                  enum: [0, 1, 2]
+                  description: 0=fit, 1=fill, 2=zoom
+                  example: 0
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/video/zoom:
+    get:
+      tags: [Video Transform]
+      summary: Get zoom percent
+      responses:
+        "200":
+          description: Zoom percent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zoom_percents: { type: integer, example: 100 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Video Transform]
+      summary: Set zoom percent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [zoom]
+              properties:
+                zoom: { type: integer, example: 120 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/video/rotation:
+    get:
+      tags: [Video Transform]
+      summary: Get rotation angle
+      responses:
+        "200":
+          description: Rotation angle
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rotation_angle: { type: integer, enum: [0, 90, 180, 270], example: 0 }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Video Transform]
+      summary: Set rotation angle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [angle]
+              properties:
+                angle: { type: integer, enum: [0, 90, 180, 270], example: 90 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/video/flip:
+    get:
+      tags: [Video Transform]
+      summary: Get horizontal flip state
+      responses:
+        "200":
+          description: Flip state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flip_enabled: { type: boolean, example: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Video Transform]
+      summary: Set horizontal flip
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean, example: true }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ─────────────────────────── Content ──────────────────────────
+  /api/content/open:
+    post:
+      tags: [Content]
+      summary: Open / play a video
+      description: |
+        Provide `url` or `video_id`. If `playlist_id` is omitted but the `url` carries
+        a `list=` query parameter, the playlist id is parsed from the url automatically.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenVideoRequest"
+            examples:
+              byUrl:
+                value: { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+              byId:
+                value: { video_id: "dQw4w9WgXcQ" }
+              withPosition:
+                value: { video_id: "dQw4w9WgXcQ", position_ms: 30000 }
+              inPlaylist:
+                value: { video_id: "dQw4w9WgXcQ", playlist_id: "PLxxx", playlist_index: 5 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/search:
+    post:
+      tags: [Content]
+      summary: Search YouTube and play the first result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query: { type: string, example: never gonna give you up }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/search/results:
+    get:
+      tags: [Content]
+      summary: Search YouTube WITHOUT playing
+      description: |
+        Returns search results so the client can present them — unlike
+        `POST /api/content/search`, which plays the first hit. Play an item via
+        `POST /api/content/open` with its `video_id`.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+          example: lofi hip hop
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+          description: Clamped to 1–50.
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/VideoSummary" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/suggestions:
+    get:
+      tags: [Content]
+      summary: Related videos of the current video
+      description: The player's suggestion rows (related to what's playing), flattened.
+      responses:
+        "200":
+          description: Suggestion list
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/VideoSummary" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/suggestions/{idOrIndex}:
+    post:
+      tags: [Content]
+      summary: Play a suggestion by video ID or index
+      description: |
+        Prefer the **video ID** form (e.g. `/api/content/suggestions/dQw4w9WgXcQ`) — it
+        keeps playback context and is robust to the list refreshing. The bare index form
+        (e.g. `/api/content/suggestions/3`) is kept for compatibility but goes stale.
+      parameters:
+        - name: idOrIndex
+          in: path
+          required: true
+          schema: { type: string }
+          description: An 11-char video ID, or a zero-based index into the flattened suggestions list
+          examples:
+            byId: { value: dQw4w9WgXcQ }
+            byIndex: { value: "3" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400":
+          description: Invalid suggestion index
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/content/recommended:
+    get:
+      tags: [Content]
+      summary: The user's Home recommendations
+      description: Cached ~5 minutes on the device. Play an item via `POST /api/content/open` with its `video_id`.
+      responses:
+        "200":
+          description: Recommended videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/VideoSummary" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ─────────────────────────── Queue ────────────────────────────
+  /api/player/queue:
+    get:
+      tags: [Queue]
+      summary: Get the playback queue
+      responses:
+        "200":
+          description: Queue items
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/QueueItem" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    post:
+      tags: [Queue]
+      summary: Add a video to the end of the queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VideoIdRequest" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    delete:
+      tags: [Queue]
+      summary: Remove a video from the queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VideoIdRequest" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/queue/next:
+    post:
+      tags: [Queue]
+      summary: Insert a video to play next
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VideoIdRequest" }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/queue/clear:
+    post:
+      tags: [Queue]
+      summary: Clear the entire queue
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/queue/shuffle:
+    post:
+      tags: [Queue]
+      summary: Shuffle the queue
+      description: Shuffles the queue while keeping the currently-playing item in place.
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/queue/move:
+    post:
+      tags: [Queue]
+      summary: Move a queue item
+      description: Bounds-checked; out-of-range indexes are a no-op.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [from, to]
+              properties:
+                from: { type: integer, example: 2 }
+                to: { type: integer, example: 0 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400":
+          description: Missing or non-integer from/to
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/player/queue/playlist:
+    post:
+      tags: [Queue]
+      summary: Bulk-add a whole YouTube playlist to the queue
+      description: |
+        Pass `playlist_id` **or** `playlist_url` (the `list=` param is parsed from the url).
+        Optional `shuffle` (default false). If nothing is playing, playback starts on the
+        first item. The playlist is paged on the device, capped at **500 items / 20
+        continuation pages**. Returns `202 Accepted`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playlist_id:
+                  type: string
+                  example: PLxxx
+                playlist_url:
+                  type: string
+                  example: https://www.youtube.com/playlist?list=PLxxx
+                shuffle:
+                  type: boolean
+                  default: false
+            examples:
+              byId:
+                value: { playlist_id: "PLxxx", shuffle: false }
+              byUrl:
+                value: { playlist_url: "https://www.youtube.com/playlist?list=PLxxx" }
+      responses:
+        "202":
+          description: Playlist queue update scheduled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean, example: true }
+                  playlist_id: { type: string, example: PLxxx }
+        "400":
+          description: Neither playlist_id nor a resolvable playlist_url supplied
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  # ──────────────────────── Home Theater ────────────────────────
+  /api/theater:
+    get:
+      tags: [Home Theater]
+      summary: TV volume + mute + audio output
+      responses:
+        "200":
+          description: Theater state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  volume: { type: integer, minimum: 0, maximum: 100, example: 42 }
+                  muted: { type: boolean, example: false }
+                  audio_output:
+                    type: string
+                    enum: [tv, theater]
+                    example: tv
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/refresh:
+    get:
+      tags: [Home Theater]
+      summary: Force-refresh and return theater state
+      description: Re-reads volume/mute/output from the hardware and returns the same shape as `GET /api/theater`.
+      responses:
+        "200":
+          description: Theater state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  volume: { type: integer, minimum: 0, maximum: 100, example: 42 }
+                  muted: { type: boolean, example: false }
+                  audio_output:
+                    type: string
+                    enum: [tv, theater]
+                    example: tv
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/volume:
+    get:
+      tags: [Home Theater]
+      summary: Get TV volume + muted state
+      responses:
+        "200":
+          description: TV volume
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  volume: { type: integer, minimum: 0, maximum: 100, example: 42 }
+                  muted: { type: boolean, example: false }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    put:
+      tags: [Home Theater]
+      summary: Set TV volume (0–100)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [volume]
+              properties:
+                volume: { type: integer, minimum: 0, maximum: 100, example: 50 }
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/volume/up:
+    post:
+      tags: [Home Theater]
+      summary: Volume up one step
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/volume/down:
+    post:
+      tags: [Home Theater]
+      summary: Volume down one step
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/mute/toggle:
+    post:
+      tags: [Home Theater]
+      summary: Toggle TV mute
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+  /api/theater/power/toggle:
+    post:
+      tags: [Home Theater]
+      summary: Toggle TV power
+      description: Sends `KEYCODE_POWER`.
+      responses:
+        "200": { $ref: "#/components/responses/Ok" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        `Authorization: Bearer <token>` from the pairing flow. Required only in
+        paired mode (`pairing_required: true`); ignored in open mode.
+
+  responses:
+    Ok:
+      description: Success
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Ok" }
+    BadRequest:
+      description: Malformed JSON body or invalid/missing parameter
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    Unauthorized:
+      description: Missing or invalid bearer token (paired mode)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    TooManyRequests:
+      description: Pairing rate limit exceeded (5 failed attempts/min per IP)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+
+  schemas:
+    Ok:
+      type: object
+      properties:
+        ok: { type: boolean, example: true }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: integer, example: 401 }
+            message: { type: string, example: Unauthorized }
+
+    Ping:
+      type: object
+      properties:
+        status: { type: string, example: ok }
+        device_name: { type: string, example: Living Room TV }
+        app_version: { type: string, example: "24.93" }
+        api_version: { type: string, example: "1" }
+        pairing_required:
+          type: boolean
+          description: false = open mode (no token needed); true = paired mode
+          example: false
+
+    VideoIdRequest:
+      type: object
+      required: [video_id]
+      properties:
+        video_id: { type: string, example: dQw4w9WgXcQ }
+
+    OpenVideoRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: A YouTube watch/share URL (may include a `list=` playlist param)
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        video_id:
+          type: string
+          description: 11-char video ID (alternative to `url`)
+          example: dQw4w9WgXcQ
+        position_ms:
+          type: integer
+          format: int64
+          description: Start position in milliseconds
+          example: 30000
+        playlist_id:
+          type: string
+          example: PLxxx
+        playlist_index:
+          type: integer
+          example: 5
+
+    PlayerState:
+      type: object
+      properties:
+        state: { $ref: "#/components/schemas/PlaybackState" }
+        video: { $ref: "#/components/schemas/Video" }
+        position_ms: { type: integer, format: int64, example: 45000 }
+        duration_ms: { type: integer, format: int64, example: 212000 }
+        speed: { type: number, format: float, example: 1.0 }
+        pitch: { type: number, format: float, example: 1.0 }
+        volume: { type: number, format: float, example: 0.85 }
+        selected_tracks: { $ref: "#/components/schemas/SelectedTracks" }
+        video_transform: { $ref: "#/components/schemas/VideoTransform" }
+        suggestions_count: { type: integer, example: 12 }
+        queue_size: { type: integer, example: 5 }
+        queue_index: { type: integer, example: 0 }
+        queue_generation:
+          type: integer
+          description: Monotonic counter; increments on every queue change (add/remove/clear/shuffle/move). Compare across updates to cheaply detect queue changes.
+          example: 7
+
+    PlaybackState:
+      type: string
+      enum: [playing, paused, buffering, idle, ended]
+
+    Video:
+      type: object
+      properties:
+        video_id: { type: string, example: dQw4w9WgXcQ }
+        title: { type: string, example: Never Gonna Give You Up }
+        author: { type: string, example: Rick Astley }
+        channel_id: { type: string, example: UCuAXFkgsw1L7xaCfnd5JJOw }
+        thumbnail_url: { type: string, example: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" }
+        duration_ms: { type: integer, format: int64, example: 212000 }
+        is_live: { type: boolean, example: false }
+        is_shorts: { type: boolean, example: false }
+        playlist_id: { type: string, nullable: true, example: PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf }
+        playlist_index: { type: integer, nullable: true, example: 5 }
+
+    VideoSummary:
+      type: object
+      description: Compact video used in suggestions, recommendations, search results, and queue listings
+      properties:
+        video_id: { type: string, example: dQw4w9WgXcQ }
+        title: { type: string }
+        author: { type: string, nullable: true }
+        thumbnail_url: { type: string, nullable: true }
+        duration_ms: { type: integer, format: int64 }
+        is_live: { type: boolean }
+
+    Chapter:
+      type: object
+      properties:
+        title: { type: string, example: Intro }
+        start_ms: { type: integer, format: int64, example: 0 }
+        end_ms:
+          type: integer
+          format: int64
+          description: Start of the next chapter, or the video duration for the last one. Omitted if unknown.
+          example: 45000
+        thumbnail_url: { type: string, nullable: true }
+
+    QueueItem:
+      type: object
+      properties:
+        index: { type: integer, example: 0 }
+        video_id: { type: string, example: dQw4w9WgXcQ }
+        title: { type: string, example: Video 1 }
+        author: { type: string, nullable: true, example: Channel A }
+        thumbnail_url: { type: string, nullable: true }
+        duration_ms: { type: integer, format: int64 }
+        is_live: { type: boolean }
+        is_current: { type: boolean, example: true }
+
+    SelectedTracks:
+      type: object
+      properties:
+        video: { allOf: [{ $ref: "#/components/schemas/VideoFormat" }], nullable: true }
+        audio: { allOf: [{ $ref: "#/components/schemas/AudioFormat" }], nullable: true }
+        subtitle: { allOf: [{ $ref: "#/components/schemas/SubtitleFormat" }], nullable: true }
+
+    VideoTransform:
+      type: object
+      properties:
+        resize_mode: { type: integer, enum: [0, 1, 2], example: 0 }
+        zoom_percents: { type: integer, example: 100 }
+        rotation_angle: { type: integer, enum: [0, 90, 180, 270], example: 0 }
+        flip_enabled: { type: boolean, example: false }
+
+    VideoFormat:
+      type: object
+      properties:
+        format_id: { type: string, example: "30232" }
+        width: { type: integer, example: 1920 }
+        height: { type: integer, example: 1080 }
+        frame_rate: { type: number, format: float, example: 60.0 }
+        codec: { type: string, example: vp9 }
+        bitrate: { type: integer, example: 4500000 }
+        label: { type: string, example: 1080p60 VP9 }
+        is_selected: { type: boolean, example: true }
+
+    AudioFormat:
+      type: object
+      properties:
+        format_id: { type: string, example: "251" }
+        codec: { type: string, example: opus }
+        language: { type: string, nullable: true, example: en }
+        language_label: { type: string, nullable: true, example: English }
+        bitrate: { type: integer, example: 128000 }
+        is_selected: { type: boolean, example: true }
+
+    SubtitleFormat:
+      type: object
+      properties:
+        format_id: { type: string, example: en }
+        language: { type: string, example: en }
+        language_label: { type: string, example: English }
+        is_selected: { type: boolean, example: false }

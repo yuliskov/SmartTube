@@ -151,6 +151,11 @@
             android:screenOrientation="unspecified"
             android:theme="@style/App.Theme.Leanback.Preferences.Opaque"/>
 
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.debug.RemoteApiDebugActivity"
+            android:exported="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/App.Theme.Leanback.Preferences"/>
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:launchMode="singleInstance"

@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.GeneralSett
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteApiSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
@@ -45,6 +46,8 @@ public class AppDataSourceManager {
                 context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(context).show(), R.drawable.settings_account));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_remote_control), () -> RemoteControlSettingsPresenter.instance(context).show(), R.drawable.settings_cast));
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.settings_remote_api), () -> RemoteApiSettingsPresenter.instance(context).show(), R.drawable.settings_cast));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(context).show(), R.drawable.settings_language));
         settingItems.add(new SettingsItem(
