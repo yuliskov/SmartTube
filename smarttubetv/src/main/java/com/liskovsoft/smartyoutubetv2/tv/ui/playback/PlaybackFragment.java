@@ -358,6 +358,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void refreshVolumeNormalization() {
+        if (mExoPlayerController != null) {
+            mExoPlayerController.refreshVolumeNormalization();
+        }
+    }
+
+    @Override
     public void reloadPlayback() {
         if (mPlayer != null) {
             mPlaybackPresenter.onEngineReleased();
