@@ -12,8 +12,10 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.PlaylistPanelExtractor;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
@@ -32,7 +34,9 @@ import com.liskovsoft.smartyoutubetv2.common.misc.StreamReminderService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -69,6 +73,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsAddToRecentPlaylistButtonEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
+    private boolean mIsPlayInReverseButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsPlayNextButtonEnabled;
     private boolean mIsShowPlaybackQueueButtonEnabled;
@@ -327,6 +332,86 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.open_playlist), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
+    }
+
+    private void appendPlayInReverseButton() {
+        if (!mIsPlayInReverseButtonEnabled || mVideo == null || !mVideo.hasPlaylist()) {
+            return;
+        }
+
+        // Special type of channels that work as playlist (no regular playlist id)
+        if (mVideo.isPlaylistAsChannel() && ChannelPresenter.canOpenChannel(mVideo)) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.play_playlist_in_reverse), optionItem -> {
+                    mDialogPresenter.closeDialog();
+                    startReversePlayback(mVideo.playlistId, mVideo.getTitle());
+                }));
+    }
+
+    /**
+     * Starts the playlist from its last item and switches the player into reverse mode, so
+     * subsequent videos are played backwards. Works with foreign playlists since nothing is
+     * written back to the remote playlist (see VideoLoaderController).
+     */
+    private void startReversePlayback(String playlistId, String playlistTitle) {
+        if (playlistId == null) {
+            return;
+        }
+
+        LoadingManager.showLoading(getContext(), true);
+
+        Video probe = new Video();
+        probe.playlistId = playlistId;
+        probe.playlistIndex = 0; // a negative index is rejected by the backend
+
+        // Step 1: read the playlist size. Step 2: resolve the last item and open it.
+        MediaServiceManager.instance().loadMetadata(probe, metadata -> {
+            PlaylistInfo playlistInfo = metadata.getPlaylistInfo();
+            int size = playlistInfo != null ? playlistInfo.getSize() : -1;
+
+            if (size <= 1) {
+                onReversePlaybackError();
+                return;
+            }
+
+            openLastPlaylistItem(playlistId, playlistTitle, size);
+        }, error -> onReversePlaybackError(), () -> {});
+    }
+
+    private void openLastPlaylistItem(String playlistId, String playlistTitle, int size) {
+        Video probe = new Video();
+        probe.playlistId = playlistId;
+        probe.playlistIndex = size - 1;
+
+        // A video-id-less request only returns the playlist "panel" window, not a top-level
+        // video id, so take the last panel item (see PlaylistPanelExtractor).
+        MediaServiceManager.instance().loadMetadata(probe, metadata -> {
+            LoadingManager.showLoading(getContext(), false);
+
+            Video last = PlaylistPanelExtractor.lastItem(metadata, playlistId);
+
+            if (last == null || last.videoId == null) {
+                MessageHelpers.showMessage(getContext(), R.string.nothing_found);
+                return;
+            }
+
+            last.playlistId = playlistId;
+            last.playlistIndex = size - 1;
+            if (last.title == null) {
+                last.title = playlistTitle;
+            }
+
+            PlayerData.instance(getContext()).setPlaybackMode(PlayerConstants.PLAYBACK_MODE_REVERSE_LIST);
+            PlaybackPresenter.instance(getContext()).openVideo(last);
+        }, error -> onReversePlaybackError(), () -> {});
+    }
+
+    private void onReversePlaybackError() {
+        LoadingManager.showLoading(getContext(), false);
+        MessageHelpers.showMessage(getContext(), R.string.nothing_found);
     }
 
     private void appendOpenChannelUploadsButton() {
@@ -964,6 +1049,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mIsOpenChannelUploadsButtonEnabled = true;
         mIsOpenPlaylistButtonEnabled = true;
+        mIsPlayInReverseButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_IN_REVERSE);
         mIsReturnToBackgroundVideoEnabled = true;
         mIsOpenChannelButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_CHANNEL);
         mIsAddToRecentPlaylistButtonEnabled = mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RECENT_PLAYLIST);
@@ -1016,6 +1102,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_SHOW_QUEUE, new MenuAction(this::appendShowPlaybackQueueButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_CHANNEL, new MenuAction(this::appendOpenChannelButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_PLAYLIST, new MenuAction(this::appendOpenPlaylistButton, false));
+        mMenuMapping.put(MainUIData.MENU_ITEM_PLAY_IN_REVERSE, new MenuAction(this::appendPlayInReverseButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_SUBSCRIBE, new MenuAction(this::appendSubscribeButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_EXCLUDE_FROM_CONTENT_BLOCK, new MenuAction(this::appendToggleExcludeFromContentBlockButton, false));
         mMenuMapping.put(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR, new MenuAction(this::appendTogglePinVideoToSidebarButton, false));
