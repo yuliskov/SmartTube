@@ -5,6 +5,7 @@ import android.os.Build.VERSION;
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
@@ -133,6 +134,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             if (shouldIgnore(e)) {
+                MessageHelpers.showLongMessage(this, e.getMessage());
                 return;
             }
 
