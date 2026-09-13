@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.remoteapi.RemoteApiBridge;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.ChainProcessor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.Processor;
@@ -61,6 +62,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mEventListeners.add(new ErrorFixerController());
         mEventListeners.add(new PlayerUIController());
         mEventListeners.add(new RemoteController(context));
+        RemoteApiBridge.init(this);
         mEventListeners.add(new SponsorBlockController());
         mEventListeners.add(new AutoFrameRateController());
         mEventListeners.add(new HQDialogController());

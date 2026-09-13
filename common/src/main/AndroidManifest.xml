@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.liskovsoft.smartyoutubetv2.common">
+    <uses-sdk tools:overrideLibrary="androidx.test.espresso.idling.resource,androidx.test.monitor,androidx.test.core,androidx.test.ext.junit,androidx.test.ext.truth,androidx.test.runner,androidx.test.rules,androidx.test.espresso" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- Android 14 (API 34) -->
     <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" /> -->
@@ -19,6 +21,7 @@
     <!-- Starting targetSDK 33+, foreground services require explicit permissions in the manifest. -->
     <!-- NOTE: only works with 'mediaPlayback' type service. Others types will fail. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <queries>
         <!-- Android 11+: access package info (works only for specified apps) -->
