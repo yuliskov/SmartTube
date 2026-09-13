@@ -22,7 +22,8 @@ public class BlockedChannelData implements ProfileChangeListener {
     @SuppressLint("StaticFieldLeak")
     private static BlockedChannelData sInstance;
     private final AppPrefs mPrefs;
-    private final TreeSet<Channel> mChannels = new TreeSet<>((channel1, channel2) -> channel1.channelName.compareToIgnoreCase(channel2.channelName));
+    private final TreeSet<Channel> mChannels =
+            new TreeSet<>((channel1, channel2) -> Helpers.compareToIgnoreCase(channel1.channelName, channel2.channelName));
     private final Runnable mPersistStateInt = this::persistStateInt;
     private final List<BlockedChannelListener> mListeners = new ArrayList<>();
 
