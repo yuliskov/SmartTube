@@ -86,6 +86,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.previewtimebar.StoryboardSe
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.LiveChatView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.volume.VolumeView;
 import com.liskovsoft.googlecommon.common.helpers.YouTubeHelper;
 
 import java.io.InputStream;
@@ -912,6 +913,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             getProgressBarManager().show();
         } else {
             getProgressBarManager().hide();
+        }
+    }
+
+    @Override
+    public void showVolume(int volume) {
+        if (getView() != null) {
+            VolumeView volumeView = getView().findViewById(R.id.volume_view);
+            volumeView.show(volume);
         }
     }
 
