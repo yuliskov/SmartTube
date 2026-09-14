@@ -35,7 +35,14 @@ public class ScreensaverManager {
     private int mMode = MODE_SCREENSAVER;
     private boolean mIsScreenOff;
     private boolean mIsBlocked;
+    // Distinct from mIsBlocked: lifecycle suspension stops all screensaver management while
+    // the host activity is not in the foreground. Blocked only suppresses user-facing dimming.
+    private boolean mIsSuspended;
     private final Runnable mTimeoutHandler = () -> {
+        if (mIsSuspended) {
+            return;
+        }
+
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             return;
@@ -85,6 +92,10 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void enableChecked() {
+        if (mIsSuspended) {
+            return;
+        }
+
         // Fix dialog dimming when using the play button on the remote controller.
         // NOTE: only the last activity will show dimming and in our case the last one is PlaybackActivity
         if (mMode == MODE_SCREEN_OFF || getAppDialogPresenter().isDialogShown()) {
@@ -98,6 +109,10 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void disableChecked() {
+        if (mIsSuspended) {
+            return;
+        }
+
         if (mMode == MODE_SCREEN_OFF) {
             return;
         }
@@ -106,6 +121,10 @@ public class ScreensaverManager {
     }
 
     public void enable() {
+        if (mIsSuspended) {
+            return;
+        }
+
         if (mIsBlocked) {
             Log.d(TAG, "Screensaver blocked!");
             return;
@@ -121,6 +140,10 @@ public class ScreensaverManager {
     }
 
     public void disable() {
+        if (mIsSuspended) {
+            return;
+        }
+
         if (mIsBlocked) {
             Log.d(TAG, "Screensaver blocked!");
             return;
@@ -133,6 +156,10 @@ public class ScreensaverManager {
     }
 
     public void doScreenOff() {
+        if (mIsSuspended) {
+            return;
+        }
+
         //if (mIsScreenOff) {
         //    return;
         //}
@@ -144,6 +171,36 @@ public class ScreensaverManager {
         Utils.postDelayed(mDimScreen, 0);
     }
 
+    /**
+     * Stop managing the screensaver while the host activity is not in the foreground.
+     * Distinct from {@link #setBlocked(boolean)}: blocked only suppresses user-facing dimming,
+     * while suspension always releases wake suppression and ignores later playback events.
+     */
+    public void suspend() {
+        mIsSuspended = true;
+        // Leave mUnlockInstance queued so the shared registry lock cannot be stranded.
+        Utils.removeCallbacks(mDimScreen, mUndimScreen, mTimeoutHandler);
+        hideDimOverlay();
+        releaseScreensaver();
+    }
+
+    /**
+     * Resume the existing dimming policy after the host activity returns to the foreground.
+     */
+    public void resume() {
+        mIsSuspended = false;
+        enable();
+    }
+
+    /**
+     * Idempotent cleanup for activity destruction. Releases suppression and drops this instance
+     * from the shared registry without cancelling an in-flight registry unlock.
+     */
+    public void cleanup() {
+        suspend();
+        sInstances.remove(this);
+    }
+
     public boolean isScreenOff() {
         return mIsScreenOff;
     }
@@ -153,6 +210,10 @@ public class ScreensaverManager {
     }
 
     private void enableTimeout() {
+        if (mIsSuspended) {
+            return;
+        }
+
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             disableTimeout();
@@ -170,10 +231,18 @@ public class ScreensaverManager {
     }
 
     private void dimScreen() {
+        if (mIsSuspended) {
+            return;
+        }
+
         showHide(true);
     }
 
     private void undimScreen() {
+        if (mIsSuspended) {
+            return;
+        }
+
         showHide(false);
     }
 
@@ -183,6 +252,10 @@ public class ScreensaverManager {
     }
 
     private void showHideDimming(boolean show) {
+        if (mIsSuspended) {
+            return;
+        }
+
         Activity activity = mActivity.get();
         View dimContainer = mDimContainer.get();
 
@@ -223,6 +296,10 @@ public class ScreensaverManager {
     }
 
     private void showHideScreensaver(boolean show) {
+        if (mIsSuspended) {
+            return;
+        }
+
         Activity activity = mActivity.get();
 
         if (activity == null) {
@@ -295,12 +372,34 @@ public class ScreensaverManager {
         }
     }
 
+    /**
+     * Hide the dim overlay without going through {@link #undimScreen()}, which would
+     * reacquire wake suppression via {@link Helpers#disableScreensaver(Activity)}.
+     */
+    private void hideDimOverlay() {
+        View dimContainer = mDimContainer.get();
+
+        if (dimContainer != null) {
+            dimContainer.setVisibility(View.GONE);
+        }
+
+        mIsScreenOff = false;
+    }
+
+    private void releaseScreensaver() {
+        Activity activity = mActivity.get();
+
+        if (activity != null) {
+            Helpers.enableScreensaver(activity);
+        }
+    }
+
     private void addToRegistry() {
         sInstances.add(this);
     }
 
     private void notifyRegistry() {
-        if (sLockInstance) {
+        if (mIsSuspended || sLockInstance) {
             return;
         }
 
