@@ -178,6 +178,11 @@ public class SabrStream {
         return processor.getSegmentStartTimeMs(iTag);
     }
 
+    public long getEndOfStreamSeekToleranceMs() {
+        return processor.getLiveSegmentTargetDurationSec() * 1_000L
+                - processor.getLiveSegmentTargetDurationToleranceMs();
+    }
+
     public long getSegmentDurationMs(int iTag) {
         return processor.getSegmentDurationMs(iTag);
     }

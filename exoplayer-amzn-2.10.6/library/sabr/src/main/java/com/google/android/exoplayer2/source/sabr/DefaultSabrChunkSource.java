@@ -101,6 +101,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     }
 
     private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
+    private static final long END_OF_STREAM_SEEK_TOLERANCE_US = 500_000L; // 0.5 seconds
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -234,6 +235,24 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //        return Util.resolveSeekPositionUs(positionUs, seekParameters, firstSyncUs, secondSyncUs);
         //    }
         //}
+
+        // Clamp a seek target that lands at/past the end of the video. Without this, seeking to
+        // exactly periodDurationUs (e.g. the app's "pause on end" logic parking the player at
+        // getDurationMs()) leaves nothing left to buffer, so getNextChunk() immediately re-signals
+        // endOfStream, which re-triggers STATE_ENDED, which re-triggers that same seek-to-end logic
+        // again - an infinite onTracksChanged()/STATE_ENDED loop every time playback reaches the end.
+        for (RepresentationHolder representationHolder : representationHolders) {
+            long periodDurationUs = representationHolder.periodDurationUs;
+            if (periodDurationUs != C.TIME_UNSET && positionUs >= periodDurationUs) {
+                // The constant is usually smaller than the real value in sabrStream.getEndOfStreamSeekToleranceMs()
+                long toleranceUs = END_OF_STREAM_SEEK_TOLERANCE_US;
+                if (sabrStream != null) {
+                    long segmentBasedToleranceUs = sabrStream.getEndOfStreamSeekToleranceMs() * 1_000L;
+                    toleranceUs = Math.min(toleranceUs, segmentBasedToleranceUs);
+                }
+                return Math.max(0, periodDurationUs - toleranceUs);
+            }
+        }
         // We don't have a segment index to adjust the seek position with yet.
         return positionUs;
     }
