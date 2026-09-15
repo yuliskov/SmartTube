@@ -245,12 +245,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             long periodDurationUs = representationHolder.periodDurationUs;
             if (periodDurationUs != C.TIME_UNSET && positionUs >= periodDurationUs) {
                 // The constant is usually smaller than the real value in sabrStream.getEndOfStreamSeekToleranceMs()
-                long toleranceUs = END_OF_STREAM_SEEK_TOLERANCE_US;
-                if (sabrStream != null) {
-                    long segmentBasedToleranceUs = sabrStream.getEndOfStreamSeekToleranceMs() * 1_000L;
-                    toleranceUs = Math.min(toleranceUs, segmentBasedToleranceUs);
-                }
-                return Math.max(0, periodDurationUs - toleranceUs);
+                return Math.max(0, periodDurationUs - END_OF_STREAM_SEEK_TOLERANCE_US);
             }
         }
         // We don't have a segment index to adjust the seek position with yet.
