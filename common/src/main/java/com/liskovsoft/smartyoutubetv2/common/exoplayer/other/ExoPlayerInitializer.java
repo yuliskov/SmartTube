@@ -106,44 +106,39 @@ public class ExoPlayerInitializer {
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS // 2_500
         //DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS // 5_000
 
-        // Default values
+        // Optimized TV streaming buffer values for fast startup and resilient re-buffering
         int minBufferMs = 30_000;
-        int maxBufferMs = 30_000;
-        int bufferForPlaybackMs = 2_500;
-        int bufferForPlaybackAfterRebufferMs = 5_000;
+        int maxBufferMs = 45_000;
+        int bufferForPlaybackMs = 1_200; // 1.2s for instantaneous start
+        int bufferForPlaybackAfterRebufferMs = 2_000; // 2s recovery instead of 5s stall
 
         switch (mPlayerData.getVideoBufferType()) {
             case PlayerData.BUFFER_HIGHEST:
                 minBufferMs = 50_000;
                 maxBufferMs = 100_000;
-                // Infinite buffer works awfully on live streams. Constant stuttering.
-                //maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
-                baseBuilder
-                        .setTargetBufferBytes(mMaxBufferBytes);
+                baseBuilder.setTargetBufferBytes(mMaxBufferBytes);
                 baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
             case PlayerData.BUFFER_HIGH:
-                minBufferMs = 50_000;
-                maxBufferMs = 50_000;
-                baseBuilder.setBackBuffer(minBufferMs, true);
+                minBufferMs = 45_000;
+                maxBufferMs = 60_000;
+                baseBuilder.setBackBuffer(30_000, true);
                 break;
             case PlayerData.BUFFER_MEDIUM:
-                //minBufferMs = 30_000;
-                //maxBufferMs = 30_000;
+                minBufferMs = 25_000;
+                maxBufferMs = 40_000;
+                baseBuilder.setBackBuffer(15_000, true);
                 break;
             case PlayerData.BUFFER_LOW:
                 minBufferMs = 5_000; // LIVE fix
-                maxBufferMs = 5_000; // LIVE fix
-                //bufferForPlaybackMs = 1_000;
-                //bufferForPlaybackAfterRebufferMs = 1_000;
+                maxBufferMs = 10_000;
+                bufferForPlaybackMs = 800;
+                bufferForPlaybackAfterRebufferMs = 1_200;
                 break;
         }
 
-        baseBuilder
-                .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs);
-
-        // Decrease buffer size?
-        //baseBuilder.setAllocator(new DefaultAllocator(true, 16 * 1024));
+        baseBuilder.setPrioritizeTimeOverSizeThresholds(true);
+        baseBuilder.setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs);
 
         return baseBuilder.createDefaultLoadControl();
     }

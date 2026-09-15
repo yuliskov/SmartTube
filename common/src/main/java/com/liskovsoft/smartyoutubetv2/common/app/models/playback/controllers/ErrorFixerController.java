@@ -22,8 +22,10 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final int MAX_CLIENT_SWITCH_RETRIES = 3;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
+    private int mClientSwitchRetryCount = 0;
 
     @Override
     public void onInit() {
@@ -59,11 +61,16 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
                 getPlayerTweaksData().setPreferredDnsType(PlayerTweaksData.DNS_TYPE_GOOGLE);
                 mVideoLoaderController.restartEngine();
-            } else {
-                // Also, some clients like ANDROID_REEL may just hang at start
-                MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+            } else if (mClientSwitchRetryCount < MAX_CLIENT_SWITCH_RETRIES) {
+                mClientSwitchRetryCount++;
+                MessageHelpers.showLongMessage(getContext(), String.format("Fixing stalled client (%d/%d)...", mClientSwitchRetryCount, MAX_CLIENT_SWITCH_RETRIES));
                 YouTubeServiceManager.instance().switchNextClientNow();
                 mVideoLoaderController.reloadVideo();
+            } else {
+                Log.w(TAG, "Client switch retry limit reached. Attempting resolution fallback instead of infinite reload.");
+                mClientSwitchRetryCount = 0;
+                lowerVideoQuality();
+                mVideoLoaderController.restartEngine();
             }
         } else {
             // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
@@ -91,6 +98,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onPlay() {
+        mClientSwitchRetryCount = 0;
         mBufferingDetector.onStopBuffering();
     }
 
@@ -101,6 +109,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onNewVideo(Video item) {
+        mClientSwitchRetryCount = 0;
         mBufferingDetector.start();
     }
 
