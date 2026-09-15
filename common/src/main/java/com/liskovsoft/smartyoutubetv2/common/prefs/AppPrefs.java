@@ -24,6 +24,11 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String WEB_PROXY_URI = "web_proxy_uri";
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
+    private static final String REST_API_ENABLED = "rest_api_enabled";
+    private static final String REST_API_PORT = "rest_api_port";
+    private static final String REST_API_USERNAME = "rest_api_username";
+    private static final String REST_API_PASSWORD = "rest_api_password";
+    private static final String REST_API_SHOW_NOTIFICATIONS = "rest_api_show_notifications";
     private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
     private final WeakHashSet<ProfileChangeListener> mListeners = new WeakHashSet<>();
@@ -147,6 +152,62 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     public void setWebProxyEnabled(boolean enabled) {
         putBoolean(WEB_PROXY_ENABLED, enabled);
+    }
+
+    public boolean isRestApiEnabled() {
+        return getBoolean(REST_API_ENABLED, false);
+    }
+
+    public void setRestApiEnabled(boolean enabled) {
+        putBoolean(REST_API_ENABLED, enabled);
+    }
+
+    public int getRestApiPort() {
+        return getInt(REST_API_PORT, 8090);
+    }
+
+    public void setRestApiPort(int port) {
+        putInt(REST_API_PORT, port);
+    }
+
+    public String getRestApiUsername() {
+        return getString(REST_API_USERNAME, "admin");
+    }
+
+    public void setRestApiUsername(String username) {
+        putString(REST_API_USERNAME, username);
+    }
+
+    public String getRestApiPassword() {
+        String password = getString(REST_API_PASSWORD, "admin");
+        // Auto-migrate from default "admin" to a random secure password on first access
+        if ("admin".equals(password)) {
+            password = generateRandomPassword(6);
+            putString(REST_API_PASSWORD, password);
+        }
+        return password;
+    }
+
+    private static String generateRandomPassword(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder(length);
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
+    public void setRestApiPassword(String password) {
+        putString(REST_API_PASSWORD, password);
+    }
+
+    public boolean isRestApiShowNotifications() {
+        return getBoolean(REST_API_SHOW_NOTIFICATIONS, true);
+    }
+
+    public void setRestApiShowNotifications(boolean enabled) {
+        putBoolean(REST_API_SHOW_NOTIFICATIONS, enabled);
     }
 
     private String getProfileName() {
