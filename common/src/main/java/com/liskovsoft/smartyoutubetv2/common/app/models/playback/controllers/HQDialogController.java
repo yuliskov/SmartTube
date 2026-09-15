@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.HashSet;
@@ -53,6 +54,7 @@ public class HQDialogController extends BasePlayerController {
         addNetworkEngine();
         addVideoBufferCategory();
         addAudioDelayCategory();
+        addVolumeNormalizationCategories();
         addPitchEffectCategory();
         addSleepTimerCategory();
         //addBackgroundPlaybackCategory();
@@ -140,6 +142,29 @@ public class HQDialogController extends BasePlayerController {
 
     private void addPitchEffectCategory() {
         addCategoryInt(AppDialogUtil.createPitchEffectCategory(getContext()));
+    }
+
+    private void addVolumeNormalizationCategories() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        addCategoryInt(AppDialogUtil.createVolumeNormalizationModeCategory(
+                getContext(),
+                () -> getPlayer().restartEngine()));
+        addCategoryInt(AppDialogUtil.createVolumeNormalizationIntensityCategory(
+                getContext(),
+                () -> getPlayer().refreshVolumeNormalization()));
+
+        if (getPlayerData().getVolumeNormalizationMode() == PlayerData.VOLUME_NORMALIZATION_SELECTED_CHANNELS) {
+            OptionCategory channelCategory = AppDialogUtil.createVolumeNormalizationChannelCategory(
+                    getContext(),
+                    getVideo(),
+                    () -> getPlayer().refreshVolumeNormalization());
+            if (channelCategory != null) {
+                addCategoryInt(channelCategory);
+            }
+        }
     }
 
     private void addSleepTimerCategory() {
