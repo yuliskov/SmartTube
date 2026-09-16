@@ -204,9 +204,9 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onStart() {
         try {
-            super.onResume();
+            super.onStart();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -221,8 +221,8 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
 
         // Stop managing the screensaver so a paused activity cannot keep the display awake.
         mScreensaverManager.suspend();
