@@ -51,10 +51,11 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
             if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
-                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
-                // Wrong DNS resolution could cause hanging at start
+                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM
+                && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                // Wrong DNS resolving could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
-                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
+                MessageHelpers.showLongMessage(getContext(), "Fixing wrong DNS resolving...");
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
                 mVideoLoaderController.restartEngine();
             } else {
@@ -63,14 +64,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 YouTubeServiceManager.instance().switchNextClientNow();
                 mVideoLoaderController.reloadVideo();
             }
-        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            // Possibly ISP ban
-            //switchNextEngine();
-            //mVideoLoaderController.restartEngine();
-
+        } else {
             // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
             // This will change current format to 'Disabled'. Do restartEngine() instead.
-            lowerVideoQuality();
+            //lowerVideoQuality();
+            //mVideoLoaderController.restartEngine();
+
+            // SABR may hang if the server issues a high backoffTime
             mVideoLoaderController.restartEngine();
         }
     }
@@ -229,8 +229,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         if (showMessage) {
             MessageHelpers.showLongMessage(getContext(), errorMessage);
             if (getPlayer() != null) {
-                getPlayer().showControls(true);
-                getPlayer().setTitle(errorMessage);
+                getPlayer().setTitle(errorContent);
             }
         }
 
@@ -311,7 +310,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         if (!Helpers.containsAny(message, "fromNullable result is null")) {
             MessageHelpers.showLongMessage(getContext(), fullMsg);
             if (getPlayer() != null) {
-                getPlayer().showControls(true);
                 getPlayer().setTitle(fullMsg);
             }
         }

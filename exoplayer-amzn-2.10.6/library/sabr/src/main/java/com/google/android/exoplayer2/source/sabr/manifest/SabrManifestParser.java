@@ -90,7 +90,8 @@ public class SabrManifestParser {
                 formatInfo.getVideoPlaybackUstreamerConfig(),
                 formatInfo.getPoToken(),
                 formatInfo.getVideoId(),
-                createClientInfo(formatInfo));
+                createClientInfo(formatInfo),
+                formatInfo.getVisitorCookie());
     }
 
     private static long getDurationMs(MediaItemFormatInfo formatInfo) {

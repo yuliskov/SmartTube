@@ -178,6 +178,19 @@ public class SabrStream {
         return processor.getSegmentStartTimeMs(iTag);
     }
 
+    /**
+     * How far below the video's total duration (in ms) a seek target should be clamped when it
+     * would otherwise land at/past the end (see DefaultSabrChunkSource.getAdjustedSeekPositionUs()).
+     * Based on the same live-segment-target-duration estimate SabrProcessor uses for a segment's own duration.
+     * <p/>
+     * Currently unused - the fixed constant in DefaultSabrChunkSource was consistently smaller
+     * (safer) on tested content. Kept for future use.
+     */
+    public long getEndOfStreamSeekToleranceMs() {
+        return processor.getLiveSegmentTargetDurationSec() * 1_000L
+                - processor.getLiveSegmentTargetDurationToleranceMs();
+    }
+
     public long getSegmentDurationMs(int iTag) {
         return processor.getSegmentDurationMs(iTag);
     }
