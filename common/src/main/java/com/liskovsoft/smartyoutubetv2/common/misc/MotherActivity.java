@@ -204,9 +204,9 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
         try {
-            super.onStart();
+            super.onResume();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -225,6 +225,7 @@ public class MotherActivity extends FragmentActivity {
         super.onStop();
 
         // Stop managing the screensaver so a paused activity cannot keep the display awake.
+        // NOTE: moving suspend to onStop to prevent screen flicker when persistent dimming is enabled
         mScreensaverManager.suspend();
     }
 
