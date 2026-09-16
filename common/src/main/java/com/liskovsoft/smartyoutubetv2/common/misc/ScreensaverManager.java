@@ -180,7 +180,8 @@ public class ScreensaverManager {
         mIsSuspended = true;
         // Leave mUnlockInstance queued so the shared registry lock cannot be stranded.
         Utils.removeCallbacks(mDimScreen, mUndimScreen, mTimeoutHandler);
-        hideDimOverlay();
+        // When constant dimming is enabled, calling hideDimOverlay() introduces flickering every time the user leaves the activity.
+        //hideDimOverlay();
         releaseScreensaver();
     }
 
