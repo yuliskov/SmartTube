@@ -102,6 +102,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
     private static final long END_OF_STREAM_SEEK_TOLERANCE_US = 500_000L; // 0.5 seconds
+    private static final long NEAR_END_TOLERANCE_US = 700_000L; // 0.7 seconds
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -354,7 +355,9 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         boolean periodEnded = periodDurationUs != C.TIME_UNSET;
 
         // FIX: fire ending event on a video end
-        if (periodEnded && loadPositionUs >= periodDurationUs) {
+        // Tolerance needed: on some (usually short/sponsor at end) videos, real segment duration falls a fraction
+        // of a second short of periodDurationUs, so a strict ">=" never fires and getNextChunk() loops forever
+        if (periodEnded && (loadPositionUs + NEAR_END_TOLERANCE_US) >= periodDurationUs) {
             // No segment index in SABR, so we can't compare per-segment boundaries like stock
             // DASH does — comparing loadPositionUs directly against periodDurationUs is the
             // SABR equivalent. Without this, getNextChunk() keeps firing "next chunk" requests
