@@ -56,7 +56,7 @@ public class TrackInfoFormatter2 {
     }
 
     public void setSpeed(float speed) {
-        mSpeedStr = speed != 1.0f ? speed + "x" : "";
+        mSpeedStr = speed != 1.0f ? speed + "\u00D7" : "";
     }
 
     public String getQualityLabel() {
