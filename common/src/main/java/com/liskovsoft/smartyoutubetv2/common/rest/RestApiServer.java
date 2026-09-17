@@ -73,6 +73,16 @@ class RestApiServer extends NanoHTTPD {
         }
     }
 
+    @Override
+    protected boolean useGzipWhenAccepted(Response r) {
+        // A 204 response must not carry a body. NanoHTTPD would otherwise gzip it when the
+        // client advertises Accept-Encoding: gzip, emitting Transfer-Encoding: chunked and
+        // writing gzip chunk bytes after the headers. Browsers have already reused the
+        // keep-alive connection for the next request by then, so the stray bytes corrupt
+        // that response (Chrome: ERR_INVALID_HTTP_RESPONSE).
+        return r.getStatus() != Status.NO_CONTENT && super.useGzipWhenAccepted(r);
+    }
+
     private RestRequest parseRequest(IHTTPSession session) {
         String method = session.getMethod().name();
         String path = session.getUri();
