@@ -151,6 +151,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 enableFasterDataSource();
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
+            } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_MEDIUM) {
+                getPlayerData().setVideoBufferType(PlayerData.BUFFER_LOW);
             } else {
                 getPlayerTweaksData().setSectionPlaylistEnabled(false);
                 restartEngine = false;
