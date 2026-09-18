@@ -149,6 +149,13 @@ public class ExoPlayerInitializer {
     }
 
     private void setupVolumeBoost(SimpleExoPlayer player) {
+        // The legacy LoudnessEnhancer and the new compressor must never process the same
+        // audio session together. Preserve the original behavior when normalization is off.
+        if (mPlayerData.getVolumeNormalizationMode() != PlayerData.VOLUME_NORMALIZATION_OFF) {
+            mVolumeBoost = 1f;
+            return;
+        }
+
         // 5.1 audio cannot be boosted (format isn't supported error)
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
         float volume = mPlayerTweaksData.isPlayerAutoVolumeEnabled() ? mPlayerData.getPlayerVolume() * 2.0f : mPlayerData.getPlayerVolume();
