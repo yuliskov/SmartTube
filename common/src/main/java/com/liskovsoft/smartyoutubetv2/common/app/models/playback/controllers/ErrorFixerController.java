@@ -138,10 +138,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            // Recently this message starting to show for other reasons
-            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
-            //switchNextEngine(); // ?
-            //restartEngine = false;
+            // Recently this message starting to show for other unknown reasons
             if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 switchNextEngine();
             }
@@ -151,11 +148,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 enableFasterDataSource();
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
-            } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_MEDIUM) {
-                getPlayerData().setVideoBufferType(PlayerData.BUFFER_LOW);
             } else {
-                getPlayerTweaksData().setSectionPlaylistEnabled(false);
-                restartEngine = false;
+                lowerVideoQuality(); // NOTE: restart engine is required after lower the quality
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
@@ -177,16 +171,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-
-            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-            //} else if (isSubtitlesEnabled()) {
-            //    disableSubtitles(); // Response code: 429
-            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            //} else {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            //}
 
             restartEngine = false;
             showMessage = false;
