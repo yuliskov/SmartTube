@@ -37,9 +37,9 @@ public final class Video {
     public static final String PLAYLIST_LIKED_MUSIC = "LM";
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
+    public static final float MIN_WATCHED_PERCENT = 10; // min value for immediately closed videos
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
-    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public int id;
     public String title;
     public String deArrowTitle;
@@ -913,7 +913,7 @@ public final class Video {
 
     private long getPositionFromPercentWatched() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        if (percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
+        if (percentWatched <= MIN_WATCHED_PERCENT || percentWatched >= 100) {
             return 0;
         }
 

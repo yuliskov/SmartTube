@@ -504,6 +504,6 @@ public class VideoGroup {
             return false;
         }
 
-        return video.percentWatched > 95;
+        return video.percentWatched > 95 || video.percentWatched == Video.MIN_WATCHED_PERCENT;
     }
 }
