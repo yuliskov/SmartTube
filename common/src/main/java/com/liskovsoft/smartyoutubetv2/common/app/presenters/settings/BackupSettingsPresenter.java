@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BackupSettingsPresenter extends BasePresenter<Void> {
-    private static final String TAG = BackupSettingsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static BackupSettingsPresenter sInstance;
     private final GDriveBackupManager mGDriveBackupManager;

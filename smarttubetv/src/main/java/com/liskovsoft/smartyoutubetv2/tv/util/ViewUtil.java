@@ -189,7 +189,6 @@ public class ViewUtil {
         View itemsContainer = rootView.findViewById(R.id.list);
         View title = rootView.findViewById(R.id.decor_title_container);
         int transparent = ContextCompat.getColor(context, R.color.transparent);
-        int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
         // Disable shadow outline on parent fragment
         if (mainContainer instanceof FrameLayout && VERSION.SDK_INT >= 21) {
