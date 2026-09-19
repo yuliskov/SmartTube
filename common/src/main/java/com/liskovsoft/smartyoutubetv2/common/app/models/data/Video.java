@@ -33,7 +33,16 @@ import java.util.List;
 /**
  * Video is an object that holds the various metadata associated with a single video.
  */
-public final class Video {
+public final class Video implements Cloneable {
+    /** Copy item state while retaining its browse-group association. */
+    public Video copyForContextMenu() {
+        try {
+            return (Video) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     public static final String PLAYLIST_LIKED_MUSIC = "LM";
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;

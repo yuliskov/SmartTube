@@ -52,6 +52,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mSubscribeAction;
     private Disposable mPlaylistsInfoAction;
     private Video mVideo;
+    private Video mOriginalVideo;
+    private Disposable mContextMenuAction;
+    private static int sContextMenuRequest;
+
     public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsNotRecommendChannelEnabled;
@@ -154,9 +158,40 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         mVideo = video;
+        mOriginalVideo = video;
         sVideoHolder = new WeakReference<>(video);
 
-        MediaServiceManager.instance().authCheck(this::bootstrapPrepareAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
+        final int request = ++sContextMenuRequest;
+        MediaServiceManager.instance().authCheck(
+                () -> resolveContextMenu(request, true), () -> resolveContextMenu(request, false));
+    }
+
+    private void resolveContextMenu(int request, boolean signed) {
+        Runnable show = signed ? this::bootstrapPrepareAndShowDialogSigned : this::prepareAndShowDialogUnsigned;
+        if (mVideo.mediaItem == null) {
+            if (request == sContextMenuRequest) show.run();
+            return;
+        }
+        com.liskovsoft.mediaserviceinterfaces.oauth.Account account = getSignInService().getSelectedAccount();
+        int accountId = account != null ? account.getId() : -1;
+        RxHelper.disposeActions(mContextMenuAction);
+        mContextMenuAction = mMediaItemService.resolveContextMenuObserve(mVideo.mediaItem)
+                .timeout(5, java.util.concurrent.TimeUnit.SECONDS)
+                .onErrorReturnItem(mVideo.mediaItem)
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    com.liskovsoft.mediaserviceinterfaces.oauth.Account selected = getSignInService().getSelectedAccount();
+                    if (request != sContextMenuRequest || accountId != (selected != null ? selected.getId() : -1)) return;
+                    if (item != mVideo.mediaItem) {
+                        mVideo = mOriginalVideo.copyForContextMenu();
+                        mVideo.mediaItem = item;
+                        mVideo.videoId = item.getVideoId();
+                        mVideo.channelId = item.getChannelId();
+                        mVideo.playlistParams = item.getParams();
+                        sVideoHolder = new WeakReference<>(mVideo);
+                    }
+                    show.run();
+                }, error -> Log.e(TAG, "Context menu error"));
     }
 
     private void bootstrapPrepareAndShowDialogSigned() {
@@ -377,7 +412,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void removeSuggestedItemAndClose() {
         if (mCallback != null) {
-            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+            mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
         } else {
             MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
         }
@@ -403,7 +438,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
                                     () -> {
                                         if (mCallback != null) {
-                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                            mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
                                         } else {
                                             MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
                                         }
@@ -443,7 +478,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                     }
 
                     if (mCallback != null) {
-                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                        mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
                     }
                     mDialogPresenter.closeDialog();
                     showHideBlockedChannelsSection(blockedChannelData);
@@ -483,7 +518,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void onRemoveFromHistoryDone() {
         if (mCallback != null) {
-            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+            mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
         } else {
             MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
         }
@@ -510,7 +545,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                     error -> Log.e(TAG, "Remove from subscriptions error: %s", error.getMessage()),
                                     () -> {
                                         if (mCallback != null) {
-                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                            mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
                                         }
                                     }
                             );
@@ -531,7 +566,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(R.string.remove_from_subscriptions), optionItem -> {
                     MediaServiceManager.instance().hideNotification(mVideo);
                     if (mCallback != null) {
-                        mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                        mCallback.onItemAction(mOriginalVideo, VideoMenuCallback.ACTION_REMOVE);
                     }
                     mDialogPresenter.closeDialog();
                 }));
