@@ -1,0 +1,682 @@
+{
+  "date": "2026-09-19",
+  "provider": "OpenRouter native Decisions API",
+  "runs": [
+    {
+      "name": "screensaver-development",
+      "summary": {
+        "live": true,
+        "rank_status": "judged",
+        "audit_status": "judged",
+        "rank_relevant_retained": 3,
+        "rank_relevant_total": 3,
+        "rank_retained_total": 4,
+        "rank_candidates": 12,
+        "excerpt_chars_before": 9912,
+        "excerpt_chars_after": 3114,
+        "rank_full_report_chars": 5564,
+        "audit_correct_labels": 11,
+        "audit_cases": 12,
+        "audit_false_support": [],
+        "audit_escalations": 3,
+        "calls": 2,
+        "elapsed_ms": {
+          "rank": 1182.76,
+          "audit": 1150.32
+        },
+        "usage": {
+          "rank": {
+            "input_tokens": 4369,
+            "output_tokens": 187,
+            "cost": 0.000183498
+          },
+          "audit": {
+            "input_tokens": 2954,
+            "output_tokens": 520,
+            "cost": 0.000124068
+          }
+        },
+        "models": [
+          "typesafe/jev-1.13-20260917",
+          "typesafe/jev-1.13-20260917"
+        ],
+        "limitations": "Small constructed set; no Astra A/B, production calibration or end-to-end speed claim."
+      },
+      "reports": {
+        "rank": {
+          "policy": "smarttube-triage-v1",
+          "mode": "rank",
+          "status": "judged",
+          "calls": 1,
+          "input_sha256": "038ea67c03e4a856c95f71b1934eadd0905064e9caf4b4a5415d70a13eca41ca",
+          "model": "typesafe/jev-1.13-20260917",
+          "usage": {
+            "input_tokens": 4369,
+            "output_tokens": 187,
+            "cost": 0.000183498
+          },
+          "rows": [
+            {
+              "id": "required",
+              "source": "AGENTS.md:1",
+              "action": "pinned"
+            },
+            {
+              "id": "suspend",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/ScreensaverManager.java:174-203",
+              "action": "read_first",
+              "answer": {
+                "type": "noul",
+                "noul": 0.9
+              }
+            },
+            {
+              "id": "lifecycle",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/MotherActivity.java:212-240",
+              "action": "read_first",
+              "answer": {
+                "type": "noul",
+                "noul": 0.88
+              }
+            },
+            {
+              "id": "test",
+              "source": "common/src/test/java/com/liskovsoft/smartyoutubetv2/common/misc/ScreensaverManagerTest.java:53-75",
+              "action": "astra_review",
+              "answer": {
+                "type": "noul",
+                "noul": 0.83
+              }
+            },
+            {
+              "id": "remote",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/RemoteControlWorker.java:1-40",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.05
+              }
+            },
+            {
+              "id": "sponsor",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/models/playback/controllers/SponsorBlockController.java:90-114",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.04
+              }
+            },
+            {
+              "id": "press",
+              "source": "smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/util/LongPressHandler.java:20-44",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.04
+              }
+            },
+            {
+              "id": "channel",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/presenters/ChannelPresenter.java:237-273",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.03
+              }
+            },
+            {
+              "id": "search",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/presenters/SearchPresenter.java:90-114",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.03
+              }
+            },
+            {
+              "id": "backup",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/BackupAndRestoreManager.java:55-79",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.02
+              }
+            },
+            {
+              "id": "toast",
+              "source": "smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/util/vineyard/ToastFactory.java:1-16",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.02
+              }
+            },
+            {
+              "id": "injection",
+              "source": "synthetic:adversarial",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.02
+              }
+            }
+          ],
+          "elapsed_ms": 1182.76,
+          "context_chars_before": 9912,
+          "context_chars_after": 3114,
+          "not_checked": [
+            "candidate coverage",
+            "full-file correctness",
+            "deferred evidence remains in input"
+          ]
+        },
+        "audit": {
+          "policy": "smarttube-triage-v1",
+          "mode": "audit",
+          "status": "judged",
+          "calls": 1,
+          "input_sha256": "87494fec81a61e4118709e822ff562a9fbcc2e256e2d93ab99dcacaadc9e1351",
+          "model": "typesafe/jev-1.13-20260917",
+          "usage": {
+            "input_tokens": 2954,
+            "output_tokens": 520,
+            "cost": 0.000124068
+          },
+          "rows": [
+            {
+              "id": "device",
+              "source": "synthetic:device",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "contradicts": 0.93,
+                  "supports": 0,
+                  "insufficient": 0.07
+                },
+                "confidence": 0.89
+              }
+            },
+            {
+              "id": "signing",
+              "source": "synthetic:signing",
+              "action": "astra_review",
+              "answer": {
+                "type": "choice",
+                "choice": "insufficient",
+                "probabilities": {
+                  "contradicts": 0.29,
+                  "supports": 0,
+                  "insufficient": 0.71
+                },
+                "confidence": 0.56
+              }
+            },
+            {
+              "id": "test_not_run",
+              "source": "synthetic:test_not_run",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "contradicts": 0.97,
+                  "supports": 0,
+                  "insufficient": 0.03
+                },
+                "confidence": 0.95
+              }
+            },
+            {
+              "id": "test_pass",
+              "source": "synthetic:test_pass",
+              "action": "supported_in_supplied_evidence",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "contradicts": 0.01,
+                  "supports": 0.98,
+                  "insufficient": 0.01
+                },
+                "confidence": 0.97
+              }
+            },
+            {
+              "id": "pending",
+              "source": "synthetic:pending",
+              "action": "supported_in_supplied_evidence",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "contradicts": 0,
+                  "supports": 0.99,
+                  "insufficient": 0.01
+                },
+                "confidence": 0.98
+              }
+            },
+            {
+              "id": "no_evidence",
+              "source": "synthetic:no_evidence",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "insufficient",
+                "probabilities": {
+                  "contradicts": 0,
+                  "supports": 0,
+                  "insufficient": 1
+                },
+                "confidence": 1
+              }
+            },
+            {
+              "id": "false_pass",
+              "source": "synthetic:false_pass",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "contradicts": 1,
+                  "supports": 0,
+                  "insufficient": 0
+                },
+                "confidence": 0.99
+              }
+            },
+            {
+              "id": "unrelated",
+              "source": "synthetic:unrelated",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "insufficient",
+                "probabilities": {
+                  "contradicts": 0.02,
+                  "supports": 0,
+                  "insufficient": 0.98
+                },
+                "confidence": 0.96
+              }
+            },
+            {
+              "id": "cn_pending",
+              "source": "synthetic:cn_pending",
+              "action": "astra_review",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "contradicts": 0.08,
+                  "supports": 0.61,
+                  "insufficient": 0.31
+                },
+                "confidence": 0.42
+              }
+            },
+            {
+              "id": "cn_claim",
+              "source": "synthetic:cn_claim",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "contradicts": 0.95,
+                  "supports": 0,
+                  "insufficient": 0.05
+                },
+                "confidence": 0.93
+              }
+            },
+            {
+              "id": "injection",
+              "source": "synthetic:injection",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "contradicts": 0.97,
+                  "supports": 0,
+                  "insufficient": 0.03
+                },
+                "confidence": 0.96
+              }
+            },
+            {
+              "id": "stale",
+              "source": "synthetic:stale",
+              "action": "astra_review",
+              "answer": {
+                "type": "choice",
+                "choice": "insufficient",
+                "probabilities": {
+                  "contradicts": 0.43,
+                  "supports": 0.02,
+                  "insufficient": 0.55
+                },
+                "confidence": 0.32
+              }
+            }
+          ],
+          "elapsed_ms": 1150.32,
+          "not_checked": [
+            "evidence authenticity/freshness",
+            "code correctness",
+            "overall task completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channel-holdout",
+      "summary": {
+        "live": true,
+        "holdout": true,
+        "rank_status": "judged",
+        "audit_status": "judged",
+        "rank_relevant_retained": 1,
+        "rank_relevant_total": 1,
+        "rank_retained_total": 2,
+        "rank_candidates": 12,
+        "excerpt_chars_before": 9912,
+        "excerpt_chars_after": 1682,
+        "rank_full_report_chars": 4122,
+        "audit_correct_labels": 8,
+        "audit_cases": 8,
+        "audit_false_support": [],
+        "audit_escalations": 1,
+        "calls": 2,
+        "elapsed_ms": {
+          "rank": 1227.5,
+          "audit": 1856.81
+        },
+        "usage": {
+          "rank": {
+            "input_tokens": 4394,
+            "output_tokens": 187,
+            "cost": 0.000184548
+          },
+          "audit": {
+            "input_tokens": 1918,
+            "output_tokens": 291,
+            "cost": 8.0556e-05
+          }
+        },
+        "models": [
+          "typesafe/jev-1.13-20260917",
+          "typesafe/jev-1.13-20260917"
+        ],
+        "limitations": "Small constructed set; no Astra A/B, production calibration or end-to-end speed claim."
+      },
+      "reports": {
+        "rank": {
+          "policy": "smarttube-triage-v1",
+          "mode": "rank",
+          "status": "judged",
+          "calls": 1,
+          "input_sha256": "d61e593ca0c916975bf571bb6f2088d76c3ecc7c926d633dbc7c0bba2200edeb",
+          "model": "typesafe/jev-1.13-20260917",
+          "usage": {
+            "input_tokens": 4394,
+            "output_tokens": 187,
+            "cost": 0.000184548
+          },
+          "rows": [
+            {
+              "id": "required",
+              "source": "AGENTS.md:1",
+              "action": "pinned"
+            },
+            {
+              "id": "channel",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/presenters/ChannelPresenter.java:237-273",
+              "action": "astra_review",
+              "answer": {
+                "type": "noul",
+                "noul": 0.72
+              }
+            },
+            {
+              "id": "search",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/presenters/SearchPresenter.java:90-114",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.06
+              }
+            },
+            {
+              "id": "press",
+              "source": "smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/util/LongPressHandler.java:20-44",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.06
+              }
+            },
+            {
+              "id": "suspend",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/ScreensaverManager.java:174-203",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.05
+              }
+            },
+            {
+              "id": "lifecycle",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/MotherActivity.java:212-240",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.05
+              }
+            },
+            {
+              "id": "test",
+              "source": "common/src/test/java/com/liskovsoft/smartyoutubetv2/common/misc/ScreensaverManagerTest.java:53-75",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.05
+              }
+            },
+            {
+              "id": "sponsor",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/app/models/playback/controllers/SponsorBlockController.java:90-114",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.04
+              }
+            },
+            {
+              "id": "remote",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/RemoteControlWorker.java:1-40",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.04
+              }
+            },
+            {
+              "id": "toast",
+              "source": "smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/util/vineyard/ToastFactory.java:1-16",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.04
+              }
+            },
+            {
+              "id": "backup",
+              "source": "common/src/main/java/com/liskovsoft/smartyoutubetv2/common/misc/BackupAndRestoreManager.java:55-79",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.03
+              }
+            },
+            {
+              "id": "injection",
+              "source": "synthetic:adversarial",
+              "action": "defer",
+              "answer": {
+                "type": "noul",
+                "noul": 0.03
+              }
+            }
+          ],
+          "elapsed_ms": 1227.5,
+          "context_chars_before": 9912,
+          "context_chars_after": 1682,
+          "not_checked": [
+            "candidate coverage",
+            "full-file correctness",
+            "deferred evidence remains in input"
+          ]
+        },
+        "audit": {
+          "policy": "smarttube-triage-v1",
+          "mode": "audit",
+          "status": "judged",
+          "calls": 1,
+          "input_sha256": "9eede083f6d7542e0be43dddd5b52506ef068f019d4e21412317eb174d663f6d",
+          "model": "typesafe/jev-1.13-20260917",
+          "usage": {
+            "input_tokens": 1918,
+            "output_tokens": 291,
+            "cost": 8.0556e-05
+          },
+          "rows": [
+            {
+              "id": "unsigned",
+              "source": "synthetic:holdout:unsigned",
+              "action": "supported_in_supplied_evidence",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "insufficient": 0.02,
+                  "supports": 0.94,
+                  "contradicts": 0.04
+                },
+                "confidence": 0.91
+              }
+            },
+            {
+              "id": "skipped",
+              "source": "synthetic:holdout:skipped",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "insufficient": 0.01,
+                  "supports": 0,
+                  "contradicts": 0.99
+                },
+                "confidence": 0.99
+              }
+            },
+            {
+              "id": "scope",
+              "source": "synthetic:holdout:scope",
+              "action": "supported_in_supplied_evidence",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "insufficient": 0.08,
+                  "supports": 0.9,
+                  "contradicts": 0.02
+                },
+                "confidence": 0.85
+              }
+            },
+            {
+              "id": "remote",
+              "source": "synthetic:holdout:remote",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "insufficient",
+                "probabilities": {
+                  "insufficient": 0.92,
+                  "supports": 0,
+                  "contradicts": 0.08
+                },
+                "confidence": 0.88
+              }
+            },
+            {
+              "id": "timeout",
+              "source": "synthetic:holdout:timeout",
+              "action": "inspect_evidence_gap",
+              "answer": {
+                "type": "choice",
+                "choice": "contradicts",
+                "probabilities": {
+                  "insufficient": 0.03,
+                  "supports": 0,
+                  "contradicts": 0.97
+                },
+                "confidence": 0.96
+              }
+            },
+            {
+              "id": "key",
+              "source": "synthetic:holdout:key",
+              "action": "supported_in_supplied_evidence",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "insufficient": 0.1,
+                  "supports": 0.9,
+                  "contradicts": 0
+                },
+                "confidence": 0.85
+              }
+            },
+            {
+              "id": "unknown",
+              "source": "synthetic:holdout:unknown",
+              "action": "inspect_evidence_gap",
+              "reason": "empty_evidence",
+              "decision_source": "code"
+            },
+            {
+              "id": "cn",
+              "source": "synthetic:holdout:cn",
+              "action": "astra_review",
+              "answer": {
+                "type": "choice",
+                "choice": "supports",
+                "probabilities": {
+                  "insufficient": 0.31,
+                  "supports": 0.62,
+                  "contradicts": 0.07
+                },
+                "confidence": 0.42
+              }
+            }
+          ],
+          "elapsed_ms": 1856.81,
+          "not_checked": [
+            "evidence authenticity/freshness",
+            "code correctness",
+            "overall task completion"
+          ]
+        }
+      }
+    }
+  ],
+  "note": "Captured live responses, not mocks. Development audit predates deterministic empty-evidence handling. Holdout uses the final policy. Only the four captured calls are costed; this is not an account billing total."
+}
