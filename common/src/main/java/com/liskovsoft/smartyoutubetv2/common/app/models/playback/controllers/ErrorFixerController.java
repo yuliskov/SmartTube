@@ -53,9 +53,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
                 && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM
                 && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-                // Wrong DNS resolution could cause hanging at start
+                // Wrong DNS resolving could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
-                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
+                MessageHelpers.showLongMessage(getContext(), "Fixing wrong DNS resolving...");
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
                 mVideoLoaderController.restartEngine();
             } else {
@@ -138,10 +138,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            // Recently this message starting to show for other reasons
-            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
-            //switchNextEngine(); // ?
-            //restartEngine = false;
+            // Recently this message starting to show for other unknown reasons
             if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 switchNextEngine();
             }
@@ -152,8 +149,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             } else {
-                getPlayerTweaksData().setSectionPlaylistEnabled(false);
-                restartEngine = false;
+                lowerVideoQuality(); // NOTE: restart engine is required after lower the quality
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
@@ -175,16 +171,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-
-            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-            //} else if (isSubtitlesEnabled()) {
-            //    disableSubtitles(); // Response code: 429
-            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            //} else {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            //}
 
             restartEngine = false;
             showMessage = false;

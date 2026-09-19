@@ -101,6 +101,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     }
 
     private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
+    private static final long END_OF_STREAM_SEEK_TOLERANCE_US = 500_000L; // 0.5 seconds
+    private static final long NEAR_END_TOLERANCE_US = 700_000L; // 0.7 seconds
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -234,6 +236,19 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //        return Util.resolveSeekPositionUs(positionUs, seekParameters, firstSyncUs, secondSyncUs);
         //    }
         //}
+
+        // Clamp a seek target that lands at/past the end of the video. Without this, seeking to
+        // exactly periodDurationUs (e.g. the app's "pause on end" logic parking the player at
+        // getDurationMs()) leaves nothing left to buffer, so getNextChunk() immediately re-signals
+        // endOfStream, which re-triggers STATE_ENDED, which re-triggers that same seek-to-end logic
+        // again - an infinite onTracksChanged()/STATE_ENDED loop every time playback reaches the end.
+        for (RepresentationHolder representationHolder : representationHolders) {
+            long periodDurationUs = representationHolder.periodDurationUs;
+            if (periodDurationUs != C.TIME_UNSET && positionUs >= periodDurationUs) {
+                // The constant is usually smaller than the real value in sabrStream.getEndOfStreamSeekToleranceMs()
+                return Math.max(0, periodDurationUs - END_OF_STREAM_SEEK_TOLERANCE_US);
+            }
+        }
         // We don't have a segment index to adjust the seek position with yet.
         return positionUs;
     }
@@ -340,7 +355,9 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         boolean periodEnded = periodDurationUs != C.TIME_UNSET;
 
         // FIX: fire ending event on a video end
-        if (periodEnded && loadPositionUs >= periodDurationUs) {
+        // Tolerance needed: on some (usually short/sponsor at end) videos, real segment duration falls a fraction
+        // of a second short of periodDurationUs, so a strict ">=" never fires and getNextChunk() loops forever
+        if (periodEnded && (loadPositionUs + NEAR_END_TOLERANCE_US) >= periodDurationUs) {
             // No segment index in SABR, so we can't compare per-segment boundaries like stock
             // DASH does — comparing loadPositionUs directly against periodDurationUs is the
             // SABR equivalent. Without this, getNextChunk() keeps firing "next chunk" requests

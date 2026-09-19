@@ -454,7 +454,7 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedAndRecommended(video)) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedSuggestion(video)) {
             return;
         }
 
@@ -493,7 +493,7 @@ public class VideoGroup {
         return blockedChannelData.containsChannel(channelId, channelName);
     }
 
-    private boolean isWatchedAndRecommended(Video video) {
+    private boolean isWatchedSuggestion(Video video) {
         if (video == null) {
             return false;
         }
@@ -504,6 +504,10 @@ public class VideoGroup {
             return false;
         }
 
-        return video.percentWatched > 95;
+        if (type == MediaGroup.TYPE_HOME && getPosition() > 0) {
+            return false;
+        }
+
+        return video.percentWatched > 95 || video.percentWatched == Video.MIN_WATCHED_PERCENT;
     }
 }
