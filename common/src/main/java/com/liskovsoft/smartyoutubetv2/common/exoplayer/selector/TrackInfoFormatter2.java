@@ -10,6 +10,8 @@ public class TrackInfoFormatter2 {
     private String mHdrStr;
     private String mSpeedStr;
     private String mChannelsStr;
+    private String mAudioCodecStr;
+    private String mAudioBitrateStr;
     private String mHighBitrateStr;
     private boolean mEnableBitrate;
     private String mDrcStr;
@@ -52,6 +54,14 @@ public class TrackInfoFormatter2 {
 
         mChannelsStr = TrackSelectorUtil.buildChannels(format);
 
+        String audioCodec = TrackSelectorUtil.extractCodec(format);
+        mAudioCodecStr = audioCodec != null ? audioCodec.toLowerCase() : "";
+
+        if (mEnableBitrate) {
+            String audioBitrate = TrackSelectorUtil.extractBitrate(format, 2);
+            mAudioBitrateStr = audioBitrate.isEmpty() ? "" : audioBitrate + "Mb";
+        }
+
         mDrcStr = TrackSelectorUtil.buildDrcMark(format);
     }
 
@@ -60,7 +70,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mSpeedStr, mHighBitrateStr, mDrcStr);
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mAudioCodecStr, mAudioBitrateStr, mSpeedStr, mHighBitrateStr, mDrcStr);
     }
 
     private static String combine(String... items) {
