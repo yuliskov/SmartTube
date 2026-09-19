@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
@@ -9,22 +8,14 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
 public class SignInFragment extends GuidedStepSupportFragment implements SignInView {
-    private static final String TAG = SignInFragment.class.getSimpleName();
     private static final int CONTINUE = 2;
     private static final int OPEN_BROWSER = 3;
     private SignInPresenter mSignInPresenter;
@@ -70,13 +61,8 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
 
         mFullSignInUrl = fullSignInUrl != null ? fullSignInUrl : signInUrl;
 
-        Glide.with(getContext())
-                .load(Utils.toQrCodeLink(mFullSignInUrl))
-                .placeholder(R.drawable.activate_account_qrcode)
-                .apply(ViewUtil.glideOptions())
-                .error(R.drawable.activate_account_qrcode)
-                .listener(mErrorListener)
-                .into(getGuidanceStylist().getIconView());
+        // Keep the activation URL on the device; do not download or cache a login QR image.
+        getGuidanceStylist().getIconView().setImageBitmap(SignInQrCode.create(mFullSignInUrl));
 
         String description = getString(R.string.signin_view_description, signInUrl);
         int start = description.indexOf(signInUrl);
@@ -91,6 +77,11 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         if (getActivity() != null) {
             getActivity().finish();
         }
+    }
+
+    @Override
+    public GuidanceStylist onCreateGuidanceStylist() {
+        return new SignInGuidanceStylist();
     }
 
     @Override
@@ -126,16 +117,4 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         }
     }
 
-    private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
-        @Override
-        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            Log.e(TAG, "Glide load failed: " + e);
-            return false;
-        }
-
-        @Override
-        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-            return false;
-        }
-    };
 }
