@@ -19,6 +19,10 @@
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audio formats</string>
     <string name="subtitle_category_title">Subtitles</string>
+    <string name="subtitle_dual_enable">Dual subtitles. Shows a secondary translated subtitle below the original text using Google Translate.</string>
+    <string name="subtitle_dual_select_title">Secondary translated subtitle</string>
+    <string name="subtitle_dual_target_language">Secondary translated subtitle</string>
+    <string name="subtitle_dual_enable_first">Turn on dual subtitles in Settings first, then choose a language for the secondary translated subtitle.</string>
     <string name="playback_queue_category_title">Playback queue</string>
     <string name="video_max_quality">Auto (max quality)</string>
     <string name="audio_max_quality">Auto (max quality)</string>
