@@ -1,0 +1,7 @@
+# SmartTube-AI
+
+- This is an Android TV Gradle project. App code is in `smarttubetv/`, shared application code in `common/`; preserve TV remote/focus behavior and existing Android compatibility constraints.
+- `SharedModules/` and `MediaServiceCore/` are Git submodules. `settings.gradle` prefers sibling checkouts (`../SharedModules`, `../MediaServiceCore`) when present. Before editing shared code, establish which checkout the build actually uses; keep unrelated submodule revisions intact.
+- Use the checked-in Gradle wrapper. CI uses JDK 17 and the `stbeta` release variant; dependency and SDK versions come from the selected SharedModules constants. For build setup, task selection, signing, or APK verification, use `.agents/skills/smarttube-build/SKILL.md`.
+- Complete the requested change and relevant verification, including in-scope fixes. A document-only change needs document/config checks, not an APK build. For app changes, use affected tests and compilation; release/CI changes require the relevant CI checks. State unavailable device checks separately from automated results.
+- A generic skill does not require a new design approval, issue-tracker setup, commit, full-suite run after each edit, or a review pause in this repository. Preserve explicit task checkpoints and actual release/signing/device authorization. Do not import approval gates or completion claims from another SmartTube checkout or another project.
