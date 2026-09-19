@@ -18,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
+import javax.annotation.Nullable;
+
 public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
@@ -31,10 +33,18 @@ public class VideoStateController extends BasePlayerController {
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 3; // Sync history every x minutes
     private boolean mIsPlayEnabled;
     private boolean mIsPlayBlocked;
-    private int mTickleLeft;
+    private int mTickleCount;
     private boolean mIncognito;
     private final Runnable mUpdateHistory = this::saveState;
     private long mNewVideoTimeMs;
+    @Nullable
+    private Boolean mIsRestoreActualLive;
+    private long mSleepTimerStartMs;
+
+    @Override
+    public void onInit() {
+        mSleepTimerStartMs = System.currentTimeMillis();
+    }
 
     /**
      * Fired after user clicked on video in browse activity<br/>
@@ -48,7 +58,7 @@ public class VideoStateController extends BasePlayerController {
 
             // NOTE: even for the same videos it's good to save state (switch from embed, video reload etc)
             // Reset auto-save history timer
-            mTickleLeft = 0;
+            mTickleCount = 0;
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
             saveState();
@@ -75,6 +85,7 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayer() != null && getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
             getPlayer().setPositionMs(100);
+            mIsRestoreActualLive = false;
             return true;
         }
 
@@ -85,9 +96,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public boolean onNextClicked() {
         // Seek to the actual live position on next
-        if (getVideo() != null && getPlayer() != null
-                && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > getLiveThreshold())) {
-            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
+        if (seekToActualLivePosition()) {
             return true;
         }
 
@@ -110,12 +119,14 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onEngineInitialized() {
         // Reset auto-save history timer
-        mTickleLeft = 0;
+        mTickleCount = 0;
 
         // Show user info instead of black screen.
         //if (getPlayer() != null && !getPlayEnabled()) {
         //    getPlayer().showOverlay(true);
         //}
+
+        mSleepTimerStartMs = System.currentTimeMillis();
     }
 
     @Override
@@ -132,14 +143,43 @@ public class VideoStateController extends BasePlayerController {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode) {
+        mSleepTimerStartMs = System.currentTimeMillis();
+
+        // Remove error msg if needed
+        if (getPlayer() != null && getPlayerData().getSleepTimerHours() > 0) {
+            getPlayer().setVideo(getVideo());
+        }
+
+        return false;
+    }
+
+    @Override
     public void onTickle() {
         if (getPlayer() == null || !getPlayer().isEngineInitialized()) {
             return;
         }
 
-        if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
-            mTickleLeft = 0;
+        if (++mTickleCount > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
+            mTickleCount = 0;
             saveState();
+        }
+
+        checkSleepTimer();
+    }
+
+    private void checkSleepTimer() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        float sleepHours = getPlayerData().getSleepTimerHours();
+        if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000) {
+            getPlayer().setPlayWhenReady(false);
+            getPlayer().setTitle(getContext().getString(R.string.player_sleep_timer)
+                    + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
+            getPlayer().showOverlay(true);
+            Helpers.enableScreensaver(getActivity());
         }
     }
 
@@ -161,6 +201,7 @@ public class VideoStateController extends BasePlayerController {
     public void onSeekPositionChanged(long positionMs) {
         // Need a delay while player internal state changed
         Utils.post(mUpdateHistory);
+        mIsRestoreActualLive = false;
     }
 
     @Override
@@ -196,6 +237,10 @@ public class VideoStateController extends BasePlayerController {
         showHideScreensaver(false);
         // throttle seeking calls
         Utils.removeCallbacks(mUpdateHistory);
+
+        if (isRestoreActualLive()) {
+            seekToActualLivePosition();
+        }
     }
 
     @Override
@@ -232,7 +277,7 @@ public class VideoStateController extends BasePlayerController {
     public void onPlayEnd() {
         saveState();
 
-        // Don't enable screensaver here or you'll broke 'screen off' logic.
+        // Don't enable screensaver here, or you'll brake 'screen off' logic.
         showHideScreensaver(true);
     }
 
@@ -243,6 +288,8 @@ public class VideoStateController extends BasePlayerController {
 
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
+
+        setRestoreActualLive();
     }
 
     @Override
@@ -485,7 +532,7 @@ public class VideoStateController extends BasePlayerController {
         long positionMs = getPlayer().getPositionMs();
         long remainsMs = durationMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        boolean isLiveBroken = video.isLive && durationMs <= 30_000; // the live without a history
+        boolean isLiveBroken = video.isLive && durationMs <= 30_000; // live without a history
         if (isPositionActual && !isLiveBroken) { // partially viewed
             State state = new State(video, positionMs, durationMs, getPlayer().getSpeed());
             getStateService().save(state);
@@ -532,7 +579,9 @@ public class VideoStateController extends BasePlayerController {
         if (!mIsPlayBlocked) {
             boolean playEnabled = getPlayEnabled();
             getPlayer().setPlayWhenReady(playEnabled);
-            getPlayer().showOverlay(!playEnabled);
+            if (!getPlayer().isOverlayShown()) {
+                getPlayer().showOverlay(!playEnabled);
+            }
         }
     }
 
@@ -659,6 +708,10 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private boolean isMusicVideo() {
+        if (getVideo() == null) {
+            return false;
+        }
+
         Video item = getVideo();
         return item.belongsToMusic();
     }
@@ -725,5 +778,33 @@ public class VideoStateController extends BasePlayerController {
     private boolean isBeginEmbed() {
         return isEmbedPlayer() && System.currentTimeMillis() - mNewVideoTimeMs <= EMBED_THRESHOLD_MS &&
                 getPlayer() != null && getPlayer().getPositionMs() < getPlayer().getDurationMs();
+    }
+
+    private boolean seekToActualLivePosition() {
+        if (getPlayer() != null && isBehindActualLive()) {
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
+            mIsRestoreActualLive = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isRestoreActualLive() {
+        return mIsRestoreActualLive != null && mIsRestoreActualLive && isBehindActualLive();
+    }
+
+    private void setRestoreActualLive() {
+        if (mIsRestoreActualLive == null) {
+            mIsRestoreActualLive = isInsideActualLive();
+        }
+    }
+
+    private boolean isBehindActualLive() {
+        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > getLiveThreshold());
+    }
+
+    private boolean isInsideActualLive() {
+        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() < Math.max(RESTORE_LIVE_BUFFER_MS, getLiveThreshold()));
     }
 }

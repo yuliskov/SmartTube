@@ -62,6 +62,7 @@ tmp/
 *_bak*
 *_tmp
 *.bak*
+*.new*
 *.tmp
 *.7z
 .DS_Store

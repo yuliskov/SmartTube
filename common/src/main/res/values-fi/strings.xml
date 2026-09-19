@@ -742,4 +742,8 @@
   <string name="app_backup_desc">Varmuuskopio luodaan zip-muodossa</string>
   <string name="remove_from_search_history">Poista hakuhistoriasta</string>
   <string name="add_video_to_watch_later">Lisää katsottavaksi myöhemmin</string>
+  <string name="enable_conscrypt_desc">Parantaa HTTPS-, TLS- ja VPN-yhteensopivuutta joillakin laitteilla mutta saattaa toisinaan aiheuttaa toisto-ongelmia tai hitaampaa verkon suorituskykyä</string>
+  <string name="network_settings">Verkkoasetukset</string>
+  <string name="comments_disabled">Kommentit on poistettu käytöstä tässä videossa</string>
+  <string name="enable_conscrypt">Ota Conscrypt käyttöön</string>
 </resources>

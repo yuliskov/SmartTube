@@ -12,6 +12,7 @@ import java.util.List;
 
 public abstract class DataSaverBase extends DataChangeBase {
     private final AppPrefs mAppPrefs;
+    private final boolean mPersistImmediately;
     private final String mDataKey;
     private final List<Object> mValues;
     private final Runnable mPersistStateInt = this::persistStateInt;
@@ -21,7 +22,12 @@ public abstract class DataSaverBase extends DataChangeBase {
     }
 
     public DataSaverBase(Context context) {
+        this(context, false);
+    }
+
+    public DataSaverBase(Context context, boolean persistImmediately) {
         mAppPrefs = AppPrefs.instance(context);
+        mPersistImmediately = persistImmediately;
         mDataKey = this.getClass().getSimpleName();
         mValues = new ArrayList<>();
         restoreState();
@@ -92,9 +98,18 @@ public abstract class DataSaverBase extends DataChangeBase {
         }
     }
 
+    public void persistNow() {
+        Utils.post(mPersistStateInt);
+    }
+
     private void persistState() {
         onDataChange();
-        Utils.postDelayed(mPersistStateInt, 10_000);
+
+        if (mPersistImmediately) {
+            Utils.post(mPersistStateInt);
+        } else {
+            Utils.postDelayed(mPersistStateInt, 10_000);
+        }
     }
 
     private void persistStateInt() {

@@ -459,7 +459,6 @@
   <string name="speech_recognizer_system">سیستم (ترجیحی)</string>
   <string name="speech_recognizer_external_1">خارجی ۱ (به خوبی کار نمی‌کند، برای کار نیاز به غیرفعال کردن دسترسی به میکروفون دارد)</string>
   <string name="speech_recognizer_external_2">خارجی ۲ (به خوبی کار نمی‌کند)</string>
-  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="real_channel_icon">نمایش لوگوی کانال در پخش کننده</string>
   <string name="subtitle_yellow_semi_transparent">زرد روی پس‌زمینه نیمه شفاف</string>
   <string name="subtitle_yellow_black">زرد روی پس‌زمینه سیاه</string>

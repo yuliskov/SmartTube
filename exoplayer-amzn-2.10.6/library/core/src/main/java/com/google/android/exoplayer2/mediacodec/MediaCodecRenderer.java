@@ -28,6 +28,7 @@ import android.os.SystemClock;
 import androidx.annotation.CheckResult;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import com.google.android.exoplayer2.BaseRenderer;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -342,6 +343,16 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
   @DrainAction private int codecDrainAction;
   private boolean codecReceivedBuffers;
   private boolean codecReceivedEos;
+  // SmartTube fix: transient MediaCodec error recovery.
+  // A transient codec IllegalStateException is recovered in place (codec re-init) instead of
+  // surfacing as an unrecoverable TYPE_UNEXPECTED player error (full engine restart + error toast).
+  // A short per-window attempt budget prevents a permanently wedged codec from re-initializing in a
+  // tight loop; once exhausted we surface the error (with a real message) and let the app restart the
+  // engine, as it did before this fix.
+  private static final int MAX_CODEC_RECOVERY_ATTEMPTS = 3;
+  private static final long CODEC_RECOVERY_WINDOW_MS = 5_000;
+  private int codecRecoveryAttempts;
+  private long lastCodecRecoveryMs = C.TIME_UNSET;
   private long lastBufferInStreamPresentationTimeUs;
   private long largestQueuedPresentationTimeUs;
   private boolean inputStreamEnded;
@@ -667,9 +678,20 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
     if (codec != null) {
       long drainStartTimeMs = SystemClock.elapsedRealtime();
       TraceUtil.beginSection("drainAndFeed");
-      while (drainOutputBuffer(positionUs, elapsedRealtimeUs)) {}
-      while (feedInputBuffer() && shouldContinueFeeding(drainStartTimeMs)) {}
-      TraceUtil.endSection();
+      try {
+        while (drainOutputBuffer(positionUs, elapsedRealtimeUs)) {}
+        while (feedInputBuffer() && shouldContinueFeeding(drainStartTimeMs)) {}
+      } catch (IllegalStateException e) {
+        // SmartTube fix: a native MediaCodec error would otherwise propagate as
+        // TYPE_UNEXPECTED. Try to recover in place; only surface a (typed) error if that fails.
+        if (isMediaCodecException(e)) {
+          maybeRecoverFromCodecError(e);
+        } else {
+          throw e;
+        }
+      } finally {
+        TraceUtil.endSection();
+      }
     } else {
       decoderCounters.skippedInputBufferCount += skipSource(positionUs);
       // We need to read any format changes despite not having a codec so that drmSession can be
@@ -679,6 +701,92 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
       readToFlagsOnlyBuffer(/* requireFormat= */ false);
     }
     decoderCounters.ensureUpdated();
+  }
+
+  /**
+   * SmartTube fix: recover from a transient MediaCodec
+   * {@link IllegalStateException} by re-initializing the codec in place, instead of letting it
+   * surface as an unrecoverable player error (which forces a full engine restart and an "Unexpected
+   * playback error" toast).
+   *
+   * <p>Repeated failures within {@link #CODEC_RECOVERY_WINDOW_MS} (a permanently wedged codec) exhaust
+   * {@link #MAX_CODEC_RECOVERY_ATTEMPTS} and fall through to {@link #createDecoderException}, so the
+   * old restart-based recovery still acts as a backstop.
+   */
+  private void maybeRecoverFromCodecError(IllegalStateException error) throws ExoPlaybackException {
+    long nowMs = SystemClock.elapsedRealtime();
+    if (lastCodecRecoveryMs == C.TIME_UNSET || nowMs - lastCodecRecoveryMs > CODEC_RECOVERY_WINDOW_MS) {
+      codecRecoveryAttempts = 0;
+    }
+    lastCodecRecoveryMs = nowMs;
+
+    if (codecRecoveryAttempts >= MAX_CODEC_RECOVERY_ATTEMPTS) {
+      throw createDecoderException(error);
+    }
+
+    codecRecoveryAttempts++;
+    Log.w(TAG, "Recovering from MediaCodec error, re-initializing decoder (attempt "
+        + codecRecoveryAttempts + "/" + MAX_CODEC_RECOVERY_ATTEMPTS + ")");
+    try {
+      // A wedged codec's stop() can throw inside releaseCodec(), but releaseCodec()'s own finally has
+      // already nulled the codec by then, so a fresh init can still proceed. Don't let that abort the
+      // recovery.
+      try {
+        releaseCodec();
+      } catch (Throwable ignored) {
+        // Codec already released; continue to re-init.
+      }
+      maybeInitCodec();
+    } catch (ExoPlaybackException reinitError) {
+      throw reinitError;
+    } catch (Throwable reinitError) {
+      throw createDecoderException(error);
+    }
+  }
+
+  /**
+   * Wraps a MediaCodec {@link IllegalStateException} (which normally carries a {@code null} message)
+   * with the decoder name and, when available, the codec's diagnostic info, and reports it as an
+   * {@code UNEXPECTED} error.
+   *
+   * <p>We deliberately do NOT use {@link ExoPlaybackException#createForRenderer} here. A
+   * {@code TYPE_RENDERER} video error routes into the app's ErrorFixerController, which reacts by
+   * persisting a fallback format ({@code VIDEO_FHD_AVC_30}) — wiping the user's saved video preset.
+   * Keeping {@code TYPE_UNEXPECTED} preserves the (non-destructive) pre-fix restart path for an
+   * unrecoverable transient error, while still replacing the bare {@code null} message with a real
+   * one so it's no longer reported as "Unexpected playback error null".
+   */
+  private ExoPlaybackException createDecoderException(IllegalStateException error) {
+    String diagnosticInfo = getCodecDiagnosticInfo(error);
+    String message = "MediaCodec decoder error (" + codecName + ")"
+        + (diagnosticInfo != null ? ": " + diagnosticInfo : "");
+    return ExoPlaybackException.createForUnexpected(new IllegalStateException(message, error));
+  }
+
+  private static String getCodecDiagnosticInfo(IllegalStateException error) {
+    if (Util.SDK_INT >= 21) {
+      return getCodecDiagnosticInfoV21(error);
+    }
+    return null;
+  }
+
+  @TargetApi(21)
+  private static String getCodecDiagnosticInfoV21(IllegalStateException error) {
+    return error instanceof CodecException ? ((CodecException) error).getDiagnosticInfo() : null;
+  }
+
+  @VisibleForTesting
+  /* package */ static boolean isMediaCodecException(IllegalStateException error) {
+    if (Util.SDK_INT >= 21 && isMediaCodecExceptionV21(error)) {
+      return true;
+    }
+    StackTraceElement[] stackTrace = error.getStackTrace();
+    return stackTrace.length > 0 && stackTrace[0].getClassName().equals("android.media.MediaCodec");
+  }
+
+  @TargetApi(21)
+  private static boolean isMediaCodecExceptionV21(IllegalStateException error) {
+    return error instanceof CodecException;
   }
 
   /**

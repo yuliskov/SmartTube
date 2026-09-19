@@ -189,7 +189,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mSharedPrefsDir.isDirectory() && !FileHelpers.isEmpty(mSharedPrefsDir)) {
             File destination = new File(target, mSharedPrefsDir.getName());
-            FileHelpers.copy(mSharedPrefsDir, destination, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_PATTERNS), null);
+            FileHelpers.copy(mSharedPrefsDir, destination, file -> Helpers.endsWithAny(file.getName(), Utils.BACKUP_PREFS), null);
 
             // Don't store unique id
             FileHelpers.delete(new File(destination, HiddenPrefs.SHARED_PREFERENCES_NAME + ".xml"));
@@ -197,7 +197,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
         if (mFilesDir.isDirectory() && !FileHelpers.isEmpty(mFilesDir)) {
             File destination = new File(target, mFilesDir.getName());
-            FileHelpers.copy(mFilesDir, destination, null, fileName -> Helpers.endsWithAny(fileName.toString(), Utils.BACKUP_DIR_PATTERNS));
+            FileHelpers.copy(mFilesDir, destination, null, dir -> Helpers.equalsAny(dir.getName(), Utils.BACKUP_DIRS));
         }
     }
 

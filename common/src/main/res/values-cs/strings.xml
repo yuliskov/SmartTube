@@ -370,7 +370,6 @@
     <string name="proxy_not_supported">Použijte webové proxy (Vyžaduje Android 4.4+)</string>
     <string name="proxy_test_btn">Test</string>
     <string name="proxy_settings_title">Nastavení proxy serveru</string>
-    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
     <string name="proxy_test_cancelled">Test #%d: zrušen.</string>
     <string name="proxy_type_invalid">Typ proxy není nastaven.</string>
     <string name="proxy_host_invalid">Hostitel proxy není nastaven.</string>
@@ -398,8 +397,8 @@
     <string name="audio_sync_fix">Oprava synchronizace zvuku</string>
     <string name="ambilight_ratio_fix_desc">Opravuje chybějící bias osvětlení. Opravuje nesprávný poměr stran nebo měřítko videa. Opravuje prázdné screenshoty. Ovlivňuje výkon!</string>
     <string name="ambilight_ratio_fix">Oprava Ambilight/Poměru stran/Měřítka videa/Screenshotů</string>
-    <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 720p.</string>
-    <string name="force_legacy_codecs">Vynucení starších kodeků (720p)</string>
+    <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 360p.</string>
+    <string name="force_legacy_codecs">Vynucení starších kodeků (360p)</string>
     <string name="live_stream_fix_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
     <string name="live_stream_fix_4k_desc">Pozor: Přetáčení vysílání nebude k dispozici. Výrazně zlepšuje výkon živého vysílání. Maximální rozlišení je 4K.</string>
     <string name="live_stream_fix">Oprava živého vysílání (1080p)</string>
@@ -648,7 +647,7 @@
     <string name="hide_watched_from_notifications">Skrýt zhlédnutá videa v Oznámení</string>
     <string name="hide_unwanted_content">Skrýt obsah</string>
     <string name="hide_watched_from_home">Skrýt zhlédnutá videa ze sekce Domů</string>
-    <string name="hide_watched_from_watch_later">Skrýt zhlédnutá videa ze seznamu Přehrát později</string>
+    <string name="hide_watched_from_watch_later">Odstranit zhlédnutá videa ze seznamu Přehrát později</string>
     <string name="remote_control_permission">Dálkové ovládání na pozadí vyžaduje oprávnění pro překrytí přes okna</string>
     <string name="login_from_browser">Přihlášení přes prohlížeč</string>
     <string name="disable_remote_history">Zazázat historii při používání dálkového ovládání</string>
@@ -744,6 +743,11 @@
     <string name="app_restore_desc">POZOR: Zálohu ZIP je nutné do této složky zkopírovat ručně nebo přes správce souborů, pomocí \'Otevřít v\'</string>
     <string name="app_backup_desc">POZOR: Záloha bude vytvořena ve formátu ZIP</string>
     <string name="add_video_to_watch_later">Přidat do Přehrát později</string>
+    <string name="remove_video_to_watch_later">Odstranit z Přehrát později</string>
+    <string name="enable_conscrypt">Povolit Conscrypt</string>
+    <string name="enable_conscrypt_desc">Vylepšuje HTTPS, TLS, and VPN kompatibilitu na některých zařízeních, ale občas může způsobit problémy s přehráváním nebo pomalejší výkon sítě</string>
+    <string name="network_settings">Nastavení sítě</string>
+    <string name="comments_disabled">Pro toto video jsou komentáře vypnuté</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>

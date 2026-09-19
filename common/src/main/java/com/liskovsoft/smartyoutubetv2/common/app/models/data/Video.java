@@ -37,9 +37,9 @@ public final class Video {
     public static final String PLAYLIST_LIKED_MUSIC = "LM";
     public static final String TERTIARY_TEXT_DELIM = "•";
     public static final long MAX_LIVE_DURATION_MS = 24 * 60 * 60 * 1_000;
+    public static final float MIN_WATCHED_PERCENT = 10; // min value for immediately closed videos
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String BLACK_PLACEHOLDER_URL = "https://via.placeholder.com/1280x720/000000/000000";
-    private static final float RESTORE_POSITION_PERCENTS = 10; // min value for immediately closed videos
     public int id;
     public String title;
     public String deArrowTitle;
@@ -568,7 +568,14 @@ public final class Video {
         }
 
         // NOTE: Movies labeled as "Free with Ads" not supported yet
-        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie;
+        return Helpers.allNulls(videoId, playlistId, reloadPageKey, playlistParams, channelId, searchQuery) || isMovie || isMembersOnly();
+    }
+
+    /**
+     * Members only videos appears as videos with a length badge but has only a channel id
+     */
+    private boolean isMembersOnly() {
+        return videoId == null && durationMs > 0;
     }
 
     public String getGroupTitle() {
@@ -738,7 +745,7 @@ public final class Video {
 
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (metadataTitle == null) {
+        if (!isUpcoming || metadataTitle == null) {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
@@ -906,7 +913,7 @@ public final class Video {
 
     private long getPositionFromPercentWatched() {
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        if (percentWatched <= RESTORE_POSITION_PERCENTS || percentWatched >= 100) {
+        if (percentWatched <= MIN_WATCHED_PERCENT || percentWatched >= 100) {
             return 0;
         }
 
@@ -920,7 +927,10 @@ public final class Video {
 
     public void sync(VideoStateService.State state) {
         if (state != null) {
-            percentWatched = state.positionMs / (state.durationMs / 100f);
+            long realDurationMs = state.durationMs != -1 ? state.durationMs : getDurationMs();
+            if (realDurationMs > 0) {
+                percentWatched = state.positionMs / (realDurationMs / 100f);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
@@ -26,6 +27,14 @@ public class ExoUtils {
         }
 
         return player.isLoading();
+    }
+
+    public static boolean isBuffering(ExoPlayer player) {
+        if (player == null) {
+            return false;
+        }
+
+        return player.getPlaybackState() == Player.STATE_BUFFERING;
     }
 
     public static MediaCodecInfo getCapsDecoderInfo(String mimeType) {

@@ -30,6 +30,9 @@ public class SabrMatroskaAdapter extends MatroskaExtractor {
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
+        } catch (Exception e) {
+            Log.e(TAG, "User doing seek? %s: %s", e.getClass().getSimpleName(), e.getMessage());
+            e.printStackTrace();
         } finally {
             if (result != RESULT_CONTINUE) {
                 Log.e(TAG, "MatroskaAdapter: disposing, result=%s", result);

@@ -66,6 +66,10 @@ public class CommentsController extends BasePlayerController {
         CommentsReceiver commentsReceiver = new AbstractCommentsReceiver(getContext()) {
             @Override
             public void onLoadMore(CommentGroup commentGroup) {
+                if (commentGroup == null) {
+                    return;
+                }
+
                 loadComments(this, commentGroup.getNextCommentsKey());
             }
 
@@ -130,7 +134,7 @@ public class CommentsController extends BasePlayerController {
             }
 
             if (mCommentsKey == null && mLiveChatKey == null) {
-                MessageHelpers.showMessage(getContext(), R.string.section_is_empty);
+                MessageHelpers.showMessage(getContext(), R.string.comments_disabled);
             }
         }
     }

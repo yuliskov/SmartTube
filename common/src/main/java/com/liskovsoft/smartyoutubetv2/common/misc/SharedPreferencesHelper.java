@@ -15,7 +15,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,6 +79,9 @@ public class SharedPreferencesHelper {
                     editor.putFloat(key, (Float) value);
                 } else if (value instanceof Long) {
                     editor.putLong(key, (Long) value);
+                } else if (value instanceof Set) {
+                    //noinspection unchecked
+                    editor.putStringSet(key, (Set<String>) value);
                 } else {
                     Log.e(TAG, "Unsupported data type: " + key + " -> " + value);
                 }
@@ -136,6 +141,17 @@ public class SharedPreferencesHelper {
                 switch (type) {
                     case "string":
                         editor.putString(key, value);
+                        break;
+                    case "set":
+                        Set<String> set = new HashSet<>();
+                        NodeList setChildren = element.getChildNodes();
+                        for (int j = 0; j < setChildren.getLength(); j++) {
+                            Node setChild = setChildren.item(j);
+                            if (setChild.getNodeType() == Node.ELEMENT_NODE && "string".equals(setChild.getNodeName())) {
+                                set.add(setChild.getTextContent());
+                            }
+                        }
+                        editor.putStringSet(key, set);
                         break;
                     case "int":
                         editor.putInt(key, Integer.parseInt(value));

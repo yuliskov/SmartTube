@@ -97,6 +97,11 @@
     </style>
     <!-- Give ability to override style for different api -->
     <style name="App.Theme.Leanback.Preferences" parent="App.Theme.Leanback.Preferences.Base" />
+    <!-- Android 8 fallback -->
+    <style name="App.Theme.Leanback.Preferences.Opaque" parent="App.Theme.Leanback.Preferences.Base">
+        <!-- IllegalStateException: Only fullscreen opaque activities can request orientation -->
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
     <!-- End Color scheme: Teal (Default) -->
 
     <!--  Color scheme: Dark Grey  -->

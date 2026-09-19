@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
+import com.liskovsoft.smartyoutubetv2.common.misc.CrashRestorer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelHeaderPresenter.ChannelHeaderCallback;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
@@ -17,17 +18,20 @@ import com.liskovsoft.googlecommon.common.helpers.YouTubeHelper;
 
 public class ChannelFragment extends MultipleRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();
-    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ChannelPresenter mChannelPresenter;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
-    private int mRestoredItemIndex = -1;
+    private CrashRestorer mCrashRestorer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(null); // Real restore takes place in the presenter
-        
-        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
+
+        if (getContext() == null) {
+            return;
+        }
+
+        mCrashRestorer = new CrashRestorer(getContext(), savedInstanceState);
         mIsFragmentCreated = true;
         mChannelPresenter = ChannelPresenter.instance(getContext());
         mChannelPresenter.setView(this);
@@ -65,22 +69,28 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Not robust. Because tab content often changed after reloading.
-        outState.putInt(SELECTED_ITEM_INDEX, getPosition());
+        // Called when the activity is paused
+        mCrashRestorer.persistHeaderIndex(outState, getPosition());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (getActivity() == null) {
+            return;
+        }
+
         // Don't move to onCreateView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mChannelPresenter.onViewInitialized();
-
+        
         // Restore state after crash
-        setPosition(mRestoredItemIndex);
-        mRestoredItemIndex = -1;
+        mCrashRestorer.restoreHeader((idx, video) -> {
+            setPosition(idx);
+        });
+        mCrashRestorer.restorePlayback();
     }
 
     @Override

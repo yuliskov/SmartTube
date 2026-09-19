@@ -57,8 +57,8 @@ android {
         applicationId "app.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 2367
-        versionName "31.77"
+        versionCode 2443
+        versionName "32.53"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -171,6 +171,11 @@ android {
             applicationId "app.smarttube.fdroid"
             minSdkVersion 21
             targetSdkVersion project.properties.compileSdkVersion
+
+            // The content of Universal apk
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+            }
         }
     }
 }

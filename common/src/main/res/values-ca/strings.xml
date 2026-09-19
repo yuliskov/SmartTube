@@ -338,7 +338,6 @@
   <string name="proxy_not_supported">Utilitzeu el servidor intermediari web (necessita Android 4.4+)</string>
   <string name="proxy_test_btn">Prova</string>
   <string name="proxy_settings_title">	Configuració del servidor intermediari</string>
-  <string name="proxy_test_urls">https://www.youtube.com \n https://www.google.com</string>
   <string name="proxy_test_cancelled">Prova # %d : cancel·lada.</string>
   <string name="proxy_type_invalid">No s\'ha definit el tipus de proxy.</string>
   <string name="proxy_host_invalid">L\'amfitrió del servidor intermediari no s\'ha definit.</string>
