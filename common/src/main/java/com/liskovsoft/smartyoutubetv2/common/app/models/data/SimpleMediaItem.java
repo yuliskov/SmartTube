@@ -30,6 +30,7 @@ public final class SimpleMediaItem implements MediaItem {
     private String mClickTrackingParams;
     private String mFeedbackToken;
     private String mFeedbackToken2;
+    private FeedbackEndpoint mFeedbackEndpoint;
 
     private SimpleMediaItem() {
     }
@@ -78,6 +79,7 @@ public final class SimpleMediaItem implements MediaItem {
         if (video.mediaItem != null) {
             mediaItem.mFeedbackToken = video.mediaItem.getFeedbackToken();
             mediaItem.mFeedbackToken2 = video.mediaItem.getFeedbackToken2();
+            mediaItem.mFeedbackEndpoint = video.mediaItem.getFeedbackEndpoint();
         }
 
         return mediaItem;
@@ -135,7 +137,7 @@ public final class SimpleMediaItem implements MediaItem {
 
     @Override
     public FeedbackEndpoint getFeedbackEndpoint() {
-        return null;
+        return mFeedbackEndpoint;
     }
 
     @Override
