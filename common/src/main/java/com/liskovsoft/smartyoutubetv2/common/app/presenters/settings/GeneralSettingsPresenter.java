@@ -623,6 +623,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.setSelectChannelSectionEnabled(option.isSelected()),
                 mGeneralData.isSelectChannelSectionEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.sort_playlists_alphabetically),
+                option -> mGeneralData.setPlaylistsSortedEnabled(option.isSelected()),
+                mGeneralData.isPlaylistsSortedEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
