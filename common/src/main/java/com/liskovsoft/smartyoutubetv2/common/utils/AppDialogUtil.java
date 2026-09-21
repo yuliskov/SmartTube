@@ -350,7 +350,7 @@ public class AppDialogUtil {
                         playerData.setFormatPerChannel(channelId, preset.format);
                         onFormatSelected.run();
                     },
-                    preset.format.equals(selectedFormat)));
+                    Helpers.equals(preset.format, selectedFormat)));
         }
 
         result.add(0, UiOptionItem.from(

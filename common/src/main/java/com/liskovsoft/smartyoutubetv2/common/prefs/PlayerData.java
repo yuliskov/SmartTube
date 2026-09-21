@@ -921,7 +921,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         if (formatsPerChannel != null) {
             for (String formatSpec : formatsPerChannel) {
                 ChannelFormat item = ChannelFormat.fromString(formatSpec);
-                mFormatsPerChannel.put(item.channelId, item);
+
+                if (item.channelId != null && item.format != null) {
+                    mFormatsPerChannel.put(item.channelId, item);
+                }
             }
         }
 
