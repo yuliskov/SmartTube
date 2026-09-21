@@ -566,8 +566,14 @@ public class SuggestionsController extends BasePlayerController {
             return;
         }
 
-        getPlayer().updateSuggestions(video.getGroup());
-        focusAndContinueIfNeeded(video.getGroup(), () -> findNextSectionVideoIfNeeded(video));
+        VideoGroup group = video.getGroup();
+
+        if (group != null) {
+            // Make the index consistent with the other sections.
+            group.setPosition(-1);
+            getPlayer().updateSuggestions(group);
+            focusAndContinueIfNeeded(group, () -> findNextSectionVideoIfNeeded(video));
+        }
     }
 
     private void markAsQueueIfNeeded(Video item) {
