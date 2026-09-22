@@ -206,7 +206,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void onResume() {
-        resetBackState();
+        mIsBackPressed = false;
         try {
             super.onResume();
         } catch (IllegalArgumentException e) {
@@ -439,6 +439,10 @@ public class MotherActivity extends FragmentActivity {
 
     protected MediaServiceData getMediaServiceData() {
         return MediaServiceData.instance();
+    }
+
+    protected final boolean isBackPressed() {
+        return mIsBackPressed;
     }
 
     protected final void resetBackState() {
