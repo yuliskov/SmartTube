@@ -121,6 +121,8 @@ public class AppDialogActivity extends MotherActivity {
             // treats differently than real D-pad input.
             if (mIsBackPressed && mFragment.canGoBack()) {
                 mFragment.goBack();
+                // No additional event like onResume is fired, so we should restore the state explicitly
+                super.resetBackState();
                 return;
             }
 
