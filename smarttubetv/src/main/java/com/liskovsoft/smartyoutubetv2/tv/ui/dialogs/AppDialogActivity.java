@@ -115,6 +115,10 @@ public class AppDialogActivity extends MotherActivity {
         Log.d(TAG, "Dialog finish");
         if (mFragment != null) { // fragment isn't created yet (expandable = true)
             // Fix mouse DPAD emulation on API 28+
+            // The bug on API 28+ when using mouse to traverse nested dialog categories.
+            // In this case the back key closes dialog instead of return to the previous category.
+            // Cause: mouse click flips the view hierarchy into touch mode, which back-handling
+            // treats differently than real D-pad input.
             if (mIsBackPressed && mFragment.canGoBack()) {
                 mFragment.goBack();
                 return;
