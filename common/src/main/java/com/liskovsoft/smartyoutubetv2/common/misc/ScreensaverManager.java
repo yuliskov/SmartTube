@@ -183,7 +183,7 @@ public class ScreensaverManager {
         if (!mIsBlocked) {
             hideDimOverlay();
         }
-        enableScreensaver();
+        enableSystemScreensaver();
     }
 
     /**
@@ -193,7 +193,7 @@ public class ScreensaverManager {
         mIsSuspended = false;
         enable();
         if (mIsBlocked) {
-            disableScreensaver();
+            disableSystemScreensaver();
         }
     }
 
@@ -391,7 +391,7 @@ public class ScreensaverManager {
         mIsScreenOff = false;
     }
 
-    private void enableScreensaver() {
+    private void enableSystemScreensaver() {
         Activity activity = mActivity.get();
 
         if (activity != null) {
@@ -399,7 +399,7 @@ public class ScreensaverManager {
         }
     }
 
-    private void disableScreensaver() {
+    private void disableSystemScreensaver() {
         Activity activity = mActivity.get();
 
         if (activity != null) {
