@@ -218,46 +218,26 @@ public class MotherActivity extends FragmentActivity {
 
         applyFullscreenModeIfNeeded();
 
-        // Remove screensaver from the previous activity when closing current one.
-        // Called on player's next track. Reason unknown.
-        mScreensaverManager.enable();
         // Restore this activity's screensaver policy after returning to the foreground.
-        //mScreensaverManager.resume();
+        mScreensaverManager.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        // Remove screensaver from the previous activity when closing current one.
-        // Called on player's next track. Reason unknown.
-        mScreensaverManager.disable();
         // Stop managing the screensaver so a paused activity cannot keep the display awake.
-        // NOTE: moving suspend to onStop to prevent screen flicker when persistent dimming is enabled
-        //if (!mIsBackPressed) {
-        //    mScreensaverManager.suspend();
-        //}
+        mScreensaverManager.suspend();
     }
 
-    //@Override
-    //protected void onStop() {
-    //    super.onStop();
-    //
-    //    // Stop managing the screensaver so a paused activity cannot keep the display awake.
-    //    // NOTE: moving suspend to onStop to prevent screen flicker when persistent dimming is enabled
-    //    if (mIsBackPressed) {
-    //        mScreensaverManager.suspend();
-    //    }
-    //}
+    @Override
+    protected void onDestroy() {
+        if (mScreensaverManager != null) {
+            mScreensaverManager.cleanup();
+        }
 
-    //@Override
-    //protected void onDestroy() {
-    //    if (mScreensaverManager != null) {
-    //        mScreensaverManager.cleanup();
-    //    }
-    //
-    //    super.onDestroy();
-    //}
+        super.onDestroy();
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

@@ -180,8 +180,10 @@ public class ScreensaverManager {
         mIsSuspended = true;
         // Leave mUnlockInstance queued so the shared registry lock cannot be stranded.
         Utils.removeCallbacks(mDimScreen, mUndimScreen, mTimeoutHandler);
-        hideDimOverlay();
-        releaseScreensaver();
+        if (!mIsBlocked) {
+            hideDimOverlay();
+        }
+        enableScreensaver();
     }
 
     /**
@@ -190,6 +192,9 @@ public class ScreensaverManager {
     public void resume() {
         mIsSuspended = false;
         enable();
+        if (mIsBlocked) {
+            disableScreensaver();
+        }
     }
 
     /**
@@ -386,11 +391,19 @@ public class ScreensaverManager {
         mIsScreenOff = false;
     }
 
-    private void releaseScreensaver() {
+    private void enableScreensaver() {
         Activity activity = mActivity.get();
 
         if (activity != null) {
             Helpers.enableScreensaver(activity);
+        }
+    }
+
+    private void disableScreensaver() {
+        Activity activity = mActivity.get();
+
+        if (activity != null) {
+            Helpers.disableScreensaver(activity);
         }
     }
 
