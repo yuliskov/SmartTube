@@ -142,7 +142,7 @@ public class VideoContentProvider extends ContentProvider {
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
 
-            Log.d(TAG, "Search result received: " + mediaItems);
+            Log.d(TAG, "Search result received: %d items", mediaItems != null ? mediaItems.size() : 0);
 
             sCachedMediaItems.clear();
 
@@ -161,7 +161,7 @@ public class VideoContentProvider extends ContentProvider {
         if (mSearch != null) {
             List<MediaItem> mediaItems = mSearch.getMediaItems();
 
-            Log.d(TAG, "Next search result received: " + mediaItems);
+            Log.d(TAG, "Next search result received: %d items", mediaItems != null ? mediaItems.size() : 0);
 
             apply(cursor, mediaItems, limit);
         } else {
@@ -171,17 +171,17 @@ public class VideoContentProvider extends ContentProvider {
 
     private void apply(MatrixCursor matrixCursor, List<MediaItem> mediaItems, int limit) {
         if (mediaItems != null) {
-            int idx = 0;
+            int count = 0;
 
             for (MediaItem mediaItem : mediaItems) {
+                if (count >= limit) break;
                 matrixCursor.addRow(convertVideoIntoRow(mediaItem));
-                idx++;
+                sCachedMediaItems.add(mediaItem);
+                count++;
             }
 
-            sCachedMediaItems.addAll(mediaItems);
-
-            if (idx < limit) {
-                nextSearch(matrixCursor, limit - idx);
+            if (count < limit) {
+                nextSearch(matrixCursor, limit - count);
             }
         }
     }
