@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.HiddenPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -199,6 +200,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             File destination = new File(target, mFilesDir.getName());
             FileHelpers.copy(mFilesDir, destination, null, dir -> Helpers.equalsAny(dir.getName(), Utils.BACKUP_DIRS));
         }
+
     }
 
     private void restoreData(String backupName) {
@@ -406,7 +408,11 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         if (files != null) {
             for (File file : files) {
                 if (file.getName().endsWith(".zip")) {
-                    mHelper.unpackTempZip(file);
+                    try {
+                        mHelper.unpackTempZip(file);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Cannot import backup: " + e.getMessage());
+                    }
                     // More than one zip file
                     //break;
                 }
