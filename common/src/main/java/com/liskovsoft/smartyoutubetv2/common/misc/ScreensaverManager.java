@@ -39,10 +39,6 @@ public class ScreensaverManager {
     // the host activity is not in the foreground. Blocked only suppresses user-facing dimming.
     private boolean mIsSuspended;
     private final Runnable mTimeoutHandler = () -> {
-        if (mIsSuspended) {
-            return;
-        }
-
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             return;
@@ -92,10 +88,6 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void enableChecked() {
-        if (mIsSuspended) {
-            return;
-        }
-
         // Fix dialog dimming when using the play button on the remote controller.
         // NOTE: only the last activity will show dimming and in our case the last one is PlaybackActivity
         if (mMode == MODE_SCREEN_OFF || getAppDialogPresenter().isDialogShown()) {
@@ -109,10 +101,6 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void disableChecked() {
-        if (mIsSuspended) {
-            return;
-        }
-
         if (mMode == MODE_SCREEN_OFF) {
             return;
         }
@@ -156,13 +144,10 @@ public class ScreensaverManager {
     }
 
     public void doScreenOff() {
-        if (mIsSuspended) {
+        // Ignore suspend if dialog is opened to apply settings immediately
+        if (mIsSuspended && !getAppDialogPresenter().isDialogShown()) {
             return;
         }
-
-        //if (mIsScreenOff) {
-        //    return;
-        //}
 
         // NOTE: disable will create infinite loop
         //disable();
@@ -215,10 +200,6 @@ public class ScreensaverManager {
     }
 
     private void enableTimeout() {
-        if (mIsSuspended) {
-            return;
-        }
-
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
             disableTimeout();
@@ -236,18 +217,10 @@ public class ScreensaverManager {
     }
 
     private void dimScreen() {
-        if (mIsSuspended) {
-            return;
-        }
-
         showHide(true);
     }
 
     private void undimScreen() {
-        if (mIsSuspended) {
-            return;
-        }
-
         showHide(false);
     }
 
@@ -257,10 +230,6 @@ public class ScreensaverManager {
     }
 
     private void showHideDimming(boolean show) {
-        if (mIsSuspended) {
-            return;
-        }
-
         Activity activity = mActivity.get();
         View dimContainer = mDimContainer.get();
 
@@ -301,10 +270,6 @@ public class ScreensaverManager {
     }
 
     private void showHideScreensaver(boolean show) {
-        if (mIsSuspended) {
-            return;
-        }
-
         Activity activity = mActivity.get();
 
         if (activity == null) {
