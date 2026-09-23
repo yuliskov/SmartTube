@@ -45,7 +45,11 @@ public class ExoPlayerInitializer {
         // If ram is too big, bigger then max int value DeviceRam will return a negative number...
         // use 196MB as that can only happens if device has more than 17GB of RAM, so 196 is enough and safe
         // https://github.com/yuliskov/SmartYouTubeTV/issues/532
-        mMaxBufferBytes = deviceRam <= 0 ? 196_000_000 : (int)(deviceRam / 18);
+        // ExoPlayer's allocator stores media in the app's Java heap, which can be much smaller
+        // than device RAM (384 MB on some 8 GB boxes). Leave room for the rest of the app.
+        long deviceBufferBytes = deviceRam <= 0 ? 196_000_000 : deviceRam / 18;
+        mMaxBufferBytes = (int) Math.min(Math.min(deviceBufferBytes,
+                Runtime.getRuntime().maxMemory() / 4), Integer.MAX_VALUE);
     }
 
     public SimpleExoPlayer createPlayer(Context context, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
@@ -98,7 +102,9 @@ public class ExoPlayerInitializer {
      * @return load control
      */
     private DefaultLoadControl createLoadControl() {
-        DefaultLoadControl.Builder baseBuilder = new DefaultLoadControl.Builder();
+        DefaultLoadControl.Builder baseBuilder = new DefaultLoadControl.Builder()
+                .setTargetBufferBytes(mMaxBufferBytes)
+                .setPrioritizeTimeOverSizeThresholds(false);
 
         // Default values
         //DefaultLoadControl.DEFAULT_MIN_BUFFER_MS // 15_000
@@ -116,16 +122,10 @@ public class ExoPlayerInitializer {
             case PlayerData.BUFFER_HIGHEST:
                 minBufferMs = 50_000;
                 maxBufferMs = 100_000;
-                // Infinite buffer works awfully on live streams. Constant stuttering.
-                //maxBufferMs = 36_000_000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
-                baseBuilder
-                        .setTargetBufferBytes(mMaxBufferBytes);
-                baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
             case PlayerData.BUFFER_HIGH:
                 minBufferMs = 50_000;
                 maxBufferMs = 50_000;
-                baseBuilder.setBackBuffer(minBufferMs, true);
                 break;
             case PlayerData.BUFFER_MEDIUM:
                 //minBufferMs = 30_000;
