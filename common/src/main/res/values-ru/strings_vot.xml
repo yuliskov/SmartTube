@@ -25,6 +25,7 @@
     <string name="vot_live_voices_desc">Только для перевода на русский. Если недоступны, используются обычные голоса</string>
     <string name="vot_standard_voices">Обычные голоса</string>
     <string name="vot_yandex_token">Войти в Яндекс по токену</string>
+    <string name="vot_yandex_account">Аккаунт Яндекса</string>
     <string name="vot_yandex_token_missing">Добавить токен для живых голосов</string>
     <string name="vot_yandex_token_saved">Токен сохранён (не проверен)</string>
     <string name="vot_yandex_token_remove">Удалить токен Яндекса</string>

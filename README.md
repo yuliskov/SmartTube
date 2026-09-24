@@ -135,6 +135,10 @@ It has been successfully tested on TVs, TV boxes and TV sticks that are based on
 
 SmartTube focuses on a clean and distraction-free interface for watching media content. The app does not include advertising UI elements and focuses on playback and browsing experience instead.
 
+### TTS Voiceover
+
+Enable TTS Voiceover in the player settings to translate videos automatically. Choose a YouTube dubbed track or Yandex VOT, a target language, and the audio mix there. Live voices can use a Yandex OAuth token under **Yandex account**; when they are unavailable, the app tries standard voices. The feature is off by default, and the player button turns it off for the current video.
+
 
 ### SponsorBlock
 

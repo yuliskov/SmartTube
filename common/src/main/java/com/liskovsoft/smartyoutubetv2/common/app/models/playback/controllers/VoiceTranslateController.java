@@ -111,9 +111,10 @@ public final class VoiceTranslateController extends BasePlayerController {
             maybeAutoStart();
             return;
         }
-        boolean automatic = mStartedAutomatically;
         stop();
-        start(automatic);
+        // Changing a setting is an explicit choice for this video, even when
+        // the previous translation was started automatically.
+        start(false);
     }
 
     private String sourceLanguage() {
