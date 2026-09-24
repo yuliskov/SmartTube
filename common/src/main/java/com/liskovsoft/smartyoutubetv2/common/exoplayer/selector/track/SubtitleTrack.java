@@ -25,6 +25,26 @@ public class SubtitleTrack extends MediaTrack {
             return 1;
         }
 
+        // Exact match by format ID takes highest priority
+        if (format.id != null && track2.format.id != null) {
+            if (Helpers.equals(format.id, track2.format.id)) {
+                return 0;
+            }
+            if (Helpers.equals(format.language, track2.format.language)) {
+                boolean thisAuto = isAuto(format.language);
+                boolean otherAuto = isAuto(track2.format.language);
+                if (thisAuto == otherAuto) {
+                    return -1; // Different tracks with same language (e.g. Animated vs Standard)
+                }
+            }
+        } else if (Helpers.equals(format.language, track2.format.language)) {
+            boolean thisAuto = isAuto(format.language);
+            boolean otherAuto = isAuto(track2.format.language);
+            if (thisAuto == otherAuto) {
+                return 0;
+            }
+        }
+
         int result = -1;
 
         if (Helpers.startsWith(track2.format.language, trim(format.language))) { // partial match

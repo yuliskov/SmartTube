@@ -165,8 +165,13 @@ public class ExoFormatItem implements FormatItem {
                             && Helpers.equals(mCodecs, formatItem.mCodecs)
                             && Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
                 case TYPE_SUBTITLE:
-                    return mType == formatItem.mType &&
-                            Helpers.contains(SubtitleTrack.trim(mLanguage), SubtitleTrack.trim(formatItem.mLanguage));
+                    if (mType != formatItem.mType) {
+                        return false;
+                    }
+                    if (mFormatId != null && formatItem.mFormatId != null) {
+                        return Helpers.equals(mFormatId, formatItem.mFormatId) && Helpers.equals(mLanguage, formatItem.mLanguage);
+                    }
+                    return mId == formatItem.mId && Helpers.equals(mLanguage, formatItem.mLanguage);
             }
         }
 

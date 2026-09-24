@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCode
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
@@ -46,6 +47,12 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
         }
 
         InvalidResponseCodeException ex = (InvalidResponseCodeException) e;
+
+        if (isSubtitle(ex)) {
+            Log.e(TAG, "Subtitle track failed with code " + ex.responseCode + ", disabling subtitle track");
+            mTrackSelectorManager.selectTrack(FormatItem.toMediaTrack(FormatItem.SUBTITLE_NONE));
+            return true;
+        }
 
         if (ex.responseCode != 404 && ex.responseCode != 503 && ex.responseCode != 500) {
             return false;
@@ -220,6 +227,14 @@ public class TrackErrorFixer extends DefaultMediaSourceEventListener {
         String url = ex.dataSpec.uri.toString();
 
         return url.contains("mime/audio");
+    }
+
+    private boolean isSubtitle(InvalidResponseCodeException ex) {
+        if (ex.dataSpec != null && ex.dataSpec.uri != null) {
+            String uriStr = ex.dataSpec.uri.toString();
+            return uriStr.contains("timedtext") || uriStr.contains("fmt=srv3") || uriStr.contains("fmt=vtt");
+        }
+        return false;
     }
 
     private boolean isBlacklisted(MediaTrack track) {

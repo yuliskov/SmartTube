@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector;
 import com.liskovsoft.smartyoutubetv2.common.misc.BufferingDetector.OnLongBuffering;
@@ -174,6 +175,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
             restartEngine = false;
             showMessage = false;
+
+            if (isSubtitlesEnabled() && isSubtitleError(error, errorContent)) {
+                Log.e(TAG, "Subtitle track request failed: " + errorContent + ", disabling subtitles.");
+                disableSubtitles();
+                return;
+            }
 
             boolean isGeneralError = Helpers.startsWithAny(errorContent, "Response code: 429", "Response code: 500");
             if (isGeneralError && isSubtitlesEnabled()) {
@@ -355,6 +362,32 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private void disableSubtitles() {
         getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+        if (getPlayer() != null) {
+            getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+        }
+    }
+
+    private boolean isSubtitleError(Throwable error, String errorContent) {
+        if (errorContent != null && (errorContent.contains("timedtext") || errorContent.contains("fmt=srv3") || errorContent.contains("fmt=vtt"))) {
+            return true;
+        }
+        while (error != null) {
+            if (error instanceof InvalidResponseCodeException) {
+                InvalidResponseCodeException ex = (InvalidResponseCodeException) error;
+                if (ex.dataSpec != null && ex.dataSpec.uri != null) {
+                    String uri = ex.dataSpec.uri.toString();
+                    if (uri.contains("timedtext") || uri.contains("fmt=srv3") || uri.contains("fmt=vtt")) {
+                        return true;
+                    }
+                }
+            }
+            String msg = error.getMessage();
+            if (msg != null && (msg.contains("timedtext") || msg.contains("fmt=srv3") || msg.contains("fmt=vtt"))) {
+                return true;
+            }
+            error = error.getCause();
+        }
+        return false;
     }
 
     private boolean isStreamEnded() {

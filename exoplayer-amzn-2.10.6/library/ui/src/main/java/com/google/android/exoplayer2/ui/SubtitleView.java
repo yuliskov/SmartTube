@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import androidx.annotation.Nullable;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -87,10 +88,19 @@ public final class SubtitleView extends View implements TextOutput {
    * @param cues The cues to display, or null to clear the cues.
    */
   public void setCues(@Nullable List<Cue> cues) {
-    // MOD: fix overlapped subs
-    // All cues are rendered simultaneously, so remain only one of them
+    // MOD: fix overlapped subs for unpositioned plain text
     if (cues != null && cues.size() > 1) {
-      cues = cues.subList(cues.size() - 1, cues.size());
+      boolean hasPositionedOrStyled = false;
+      for (int i = 0; i < cues.size(); i++) {
+        Cue cue = cues.get(i);
+        if (cue.position != Cue.DIMEN_UNSET || cue.line != Cue.DIMEN_UNSET || cue.text instanceof Spanned) {
+          hasPositionedOrStyled = true;
+          break;
+        }
+      }
+      if (!hasPositionedOrStyled) {
+        cues = cues.subList(cues.size() - 1, cues.size());
+      }
     }
 
     if (this.cues == cues) {

@@ -33,7 +33,9 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
@@ -448,9 +450,66 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
    */
   @SuppressWarnings("UndefinedEquals")
   private static boolean areCharSequencesEqual(CharSequence first, CharSequence second) {
-    // Some CharSequence implementations don't perform a cheap referential equality check in their
-    // equals methods, so we perform one explicitly here.
-    return first == second || (first != null && first.equals(second));
+    if (first == second) {
+      return true;
+    }
+    if (first == null || second == null) {
+      return false;
+    }
+    if (first.length() != second.length()) {
+      return false;
+    }
+    // If either sequence is Spanned, check text content AND span equality
+    if (first instanceof Spanned || second instanceof Spanned) {
+      if (!(first instanceof Spanned) || !(second instanceof Spanned)) {
+        return false;
+      }
+      if (!first.toString().equals(second.toString())) {
+        return false;
+      }
+      Spanned firstSpanned = (Spanned) first;
+      Spanned secondSpanned = (Spanned) second;
+      Object[] firstSpans = firstSpanned.getSpans(0, firstSpanned.length(), Object.class);
+      Object[] secondSpans = secondSpanned.getSpans(0, secondSpanned.length(), Object.class);
+      if (firstSpans.length != secondSpans.length) {
+        return false;
+      }
+      for (int i = 0; i < firstSpans.length; i++) {
+        Object s1 = firstSpans[i];
+        Object s2 = secondSpans[i];
+        if (s1.getClass() != s2.getClass()) {
+          return false;
+        }
+        if (firstSpanned.getSpanStart(s1) != secondSpanned.getSpanStart(s2)
+            || firstSpanned.getSpanEnd(s1) != secondSpanned.getSpanEnd(s2)
+            || firstSpanned.getSpanFlags(s1) != secondSpanned.getSpanFlags(s2)) {
+          return false;
+        }
+        if (s1 instanceof ForegroundColorSpan) {
+          if (((ForegroundColorSpan) s1).getForegroundColor() != ((ForegroundColorSpan) s2).getForegroundColor()) {
+            return false;
+          }
+        } else if (s1 instanceof BackgroundColorSpan) {
+          if (((BackgroundColorSpan) s1).getBackgroundColor() != ((BackgroundColorSpan) s2).getBackgroundColor()) {
+            return false;
+          }
+        } else if (s1 instanceof StyleSpan) {
+          if (((StyleSpan) s1).getStyle() != ((StyleSpan) s2).getStyle()) {
+            return false;
+          }
+        } else if (s1 instanceof AbsoluteSizeSpan) {
+          if (((AbsoluteSizeSpan) s1).getSize() != ((AbsoluteSizeSpan) s2).getSize()) {
+            return false;
+          }
+        } else if (s1 instanceof RelativeSizeSpan) {
+          if (((RelativeSizeSpan) s1).getSizeChange() != ((RelativeSizeSpan) s2).getSizeChange()) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    return first.equals(second);
   }
 
 }

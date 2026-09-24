@@ -14,10 +14,12 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.Selecti
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.AudioTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
@@ -413,7 +415,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         // enable renderer
         mRenderers[rendererIndex].isDisabled = false;
 
-        MediaTrack matchedTrack = findBestMatch(track);
+        MediaTrack matchedTrack;
+        if (track.groupIndex != -1 && track.trackIndex != -1) {
+            matchedTrack = track;
+        } else {
+            matchedTrack = findBestMatch(track);
+        }
         
         setSelection(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
 
@@ -535,16 +542,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 // Don't let change the codec beside needed one.
-                // Handle situation where same codecs in different groups (e.g. subtitles).
-                if (MediaTrack.codecEquals(result, originTrack)) {
-                    if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
+                // Handle situation where same codecs in different groups. Skip for subtitles.
+                if (originTrack.rendererIndex != RENDERER_INDEX_SUBTITLE && !(originTrack instanceof SubtitleTrack)) {
+                    if (MediaTrack.codecEquals(result, originTrack)) {
+                        if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
+                            result = prevResult;
+                        }
+                    } else if (MediaTrack.codecEquals(prevResult, originTrack)) {
                         result = prevResult;
-                    }
-                } else if (MediaTrack.codecEquals(prevResult, originTrack)) {
-                    result = prevResult;
-                } else if (prevResult.compare(result) == 0) { // Formats are the same except the codecs
-                    if (MediaTrack.preferByCodec(prevResult, result)) {
-                        result = prevResult;
+                    } else if (prevResult.compare(result) == 0) { // Formats are the same except the codecs
+                        if (MediaTrack.preferByCodec(prevResult, result)) {
+                            result = prevResult;
+                        }
                     }
                 }
             }
@@ -779,35 +788,90 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
         @Override
         public int compare(MediaTrack mediaTrack1, MediaTrack mediaTrack2) {
-            Format format1 = mediaTrack1.format;
-            Format format2 = mediaTrack2.format;
+            if (mediaTrack1 == mediaTrack2) {
+                return 0;
+            }
 
+            Format format1 = mediaTrack1 != null ? mediaTrack1.format : null;
+            Format format2 = mediaTrack2 != null ? mediaTrack2.format : null;
+
+            if (format1 == null && format2 == null) {
+                return compareTrackIndices(mediaTrack1, mediaTrack2);
+            }
             if (format1 == null) { // assume it's auto option
                 return -1;
             }
-
             if (format2 == null) { // assume it's auto option
                 return 1;
             }
 
             // sort subtitles/audio tracks by language code
-            if (format1.language != null && format2.language != null) {
+            if (format1.language != null || format2.language != null) {
+                if (format1.language == null) return -1;
+                if (format2.language == null) return 1;
                 int result = format1.language.compareTo(format2.language);
                 if (result != 0) {
                     return result;
                 }
             }
 
+            if (mediaTrack1 instanceof SubtitleTrack || mediaTrack1.rendererIndex == RENDERER_INDEX_SUBTITLE) {
+                // For subtitle tracks with same language, distinguish by format id (e.g. animated vs standard vs asr)
+                if (format1.id != null || format2.id != null) {
+                    if (format1.id == null) return -1;
+                    if (format2.id == null) return 1;
+                    int idComp = format1.id.compareTo(format2.id);
+                    if (idComp != 0) {
+                        return idComp;
+                    }
+                }
+                if (format1.sampleMimeType != null || format2.sampleMimeType != null) {
+                    if (format1.sampleMimeType == null) return -1;
+                    if (format2.sampleMimeType == null) return 1;
+                    int mimeComp = format1.sampleMimeType.compareTo(format2.sampleMimeType);
+                    if (mimeComp != 0) {
+                        return mimeComp;
+                    }
+                }
+                return compareTrackIndices(mediaTrack1, mediaTrack2);
+            }
+
             int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
             int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
             int delta = leftVal - rightVal;
-            if (delta == 0) {
-                int delta2 = format2.bitrate - format1.bitrate;
-                return delta2 == 0 ? 1 : delta2; // NOTE: don't return 0 or track will be removed
+            if (delta != 0) {
+                return delta;
             }
 
-            return delta;
+            int delta2 = format2.bitrate - format1.bitrate;
+            if (delta2 != 0) {
+                return delta2;
+            }
+
+            if (format1.id != null || format2.id != null) {
+                if (format1.id == null) return -1;
+                if (format2.id == null) return 1;
+                int idComp = format1.id.compareTo(format2.id);
+                if (idComp != 0) {
+                    return idComp;
+                }
+            }
+
+            return compareTrackIndices(mediaTrack1, mediaTrack2);
+        }
+
+        private static int compareTrackIndices(MediaTrack t1, MediaTrack t2) {
+            if (t1 == null && t2 == null) return 0;
+            if (t1 == null) return -1;
+            if (t2 == null) return 1;
+            if (t1.groupIndex != t2.groupIndex) {
+                return Integer.compare(t1.groupIndex, t2.groupIndex);
+            }
+            if (t1.trackIndex != t2.trackIndex) {
+                return Integer.compare(t1.trackIndex, t2.trackIndex);
+            }
+            return Integer.compare(System.identityHashCode(t1), System.identityHashCode(t2));
         }
     }
 
@@ -816,7 +880,19 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return true;
         }
 
+        if (mediaTrack instanceof SubtitleTrack || mediaTrack.rendererIndex == RENDERER_INDEX_SUBTITLE) {
+            return true;
+        }
+
         Format format = mediaTrack.format;
+        if (format == null) {
+            return true;
+        }
+
+        // Do not deduplicate text tracks, as they can have same language but different names (e.g. English vs English - animated)
+        if (format.sampleMimeType != null && (MimeTypes.isText(format.sampleMimeType) || MimeTypes.APPLICATION_YTSRV3.equals(format.sampleMimeType))) {
+            return true;
+        }
 
         // Remove hls un-complete formats altogether
         if (format.codecs == null || format.codecs.isEmpty() || format.bitrate <= 0) {
