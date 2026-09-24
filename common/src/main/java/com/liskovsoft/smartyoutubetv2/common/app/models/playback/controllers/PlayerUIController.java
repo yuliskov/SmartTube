@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -153,64 +154,178 @@ public class PlayerUIController extends BasePlayerController {
 
         boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
-        // First run
-        if (FormatItem.SUBTITLE_NONE.equals(getPlayerData().getLastSubtitleFormat())) {
-            onSubtitleLongClicked();
+        if (enabled) {
+            getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+            getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+            getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
+            enableSubtitleForChannel(false);
             return;
         }
 
         // Only default in the list
-        if (getPlayer().getSubtitleFormats() == null || getPlayer().getSubtitleFormats().size() == 1) {
+        if (getPlayer().getSubtitleFormats() == null || getPlayer().getSubtitleFormats().size() <= 1) {
             return;
         }
 
-        FormatItem matchedFormat = null;
+        FormatItem bestFormat = findBestSubtitle(getPlayer(), getPlayerData());
 
-        List<FormatItem> availableFormats = getPlayer().getSubtitleFormats();
-        if (availableFormats != null) {
-            // 1. Try exact match from last subtitle formats
-            for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
-                if (item != null) {
-                    for (FormatItem available : availableFormats) {
-                        if (available.equals(item)) {
-                            matchedFormat = available;
-                            break;
-                        }
-                    }
-                    if (matchedFormat != null) {
-                        break;
-                    }
-                }
-            }
-
-            // 2. If no exact match (e.g. restored config from older version with legacy format ID),
-            // match by language against preferred subtitle format, favoring animated tracks!
-            if (matchedFormat == null) {
-                FormatItem preferred = getPlayerData().getLastSubtitleFormat();
-                if (preferred != null && preferred.getLanguage() != null) {
-                    for (FormatItem available : availableFormats) {
-                        if (!available.isDefault() && SubtitleTrack.isLanguageMatch(preferred.getLanguage(), available.getLanguage())) {
-                            matchedFormat = available;
-                            if (SubtitleTrack.isAnimated(available.getLanguage())) {
-                                break; // Best match found (animated track)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Match found
-        if (matchedFormat != null) {
-            FormatItem format = enabled ? FormatItem.SUBTITLE_NONE : matchedFormat;
-            getPlayer().setFormat(format);
-            getPlayerData().setFormat(format);
-            getPlayer().setButtonState(R.id.lb_control_closed_captioning, !FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-            enableSubtitleForChannel(!enabled);
+        if (bestFormat != null && !bestFormat.isDefault() && !FormatItem.SUBTITLE_NONE.equals(bestFormat)) {
+            getPlayer().setFormat(bestFormat);
+            getPlayerData().setFormat(bestFormat);
+            getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
+            enableSubtitleForChannel(true);
         } else {
-            // Match not found
             onSubtitleLongClicked();
         }
+    }
+
+    public static FormatItem findBestSubtitle(PlayerEngine player, PlayerData playerData) {
+        if (player == null) {
+            return FormatItem.SUBTITLE_NONE;
+        }
+
+        List<FormatItem> availableFormats = player.getSubtitleFormats();
+        if (availableFormats == null || availableFormats.size() <= 1) {
+            return FormatItem.SUBTITLE_NONE;
+        }
+
+        String spokenLang = getVideoSpokenLanguage(player, availableFormats);
+
+        FormatItem preferred = playerData != null ? playerData.getLastSubtitleFormat() : null;
+        String preferredLang = (preferred != null && !preferred.isDefault() && preferred.getLanguage() != null)
+                ? preferred.getLanguage() : null;
+
+        // 1. First priority: match the video's actual spoken language among MANUAL subtitles
+        // (preferring animated/karaoke tracks)
+        if (spokenLang != null) {
+            FormatItem manualMatch = findManualMatch(availableFormats, spokenLang);
+            if (manualMatch != null) {
+                return manualMatch;
+            }
+        }
+
+        // 2. Second priority: if user has a preferred language matching manual subtitles
+        if (preferredLang != null) {
+            FormatItem manualMatch = findManualMatch(availableFormats, preferredLang);
+            if (manualMatch != null) {
+                return manualMatch;
+            }
+        }
+
+        // 3. Third priority: look through auto-generated subtitles for video's native language
+        // (specifically the genuine native ASR track e.g. "English (auto-generated)", NOT auto-translated!)
+        if (spokenLang != null) {
+            FormatItem nativeAuto = findNativeAutoMatch(availableFormats, spokenLang);
+            if (nativeAuto != null) {
+                return nativeAuto;
+            }
+        }
+
+        // 4. Fourth priority: native auto-generated matching user's preferred language
+        if (preferredLang != null) {
+            FormatItem nativeAuto = findNativeAutoMatch(availableFormats, preferredLang);
+            if (nativeAuto != null) {
+                return nativeAuto;
+            }
+        }
+
+        // 5. Fifth priority: auto-translated matching user's preferred language
+        if (preferredLang != null) {
+            for (FormatItem item : availableFormats) {
+                if (item != null && !item.isDefault() && SubtitleTrack.isAutoTranslated(item.getLanguage())
+                        && SubtitleTrack.isLanguageMatch(preferredLang, item.getLanguage())) {
+                    return item;
+                }
+            }
+        }
+
+        // 6. Fallback: first non-default manual track
+        for (FormatItem item : availableFormats) {
+            if (item != null && !item.isDefault() && !SubtitleTrack.isAuto(item.getLanguage())) {
+                return item;
+            }
+        }
+
+        // 7. Fallback: any native auto track
+        for (FormatItem item : availableFormats) {
+            if (item != null && !item.isDefault() && SubtitleTrack.isNativeAuto(item.getLanguage())) {
+                return item;
+            }
+        }
+
+        // 8. Fallback: first available non-default track
+        for (FormatItem item : availableFormats) {
+            if (item != null && !item.isDefault()) {
+                return item;
+            }
+        }
+
+        return FormatItem.SUBTITLE_NONE;
+    }
+
+    private static FormatItem findManualMatch(List<FormatItem> availableFormats, String targetLang) {
+        FormatItem candidate = null;
+        for (FormatItem item : availableFormats) {
+            if (item != null && !item.isDefault() && !SubtitleTrack.isAuto(item.getLanguage())
+                    && SubtitleTrack.isLanguageMatch(targetLang, item.getLanguage())) {
+                if (SubtitleTrack.isAnimated(item.getLanguage())) {
+                    return item; // Best match: manual animated track!
+                }
+                if (candidate == null) {
+                    candidate = item;
+                }
+            }
+        }
+        return candidate;
+    }
+
+    private static FormatItem findNativeAutoMatch(List<FormatItem> availableFormats, String targetLang) {
+        for (FormatItem item : availableFormats) {
+            if (item != null && !item.isDefault() && SubtitleTrack.isNativeAuto(item.getLanguage())
+                    && SubtitleTrack.isLanguageMatch(targetLang, item.getLanguage())) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static String getVideoSpokenLanguage(PlayerEngine player, List<FormatItem> subtitleFormats) {
+        // 1. Look for native auto-generated ASR subtitle track in the video
+        if (subtitleFormats != null) {
+            for (FormatItem item : subtitleFormats) {
+                if (item != null && !item.isDefault() && SubtitleTrack.isNativeAuto(item.getLanguage())) {
+                    String base = SubtitleTrack.getBaseLanguage(item.getLanguage());
+                    if (!base.isEmpty()) {
+                        return base;
+                    }
+                }
+            }
+        }
+
+        // 2. Check active audio format
+        if (player != null && player.getAudioFormat() != null && !player.getAudioFormat().isDefault()) {
+            String audioLang = player.getAudioFormat().getLanguage();
+            if (audioLang != null) {
+                String base = SubtitleTrack.getBaseLanguage(audioLang);
+                if (!base.isEmpty()) {
+                    return base;
+                }
+            }
+        }
+
+        // 3. Check first non-default manual subtitle track
+        if (subtitleFormats != null) {
+            for (FormatItem item : subtitleFormats) {
+                if (item != null && !item.isDefault() && !SubtitleTrack.isAuto(item.getLanguage())) {
+                    String base = SubtitleTrack.getBaseLanguage(item.getLanguage());
+                    if (!base.isEmpty()) {
+                        return base;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     private void onSubtitleLongClicked() {
@@ -1117,20 +1232,50 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        // Move last format to the top
         int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
         List<FormatItem> topSubtitles = new ArrayList<>();
-        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
-            if (item == null || item.getLanguage() == null) { // skip empty formats
-                continue;
-            }
-            int index = 0;
-            while (index != -1) {
-                index = subtitleFormats.indexOf(item);
-                if (index != -1) {
-                    topSubtitles.add(subtitleFormats.remove(index));
+
+        String spokenLang = getVideoSpokenLanguage(getPlayer(), getPlayer().getSubtitleFormats());
+
+        // 1. First priority: Always place the video's actual spoken language at the top!
+        if (spokenLang != null) {
+            // First look for native ASR (e.g. English (auto-generated)) or manual tracks
+            for (FormatItem item : subtitleFormats) {
+                if (item != null && !item.isDefault() && SubtitleTrack.isLanguageMatch(spokenLang, item.getLanguage())) {
+                    if (SubtitleTrack.isNativeAuto(item.getLanguage()) || !SubtitleTrack.isAuto(item.getLanguage())) {
+                        if (!topSubtitles.contains(item)) {
+                            topSubtitles.add(item);
+                        }
+                    }
                 }
             }
+            // If neither manual nor native ASR found in this list, match translated if any
+            if (topSubtitles.isEmpty()) {
+                for (FormatItem item : subtitleFormats) {
+                    if (item != null && !item.isDefault() && SubtitleTrack.isLanguageMatch(spokenLang, item.getLanguage())) {
+                        if (!topSubtitles.contains(item)) {
+                            topSubtitles.add(item);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Second priority: User's last selected subtitle formats
+        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
+            if (item == null || item.getLanguage() == null) {
+                continue;
+            }
+            for (FormatItem available : subtitleFormats) {
+                if (available != null && !available.isDefault() && available.equals(item) && !topSubtitles.contains(available)) {
+                    topSubtitles.add(available);
+                }
+            }
+        }
+
+        // Remove topSubtitles from their current positions and re-insert at begin
+        for (FormatItem item : topSubtitles) {
+            subtitleFormats.remove(item);
         }
         subtitleFormats.addAll(subtitleFormats.size() < begin ? 0 : begin, topSubtitles);
     }

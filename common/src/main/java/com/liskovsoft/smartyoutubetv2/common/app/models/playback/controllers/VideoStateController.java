@@ -470,14 +470,24 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        FormatItem result = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
+        boolean enabled;
 
         if (getPlayerData().isSubtitlesPerChannelEnabled()) {
-            result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId)
-                    ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+            enabled = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId);
+        } else {
+            FormatItem saved = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
+            enabled = saved != null && !saved.isDefault();
         }
 
-        getPlayer().setFormat(result);
+        if (enabled) {
+            FormatItem bestFormat = PlayerUIController.findBestSubtitle(getPlayer(), getPlayerData());
+            if (bestFormat != null && !bestFormat.isDefault() && !FormatItem.SUBTITLE_NONE.equals(bestFormat)) {
+                getPlayer().setFormat(bestFormat);
+                return;
+            }
+        }
+
+        getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
     }
 
     private void saveState() {

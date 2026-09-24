@@ -82,8 +82,7 @@ public final class WebvttDecoder extends SimpleSubtitleDecoder {
         parsableWebvttData.readLine(); // Consume the "STYLE" header.
         definedStyles.addAll(cssParser.parseBlock(parsableWebvttData));
       } else if (event == EVENT_CUE) {
-        if (cueParser.parseCue(parsableWebvttData, webvttCueBuilder, definedStyles)) {
-          subtitles.add(webvttCueBuilder.build());
+        if (cueParser.parseCue(parsableWebvttData, webvttCueBuilder, definedStyles, subtitles)) {
           webvttCueBuilder.reset();
         }
       }

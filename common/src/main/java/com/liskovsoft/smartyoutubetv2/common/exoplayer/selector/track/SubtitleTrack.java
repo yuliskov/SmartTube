@@ -253,12 +253,25 @@ public class SubtitleTrack extends MediaTrack {
         if (language == null) {
             return false;
         }
-        return hasMarker(language)
-                || language.toLowerCase(Locale.ROOT).contains("auto-generated")
-                || language.toLowerCase(Locale.ROOT).contains("automatically generated");
+        return isNativeAuto(language) || isAutoTranslated(language);
     }
 
-    private static boolean hasMarker(String language) {
+    public static boolean isNativeAuto(String language) {
+        if (language == null) {
+            return false;
+        }
+        String lower = language.toLowerCase(Locale.ROOT);
+        return lower.contains("auto-generated") || lower.contains("automatically generated");
+    }
+
+    public static boolean isAutoTranslated(String language) {
+        if (language == null) {
+            return false;
+        }
+        return hasMarker(language) && !isNativeAuto(language);
+    }
+
+    public static boolean hasMarker(String language) {
         return language != null && language.endsWith(TranslatedCaptionTrack.TRANSLATE_MARKER);
     }
 }

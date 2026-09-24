@@ -93,8 +93,25 @@ public final class WebvttCueParser {
    * @param styles List of styles defined by the CSS style blocks preceeding the cues.
    * @return Whether a valid Cue was found.
    */
+  private static final Pattern TIMESTAMP_TAG_PATTERN =
+      Pattern.compile("<(?:(\\d{1,2}):)?(\\d{1,2}):(\\d{2})\\.(\\d{3})>");
+
   public boolean parseCue(ParsableByteArray webvttData, WebvttCue.Builder builder,
       List<WebvttCssStyle> styles) {
+    return parseCue(webvttData, builder, styles, null);
+  }
+
+  /**
+   * Parses the next valid WebVTT cue in a parsable array, expanding intra-cue timestamps if present.
+   *
+   * @param webvttData Parsable WebVTT file data.
+   * @param builder Builder for WebVTT Cues.
+   * @param styles List of styles defined by the CSS style blocks preceding the cues.
+   * @param outCues Optional list to collect parsed WebVTT cues (including progressive word-by-word cues).
+   * @return Whether a valid Cue was found.
+   */
+  public boolean parseCue(ParsableByteArray webvttData, WebvttCue.Builder builder,
+      List<WebvttCssStyle> styles, List<WebvttCue> outCues) {
     String firstLine = webvttData.readLine();
     if (firstLine == null) {
       return false;
@@ -102,7 +119,7 @@ public final class WebvttCueParser {
     Matcher cueHeaderMatcher = WebvttCueParser.CUE_HEADER_PATTERN.matcher(firstLine);
     if (cueHeaderMatcher.matches()) {
       // We have found the timestamps in the first line. No id present.
-      return parseCue(null, cueHeaderMatcher, webvttData, builder, textBuilder, styles);
+      return parseCue(null, cueHeaderMatcher, webvttData, builder, textBuilder, styles, outCues);
     }
     // The first line is not the timestamps, but could be the cue id.
     String secondLine = webvttData.readLine();
@@ -113,7 +130,7 @@ public final class WebvttCueParser {
     if (cueHeaderMatcher.matches()) {
       // We can do the rest of the parsing, including the id.
       return parseCue(firstLine.trim(), cueHeaderMatcher, webvttData, builder, textBuilder,
-          styles);
+          styles, outCues);
     }
     return false;
   }
@@ -159,9 +176,6 @@ public final class WebvttCueParser {
    */
   /* package */ static void parseCueText(String id, String markup, WebvttCue.Builder builder,
       List<WebvttCssStyle> styles) {
-    // MOD: Fix embedded styles by decoding html entities
-    markup = Html.fromHtml(markup).toString();
-
     SpannableStringBuilder spannedText = new SpannableStringBuilder();
     ArrayDeque<StartTag> startTagStack = new ArrayDeque<>();
     List<StyleMatch> scratchStyleMatches = new ArrayList<>();
@@ -230,17 +244,21 @@ public final class WebvttCueParser {
   }
 
   private static boolean parseCue(String id, Matcher cueHeaderMatcher, ParsableByteArray webvttData,
-      WebvttCue.Builder builder, StringBuilder textBuilder, List<WebvttCssStyle> styles) {
+      WebvttCue.Builder builder, StringBuilder textBuilder, List<WebvttCssStyle> styles, List<WebvttCue> outCues) {
+    long startTimeUs;
+    long endTimeUs;
     try {
       // Parse the cue start and end times.
-      builder.setStartTime(WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(1)))
-          .setEndTime(WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(2)));
+      startTimeUs = WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(1));
+      endTimeUs = WebvttParserUtil.parseTimestampUs(cueHeaderMatcher.group(2));
+      builder.setStartTime(startTimeUs).setEndTime(endTimeUs);
     } catch (NumberFormatException e) {
       Log.w(TAG, "Skipping cue with bad header: " + cueHeaderMatcher.group());
       return false;
     }
 
-    parseCueSettingsList(cueHeaderMatcher.group(3), builder);
+    String settings = cueHeaderMatcher.group(3);
+    parseCueSettingsList(settings, builder);
 
     // Parse the cue text.
     textBuilder.setLength(0);
@@ -251,7 +269,67 @@ public final class WebvttCueParser {
       }
       textBuilder.append(line.trim());
     }
-    parseCueText(id, textBuilder.toString(), builder, styles);
+    String fullText = textBuilder.toString();
+
+    // Check for intra-cue timestamps (e.g. YouTube ASR word-by-word roll-up timestamps: <00:00:01.360>)
+    Matcher tsMatcher = TIMESTAMP_TAG_PATTERN.matcher(fullText);
+    List<Integer> tagStarts = new ArrayList<>();
+    List<Integer> tagEnds = new ArrayList<>();
+    List<Long> tagTimes = new ArrayList<>();
+
+    while (tsMatcher.find()) {
+      String tag = tsMatcher.group();
+      String rawTime = tag.substring(1, tag.length() - 1);
+      try {
+        long t = WebvttParserUtil.parseTimestampUs(rawTime);
+        tagStarts.add(tsMatcher.start());
+        tagEnds.add(tsMatcher.end());
+        tagTimes.add(t);
+      } catch (NumberFormatException ignored) {}
+    }
+
+    if (tagTimes.isEmpty() || outCues == null) {
+      parseCueText(id, fullText, builder, styles);
+      if (outCues != null) {
+        outCues.add(builder.build());
+      }
+      return true;
+    }
+
+    // Expand into progressive timed sub-cues so words appear as spoken
+    int numTags = tagTimes.size();
+    List<String> chunks = new ArrayList<>();
+    List<Long> intervalTimes = new ArrayList<>();
+
+    chunks.add(fullText.substring(0, tagStarts.get(0)));
+    intervalTimes.add(startTimeUs);
+
+    for (int i = 0; i < numTags; i++) {
+      int chunkStart = tagEnds.get(i);
+      int chunkEnd = (i + 1 < numTags) ? tagStarts.get(i + 1) : fullText.length();
+      chunks.add(fullText.substring(chunkStart, chunkEnd));
+      long t = tagTimes.get(i);
+      long lastTime = intervalTimes.get(intervalTimes.size() - 1);
+      long clampedTime = Math.max(lastTime, Math.min(endTimeUs, t));
+      intervalTimes.add(clampedTime);
+    }
+    intervalTimes.add(endTimeUs);
+
+    StringBuilder cumulativeText = new StringBuilder();
+    for (int i = 0; i <= numTags; i++) {
+      cumulativeText.append(chunks.get(i));
+      long curStart = intervalTimes.get(i);
+      long curEnd = intervalTimes.get(i + 1);
+
+      if (curEnd > curStart && cumulativeText.length() > 0) {
+        builder.reset();
+        builder.setStartTime(curStart).setEndTime(curEnd);
+        parseCueSettingsList(settings, builder);
+        parseCueText(id, cumulativeText.toString(), builder, styles);
+        outCues.add(builder.build());
+      }
+    }
+
     return true;
   }
 
@@ -349,7 +427,22 @@ public final class WebvttCueParser {
       case ENTITY_AMPERSAND:
         spannedText.append('&');
         break;
+      case "quot":
+        spannedText.append('"');
+        break;
+      case "apos":
+        spannedText.append('\'');
+        break;
       default:
+        if (entity.startsWith("#")) {
+          try {
+            int codePoint = entity.startsWith("#x") || entity.startsWith("#X")
+                ? Integer.parseInt(entity.substring(2), 16)
+                : Integer.parseInt(entity.substring(1));
+            spannedText.append((char) codePoint);
+            break;
+          } catch (Exception ignored) {}
+        }
         Log.w(TAG, "ignoring unsupported entity: '&" + entity + ";'");
         break;
     }
