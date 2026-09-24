@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.text.ttml.TtmlDecoder;
 import com.google.android.exoplayer2.text.tx3g.Tx3gDecoder;
 import com.google.android.exoplayer2.text.webvtt.Mp4WebvttDecoder;
 import com.google.android.exoplayer2.text.webvtt.WebvttDecoder;
+import com.google.android.exoplayer2.text.srv3.Srv3SubtitleDecoder;
 import com.google.android.exoplayer2.util.MimeTypes;
 
 /**
@@ -85,7 +86,8 @@ public interface SubtitleDecoderFactory {
               || MimeTypes.APPLICATION_MP4CEA608.equals(mimeType)
               || MimeTypes.APPLICATION_CEA708.equals(mimeType)
               || MimeTypes.APPLICATION_DVBSUBS.equals(mimeType)
-              || MimeTypes.APPLICATION_PGS.equals(mimeType);
+              || MimeTypes.APPLICATION_PGS.equals(mimeType)
+              || MimeTypes.APPLICATION_YTSRV3.equals(mimeType);
         }
 
         @Override
@@ -99,6 +101,8 @@ public interface SubtitleDecoderFactory {
               return new Mp4WebvttDecoder();
             case MimeTypes.APPLICATION_TTML:
               return new TtmlDecoder();
+            case MimeTypes.APPLICATION_YTSRV3:
+              return new Srv3SubtitleDecoder();
             case MimeTypes.APPLICATION_SUBRIP:
               return new SubripDecoder();
             case MimeTypes.APPLICATION_TX3G:

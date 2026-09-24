@@ -597,7 +597,8 @@ public class DashManifestParser2 {
                 || MimeTypes.APPLICATION_TTML.equals(mimeType)
                 || MimeTypes.APPLICATION_MP4VTT.equals(mimeType)
                 || MimeTypes.APPLICATION_CEA708.equals(mimeType)
-                || MimeTypes.APPLICATION_CEA608.equals(mimeType);
+                || MimeTypes.APPLICATION_CEA608.equals(mimeType)
+                || MimeTypes.APPLICATION_YTSRV3.equals(mimeType);
     }
 
     /**

@@ -94,6 +94,7 @@ public final class MimeTypes {
   public static final String APPLICATION_PGS = BASE_TYPE_APPLICATION + "/pgs";
   public static final String APPLICATION_SCTE35 = BASE_TYPE_APPLICATION + "/x-scte35";
   public static final String APPLICATION_CAMERA_MOTION = BASE_TYPE_APPLICATION + "/x-camera-motion";
+  public static final String APPLICATION_YTSRV3 = BASE_TYPE_APPLICATION + "/x-ytsrv3";
   public static final String APPLICATION_EMSG = BASE_TYPE_APPLICATION + "/x-emsg";
   public static final String APPLICATION_DVBSUBS = BASE_TYPE_APPLICATION + "/dvbsubs";
   public static final String APPLICATION_EXIF = BASE_TYPE_APPLICATION + "/x-exif";
@@ -323,7 +324,8 @@ public final class MimeTypes {
         || APPLICATION_SUBRIP.equals(mimeType) || APPLICATION_TTML.equals(mimeType)
         || APPLICATION_TX3G.equals(mimeType) || APPLICATION_MP4VTT.equals(mimeType)
         || APPLICATION_RAWCC.equals(mimeType) || APPLICATION_VOBSUB.equals(mimeType)
-        || APPLICATION_PGS.equals(mimeType) || APPLICATION_DVBSUBS.equals(mimeType)) {
+        || APPLICATION_PGS.equals(mimeType) || APPLICATION_DVBSUBS.equals(mimeType)
+        || APPLICATION_YTSRV3.equals(mimeType)) {
       return C.TRACK_TYPE_TEXT;
     } else if (APPLICATION_ID3.equals(mimeType)
         || APPLICATION_EMSG.equals(mimeType)

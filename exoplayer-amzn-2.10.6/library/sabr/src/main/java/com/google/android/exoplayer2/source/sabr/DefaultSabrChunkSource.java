@@ -1001,7 +1001,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         }
 
         private static boolean mimeTypeIsRawText(String mimeType) {
-            return MimeTypes.isText(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType);
+            return MimeTypes.isText(mimeType) || MimeTypes.APPLICATION_TTML.equals(mimeType) || MimeTypes.APPLICATION_YTSRV3.equals(mimeType);
         }
 
         private static boolean needsExtractor(Representation representation) {
