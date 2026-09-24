@@ -38,6 +38,20 @@ public class VotYouTubeAudioTest {
         assertNull(VotYouTubeAudio.original(Arrays.asList(dub), dub, "ru"));
     }
 
+    @Test
+    public void restoresLegacyUntaggedOriginalFromSelectedDub() {
+        FormatItem original = audio("en");
+        FormatItem dub = audio("ru (dubbed-auto)");
+
+        assertSame(original, VotYouTubeAudio.original(Arrays.asList(original, dub), dub, "ru"));
+    }
+
+    @Test
+    public void doesNotGuessBetweenDifferentUntaggedLanguages() {
+        FormatItem dub = audio("ru (dubbed-auto)");
+        assertNull(VotYouTubeAudio.original(Arrays.asList(audio("en"), audio("es"), dub), dub, "ru"));
+    }
+
     private static FormatItem audio(String language) {
         return ExoFormatItem.from(FormatItem.TYPE_AUDIO,
                 TrackSelectorManager.RENDERER_INDEX_AUDIO, language, "mp4a.40.2",
