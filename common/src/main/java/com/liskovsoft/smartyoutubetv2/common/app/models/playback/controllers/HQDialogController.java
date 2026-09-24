@@ -190,6 +190,13 @@ public class HQDialogController extends BasePlayerController {
     //}
 
     private void addPresetsCategory() {
+        // Per channel presets (same as the speed list)
+        if (getPlayerData().isFormatPerChannelEnabled() && getPlayer() != null
+                && getPlayer().getVideo() != null && getPlayer().getVideo().channelId != null) {
+            addPresetsPerChannelCategory();
+            return;
+        }
+
         addCategoryInt(AppDialogUtil.createVideoPresetsCategory(
                 getContext(), () -> {
                     if (getPlayer() == null) {
@@ -197,6 +204,31 @@ public class HQDialogController extends BasePlayerController {
                     }
 
                     FormatItem format = getPlayerData().getFormat(FormatItem.TYPE_VIDEO);
+                    getPlayer().setFormat(format);
+
+                    if (!getPlayer().containsMedia()) {
+                        getPlayer().reloadPlayback();
+                    }
+
+                    // Make result easily be spotted by the user
+                    getPlayer().showOverlay(false);
+                }
+        ));
+    }
+
+    private void addPresetsPerChannelCategory() {
+        addCategoryInt(AppDialogUtil.createVideoPresetsPerChannelCategory(
+                getContext(), getPlayer().getVideo().channelId, () -> {
+                    if (getPlayer() == null || getPlayer().getVideo() == null) {
+                        return;
+                    }
+
+                    FormatItem format = getPlayerData().getFormatPerChannel(getPlayer().getVideo().channelId);
+
+                    if (format == null) {
+                        format = getPlayerData().getFormat(FormatItem.TYPE_VIDEO);
+                    }
+
                     getPlayer().setFormat(format);
 
                     if (!getPlayer().containsMedia()) {
