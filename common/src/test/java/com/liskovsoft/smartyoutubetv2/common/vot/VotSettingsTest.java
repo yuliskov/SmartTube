@@ -9,10 +9,30 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 28)
 public class VotSettingsTest {
+    @Test
+    public void acceptsOnlyTokensAndYandexOAuthResultLinks() {
+        String token = "y0_abcdefghijklmnopqrstuvwxyz1234567890";
+        assertEquals(token, VotSettings.oauthToken(token));
+        assertEquals(token, VotSettings.oauthToken("OAuth " + token));
+        assertEquals(token, VotSettings.oauthToken("https://oauth.yandex.ru/verification_code#access_token="
+                + token + "&expires_in=3600"));
+        assertNull(VotSettings.oauthToken("https://example.com/verification_code#access_token=" + token));
+        assertNull(VotSettings.oauthToken("https://oauth.yandex.ru/verification_code#other=" + token));
+
+        VotSettings settings = new VotSettings(RuntimeEnvironment.getApplication());
+        settings.setOAuthToken(token);
+        assertEquals(token, new VotSettings(RuntimeEnvironment.getApplication()).getOAuthToken());
+        assertFalse(settings.setOAuthToken("invalid"));
+        assertEquals(token, settings.getOAuthToken());
+        settings.setOAuthToken(null);
+        assertNull(settings.getOAuthToken());
+    }
+
     @Test
     public void defaultsDisableVoiceOverAndKeepExtensionVolumeLevels() {
         VotSettings settings = new VotSettings(RuntimeEnvironment.getApplication());

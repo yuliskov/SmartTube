@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VoiceTranslateController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -9,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.vot.VotSettings;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +102,43 @@ public final class VotSettingsPresenter {
                     restartVoiceOver(context);
                 }, !settings.useLivelyVoice()));
         dialog.appendRadioCategory(context.getString(R.string.vot_voice_type), voices);
+
+        boolean hasToken = settings.getOAuthToken() != null;
+        dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_yandex_token),
+                context.getString(hasToken ? R.string.vot_yandex_token_saved : R.string.vot_yandex_token_missing),
+                item -> {
+                    dialog.closeDialog();
+                    SimpleEditDialog.showPasswordWithMessage(context,
+                            context.getString(R.string.vot_yandex_token),
+                            context.getString(R.string.vot_yandex_token_steps),
+                            context.getString(R.string.vot_yandex_token_help),
+                            "https://yandex.ru/dev/id/doc/"
+                                    + ("ru".equals(LocaleUtility.getCurrentLanguage(context)) ? "ru" : "en")
+                                    + "/tokens/debug-token", input -> {
+                                if (VotSettings.oauthToken(input) == null) {
+                                    MessageHelpers.showMessage(context, R.string.vot_yandex_token_invalid);
+                                    return false;
+                                }
+                                if (!settings.setOAuthToken(input)) {
+                                    MessageHelpers.showMessage(context, R.string.vot_yandex_token_save_failed);
+                                    return false;
+                                }
+                                MessageHelpers.showMessage(context, R.string.vot_yandex_token_saved);
+                                restartVoiceOver(context);
+                                return true;
+                            });
+                }));
+        if (hasToken) {
+            dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_yandex_token_remove),
+                    item -> {
+                        if (!settings.setOAuthToken(null)) {
+                            MessageHelpers.showMessage(context, R.string.vot_yandex_token_save_failed);
+                            return;
+                        }
+                        restartVoiceOver(context);
+                        dialog.closeDialog();
+                    }));
+        }
 
         dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_volume_settings),
                 item -> showVolume(context, settings)));

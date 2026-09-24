@@ -6,7 +6,7 @@
     <string name="vot_uploading">%1$s тіліндегі TTS Voiceover үшін аудио жүктелуде…</string>
     <string name="vot_playing">TTS Voiceover қосылды</string>
     <string name="vot_unavailable">Бұл бейнеге TTS Voiceover қолжетімсіз</string>
-    <string name="vot_account_required">Бұл бейне үшін Яндекс жүйесіне кіру қажет; SmartTube ішінде ол әзірге қолжетімсіз</string>
+    <string name="vot_account_required">Бұл бейнеде жанды дауыстар үшін Яндекс OAuth токені қажет</string>
     <string name="vot_settings">TTS Voiceover параметрлері</string>
     <string name="vot_feature_enabled">TTS Voiceover функциясын қосу</string>
     <string name="vot_provider">TTS Voiceover көзі</string>
@@ -24,6 +24,14 @@
     <string name="vot_live_voices">Жанды дауыстар</string>
     <string name="vot_live_voices_desc">Тек орысша аудармаға арналған. Қолжетімсіз болса, стандартты дауыстар қолданылады</string>
     <string name="vot_standard_voices">Стандартты дауыстар</string>
+    <string name="vot_yandex_token">Яндекске токенмен кіру</string>
+    <string name="vot_yandex_token_missing">Жанды дауыстар үшін токен қосу</string>
+    <string name="vot_yandex_token_saved">Токен сақталды (тексерілмеді)</string>
+    <string name="vot_yandex_token_remove">Яндекс токенін жою</string>
+    <string name="vot_yandex_token_invalid">Токенді немесе Яндекс OAuth қорытынды сілтемесін енгізіңіз</string>
+    <string name="vot_yandex_token_save_failed">Яндекс токенін сақтау мүмкін болмады</string>
+    <string name="vot_yandex_token_help">Яндекс нұсқаулығы</string>
+    <string name="vot_yandex_token_steps">1. Сенімді қолданбаның OAuth сілтемесін ашыңыз.\n2. Яндексте «Рұқсат беру» түймесін басыңыз. Токенді не соңғы сілтемені көшіріңіз.\n3. Осында қойыңыз. Токенді ешкімге бермеңіз.</string>
     <string name="vot_volume_settings">Дыбыс деңгейі және араластыру</string>
     <string name="vot_original_volume">Сөйлеу кезіндегі түпнұсқа дыбыстың деңгейі</string>
     <string name="vot_translation_volume">TTS Voiceover дыбысының деңгейі</string>

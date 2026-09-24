@@ -44,6 +44,11 @@ public final class VotClient {
     private static final MediaType PROTOBUF = MediaType.parse("application/x-protobuf");
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private OkHttpClient mHttp;
+    private final String mOAuthToken;
+
+    public VotClient() { this(null); }
+
+    public VotClient(String oauthToken) { mOAuthToken = oauthToken; }
 
     public interface ProgressListener {
         void onSourceAudioUpload();
@@ -142,7 +147,7 @@ public final class VotClient {
                           String sourceLanguage, String targetLanguage, boolean lively) throws Exception {
         return parse(send("/video-translation/translate",
                 encodeTranslationRequest(url, duration, first, sourceLanguage, targetLanguage, lively),
-                false, true), false);
+                false, true, lively), false);
     }
 
     static byte[] encodeTranslationRequest(String url, double duration, boolean first,
@@ -168,7 +173,7 @@ public final class VotClient {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         writeString(out, 1, mUuid);
         writeString(out, 2, "video-translation");
-        mSessionKey = parse(send("/session/create", out.toByteArray(), false, false), true).sessionKey;
+        mSessionKey = parse(send("/session/create", out.toByteArray(), false, false, false), true).sessionKey;
         if (mSessionKey == null || mSessionKey.isEmpty()) throw new IOException("Translation session unavailable");
     }
 
@@ -192,7 +197,7 @@ public final class VotClient {
                     if (mCancelled || Thread.currentThread().isInterrupted()) throw new InterruptedException();
                     int count = (int) Math.min(CHUNK_SIZE, length - (long) index * CHUNK_SIZE);
                     byte[] body = encodeAudioChunk(stream, count, index, parts, translationId, url, fileId);
-                    Reply reply = parse(send("/video-translation/audio", body, true, true), false);
+                    Reply reply = parse(send("/video-translation/audio", body, true, true, false), false);
                     if (reply.uploadStatus != 1 && reply.uploadStatus != 2) {
                         throw new IOException("Service rejected source audio (status " + reply.uploadStatus + ")");
                     }
@@ -239,7 +244,7 @@ public final class VotClient {
         return size;
     }
 
-    private byte[] send(String path, byte[] body, boolean put, boolean session) throws Exception {
+    private byte[] send(String path, byte[] body, boolean put, boolean session, boolean lively) throws Exception {
         if (mCancelled) throw new InterruptedException();
         Request.Builder builder = new Request.Builder().url(HOST + path)
                 .header("Accept", "application/x-protobuf")
@@ -249,6 +254,9 @@ public final class VotClient {
             String token = mUuid + ":" + path + ":" + VERSION;
             builder.header("Sec-Vtrans-Sk", mSessionKey)
                     .header("Sec-Vtrans-Token", sign(token.getBytes(UTF8)) + ":" + token);
+        }
+        if (lively && mOAuthToken != null) {
+            builder.header("Authorization", "OAuth " + mOAuthToken);
         }
         RequestBody payload = RequestBody.create(PROTOBUF, body);
         Request req = (put ? builder.put(payload) : builder.post(payload)).build();

@@ -6,7 +6,7 @@
     <string name="vot_uploading">Загружаю аудио для TTS Voiceover на %1$s…</string>
     <string name="vot_playing">TTS Voiceover включён</string>
     <string name="vot_unavailable">TTS Voiceover для этого видео недоступен</string>
-    <string name="vot_account_required">Для этого видео нужен вход в Яндекс; в SmartTube он пока недоступен</string>
+    <string name="vot_account_required">Для живых голосов в этом видео нужен OAuth-токен Яндекса</string>
     <string name="vot_settings">Настройки TTS Voiceover</string>
     <string name="vot_feature_enabled">Включить TTS Voiceover</string>
     <string name="vot_provider">Источник TTS Voiceover</string>
@@ -24,6 +24,14 @@
     <string name="vot_live_voices">Живые голоса</string>
     <string name="vot_live_voices_desc">Только для перевода на русский. Если недоступны, используются обычные голоса</string>
     <string name="vot_standard_voices">Обычные голоса</string>
+    <string name="vot_yandex_token">Войти в Яндекс по токену</string>
+    <string name="vot_yandex_token_missing">Добавить токен для живых голосов</string>
+    <string name="vot_yandex_token_saved">Токен сохранён (не проверен)</string>
+    <string name="vot_yandex_token_remove">Удалить токен Яндекса</string>
+    <string name="vot_yandex_token_invalid">Введите токен или итоговую ссылку Яндекс OAuth</string>
+    <string name="vot_yandex_token_save_failed">Не удалось сохранить токен Яндекса</string>
+    <string name="vot_yandex_token_help">Инструкция Яндекса</string>
+    <string name="vot_yandex_token_steps">1. Откройте OAuth-ссылку приложения, которому доверяете.\n2. В Яндексе нажмите «Разрешить». Скопируйте токен или итоговую ссылку.\n3. Вставьте сюда. Не передавайте токен другим.</string>
     <string name="vot_volume_settings">Громкость и смешивание</string>
     <string name="vot_original_volume">Громкость оригинала во время речи</string>
     <string name="vot_translation_volume">Громкость TTS Voiceover</string>
