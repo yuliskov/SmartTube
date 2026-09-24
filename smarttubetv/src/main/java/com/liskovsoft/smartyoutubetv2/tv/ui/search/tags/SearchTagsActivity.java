@@ -7,7 +7,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 public class SearchTagsActivity extends LeanbackActivity {
     private SearchTagsFragment mFragment;
-    private boolean mDownPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
