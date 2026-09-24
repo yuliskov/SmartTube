@@ -34,7 +34,8 @@ application ID or on a test device to preserve existing app data.
    button should try voiceover even when YouTube reports the target language.
 5. Select **YouTube audio only** and verify that a dubbed audio track starts
    without a second mixed player. The button should restore the original track
-   and suppress automatic voiceover for the rest of that video. Select
+   and suppress automatic voiceover for the rest of that video. Repeat with a
+   legacy original track labeled only `en`, without `(original)`. Select
    **YouTube audio, then Yandex VOT** and check the fallback when no dub exists.
 6. Check English, Russian and Kazakh labels, the target language sent to the
    service, button visibility under **Player buttons**, the four controls under

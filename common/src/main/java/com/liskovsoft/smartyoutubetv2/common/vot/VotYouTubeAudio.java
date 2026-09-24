@@ -19,12 +19,25 @@ public final class VotYouTubeAudio {
     }
 
     public static FormatItem original(List<FormatItem> tracks, FormatItem selected, String target) {
-        if (usable(selected) && !target.equals(VotAudioSource.languageCode(selected.getLanguage())))
+        if (usable(selected) && !target.equals(VotAudioSource.languageCode(selected.getLanguage()))
+                && !selected.getLanguage().contains("(dubbed"))
             return selected;
+        FormatItem untagged = null;
+        String untaggedLanguage = null;
+        boolean ambiguous = false;
         if (tracks != null) for (FormatItem track : tracks) {
-            if (usable(track) && track.getLanguage().contains("(original)")) return track;
+            if (!usable(track)) continue;
+            String label = track.getLanguage();
+            if (label.contains("(original)")) return track;
+            String language = VotAudioSource.languageCode(label);
+            if (language == null || target.equals(language) || label.contains("(dubbed")) continue;
+            if (untaggedLanguage != null && !untaggedLanguage.equals(language)) ambiguous = true;
+            if (untagged == null) {
+                untagged = track;
+                untaggedLanguage = language;
+            }
         }
-        return null;
+        return ambiguous ? null : untagged;
     }
 
     private static boolean usable(FormatItem track) {
