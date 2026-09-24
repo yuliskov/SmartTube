@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vot_enable">TTS Voiceover</string>
+    <string name="vot_disable">Выключить TTS Voiceover</string>
+    <string name="vot_loading">Подготавливаю TTS Voiceover на %1$s…</string>
+    <string name="vot_uploading">Загружаю аудио для TTS Voiceover на %1$s…</string>
+    <string name="vot_playing">TTS Voiceover включён</string>
+    <string name="vot_unavailable">TTS Voiceover для этого видео недоступен</string>
+    <string name="vot_account_required">Для этого видео нужен вход в Яндекс; в SmartTube он пока недоступен</string>
+    <string name="vot_settings">Настройки TTS Voiceover</string>
+    <string name="vot_feature_enabled">Включить TTS Voiceover</string>
+    <string name="vot_provider">Источник TTS Voiceover</string>
+    <string name="vot_provider_yandex">Яндекс VOT</string>
+    <string name="vot_provider_auto">Дорожка YouTube, затем Яндекс VOT</string>
+    <string name="vot_provider_youtube">Только дорожка YouTube</string>
+    <string name="vot_youtube_unavailable">Для этого видео нет дублированной дорожки YouTube</string>
+    <string name="vot_target_language">Язык TTS Voiceover</string>
+    <string name="vot_target_russian">Русский</string>
+    <string name="vot_target_english">Английский</string>
+    <string name="vot_target_kazakh">Казахский</string>
+    <string name="vot_source_language">Язык оригинала</string>
+    <string name="vot_source_auto">Авто (YouTube)</string>
+    <string name="vot_voice_type">Тип голосов</string>
+    <string name="vot_live_voices">Живые голоса</string>
+    <string name="vot_live_voices_desc">Только для перевода на русский. Если недоступны, используются обычные голоса</string>
+    <string name="vot_standard_voices">Обычные голоса</string>
+    <string name="vot_volume_settings">Громкость и смешивание</string>
+    <string name="vot_original_volume">Громкость оригинала во время речи</string>
+    <string name="vot_translation_volume">Громкость TTS Voiceover</string>
+    <string name="vot_adaptive_volume">Адаптивная громкость оригинала</string>
+    <string name="vot_show_button">Показывать кнопку TTS Voiceover при включении</string>
+    <string name="vot_strong_duck">Сильнее приглушать оригинал</string>
+    <string name="vot_lang_english">Английский</string>
+    <string name="vot_lang_chinese">Китайский</string>
+    <string name="vot_lang_korean">Корейский</string>
+    <string name="vot_lang_arabic">Арабский</string>
+    <string name="vot_lang_french">Французский</string>
+    <string name="vot_lang_italian">Итальянский</string>
+    <string name="vot_lang_spanish">Испанский</string>
+    <string name="vot_lang_german">Немецкий</string>
+    <string name="vot_lang_japanese">Японский</string>
+</resources>

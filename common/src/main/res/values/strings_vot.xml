@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vot_enable">TTS Voiceover</string>
+    <string name="vot_disable">Turn off TTS Voiceover</string>
+    <string name="vot_loading">Preparing TTS Voiceover in %1$s…</string>
+    <string name="vot_uploading">Uploading audio for TTS Voiceover in %1$s…</string>
+    <string name="vot_playing">TTS Voiceover enabled</string>
+    <string name="vot_unavailable">TTS Voiceover unavailable for this video</string>
+    <string name="vot_account_required">Yandex sign-in is required for this video; sign-in is not yet available in SmartTube</string>
+    <string name="vot_settings">TTS Voiceover settings</string>
+    <string name="vot_feature_enabled">Enable TTS Voiceover</string>
+    <string name="vot_provider">TTS Voiceover source</string>
+    <string name="vot_provider_yandex">Yandex VOT</string>
+    <string name="vot_provider_auto">YouTube audio, then Yandex VOT</string>
+    <string name="vot_provider_youtube">YouTube audio only</string>
+    <string name="vot_youtube_unavailable">No YouTube dubbed audio for this video</string>
+    <string name="vot_target_language">TTS Voiceover language</string>
+    <string name="vot_target_russian">Russian</string>
+    <string name="vot_target_english">English</string>
+    <string name="vot_target_kazakh">Kazakh</string>
+    <string name="vot_source_language">Original language</string>
+    <string name="vot_source_auto">Auto (YouTube)</string>
+    <string name="vot_voice_type">Voice type</string>
+    <string name="vot_live_voices">Live voices</string>
+    <string name="vot_live_voices_desc">Russian TTS Voiceover only. Falls back to standard voices if unavailable</string>
+    <string name="vot_standard_voices">Standard voices</string>
+    <string name="vot_volume_settings">Volume and mixing</string>
+    <string name="vot_original_volume">Original volume during speech</string>
+    <string name="vot_translation_volume">TTS Voiceover volume</string>
+    <string name="vot_adaptive_volume">Adaptive original volume</string>
+    <string name="vot_show_button">Show TTS Voiceover button when enabled</string>
+    <string name="vot_strong_duck">Stronger original ducking</string>
+    <string name="vot_lang_english">English</string>
+    <string name="vot_lang_chinese">Chinese</string>
+    <string name="vot_lang_korean">Korean</string>
+    <string name="vot_lang_arabic">Arabic</string>
+    <string name="vot_lang_french">French</string>
+    <string name="vot_lang_italian">Italian</string>
+    <string name="vot_lang_spanish">Spanish</string>
+    <string name="vot_lang_german">German</string>
+    <string name="vot_lang_japanese">Japanese</string>
+</resources>
