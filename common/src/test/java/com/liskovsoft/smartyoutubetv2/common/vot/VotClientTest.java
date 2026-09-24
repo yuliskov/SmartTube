@@ -18,8 +18,28 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 public class VotClientTest {
+    @Test
+    public void sendsOAuthTokenOnlyToTranslationEndpoint() throws Exception {
+        String token = "y0_abcdefghijklmnopqrstuvwxyz1234567890";
+        OkHttpClient http = new OkHttpClient.Builder().addInterceptor(chain -> {
+            boolean translate = chain.request().url().encodedPath().endsWith("/translate");
+            if (translate) assertEquals("OAuth " + token, chain.request().header("Authorization"));
+            else assertNull(chain.request().header("Authorization"));
+            byte[] body = translate ? new byte[]{32, 1, 10, 1, 'u'} : new byte[]{10, 1, 's'};
+            return new Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1)
+                    .code(200).message("OK").body(ResponseBody.create(null, body)).build();
+        }).build();
+        VotClient client = new VotClient(token);
+        Field field = VotClient.class.getDeclaredField("mHttp");
+        field.setAccessible(true);
+        field.set(client, http);
+
+        assertEquals("u", client.translate("video", 1_000, null, "en", "ru", true, null));
+    }
+
     @Test
     public void waitsForPartialAudioToFinish() throws IOException {
         VotClient.Reply partial = VotClient.parse(new byte[]{32, 5, 40, 12, 10, 1, 'u'}, false);
@@ -55,19 +75,24 @@ public class VotClientTest {
         OkHttpClient http = new OkHttpClient.Builder().addInterceptor(chain -> {
             byte[] body;
             if (chain.request().url().encodedPath().endsWith("/session/create")) {
+                assertNull(chain.request().header("Authorization"));
                 body = new byte[]{10, 1, 's'};
             } else {
                 Buffer payload = new Buffer();
                 chain.request().body().writeTo(payload);
                 assertEquals(1, VotClient.parse(payload.readByteArray(), false).waitSeconds);
-                body = requests.getAndIncrement() == 0
+                int attempt = requests.getAndIncrement();
+                if (attempt == 0) assertEquals("OAuth y0_abcdefghijklmnopqrstuvwxyz1234567890",
+                        chain.request().header("Authorization"));
+                else assertNull(chain.request().header("Authorization"));
+                body = attempt == 0
                         ? new byte[]{32, 7} : new byte[]{32, 1, 10, 1, 'u'};
             }
             return new Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1)
                     .code(200).message("OK")
                     .body(ResponseBody.create(null, body)).build();
         }).build();
-        VotClient client = new VotClient();
+        VotClient client = new VotClient("y0_abcdefghijklmnopqrstuvwxyz1234567890");
         Field field = VotClient.class.getDeclaredField("mHttp");
         field.setAccessible(true);
         field.set(client, http);

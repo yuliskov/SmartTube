@@ -43,6 +43,14 @@ application ID or on a test device to preserve existing app data.
 7. With **Live voices** selected and no Yandex account, try a video for which
    Yandex requires sign-in. The app should retry with standard voices instead
    of reporting voiceover unavailable.
+8. In **TTS Voiceover settings → Yandex sign-in with token**, paste a token or a
+   `https://oauth.yandex.ru/verification_code#access_token=…` result link.
+   Check that invalid links are rejected, the token is masked and never shown
+   again, Live voices are requested with the token, and **Remove Yandex token**
+   clears it. It stays in the app's no-backup storage and is not validated
+   before playback. A Yandex OAuth authorization link requires an existing
+   registered OAuth client; see the
+   [official manual-token instructions](https://yandex.ru/dev/id/doc/en/tokens/debug-token).
 
 The action icon is Google Material Symbols Outlined `voice_selection`
 (Apache 2.0). Yandex translation uses an unofficial endpoint; protocol behavior

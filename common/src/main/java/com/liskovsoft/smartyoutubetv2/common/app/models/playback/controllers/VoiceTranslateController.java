@@ -188,7 +188,7 @@ public final class VoiceTranslateController extends BasePlayerController {
         long durationMs = player.getDurationMs();
         boolean lively = settings().useLivelyVoice() && "ru".equals(targetLanguage);
         VotAudioSource source = VotAudioSource.best(mFormatInfo, sourceLanguage);
-        VotClient client = new VotClient();
+        VotClient client = new VotClient(lively ? settings().getOAuthToken() : null);
         mClient = client;
         mRequest = Single.fromCallable(() -> client.translate(
                         videoId, durationMs, source, sourceLanguage, targetLanguage, lively,

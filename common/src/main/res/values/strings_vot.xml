@@ -6,7 +6,7 @@
     <string name="vot_uploading">Uploading audio for TTS Voiceover in %1$s…</string>
     <string name="vot_playing">TTS Voiceover enabled</string>
     <string name="vot_unavailable">TTS Voiceover unavailable for this video</string>
-    <string name="vot_account_required">Yandex sign-in is required for this video; sign-in is not yet available in SmartTube</string>
+    <string name="vot_account_required">A Yandex OAuth token is required for Live voices on this video</string>
     <string name="vot_settings">TTS Voiceover settings</string>
     <string name="vot_feature_enabled">Enable TTS Voiceover</string>
     <string name="vot_provider">TTS Voiceover source</string>
@@ -24,6 +24,14 @@
     <string name="vot_live_voices">Live voices</string>
     <string name="vot_live_voices_desc">Russian TTS Voiceover only. Falls back to standard voices if unavailable</string>
     <string name="vot_standard_voices">Standard voices</string>
+    <string name="vot_yandex_token">Yandex sign-in with token</string>
+    <string name="vot_yandex_token_missing">Add a token for Live voices</string>
+    <string name="vot_yandex_token_saved">Token saved (not verified)</string>
+    <string name="vot_yandex_token_remove">Remove Yandex token</string>
+    <string name="vot_yandex_token_invalid">Enter a valid token or Yandex OAuth result link</string>
+    <string name="vot_yandex_token_save_failed">Could not save the Yandex token</string>
+    <string name="vot_yandex_token_help">Yandex guide</string>
+    <string name="vot_yandex_token_steps">1. Open an OAuth link from an app you trust.\n2. Allow access in Yandex. Copy the token or final link.\n3. Paste it here. Keep it private.</string>
     <string name="vot_volume_settings">Volume and mixing</string>
     <string name="vot_original_volume">Original volume during speech</string>
     <string name="vot_translation_volume">TTS Voiceover volume</string>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -36,12 +37,30 @@ public class SimpleEditDialog {
         show(context, dialogTitle, dialogTitle, defaultValue, onChange, onDismiss, true);
     }
 
+    public static void showPasswordWithMessage(Context context, String title, String message,
+                                               String helpLabel, String helpUrl, OnChange onChange) {
+        show(context, title, title, message, helpLabel, helpUrl, null, onChange, null, true);
+    }
+
     private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
+        show(context, dialogTitle, dialogHint, null, null, null, defaultValue, onChange, onDismiss, isPassword);
+    }
+
+    private static void show(Context context, String dialogTitle, String dialogHint, String message,
+                             String helpLabel, String helpUrl, String defaultValue, OnChange onChange,
+                             Runnable onDismiss, boolean isPassword) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
+        if (message != null) {
+            TextView messageView = contentView.findViewById(R.id.simple_edit_message);
+            messageView.setText(message);
+            messageView.setVisibility(View.VISIBLE);
+        }
+
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
+        if (message != null) editField.setEms(32);
         if (isPassword) {
             editField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
@@ -57,6 +76,9 @@ public class SimpleEditDialog {
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
+        if (helpUrl != null) {
+            builder.setNeutralButton(helpLabel, (dialog, which) -> { });
+        }
         AlertDialog configDialog = builder
                 .setTitle(dialogTitle)
                 .setView(contentView)
@@ -105,6 +127,11 @@ public class SimpleEditDialog {
                 configDialog.dismiss();
             }
         });
+
+        if (helpUrl != null) {
+            configDialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+                    .setOnClickListener(view -> Utils.openLinkExt(context, helpUrl));
+        }
 
         configDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener((view) -> configDialog.dismiss());
 

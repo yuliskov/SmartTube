@@ -1,11 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.vot;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
-/** Small, profile-aware settings shared by the player and its TV dialog. */
+/** Profile-aware playback settings; the Yandex credential stays local to the app. */
 public final class VotSettings {
     public static final String[] SOURCE_LANGUAGES = {
             "en", "ru", "zh", "ko", "ar", "fr", "it", "es", "de", "ja"
@@ -73,6 +74,34 @@ public final class VotSettings {
 
     public void setLivelyVoice(boolean lively) {
         mPrefs.setProfileData(VOICE_KEY, lively ? "lively" : "standard");
+    }
+
+    public String getOAuthToken() {
+        return new VotTokenStore(mContext).get();
+    }
+
+    public boolean setOAuthToken(String input) {
+        String token = oauthToken(input);
+        return (input == null || token != null) && new VotTokenStore(mContext).set(token);
+    }
+
+    /** Accept a token or the Yandex OAuth result URL; never persist the URL itself. */
+    public static String oauthToken(String input) {
+        if (input == null) return null;
+        String value = input.trim();
+        if (value.startsWith("OAuth ")) value = value.substring(6).trim();
+        if (value.startsWith("https://")) {
+            Uri uri = Uri.parse(value);
+            if (!("oauth.yandex.ru".equals(uri.getHost()) || "oauth.yandex.com".equals(uri.getHost()))
+                    || !"/verification_code".equals(uri.getPath()) || uri.getFragment() == null) return null;
+            for (String part : uri.getFragment().split("&")) {
+                if (part.startsWith("access_token=")) {
+                    value = Uri.decode(part.substring("access_token=".length()));
+                    break;
+                }
+            }
+        }
+        return value.matches("[A-Za-z0-9_-]{20,512}") ? value : null;
     }
 
     public int getOriginalVolume() {
