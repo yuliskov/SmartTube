@@ -5,4 +5,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 
 public interface PlaybackView extends PlayerManager {
     void showProgressBar(boolean show);
+    void showVoiceOverProgress(boolean show);
+    boolean supportsVoiceOver();
 }

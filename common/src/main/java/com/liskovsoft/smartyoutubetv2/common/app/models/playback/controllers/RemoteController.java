@@ -365,6 +365,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             case Command.TYPE_PLAY:
                 if (getPlayer() != null) {
                     movePlayerToForeground();
+                    getController(VoiceTranslateController.class).onPlayRequested();
                     getPlayer().setPlayWhenReady(true);
                     //postStartPlaying(getController().getVideo(), true);
                     postPlayState(RemoteControlService.STATE_PLAYING);
@@ -376,6 +377,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
             case Command.TYPE_PAUSE:
                 if (getPlayer() != null) {
                     movePlayerToForeground();
+                    getController(VoiceTranslateController.class).onPauseRequested();
                     getPlayer().setPlayWhenReady(false);
                     //postStartPlaying(getController().getVideo(), false);
                     postPlayState(RemoteControlService.STATE_PAUSED);
