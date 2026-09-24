@@ -103,6 +103,15 @@ public final class VotSettingsPresenter {
                 }, !settings.useLivelyVoice()));
         dialog.appendRadioCategory(context.getString(R.string.vot_voice_type), voices);
 
+        dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_yandex_account),
+                item -> showYandexAccount(context, settings)));
+        dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_volume_settings),
+                item -> showVolume(context, settings)));
+        dialog.showDialog(context.getString(R.string.vot_settings));
+    }
+
+    private static void showYandexAccount(Context context, VotSettings settings) {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(context);
         boolean hasToken = settings.getOAuthToken() != null;
         dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_yandex_token),
                 context.getString(hasToken ? R.string.vot_yandex_token_saved : R.string.vot_yandex_token_missing),
@@ -140,9 +149,7 @@ public final class VotSettingsPresenter {
                     }));
         }
 
-        dialog.appendSingleButton(UiOptionItem.from(context.getString(R.string.vot_volume_settings),
-                item -> showVolume(context, settings)));
-        dialog.showDialog(context.getString(R.string.vot_settings));
+        dialog.showDialog(context.getString(R.string.vot_yandex_account));
     }
 
     private static void showVolume(Context context, VotSettings settings) {

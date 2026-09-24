@@ -25,6 +25,7 @@
     <string name="vot_live_voices_desc">Russian TTS Voiceover only. Falls back to standard voices if unavailable</string>
     <string name="vot_standard_voices">Standard voices</string>
     <string name="vot_yandex_token">Yandex sign-in with token</string>
+    <string name="vot_yandex_account">Yandex account</string>
     <string name="vot_yandex_token_missing">Add a token for Live voices</string>
     <string name="vot_yandex_token_saved">Token saved (not verified)</string>
     <string name="vot_yandex_token_remove">Remove Yandex token</string>

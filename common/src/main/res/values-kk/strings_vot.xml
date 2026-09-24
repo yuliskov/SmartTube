@@ -25,6 +25,7 @@
     <string name="vot_live_voices_desc">Тек орысша аудармаға арналған. Қолжетімсіз болса, стандартты дауыстар қолданылады</string>
     <string name="vot_standard_voices">Стандартты дауыстар</string>
     <string name="vot_yandex_token">Яндекске токенмен кіру</string>
+    <string name="vot_yandex_account">Яндекс тіркелгісі</string>
     <string name="vot_yandex_token_missing">Жанды дауыстар үшін токен қосу</string>
     <string name="vot_yandex_token_saved">Токен сақталды (тексерілмеді)</string>
     <string name="vot_yandex_token_remove">Яндекс токенін жою</string>

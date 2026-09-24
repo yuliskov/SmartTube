@@ -71,10 +71,27 @@ public class VotClientTest {
 
     @Test
     public void standardVoiceRetryStartsNewRequestAfterLiveVoiceRequiresAccount() throws Exception {
+        assertStandardFallback(new byte[]{32, 7}, 200);
+    }
+
+    @Test
+    public void unavailableLiveVoiceFallsBackToStandard() throws Exception {
+        assertStandardFallback(new byte[]{32, 4}, 200);
+    }
+
+    @Test
+    public void forbiddenLiveVoiceFallsBackToStandard() throws Exception {
+        assertStandardFallback(new byte[0], 403);
+    }
+
+    private static void assertStandardFallback(byte[] liveResponse, int liveStatus) throws Exception {
         AtomicInteger requests = new AtomicInteger();
+        AtomicInteger sessions = new AtomicInteger();
         OkHttpClient http = new OkHttpClient.Builder().addInterceptor(chain -> {
             byte[] body;
+            int status = 200;
             if (chain.request().url().encodedPath().endsWith("/session/create")) {
+                sessions.incrementAndGet();
                 assertNull(chain.request().header("Authorization"));
                 body = new byte[]{10, 1, 's'};
             } else {
@@ -85,11 +102,11 @@ public class VotClientTest {
                 if (attempt == 0) assertEquals("OAuth y0_abcdefghijklmnopqrstuvwxyz1234567890",
                         chain.request().header("Authorization"));
                 else assertNull(chain.request().header("Authorization"));
-                body = attempt == 0
-                        ? new byte[]{32, 7} : new byte[]{32, 1, 10, 1, 'u'};
+                body = attempt == 0 ? liveResponse : new byte[]{32, 1, 10, 1, 'u'};
+                if (attempt == 0) status = liveStatus;
             }
             return new Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1)
-                    .code(200).message("OK")
+                    .code(status).message(status == 200 ? "OK" : "Forbidden")
                     .body(ResponseBody.create(null, body)).build();
         }).build();
         VotClient client = new VotClient("y0_abcdefghijklmnopqrstuvwxyz1234567890");
@@ -99,6 +116,7 @@ public class VotClientTest {
 
         assertEquals("u", client.translate("video", 1_000, null, "en", "ru", true, null));
         assertEquals(2, requests.get());
+        assertEquals(2, sessions.get());
     }
 
     @Test(expected = IOException.class)

@@ -109,8 +109,10 @@ public final class VotClient {
                 reply = request(url, durationMs / 1000d, firstRequest,
                         sourceLanguage, targetLanguage, lively);
             } catch (HttpFailure failure) {
-                if (!lively || failure.status != 400) throw failure;
+                if (!lively || (failure.status != 400 && failure.status != 401
+                        && failure.status != 403)) throw failure;
                 lively = false;
+                createSession();
                 firstRequest = true;
                 uploaded = false;
                 continue;
@@ -121,6 +123,7 @@ public final class VotClient {
             }
             if (reply.shouldUseStandardVoice(lively)) {
                 lively = false;
+                createSession();
                 firstRequest = true;
                 uploaded = false;
                 continue;
@@ -360,9 +363,10 @@ public final class VotClient {
         }
 
         boolean shouldUseStandardVoice(boolean lively) {
+            if (!lively) return false;
             // The API sends this literal phrase in Russian regardless of the app locale.
-            return lively && (status == 7 || message != null
-                    && message.toLowerCase(Locale.ROOT).contains("обычная озвучка"));
+            return status != 2 && status != 3 && status != 5 && status != 6
+                    || message != null && message.toLowerCase(Locale.ROOT).contains("обычная озвучка");
         }
     }
 }
