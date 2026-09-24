@@ -166,10 +166,37 @@ public class PlayerUIController extends BasePlayerController {
 
         FormatItem matchedFormat = null;
 
-        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
-            if (getPlayer().getSubtitleFormats().contains(item)) {
-                matchedFormat = item;
-                break;
+        List<FormatItem> availableFormats = getPlayer().getSubtitleFormats();
+        if (availableFormats != null) {
+            // 1. Try exact match from last subtitle formats
+            for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
+                if (item != null) {
+                    for (FormatItem available : availableFormats) {
+                        if (available.equals(item)) {
+                            matchedFormat = available;
+                            break;
+                        }
+                    }
+                    if (matchedFormat != null) {
+                        break;
+                    }
+                }
+            }
+
+            // 2. If no exact match (e.g. restored config from older version with legacy format ID),
+            // match by language against preferred subtitle format, favoring animated tracks!
+            if (matchedFormat == null) {
+                FormatItem preferred = getPlayerData().getLastSubtitleFormat();
+                if (preferred != null && preferred.getLanguage() != null) {
+                    for (FormatItem available : availableFormats) {
+                        if (!available.isDefault() && SubtitleTrack.isLanguageMatch(preferred.getLanguage(), available.getLanguage())) {
+                            matchedFormat = available;
+                            if (SubtitleTrack.isAnimated(available.getLanguage())) {
+                                break; // Best match found (animated track)
+                            }
+                        }
+                    }
+                }
             }
         }
 

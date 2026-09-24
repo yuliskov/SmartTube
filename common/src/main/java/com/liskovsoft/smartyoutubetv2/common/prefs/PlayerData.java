@@ -832,6 +832,25 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
         mLastSubtitleFormats = Helpers.parseList(split, 47, ExoFormatItem::from);
+        if (mLastSubtitleFormats != null) {
+            List<FormatItem> cleanList = new ArrayList<>();
+            for (FormatItem item : mLastSubtitleFormats) {
+                if (item == null || item.isDefault()) {
+                    continue;
+                }
+                boolean duplicate = false;
+                for (FormatItem existing : cleanList) {
+                    if (existing.equals(item)) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (!duplicate) {
+                    cleanList.add(item);
+                }
+            }
+            mLastSubtitleFormats = cleanList;
+        }
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mRotationAngle = Helpers.parseInt(split, 49, 0);
         mZoomPercents = Helpers.parseInt(split, 50, -1);

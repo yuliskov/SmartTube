@@ -169,9 +169,18 @@ public class ExoFormatItem implements FormatItem {
                         return false;
                     }
                     if (mFormatId != null && formatItem.mFormatId != null) {
-                        return Helpers.equals(mFormatId, formatItem.mFormatId) && Helpers.equals(mLanguage, formatItem.mLanguage);
+                        if (!mFormatId.equalsIgnoreCase(formatItem.mFormatId)) {
+                            return false;
+                        }
+                        if (mLanguage != null && formatItem.mLanguage != null) {
+                            return mLanguage.equalsIgnoreCase(formatItem.mLanguage);
+                        }
+                        return true;
                     }
-                    return mId == formatItem.mId && Helpers.equals(mLanguage, formatItem.mLanguage);
+                    if (mLanguage != null && formatItem.mLanguage != null) {
+                        return mLanguage.equalsIgnoreCase(formatItem.mLanguage);
+                    }
+                    return mId != 0 && mId == formatItem.mId;
             }
         }
 

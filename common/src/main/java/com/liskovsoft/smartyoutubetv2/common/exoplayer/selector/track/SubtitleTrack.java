@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.videoinfo.models.TranslatedCaptionTrack;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class SubtitleTrack extends MediaTrack {
@@ -27,17 +29,14 @@ public class SubtitleTrack extends MediaTrack {
 
         // Exact match by format ID takes highest priority
         if (format.id != null && track2.format.id != null) {
-            if (Helpers.equals(format.id, track2.format.id)) {
+            if (format.id.equalsIgnoreCase(track2.format.id)) {
                 return 0;
             }
-            if (Helpers.equals(format.language, track2.format.language)) {
-                boolean thisAuto = isAuto(format.language);
-                boolean otherAuto = isAuto(track2.format.language);
-                if (thisAuto == otherAuto) {
-                    return -1; // Different tracks with same language (e.g. Animated vs Standard)
-                }
-            }
-        } else if (Helpers.equals(format.language, track2.format.language)) {
+        }
+
+        // Exact full language match (case-insensitive)
+        if (format.language != null && track2.format.language != null
+                && format.language.equalsIgnoreCase(track2.format.language)) {
             boolean thisAuto = isAuto(format.language);
             boolean otherAuto = isAuto(track2.format.language);
             if (thisAuto == otherAuto) {
@@ -45,18 +44,32 @@ public class SubtitleTrack extends MediaTrack {
             }
         }
 
-        int result = -1;
+        // Check if candidate matches base language or language code (e.g. English, English (United Kingdom), en-GB, en)
+        if (isLanguageMatch(format.language, track2.format.language)
+                || isLanguageMatch(format.id, track2.format.language)
+                || isLanguageMatch(format.language, track2.format.id)
+                || isLanguageMatch(format.id, track2.format.id)) {
+            boolean originAuto = isAuto(format.language);
+            boolean candidateAuto = isAuto(track2.format.language);
 
-        if (Helpers.startsWith(track2.format.language, trim(format.language))) { // partial match
-            if (!isAuto(track2.format.language)) {
-                // Prefer original subs
-                result = 0;
-            } else {
-                result = 1;
+            // If user originally wanted non-auto subs, prefer non-auto candidate
+            if (!originAuto && candidateAuto) {
+                return 1; // Fallback match
+            }
+
+            return 0; // High-priority match
+        }
+
+        // Fallback partial prefix match
+        if (format.language != null && track2.format.language != null) {
+            String trimmedOrigin = trim(format.language);
+            String trimmedCandidate = trim(track2.format.language);
+            if (Helpers.startsWith(trimmedCandidate, trimmedOrigin) || Helpers.startsWith(trimmedOrigin, trimmedCandidate)) {
+                return !isAuto(track2.format.language) ? 0 : 1;
             }
         }
 
-        return result;
+        return -1;
     }
 
     @Override
@@ -69,18 +82,122 @@ public class SubtitleTrack extends MediaTrack {
             return 1;
         }
 
-        int result = -1;
+        boolean thisAuto = isAuto(format.language);
+        boolean otherAuto = isAuto(track2.format.language);
 
-        if (Helpers.startsWith(track2.format.language, trim(format.language))) { // partial match
-            if (!isAuto(format.language)) {
-                // Prefer original subs
-                result = 1;
-            } else if (isAuto(format.language) && isAuto(track2.format.language)) {
-                result = 0;
-            }
+        // 1. Prefer manual/creator subs over auto-generated
+        if (!thisAuto && otherAuto) {
+            return 1;
+        } else if (thisAuto && !otherAuto) {
+            return -1;
         }
 
-        return result;
+        // 2. Prefer animated subs over non-animated subs
+        boolean thisAnimated = isAnimated(format.language);
+        boolean otherAnimated = isAnimated(track2.format.language);
+
+        if (thisAnimated && !otherAnimated) {
+            return 1;
+        } else if (!thisAnimated && otherAnimated) {
+            return -1;
+        }
+
+        // 3. Prefer SRV3 format over others
+        boolean thisSrv3 = MimeTypes.APPLICATION_YTSRV3.equals(format.sampleMimeType);
+        boolean otherSrv3 = MimeTypes.APPLICATION_YTSRV3.equals(track2.format.sampleMimeType);
+
+        if (thisSrv3 && !otherSrv3) {
+            return 1;
+        } else if (!thisSrv3 && otherSrv3) {
+            return -1;
+        }
+
+        return 0;
+    }
+
+    public static String getBaseLanguage(String language) {
+        if (language == null) {
+            return "";
+        }
+
+        String cleaned = trimMarker(language).trim();
+
+        // Remove " - animated", " - standard", " - CC", etc.
+        int dashIdx = cleaned.indexOf(" - ");
+        if (dashIdx != -1) {
+            cleaned = cleaned.substring(0, dashIdx).trim();
+        }
+
+        // Remove " (United Kingdom)", " (auto-generated)", " (US)", etc.
+        int parenIdx = cleaned.indexOf(" (");
+        if (parenIdx != -1) {
+            cleaned = cleaned.substring(0, parenIdx).trim();
+        }
+
+        // Remove leading dot like .en-GB
+        if (cleaned.startsWith(".")) {
+            cleaned = cleaned.substring(1);
+        }
+
+        int subTag = cleaned.indexOf('-');
+        if (subTag != -1) {
+            cleaned = cleaned.substring(0, subTag);
+        }
+
+        int subTag2 = cleaned.indexOf('_');
+        if (subTag2 != -1) {
+            cleaned = cleaned.substring(0, subTag2);
+        }
+
+        return cleaned.toLowerCase(Locale.ROOT);
+    }
+
+    public static boolean isLanguageMatch(String lang1, String lang2) {
+        if (lang1 == null || lang2 == null) {
+            return false;
+        }
+
+        String base1 = getBaseLanguage(lang1);
+        String base2 = getBaseLanguage(lang2);
+
+        if (base1.isEmpty() || base2.isEmpty()) {
+            return false;
+        }
+
+        if (base1.equals(base2)) {
+            return true;
+        }
+
+        // Check 2-letter / 3-letter ISO code match (e.g. "en" and "english", "hu" and "hungarian")
+        return isIsoCodeMatch(base1, base2) || isIsoCodeMatch(base2, base1);
+    }
+
+    private static boolean isIsoCodeMatch(String code, String name) {
+        if (code.length() <= 3 && name.length() > 3) {
+            try {
+                Locale locale = new Locale(code);
+                String displayEn = locale.getDisplayLanguage(Locale.ENGLISH).toLowerCase(Locale.ROOT);
+                if (name.startsWith(displayEn) || displayEn.startsWith(name)) {
+                    return true;
+                }
+                String displaySelf = locale.getDisplayLanguage(locale).toLowerCase(Locale.ROOT);
+                if (name.startsWith(displaySelf) || displaySelf.startsWith(name)) {
+                    return true;
+                }
+            } catch (Exception e) {
+                // Ignore locale parse failure
+            }
+            return name.startsWith(code);
+        }
+        return false;
+    }
+
+    public static boolean isAnimated(String language) {
+        if (language == null) {
+            return false;
+        }
+        String lower = language.toLowerCase(Locale.ROOT);
+        return lower.contains("animated") || lower.contains("karaoke");
     }
 
     /**
@@ -133,7 +250,12 @@ public class SubtitleTrack extends MediaTrack {
     }
 
     public static boolean isAuto(String language) {
-        return hasMarker(language);
+        if (language == null) {
+            return false;
+        }
+        return hasMarker(language)
+                || language.toLowerCase(Locale.ROOT).contains("auto-generated")
+                || language.toLowerCase(Locale.ROOT).contains("automatically generated");
     }
 
     private static boolean hasMarker(String language) {
