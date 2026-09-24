@@ -128,6 +128,21 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mIsEmbedPlayerStarted = false;
     }
 
+    public void startMix(Video source) {
+        if (source == null) {
+            return;
+        }
+
+        Playlist.instance().clear();
+
+        Video mixVideo = Video.from(source);
+        mixVideo.playlistId = "RD" + source.videoId;
+        mixVideo.playlistIndex = 0;
+        mixVideo.playlistParams = null;
+
+        openVideo(mixVideo);
+    }
+
     public Video getVideo() {
         return mVideo != null ? mVideo.get() : null;
     }
