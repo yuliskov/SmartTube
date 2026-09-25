@@ -12,6 +12,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.DislikeData;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaSubtitle;
 import com.liskovsoft.mediaserviceinterfaces.data.ItemGroup.Item;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.NotificationState;
@@ -72,6 +73,8 @@ public final class Video {
     public boolean isLive;
     public boolean isUpcoming;
     public boolean isUnplayable;
+    public List<MediaSubtitle> subtitles;
+    public String visitorCookie;
     public boolean isShorts;
     public boolean isChapter;
     public boolean isMovie;
@@ -732,6 +735,12 @@ public final class Video {
         }
 
         percentWatched = video.percentWatched;
+        if (video.subtitles != null) {
+            subtitles = video.subtitles;
+        }
+        if (video.visitorCookie != null) {
+            visitorCookie = video.visitorCookie;
+        }
     }
 
     public void sync(MediaItemMetadata metadata) {
@@ -796,6 +805,8 @@ public final class Video {
 
         volume = formatInfo.getVolumeLevel();
         isUnplayable = formatInfo.isUnplayable();
+        subtitles = formatInfo.getSubtitles();
+        visitorCookie = formatInfo.getVisitorCookie();
     }
 
     public void sync(DislikeData dislikeData) {

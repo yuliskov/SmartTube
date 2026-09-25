@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
-import android.text.Spanned;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Layout;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.CaptioningManager;
@@ -12,26 +14,49 @@ import android.view.accessibility.CaptioningManager.CaptionStyle;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
+import com.google.android.exoplayer2.source.MediaSourceEventListener.LoadEventInfo;
+import com.google.android.exoplayer2.source.MediaSourceEventListener.MediaLoadData;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.TextOutput;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SubtitleView;
-import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class SubtitleManager implements TextOutput, OnDataChange {
+public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListener {
     private static final String TAG = SubtitleManager.class.getSimpleName();
+    private static final float TV_LEFT_PADDING_FRACTION = 0.08f;
+    private static final long MAX_ANIMATION_DURATION_MS = 15_000;
+    private static final String LOADING_TEXT = "[Loading subtitles...]";
+
     private final SubtitleView mSubtitleView;
     private final Context mContext;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private final AppPrefs mPrefs;
     private final PlayerData mPlayerData;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private boolean mIsLoading = false;
+    private boolean mIsSubtitlesSelected = false;
+    private boolean mIsActiveTrackAuto = false;
+    private List<Cue> mLastCues = null;
+
+    private final Runnable mTimeoutRunnable = this::stopLoadingAnimation;
 
     public static class SubtitleStyle {
         public final int nameResId;
@@ -71,8 +96,16 @@ public class SubtitleManager implements TextOutput, OnDataChange {
 
     @Override
     public void onCues(List<Cue> cues) {
-        if (mSubtitleView != null) {
-            mSubtitleView.setCues(forceCenterAlignment(cues));
+        mLastCues = cues;
+        if (cues != null && !cues.isEmpty() && hasText(cues)) {
+            stopLoadingAnimation();
+            if (mSubtitleView != null) {
+                mSubtitleView.setCues(formatCues(cues));
+            }
+        } else {
+            if (!mIsLoading && mSubtitleView != null) {
+                mSubtitleView.setCues(Collections.emptyList());
+            }
         }
     }
 
@@ -80,6 +113,150 @@ public class SubtitleManager implements TextOutput, OnDataChange {
         if (mSubtitleView != null) {
             mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
+    }
+
+    public void startLoadingAnimation() {
+        if (!mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+            return;
+        }
+
+        if (mSubtitleView != null) {
+            mSubtitleView.setVisibility(View.VISIBLE);
+        }
+
+        if (mIsLoading) {
+            return;
+        }
+
+        mIsLoading = true;
+        mLastCues = null;
+        mHandler.removeCallbacks(mTimeoutRunnable);
+
+        Cue loadingCue = new Cue(LOADING_TEXT);
+        if (mSubtitleView != null) {
+            mSubtitleView.setCues(Collections.singletonList(loadingCue));
+        }
+
+        mHandler.postDelayed(mTimeoutRunnable, MAX_ANIMATION_DURATION_MS);
+    }
+
+    public void stopLoadingAnimation() {
+        mHandler.removeCallbacks(mTimeoutRunnable);
+        if (mIsLoading) {
+            mIsLoading = false;
+            if (mSubtitleView != null && (mLastCues == null || mLastCues.isEmpty() || !hasText(mLastCues))) {
+                mSubtitleView.setCues(Collections.emptyList());
+            }
+        }
+    }
+
+    public void dispose() {
+        stopLoadingAnimation();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public void onTracksChanged(EventTime eventTime, TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        boolean hasTextTrack = false;
+        boolean isAutoTrack = false;
+        if (trackSelections != null) {
+            for (TrackSelection selection : trackSelections.getAll()) {
+                if (selection != null && selection.length() > 0) {
+                    Format format = selection.getFormat(0);
+                    if (isSubtitleFormat(format)) {
+                        hasTextTrack = true;
+                        if (isAutoTrack(format)) {
+                            isAutoTrack = true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        mIsSubtitlesSelected = hasTextTrack;
+        mIsActiveTrackAuto = isAutoTrack;
+
+        if (mIsSubtitlesSelected) {
+            if (mLastCues == null || mLastCues.isEmpty() || !hasText(mLastCues)) {
+                if (mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+                    startLoadingAnimation();
+                }
+            }
+        } else {
+            stopLoadingAnimation();
+            mLastCues = null;
+            if (mSubtitleView != null) {
+                mSubtitleView.setCues(Collections.emptyList());
+            }
+        }
+    }
+
+    @Override
+    public void onLoadStarted(EventTime eventTime, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
+        if (mediaLoadData != null && mediaLoadData.trackType == C.TRACK_TYPE_TEXT) {
+            if (mIsSubtitlesSelected && mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+                if (mLastCues == null || mLastCues.isEmpty() || !hasText(mLastCues)) {
+                    startLoadingAnimation();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onLoadCompleted(EventTime eventTime, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
+        // Do not stop loading animation here; wait until onCues() receives parsed cues with text.
+    }
+
+    @Override
+    public void onLoadError(EventTime eventTime, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException error, boolean wasCanceled) {
+        if (mediaLoadData != null && mediaLoadData.trackType == C.TRACK_TYPE_TEXT) {
+            stopLoadingAnimation();
+        }
+    }
+
+    private static boolean isSubtitleFormat(Format format) {
+        if (format == null) {
+            return false;
+        }
+        if ((format.roleFlags & C.ROLE_FLAG_SUBTITLE) != 0) {
+            return true;
+        }
+        String mime = format.sampleMimeType;
+        if (mime == null) {
+            return false;
+        }
+        return MimeTypes.isText(mime)
+                || mime.startsWith("text/")
+                || mime.contains("srv3")
+                || mime.contains("ttml")
+                || mime.contains("vtt")
+                || mime.contains("subrip");
+    }
+
+    private static boolean isAutoTrack(Format format) {
+        if (format == null) {
+            return false;
+        }
+        if (SubtitleTrack.isAuto(format.language)) {
+            return true;
+        }
+        if (format.id != null && (format.id.startsWith("a.") || format.id.startsWith("asr") || format.id.contains(".asr"))) {
+            return true;
+        }
+        if (format.label != null && SubtitleTrack.isAuto(format.label)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean hasText(List<Cue> cues) {
+        for (Cue cue : cues) {
+            if (cue != null && cue.text != null && cue.text.length() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<SubtitleStyle> getSubtitleStyles() {
@@ -95,19 +272,35 @@ public class SubtitleManager implements TextOutput, OnDataChange {
         configureSubtitleView();
     }
 
-    private List<Cue> forceCenterAlignment(List<Cue> cues) {
+    private List<Cue> formatCues(List<Cue> cues) {
+        // ONLY auto-generated tracks are left-aligned, and ONLY when "Word by word auto-subtitles" is ON.
+        // Manual subtitles ALWAYS stay centered with default alignment and placement!
+        if (!mIsActiveTrackAuto || !mPlayerData.isWordByWordAutoSubtitlesEnabled()) {
+            return cues;
+        }
+
         List<Cue> result = new ArrayList<>();
 
         for (Cue cue : cues) {
-            // Keep explicitly vertically positioned cues (e.g. SRV3 top/window positioned subtitles)
-            if (cue.line != Cue.DIMEN_UNSET) {
+            // Keep explicitly vertically or horizontally positioned cues (e.g. SRV3 top/window positioned subtitles)
+            if (cue.line != Cue.DIMEN_UNSET || cue.position != Cue.DIMEN_UNSET) {
                 result.add(cue);
                 continue;
             }
 
-            // For unpositioned/auto-generated cues (like WebVTT), center them horizontally at the bottom.
-            // Preserves text styles, spans, and multi-line breaks (\n) for proper 2-line rolling display.
-            result.add(new Cue(cue.text));
+            // For unpositioned auto-generated cues, left-align text and anchor to the left side
+            // with TV safe-area margin (8%), matching the official YouTube TV app.
+            // Preserves spans, styles, and newlines (\n) for word-by-word rolling subtitles.
+            result.add(new Cue(
+                    cue.text,
+                    Layout.Alignment.ALIGN_NORMAL,
+                    Cue.DIMEN_UNSET,
+                    Cue.TYPE_UNSET,
+                    Cue.TYPE_UNSET,
+                    TV_LEFT_PADDING_FRACTION,
+                    Cue.ANCHOR_TYPE_START,
+                    Cue.DIMEN_UNSET
+            ));
         }
 
         return result;

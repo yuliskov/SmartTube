@@ -193,6 +193,10 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     if (isPendingReset()) {
       return;
     }
+    // Don't discard single sample chunks (e.g. subtitles) because the single sample covers the entire media duration
+    if (!mediaChunks.isEmpty() && mediaChunks.get(0) instanceof SingleSampleMediaChunk) {
+      return;
+    }
     int oldFirstSampleIndex = primarySampleQueue.getFirstIndex();
     primarySampleQueue.discardTo(positionUs, toKeyframe, true);
     int newFirstSampleIndex = primarySampleQueue.getFirstIndex();
@@ -296,6 +300,16 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
       } else if (mediaChunkStartTimeUs > positionUs) {
         // We're not going to find a chunk with a matching start time.
         break;
+      }
+    }
+
+    // SingleSampleMediaChunk (e.g. subtitles) contains the entire media from startTimeUs to endTimeUs.
+    // If it has completed loading and the seek position is within its duration, seek inside the buffer!
+    if (seekToMediaChunk == null && !mediaChunks.isEmpty()) {
+      BaseMediaChunk firstChunk = mediaChunks.get(0);
+      if (firstChunk instanceof SingleSampleMediaChunk && firstChunk.isLoadCompleted()
+          && positionUs >= firstChunk.startTimeUs) {
+        seekToMediaChunk = firstChunk;
       }
     }
 
@@ -622,6 +636,10 @@ public class ChunkSampleStream<T extends ChunkSource> implements SampleStream, S
     }
 
     int currentQueueSize = mediaChunks.size();
+    // Don't discard single sample chunks (e.g. subtitles) because the single sample covers the entire media duration
+    if (!mediaChunks.isEmpty() && mediaChunks.get(0) instanceof SingleSampleMediaChunk) {
+      return;
+    }
     int preferredQueueSize = chunkSource.getPreferredQueueSize(positionUs, readOnlyMediaChunks);
     if (currentQueueSize <= preferredQueueSize) {
       return;

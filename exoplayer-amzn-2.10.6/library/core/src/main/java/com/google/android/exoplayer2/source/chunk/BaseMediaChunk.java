@@ -86,7 +86,8 @@ public abstract class BaseMediaChunk extends MediaChunk {
    * from this chunk.
    */
   public final int getFirstSampleIndex(int trackIndex) {
-    return firstSampleIndices[trackIndex];
+    return firstSampleIndices != null && trackIndex < firstSampleIndices.length
+        ? firstSampleIndices[trackIndex] : 0;
   }
 
   /**

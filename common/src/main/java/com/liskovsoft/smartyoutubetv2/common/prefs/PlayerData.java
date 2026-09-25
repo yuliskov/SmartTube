@@ -101,6 +101,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsLegacyCodecsForced;
     private boolean mIsAudioDelayEnabled;
+    private boolean mIsSubtitleLoadingAnimationEnabled;
+    private boolean mIsWordByWordAutoSubtitlesEnabled = true;
 
     private static class SpeedItem {
         public String channelId;
@@ -450,6 +452,28 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     public void setSubtitlesPerChannelEnabled(boolean enable) {
         mIsSubtitlesPerChannelEnabled = enable;
+        persistState();
+    }
+
+
+
+    public boolean isSubtitleLoadingAnimationEnabled() {
+        return mIsSubtitleLoadingAnimationEnabled;
+    }
+
+    public void setSubtitleLoadingAnimationEnabled(boolean enable) {
+        mIsSubtitleLoadingAnimationEnabled = enable;
+        persistState();
+    }
+
+    public boolean isWordByWordAutoSubtitlesEnabled() {
+        return mIsWordByWordAutoSubtitlesEnabled;
+    }
+
+    public void setWordByWordAutoSubtitlesEnabled(boolean enable) {
+        mIsWordByWordAutoSubtitlesEnabled = enable;
+        com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled = enable;
+        com.google.android.exoplayer2.text.srv3.Srv3SubtitleDecoder.sWordByWordEnabled = enable;
         persistState();
     }
 
@@ -866,6 +890,10 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        mIsSubtitleLoadingAnimationEnabled = Helpers.parseBoolean(split, 64, true);
+        mIsWordByWordAutoSubtitlesEnabled = Helpers.parseBoolean(split, 65, true);
+        com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled = mIsWordByWordAutoSubtitlesEnabled;
+        com.google.android.exoplayer2.text.srv3.Srv3SubtitleDecoder.sWordByWordEnabled = mIsWordByWordAutoSubtitlesEnabled;
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -903,7 +931,8 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, null, mIsSubtitleLoadingAnimationEnabled,
+                mIsWordByWordAutoSubtitlesEnabled
         ));
     }
 

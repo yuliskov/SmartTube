@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -229,6 +230,8 @@ public class VideoStateController extends BasePlayerController {
 
         // In this state video length is not undefined.
         restoreState();
+
+
     }
 
     @Override
@@ -488,6 +491,8 @@ public class VideoStateController extends BasePlayerController {
         }
 
         getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+
+
     }
 
     private void saveState() {

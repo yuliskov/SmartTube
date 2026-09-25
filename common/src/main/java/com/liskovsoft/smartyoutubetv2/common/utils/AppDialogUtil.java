@@ -528,6 +528,24 @@ public class AppDialogUtil {
         );
     }
 
+
+
+    public static OptionItem createSubtitleLoadingAnimationOption(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        return UiOptionItem.from(context.getString(R.string.subtitle_loading_animation),
+                optionItem -> playerData.setSubtitleLoadingAnimationEnabled(optionItem.isSelected()),
+                playerData.isSubtitleLoadingAnimationEnabled()
+        );
+    }
+
+    public static OptionItem createWordByWordAutoSubtitlesOption(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        return UiOptionItem.from(context.getString(R.string.word_by_word_auto_subtitles),
+                optionItem -> playerData.setWordByWordAutoSubtitlesEnabled(optionItem.isSelected()),
+                playerData.isWordByWordAutoSubtitlesEnabled()
+        );
+    }
+
     @TargetApi(19)
     private static List<OptionItem> createSubtitleStyles(Context context) {
         PlayerData playerData = PlayerData.instance(context);

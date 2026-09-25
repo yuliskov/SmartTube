@@ -246,6 +246,11 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
     int availableWidth = parentWidth - textPaddingX * 2;
     if (cueSize != Cue.DIMEN_UNSET) {
       availableWidth = (int) (availableWidth * cueSize);
+    } else if (cuePosition != Cue.DIMEN_UNSET && cuePositionAnchor == Cue.ANCHOR_TYPE_START) {
+      int maxAvailable = (int) (parentWidth * (1.0f - 2 * cuePosition)) - textPaddingX * 2;
+      if (maxAvailable > 0 && availableWidth > maxAvailable) {
+        availableWidth = maxAvailable;
+      }
     }
     if (availableWidth <= 0) {
       Log.w(TAG, "Skipped drawing subtitle cue (insufficient space)");
@@ -283,19 +288,20 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
       }
     }
 
+    Alignment textAlignment = cueTextAlignment == null ? Alignment.ALIGN_CENTER : cueTextAlignment;
+
     if (Color.alpha(backgroundColor) > 0) {
       SpannableStringBuilder newCueText = new SpannableStringBuilder(cueText);
       // MOD: add subs bg padding
       //newCueText.setSpan(
       //    new BackgroundColorSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
       newCueText.setSpan(
-              new PaddingBackgroundColorSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
+              new PaddingBackgroundColorSpan(backgroundColor, 10, textAlignment), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
       //newCueText.setSpan(
       //        new RoundedBackgroundSpan(backgroundColor), 0, newCueText.length(), Spanned.SPAN_PRIORITY);
       cueText = newCueText;
     }
 
-    Alignment textAlignment = cueTextAlignment == null ? Alignment.ALIGN_CENTER : cueTextAlignment;
     textLayout = new StaticLayout(cueText, textPaint, availableWidth, textAlignment, spacingMult,
         spacingAdd, true);
     // MOD: same height for multiline and single line subs (use 3 lines height)

@@ -93,6 +93,8 @@ public final class WebvttCueParser {
    * @param styles List of styles defined by the CSS style blocks preceeding the cues.
    * @return Whether a valid Cue was found.
    */
+  public static volatile boolean sWordByWordEnabled = true;
+
   private static final Pattern TIMESTAMP_TAG_PATTERN =
       Pattern.compile("<(?:(\\d{1,2}):)?(\\d{1,2}):(\\d{2})\\.(\\d{3})>");
 
@@ -271,6 +273,15 @@ public final class WebvttCueParser {
     }
     String fullText = textBuilder.toString();
 
+    // Fast path: if no tags at all or word-by-word disabled, parse directly
+    if (!sWordByWordEnabled || fullText.indexOf('<') == -1 || outCues == null) {
+      parseCueText(id, fullText, builder, styles);
+      if (outCues != null) {
+        outCues.add(builder.build());
+      }
+      return true;
+    }
+
     // Check for intra-cue timestamps (e.g. YouTube ASR word-by-word roll-up timestamps: <00:00:01.360>)
     Matcher tsMatcher = TIMESTAMP_TAG_PATTERN.matcher(fullText);
     List<Integer> tagStarts = new ArrayList<>();
@@ -288,26 +299,24 @@ public final class WebvttCueParser {
       } catch (NumberFormatException ignored) {}
     }
 
-    if (tagTimes.isEmpty() || outCues == null) {
+    if (tagTimes.isEmpty()) {
       parseCueText(id, fullText, builder, styles);
-      if (outCues != null) {
-        outCues.add(builder.build());
-      }
+      outCues.add(builder.build());
       return true;
     }
 
     // Expand into progressive timed sub-cues so words appear as spoken
     int numTags = tagTimes.size();
-    List<String> chunks = new ArrayList<>();
-    List<Long> intervalTimes = new ArrayList<>();
+    List<String> chunks = new ArrayList<>(numTags + 1);
+    List<Long> intervalTimes = new ArrayList<>(numTags + 2);
 
-    chunks.add(fullText.substring(0, tagStarts.get(0)));
+    chunks.add(stripTagsAndDecodeEntities(fullText.substring(0, tagStarts.get(0))));
     intervalTimes.add(startTimeUs);
 
     for (int i = 0; i < numTags; i++) {
       int chunkStart = tagEnds.get(i);
       int chunkEnd = (i + 1 < numTags) ? tagStarts.get(i + 1) : fullText.length();
-      chunks.add(fullText.substring(chunkStart, chunkEnd));
+      chunks.add(stripTagsAndDecodeEntities(fullText.substring(chunkStart, chunkEnd)));
       long t = tagTimes.get(i);
       long lastTime = intervalTimes.get(intervalTimes.size() - 1);
       long clampedTime = Math.max(lastTime, Math.min(endTimeUs, t));
@@ -315,6 +324,7 @@ public final class WebvttCueParser {
     }
     intervalTimes.add(endTimeUs);
 
+    // Settings are already applied to builder above. Simply set times and text per progressive cue.
     StringBuilder cumulativeText = new StringBuilder();
     for (int i = 0; i <= numTags; i++) {
       cumulativeText.append(chunks.get(i));
@@ -322,10 +332,8 @@ public final class WebvttCueParser {
       long curEnd = intervalTimes.get(i + 1);
 
       if (curEnd > curStart && cumulativeText.length() > 0) {
-        builder.reset();
         builder.setStartTime(curStart).setEndTime(curEnd);
-        parseCueSettingsList(settings, builder);
-        parseCueText(id, cumulativeText.toString(), builder, styles);
+        builder.setText(new SpannableStringBuilder(cumulativeText));
         outCues.add(builder.build());
       }
     }
@@ -413,7 +421,7 @@ public final class WebvttCueParser {
     return index == -1 ? markup.length() : index + 1;
   }
 
-  private static void applyEntity(String entity, SpannableStringBuilder spannedText) {
+  private static void applyEntity(String entity, StringBuilder spannedText) {
     switch (entity) {
       case ENTITY_LESS_THAN:
         spannedText.append('<');
@@ -446,6 +454,49 @@ public final class WebvttCueParser {
         Log.w(TAG, "ignoring unsupported entity: '&" + entity + ";'");
         break;
     }
+  }
+
+  private static void applyEntity(String entity, SpannableStringBuilder spannedText) {
+    StringBuilder sb = new StringBuilder();
+    applyEntity(entity, sb);
+    spannedText.append(sb);
+  }
+
+  private static String stripTagsAndDecodeEntities(String str) {
+    if (str == null || str.isEmpty()) {
+      return "";
+    }
+    if (str.indexOf('<') == -1 && str.indexOf('&') == -1) {
+      return str;
+    }
+    StringBuilder sb = new StringBuilder(str.length());
+    int pos = 0;
+    int len = str.length();
+    while (pos < len) {
+      char c = str.charAt(pos);
+      if (c == '<') {
+        int close = str.indexOf('>', pos + 1);
+        pos = (close != -1) ? close + 1 : len;
+      } else if (c == '&') {
+        int semi = str.indexOf(';', pos + 1);
+        int space = str.indexOf(' ', pos + 1);
+        int end = semi == -1 ? space : (space == -1 ? semi : Math.min(semi, space));
+        if (end != -1) {
+          applyEntity(str.substring(pos + 1, end), sb);
+          if (end == space) {
+            sb.append(' ');
+          }
+          pos = end + 1;
+        } else {
+          sb.append(c);
+          pos++;
+        }
+      } else {
+        sb.append(c);
+        pos++;
+      }
+    }
+    return sb.toString();
   }
 
   private static boolean isSupportedTag(String tagName) {

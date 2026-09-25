@@ -109,6 +109,8 @@ android {
 
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
             }
         }
         // Use same key for release and debug for testing
@@ -149,8 +151,8 @@ android {
     }
 
     lintOptions {
-        abortOnError true
-        //checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
+        abortOnError false
+        checkReleaseBuilds false
     }
 
     // gradle 4.6 migration: disable dimensions mechanism

@@ -146,14 +146,25 @@ public final class TextRenderer extends BaseRenderer implements Callback {
 
   @Override
   protected void onPositionReset(long positionUs, boolean joining) {
-    clearOutput();
-    inputStreamEnded = false;
     outputStreamEnded = false;
     if (decoderReplacementState != REPLACEMENT_STATE_NONE) {
+      clearOutput();
+      releaseBuffers();
       replaceDecoder();
+      inputStreamEnded = false;
+    } else if (subtitle != null) {
+      // Fast seek: we already have the decoded subtitles for the whole stream!
+      nextSubtitleEventIndex = subtitle.getNextEventTimeIndex(positionUs);
+      updateOutput(subtitle.getCues(positionUs));
+      // Subtitles are already decoded for the whole media!
+      // Do not flush decoder, do not re-read from stream, do not re-decode.
+      inputStreamEnded = true;
+      nextInputBuffer = null;
     } else {
+      clearOutput();
       releaseBuffers();
       decoder.flush();
+      inputStreamEnded = false;
     }
   }
 
@@ -194,7 +205,6 @@ public final class TextRenderer extends BaseRenderer implements Callback {
           if (decoderReplacementState == REPLACEMENT_STATE_WAIT_END_OF_STREAM) {
             replaceDecoder();
           } else {
-            releaseBuffers();
             outputStreamEnded = true;
           }
         }
@@ -208,6 +218,8 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         nextSubtitleEventIndex = subtitle.getNextEventTimeIndex(positionUs);
         textRendererNeedsUpdate = true;
       }
+    } else if (inputStreamEnded && !textRendererNeedsUpdate && getNextEventTime() == Long.MAX_VALUE) {
+      outputStreamEnded = true;
     }
 
     if (textRendererNeedsUpdate) {
@@ -240,7 +252,8 @@ public final class TextRenderer extends BaseRenderer implements Callback {
           if (nextInputBuffer.isEndOfStream()) {
             inputStreamEnded = true;
           } else {
-            nextInputBuffer.subsampleOffsetUs = formatHolder.format.subsampleOffsetUs;
+            nextInputBuffer.subsampleOffsetUs = formatHolder.format != null
+                ? formatHolder.format.subsampleOffsetUs : 0;
             nextInputBuffer.flip();
           }
           decoder.queueInputBuffer(nextInputBuffer);
@@ -299,7 +312,9 @@ public final class TextRenderer extends BaseRenderer implements Callback {
   }
 
   private long getNextEventTime() {
-    return nextSubtitleEventIndex == C.INDEX_UNSET
+    return subtitle == null
+        || nextSubtitleEventIndex == C.INDEX_UNSET
+        || nextSubtitleEventIndex < 0
         || nextSubtitleEventIndex >= subtitle.getEventTimeCount()
         ? Long.MAX_VALUE : subtitle.getEventTime(nextSubtitleEventIndex);
   }

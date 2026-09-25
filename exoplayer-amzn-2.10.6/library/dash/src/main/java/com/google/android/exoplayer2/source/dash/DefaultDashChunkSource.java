@@ -532,9 +532,8 @@ public class DefaultDashChunkSource implements DashChunkSource {
       long endTimeUs = representationHolder.getSegmentEndTimeUs(firstSegmentNum);
       // MOD: fix subtitles bot check error by add cookie header
       // NOTE: extractorWrapper == null on subtitles
-      //DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl),
-      //    segmentUri.start, segmentUri.length, representation.getCacheKey());
-      DataSpec dataSpec = new DataSpec(segmentUri.resolveUri(baseUrl), DataSpec.HTTP_METHOD_GET, null,
+      Uri resolvedUri = segmentUri.resolveUri(baseUrl);
+      DataSpec dataSpec = new DataSpec(resolvedUri, DataSpec.HTTP_METHOD_GET, null,
               segmentUri.start, segmentUri.start, segmentUri.length, representation.getCacheKey(), 0,
               manifest.visitorCookie != null ? Collections.singletonMap("Cookie", manifest.visitorCookie) : Collections.emptyMap());
       return new SingleSampleMediaChunk(dataSource, dataSpec, trackFormat, trackSelectionReason,

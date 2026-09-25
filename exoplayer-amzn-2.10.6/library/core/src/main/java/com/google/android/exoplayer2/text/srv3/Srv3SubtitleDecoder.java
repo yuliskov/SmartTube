@@ -40,6 +40,12 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
 
   private static final String TAG = "Srv3SubtitleDecoder";
 
+  public static volatile boolean sWordByWordEnabled = true;
+
+  public static void setWordByWordEnabled(boolean enabled) {
+    sWordByWordEnabled = enabled;
+  }
+
   private final XmlPullParserFactory xmlParserFactory;
 
   public Srv3SubtitleDecoder() {
@@ -62,6 +68,7 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       Map<String, Pen> pens = new HashMap<>();
       Map<String, Wp> wps = new HashMap<>();
       List<Srv3Subtitle.Srv3Cue> cues = new ArrayList<>();
+      StringBuilder paragraphBuilder = new StringBuilder(256);
 
       int eventType = xmlParser.getEventType();
       while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -72,7 +79,7 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
           } else if ("wp".equals(tagName)) {
             parseWp(xmlParser, wps);
           } else if ("p".equals(tagName)) {
-            parseParagraph(xmlParser, pens, wps, cues);
+            parseParagraph(xmlParser, pens, wps, cues, paragraphBuilder);
           }
         }
         eventType = xmlParser.next();
@@ -88,29 +95,41 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
     if (colorStr == null || colorStr.isEmpty()) {
       return null;
     }
-    try {
-      if (colorStr.startsWith("#")) {
-        return Color.parseColor(colorStr);
-      }
+    if (colorStr.charAt(0) == '#') {
       try {
-        // YTT often uses decimal color integers e.g. 16777215
-        long colorLong = Long.parseLong(colorStr);
-        // If it's RGB without alpha, add 0xFF000000 alpha
-        int color = (int) colorLong;
-        if ((color & 0xFF000000) == 0) {
-          color |= 0xFF000000;
-        }
-        return color;
-      } catch (NumberFormatException e) {
-        // YTT hex without # e.g. FFFFFF or FFFFFFFF
-        if (colorStr.length() == 6 || colorStr.length() == 8) {
+        return Color.parseColor(colorStr);
+      } catch (Exception e) {
+        return null;
+      }
+    }
+    boolean hasHex = false;
+    for (int i = 0; i < colorStr.length(); i++) {
+      char c = colorStr.charAt(i);
+      if ((c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+        hasHex = true;
+        break;
+      }
+    }
+    if (hasHex) {
+      if (colorStr.length() == 6 || colorStr.length() == 8) {
+        try {
           return Color.parseColor("#" + colorStr);
+        } catch (Exception e) {
+          return null;
         }
       }
-    } catch (Exception e) {
-      // Ignore
+      return null;
     }
-    return null;
+    try {
+      long colorLong = Long.parseLong(colorStr);
+      int color = (int) colorLong;
+      if ((color & 0xFF000000) == 0) {
+        color |= 0xFF000000;
+      }
+      return color;
+    } catch (NumberFormatException e) {
+      return null;
+    }
   }
 
   private void parsePen(XmlPullParser parser, Map<String, Pen> pens) {
@@ -229,7 +248,8 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       XmlPullParser parser,
       Map<String, Pen> pens,
       Map<String, Wp> wps,
-      List<Srv3Subtitle.Srv3Cue> cues)
+      List<Srv3Subtitle.Srv3Cue> cues,
+      StringBuilder paragraphBuilder)
       throws XmlPullParserException, IOException {
 
     String t = parser.getAttributeValue(null, "t");
@@ -263,8 +283,8 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
     
     String defaultPenId = parser.getAttributeValue(null, "p");
 
-    StringBuilder builder = new StringBuilder();
-    List<SpanInfo> spanInfos = new ArrayList<>();
+    paragraphBuilder.setLength(0);
+    List<SpanInfo> spanInfos = null;
 
     int eventType = parser.next();
     String currentSpanPenId = null;
@@ -276,8 +296,19 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       if (eventType == XmlPullParser.START_TAG) {
         String tagName = parser.getName();
         if ("s".equals(tagName) || "span".equals(tagName)) {
+          if (spanInfos == null) {
+            spanInfos = new ArrayList<>();
+            if (paragraphBuilder.length() > 0) {
+              SpanInfo info = new SpanInfo();
+              info.start = 0;
+              info.end = paragraphBuilder.length();
+              info.penId = null;
+              info.offsetUs = 0;
+              spanInfos.add(info);
+            }
+          }
           inSpan = true;
-          currentSpanStart = builder.length();
+          currentSpanStart = paragraphBuilder.length();
           currentSpanPenId = parser.getAttributeValue(null, "p");
           String spanT = parser.getAttributeValue(null, "t");
           currentSpanOffsetUs = 0;
@@ -292,29 +323,33 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       } else if (eventType == XmlPullParser.TEXT) {
         String text = parser.getText();
         if (text != null) {
-          String normalized = text.replace("\\n", "\n");
-          if (!inSpan) {
-            int textStart = builder.length();
-            builder.append(normalized);
+          if (text.indexOf('\\') != -1) {
+            text = text.replace("\\n", "\n");
+          }
+          if (spanInfos != null && !inSpan) {
+            int textStart = paragraphBuilder.length();
+            paragraphBuilder.append(text);
             SpanInfo info = new SpanInfo();
             info.start = textStart;
-            info.end = builder.length();
+            info.end = paragraphBuilder.length();
             info.penId = null;
             info.offsetUs = currentSpanOffsetUs;
             spanInfos.add(info);
           } else {
-            builder.append(normalized);
+            paragraphBuilder.append(text);
           }
         }
       } else if (eventType == XmlPullParser.END_TAG) {
         String tagName = parser.getName();
         if ("s".equals(tagName) || "span".equals(tagName)) {
-          SpanInfo info = new SpanInfo();
-          info.start = currentSpanStart;
-          info.end = builder.length();
-          info.penId = currentSpanPenId;
-          info.offsetUs = currentSpanOffsetUs;
-          spanInfos.add(info);
+          if (spanInfos != null) {
+            SpanInfo info = new SpanInfo();
+            info.start = currentSpanStart;
+            info.end = paragraphBuilder.length();
+            info.penId = currentSpanPenId;
+            info.offsetUs = currentSpanOffsetUs;
+            spanInfos.add(info);
+          }
           currentSpanPenId = null;
           inSpan = false;
         } else if ("p".equals(tagName)) {
@@ -324,24 +359,51 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       eventType = parser.next();
     }
 
-    if (builder.length() == 0) {
+    if (paragraphBuilder.length() == 0) {
+      return;
+    }
+
+    Pen defaultPen = defaultPenId != null ? pens.get(defaultPenId) : null;
+    String fullText = paragraphBuilder.toString();
+
+    // Fast path: standard paragraph without child <s> or <span> tags
+    if (spanInfos == null || spanInfos.isEmpty()) {
+      SpannableStringBuilder intervalBuilder = new SpannableStringBuilder(fullText);
+      if (defaultPen != null) {
+        applyPen(defaultPen, intervalBuilder, 0, fullText.length());
+      }
+      Cue cue = buildCue(intervalBuilder, wp);
+      cues.add(new Srv3Subtitle.Srv3Cue(cue, startTimeUs, endTimeUs));
       return;
     }
 
     // Collect all unique time offsets
     List<Long> offsets = new ArrayList<>();
     offsets.add(0L);
-    for (SpanInfo info : spanInfos) {
-      if (info.offsetUs > 0 && !offsets.contains(info.offsetUs)) {
-        if (durationUs == 0 || info.offsetUs < durationUs) {
-          offsets.add(info.offsetUs);
+    if (sWordByWordEnabled) {
+      for (SpanInfo info : spanInfos) {
+        if (info.offsetUs > 0 && !offsets.contains(info.offsetUs)) {
+          if (durationUs == 0 || info.offsetUs < durationUs) {
+            offsets.add(info.offsetUs);
+          }
         }
       }
+      Collections.sort(offsets);
     }
-    Collections.sort(offsets);
 
-    Pen defaultPen = defaultPenId != null ? pens.get(defaultPenId) : null;
-    String fullText = builder.toString();
+    // Fast path: if only 1 offset (normal paragraph, no word-by-word timing or disabled)
+    if (offsets.size() <= 1) {
+      SpannableStringBuilder intervalBuilder = new SpannableStringBuilder(fullText);
+      for (SpanInfo info : spanInfos) {
+        if (info.start < info.end) {
+          Pen pen = info.penId != null ? pens.get(info.penId) : defaultPen;
+          applyPen(pen, intervalBuilder, info.start, info.end);
+        }
+      }
+      Cue cue = buildCue(intervalBuilder, wp);
+      cues.add(new Srv3Subtitle.Srv3Cue(cue, startTimeUs, endTimeUs));
+      return;
+    }
 
     // Generate a cue for each interval
     for (int i = 0; i < offsets.size(); i++) {
@@ -356,8 +418,8 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       SpannableStringBuilder intervalBuilder = new SpannableStringBuilder(fullText);
 
       // Apply styling:
-      // Spans arrived up to currentOffsetUs get their style or defaultPen.
-      // Upcoming spans (offsetUs > currentOffsetUs) get transparent text color so layout remains stable without jumping.
+      // Active spans get styled. All upcoming spans get hidden with a single transparent span.
+      int firstFutureStart = -1;
       for (SpanInfo info : spanInfos) {
         if (info.start >= info.end) {
           continue;
@@ -365,9 +427,13 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
         if (info.offsetUs <= currentOffsetUs) {
           Pen pen = info.penId != null ? pens.get(info.penId) : defaultPen;
           applyPen(pen, intervalBuilder, info.start, info.end);
-        } else {
-          intervalBuilder.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), info.start, info.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (firstFutureStart == -1 || info.start < firstFutureStart) {
+          firstFutureStart = info.start;
         }
+      }
+
+      if (firstFutureStart != -1 && firstFutureStart < fullText.length()) {
+        intervalBuilder.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), firstFutureStart, fullText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
 
       Cue cue = buildCue(intervalBuilder, wp);

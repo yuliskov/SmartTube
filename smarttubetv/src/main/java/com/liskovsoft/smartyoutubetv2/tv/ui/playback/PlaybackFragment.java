@@ -60,6 +60,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -442,8 +443,14 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayerInitializer.release();
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
+        if (mSubtitleManager != null) {
+            if (mPlayer != null) {
+                mPlayer.removeAnalyticsListener(mSubtitleManager);
+            }
+            mSubtitleManager.dispose();
+            mSubtitleManager = null;
+        }
         mPlayer = null;
-        mSubtitleManager = null;
         if (mYouTubeOverlay != null) {
             mYouTubeOverlay
                     .player(null)
@@ -516,6 +523,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             if (mPlayer.getTextComponent() != null) {
                 mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
             }
+            mPlayer.addAnalyticsListener(mSubtitleManager);
         }
     }
 
@@ -1043,6 +1051,20 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void setFormat(FormatItem formatItem) {
+        if (formatItem != null && (formatItem.getType() == FormatItem.TYPE_SUBTITLE ||
+                (formatItem.getTrack() != null && formatItem.getTrack().rendererIndex == TrackSelectorManager.RENDERER_INDEX_SUBTITLE))) {
+            createSubtitleManager();
+            if (mSubtitleManager != null) {
+                if (!formatItem.isDefault() && !FormatItem.SUBTITLE_NONE.equals(formatItem)) {
+                    mSubtitleManager.show(true);
+                    if (getPlayerData() != null && getPlayerData().isSubtitleLoadingAnimationEnabled()) {
+                        mSubtitleManager.startLoadingAnimation();
+                    }
+                } else {
+                    mSubtitleManager.stopLoadingAnimation();
+                }
+            }
+        }
         // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
         mExoPlayerController.selectFormat(formatItem);
     }

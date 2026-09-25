@@ -170,6 +170,7 @@ public class PlayerUIController extends BasePlayerController {
         FormatItem bestFormat = findBestSubtitle(getPlayer(), getPlayerData());
 
         if (bestFormat != null && !bestFormat.isDefault() && !FormatItem.SUBTITLE_NONE.equals(bestFormat)) {
+            getPlayer().showSubtitles(true);
             getPlayer().setFormat(bestFormat);
             getPlayerData().setFormat(bestFormat);
             getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_ON);
@@ -375,6 +376,8 @@ public class PlayerUIController extends BasePlayerController {
         }));
 
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleLoadingAnimationOption(getContext()));
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createWordByWordAutoSubtitlesOption(getContext()));
 
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getContext());
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);

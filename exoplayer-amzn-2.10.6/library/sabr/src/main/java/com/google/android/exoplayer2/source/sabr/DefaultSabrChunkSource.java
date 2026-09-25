@@ -599,8 +599,10 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             long seekTimeUs) {
         Representation representation = representationHolder.representation;
         if (representationHolder.extractorWrapper == null) {
+            String baseUrl = representation.baseUrl;
+            Uri subtitleUri = Uri.parse(baseUrl);
             DataSpec dataSpec = new DataSpec(
-                    Uri.parse(representation.baseUrl), DataSpec.HTTP_METHOD_GET, null,
+                    subtitleUri, DataSpec.HTTP_METHOD_GET, null,
                     0, 0, C.LENGTH_UNSET, representation.getCacheKey(), 0,
                     manifest.visitorCookie != null
                             ? Collections.singletonMap("Cookie", manifest.visitorCookie)
