@@ -10,10 +10,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 /** Keeps the user-provided credential outside SmartTube's settings backups. */
 final class VotTokenStore {
+    private static final Charset UTF8 = Charset.forName("UTF-8");
     private final AtomicFile mFile;
 
     VotTokenStore(Context context) {
@@ -31,7 +32,7 @@ final class VotTokenStore {
                 if (out.size() + count > 512) return null;
                 out.write(buffer, 0, count);
             }
-            return VotSettings.oauthToken(new String(out.toByteArray(), StandardCharsets.UTF_8));
+            return VotSettings.oauthToken(new String(out.toByteArray(), UTF8));
         } catch (IOException ignored) {
             return null;
         }
@@ -46,7 +47,7 @@ final class VotTokenStore {
         FileOutputStream stream = null;
         try {
             stream = mFile.startWrite();
-            stream.write(token.getBytes(StandardCharsets.UTF_8));
+            stream.write(token.getBytes(UTF8));
             mFile.finishWrite(stream);
             return true;
         } catch (IOException ignored) {
