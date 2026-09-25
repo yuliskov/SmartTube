@@ -20,6 +20,7 @@
     <string name="vot_target_kazakh">Қазақша</string>
     <string name="vot_source_language">Бастапқы тіл</string>
     <string name="vot_source_auto">Авто (YouTube)</string>
+    <string name="vot_skip_music">Музыкалық бейнелерді өткізу</string>
     <string name="vot_voice_type">Дауыс түрі</string>
     <string name="vot_live_voices">Жанды дауыстар</string>
     <string name="vot_live_voices_desc">Тек орысша аудармаға арналған. Қолжетімсіз болса, стандартты дауыстар қолданылады</string>

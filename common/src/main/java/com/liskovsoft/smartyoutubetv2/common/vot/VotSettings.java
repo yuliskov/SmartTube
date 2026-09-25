@@ -26,6 +26,7 @@ public final class VotSettings {
     private static final String SHOW_BUTTON_KEY = "vot_show_button";
     private static final String STRONG_DUCK_KEY = "vot_strong_duck";
     private static final String VOICE_SOURCE_KEY = "vot_voice_source";
+    private static final String SKIP_MUSIC_KEY = "vot_skip_music";
     private final AppPrefs mPrefs;
     private final Context mContext;
 
@@ -134,6 +135,14 @@ public final class VotSettings {
 
     public void setEnabled(boolean enabled) {
         mPrefs.setProfileData(ENABLED_KEY, String.valueOf(enabled));
+    }
+
+    public boolean isSkipMusicEnabled() {
+        return !"false".equals(mPrefs.getProfileData(SKIP_MUSIC_KEY));
+    }
+
+    public void setSkipMusicEnabled(boolean enabled) {
+        mPrefs.setProfileData(SKIP_MUSIC_KEY, String.valueOf(enabled));
     }
 
     public String getVoiceSource() {

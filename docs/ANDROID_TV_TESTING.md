@@ -51,6 +51,13 @@ application ID or on a test device to preserve existing app data.
    before playback. A Yandex OAuth authorization link requires an existing
    registered OAuth client; see the
    [official manual-token instructions](https://yandex.ru/dev/id/doc/en/tokens/debug-token).
+9. With **Skip for music videos** on (the default), open a track from Music,
+   a music video from search, and a direct music-video link such as
+   `https://www.youtube.com/watch?v=dQw4w9WgXcQ`. Voiceover should stay off
+   and the player button should not light up. The button should still start
+   voiceover manually. Turn the setting off and open another music video;
+   voiceover should start. Turn it back on during automatic voiceover on a
+   music video; voiceover should stop.
 
 The action icon is Google Material Symbols Outlined `voice_selection`
 (Apache 2.0). Yandex translation uses an unofficial endpoint; protocol behavior
