@@ -20,6 +20,7 @@
     <string name="vot_target_kazakh">Kazakh</string>
     <string name="vot_source_language">Original language</string>
     <string name="vot_source_auto">Auto (YouTube)</string>
+    <string name="vot_skip_music">Skip for music videos</string>
     <string name="vot_voice_type">Voice type</string>
     <string name="vot_live_voices">Live voices</string>
     <string name="vot_live_voices_desc">Russian TTS Voiceover only. Falls back to standard voices if unavailable</string>

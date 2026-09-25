@@ -43,6 +43,7 @@ public class VotSettingsTest {
         assertFalse(settings.shouldShowButton());
         assertTrue(settings.isStrongDuckingEnabled());
         assertTrue(settings.isAdaptiveVolumeEnabled());
+        assertTrue(settings.isSkipMusicEnabled());
         assertEquals(15, settings.getOriginalVolume());
         assertEquals(100, settings.getTranslationVolume());
         settings.setTargetLanguage("ru");
@@ -90,6 +91,7 @@ public class VotSettingsTest {
         settings.setLivelyVoice(false);
         settings.setAdaptiveVolumeEnabled(false);
         settings.setStrongDuckingEnabled(false);
+        settings.setSkipMusicEnabled(false);
 
         reloaded = new VotSettings(RuntimeEnvironment.getApplication());
         assertEquals(0, reloaded.getOriginalVolume());
@@ -97,5 +99,6 @@ public class VotSettingsTest {
         assertFalse(reloaded.useLivelyVoice());
         assertFalse(reloaded.isAdaptiveVolumeEnabled());
         assertFalse(reloaded.isStrongDuckingEnabled());
+        assertFalse(reloaded.isSkipMusicEnabled());
     }
 }

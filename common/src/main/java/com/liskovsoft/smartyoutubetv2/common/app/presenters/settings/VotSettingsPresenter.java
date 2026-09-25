@@ -87,6 +87,14 @@ public final class VotSettingsPresenter {
         }
         dialog.appendRadioCategory(context.getString(R.string.vot_source_language), sources);
 
+        dialog.appendSingleSwitch(UiOptionItem.from(context.getString(R.string.vot_skip_music),
+                item -> {
+                    settings.setSkipMusicEnabled(item.isSelected());
+                    VoiceTranslateController controller = PlaybackPresenter.instance(context)
+                            .getController(VoiceTranslateController.class);
+                    if (controller != null) controller.onMusicSettingChanged();
+                }, settings.isSkipMusicEnabled()));
+
         List<OptionItem> voices = new ArrayList<>();
         voices.add(UiOptionItem.from(context.getString(R.string.vot_live_voices),
                 context.getString(R.string.vot_live_voices_desc),

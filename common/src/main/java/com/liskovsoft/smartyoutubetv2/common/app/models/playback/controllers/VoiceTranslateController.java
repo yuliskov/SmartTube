@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.os.SystemClock;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -15,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.vot.TranslationAudioPlayer;
 import com.liskovsoft.smartyoutubetv2.common.vot.VotAudioSource;
 import com.liskovsoft.smartyoutubetv2.common.vot.VotClient;
+import com.liskovsoft.smartyoutubetv2.common.vot.VotMusicVideo;
 import com.liskovsoft.smartyoutubetv2.common.vot.VotSettings;
 import com.liskovsoft.smartyoutubetv2.common.vot.VotYouTubeAudio;
 
@@ -30,6 +32,7 @@ public final class VoiceTranslateController extends BasePlayerController {
     private TranslationAudioPlayer mAudio;
     private VotClient mClient;
     private Disposable mRequest;
+    private Disposable mMusicRequest;
     private boolean mEnabled;
     private boolean mStartedAutomatically;
     private boolean mAutoTried;
@@ -45,6 +48,8 @@ public final class VoiceTranslateController extends BasePlayerController {
     private MediaItemFormatInfo mFormatInfo;
     private String mFormatInfoVideoId;
     private String mLoadedVideoId;
+    private String mMusicCheckVideoId;
+    private Boolean mMusicCheckResult;
     private FormatItem mNativeOriginal;
     private FormatItem mNativeDub;
 
@@ -105,6 +110,17 @@ public final class VoiceTranslateController extends BasePlayerController {
         }
     }
 
+    public void onMusicSettingChanged() {
+        if (settings().isSkipMusicEnabled() && mStartedAutomatically) {
+            if (isMusicVideo(getVideo())) stop();
+            else checkMusicVideo(getVideo());
+        }
+        if (!mEnabled) {
+            mAutoTried = false;
+            maybeAutoStart();
+        }
+    }
+
     public void onRequestSettingsChanged() {
         if (!mEnabled) {
             mAutoTried = false;
@@ -132,8 +148,45 @@ public final class VoiceTranslateController extends BasePlayerController {
                 || !video.videoId.equals(mFormatInfoVideoId)
                 || !video.videoId.equals(mLoadedVideoId) || player == null || !player.supportsVoiceOver()
                 || player.getDurationMs() <= 0) return;
+        if (settings().isSkipMusicEnabled()) {
+            if (isMusicVideo(video)) return;
+            if (!video.videoId.equals(mMusicCheckVideoId)) checkMusicVideo(video);
+            if (mMusicCheckResult == null || mMusicCheckResult) return;
+        }
         mAutoTried = true;
         start(true);
+    }
+
+    private boolean isMusicVideo(Video video) {
+        return video != null && (video.itemType == MediaItem.TYPE_MUSIC || video.belongsToMusic()
+                || video.videoId != null && video.videoId.equals(mMusicCheckVideoId)
+                && Boolean.TRUE.equals(mMusicCheckResult));
+    }
+
+    private void checkMusicVideo(Video video) {
+        if (video == null || video.videoId == null || video.videoId.equals(mMusicCheckVideoId)) return;
+        if (mMusicRequest != null) mMusicRequest.dispose();
+        String videoId = video.videoId;
+        mMusicCheckVideoId = videoId;
+        mMusicCheckResult = null;
+        mMusicRequest = Single.fromCallable(() -> VotMusicVideo.isMusic(videoId))
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(music -> onMusicChecked(videoId, music),
+                        error -> onMusicChecked(videoId, false));
+    }
+
+    private void onMusicChecked(String videoId, boolean music) {
+        if (!videoId.equals(mMusicCheckVideoId)) return;
+        mMusicCheckResult = music;
+        if (music && settings().isSkipMusicEnabled() && mStartedAutomatically) stop();
+        else maybeAutoStart();
+    }
+
+    private void clearMusicCheck() {
+        if (mMusicRequest != null) mMusicRequest.dispose();
+        mMusicRequest = null;
+        mMusicCheckVideoId = null;
+        mMusicCheckResult = null;
     }
 
     private void start(boolean automatic) {
@@ -368,6 +421,7 @@ public final class VoiceTranslateController extends BasePlayerController {
 
     @Override public void onNewVideo(Video item) {
         stop();
+        clearMusicCheck();
         mFormatInfo = null;
         mFormatInfoVideoId = null;
         mLoadedVideoId = null;
@@ -379,6 +433,7 @@ public final class VoiceTranslateController extends BasePlayerController {
     @Override public void onEngineReleased() {
         boolean resume = mWaitingForAudio && mResumeAfterLoad;
         stop(false);
+        clearMusicCheck();
         if (resume) getController(VideoStateController.class).setPlayEnabled(true);
         mFormatInfo = null;
         mFormatInfoVideoId = null;
@@ -386,8 +441,8 @@ public final class VoiceTranslateController extends BasePlayerController {
         mAutoTried = false;
     }
     @Override public void onPlayEnd() { stop(false); mAutoTried = true; }
-    @Override public void onFinish() { stop(false); }
-    @Override public void onViewDestroyed() { stop(false); mAutoTried = false; mLoadedVideoId = null; }
+    @Override public void onFinish() { stop(false); clearMusicCheck(); }
+    @Override public void onViewDestroyed() { stop(false); clearMusicCheck(); mAutoTried = false; mLoadedVideoId = null; }
     @Override public void onViewResumed() { sync(); maybeAutoStart(); }
     @Override public void onVideoLoaded(Video item) {
         mLoadedVideoId = item != null ? item.videoId : null;
