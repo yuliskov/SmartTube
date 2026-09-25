@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         SmartTube sent to TV
-// @version      1.0.2
+// @version      1.0.7
 // @description  Send the current YouTube video to a paired SmartTube TV
 // @match        https://www.youtube.com/*
 // @grant        none
@@ -16,7 +16,9 @@
   const API = 'https://www.youtube.com/api/lounge/';
   const SCREEN_KEY = 'smarttube-screen-id';
   const BUTTON_ID = 'smarttube-sent-to-tv';
-  if (document.getElementById(BUTTON_ID)) return;
+  const INSTALLED = 'data-smarttube-sender-installed';
+  if (document.documentElement.hasAttribute(INSTALLED) || document.getElementById(BUTTON_ID)) return;
+  document.documentElement.setAttribute(INSTALLED, '');
   const style = document.createElement('style');
   style.textContent = '#send-to-smarttube{display:none!important}';
   document.head.append(style);
@@ -138,7 +140,9 @@
     button.type = 'button';
     button.classList.replace('ytSpecButtonShapeNextIconLeading', 'ytSpecButtonShapeNextIconButton');
     button.querySelector('.ytSpecButtonShapeNextButtonTextContent')?.remove();
-    svg.innerHTML = '<path d="M3 4h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-7v2h3v2H7v-2h3v-2H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v10h16V6H4zm6 2 5 3-5 3V8z"/>';
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M3 4h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-7v2h3v2H7v-2h3v-2H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v10h16V6H4zm6 2 5 3-5 3V8z');
+    svg.replaceChildren(path);
     button.style.marginLeft = '8px';
     setLabel(label.send);
     button.addEventListener('click', event => {
@@ -149,23 +153,25 @@
     return button;
   }
 
-  let row;
-  let observedTarget;
-  const observer = new MutationObserver(sync);
+  let retry;
   function sync() {
-    row = [...document.querySelectorAll('ytd-watch-metadata #top-level-buttons-computed')]
+    clearTimeout(retry);
+    const row = [...document.querySelectorAll('ytd-watch-metadata #top-level-buttons-computed')]
       .find(element => element.getBoundingClientRect().width > 0);
-    const target = row || (location.pathname === '/watch' ? document.body : null);
-    if (target !== observedTarget) {
-      observer.disconnect();
-      observedTarget = target;
-      if (target) observer.observe(target, { childList: true, subtree: true });
-    }
     const share = [...(row?.children || [])].find(element => element.tagName === 'YT-BUTTON-VIEW-MODEL');
-    if (!share) return button?.remove();
-    const shareButton = share.querySelector('button');
-    if (!shareButton || (!button && !createButton(shareButton))) return;
+    const shareButton = share?.querySelector('button');
+    if (!shareButton) {
+      button?.remove();
+      if (location.pathname === '/watch') retry = setTimeout(sync, 1000);
+      return;
+    }
+    if (!button) button = document.getElementById(BUTTON_ID) || createButton(shareButton);
+    if (!button) {
+      retry = setTimeout(sync, 1000);
+      return;
+    }
     if (button.parentElement !== row || button.previousElementSibling !== share) share.after(button);
+    retry = setTimeout(sync, 2000);
   }
   document.addEventListener('yt-navigate-finish', sync);
   document.addEventListener('yt-page-data-updated', sync);
