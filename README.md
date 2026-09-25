@@ -156,6 +156,11 @@ To cast videos from your phone (or other devices), you must link that device to 
 
 [**Screenshot guide**](https://t.me/SmartTubeEN/8514)
 
+On desktop, open the [SmartTube sent to TV userscript](scripts/send-to-smarttube.user.js) and click Raw
+to install it with Tampermonkey in your browser. On a YouTube video, the TV button appears after Share.
+Enter the TV code on first use, then click the button to send later videos. Pairing stays in this browser;
+Shift-click the button to change TVs.
+
 Due to technical limitations, you need to open the app on the TV before casting; SmartTube cannot automatically wake up the TV.
 
 
