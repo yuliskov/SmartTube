@@ -157,6 +157,21 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void setButtonVisible(int buttonId, boolean visible) {
+
+    }
+
+    @Override
+    public void showVoiceOverProgress(boolean show) {
+
+    }
+
+    @Override
+    public boolean supportsVoiceOver() {
+        return false;
+    }
+
+    @Override
     public void setChannelIcon(String iconUrl) {
 
     }

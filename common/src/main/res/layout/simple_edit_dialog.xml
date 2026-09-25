@@ -8,6 +8,15 @@
     android:orientation="vertical"
     android:padding="10sp">
 
+    <TextView
+        android:id="@+id/simple_edit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:textColor="@color/dialog_text_color"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/simple_edit_value"
         android:layout_width="match_parent"

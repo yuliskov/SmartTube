@@ -23,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.vot.VotSettings;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
@@ -40,6 +41,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenDimmingAction
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SoundOffAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VoiceTranslateAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
@@ -134,6 +136,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new RotateAction(context));
         putAction(new FlipAction(context));
         putAction(new SoundOffAction(context));
+        putAction(new VoiceTranslateAction(context));
     }
 
     @Override
@@ -189,6 +192,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SOUND_OFF)) {
             adapter.add(mActions.get(R.id.action_sound_off));
+        }
+        if (new VotSettings(getContext()).shouldShowButton()) {
+            adapter.add(mActions.get(R.id.action_voice_translate));
         }
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_AFR)) {
             adapter.add(mActions.get(R.id.action_afr));
@@ -311,6 +317,19 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     public void setButtonState(int buttonId, int buttonState) {
         setActionIndex(mActions.get(buttonId), buttonState);
+    }
+
+    public void setButtonVisible(int buttonId, boolean visible) {
+        Action action = mActions.get(buttonId);
+        if (action == null || getControlsRow() == null) return;
+        if (!visible) {
+            removePrimaryAction(action);
+        } else {
+            ArrayObjectAdapter adapter = (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter();
+            if (adapter == null) return;
+            int afr = adapter.indexOf(mActions.get(R.id.action_afr));
+            addPrimaryAction(action, afr >= 0 ? afr : adapter.size());
+        }
     }
 
     public void setChannelIcon(String iconUrl) {
