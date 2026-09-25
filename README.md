@@ -156,10 +156,10 @@ To cast videos from your phone (or other devices), you must link that device to 
 
 [**Screenshot guide**](https://t.me/SmartTubeEN/8514)
 
-On desktop, open the [Send to SmartTube userscript](scripts/send-to-smarttube.user.js) and click Raw
-to install it with Tampermonkey.
-It adds a floating button to YouTube videos. Enter the TV code on first use; the pairing stays
-in this browser. Shift-click the button to change TVs.
+On desktop, open the [SmartTube sent to TV userscript](scripts/send-to-smarttube.user.js) and click Raw
+to install it with Tampermonkey in your browser. The button appears on YouTube pages. Enter the
+TV code on first use, then open a video and click to send it. Pairing stays in this browser;
+Shift-click the button to change TVs.
 
 Due to technical limitations, you need to open the app on the TV before casting; SmartTube cannot automatically wake up the TV.
 

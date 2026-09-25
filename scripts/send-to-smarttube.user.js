@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Send to SmartTube
-// @version      1.0.0
+// @name         SmartTube sent to TV
+// @version      1.0.1
 // @description  Send the current YouTube video to a paired SmartTube TV
 // @match        https://www.youtube.com/*
 // @grant        none
@@ -15,10 +15,14 @@
 
   const API = 'https://www.youtube.com/api/lounge/';
   const SCREEN_KEY = 'smarttube-screen-id';
-  const BUTTON_ID = 'send-to-smarttube';
+  const BUTTON_ID = 'smarttube-sent-to-tv';
+  if (document.getElementById(BUTTON_ID)) return;
+  const style = document.createElement('style');
+  style.textContent = '#send-to-smarttube{display:none!important}';
+  document.head.append(style);
   const label = document.documentElement.lang.startsWith('ru')
-    ? { send: 'На SmartTube', wait: 'Отправляю…', sent: 'Отправлено', code: 'На ТВ: SmartTube → Настройки → Удалённое управление → Код ТВ. Введите код:', offline: 'Откройте SmartTube на телевизоре и попробуйте снова.' }
-    : { send: 'SmartTube', wait: 'Sending…', sent: 'Sent', code: 'On TV: SmartTube → Settings → Remote control → TV code. Enter the code:', offline: 'Open SmartTube on the TV and try again.' };
+    ? { send: 'На SmartTube', wait: 'Отправляю…', sent: 'Отправлено', paired: 'ТВ подключён', code: 'На ТВ: SmartTube → Настройки → Удалённое управление → Код ТВ. Введите код:', offline: 'Откройте SmartTube на телевизоре и попробуйте снова.' }
+    : { send: 'SmartTube', wait: 'Sending…', sent: 'Sent', paired: 'TV paired', code: 'On TV: SmartTube → Settings → Remote control → TV code. Enter the code:', offline: 'Open SmartTube on the TV and try again.' };
   let busy = false;
 
   async function post(path, data, params = {}) {
@@ -75,10 +79,11 @@
   }
 
   async function sendVideo() {
-    const videoId = new URL(location.href).searchParams.get('v');
-    if (!/^[-\w]{11}$/.test(videoId || '')) throw new Error('Open a YouTube video first');
     const screen = await pairedScreen();
     if (!screen) return false;
+    const url = new URL(location.href);
+    const videoId = url.searchParams.get('v') || url.pathname.match(/^\/(?:shorts|live)\/([-\w]{11})(?:\/|$)/)?.[1];
+    if (!/^[-\w]{11}$/.test(videoId || '')) return 'paired';
 
     const availability = JSON.parse(await post('pairing/get_screen_availability', { lounge_token: screen.token }));
     if (availability.screens?.[0]?.status !== 'online') throw new Error(label.offline);
@@ -97,7 +102,7 @@
       gsessionid: session.gsessionid, device: 'REMOTE_CONTROL', app: 'youtube-desktop',
       VER: '8', v: '2', RID: '2',
     });
-    return true;
+    return 'sent';
   }
 
   let resetTimer;
@@ -107,13 +112,14 @@
     clearTimeout(resetTimer);
     button.textContent = label.wait;
     try {
-      button.textContent = await sendVideo() ? label.sent : label.send;
+      const result = await sendVideo();
+      button.textContent = result === 'sent' ? label.sent : result === 'paired' ? label.paired : label.send;
     } catch (error) {
       button.textContent = label.send;
       alert(`SmartTube: ${error.message}`);
     } finally {
       busy = false;
-      if (button.textContent === label.sent) resetTimer = setTimeout(() => { button.textContent = label.send; }, 2500);
+      if (button.textContent !== label.send) resetTimer = setTimeout(() => { button.textContent = label.send; }, 2500);
     }
   }
 
@@ -141,7 +147,6 @@
     const player = watch?.hasAttribute('fullscreen') ? document.querySelector('#movie_player') : null;
     const target = document.fullscreenElement || player || document.body;
     if (target && button.parentElement !== target) target.append(button);
-    button.hidden = location.pathname !== '/watch';
   }
   document.addEventListener('yt-navigate-finish', sync);
   document.addEventListener('fullscreenchange', sync);
