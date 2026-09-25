@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         SmartTube sent to TV
-// @version      1.0.1
+// @version      1.0.2
 // @description  Send the current YouTube video to a paired SmartTube TV
 // @match        https://www.youtube.com/*
 // @grant        none
@@ -21,8 +21,8 @@
   style.textContent = '#send-to-smarttube{display:none!important}';
   document.head.append(style);
   const label = document.documentElement.lang.startsWith('ru')
-    ? { send: 'На SmartTube', wait: 'Отправляю…', sent: 'Отправлено', paired: 'ТВ подключён', code: 'На ТВ: SmartTube → Настройки → Удалённое управление → Код ТВ. Введите код:', offline: 'Откройте SmartTube на телевизоре и попробуйте снова.' }
-    : { send: 'SmartTube', wait: 'Sending…', sent: 'Sent', paired: 'TV paired', code: 'On TV: SmartTube → Settings → Remote control → TV code. Enter the code:', offline: 'Open SmartTube on the TV and try again.' };
+    ? { send: 'Отправить на SmartTube', wait: 'Отправляю…', sent: 'Отправлено', paired: 'ТВ подключён', code: 'На ТВ: SmartTube → Настройки → Удалённое управление → Код ТВ. Введите код:', offline: 'Откройте SmartTube на телевизоре и попробуйте снова.' }
+    : { send: 'Send to SmartTube', wait: 'Sending…', sent: 'Sent', paired: 'TV paired', code: 'On TV: SmartTube → Settings → Remote control → TV code. Enter the code:', offline: 'Open SmartTube on the TV and try again.' };
   let busy = false;
 
   async function post(path, data, params = {}) {
@@ -105,51 +105,69 @@
     return 'sent';
   }
 
+  let button;
   let resetTimer;
+  function setLabel(value) {
+    button.title = value;
+    button.setAttribute('aria-label', value);
+  }
+
   async function onSend() {
     if (busy) return;
     busy = true;
     clearTimeout(resetTimer);
-    button.textContent = label.wait;
+    setLabel(label.wait);
     try {
       const result = await sendVideo();
-      button.textContent = result === 'sent' ? label.sent : result === 'paired' ? label.paired : label.send;
+      setLabel(result === 'sent' ? label.sent : result === 'paired' ? label.paired : label.send);
     } catch (error) {
-      button.textContent = label.send;
+      setLabel(label.send);
       alert(`SmartTube: ${error.message}`);
     } finally {
       busy = false;
-      if (button.textContent !== label.send) resetTimer = setTimeout(() => { button.textContent = label.send; }, 2500);
+      if (button.title !== label.send) resetTimer = setTimeout(() => setLabel(label.send), 2500);
     }
   }
 
-  const button = document.createElement('button');
-  button.id = BUTTON_ID;
-  button.type = 'button';
-  button.textContent = label.send;
-  button.title = 'Send video to SmartTube · Shift-click to change TV';
-  button.style.cssText = 'position:fixed;right:20px;bottom:20px;z-index:2147483646;padding:10px 16px;border:1px solid rgba(128,128,128,.3);border-radius:999px;cursor:pointer;background:Canvas;color:CanvasText;box-shadow:0 3px 16px rgba(0,0,0,.24);font:500 14px Roboto,Arial,sans-serif;white-space:nowrap';
-  button.addEventListener('click', event => {
-    if (event.shiftKey) localStorage.removeItem(SCREEN_KEY);
-    return onSend();
-  });
+  function createButton(share) {
+    const copy = share.cloneNode(true);
+    const svg = copy.querySelector('svg');
+    if (!svg) return null;
+    button = copy;
+    button.id = BUTTON_ID;
+    button.type = 'button';
+    button.classList.replace('ytSpecButtonShapeNextIconLeading', 'ytSpecButtonShapeNextIconButton');
+    button.querySelector('.ytSpecButtonShapeNextButtonTextContent')?.remove();
+    svg.innerHTML = '<path d="M3 4h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-7v2h3v2H7v-2h3v-2H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm1 2v10h16V6H4zm6 2 5 3-5 3V8z"/>';
+    button.style.marginLeft = '8px';
+    setLabel(label.send);
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      if (event.shiftKey) localStorage.removeItem(SCREEN_KEY);
+      return onSend();
+    });
+    return button;
+  }
 
-  let watch;
-  const watchObserver = new MutationObserver(sync);
+  let row;
+  let observedTarget;
+  const observer = new MutationObserver(sync);
   function sync() {
-    button.style.colorScheme = document.documentElement.hasAttribute('dark') ? 'dark' : 'light';
-    const nextWatch = document.querySelector('ytd-watch-flexy');
-    if (nextWatch !== watch) {
-      watchObserver.disconnect();
-      watch = nextWatch;
-      if (watch) watchObserver.observe(watch, { attributes: true, attributeFilter: ['fullscreen'] });
+    row = [...document.querySelectorAll('ytd-watch-metadata #top-level-buttons-computed')]
+      .find(element => element.getBoundingClientRect().width > 0);
+    const target = row || (location.pathname === '/watch' ? document.body : null);
+    if (target !== observedTarget) {
+      observer.disconnect();
+      observedTarget = target;
+      if (target) observer.observe(target, { childList: true, subtree: true });
     }
-    const player = watch?.hasAttribute('fullscreen') ? document.querySelector('#movie_player') : null;
-    const target = document.fullscreenElement || player || document.body;
-    if (target && button.parentElement !== target) target.append(button);
+    const share = [...(row?.children || [])].find(element => element.tagName === 'YT-BUTTON-VIEW-MODEL');
+    if (!share) return button?.remove();
+    const shareButton = share.querySelector('button');
+    if (!shareButton || (!button && !createButton(shareButton))) return;
+    if (button.parentElement !== row || button.previousElementSibling !== share) share.after(button);
   }
   document.addEventListener('yt-navigate-finish', sync);
-  document.addEventListener('fullscreenchange', sync);
-  new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['dark'] });
+  document.addEventListener('yt-page-data-updated', sync);
   sync();
 })();
