@@ -5,6 +5,7 @@ import android.os.Build.VERSION;
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
@@ -18,7 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -41,7 +41,7 @@ import java.security.Security;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
-        // fix youtube bandwidth throttling (best - false)???
+        // fix YouTube bandwidth throttling (best - false)???
         // false is better for streams (less buffering)
         System.setProperty("http.keepAlive", "false");
         // fix ipv6 infinite video buffering???
@@ -88,27 +88,41 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
 
-        Class<? extends AppDialogActivity> dialogClazz;
-
-        if (VERSION.SDK_INT == 26
-                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(), "4S806_Z51S1 (Panasonic)")) {
-            // The fix: Only fullscreen opaque activities can request orientation
-            dialogClazz = AppDialogActivityOpaque.class;
-        } else {
-            dialogClazz = AppDialogActivity.class;
-        }
+        Class<? extends AppDialogActivity> dialogClass = getDialogClass();
 
         viewManager.setRoot(BrowseActivity.class);
         viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
         viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
         viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppDialogView.class, dialogClazz, BrowseActivity.class);
+        viewManager.register(AppDialogView.class, dialogClass, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
         viewManager.register(WebBrowserView.class, WebBrowserActivity.class, BrowseActivity.class);
+    }
+
+    /**
+     * Fix for the 'IllegalStateException: Only fullscreen opaque activities can request orientation'
+     */
+    private static Class<? extends AppDialogActivity> getDialogClass() {
+        Class<? extends AppDialogActivity> dialogClass;
+
+        if (VERSION.SDK_INT == 26
+                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(),
+                "4S806_Z51S1 (Panasonic)",
+                "5S72Z_G20S (Panasonic)",
+                "9S60Z_ZQ21S (Panasonic)",
+                "Android Smart TV (MStar)",
+                "Xgimi TV (Xgimi Technology Co.,Ltd)"
+        )) {
+            // The fix: Only fullscreen opaque activities can request orientation
+            dialogClass = AppDialogActivityOpaque.class;
+        } else {
+            dialogClass = AppDialogActivity.class;
+        }
+        return dialogClass;
     }
 
     private void setupGlobalExceptionHandler() {
@@ -120,6 +134,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             if (shouldIgnore(e)) {
+                MessageHelpers.showLongMessage(this, e.getMessage());
                 return;
             }
 
@@ -131,23 +146,27 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     }
 
     private boolean shouldIgnore(Throwable e) {
-        if (Helpers.containsAny(e.getMessage(), "KatnissVoiceInteractionService", "ListenableFuture")
-                || e.getClass().getName().startsWith("org.chromium")) {
-            // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
-            // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
-            // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
+        // IllegalStateException: Not allowed to start service Intent { act=android.service.voice.VoiceInteractionService
+        // cmp=com.google.android.katniss/.search.serviceapi.KatnissVoiceInteractionService (has extras) }:
+        // app is in background uid UidRecord{40e7240 u0a19 CEM idle change:cached procs:1 seq(0,0,0)}
 
-            // java.lang.NoSuchMethodError: No interface method addListener(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)V
-            // in class Lcom/google/common/util/concurrent/ListenableFuture; or its super classes
-            // (declaration of 'com.google.common.util.concurrent.ListenableFuture' appears in /system/framework/libsetting.jar)
+        // java.lang.NoSuchMethodError: No interface method addListener(Ljava/lang/Runnable;Ljava/util/concurrent/Executor;)V
+        // in class Lcom/google/common/util/concurrent/ListenableFuture; or its super classes
+        // (declaration of 'com.google.common.util.concurrent.ListenableFuture' appears in /system/framework/libsetting.jar)
 
-            // Fatal Exception: org.chromium.base.JniAndroid$UncaughtExceptionException
-            // 1) Caused by java.lang.InterruptedException
-            // 2) Caused by java.lang.SecurityException: The calling process has already registered an InputDevicesChangedListener.
-            return true;
-        }
+        // org.chromium.base.JniAndroid$UncaughtExceptionException
+        // 1) Caused by java.lang.InterruptedException
+        // 2) Caused by java.lang.SecurityException: The calling process has already registered an InputDevicesChangedListener.
 
-        return false;
+        // IllegalArgumentException: Missing android.support.FILE_PROVIDER_PATHS meta-data (Shield Android TV 95%, MiTV-AFKR0 5%)
+
+        // RuntimeException: Error receiving broadcast Intent { act=android.hardware.usb.action.USB_DEVICE_ATTACHED flg=0x10 }
+        // Caused by NullPointerException: Attempt to invoke virtual method 'int android.hardware.usb.UsbDevice.getInterfaceCount()' on a null object reference
+
+        return Helpers.containsAny(e.getMessage(),
+                "KatnissVoiceInteractionService", "ListenableFuture", "Missing android.support.FILE_PROVIDER_PATHS meta-data",
+                "Error receiving broadcast Intent { act=android.hardware.usb.action.USB_DEVICE_ATTACHED flg=0x10 }")
+                || e.getClass().getName().startsWith("org.chromium");
     }
 
     private Throwable wrapWithAdditionalInfo(Throwable e) {

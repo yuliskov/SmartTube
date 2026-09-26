@@ -347,7 +347,6 @@
   <string name="proxy_not_supported">Utiliser un proxy web (Nécessite Android 4.4+)</string>
   <string name="proxy_test_btn">Test</string>
   <string name="proxy_settings_title">Paramètres du serveur proxy</string>
-  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="proxy_test_cancelled">Test#%d : annulé.</string>
   <string name="proxy_type_invalid">Le type de proxy n\'est pas défini.</string>
   <string name="proxy_host_invalid">L\'hôte du proxy n\'est pas défini.</string>
@@ -748,4 +747,5 @@
   <string name="enable_conscrypt_desc">Améliore la compatibilité HTTPS, TLS et VPN sur certains appareils, mais peut occasionnellement provoquer des problèmes de lecture ou ralentir les performances réseau</string>
   <string name="network_settings">Paramètres réseau</string>
   <string name="comments_disabled">Les commentaires sont désactivés pour cette vidéo</string>
+  <string name="remove_video_to_watch_later">Supprimer de \"À regarder plus tard\"</string>
 </resources>

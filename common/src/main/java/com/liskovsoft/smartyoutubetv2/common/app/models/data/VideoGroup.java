@@ -8,7 +8,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
-import com.liskovsoft.smartyoutubetv2.common.filter.KeywordFilterManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 
 import java.util.ArrayList;
@@ -455,7 +454,7 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty() || isChannelBlocked(video) || isKeywordBlocked(video) || isWatchedAndRecommended(video)) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedSuggestion(video)) {
             return;
         }
 
@@ -494,29 +493,21 @@ public class VideoGroup {
         return blockedChannelData.containsChannel(channelId, channelName);
     }
 
-    private boolean isKeywordBlocked(Video video) {
-        if (video == null || video.isChapter) {
-            return false;
-        }
-
-        return KeywordFilterManager.instance(GlobalPreferences.context()).isBlocked(video.getTitle());
-    }
-
-    private boolean isWatchedAndRecommended(Video video) {
+    private boolean isWatchedSuggestion(Video video) {
         if (video == null) {
             return false;
         }
 
         int type = getType();
 
-        //if (type != MediaGroup.TYPE_HOME && type != MediaGroup.TYPE_SUGGESTIONS) {
-        //    return false;
-        //}
-
-        if (type != MediaGroup.TYPE_SUGGESTIONS) {
+        if (type != MediaGroup.TYPE_HOME && type != MediaGroup.TYPE_SUGGESTIONS) {
             return false;
         }
 
-        return video.percentWatched > 95;
+        if (type == MediaGroup.TYPE_HOME && getPosition() > 0) {
+            return false;
+        }
+
+        return video.percentWatched > 95 || video.percentWatched == Video.MIN_WATCHED_PERCENT;
     }
 }

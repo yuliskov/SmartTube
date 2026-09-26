@@ -1250,7 +1250,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithSubsampleOffsetUs(long subsampleOffsetUs) {
@@ -1282,7 +1284,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithLabel(@Nullable String label) {
@@ -1314,7 +1318,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithContainerInfo(
@@ -1363,7 +1369,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   @SuppressWarnings("ReferenceEquality")
@@ -1442,7 +1450,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithGaplessInfo(int encoderDelay, int encoderPadding) {
@@ -1474,7 +1484,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithFrameRate(float frameRate) {
@@ -1506,7 +1518,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithDrmInitData(@Nullable DrmInitData drmInitData) {
@@ -1538,7 +1552,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithMetadata(@Nullable Metadata metadata) {
@@ -1570,7 +1586,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithRotationDegrees(int rotationDegrees) {
@@ -1602,7 +1620,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   public Format copyWithBitrate(int bitrate) {
@@ -1634,7 +1654,9 @@ public final class Format implements Parcelable {
         encoderDelay,
         encoderPadding,
         language,
-        accessibilityChannel);
+        accessibilityChannel,
+        isDrc,
+        lastModified);
   }
 
   /**

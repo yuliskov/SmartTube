@@ -306,7 +306,6 @@
   <string name="proxy_test_start">Kiểm tra #%d: %s …</string>
   <string name="proxy_test_error">Lỗi #%d: %s</string>
   <string name="proxy_test_status">Trạng thái #%d: %s %d %s</string>
-  <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
   <string name="proxy_test_cancelled">Kiểm tra#%d: đã bị hủy bỏ.</string>
   <string name="keyboard_auto_show">Hiển thị bàn phím tự động</string>
   <string name="msg_player_error_source2">Liên kết không hoạt động hoặc thời gian của thiết bị không chính xác.\nThông thường thì đây là lỗi từ ứng dụng.</string>
@@ -736,4 +735,5 @@
   <string name="app_restore_desc">LƯU Ý: Tệp zip chứa dữ liệu sao lưu cần được sao chép vào thư mục này theo cách thủ công hoặc sử dụng trình quản lý tệp, chọn \'Mở bằng\'</string>
   <string name="ignore_short_segments">Bỏ qua các đoạn ngắn</string>
   <string name="card_unlocalized_titles">Tiêu đề video chưa được bản địa hóa</string>
+  <string name="remove_video_to_watch_later">Xóa khỏi Xem sau</string>
 </resources>

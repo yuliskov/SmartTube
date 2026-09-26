@@ -13,6 +13,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.NotificationsService;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -50,7 +51,7 @@ public abstract class BasePlayerController implements PlayerEventListener {
         }
         getPlayer().showControls(false);
         // Dialog takes up 37% of the screen space
-        float dialogWidth = 37 * getMainUIData().getUIScale();
+        float dialogWidth = Helpers.isCutoutMode(getContext()) ? 33 : 37 * getMainUIData().getUIScale();
         float initialZoom = 100;
         float totalZoom = initialZoom - dialogWidth;
         float ratio = format.width / (float) format.height;

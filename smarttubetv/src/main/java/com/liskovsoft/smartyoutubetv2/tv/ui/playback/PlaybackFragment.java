@@ -634,6 +634,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, getVideo().videoId);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().getTitleFull());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().getTitleFull());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().getAuthor());
@@ -900,6 +901,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void showProgressBar(boolean show) {
         if (getProgressBarManager() == null) {
+            return;
+        }
+
+        // Fix interrupted progress (by suggestions, etc). The video player can handle these states correctly.
+        if (mExoPlayerController.isLoading() || mExoPlayerController.isBuffering()) {
             return;
         }
 

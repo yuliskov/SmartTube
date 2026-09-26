@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -37,7 +39,7 @@ public class WebProxyDialog {
     public WebProxyDialog(Context context) {
         mContext = context;
         mProxyManager = new ProxyManager(mContext);
-        mProxyTestHandler = new Handler(Looper.myLooper());
+        mProxyTestHandler = new Handler(Looper.getMainLooper());
         mUrlTests = new ArrayList<>();
     }
 
@@ -128,12 +130,12 @@ public class WebProxyDialog {
 
         for (String urlString: testUrls) {
             int serialNo = ++ mNumTests;
-            Request request = new Request.Builder().url(urlString).build();
+            Request request = new Request.Builder().url(urlString).head().build();
             appendStatusMessage(R.string.proxy_test_start, serialNo, urlString);
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     if (call.isCanceled())
                         mProxyTestHandler.post(() -> appendStatusMessage(R.string.proxy_test_cancelled, serialNo));
                     else
@@ -141,12 +143,14 @@ public class WebProxyDialog {
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) {
-                    String protocol = response.protocol().toString().toUpperCase();
-                    int code = response.code();
-                    String status = response.message();
-                    mProxyTestHandler.post(() -> appendStatusMessage(R.string.proxy_test_status,
-                            serialNo, protocol, code, status.isEmpty() ? "OK" : status));
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    try (Response ignored = response) {
+                        String protocol = response.protocol().toString().toUpperCase();
+                        int code = response.code();
+                        String status = response.message();
+                        mProxyTestHandler.post(() -> appendStatusMessage(R.string.proxy_test_status,
+                                serialNo, protocol, code, status.isEmpty() ? "OK" : status));
+                    }
                 }
             });
             mUrlTests.add(call);

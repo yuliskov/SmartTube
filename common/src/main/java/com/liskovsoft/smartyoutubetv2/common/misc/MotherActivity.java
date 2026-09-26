@@ -51,6 +51,7 @@ public class MotherActivity extends FragmentActivity {
     private boolean mEnableThrottleKeyDown;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsFullscreenModeEnabled;
+    private boolean mIsBackPressed;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -171,11 +172,21 @@ public class MotherActivity extends FragmentActivity {
 
     public void finishReally() {
         try {
-            if (VERSION.SDK_INT >= 21 && getViewManager().getTopView() != null) { // remain root activity in recents
-                super.finishAndRemoveTask();
-            } else {
-                super.finish();
-            }
+            //if (VERSION.SDK_INT >= 21 && getViewManager().getTopView() != null) { // remain root activity in recents
+            //    super.finishAndRemoveTask();
+            //} else {
+            //    super.finish();
+            //}
+
+            // finishAndRemoveTask() must be used carefully for intermediate activities:
+            // calling it right after starting a parent activity races with that
+            // startActivity() call. On slower devices, task removal can complete
+            // first, killing the process instead of navigating back. Use finish()
+            // when returning to an existing parent — the task cleans up automatically
+            // for singleInstance activities. Reserve finishAndRemoveTask() for actual
+            // app exit.
+            // The issue: https://github.com/yuliskov/SmartTube/issues/6010
+            super.finish();
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
@@ -195,6 +206,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void onResume() {
+        mIsBackPressed = false;
         try {
             super.onResume();
         } catch (IllegalArgumentException e) {
@@ -206,18 +218,25 @@ public class MotherActivity extends FragmentActivity {
 
         applyFullscreenModeIfNeeded();
 
-        // Remove screensaver from the previous activity when closing current one.
-        // Called on player's next track. Reason unknown.
-        mScreensaverManager.enable();
+        // Restore this activity's screensaver policy after returning to the foreground.
+        mScreensaverManager.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        // Remove screensaver from the previous activity when closing current one.
-        // Called on player's next track. Reason unknown.
-        mScreensaverManager.disable();
+        // Stop managing the screensaver so a paused activity cannot keep the display awake.
+        mScreensaverManager.suspend();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mScreensaverManager != null) {
+            mScreensaverManager.cleanup();
+        }
+
+        super.onDestroy();
     }
 
     @Override
@@ -310,6 +329,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
+        mIsBackPressed = true;
         super.onBackPressed();
         // Oculus Quest fix: back button not closing the activity
         if (mIsOculusQuestFixEnabled) {
@@ -405,6 +425,14 @@ public class MotherActivity extends FragmentActivity {
 
     protected MediaServiceData getMediaServiceData() {
         return MediaServiceData.instance();
+    }
+
+    protected final boolean isBackPressed() {
+        return mIsBackPressed;
+    }
+
+    protected final void resetBackState() {
+        mIsBackPressed = false;
     }
 
     private void initEdgeSlide() {

@@ -769,6 +769,7 @@ public class PlayerUIController extends BasePlayerController {
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
                 long positionMs = (long) (getPlayer().getDurationMs() * seekPercent);
                 getPlayer().setPositionMs(positionMs);
+                getController(VideoStateController.class).onSeekPositionChanged(positionMs); // disable live window
                 MessageHelpers.showMessage(getContext(), ServiceHelper.millisToTimeText(positionMs));
             }
         }
@@ -1136,10 +1137,12 @@ public class PlayerUIController extends BasePlayerController {
                 AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), () -> {
                     prepareScreenOff();
                     applyScreenOff(PlayerUI.BUTTON_OFF);
+                    applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
                 });
         OptionCategory category =
                 AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), () -> {
                     prepareScreenOff();
+                    applyScreenOff(PlayerUI.BUTTON_OFF);
                     applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
                 });
         settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);

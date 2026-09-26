@@ -66,6 +66,10 @@ public class CommentsController extends BasePlayerController {
         CommentsReceiver commentsReceiver = new AbstractCommentsReceiver(getContext()) {
             @Override
             public void onLoadMore(CommentGroup commentGroup) {
+                if (commentGroup == null) {
+                    return;
+                }
+
                 loadComments(this, commentGroup.getNextCommentsKey());
             }
 
