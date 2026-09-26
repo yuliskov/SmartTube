@@ -22,6 +22,7 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final long SEEK_END_THRESHOLD_MS = 1_000;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
 
@@ -83,6 +84,15 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onSeekEnd() {
         mBufferingDetector.reset();
+
+        if (isAtStreamEnd()) {
+            // VideoLoaderController.stopPlayback() ends a video by seeking to getDurationMs(), which
+            // arrives here. That leaves the player in STATE_ENDED, and ExoPlayerController only emits
+            // onPause() from STATE_READY, so nothing would cancel the timer below - it would fire 20s
+            // later while the user is sitting on the suggestions screen and reload the video.
+            return;
+        }
+
         // Needed to detect additional buffering (e.g. hanged clients).
         // Don't worry this event will be canceled by subsequent onPlay() or onPause() if everything is ok.
         mBufferingDetector.onStartBuffering();
@@ -355,6 +365,21 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private void disableSubtitles() {
         getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
         getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+    }
+
+    /**
+     * True when the playback position sits at the very end of the stream, which is where an
+     * end-of-video seek lands. Deliberately not {@link #isStreamEnded()} - that one is about a
+     * finished live stream and uses a three minute window.
+     */
+    private boolean isAtStreamEnd() {
+        if (getPlayer() == null) {
+            return false;
+        }
+
+        long durationMs = getPlayer().getDurationMs();
+
+        return durationMs > 0 && durationMs - getPlayer().getPositionMs() < SEEK_END_THRESHOLD_MS;
     }
 
     private boolean isStreamEnded() {
