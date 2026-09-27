@@ -363,10 +363,29 @@ public final class VoiceTranslateController extends BasePlayerController {
 
     private void sync() {
         PlaybackView player = getPlayer();
-        if (player == null || mAudio == null || !mAudio.canSync()) return;
-        if (player.isPlaying()) mAudio.resume(); else mAudio.pause();
+        if (player == null || mAudio == null) return;
+        if (!mAudio.canSync()) return;
         long position = player.getPositionMs();
-        if (Math.abs(mAudio.getPositionMs() - position) > 750) mAudio.seekTo(position);
+        if (mDucked && !mAudio.isReady()) {
+            if (!mWaitingForAudio) {
+                mWaitingForAudio = true;
+                mResumeAfterLoad = player.getPlayWhenReady();
+                player.setPlayWhenReady(false);
+                if (getScreensaverManager() != null) getScreensaverManager().disableChecked();
+                player.showVoiceOverProgress(true);
+            }
+            return;
+        }
+        if (mDucked && mWaitingForAudio) {
+            if (Math.abs(mAudio.getPositionMs() - position) > 750) {
+                mAudio.seekTo(position);
+                return;
+            }
+            finishWaiting(true);
+        }
+        if (player.isPlaying()) mAudio.resume(); else mAudio.pause();
+        if (mAudio.isReady() && Math.abs(mAudio.getPositionMs() - position) > 750)
+            mAudio.seekTo(position);
     }
 
     private void stop() {
