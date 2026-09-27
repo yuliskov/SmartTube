@@ -25,6 +25,9 @@ application ID or on a test device to preserve existing app data.
 3. Check pause, seek, speed, volume keys, Home/return, replay, and next video.
    The translated audio should stay in sync. Original volume should return
    after voiceover stops, including when SmartTube's automatic volume is on.
+   With SponsorBlock enabled, play across an automatic sponsor skip and seek
+   back through it. If the translated track buffers, video should wait for it
+   and resume with both tracks aligned.
 4. With **Original language → Auto (YouTube)**, a video whose original language
    is the target language should be skipped automatically.
    Test a Russian video with Russian selected, and a Belarusian video to ensure
