@@ -28,8 +28,8 @@
         android:id="@+id/leanback_subtitles"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="150sp"
-        android:paddingRight="150sp"/>
+        android:paddingLeft="56dp"
+        android:paddingRight="56dp"/>
 
     <LinearLayout
         android:id="@+id/live_chat_wrapper"

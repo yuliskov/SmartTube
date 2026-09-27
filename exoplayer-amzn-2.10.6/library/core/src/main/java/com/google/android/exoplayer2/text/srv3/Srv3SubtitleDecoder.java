@@ -559,9 +559,9 @@ public final class Srv3SubtitleDecoder extends SimpleSubtitleDecoder {
       if (line == Cue.DIMEN_UNSET) line = 1f;
     }
     
-    // Apply TV safe area margin (8% top inset, 8% bottom inset)
+    // Apply TV safe area margin (5% top inset, 5% bottom inset)
     if (line != Cue.DIMEN_UNSET) {
-      line = 0.08f + (line * 0.84f);
+      line = 0.05f + (line * 0.90f);
     }
     
     Layout.Alignment alignment = Layout.Alignment.ALIGN_CENTER;

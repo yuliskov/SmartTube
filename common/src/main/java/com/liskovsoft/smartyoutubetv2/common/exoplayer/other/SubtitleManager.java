@@ -40,7 +40,7 @@ import java.util.List;
 
 public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListener {
     private static final String TAG = SubtitleManager.class.getSimpleName();
-    private static final float TV_LEFT_PADDING_FRACTION = 0.08f;
+    private static final float TV_LEFT_PADDING_FRACTION = 0.14f;
     private static final long MAX_ANIMATION_DURATION_MS = 15_000;
     private static final String LOADING_TEXT = "[Loading subtitles...]";
 
@@ -92,6 +92,9 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     @Override
     public void onDataChange() {
         configureSubtitleView();
+        if (mSubtitleView != null && mLastCues != null && !mLastCues.isEmpty() && hasText(mLastCues)) {
+            mSubtitleView.setCues(formatCues(mLastCues));
+        }
     }
 
     @Override
@@ -273,34 +276,40 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     }
 
     private List<Cue> formatCues(List<Cue> cues) {
-        // ONLY auto-generated tracks are left-aligned, and ONLY when "Word by word auto-subtitles" is ON.
-        // Manual subtitles ALWAYS stay centered with default alignment and placement!
-        if (!mIsActiveTrackAuto || !mPlayerData.isWordByWordAutoSubtitlesEnabled()) {
+        // If not an auto-generated track, keep manual subtitles untouched (preserves manual positioning/centering)
+        if (!mIsActiveTrackAuto) {
             return cues;
         }
 
         List<Cue> result = new ArrayList<>();
+        boolean wordByWord = mPlayerData.isWordByWordAutoSubtitlesEnabled();
 
         for (Cue cue : cues) {
-            // Keep explicitly vertically or horizontally positioned cues (e.g. SRV3 top/window positioned subtitles)
-            if (cue.line != Cue.DIMEN_UNSET || cue.position != Cue.DIMEN_UNSET) {
+            // Keep explicitly vertically positioned cues (e.g. top/window positioned subtitles)
+            if (cue.line != Cue.DIMEN_UNSET) {
                 result.add(cue);
                 continue;
             }
 
-            // For unpositioned auto-generated cues, left-align text and anchor to the left side
-            // with TV safe-area margin (8%), matching the official YouTube TV app.
-            // Preserves spans, styles, and newlines (\n) for word-by-word rolling subtitles.
-            result.add(new Cue(
-                    cue.text,
-                    Layout.Alignment.ALIGN_NORMAL,
-                    Cue.DIMEN_UNSET,
-                    Cue.TYPE_UNSET,
-                    Cue.TYPE_UNSET,
-                    TV_LEFT_PADDING_FRACTION,
-                    Cue.ANCHOR_TYPE_START,
-                    Cue.DIMEN_UNSET
-            ));
+            if (wordByWord) {
+                // For unpositioned auto-generated cues when word-by-word is ON:
+                // Left-align text and anchor to the left side with TV padding, matching official YouTube TV app.
+                result.add(new Cue(
+                        cue.text,
+                        Layout.Alignment.ALIGN_NORMAL,
+                        Cue.DIMEN_UNSET,
+                        Cue.TYPE_UNSET,
+                        Cue.TYPE_UNSET,
+                        TV_LEFT_PADDING_FRACTION,
+                        Cue.ANCHOR_TYPE_START,
+                        1.0f - (2 * TV_LEFT_PADDING_FRACTION)
+                ));
+            } else {
+                // When word-by-word is OFF:
+                // Center the subtitles in the middle of the screen (legacy behavior).
+                // Strips any WebVTT default 'align:start' and 'position:0%'.
+                result.add(new Cue(cue.text));
+            }
         }
 
         return result;

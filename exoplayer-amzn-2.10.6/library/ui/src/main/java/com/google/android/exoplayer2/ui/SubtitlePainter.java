@@ -246,10 +246,11 @@ import com.liskovsoft.sharedutils.misc.RoundedBackgroundSpan;
     int availableWidth = parentWidth - textPaddingX * 2;
     if (cueSize != Cue.DIMEN_UNSET) {
       availableWidth = (int) (availableWidth * cueSize);
-    } else if (cuePosition != Cue.DIMEN_UNSET && cuePositionAnchor == Cue.ANCHOR_TYPE_START) {
-      int maxAvailable = (int) (parentWidth * (1.0f - 2 * cuePosition)) - textPaddingX * 2;
-      if (maxAvailable > 0 && availableWidth > maxAvailable) {
-        availableWidth = maxAvailable;
+    } else if (cuePosition == Cue.DIMEN_UNSET) {
+      // For centered unpositioned subtitles, keep comfortable reading width (max 85% of screen)
+      int maxCenterWidth = (int) (parentWidth * 0.85f) - textPaddingX * 2;
+      if (maxCenterWidth > 0 && availableWidth > maxCenterWidth) {
+        availableWidth = maxCenterWidth;
       }
     }
     if (availableWidth <= 0) {

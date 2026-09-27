@@ -91,6 +91,10 @@ public final class TextRenderer extends BaseRenderer implements Callback {
   private SubtitleOutputBuffer subtitle;
   private SubtitleOutputBuffer nextSubtitle;
   private int nextSubtitleEventIndex;
+  private byte[] rawSubtitleData;
+  private long rawSubtitleTimeUs;
+  private long rawSubtitleOffsetUs;
+  private boolean decodedWordByWord;
 
   /**
    * @param output The output.
@@ -137,6 +141,7 @@ public final class TextRenderer extends BaseRenderer implements Callback {
   @Override
   protected void onStreamChanged(Format[] formats, long offsetUs) throws ExoPlaybackException {
     streamFormat = formats[0];
+    rawSubtitleData = null;
     if (decoder != null) {
       decoderReplacementState = REPLACEMENT_STATE_SIGNAL_END_OF_STREAM;
     } else {
@@ -152,6 +157,9 @@ public final class TextRenderer extends BaseRenderer implements Callback {
       releaseBuffers();
       replaceDecoder();
       inputStreamEnded = false;
+    } else if (rawSubtitleData != null && streamFormat != null
+        && decodedWordByWord != com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled) {
+      redecodeRawSubtitleData(positionUs);
     } else if (subtitle != null) {
       // Fast seek: we already have the decoded subtitles for the whole stream!
       nextSubtitleEventIndex = subtitle.getNextEventTimeIndex(positionUs);
@@ -172,6 +180,11 @@ public final class TextRenderer extends BaseRenderer implements Callback {
   public void render(long positionUs, long elapsedRealtimeUs) throws ExoPlaybackException {
     if (outputStreamEnded) {
       return;
+    }
+
+    if (rawSubtitleData != null && streamFormat != null
+        && decodedWordByWord != com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled) {
+      redecodeRawSubtitleData(positionUs);
     }
 
     if (nextSubtitle == null) {
@@ -208,7 +221,7 @@ public final class TextRenderer extends BaseRenderer implements Callback {
             outputStreamEnded = true;
           }
         }
-      } else if (nextSubtitle.timeUs <= positionUs) {
+      } else if (nextSubtitle.timeUs <= positionUs || subtitle == null) {
         // Advance to the next subtitle. Sync the next event index and trigger an update.
         if (subtitle != null) {
           subtitle.release();
@@ -218,8 +231,6 @@ public final class TextRenderer extends BaseRenderer implements Callback {
         nextSubtitleEventIndex = subtitle.getNextEventTimeIndex(positionUs);
         textRendererNeedsUpdate = true;
       }
-    } else if (inputStreamEnded && !textRendererNeedsUpdate && getNextEventTime() == Long.MAX_VALUE) {
-      outputStreamEnded = true;
     }
 
     if (textRendererNeedsUpdate) {
@@ -255,6 +266,15 @@ public final class TextRenderer extends BaseRenderer implements Callback {
             nextInputBuffer.subsampleOffsetUs = formatHolder.format != null
                 ? formatHolder.format.subsampleOffsetUs : 0;
             nextInputBuffer.flip();
+            if (nextInputBuffer.data != null) {
+              int pos = nextInputBuffer.data.position();
+              rawSubtitleData = new byte[nextInputBuffer.data.remaining()];
+              nextInputBuffer.data.get(rawSubtitleData);
+              nextInputBuffer.data.position(pos);
+              rawSubtitleTimeUs = nextInputBuffer.timeUs;
+              rawSubtitleOffsetUs = nextInputBuffer.subsampleOffsetUs;
+              decodedWordByWord = com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled;
+            }
           }
           decoder.queueInputBuffer(nextInputBuffer);
           nextInputBuffer = null;
@@ -267,9 +287,39 @@ public final class TextRenderer extends BaseRenderer implements Callback {
     }
   }
 
+  private void redecodeRawSubtitleData(long positionUs) {
+    decodedWordByWord = com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled;
+    outputStreamEnded = false;
+    if (decoder != null) {
+      decoder.release();
+      decoder = decoderFactory.createDecoder(streamFormat);
+    }
+    if (nextSubtitle != null) {
+      nextSubtitle.release();
+      nextSubtitle = null;
+    }
+    try {
+      SubtitleInputBuffer inputBuf = decoder.dequeueInputBuffer();
+      if (inputBuf != null) {
+        inputBuf.clear();
+        inputBuf.ensureSpaceForWrite(rawSubtitleData.length);
+        inputBuf.data.put(rawSubtitleData);
+        inputBuf.timeUs = rawSubtitleTimeUs;
+        inputBuf.subsampleOffsetUs = rawSubtitleOffsetUs;
+        inputBuf.flip();
+        decoder.queueInputBuffer(inputBuf);
+        inputStreamEnded = true;
+        nextInputBuffer = null;
+      }
+    } catch (SubtitleDecoderException e) {
+      // Ignore
+    }
+  }
+
   @Override
   protected void onDisabled() {
     streamFormat = null;
+    rawSubtitleData = null;
     clearOutput();
     releaseDecoder();
   }
