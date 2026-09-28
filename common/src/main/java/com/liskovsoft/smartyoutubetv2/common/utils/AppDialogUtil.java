@@ -546,6 +546,14 @@ public class AppDialogUtil {
         );
     }
 
+    public static OptionItem createSubtitlePreloadOption(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        return UiOptionItem.from(context.getString(R.string.subtitle_preload),
+                optionItem -> playerData.setSubtitlePreloadEnabled(optionItem.isSelected()),
+                playerData.isSubtitlePreloadEnabled()
+        );
+    }
+
     @TargetApi(19)
     private static List<OptionItem> createSubtitleStyles(Context context) {
         PlayerData playerData = PlayerData.instance(context);

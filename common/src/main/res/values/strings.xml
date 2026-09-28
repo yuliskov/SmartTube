@@ -395,6 +395,7 @@
     <string name="subtitle_scale">Subtitle scale</string>
     <string name="subtitle_loading_animation">Show loading indicator</string>
     <string name="word_by_word_auto_subtitles">Word by word auto-subtitles</string>
+    <string name="subtitle_preload">Preload subtitles</string>
     <string name="audio_sync_fix_desc">An alternative way to synchronize audio/video. It\'s considered obsolete, but in some cases, may help.</string>
     <string name="audio_sync_fix">Audio sync fix</string>
     <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio or video scale. Fixes blank screenshots. Affects performance!</string>

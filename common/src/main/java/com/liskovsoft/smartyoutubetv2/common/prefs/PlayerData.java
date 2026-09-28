@@ -103,6 +103,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private boolean mIsAudioDelayEnabled;
     private boolean mIsSubtitleLoadingAnimationEnabled;
     private boolean mIsWordByWordAutoSubtitlesEnabled = true;
+    private boolean mIsSubtitlePreloadEnabled = true;
 
     private static class SpeedItem {
         public String channelId;
@@ -474,6 +475,15 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mIsWordByWordAutoSubtitlesEnabled = enable;
         com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled = enable;
         com.google.android.exoplayer2.text.srv3.Srv3SubtitleDecoder.sWordByWordEnabled = enable;
+        persistState();
+    }
+
+    public boolean isSubtitlePreloadEnabled() {
+        return mIsSubtitlePreloadEnabled;
+    }
+
+    public void setSubtitlePreloadEnabled(boolean enable) {
+        mIsSubtitlePreloadEnabled = enable;
         persistState();
     }
 
@@ -894,6 +904,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mIsWordByWordAutoSubtitlesEnabled = Helpers.parseBoolean(split, 65, true);
         com.google.android.exoplayer2.text.webvtt.WebvttCueParser.sWordByWordEnabled = mIsWordByWordAutoSubtitlesEnabled;
         com.google.android.exoplayer2.text.srv3.Srv3SubtitleDecoder.sWordByWordEnabled = mIsWordByWordAutoSubtitlesEnabled;
+        mIsSubtitlePreloadEnabled = Helpers.parseBoolean(split, 66, true);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -932,7 +943,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
                 mIsVideoFlipEnabled, mIsAudioDelayEnabled, null, mIsSubtitleLoadingAnimationEnabled,
-                mIsWordByWordAutoSubtitlesEnabled
+                mIsWordByWordAutoSubtitlesEnabled, mIsSubtitlePreloadEnabled
         ));
     }
 

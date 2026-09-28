@@ -54,6 +54,8 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     private boolean mIsLoading = false;
     private boolean mIsSubtitlesSelected = false;
     private boolean mIsActiveTrackAuto = false;
+    private boolean mIsShown = false;
+    private boolean mIsSubtitleLoaded = false;
     private List<Cue> mLastCues = null;
 
     private final Runnable mTimeoutRunnable = this::stopLoadingAnimation;
@@ -92,7 +94,7 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     @Override
     public void onDataChange() {
         configureSubtitleView();
-        if (mSubtitleView != null && mLastCues != null && !mLastCues.isEmpty() && hasText(mLastCues)) {
+        if (mSubtitleView != null && mIsShown && mLastCues != null && !mLastCues.isEmpty() && hasText(mLastCues)) {
             mSubtitleView.setCues(formatCues(mLastCues));
         }
     }
@@ -100,9 +102,10 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     @Override
     public void onCues(List<Cue> cues) {
         mLastCues = cues;
+        mIsSubtitleLoaded = true;
         if (cues != null && !cues.isEmpty() && hasText(cues)) {
             stopLoadingAnimation();
-            if (mSubtitleView != null) {
+            if (mSubtitleView != null && mIsShown) {
                 mSubtitleView.setCues(formatCues(cues));
             }
         } else {
@@ -113,13 +116,27 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     }
 
     public void show(boolean show) {
+        mIsShown = show;
         if (mSubtitleView != null) {
             mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
+            if (show) {
+                if (mLastCues != null && !mLastCues.isEmpty() && hasText(mLastCues)) {
+                    mSubtitleView.setCues(formatCues(mLastCues));
+                } else if (mIsSubtitlesSelected && !mIsSubtitleLoaded && mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+                    startLoadingAnimation();
+                }
+            } else {
+                stopLoadingAnimation();
+            }
         }
     }
 
+    public boolean isShown() {
+        return mIsShown;
+    }
+
     public void startLoadingAnimation() {
-        if (!mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+        if (!mIsShown || !mPlayerData.isSubtitleLoadingAnimationEnabled()) {
             return;
         }
 
@@ -156,6 +173,9 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     public void dispose() {
         stopLoadingAnimation();
         mHandler.removeCallbacksAndMessages(null);
+        mLastCues = null;
+        mIsSubtitleLoaded = false;
+        mIsShown = false;
     }
 
     @Override
@@ -179,16 +199,15 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
 
         mIsSubtitlesSelected = hasTextTrack;
         mIsActiveTrackAuto = isAutoTrack;
+        mIsSubtitleLoaded = false;
+        mLastCues = null;
 
         if (mIsSubtitlesSelected) {
-            if (mLastCues == null || mLastCues.isEmpty() || !hasText(mLastCues)) {
-                if (mPlayerData.isSubtitleLoadingAnimationEnabled()) {
-                    startLoadingAnimation();
-                }
+            if (mIsShown && mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+                startLoadingAnimation();
             }
         } else {
             stopLoadingAnimation();
-            mLastCues = null;
             if (mSubtitleView != null) {
                 mSubtitleView.setCues(Collections.emptyList());
             }
@@ -198,7 +217,7 @@ public class SubtitleManager implements TextOutput, OnDataChange, AnalyticsListe
     @Override
     public void onLoadStarted(EventTime eventTime, LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
         if (mediaLoadData != null && mediaLoadData.trackType == C.TRACK_TYPE_TEXT) {
-            if (mIsSubtitlesSelected && mPlayerData.isSubtitleLoadingAnimationEnabled()) {
+            if (mIsShown && mIsSubtitlesSelected && mPlayerData.isSubtitleLoadingAnimationEnabled()) {
                 if (mLastCues == null || mLastCues.isEmpty() || !hasText(mLastCues)) {
                     startLoadingAnimation();
                 }

@@ -23,6 +23,10 @@ public class UiOptionItem implements OptionItem {
     }
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback, String defaultTitle) {
+        return from(formats, callback, defaultTitle, true);
+    }
+
+    public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback, String defaultTitle, boolean isEnabled) {
         if (formats == null) {
             return null;
         }
@@ -30,17 +34,21 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
-            options.add(from(format, callback, defaultTitle));
+            options.add(from(format, callback, defaultTitle, isEnabled));
         }
 
         return options;
     }
 
     public static OptionItem from(FormatItem format, OptionCallback callback) {
-        return from(format, callback, null);
+        return from(format, callback, null, true);
     }
 
     public static OptionItem from(FormatItem format, OptionCallback callback, String defaultTitle) {
+        return from(format, callback, defaultTitle, true);
+    }
+
+    public static OptionItem from(FormatItem format, OptionCallback callback, String defaultTitle, boolean isEnabled) {
         if (format == null) {
             return null;
         }
@@ -48,7 +56,7 @@ public class UiOptionItem implements OptionItem {
         UiOptionItem uiOptionItem = new UiOptionItem();
 
         uiOptionItem.mTitle = format.isDefault() ? defaultTitle : format.getTitle();
-        uiOptionItem.mIsSelected = format.isSelected();
+        uiOptionItem.mIsSelected = isEnabled ? (format.isSelected() && !format.isDefault()) : format.isDefault();
         uiOptionItem.mFormat = format;
         uiOptionItem.mCallback = callback;
 

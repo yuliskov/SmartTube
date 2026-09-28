@@ -28,6 +28,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleLoadingAnimationOption(getContext()));
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createWordByWordAutoSubtitlesOption(getContext()));
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitlePreloadOption(getContext()));
         // Can't work properly. There is no robust language detection.
         //appendSubtitleLanguageCategory(settingsPresenter);
         //appendMoreSubtitlesSwitch(settingsPresenter);

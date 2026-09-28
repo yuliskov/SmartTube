@@ -182,6 +182,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public boolean isSubtitlesShown() {
+        return false;
+    }
+
+    @Override
     public void loadStoryboard() {
 
     }

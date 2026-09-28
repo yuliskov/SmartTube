@@ -155,7 +155,7 @@ public class PlayerUIController extends BasePlayerController {
         boolean enabled = buttonState == PlayerUI.BUTTON_ON;
 
         if (enabled) {
-            getPlayer().setFormat(FormatItem.SUBTITLE_NONE);
+            getPlayer().showSubtitles(false);
             getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
             getPlayer().setButtonState(R.id.lb_control_closed_captioning, PlayerUI.BUTTON_OFF);
             enableSubtitleForChannel(false);
@@ -167,7 +167,11 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        FormatItem bestFormat = findBestSubtitle(getPlayer(), getPlayerData());
+        FormatItem bestFormat = getPlayer().getSubtitleFormat();
+
+        if (bestFormat == null || bestFormat.isDefault() || FormatItem.SUBTITLE_NONE.equals(bestFormat)) {
+            bestFormat = findBestSubtitle(getPlayer(), getPlayerData());
+        }
 
         if (bestFormat != null && !bestFormat.isDefault() && !FormatItem.SUBTITLE_NONE.equals(bestFormat)) {
             getPlayer().showSubtitles(true);
@@ -351,10 +355,12 @@ public class PlayerUIController extends BasePlayerController {
                             option -> {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().showSubtitles(!format.isDefault());
                                 getPlayer().setFormat(format);
                                 getPlayerData().setFormat(format);
                             },
-                            getContext().getString(R.string.subtitles_disabled)));
+                            getContext().getString(R.string.subtitles_disabled),
+                            isSubtitleEnabled()));
             settingsPresenter.showDialog();
         }));
 
@@ -368,16 +374,19 @@ public class PlayerUIController extends BasePlayerController {
                             option -> {
                                 FormatItem format = UiOptionItem.toFormat(option);
                                 enableSubtitleForChannel(!format.isDefault());
+                                getPlayer().showSubtitles(!format.isDefault());
                                 getPlayer().setFormat(format);
                                 getPlayerData().setFormat(format);
                             },
-                            getContext().getString(R.string.subtitles_disabled)));
+                            getContext().getString(R.string.subtitles_disabled),
+                            isSubtitleEnabled()));
             settingsPresenter.showDialog();
         }));
 
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleChannelOption(getContext()));
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitleLoadingAnimationOption(getContext()));
         settingsPresenter.appendSingleSwitch(AppDialogUtil.createWordByWordAutoSubtitlesOption(getContext()));
+        settingsPresenter.appendSingleSwitch(AppDialogUtil.createSubtitlePreloadOption(getContext()));
 
         OptionCategory stylesCategory = AppDialogUtil.createSubtitleStylesCategory(getContext());
         settingsPresenter.appendRadioCategory(stylesCategory.title, stylesCategory.options);
@@ -466,7 +475,9 @@ public class PlayerUIController extends BasePlayerController {
 
         // Activate debug infos when restoring after PIP.
         showDebugInfo();
-        getPlayer().showSubtitles(true);
+        if (isSubtitleEnabled() && isSubtitleSelected()) {
+            getPlayer().showSubtitles(true);
+        }
 
         // Maybe dialog just closed. Reset timeout just in case.
         enableUiAutoHideTimeout();
@@ -1050,7 +1061,12 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean isSubtitleEnabled() {
-        return !getPlayerData().isSubtitlesPerChannelEnabled() || getPlayerData().isSubtitlesPerChannelEnabled(getChannelId());
+        if (getPlayerData().isSubtitlesPerChannelEnabled()) {
+            return getPlayerData().isSubtitlesPerChannelEnabled(getChannelId());
+        } else {
+            FormatItem saved = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
+            return saved != null && !saved.isDefault() && !FormatItem.SUBTITLE_NONE.equals(saved);
+        }
     }
 
     private void enableSubtitleForChannel(boolean enable) {

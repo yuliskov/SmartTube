@@ -1056,9 +1056,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             createSubtitleManager();
             if (mSubtitleManager != null) {
                 if (!formatItem.isDefault() && !FormatItem.SUBTITLE_NONE.equals(formatItem)) {
-                    mSubtitleManager.show(true);
-                    if (getPlayerData() != null && getPlayerData().isSubtitleLoadingAnimationEnabled()) {
-                        mSubtitleManager.startLoadingAnimation();
+                    if (mSubtitleManager.isShown()) {
+                        FormatItem current = mExoPlayerController.getSubtitleFormat();
+                        boolean isDifferentFormat = current == null || !formatItem.equals(current);
+                        if (isDifferentFormat && getPlayerData() != null && getPlayerData().isSubtitleLoadingAnimationEnabled()) {
+                            mSubtitleManager.startLoadingAnimation();
+                        }
                     }
                 } else {
                     mSubtitleManager.stopLoadingAnimation();
@@ -1383,6 +1386,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mSubtitleManager != null) {
             mSubtitleManager.show(show);
         }
+    }
+
+    @Override
+    public boolean isSubtitlesShown() {
+        createSubtitleManager();
+        return mSubtitleManager != null && mSubtitleManager.isShown();
     }
 
     public boolean isDebugInfoShown() {
