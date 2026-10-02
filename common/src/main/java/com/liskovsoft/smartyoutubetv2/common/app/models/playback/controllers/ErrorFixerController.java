@@ -204,8 +204,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            // IllegalStateException: Buffer too small (5242880 < 7208383)
-            if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+            if (error instanceof NullPointerException) {
+                // SABR extractor throws NPE on subtitle error
+                // NOTE: the engine should be restarted
+                disableSubtitles();
+            } else if (Helpers.startsWithAny(errorContent,
+                    "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+                // IllegalStateException: Buffer too small (5242880 < 7208383)
                 // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
                 // This will change current format to 'Disabled'. Do restartEngine() instead.
                 lowerVideoQuality();
