@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
@@ -20,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.vot.VotSettings;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -57,6 +59,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.vot_settings),
+                item -> VotSettingsPresenter.show(getContext())));
         appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
@@ -238,6 +242,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 }
             }, mPlayerTweaksData.isPlayerButtonEnabled(pair[1])));
         }
+
+        VotSettings votSettings = new VotSettings(getContext());
+        options.add(UiOptionItem.from(getContext().getString(R.string.vot_show_button),
+                item -> {
+                    votSettings.setButtonShown(item.isSelected());
+                    PlaybackPresenter playback = PlaybackPresenter.instance(getContext());
+                    if (playback.getPlayer() != null) playback.getPlayer().setButtonVisible(
+                            R.id.action_voice_translate, votSettings.shouldShowButton());
+                }, votSettings.isButtonShown()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }

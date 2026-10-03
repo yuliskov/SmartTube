@@ -272,6 +272,8 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
+        getController(VoiceTranslateController.class).onFormatInfo(formatInfo);
+
         String bgImageUrl = null;
 
         getVideo().sync(formatInfo);
