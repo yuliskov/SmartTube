@@ -1,5 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
+import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
+import android.os.Build;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
@@ -15,6 +18,43 @@ public abstract class MediaTrack {
     private static int sVP9Weight = VP9_WEIGHT;
     private static int sAVCWeight = AVC_WEIGHT;
     private static int sAV1Weight = AV1_WEIGHT;
+    private static Boolean sIsHardwareAV1Supported = null;
+
+    static {
+        if (!isHardwareAV1Supported()) {
+            sAV1Weight = -100; // Demote software-decoded AV1 behind hardware-accelerated VP9 and AVC
+        }
+    }
+
+    public static boolean isHardwareAV1Supported() {
+        if (sIsHardwareAV1Supported == null) {
+            sIsHardwareAV1Supported = checkHardwareCodec("video/av01");
+        }
+        return sIsHardwareAV1Supported;
+    }
+
+    private static boolean checkHardwareCodec(String mimeType) {
+        try {
+            int numCodecs = MediaCodecList.getCodecCount();
+            for (int i = 0; i < numCodecs; i++) {
+                MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
+                if (codecInfo.isEncoder()) {
+                    continue;
+                }
+                for (String type : codecInfo.getSupportedTypes()) {
+                    if (type.equalsIgnoreCase(mimeType)) {
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            return codecInfo.isHardwareAccelerated();
+                        }
+                        String name = codecInfo.getName().toLowerCase();
+                        return !name.startsWith("omx.google.") && !name.startsWith("c2.android.") && !name.contains("sw");
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return false;
+    }
     public Format format;
     public int groupIndex = -1;
     public int trackIndex = -1;

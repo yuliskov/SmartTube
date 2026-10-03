@@ -6,7 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class BufferingDetector {
     private static final long BUFFERING_WINDOW_MS = 60_000;
-    private static final long BUFFERING_DURATION_MS = 20_000;
+    private static final long BUFFERING_DURATION_MS = 8_000; // Responsive 8s threshold instead of 20s stall
     
     private long mBeginTimeMs;
     private long mStartTimeMs;
