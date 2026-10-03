@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class HQDialogController extends BasePlayerController {
-    private static final String TAG = HQDialogController.class.getSimpleName();
     private static final int VIDEO_FORMATS_ID = 132;
     private static final int AUDIO_FORMATS_ID = 133;
     // NOTE: using map, because same item could be changed time to time

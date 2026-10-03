@@ -12,8 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 
 public class VideoActionPresenter extends BasePresenter<Void> {
-    private static final String TAG = VideoActionPresenter.class.getSimpleName();
-
     private VideoActionPresenter(Context context) {
         super(context);
     }

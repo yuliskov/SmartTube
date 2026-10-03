@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> implements PlayerEventListener {
-    private static final String TAG = PlaybackPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static PlaybackPresenter sInstance;
     private final List<PlayerEventListener> mEventListeners = new CopyOnWriteArrayList<PlayerEventListener>() {

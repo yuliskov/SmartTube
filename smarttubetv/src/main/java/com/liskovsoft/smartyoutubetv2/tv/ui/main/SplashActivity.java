@@ -7,7 +7,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
 public class SplashActivity extends MotherActivity implements SplashView {
-    private static final String TAG = SplashActivity.class.getSimpleName();
     private Intent mNewIntent;
     private SplashPresenter mPresenter;
 

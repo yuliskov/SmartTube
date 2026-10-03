@@ -41,8 +41,6 @@ import androidx.leanback.R;
  */
 @RequiresApi(19)
 class SlideKitkat extends Visibility {
-    private static final String TAG = "SlideKitkat";
-
     private static final TimeInterpolator sDecelerate = new DecelerateInterpolator();
     private static final TimeInterpolator sAccelerate = new AccelerateInterpolator();
 

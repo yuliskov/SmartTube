@@ -53,8 +53,6 @@ import java.util.Locale;
  */
 public class TimePicker extends Picker {
 
-    static final String TAG = "TimePicker";
-
     private static final int AM_INDEX = 0;
     private static final int PM_INDEX = 1;
 
