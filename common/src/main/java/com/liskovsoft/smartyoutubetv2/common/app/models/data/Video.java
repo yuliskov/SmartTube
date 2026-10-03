@@ -97,6 +97,7 @@ public final class Video {
     public boolean deArrowProcessed;
     public boolean isLiveEnd;
     public boolean isShuffled;
+    public boolean isReversed;
     public String searchQuery;
     private int startSegmentNum;
     private long liveDurationMs = -1;
