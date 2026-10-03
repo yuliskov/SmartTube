@@ -1,0 +1,723 @@
+openapi: 3.0.3
+info:
+  title: SmartTube REST API
+  description: Local-network REST API for playback, queue, and playlist control.
+  version: 1.0.0
+  contact:
+    name: SmartTube
+servers:
+  - url: http://{host}:{port}/api/v1
+    variables:
+      host:
+        default: 192.168.1.1
+        description: IP address of the Android TV device running SmartTube
+      port:
+        default: '8090'
+        description: Configured REST API port in SmartTube settings
+security:
+  - basicAuth: []
+
+paths:
+  /playback/play:
+    post:
+      summary: Start or resume playback
+      description: Resumes the current video if the player is active, otherwise opens the current playlist item.
+      operationId: playbackPlay
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Playback started or resumed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playback started
+        '422':
+          description: No active video to play
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: No active video
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/pause:
+    post:
+      summary: Pause playback
+      description: Pauses the currently playing video.
+      operationId: playbackPause
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Playback paused
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playback paused
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/toggle:
+    post:
+      summary: Toggle play/pause
+      description: Toggles between playing and paused state.
+      operationId: playbackToggle
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Playback toggled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playback toggled
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/next:
+    post:
+      summary: Play next video
+      description: Skips to the next video in the queue/playlist.
+      operationId: playbackNext
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Next requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Next requested
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/previous:
+    post:
+      summary: Play previous video
+      description: Goes back to the previous video in the queue/playlist.
+      operationId: playbackPrevious
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Previous requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Previous requested
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/seek:
+    post:
+      summary: Seek to position
+      description: Seeks the current video to the specified position in milliseconds.
+      operationId: playbackSeek
+      tags:
+        - Playback
+      parameters:
+        - name: positionMs
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+          description: Target position in milliseconds
+          example: 120000
+      responses:
+        '200':
+          description: Seek requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Seek requested
+        '400':
+          description: Missing or invalid positionMs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Missing or invalid positionMs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/stop:
+    post:
+      summary: Stop playback
+      description: Stops the current video completely and closes the player.
+      operationId: playbackStop
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Playback stopped
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playback stopped
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playback/pip:
+    post:
+      summary: Toggle PIP mode
+      description: Toggles between fullscreen and picture-in-picture (PIP) mode.
+      operationId: playbackPip
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: PIP mode toggled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Entered PIP mode
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /playbackstate:
+    get:
+      summary: Get playback state
+      description: Returns the current playback state including position, duration, and player status.
+      operationId: playbackstateGet
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: Current playback state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaybackStateResponse'
+              example:
+                videoId: dQw4w9WgXcQ
+                title: Never Gonna Give You Up
+                thumbnail: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
+                isPlaying: true
+                isLoading: false
+                playWhenReady: true
+                positionMs: 120000
+                durationMs: 212000
+                speed: 1.0
+                volume: 1.0
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue:
+    get:
+      summary: Get current queue
+      description: Returns the current video and all items in the playback queue.
+      operationId: queueGet
+      tags:
+        - Queue
+      responses:
+        '200':
+          description: Queue contents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueResponse'
+              example:
+                currentVideoId: _LOY7_kSwQM
+                currentTitle: Example Video
+                currentThumbnail: https://i.ytimg.com/vi/_LOY7_kSwQM/hqdefault.jpg
+                currentIndex: 0
+                items:
+                  - index: 0
+                    videoId: _LOY7_kSwQM
+                    title: Example Video
+                    thumbnail: https://i.ytimg.com/vi/_LOY7_kSwQM/hqdefault.jpg
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/items:
+    post:
+      summary: Add video or playlist to queue
+      description: Adds a single video or all videos from a playlist to the playback queue.
+      operationId: queueAdd
+      tags:
+        - Queue
+      parameters:
+        - name: videoUrl
+          in: query
+          schema:
+            type: string
+          description: YouTube video URL or bare video ID. Supported formats include watch, shorts, live, embed, and youtu.be links. Provide either videoUrl or playlistUrl.
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        - name: playlistUrl
+          in: query
+          schema:
+            type: string
+          description: YouTube playlist URL or bare playlist ID. Can be a playlist page or a watch URL containing a list parameter (e.g. watch?v=VIDEO_ID&list=PLAYLIST_ID). Provide either videoUrl or playlistUrl.
+          example: https://www.youtube.com/watch?v=XqPBUrXgrTw&list=PLAYLIST_ID&pp=0gcJCcsEOCosWNin
+        - name: shuffle
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Shuffle the playlist videos before adding to the queue. Only applies when adding via playlistUrl.
+          example: true
+      responses:
+        '202':
+          description: Request accepted. For a single video, it is added immediately. For a playlist, loading happens asynchronously; if no video is currently playing, playback will auto-start with the first added video.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Added to queue
+        '400':
+          description: Missing or invalid videoUrl or playlistUrl
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Missing videoUrl or playlistUrl
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/shuffle:
+    post:
+      summary: Shuffle queue
+      description: Randomizes the order of videos in the playback queue and returns the updated queue.
+      operationId: queueShuffle
+      tags:
+        - Queue
+      responses:
+        '200':
+          description: Queue shuffled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueResponse'
+              example:
+                currentVideoId: _LOY7_kSwQM
+                currentTitle: Example Video
+                currentThumbnail: https://i.ytimg.com/vi/_LOY7_kSwQM/hqdefault.jpg
+                currentIndex: 2
+                items:
+                  - index: 0
+                    videoId: dQw4w9WgXcQ
+                    title: Never Gonna Give You Up
+                    thumbnail: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
+                  - index: 1
+                    videoId: 9bZkp7q19f0
+                    title: Gangnam Style
+                    thumbnail: https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg
+                  - index: 2
+                    videoId: _LOY7_kSwQM
+                    title: Example Video
+                    thumbnail: https://i.ytimg.com/vi/_LOY7_kSwQM/hqdefault.jpg
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/clear:
+    post:
+      summary: Clear queue
+      description: Removes all videos from the playback queue.
+      operationId: queueClear
+      tags:
+        - Queue
+      responses:
+        '200':
+          description: Queue cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Queue cleared
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/show:
+    post:
+      summary: Show queue overlay
+      description: Opens the playback queue dialog on the TV screen.
+      operationId: queueShow
+      tags:
+        - Queue
+      responses:
+        '200':
+          description: Queue dialog shown
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Queue dialog shown
+        '422':
+          description: Player is not active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Player is not active
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/items/move:
+    post:
+      summary: Move queue item
+      description: Moves a video from one position to another in the playback queue.
+      operationId: queueMove
+      tags:
+        - Queue
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: Source index of the item to move
+          example: 2
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: Destination index in the queue
+          example: 0
+      responses:
+        '200':
+          description: Item moved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Item moved
+        '400':
+          description: Missing or invalid from/to parameters or index out of bounds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Missing or invalid from/to parameters
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /queue/items/{videoId}:
+    delete:
+      summary: Remove video from queue
+      description: Removes a specific video from the playback queue.
+      operationId: queueRemove
+      tags:
+        - Queue
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: YouTube video ID to remove
+          example: dQw4w9WgXcQ
+      responses:
+        '200':
+          description: Removed from queue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Removed from queue
+        '400':
+          description: Missing videoId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Missing videoId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /play:
+    post:
+      summary: Play video or playlist
+      description: Opens and starts playing a single YouTube video or an entire playlist. The url parameter is inspected first for a playlist ID; if found, the playlist is loaded and played. Otherwise it is treated as a single video.
+      operationId: play
+      tags:
+        - Playback
+      parameters:
+        - name: url
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: >
+            YouTube video URL, playlist URL, or bare ID.
+            Supported video formats: watch (?v=), shorts (/shorts/), live (/live/),
+            embed (/embed/), youtu.be, and bare 11-character video IDs.
+            Supported playlist formats: playlist (?list=), watch URLs containing
+            a list parameter, and bare playlist IDs.
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        - name: index
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+          description: Zero-based index of the video to start from. Only applies when playing a playlist.
+          example: 3
+        - name: shuffle
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Shuffle the playlist videos before starting playback. Only applies when playing a playlist.
+          example: true
+      responses:
+        '200':
+          description: Playlist playback started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playlist playback started
+        '202':
+          description: Single video playback started (metadata loaded asynchronously)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Playback started
+        '400':
+          description: Missing or invalid url
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                message: Missing or invalid url
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /recommendations:
+    get:
+      summary: Get video recommendations
+      description: Returns the recommendation/suggestion rows for the currently playing video.
+      operationId: recommendationsGet
+      tags:
+        - Playback
+      responses:
+        '200':
+          description: List of recommendation groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecommendationGroup'
+              example:
+                - title: Related videos
+                  videos:
+                    - videoId: dQw4w9WgXcQ
+                      title: Never Gonna Give You Up
+                      thumbnail: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication using the username and password configured in SmartTube REST API settings. Default username is admin; the password is auto-generated as a random 6-character string on first enable.
+
+  schemas:
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    QueueItem:
+      type: object
+      properties:
+        index:
+          type: integer
+          description: Position of the item in the queue
+        videoId:
+          type: string
+          description: YouTube video ID
+        title:
+          type: string
+          description: Video title
+        thumbnail:
+          type: string
+          description: Thumbnail image URL
+      required:
+        - index
+        - videoId
+
+    QueueResponse:
+      type: object
+      properties:
+        currentVideoId:
+          type: string
+          description: ID of the currently playing video (empty string if none)
+        currentTitle:
+          type: string
+          description: Title of the currently playing video
+        currentThumbnail:
+          type: string
+          description: Thumbnail of the currently playing video
+        currentIndex:
+          type: integer
+          description: Index of the currently playing video in the items array (-1 if none)
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueueItem'
+      required:
+        - currentVideoId
+        - currentIndex
+        - items
+
+    PlaybackStateResponse:
+      type: object
+      properties:
+        videoId:
+          type: string
+          description: ID of the current video (empty string if none)
+        title:
+          type: string
+          description: Title of the current video
+        thumbnail:
+          type: string
+          description: Thumbnail image URL
+        isPlaying:
+          type: boolean
+          description: Whether the player is actively rendering frames
+        isLoading:
+          type: boolean
+          description: Whether the player is buffering
+        playWhenReady:
+          type: boolean
+          description: Whether playback will start when ready
+        positionMs:
+          type: integer
+          format: int64
+          description: Current playback position in milliseconds
+        durationMs:
+          type: integer
+          format: int64
+          description: Total video duration in milliseconds
+        speed:
+          type: number
+          format: float
+          description: Playback speed multiplier
+        volume:
+          type: number
+          format: float
+          description: Player volume level (0.0 - 1.0+)
+      required:
+        - videoId
+        - isPlaying
+        - isLoading
+        - playWhenReady
+        - positionMs
+        - durationMs
+        - speed
+        - volume
+
+    RecommendationGroup:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the recommendation group
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendationVideo'
+      required:
+        - title
+        - videos
+
+    RecommendationVideo:
+      type: object
+      properties:
+        videoId:
+          type: string
+          description: YouTube video ID
+        title:
+          type: string
+          description: Video title
+        thumbnail:
+          type: string
+          description: Thumbnail image URL
+      required:
+        - videoId
+        - title
+
+  responses:
+    Unauthorized:
+      description: Authentication failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MessageResponse'
+          example:
+            message: Unauthorized

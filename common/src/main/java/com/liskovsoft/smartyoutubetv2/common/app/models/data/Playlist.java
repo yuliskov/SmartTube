@@ -16,6 +16,7 @@ public class Playlist {
     private final List<Video> mPlaylist;
     private final List<Video> mSyncedItems;
     private int mCurrentIndex;
+    private volatile int mGeneration;
     private static Playlist sInstance;
 
     private Playlist() {
@@ -39,10 +40,45 @@ public class Playlist {
     public void clear() {
         mPlaylist.clear();
         mCurrentIndex = -1;
+        mGeneration++;
     }
 
     public void clearPosition() {
         mCurrentIndex = -1;
+    }
+
+    public void shuffle() {
+        if (mPlaylist.isEmpty()) {
+            return;
+        }
+        Video current = getCurrent();
+        Collections.shuffle(mPlaylist);
+        if (current != null) {
+            int newIndex = mPlaylist.indexOf(current);
+            mCurrentIndex = newIndex >= 0 ? newIndex : 0;
+        } else {
+            mCurrentIndex = 0;
+        }
+        mGeneration++;
+    }
+
+    public void move(int fromIndex, int toIndex) {
+        if (mPlaylist.isEmpty() || fromIndex == toIndex) {
+            return;
+        }
+
+        if (fromIndex < 0 || fromIndex >= mPlaylist.size() || toIndex < 0 || toIndex >= mPlaylist.size()) {
+            return;
+        }
+
+        Video current = getCurrent();
+        Video moved = mPlaylist.remove(fromIndex);
+        mPlaylist.add(toIndex, moved);
+
+        if (current != null) {
+            mCurrentIndex = mPlaylist.indexOf(current);
+        }
+        mGeneration++;
     }
 
     /**
@@ -318,6 +354,10 @@ public class Playlist {
         if (index != -1) {
             mPlaylist.set(index, newItem);
         }
+    }
+
+    public int getGeneration() {
+        return mGeneration;
     }
 
     public void onNewSession() {
