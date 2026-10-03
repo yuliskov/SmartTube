@@ -24,4 +24,5 @@
     <item name="action_afr" type="id"/>
     <item name="channel_new_content" type="id"/>
     <item name="linkify_click_handler" type="id"/>
+    <item name="action_start_mix" type="id"/>
 </resources>
