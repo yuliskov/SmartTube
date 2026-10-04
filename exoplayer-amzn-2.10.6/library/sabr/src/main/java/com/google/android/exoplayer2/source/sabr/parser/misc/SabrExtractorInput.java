@@ -3,7 +3,9 @@ package com.google.android.exoplayer2.source.sabr.parser.misc;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.ReloadPlayerResponseError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -184,6 +186,12 @@ public final class SabrExtractorInput implements ExtractorInput {
                 data = (MediaSegmentDataSabrPart) sabrPart;
                 startPosition = position;
                 break;
+            }
+
+            // The server won't send any media until the player response is reloaded.
+            // Ignoring this part leads to the endless init chunk loading loop.
+            if (sabrPart instanceof RefreshPlayerResponseSabrPart) {
+                throw new ReloadPlayerResponseError(((RefreshPlayerResponseSabrPart) sabrPart).reloadPlaybackToken);
             }
         }
     }
