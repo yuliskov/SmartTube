@@ -283,6 +283,10 @@ public class SuggestionsController extends BasePlayerController {
         if (next != null) {
             next.fromQueue = true;
             result = next;
+        } else if (!getVideo().isShuffled &&
+                Helpers.startsWith(getVideo().getPlaylistId(), "RD") &&
+                getVideo().hasNextPlaylist()) {
+            result = Video.from(getVideo().nextMediaItem);
         } else if (mNextSectionVideo != null && !getVideo().isShuffled) {
             result = mNextSectionVideo;
         } else if (getVideo().nextMediaItem != null) {
