@@ -21,6 +21,7 @@
     <item name="action_rotate" type="id"/>
     <item name="action_flip" type="id"/>
     <item name="action_screen_dimming" type="id"/>
+    <item name="action_nightlight" type="id"/>
     <item name="action_afr" type="id"/>
     <item name="channel_new_content" type="id"/>
     <item name="linkify_click_handler" type="id"/>

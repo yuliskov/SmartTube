@@ -486,6 +486,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void applyNightlight() {
+
+    }
+
+    @Override
     public void setVideoGravity(int gravity) {
         
     }

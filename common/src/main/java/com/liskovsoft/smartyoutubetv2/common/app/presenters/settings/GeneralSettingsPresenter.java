@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
@@ -81,6 +82,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
+        appendNightlightCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendInternetCensorship(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
@@ -458,6 +460,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             appendScreenDimmingAmountCategory(presenter);
             appendScreenDimmingTimeoutCategory(presenter);
             presenter.showDialog(getContext().getString(R.string.screen_dimming));
+        }));
+    }
+
+    private void appendNightlightCategory(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.nightlight), optionItem -> {
+            AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+            AppDialogUtil.appendNightlightCategory(getContext(), presenter, () -> {
+                Utils.applyNightlight(getContext());
+                Utils.applyNightlight(presenter.getContext());
+            });
+            presenter.showDialog(getContext().getString(R.string.nightlight));
         }));
     }
 
