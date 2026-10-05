@@ -15,7 +15,6 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.google.android.exoplayer2.ui.SubtitleView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -27,7 +26,6 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private SurfaceWrapper mVideoSurfaceWrapper;
     private AspectRatioFrameLayout mVideoSurfaceRoot;
-    private View mNightlightOverlay;
     private SubtitleView mLeanbackSubtitles;
     private int mSubtitlesPadding;
     private int mBackgroundResId;
@@ -54,58 +52,42 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     }
 
     private SurfaceWrapper createSurfaceWrapper(ViewGroup root) {
-        // Color filters don't work with SurfaceView. Keep it for tunneled playback.
-        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
-        if (tweaks.isTextureViewEnabled()
-                || (tweaks.isNightlightActive() && !tweaks.isTunneledPlaybackEnabled())
-                || PlayerData.instance(getContext()).getRotationAngle() != 0
-                || PlayerData.instance(getContext()).isVideoFlipEnabled()) {
+        if (Utils.isTextureViewRequired(getContext())) {
             return new TextureViewWrapper(getContext(), root);
         }
         return new SurfaceViewWrapper(getContext(), root);
     }
 
     protected void applyNightlight() {
-        if (mVideoSurfaceRoot == null) {
+        if (mVideoSurfaceRoot == null || mVideoSurfaceWrapper == null) {
             return;
         }
 
         PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        ensureSurfaceWrapper(Utils.isTextureViewRequired(getContext()));
         boolean active = tweaks.isNightlightActive();
         boolean tintVideo = active && !tweaks.isNightlightOnUi();
 
-        // Color filters don't work with SurfaceView, so use an overlay instead.
-        boolean useOverlay = active && !(mVideoSurfaceWrapper instanceof TextureViewWrapper);
-
-        Paint paint = tintVideo && !useOverlay ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
+        // Multiplying the video colors preserves black, including the loading screen.
+        Paint paint = tintVideo ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
         mVideoSurfaceRoot.setLayerType(paint != null ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, paint);
-        applyNightlightOverlay(useOverlay ? Utils.kelvinToOverlayColor(tweaks.getNightlightWarmth()) : 0);
-    }
-
-    private void applyNightlightOverlay(int color) {
-        if (color == 0) {
-            if (mNightlightOverlay != null) {
-                mVideoSurfaceRoot.removeView(mNightlightOverlay);
-                mNightlightOverlay = null;
-            }
-            return;
-        }
-
-        if (mNightlightOverlay == null) {
-            mNightlightOverlay = new View(getContext());
-            mVideoSurfaceRoot.addView(mNightlightOverlay,
-                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        }
-        mNightlightOverlay.setBackgroundColor(color);
     }
 
     private void ensureTextureView() {
-        if (mVideoSurfaceWrapper == null || mVideoSurfaceWrapper instanceof TextureViewWrapper || getView() == null) {
+        ensureSurfaceWrapper(true);
+    }
+
+    private void ensureSurfaceWrapper(boolean useTextureView) {
+        if (mVideoSurfaceWrapper == null
+                || useTextureView == (mVideoSurfaceWrapper instanceof TextureViewWrapper)
+                || getView() == null) {
             return;
         }
 
         mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-        mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
+        mVideoSurfaceWrapper = useTextureView
+                ? new TextureViewWrapper(getContext(), (ViewGroup) getView())
+                : new SurfaceViewWrapper(getContext(), (ViewGroup) getView());
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
 
         ((PlayerEngine) this).restartEngine();
