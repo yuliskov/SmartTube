@@ -638,7 +638,7 @@
   <string name="unknown_source_error">Tuntematon lähdevirhe</string>
   <string name="unknown_renderer_error">Tuntematon renderointivirhe</string>
   <string name="hide_watched_from_notifications">Piilota katsotut videot ilmoituksista</string>
-  <string name="hide_watched_from_watch_later">Piilota katsotut videot Katsele myöhemmin -soittolistalta</string>
+  <string name="hide_watched_from_watch_later">Piilota katsotut videot \"Katso myöhemmin\" listalta</string>
   <string name="player_quick_skip_videos">Ohita tavallisia videoita vasen/oikea-painikkeilla</string>
   <string name="header_sports">Urheilu</string>
   <string name="keep_finished_activities">Säilytä valmiit toiminnot</string>
@@ -746,4 +746,5 @@
   <string name="network_settings">Verkkoasetukset</string>
   <string name="comments_disabled">Kommentit on poistettu käytöstä tässä videossa</string>
   <string name="enable_conscrypt">Ota Conscrypt käyttöön</string>
+  <string name="remove_video_to_watch_later">Poista ”Katso myöhemmin” listalta</string>
 </resources>
