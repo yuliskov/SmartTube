@@ -33,12 +33,18 @@ public class VideoStateController extends BasePlayerController {
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 3; // Sync history every x minutes
     private boolean mIsPlayEnabled;
     private boolean mIsPlayBlocked;
-    private int mTickleLeft;
+    private int mTickleCount;
     private boolean mIncognito;
     private final Runnable mUpdateHistory = this::saveState;
     private long mNewVideoTimeMs;
     @Nullable
     private Boolean mIsRestoreActualLive;
+    private long mSleepTimerStartMs;
+
+    @Override
+    public void onInit() {
+        mSleepTimerStartMs = System.currentTimeMillis();
+    }
 
     /**
      * Fired after user clicked on video in browse activity<br/>
@@ -52,7 +58,7 @@ public class VideoStateController extends BasePlayerController {
 
             // NOTE: even for the same videos it's good to save state (switch from embed, video reload etc)
             // Reset auto-save history timer
-            mTickleLeft = 0;
+            mTickleCount = 0;
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
             saveState();
@@ -113,12 +119,14 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onEngineInitialized() {
         // Reset auto-save history timer
-        mTickleLeft = 0;
+        mTickleCount = 0;
 
         // Show user info instead of black screen.
         //if (getPlayer() != null && !getPlayEnabled()) {
         //    getPlayer().showOverlay(true);
         //}
+
+        mSleepTimerStartMs = System.currentTimeMillis();
     }
 
     @Override
@@ -135,14 +143,43 @@ public class VideoStateController extends BasePlayerController {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode) {
+        mSleepTimerStartMs = System.currentTimeMillis();
+
+        // Remove error msg if needed
+        if (getPlayer() != null && getPlayerData().getSleepTimerHours() > 0) {
+            getPlayer().setVideo(getVideo());
+        }
+
+        return false;
+    }
+
+    @Override
     public void onTickle() {
         if (getPlayer() == null || !getPlayer().isEngineInitialized()) {
             return;
         }
 
-        if (++mTickleLeft > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
-            mTickleLeft = 0;
+        if (++mTickleCount > HISTORY_UPDATE_INTERVAL_MINUTES && getPlayer().isPlaying()) {
+            mTickleCount = 0;
             saveState();
+        }
+
+        checkSleepTimer();
+    }
+
+    private void checkSleepTimer() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        float sleepHours = getPlayerData().getSleepTimerHours();
+        if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000) {
+            getPlayer().setPlayWhenReady(false);
+            getPlayer().setTitle(getContext().getString(R.string.player_sleep_timer)
+                    + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
+            getPlayer().showOverlay(true);
+            Helpers.enableScreensaver(getActivity());
         }
     }
 

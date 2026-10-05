@@ -51,10 +51,11 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             mVideoLoaderController.reloadVideo();
         } else if (!mBufferingDetector.isPlayable()) {
             if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
-                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
-                // Wrong DNS resolution could cause hanging at start
+                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM
+                && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+                // Wrong DNS resolving could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
-                MessageHelpers.showLongMessage(getContext(), "Switching to OkHttp network engine...");
+                MessageHelpers.showLongMessage(getContext(), "Fixing wrong DNS resolving...");
                 getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
                 mVideoLoaderController.restartEngine();
             } else {
@@ -63,14 +64,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 YouTubeServiceManager.instance().switchNextClientNow();
                 mVideoLoaderController.reloadVideo();
             }
-        } else if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
-            // Possibly ISP ban
-            //switchNextEngine();
-            //mVideoLoaderController.restartEngine();
-
+        } else {
             // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
             // This will change current format to 'Disabled'. Do restartEngine() instead.
-            lowerVideoQuality();
+            //lowerVideoQuality();
+            //mVideoLoaderController.restartEngine();
+
+            // SABR may hang if the server issues a high backoffTime
             mVideoLoaderController.restartEngine();
         }
     }
@@ -138,10 +138,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            // Recently this message starting to show for other reasons
-            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
-            //switchNextEngine(); // ?
-            //restartEngine = false;
+            // Recently this message starting to show for other unknown reasons
             if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 switchNextEngine();
             }
@@ -152,8 +149,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             } else {
-                getPlayerTweaksData().setSectionPlaylistEnabled(false);
-                restartEngine = false;
+                lowerVideoQuality(); // NOTE: restart engine is required after lower the quality
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
@@ -176,16 +172,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
 
-            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-            //} else if (isSubtitlesEnabled()) {
-            //    disableSubtitles(); // Response code: 429
-            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            //} else {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            //}
-
             restartEngine = false;
             showMessage = false;
 
@@ -197,14 +183,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (!mBufferingDetector.isPlayable()) { // Response code: 403
                 // The stream fails instantly if nParam isn't correct.
                 // Note, nParam generation strictly tied to the client but some reported that OkHttp could help.
-                if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
-                        && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM) {
-                    // OkHttp is the engine that respects custom DNS settings
-                    getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
-                    restartEngine = true;
-                } else {
-                    YouTubeServiceManager.instance().switchNextClientNow();
-                }
+                YouTubeServiceManager.instance().switchNextClientNow();
                 showMessage = true;
             } else {
                 YouTubeServiceManager.instance().switchNextClient(); // Response code: 403
@@ -225,8 +204,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            // IllegalStateException: Buffer too small (5242880 < 7208383)
-            if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+            if (error instanceof NullPointerException) {
+                // SABR extractor throws NPE on subtitle error
+                // NOTE: the engine should be restarted
+                disableSubtitles();
+            } else if (Helpers.startsWithAny(errorContent,
+                    "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+                // IllegalStateException: Buffer too small (5242880 < 7208383)
                 // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
                 // This will change current format to 'Disabled'. Do restartEngine() instead.
                 lowerVideoQuality();
@@ -316,6 +300,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (!Helpers.containsAny(message, "fromNullable result is null")) {
             MessageHelpers.showLongMessage(getContext(), fullMsg);
+            if (getPlayer() != null) {
+                getPlayer().setTitle(fullMsg);
+            }
         }
 
         if (Utils.fixRetrofitErrors(getContext(), error)) {

@@ -35,6 +35,9 @@ public class ScreensaverManager {
     private int mMode = MODE_SCREENSAVER;
     private boolean mIsScreenOff;
     private boolean mIsBlocked;
+    // Distinct from mIsBlocked: lifecycle suspension stops all screensaver management while
+    // the host activity is not in the foreground. Blocked only suppresses user-facing dimming.
+    private boolean mIsSuspended;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
@@ -106,6 +109,10 @@ public class ScreensaverManager {
     }
 
     public void enable() {
+        if (mIsSuspended) {
+            return;
+        }
+
         if (mIsBlocked) {
             Log.d(TAG, "Screensaver blocked!");
             return;
@@ -121,6 +128,10 @@ public class ScreensaverManager {
     }
 
     public void disable() {
+        if (mIsSuspended) {
+            return;
+        }
+
         if (mIsBlocked) {
             Log.d(TAG, "Screensaver blocked!");
             return;
@@ -133,15 +144,51 @@ public class ScreensaverManager {
     }
 
     public void doScreenOff() {
-        //if (mIsScreenOff) {
-        //    return;
-        //}
+        // Ignore suspend if dialog is opened to apply settings immediately
+        if (mIsSuspended && !getAppDialogPresenter().isDialogShown()) {
+            return;
+        }
 
         // NOTE: disable will create infinite loop
         //disable();
         mMode = MODE_SCREEN_OFF;
         Utils.removeCallbacks(mUndimScreen);
         Utils.postDelayed(mDimScreen, 0);
+    }
+
+    /**
+     * Stop managing the screensaver while the host activity is not in the foreground.
+     * Distinct from {@link #setBlocked(boolean)}: blocked only suppresses user-facing dimming,
+     * while suspension always releases wake suppression and ignores later playback events.
+     */
+    public void suspend() {
+        mIsSuspended = true;
+        // Leave mUnlockInstance queued so the shared registry lock cannot be stranded.
+        Utils.removeCallbacks(mDimScreen, mUndimScreen, mTimeoutHandler);
+        if (!mIsBlocked) {
+            hideDimOverlay();
+        }
+        enableSystemScreensaver();
+    }
+
+    /**
+     * Resume the existing dimming policy after the host activity returns to the foreground.
+     */
+    public void resume() {
+        mIsSuspended = false;
+        enable();
+        if (mIsBlocked) {
+            disableSystemScreensaver();
+        }
+    }
+
+    /**
+     * Idempotent cleanup for activity destruction. Releases suppression and drops this instance
+     * from the shared registry without cancelling an in-flight registry unlock.
+     */
+    public void cleanup() {
+        suspend();
+        sInstances.remove(this);
     }
 
     public boolean isScreenOff() {
@@ -295,12 +342,42 @@ public class ScreensaverManager {
         }
     }
 
+    /**
+     * Hide the dim overlay without going through {@link #undimScreen()}, which would
+     * reacquire wake suppression via {@link Helpers#disableScreensaver(Activity)}.
+     */
+    private void hideDimOverlay() {
+        View dimContainer = mDimContainer.get();
+
+        if (dimContainer != null) {
+            dimContainer.setVisibility(View.GONE);
+        }
+
+        mIsScreenOff = false;
+    }
+
+    private void enableSystemScreensaver() {
+        Activity activity = mActivity.get();
+
+        if (activity != null) {
+            Helpers.enableScreensaver(activity);
+        }
+    }
+
+    private void disableSystemScreensaver() {
+        Activity activity = mActivity.get();
+
+        if (activity != null) {
+            Helpers.disableScreensaver(activity);
+        }
+    }
+
     private void addToRegistry() {
         sInstances.add(this);
     }
 
     private void notifyRegistry() {
-        if (sLockInstance) {
+        if (mIsSuspended || sLockInstance) {
             return;
         }
 
