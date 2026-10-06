@@ -3,8 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +29,7 @@ public class AppDialogActivity extends MotherActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        syncDisplayMode();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
         // Can't use getSupportFragmentManager because AppDialogFragment isn't subclass of androidx fragment
@@ -63,6 +66,35 @@ public class AppDialogActivity extends MotherActivity {
         //return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
         KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
         return handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
+    }
+    @Override
+    protected void onResume() {
+        syncDisplayMode();
+        super.onResume();
+    }
+
+    private void syncDisplayMode() {
+        if (VERSION.SDK_INT >= VERSION_CODES.M) {
+            Activity playbackActivity = null;
+            PlaybackView view = PlaybackPresenter.instance(this).getView();
+            if (view instanceof Fragment) {
+                playbackActivity = ((Fragment) view).getActivity();
+            }
+            if (playbackActivity == null && PlaybackPresenter.instance(this).getContext() instanceof Activity) {
+                playbackActivity = (Activity) PlaybackPresenter.instance(this).getContext();
+            }
+
+            if (playbackActivity != null && playbackActivity.getWindow() != null) {
+                int modeId = playbackActivity.getWindow().getAttributes().preferredDisplayModeId;
+                if (modeId > 0) {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    if (lp.preferredDisplayModeId != modeId) {
+                        lp.preferredDisplayModeId = modeId;
+                        getWindow().setAttributes(lp);
+                    }
+                }
+            }
+        }
     }
     
     private boolean handleNavigation(KeyEvent event) {

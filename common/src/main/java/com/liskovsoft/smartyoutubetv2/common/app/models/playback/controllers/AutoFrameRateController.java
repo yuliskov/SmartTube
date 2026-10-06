@@ -37,6 +37,8 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
     private final Runnable mApplyAfrStop = this::applyAfrStop;
+    private final Runnable mOnDialogHide = this::onDialogHide;
+    private boolean mAfrSettingsChanged;
     private boolean mIsPlay;
     private VideoStateController mStateController;
     private HQDialogController mHQDialogController;
@@ -134,20 +136,35 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
         TvQuickActions.sendStopAFR(getContext());
     }
 
+    private void onAfrEnableClick() {
+        mAfrSettingsChanged = true;
+    }
+
     private void onFpsCorrectionClick() {
+        mAfrSettingsChanged = true;
         mAutoFrameRateHelper.setFpsCorrectionEnabled(getPlayerData().isAfrFpsCorrectionEnabled());
     }
 
     private void onResolutionSwitchClick() {
+        mAfrSettingsChanged = true;
         mAutoFrameRateHelper.setResolutionSwitchEnabled(getPlayerData().isAfrResSwitchEnabled(), getPlayerData().isAfrEnabled());
     }
 
     private void onDoubleRefreshRateClick() {
+        mAfrSettingsChanged = true;
         mAutoFrameRateHelper.setDoubleRefreshRateEnabled(getPlayerData().isDoubleRefreshRateEnabled());
     }
 
     public void onSkip24RateClick() {
+        mAfrSettingsChanged = true;
         mAutoFrameRateHelper.setSkip24RateEnabled(getPlayerData().isSkip24RateEnabled());
+    }
+
+    private void onDialogHide() {
+        if (mAfrSettingsChanged) {
+            mAfrSettingsChanged = false;
+            applyAfr();
+        }
     }
 
     private void applyAfrWrapper() {
@@ -239,7 +256,7 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
         if (mAutoFrameRateHelper.isSupported() && getContext() != null) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getContext(), PlayerData.instance(getContext()),
-                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
+                    this::onAfrEnableClick, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick, this::onSkip24RateClick);
 
             OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getContext(), PlayerData.instance(getContext()));
@@ -266,10 +283,10 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
             }));
 
             mHQDialogController.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING_LIST, getContext().getString(R.string.auto_frame_rate), options));
-            mHQDialogController.addOnDialogHide(mApplyAfr); // Apply NEW Settings on dialog close
+            mHQDialogController.addOnDialogHide(mOnDialogHide); // Apply NEW Settings on dialog close
         } else {
             mHQDialogController.removeCategory(AUTO_FRAME_RATE_ID);
-            mHQDialogController.removeOnDialogHide(mApplyAfr);
+            mHQDialogController.removeOnDialogHide(mOnDialogHide);
         }
     }
 
