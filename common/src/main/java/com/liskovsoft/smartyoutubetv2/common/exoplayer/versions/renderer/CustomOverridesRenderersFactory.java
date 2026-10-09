@@ -23,7 +23,6 @@ import java.util.ArrayList;
  * Main intent: override audio delay
  */
 public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase {
-    private static final String TAG = CustomOverridesRenderersFactory.class.getSimpleName();
     private static final String[] FRAME_DROP_FIX_LIST = {
             "T95ZPLUS (q201_3GB)",
             "UGOOS (UGOOS)",

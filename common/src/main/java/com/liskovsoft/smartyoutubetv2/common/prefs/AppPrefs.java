@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
 public class AppPrefs extends SharedPreferencesBase implements AccountChangeListener {
-    private static final String TAG = AppPrefs.class.getSimpleName();
     private static final String PREFS_DIR = "app_prefs";
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;

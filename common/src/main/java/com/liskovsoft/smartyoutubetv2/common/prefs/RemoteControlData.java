@@ -13,7 +13,6 @@ public class RemoteControlData extends DataChangeBase {
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsDeviceLinkEnabled;
-    private boolean mIsRunInBackgroundEnabled;
     private boolean mIsFinishOnDisconnectEnabled;
     private boolean mIsConnectMessagesEnabled;
     private boolean mIsRemoteHistoryDisabled;
