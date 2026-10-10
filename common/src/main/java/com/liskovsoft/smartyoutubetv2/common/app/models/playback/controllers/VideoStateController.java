@@ -31,7 +31,7 @@ public class VideoStateController extends BasePlayerController {
     private static final long BEGIN_THRESHOLD_MS = 10_000;
     private static final long EMBED_THRESHOLD_MS = 30_000;
     private static final int HISTORY_UPDATE_INTERVAL_MINUTES = 3; // Sync history every x minutes
-    private boolean mIsPlayEnabled;
+    private boolean mIsPlayEnabled = true;
     private boolean mIsPlayBlocked;
     private int mTickleCount;
     private boolean mIncognito;
@@ -577,7 +577,7 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (!mIsPlayBlocked) {
-            boolean playEnabled = getPlayEnabled();
+            boolean playEnabled = isPlayEnabled();
             getPlayer().setPlayWhenReady(playEnabled);
             if (!getPlayer().isOverlayShown()) {
                 getPlayer().showOverlay(!playEnabled);
@@ -644,7 +644,7 @@ public class VideoStateController extends BasePlayerController {
         mIsPlayBlocked = block;
     }
 
-    public boolean getPlayEnabled() {
+    public boolean isPlayEnabled() {
         return mIsPlayEnabled;
     }
 
