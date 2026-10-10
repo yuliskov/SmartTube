@@ -461,6 +461,17 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    @Nullable
+    public SimpleExoPlayer getExoPlayer() {
+        return mPlayer;
+    }
+
+    @Override
+    public void refreshDualSubtitles() {
+        // Dual subtitles are only supported in the full playback fragment.
+    }
+
+    @Override
     public void setZoomPercents(int percents) {
 
     }
