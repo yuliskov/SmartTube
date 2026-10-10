@@ -159,7 +159,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        Log.e(TAG, "SABR requested player response reload. Attempt: %s", mReloadPlayerResponseAttempts);
+        String reloadMsg = String.format("SABR requested player response reload. Attempt: %s", mReloadPlayerResponseAttempts);
+        Log.e(TAG, reloadMsg);
+        MessageHelpers.showLongMessage(getContext(), reloadMsg);
 
         YouTubeServiceManager.instance().reloadPlayerResponse(video.videoId, reloadError.reloadPlaybackToken);
         mVideoLoaderController.reloadVideo();
