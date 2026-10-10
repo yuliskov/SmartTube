@@ -50,6 +50,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsOkButtonLongPressDisabled;
     private String mLastPlaylistId;
     private String mLastPlaylistTitle;
+    private boolean mIsPlaylistsSortedEnabled;
     private boolean mIsRemapNumbersToSpeedEnabled;
     private boolean mIsRemapPlayToOKEnabled;
     private int mDpadUpDownAction;
@@ -306,6 +307,15 @@ public class GeneralData implements ProfileChangeListener {
 
     public void setLastPlaylistTitle(String playlistTitle) {
         mLastPlaylistTitle = playlistTitle;
+        persistState();
+    }
+
+    public boolean isPlaylistsSortedEnabled() {
+        return mIsPlaylistsSortedEnabled;
+    }
+
+    public void setPlaylistsSortedEnabled(boolean enabled) {
+        mIsPlaylistsSortedEnabled = enabled;
         persistState();
     }
 
@@ -660,6 +670,7 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
+        mIsPlaylistsSortedEnabled = Helpers.parseBoolean(split, 73, false);
     }
 
     public void persistNow() {
@@ -685,7 +696,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled));
+                mIsRemapSToSpeedToggleEnabled, mIsPlaylistsSortedEnabled));
     }
 
     @Override
