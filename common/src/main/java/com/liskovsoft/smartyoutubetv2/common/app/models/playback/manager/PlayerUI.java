@@ -36,6 +36,10 @@ public interface PlayerUI {
     void loadStoryboard();
     void setTitle(String title);
     void showProgressBar(boolean show);
+    /**
+     * Briefly show the volume slider. Volume: 0 - 100
+     */
+    void showVolume(int volume);
     void setSeekBarSegments(List<SeekBarSegment> segments);
     void updateEndingTime();
     void setChatReceiver(ChatReceiver chatReceiver);
