@@ -384,6 +384,13 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void refreshVolumeNormalization() {
+        if (mExoPlayerController != null) {
+            mExoPlayerController.refreshVolumeNormalization();
+        }
+    }
+
+    @Override
     public void reloadPlayback() {
 
     }
