@@ -3,9 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -32,8 +35,15 @@ import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String TAG = SplashPresenter.class.getSimpleName();
@@ -46,6 +56,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private String mBridgePackageName;
     private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
     private final Runnable mCheckForUpdates = this::checkForUpdates;
+    private boolean mResolvingLiveUrl;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -189,6 +200,138 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         return mBridgePackageName;
     }
 
+
+    //https://stackoverflow.com/questions/32454238/how-to-check-if-youtube-channel-is-streaming-live/70026382#70026382
+    private String resolveLiveVideoId(String url) {
+        HttpURLConnection connection = null;
+
+        try {
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setInstanceFollowRedirects(true);
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(15000);
+            connection.setRequestProperty(
+                    "User-Agent",
+                    "Mozilla/5.0 (Linux; Android 10) " +
+                            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                            "Chrome/131.0.0.0 Mobile Safari/537.36"
+            );
+
+            int status = connection.getResponseCode();
+
+            if (status < 200 || status >= 300) {
+                return null;
+            }
+
+            // First check whether YouTube redirected directly to a watch URL.
+            String videoId = extractYouTubeVideoId(connection.getURL().toString());
+
+            if (videoId != null) {
+                return videoId;
+            }
+
+            // Otherwise inspect the HTML for a canonical watch URL.
+            StringBuilder html = new StringBuilder();
+
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream(),
+                            "UTF-8" //StandardCharsets.UTF_8 can be used instead  -  explicitly not used since it requires API 19, and min at the moment is 17
+                    ))) {
+                char[] buffer = new char[8192];
+                int count;
+
+                while ((count = reader.read(buffer)) != -1) {
+                    // Avoid reading an unexpectedly large page indefinitely.
+                    if (html.length() + count > 5_000_000) {
+                        return null;
+                    }
+
+                    html.append(buffer, 0, count);
+                }
+            }
+
+            Pattern linkPattern = Pattern.compile(
+                    "<link\\b[^>]*>",
+                    Pattern.CASE_INSENSITIVE
+            );
+
+            Matcher linkMatcher = linkPattern.matcher(html);
+
+            while (linkMatcher.find()) {
+                String tag = linkMatcher.group();
+
+                String rel = getHtmlAttribute(tag, "rel");
+                String href = getHtmlAttribute(tag, "href");
+
+                if (rel == null || href == null ||
+                        !rel.toLowerCase(Locale.ROOT)
+                                .matches(".*\\bcanonical\\b.*")) {
+                    continue;
+                }
+
+                href = href.replace("&amp;", "&");
+
+                videoId = extractYouTubeVideoId(href);
+
+                if (videoId != null) {
+                    return videoId;
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to resolve YouTube live URL", e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return null;
+    }
+
+    private String extractYouTubeVideoId(String url) {
+        try {
+            Uri uri = Uri.parse(url);
+            String host = uri.getHost();
+
+            if (host == null ||
+                    !(host.equalsIgnoreCase("youtube.com") ||
+                            host.equalsIgnoreCase("www.youtube.com") ||
+                            host.equalsIgnoreCase("m.youtube.com"))) {
+                return null;
+            }
+
+            if (!"/watch".equals(uri.getPath())) {
+                return null;
+            }
+
+            String videoId = uri.getQueryParameter("v");
+
+            if (videoId != null &&
+                    videoId.matches("[A-Za-z0-9_-]{11}")) {
+                return videoId;
+            }
+        } catch (Exception ignored) {
+            // Invalid URL.
+        }
+
+        return null;
+    }
+
+    private String getHtmlAttribute(String tag, String attribute) {
+        Pattern pattern = Pattern.compile(
+                "\\b" + Pattern.quote(attribute) +
+                        "\\s*=\\s*(['\"])(.*?)\\1",
+                Pattern.CASE_INSENSITIVE
+        );
+
+        Matcher matcher = pattern.matcher(tag);
+
+        return matcher.find() ? matcher.group(2) : null;
+    }
+
+
     private void initIntentChain() {
         mIntentChain.add(intent -> {
             String accountName = IntentExtractor.extractAccountName(intent);
@@ -221,6 +364,73 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             return false;
         });
+
+
+        mIntentChain.add(intent -> {
+            if (intent == null || intent.getData() == null) {
+                return false;
+            }
+
+
+            Uri uri = intent.getData();
+            String host = uri.getHost();
+            String path = uri.getPath();
+
+            boolean isYouTube =
+                    host != null &&
+                            (host.equalsIgnoreCase("youtube.com") ||
+                                    host.equalsIgnoreCase("www.youtube.com") ||
+                                    host.equalsIgnoreCase("m.youtube.com"));
+
+            boolean isLiveUrl =
+                    path != null &&
+                            path.matches("^/(?:@[^/]+|channel/[^/]+)/live/?$");
+
+            if (!isYouTube || !isLiveUrl) {
+                return false;
+            }
+
+            mResolvingLiveUrl = true;
+
+            new Thread(() -> {
+                String videoId = resolveLiveVideoId(uri.toString());
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    mResolvingLiveUrl = false;
+
+
+                    if (videoId == null) {
+                        Log.d(TAG, "No live video found. Falling back to channel page: " + uri);
+
+                        // Remove /live from the channel URL.
+                        String channelUrl = uri.toString()
+                                .replaceFirst("/live/?$", "");
+
+                        // Create a new intent pointing to the channel page.
+                        Intent channelIntent = new Intent(intent);
+                        channelIntent.setData(Uri.parse(channelUrl));
+
+                        // Let the existing channel processor handle the URL.
+                        applyNewIntent(channelIntent);
+                        return;
+                    }
+
+
+                    PlaybackPresenter.instance(getContext()).openVideo(
+                            videoId,
+                            IntentExtractor.hasFinishOnEndedFlag(intent),
+                            IntentExtractor.extractVideoTimeMs(intent),
+                            IntentExtractor.isIncognitoIntent(intent)
+                    );
+
+                    enablePlayerOnlyModeIfNeeded(intent);
+                    getView().finishView();
+                });
+            }).start();
+
+            return true;
+        });
+
 
         mIntentChain.add(intent -> {
             String channelId = null;
@@ -335,7 +545,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         // No passwd or the app already started
         if (password == null || getViewManager().getTopView() != null) {
             onSuccess.run();
-            getView().finishView(); // critical part, fix black screen on app exit
+            if (!mResolvingLiveUrl) {
+                getView().finishView();
+            }
         } else {
             SimpleEditDialog.showPassword(
                     getContext(),
