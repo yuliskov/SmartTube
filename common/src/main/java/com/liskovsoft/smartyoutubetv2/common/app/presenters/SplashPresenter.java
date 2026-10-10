@@ -123,6 +123,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void showAccountSelectionIfNeeded() {
+        AccountSelectionPresenter.instance(getContext()).ensureAccountSelected();
         AccountSelectionPresenter.instance(getContext()).show();
     }
 
@@ -201,6 +202,18 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         break;
                     }
                 }
+            }
+
+            return false;
+        });
+
+        // 'Hide all content if not logged in': ignore search/channel/playlist/video intents
+        mIntentChain.add(intent -> {
+            AccountSelectionPresenter.instance(getContext()).ensureAccountSelected();
+
+            if (AccountsData.instance(getContext()).isContentBlocked()) {
+                getViewManager().startDefaultView();
+                return true;
             }
 
             return false;

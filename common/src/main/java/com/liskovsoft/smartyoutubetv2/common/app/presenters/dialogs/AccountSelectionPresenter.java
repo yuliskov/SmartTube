@@ -85,12 +85,14 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     private void appendAccountSelection(List<Account> accounts, List<Drawable> icons, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
-        optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    selectAccount(null);
-                    settingsPresenter.closeDialog();
-                }, true
-        ));
+        if (!isNoneHidden()) {
+            optionItems.add(UiOptionItem.from(
+                    getContext().getString(R.string.dialog_account_none), optionItem -> {
+                        selectAccount(null);
+                        settingsPresenter.closeDialog();
+                    }, true
+            ));
+        }
 
         int index = -1;
 
@@ -126,12 +128,40 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         int index = accounts.indexOf(current);
 
         int nextIndex = index + 1;
-        // null == 'without account'
-        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
-        //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
+        if (nextIndex == accounts.size()) {
+            // null == 'without account' (skipped when None profile is hidden)
+            selectAccount(isNoneHidden() ? accounts.get(0) : null);
+        } else {
+            selectAccount(accounts.get(nextIndex));
+        }
+    }
+
+    public boolean isNoneHidden() {
+        return AccountsData.instance(getContext()).isHideNoneProfileEnabled();
+    }
+
+    /**
+     * When the None profile is hidden, selects the first account if accounts exist but none is selected.
+     */
+    public void ensureAccountSelected() {
+        if (isNoneHidden() && mSignInService.getSelectedAccount() == null) {
+            List<Account> accounts = mSignInService.getAccounts();
+            if (accounts != null && !accounts.isEmpty()) {
+                selectAccount(accounts.get(0));
+            }
+        }
     }
 
     public void selectAccount(Account account) {
+        if (account == null && isNoneHidden()) {
+            // 'None' profile hidden: never deselect while accounts exist
+            List<Account> accounts = mSignInService.getAccounts();
+            if (accounts == null || accounts.isEmpty()) {
+                return;
+            }
+            account = accounts.get(0);
+        }
+
         mSignInService.selectAccount(account);
         Utils.updateChannels(getContext());
 
