@@ -51,12 +51,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     //private static ExoMediaSourceFactory sInstance;
     private static final int MAX_SEGMENTS_PER_LOAD = 1; // default - 1 (1-5)
+    private static final int SABR_READ_TIMEOUT_MS = 4_000;
     private static final String USER_AGENT = DefaultHeaders.APP_USER_AGENT;
     @SuppressLint("StaticFieldLeak")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
@@ -67,6 +71,7 @@ public class ExoMediaSourceFactory {
     private static final boolean USE_BANDWIDTH_METER = false;
     private TrackErrorFixer mTrackErrorFixer;
     private DataSource.Factory mMediaDataSourceFactory;
+    private DataSource.Factory mSabrMediaDataSourceFactory;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
@@ -111,8 +116,12 @@ public class ExoMediaSourceFactory {
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        return buildDataSourceFactory(useBandwidthMeter, (int) OkHttpManager.getReadTimeoutMs());
+    }
+
+    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter, int readTimeoutMs) {
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultDataSourceFactory(mContext, bandwidthMeter, buildHttpDataSourceFactory(useBandwidthMeter));
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter, buildHttpDataSourceFactory(useBandwidthMeter, readTimeoutMs));
     }
 
     /**
@@ -122,13 +131,13 @@ public class ExoMediaSourceFactory {
      *                          DataSource factory.
      * @return A new HttpDataSource factory.
      */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+    private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter, int readTimeoutMs) {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
         int source = tweaksData.getPlayerDataSource();
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter) :
-                        source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter) :
-                                buildDefaultHttpDataSourceFactory(bandwidthMeter);
+        return source == PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP ? buildOkHttpDataSourceFactory(bandwidthMeter, readTimeoutMs) :
+                        source == PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET && CronetManager.getEngine(mContext) != null ? buildCronetDataSourceFactory(bandwidthMeter, readTimeoutMs) :
+                                buildDefaultHttpDataSourceFactory(bandwidthMeter, readTimeoutMs);
     }
 
     @SuppressWarnings("deprecation")
@@ -274,14 +283,18 @@ public class ExoMediaSourceFactory {
     /**
      * Use OkHttp for networking
      */
-    private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpManager.instance().getClient(), USER_AGENT,
+    private HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter, int readTimeoutMs) {
+        OkHttpClient client = OkHttpManager.instance().getClient();
+        if (readTimeoutMs != client.readTimeoutMillis()) {
+            client = client.newBuilder().readTimeout(readTimeoutMs, TimeUnit.MILLISECONDS).build(); // shares the connection pool
+        }
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(client, USER_AGENT,
                 bandwidthMeter);
         addCommonHeaders(dataSourceFactory);
         return dataSourceFactory;
     }
 
-    private HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter, int readTimeoutMs) {
         CronetDataSourceFactory dataSourceFactory =
                 new CronetDataSourceFactory(
                         new CronetEngineWrapper(CronetManager.getEngine(mContext)),
@@ -289,7 +302,7 @@ public class ExoMediaSourceFactory {
                         null,
                         bandwidthMeter,
                         (int) OkHttpManager.getConnectTimeoutMs(),
-                        (int) OkHttpManager.getReadTimeoutMs(),
+                        readTimeoutMs,
                         true,
                         USER_AGENT);
         addCommonHeaders(dataSourceFactory);
@@ -299,10 +312,10 @@ public class ExoMediaSourceFactory {
     /**
      * Use built-in component for networking
      */
-    private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter, int readTimeoutMs) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
                 USER_AGENT, bandwidthMeter, (int) OkHttpManager.getConnectTimeoutMs(),
-                (int) OkHttpManager.getReadTimeoutMs(), true); // allowCrossProtocolRedirects = true
+                readTimeoutMs, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         return dataSourceFactory;
@@ -352,6 +365,7 @@ public class ExoMediaSourceFactory {
 
     public void release() {
         mMediaDataSourceFactory = null;
+        mSabrMediaDataSourceFactory = null;
     }
 
     @NonNull
@@ -361,12 +375,25 @@ public class ExoMediaSourceFactory {
 
     @NonNull
     private SabrChunkSource.Factory getSabrChunkSourceFactory() {
-        return new DefaultSabrChunkSource.Factory(getMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
+        return new DefaultSabrChunkSource.Factory(getSabrMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
     }
 
     @NonNull
     private DashChunkSource.Factory getDashChunkSourceFactory() {
         return new DefaultDashChunkSource.Factory(getMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD);
+    }
+
+    /**
+     * SABR answers within milliseconds when healthy. A media network that doesn't answer
+     * (e.g. an ISP cache node hanging on cache misses) must fail fast, so the chunk source
+     * switches to the alternate network before the buffer runs dry.
+     */
+    private DataSource.Factory getSabrMediaDataSourceFactory() {
+        if (mSabrMediaDataSourceFactory == null) {
+            mSabrMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER, SABR_READ_TIMEOUT_MS);
+        }
+
+        return mSabrMediaDataSourceFactory;
     }
 
     private DataSource.Factory getMediaDataSourceFactory() {
