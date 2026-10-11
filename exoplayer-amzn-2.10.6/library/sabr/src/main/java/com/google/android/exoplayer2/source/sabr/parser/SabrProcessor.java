@@ -663,6 +663,15 @@ public class SabrProcessor {
         return mediaHeader.getStartMs() + mediaHeader.getDurationMs();
     }
 
+    /**
+     * False until a media segment is received for the format (or after {@link #reset(int)}).
+     */
+    public boolean hasSegmentStartTime(int iTag) {
+        MediaHeader mediaHeader = initializedFormats.get(iTag);
+
+        return mediaHeader != null && mediaHeader.getStartMs() != -1;
+    }
+
     public long getSegmentDurationMs(int iTag) {
         MediaHeader mediaHeader = initializedFormats.get(iTag);
 

@@ -125,6 +125,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     @Nullable private final SabrStream sabrStream;
     private final Map<String, String> sabrHeaders;
     private int nexChunkIdx = -1;
+    private long pendingSeekTimeUs = C.TIME_UNSET;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -419,6 +420,22 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
 
         long seekTimeUs = queue.isEmpty() ? loadPositionUs : C.TIME_UNSET;
+        if (sabrStream != null) {
+            if (seekTimeUs != C.TIME_UNSET) {
+                pendingSeekTimeUs = seekTimeUs;
+            } else if (pendingSeekTimeUs != C.TIME_UNSET) {
+                FormatId formatId = formatSelector.getSelectedFormatId();
+                if (sabrStream.hasSegmentStartTime(formatId != null ? formatId.getItag() : -1)) {
+                    pendingSeekTimeUs = C.TIME_UNSET; // the seek landed
+                } else {
+                    // FIX: the seek chunk failed (e.g. retried on an alternate media network) before
+                    // any segment arrived. The stream time is reset to 0 at this point, so without the
+                    // seek target the server would send segments from the start of the video.
+                    Log.w(TAG, "Retrying the seek to " + C.usToMs(pendingSeekTimeUs) + "ms");
+                    seekTimeUs = pendingSeekTimeUs;
+                }
+            }
+        }
         out.chunk =
                 newMediaChunk(
                         representationHolder,
