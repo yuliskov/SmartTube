@@ -450,6 +450,10 @@ public class GeneralData implements ProfileChangeListener {
     }
 
     public boolean isFullscreenModeEnabled() {
+        if (Helpers.isAndroidAuto()) {
+            return false;
+        }
+
         return mIsFullscreenModeEnabled;
     }
 
