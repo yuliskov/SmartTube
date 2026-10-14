@@ -3,7 +3,7 @@
     <string name="header_home">Ev</string>
     <string name="title_search">Axtarış</string>
     <string name="header_subscriptions">Abunəliklər</string>
-    <string name="header_history">İzləmə tarixçəsi</string>
+    <string name="header_history">Tarixçə</string>
     <string name="header_music">Musiqi</string>
     <string name="header_news">Xəbərlər</string>
     <string name="header_gaming">Oyunlar</string>
@@ -13,7 +13,7 @@
     <string name="subscriptions_signin_title">Sevdiyiniz kanallardan son yenilikləri görün</string>
     <string name="subscriptions_signin_subtitle">Abunəliklərinizi görmək üçün daxil olun</string>
     <string name="subscriptions_signin_button_text">DAXİL OL</string>
-    <string name="library_signin_to_show_more">Bəyəndiyiniz, yadda saxladığınız və ya abunə olduğunuz videoları izləyin</string>
+    <string name="library_signin_to_show_more">Bəyəndiyiniz, saxladığınız və ya abunə olduğunuz videoları izləyin</string>
     <string name="library_signin_subtitle">Kitabxananızı görmək üçün daxil olun</string>
     <string name="action_signin">DAXİL OL</string>
     <string name="title_video_formats">Video formatları</string>
@@ -31,7 +31,7 @@
     <string name="option_background_playback_off">Söndürülüb</string>
     <string name="option_background_playback_pip">Pəncərədə pəncərə (PiP)</string>
     <string name="option_background_playback_only_audio">Yalnız audio</string>
-    <string name="playback_settings">Genişləndirilmiş oynatma tənzimləmələri</string>
+    <string name="playback_settings">Qabaqcıl oynatma tənzimləmələri</string>
     <string name="video_speed">Video sürəti</string>
     <string name="resolution_switch">Görüntü imkanını dəyiş</string>
     <string name="video_buffer">Video buferi</string>
@@ -41,7 +41,7 @@
     <string name="video_buffer_size_med">Orta</string>
     <string name="video_buffer_size_high">Yüksək</string>
     <string name="video_buffer_size_highest">Ən yüksək</string>
-    <string name="update_changelog">Dəyişikliklər tarixi</string>
+    <string name="update_changelog">Dəyişikliklər qeydi</string>
     <string name="install_update">Yeniləməni quraşdır</string>
     <string name="section_is_empty">Uups! Burada heç nə yoxdur</string>
     <string name="dialog_add_to_playlist">Pleylistə əlavə et / sil</string>
@@ -63,7 +63,7 @@
     <string name="default_lang">Varsayılan</string>
     <string name="original_lang">Orijinal</string>
     <string name="dialog_select_language">Dil</string>
-    <string name="subtitle_default">Varsayılan</string>
+    <string name="subtitle_default">İlkin</string>
     <string name="subtitle_white_semi_transparent">Yarı şəffaf fonda ağ</string>
     <string name="subtitle_style">Subtitr üslubu</string>
     <string name="subtitle_language">Subtitr dili</string>
@@ -75,13 +75,13 @@
     <string name="donation">İanə</string>
     <string name="dialog_about">Haqqında</string>
     <string name="dialog_player_ui">Video oynadıcı</string>
-    <string name="player_show_ui_on_pause">Pauzada interfeysi göstər</string>
+    <string name="player_show_ui_on_pause">Fasilədə interfeysi göstər</string>
     <string name="player_pause_on_ok">OK düyməsi oynatmanı dayandırır</string>
     <string name="player_ok_button_behavior">OK düyməsinin davranışı</string>
     <string name="player_only_ui">Yalnız interfeys</string>
-    <string name="player_ui_and_pause">İnterfeys və pauza</string>
-    <string name="player_only_pause">Yalnız pauza</string>
-    <string name="player_toggle_speed">Sürəti yandır/söndür</string>
+    <string name="player_ui_and_pause">İnterfeys və fasilə</string>
+    <string name="player_only_pause">Yalnız fasilə</string>
+    <string name="player_toggle_speed">Sürəti aç/bağla</string>
     <string name="check_for_updates">Yeniləmələri yoxla</string>
     <string name="update_not_found">Siz ən son versiyadan istifadə edirsiniz</string>
     <string name="update_in_progress">Gözləyin…</string>
