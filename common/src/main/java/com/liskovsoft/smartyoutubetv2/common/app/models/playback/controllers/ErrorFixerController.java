@@ -2,7 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.annotation.SuppressLint;
 
-import com.google.android.exoplayer2.source.sabr.parser.exceptions.ReloadPlayerResponseError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -23,11 +24,13 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
-    private static final int MAX_RELOAD_PLAYER_RESPONSE_ATTEMPTS = 3;
+    private static final int MAX_ERROR_FIX_ATTEMPTS = 3;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
-    private String mReloadPlayerResponseVideoId;
-    private int mReloadPlayerResponseAttempts;
+    private String mSabrReloadPlayerVideoId;
+    private int mSabrReloadPlayerAttempts;
+    private String mSabrBackoffVideoId;
+    private int mSabrBackoffAttempts;
 
     @Override
     public void onInit() {
@@ -98,7 +101,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onPlay() {
         mBufferingDetector.onStopBuffering();
-        mReloadPlayerResponseAttempts = 0;
+        mSabrReloadPlayerAttempts = 0;
+        mSabrBackoffAttempts = 0;
     }
 
     @Override
@@ -134,7 +138,11 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        if (applyReloadPlayerResponseAction(error)) {
+        if (applySabrReloadPlayerAction(error)) {
+            return;
+        }
+
+        if (applySabrBackoffAction(error)) {
             return;
         }
 
@@ -144,25 +152,30 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     /**
      * SABR server sent ReloadPlayerResponse. It won't send any media until the player response is re-fetched with the token.
      */
-    private boolean applyReloadPlayerResponseAction(Throwable error) {
-        ReloadPlayerResponseError reloadError = findReloadPlayerResponseError(error);
+    private boolean applySabrReloadPlayerAction(Throwable error) {
+        SabrReloadPlayerError reloadError = null;
         Video video = getVideo();
+
+        Throwable cause = error.getCause();
+        if (cause instanceof SabrReloadPlayerError) {
+            reloadError = (SabrReloadPlayerError) cause;
+        }
 
         if (reloadError == null || video == null) {
             return false;
         }
 
-        if (!Helpers.equals(video.videoId, mReloadPlayerResponseVideoId)) {
-            mReloadPlayerResponseVideoId = video.videoId;
-            mReloadPlayerResponseAttempts = 0;
+        if (!Helpers.equals(video.videoId, mSabrReloadPlayerVideoId)) {
+            mSabrReloadPlayerVideoId = video.videoId;
+            mSabrReloadPlayerAttempts = 0;
         }
 
         // Reload doesn't help. Fallback to the common error handling (switch the client).
-        if (++mReloadPlayerResponseAttempts > MAX_RELOAD_PLAYER_RESPONSE_ATTEMPTS) {
+        if (++mSabrReloadPlayerAttempts > MAX_ERROR_FIX_ATTEMPTS) {
             return false;
         }
 
-        String reloadMsg = String.format("SABR requested player response reload. Attempt: %s", mReloadPlayerResponseAttempts);
+        String reloadMsg = String.format("SABR requested player response reload. Attempt: %s", mSabrReloadPlayerAttempts);
         Log.e(TAG, reloadMsg);
         MessageHelpers.showLongMessage(getContext(), reloadMsg);
 
@@ -172,16 +185,41 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         return true;
     }
 
-    private static ReloadPlayerResponseError findReloadPlayerResponseError(Throwable error) {
-        while (error != null) {
-            if (error instanceof ReloadPlayerResponseError) {
-                return (ReloadPlayerResponseError) error;
-            }
+    /**
+     * The server told us to back off, honor it instead of re-requesting
+     * immediately - otherwise we burn exactly the waiting period the server asked for.
+     */
+    private boolean applySabrBackoffAction(Throwable error) {
+        SabrBackoffError backoffError = null;
+        Video video = getVideo();
 
-            error = error.getCause();
+        Throwable cause = error.getCause();
+        if (cause instanceof SabrBackoffError) {
+            backoffError = (SabrBackoffError) cause;
         }
 
-        return null;
+        if (backoffError == null || video == null) {
+            return false;
+        }
+
+        if (!Helpers.equals(video.videoId, mSabrBackoffVideoId)) {
+            mSabrBackoffVideoId = video.videoId;
+            mSabrBackoffAttempts = 0;
+        }
+
+        // Reload doesn't help. Fallback to the common error handling (switch the client).
+        if (++mSabrBackoffAttempts > MAX_ERROR_FIX_ATTEMPTS) {
+            return false;
+        }
+
+        String reloadMsg = String.format("SABR requested back off action. Attempt: %s", mSabrBackoffAttempts);
+        Log.e(TAG, reloadMsg);
+        MessageHelpers.showLongMessage(getContext(), reloadMsg);
+
+        // SABR may hang if the server issues a high backoffTime
+        mVideoLoaderController.restartEngine();
+
+        return true;
     }
 
     private void applyEngineErrorAction(int type, int rendererIndex, Throwable error) {

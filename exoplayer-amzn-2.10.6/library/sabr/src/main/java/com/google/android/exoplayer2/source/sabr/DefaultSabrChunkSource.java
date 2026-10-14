@@ -29,6 +29,8 @@ import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrFragmentedMp4Adapter;
 import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrMatroskaAdapter;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
@@ -460,6 +462,16 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     @Override
     public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e, long blacklistDurationMs) {
         Log.e(TAG, "Chunk load failed: " + e.getMessage());
+
+        // A reload request is not a transport failure. Handing it back as "handled" would
+        // retry the very same request at full speed. Let it fall through to the
+        // LoadErrorHandlingPolicy, which stashes the token and fails the load.
+        Throwable cause = e.getCause();
+        if (cause instanceof SabrReloadPlayerError || cause instanceof SabrBackoffError) {
+            Log.e(TAG, "SABR control signal, letting the error policy decide: " + cause.getMessage());
+            return false;
+        }
+
         if (!cancelable) {
             return false;
         }
