@@ -39,6 +39,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     public void onEngineError(int type, int rendererIndex, Throwable error) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
+        mBufferingDetector.reset();
         runEngineErrorAction(type, rendererIndex, error);
     }
 
