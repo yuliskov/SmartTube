@@ -172,9 +172,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        String reloadMsg = String.format("SABR requested player response reload. Attempt: %s", mSabrErrorFixAttempts);
-        Log.e(TAG, reloadMsg);
-        MessageHelpers.showLongMessage(getContext(), reloadMsg);
+        MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", reloadError.getMessage(), mSabrErrorFixAttempts);
 
         YouTubeServiceManager.instance().reloadPlayerResponse(video.videoId, reloadError.reloadPlaybackToken);
         mVideoLoaderController.reloadVideo();
@@ -209,9 +207,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        String reloadMsg = String.format("SABR requested back off action. Attempt: %s", mSabrErrorFixAttempts);
-        Log.e(TAG, reloadMsg);
-        MessageHelpers.showLongMessage(getContext(), reloadMsg);
+        MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", backoffError.getMessage(), mSabrErrorFixAttempts);
 
         // SABR may hang if the server issues a high backoffTime
         mVideoLoaderController.restartEngine();

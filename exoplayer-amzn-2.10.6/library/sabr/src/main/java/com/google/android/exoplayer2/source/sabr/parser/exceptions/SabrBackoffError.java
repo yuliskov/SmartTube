@@ -8,7 +8,7 @@ public class SabrBackoffError extends SabrStreamError {
     public final int backoffMs;
 
     public SabrBackoffError(int backoffMs) {
-        super(String.format("Server asked to back off for %s ms, no media in this response", backoffMs));
+        super(String.format("Server asked to back off for %s ms", backoffMs));
         this.backoffMs = backoffMs;
     }
 }
