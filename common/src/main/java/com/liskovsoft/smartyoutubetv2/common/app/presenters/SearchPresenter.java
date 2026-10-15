@@ -185,6 +185,12 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                             Log.d(TAG, "Receiving results for '%s'", searchText);
                             for (MediaGroup mediaGroup : mediaGroups) {
                                 VideoGroup group = VideoGroup.from(mediaGroup);
+
+                                // SKIP EMPTY GROUPS
+                                if (group == null || group.getVideos() == null || group.getVideos().isEmpty()) {
+                                    continue;
+                                }
+
                                 startPlayFirstVideo(group);
                                 getView().updateSearch(group);
                                 mBrowseProcessor.process(group);
@@ -225,6 +231,12 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 .subscribe(
                         continueMediaGroup -> {
                             VideoGroup newGroup = VideoGroup.from(group, continueMediaGroup);
+
+                            // SKIP EMPTY GROUPS
+                            if (newGroup == null || newGroup.getVideos() == null || newGroup.getVideos().isEmpty()) {
+                                return;
+                            }
+
                             getView().updateSearch(newGroup);
                             mBrowseProcessor.process(newGroup);
                         },
