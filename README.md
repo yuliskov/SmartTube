@@ -158,6 +158,8 @@ To cast videos from your phone (or other devices), you must link that device to 
 
 Due to technical limitations, you need to open the app on the TV before casting; SmartTube cannot automatically wake up the TV.
 
+If you want sharing from your phone to also wake up the TV and launch SmartTube, you can use the third-party app [TubeBeam](https://github.com/jagjordi/tubebeam). It adds a _Send to TV_ entry to Android's share sheet and sends the link to the TV over ADB instead of casting (requires _USB debugging_ / _Network debugging_ to be enabled in the TV's developer options).
+
 
 ### Picture-in-Picture (PiP)
 
