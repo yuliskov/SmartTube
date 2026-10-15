@@ -79,7 +79,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //mVideoLoaderController.restartEngine();
 
             // SABR may hang if the server issues a high backoffTime
-            mVideoLoaderController.restartEngine();
+            mVideoLoaderController.reloadVideo();
         }
     }
 
@@ -210,7 +210,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", backoffError.getMessage(), mSabrErrorFixAttempts);
 
         // SABR may hang if the server issues a high backoffTime
-        mVideoLoaderController.restartEngine();
+        mVideoLoaderController.reloadVideo();
 
         return true;
     }
@@ -235,7 +235,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             } else {
-                lowerVideoQuality(); // NOTE: restart engine is required after lower the quality
+                lowerVideoQuality(); // NOTE: restart engine required
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
@@ -299,7 +299,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
                 // IllegalStateException: Buffer too small (5242880 < 7208383)
                 // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
                 // This will change current format to 'Disabled'. Do restartEngine() instead.
-                lowerVideoQuality();
+                lowerVideoQuality(); // NOTE: restart engine required
             }
         }
 
