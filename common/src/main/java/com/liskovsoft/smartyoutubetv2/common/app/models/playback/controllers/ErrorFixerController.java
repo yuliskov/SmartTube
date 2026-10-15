@@ -280,7 +280,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             disableSubtitles();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
-            getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
+            getPlayerData().setTempVideoFormat(FormatItem.VIDEO_FHD_AVC_30);
             if (getPlayerTweaksData().isSWDecoderForced()) {
                 getPlayerTweaksData().setSWDecoderForced(false);
             } else {
@@ -492,7 +492,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (videoFormats.size() > nextIdx) {
             FormatItem formatItem = videoFormats.get(nextIdx);
-            getPlayer().setFormat(formatItem);
             // This helps to persist the format between engine restart
             getPlayerData().setTempVideoFormat(formatItem);
         }
