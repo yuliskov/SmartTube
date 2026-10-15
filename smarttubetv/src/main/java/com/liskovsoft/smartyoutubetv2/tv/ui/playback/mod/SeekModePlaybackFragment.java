@@ -10,7 +10,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
  * Disables this behavior when seeking: <em>Show or hide other rows other than PlaybackRow.</em>
  */
 public class SeekModePlaybackFragment extends EventsOverridePlaybackFragment {
-    private static final String TAG = SeekModePlaybackFragment.class.getSimpleName();
     private static final int START_FADE_OUT = 1;
     private PlaybackSeekUi.Client mSeekUiClient2;
     private boolean mInSeek;

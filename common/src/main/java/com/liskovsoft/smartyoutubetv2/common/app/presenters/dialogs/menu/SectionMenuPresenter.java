@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class SectionMenuPresenter extends BaseMenuPresenter {
-    private static final String TAG = SectionMenuPresenter.class.getSimpleName();
     private final AppDialogPresenter mDialogPresenter;
     private Video mVideo;
     private BrowseSection mSection;

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGridFragment extends GridFragment implements VideoSection {
-    private static final String TAG = VideoGridFragment.class.getSimpleName();
     private static final int RESTORE_MAX_SIZE = 10_000;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();

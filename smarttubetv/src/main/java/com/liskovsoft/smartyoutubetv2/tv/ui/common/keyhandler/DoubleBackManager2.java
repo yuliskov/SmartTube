@@ -6,7 +6,6 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class DoubleBackManager2 {
-    private static final String TAG = DoubleBackManager2.class.getSimpleName();
     private static final int DEFAULT_REPEAT_COUNT = 2;
     private final Context mContext;
     private int mRepeatCount;

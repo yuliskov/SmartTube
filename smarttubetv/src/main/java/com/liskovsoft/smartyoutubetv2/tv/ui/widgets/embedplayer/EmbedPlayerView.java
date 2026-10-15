@@ -34,7 +34,6 @@ import java.util.List;
  * https://chatgpt.com/c/6806b729-1ab0-8010-94f0-56f6b71cdbfb
  */
 public class EmbedPlayerView extends PlayerView implements PlaybackView {
-    private static final String TAG = EmbedPlayerView.class.getSimpleName();
     public static final int QUALITY_LOW = 0;
     public static final int QUALITY_NORMAL = 1;
     private SimpleExoPlayer mPlayer;

@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiVideoGridFragment extends MultiGridFragment implements VideoSection {
-    private static final String TAG = MultiVideoGridFragment.class.getSimpleName();
     private HeaderVideoGroupObjectAdapter mGridAdapter1;
     private VideoGroupObjectAdapter mGridAdapter2;
     private final List<VideoGroup> mPendingUpdates1 = new ArrayList<>();
