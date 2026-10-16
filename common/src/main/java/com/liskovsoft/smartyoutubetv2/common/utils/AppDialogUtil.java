@@ -80,6 +80,9 @@ public class AppDialogUtil {
     private static final int PLAYER_ENGINE_ID = 147;
     private static final int IGNORE_DURATION_ID = 148;
     private static final int SLEEP_TIMER_ID = 149;
+    private static final int VOLUME_NORMALIZATION_MODE_ID = 150;
+    private static final int VOLUME_NORMALIZATION_INTENSITY_ID = 151;
+    private static final int VOLUME_NORMALIZATION_CHANNEL_ID = 152;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -486,6 +489,85 @@ public class AppDialogUtil {
         }
 
         return OptionCategory.from(AUDIO_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createVolumeNormalizationModeCategory(Context context, Runnable onSetCallback) {
+        PlayerData playerData = PlayerData.instance(context);
+        List<OptionItem> options = new ArrayList<>();
+
+        int[][] modes = {
+                {R.string.volume_normalization_off, PlayerData.VOLUME_NORMALIZATION_OFF},
+                {R.string.volume_normalization_global, PlayerData.VOLUME_NORMALIZATION_GLOBAL},
+                {R.string.volume_normalization_selected_channels, PlayerData.VOLUME_NORMALIZATION_SELECTED_CHANNELS}
+        };
+
+        for (int[] mode : modes) {
+            options.add(UiOptionItem.from(
+                    context.getString(mode[0]),
+                    option -> {
+                        playerData.setVolumeNormalizationMode(mode[1]);
+                        onSetCallback.run();
+                    },
+                    playerData.getVolumeNormalizationMode() == mode[1]));
+        }
+
+        return OptionCategory.from(
+                VOLUME_NORMALIZATION_MODE_ID,
+                OptionCategory.TYPE_RADIO_LIST,
+                context.getString(R.string.volume_normalization),
+                options);
+    }
+
+    public static OptionCategory createVolumeNormalizationIntensityCategory(Context context, Runnable onSetCallback) {
+        PlayerData playerData = PlayerData.instance(context);
+        List<OptionItem> options = new ArrayList<>();
+
+        int[][] intensities = {
+                {R.string.volume_normalization_soft, PlayerData.VOLUME_NORMALIZATION_SOFT},
+                {R.string.volume_normalization_balanced, PlayerData.VOLUME_NORMALIZATION_BALANCED},
+                {R.string.volume_normalization_strong, PlayerData.VOLUME_NORMALIZATION_STRONG}
+        };
+
+        for (int[] intensity : intensities) {
+            options.add(UiOptionItem.from(
+                    context.getString(intensity[0]),
+                    option -> {
+                        playerData.setVolumeNormalizationIntensity(intensity[1]);
+                        onSetCallback.run();
+                    },
+                    playerData.getVolumeNormalizationIntensity() == intensity[1]));
+        }
+
+        return OptionCategory.from(
+                VOLUME_NORMALIZATION_INTENSITY_ID,
+                OptionCategory.TYPE_RADIO_LIST,
+                context.getString(R.string.volume_normalization_intensity),
+                options);
+    }
+
+    public static OptionCategory createVolumeNormalizationChannelCategory(Context context, Video video, Runnable onSetCallback) {
+        if (video == null || video.getChannelIdOrName() == null) {
+            return null;
+        }
+
+        PlayerData playerData = PlayerData.instance(context);
+        String channelId = video.getChannelIdOrName();
+        String channelName = video.getAuthor() != null ? video.getAuthor() : channelId;
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                channelName,
+                option -> {
+                    playerData.setVolumeNormalizationEnabledForChannel(channelId, option.isSelected());
+                    onSetCallback.run();
+                },
+                playerData.isVolumeNormalizationEnabledForChannel(channelId)));
+
+        return OptionCategory.from(
+                VOLUME_NORMALIZATION_CHANNEL_ID,
+                OptionCategory.TYPE_CHECKBOX_LIST,
+                context.getString(R.string.volume_normalization_this_channel),
+                options);
     }
 
     public static OptionCategory createPitchEffectCategory(Context context) {
