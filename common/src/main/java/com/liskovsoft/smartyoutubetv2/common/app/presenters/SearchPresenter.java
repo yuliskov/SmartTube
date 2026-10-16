@@ -64,7 +64,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        if (!AccountsData.instance(getContext()).isPasswordAccepted()) {
+        AccountsData accountsData = AccountsData.instance(getContext());
+        if (!accountsData.isPasswordAccepted() || accountsData.isContentBlocked()) {
             getView().finishReally();
             return;
         }

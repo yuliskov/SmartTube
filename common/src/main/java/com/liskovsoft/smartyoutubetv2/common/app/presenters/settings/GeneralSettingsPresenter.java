@@ -20,6 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.provide
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -564,6 +566,38 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     BrowsePresenter.instance(getContext()).updateSections();
                 },
                 AppPrefs.instance(getContext()).isMultiProfilesEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_none_profile),
+                option -> {
+                    AccountsData.instance(getContext()).setHideNoneProfileEnabled(option.isSelected());
+                    AccountSelectionPresenter.instance(getContext()).ensureAccountSelected();
+                },
+                AccountsData.instance(getContext()).isHideNoneProfileEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_content_if_not_signed),
+                option -> {
+                    AccountsData.instance(getContext()).setHideContentIfNotSignedEnabled(option.isSelected());
+                    BrowsePresenter.instance(getContext()).updateSections();
+                },
+                AccountsData.instance(getContext()).isHideContentIfNotSignedEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.protect_account_with_pin),
+                option -> {
+                    AccountsData accountsData = AccountsData.instance(getContext());
+                    if (MediaServiceManager.instance().getSelectedAccount() == null) {
+                        // Per account option: nothing to apply to
+                        MessageHelpers.showMessage(getContext(), R.string.pin_requires_account);
+                        settingsPresenter.closeDialog();
+                        return;
+                    }
+                    accountsData.setPinEnabled(option.isSelected());
+                    String password = accountsData.getAccountPassword();
+                    if (option.isSelected() && password != null && !AccountsData.isValidPin(password)) {
+                        // Existing text password stays valid until it is replaced with a PIN
+                        MessageHelpers.showLongMessage(getContext(), R.string.pin_replace_password_hint);
+                    }
+                },
+                AccountsData.instance(getContext()).isPinEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.protect_settings_with_password),
                 option -> {
