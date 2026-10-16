@@ -487,6 +487,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setQueueRespectsPlaybackMode(option.isSelected()),
                 mPlayerTweaksData.isQueueRespectsPlaybackMode()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.auto_hide_ui_when_paused),
+                getContext().getString(R.string.auto_hide_ui_when_paused_desc),
+                option -> mPlayerTweaksData.setAutoHideUiWhenPausedEnabled(option.isSelected()),
+                mPlayerTweaksData.isAutoHideUiWhenPausedEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
