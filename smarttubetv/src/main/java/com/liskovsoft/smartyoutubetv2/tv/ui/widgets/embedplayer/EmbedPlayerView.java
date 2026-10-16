@@ -197,6 +197,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public void showVolume(int volume) {
+
+    }
+
+    @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
 
     }

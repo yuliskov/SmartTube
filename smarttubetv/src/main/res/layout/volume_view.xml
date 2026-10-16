@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Contents of VolumeView. Shown briefly on volume up/down, replaces the old toast. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar
+        android:id="@+id/volume_seek_bar"
+        android:layout_width="240sp"
+        android:layout_height="12sp"
+        android:layout_gravity="center_vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <TextView
+        android:id="@+id/volume_label"
+        android:layout_width="60sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="14sp"
+        android:gravity="right"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        tools:text="100%"/>
+
+</merge>
