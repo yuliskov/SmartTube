@@ -183,6 +183,9 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    // Pure Java QR generation. Keep 3.3.0 for compatibility with Android API 17/18.
+    implementation 'com.google.zxing:core:3.3.0'
+
     implementation 'androidx.leanback:leanback:' + leanbackXVersion
     implementation 'androidx.leanback:leanback-preference:' + leanbackXVersion
     implementation 'androidx.recommendation:recommendation:' + leanbackXVersion
