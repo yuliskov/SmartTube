@@ -31,6 +31,7 @@
         android:paddingLeft="150sp"
         android:paddingRight="150sp"/>
 
+
     <LinearLayout
         android:id="@+id/live_chat_wrapper"
         android:layout_width="300sp"
