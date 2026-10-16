@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -144,7 +145,8 @@ public class BackupAndRestoreHelper implements OnResult {
                 uri = data.getClipData().getItemAt(0).getUri();
             }
 
-            unpackTempZip(uri, () -> mOnSuccess.run(), null);
+            unpackTempZip(uri, () -> mOnSuccess.run(),
+                    error -> MessageHelpers.showLongMessage(mContext, "Failed to restore backup: " + error.getMessage()));
         }
     }
 
@@ -168,28 +170,8 @@ public class BackupAndRestoreHelper implements OnResult {
         );
     }
 
-    public void unpackTempZip(File tempZip) {
-        if (!tempZip.exists()) {
-            return;
-        }
-
-        // Target folder: /Android/media/<package>/data
-        File mediaDir = FileHelpers.getExternalMediaDirectory(mContext);
-        File dataDir = new File(mediaDir, "data");
-
-        // Remove old data
-        if (dataDir.exists()) FileHelpers.delete(dataDir);
-
-        if (ZipHelper2.hasRootDir(tempZip, "data")) {
-            // Unpack ZIP with data folder
-            ZipHelper2.unzip(tempZip, mediaDir);
-        } else {
-            // Seems we've packed the contents of the data dir not data itself
-            ZipHelper2.unzip(tempZip, dataDir);
-        }
-
-        // Delete the temporary ZIP
-        tempZip.delete();
+    public void unpackTempZip(File tempZip) throws IOException {
+        BackupArchiveImporter.importZip(tempZip, FileHelpers.getExternalMediaDirectory(mContext));
     }
 
     private void unpackTempZip(Uri zipUri, Runnable onSuccess, OnError onError) {
@@ -212,7 +194,7 @@ public class BackupAndRestoreHelper implements OnResult {
         }
     }
 
-    private void unpackTempZip(Uri zipUri) {
+    private void unpackTempZip(Uri zipUri) throws IOException {
         if (zipUri == null) {
             return;
         }
@@ -252,23 +234,24 @@ public class BackupAndRestoreHelper implements OnResult {
         }
     }
 
-    private void copyUriToFile(Uri uri, File outFile) {
-        try {
-            InputStream in = mContext.getContentResolver().openInputStream(uri);
-            OutputStream out = new FileOutputStream(outFile);
-
+    private void copyUriToFile(Uri uri, File outFile) throws IOException {
+        try (InputStream in = mContext.getContentResolver().openInputStream(uri);
+             OutputStream out = new FileOutputStream(outFile)) {
+            if (in == null) throw new IOException("Cannot open backup archive");
             byte[] buffer = new byte[8192];
-            int len;
-            while ((len = in.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
+            long copied = 0;
+            int length;
+            while ((length = in.read(buffer)) != -1) {
+                copied += length;
+                if (copied > ZipHelper2.MAX_ZIP_BYTES) {
+                    throw new IOException("Backup archive is too large");
+                }
+                out.write(buffer, 0, length);
             }
-
-            in.close();
-            out.close();
-
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Failed to copyUriToFile", e);
+            outFile.delete();
+            if (e instanceof IOException) throw (IOException) e;
+            throw new IOException("Cannot copy backup archive", e);
         }
     }
 
