@@ -9,6 +9,9 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.youtubeapi.browse.v2.BrowseApiHelper;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -454,7 +457,8 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedSuggestion(video)) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video)
+                || isWatchedSuggestion(video) || isWatchedHidden(video)) {
             return;
         }
 
@@ -473,6 +477,56 @@ public class VideoGroup {
         }
 
         mVideos.add(idx, video);
+    }
+
+    private boolean isWatchedHidden(Video video) {
+        if (video.videoId == null || !isWatchedFilterEnabled(video)) {
+            return false;
+        }
+
+        boolean isNotification = getType() == MediaGroup.TYPE_NOTIFICATIONS;
+        if (video.isLive && !isNotification) {
+            return false;
+        }
+
+        // Notifications hide any watched length; other pages match the API's watched threshold.
+        float threshold = isNotification ? 0 : 80;
+        if (video.percentWatched > threshold) {
+            return true;
+        }
+
+        VideoStateService stateService = VideoStateService.instance(null);
+        State state = stateService != null ? stateService.getByVideoId(video.videoId) : null;
+        if (state == null) {
+            return false;
+        }
+
+        if (isNotification) {
+            return state.positionMs > 0;
+        }
+
+        long durationMs = state.durationMs != -1 ? state.durationMs : video.getDurationMs();
+        return durationMs > 0 && state.positionMs / (durationMs / 100f) > threshold;
+    }
+
+    private boolean isWatchedFilterEnabled(Video video) {
+        MediaServiceData data = MediaServiceData.instance();
+        switch (getType()) {
+            case MediaGroup.TYPE_SUBSCRIPTIONS:
+                return data.isContentHidden(MediaServiceData.CONTENT_WATCHED_SUBSCRIPTIONS);
+            case MediaGroup.TYPE_HOME:
+                return data.isContentHidden(MediaServiceData.CONTENT_WATCHED_HOME);
+            case MediaGroup.TYPE_NOTIFICATIONS:
+                return GeneralData.instance(GlobalPreferences.context()).isHideWatchedFromNotificationsEnabled();
+            case MediaGroup.TYPE_CHANNEL:
+            case MediaGroup.TYPE_CHANNEL_UPLOADS:
+            case MediaGroup.TYPE_SUGGESTIONS:
+                boolean isWatchLater = BrowseApiHelper.WATCH_LATER_PLAYLIST.equals(video.playlistId)
+                        || (mMediaGroup != null && BrowseApiHelper.WATCH_LATER_CHANNEL_ID.equals(mMediaGroup.getChannelId()));
+                return isWatchLater && data.isContentHidden(MediaServiceData.CONTENT_WATCHED_WATCH_LATER);
+            default:
+                return false;
+        }
     }
 
     private boolean isChannelBlocked(Video video) {
