@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Color scheme overlays of the modern interface are looked up by name (MainUIData.ColorScheme) -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@style/ThemeOverlay.Modern.Scheme*" />

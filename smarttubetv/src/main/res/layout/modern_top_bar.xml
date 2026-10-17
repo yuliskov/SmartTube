@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/modern_topbar_top">
+
+    <LinearLayout
+        android:id="@+id/modern_top_bar_search_group"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/modern_search_box_height"
+        android:layout_marginStart="@dimen/modern_content_left"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/modern_top_bar_mic"
+            android:layout_width="@dimen/modern_search_mic_size"
+            android:layout_height="@dimen/modern_search_mic_size"
+            android:background="@drawable/modern_mic_circle"
+            android:contentDescription="@string/settings_search"
+            android:duplicateParentState="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="9dp"
+            android:src="@drawable/modern_ic_mic"
+            app:tint="@color/modern_top_bar_content" />
+
+        <TextView
+            android:id="@+id/modern_top_bar_search"
+            android:layout_width="@dimen/modern_search_box_width"
+            android:layout_height="@dimen/modern_search_box_height"
+            android:layout_marginStart="@dimen/modern_search_box_gap"
+            android:background="@drawable/modern_search_pill"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/settings_search"
+            android:textColor="@color/modern_search_text"
+            android:textSize="@dimen/modern_search_field_text"
+            android:textStyle="bold" />
+
+        <!-- Optional (top buttons setting): language and country -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/modern_top_bar_language"
+            android:layout_width="@dimen/modern_search_mic_size"
+            android:layout_height="@dimen/modern_search_mic_size"
+            android:layout_marginStart="@dimen/modern_search_box_gap"
+            android:background="@drawable/modern_mic_circle"
+            android:contentDescription="@string/settings_language_country"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="9dp"
+            android:src="@drawable/modern_ic_language"
+            app:tint="@color/modern_top_bar_content"
+            android:visibility="gone" />
+
+        <!-- While a video plays in the background: back to it -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/modern_top_bar_background_video"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/modern_search_box_height"
+            android:layout_marginStart="@dimen/modern_search_box_gap"
+            android:background="@drawable/modern_search_pill"
+            app:drawableStartCompat="@drawable/modern_ic_picture_in_picture"
+            android:drawablePadding="8dp"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:maxWidth="@dimen/modern_search_box_width"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="@color/modern_search_text"
+            android:textSize="@dimen/modern_search_field_text"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- End side: optional clock (general settings) next to the app logo.
+         Height of the text, never a fixed one: fonts differ between devices. Its top is the top of the search bar:
+         nothing goes above it, the TVs that crop the screen edges (overscan) cut what's higher -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/modern_logo_margin_end"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Time over date, like the classic clock -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/modern_clock_logo_gap"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+                android:id="@+id/modern_top_bar_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/modern_text_primary"
+                android:textSize="@dimen/modern_clock_time_text"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+                android:id="@+id/modern_top_bar_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/modern_clock_date_gap"
+                android:includeFontPadding="false"
+                android:textColor="@color/modern_text_primary"
+                android:textSize="@dimen/modern_clock_date_text"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/modern_top_bar_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/modern_logo_height"
+            android:adjustViewBounds="true"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/app_logo_semi_red" />
+    </LinearLayout>
+</FrameLayout>

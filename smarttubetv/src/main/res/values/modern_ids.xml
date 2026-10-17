@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="modern_browse_container" type="id" />
+    <item name="modern_action_id" type="id" />
+    <item name="modern_action_label" type="id" />
+    <item name="modern_action_group" type="id" />
+    <item name="modern_button_text" type="id" />
+    <item name="modern_transport_order" type="id" />
+    <item name="modern_play_pause" type="id" />
+    <item name="modern_edge_fade" type="id" />
+</resources>

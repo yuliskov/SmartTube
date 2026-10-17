@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     public void show() {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
+        appendModernInterface(settingsPresenter);
         appendTopButtonsCategory(settingsPresenter);
         appendColorScheme(settingsPresenter);
         if (Build.VERSION.SDK_INT > 19) {
@@ -67,6 +69,18 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), mOnFinish);
+    }
+
+    /**
+     * The modern interface is an addition: off, the classic interface works as always.
+     */
+    private void appendModernInterface(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.modern_interface),
+                option -> {
+                    mMainUIData.setModernUiEnabled(option.isSelected());
+                    Utils.restartTheApp(getContext());
+                },
+                mMainUIData.isModernUiEnabled()));
     }
 
     private void appendTopButtonsCategory(AppDialogPresenter settingsPresenter) {
@@ -152,7 +166,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 mMainUIData.isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         
         options.add(multilineTitle);
-        options.add(multilineSubtitle);
+        // Modern tiles always show the channel and the views / date on two lines
+        if (!mMainUIData.isModernUiEnabled()) {
+            options.add(multilineSubtitle);
+        }
         if (Build.VERSION.SDK_INT > 19) {
             options.add(autoScrolledTitle);
         }

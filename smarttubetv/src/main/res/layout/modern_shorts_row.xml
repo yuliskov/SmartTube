@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/modern_shorts_row_height"
+    android:layout_marginTop="@dimen/modern_shorts_row_gap"
+    android:background="@drawable/modern_suggestion_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/modern_shorts_padding"
+    android:paddingEnd="@dimen/modern_shorts_padding">
+
+    <ImageView
+        android:id="@+id/modern_shorts_row_icon"
+        android:layout_width="@dimen/modern_rail_avatar_size"
+        android:layout_height="@dimen/modern_rail_avatar_size"
+        android:layout_marginEnd="@dimen/modern_shorts_padding"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/modern_shorts_row_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_rail_label_size" />
+</LinearLayout>

@@ -22,12 +22,14 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.UUID;
 
 public class ExoPlayerInitializer {
+    private final boolean mIsFastStart;
     private final int mMaxBufferBytes;
     private final PlayerData mPlayerData;
     private final PlayerTweaksData mPlayerTweaksData;
@@ -38,6 +40,7 @@ public class ExoPlayerInitializer {
 
     public ExoPlayerInitializer(Context context) {
         mPlayerData = PlayerData.instance(context);
+        mIsFastStart = MainUIData.instance(context).isModernUiEnabled();
         mPlayerTweaksData = PlayerTweaksData.instance(context);
 
         long deviceRam = DeviceHelpers.getDeviceRam(context);
@@ -109,7 +112,8 @@ public class ExoPlayerInitializer {
         // Default values
         int minBufferMs = 30_000;
         int maxBufferMs = 30_000;
-        int bufferForPlaybackMs = 2_500;
+        // Modern interface: start like the reference app, after one second of media
+        int bufferForPlaybackMs = mIsFastStart ? 1_000 : 2_500;
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {

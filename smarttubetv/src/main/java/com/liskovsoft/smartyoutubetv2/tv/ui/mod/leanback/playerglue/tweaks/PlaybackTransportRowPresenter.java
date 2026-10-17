@@ -914,6 +914,24 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
     };
 
+    private int mRowLayoutId = com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row;
+
+    /**
+     * Replace the row and control bar layouts. Views are bound by id, so a layout must keep the original ids.
+     */
+    public void setLayouts(int rowLayoutId, int controlBarLayoutId) {
+        mRowLayoutId = rowLayoutId;
+        mPlaybackControlsPresenter.setLayoutResourceId(controlBarLayoutId);
+        mSecondaryControlsPresenter.setLayoutResourceId(controlBarLayoutId);
+    }
+
+    /**
+     * Max number of controls of the secondary bar (default 12).
+     */
+    public void setMaxSecondaryControls(int maxControls) {
+        mSecondaryControlsPresenter.setMaxControls(maxControls);
+    }
+
     public PlaybackTransportRowPresenter() {
         setHeaderPresenter(null);
         setSelectEffectEnabled(false);
@@ -1037,8 +1055,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     @Override
     protected RowPresenter.ViewHolder createRowViewHolder(ViewGroup parent) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(
-                com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(mRowLayoutId, parent, false);
         ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
         initRow(vh);
         return vh;

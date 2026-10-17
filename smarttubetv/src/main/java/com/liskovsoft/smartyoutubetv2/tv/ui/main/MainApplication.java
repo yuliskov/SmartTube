@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.app.Activity;
 import android.os.Build.VERSION;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.WebBrowserView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.NetworkData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -30,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivityOpaque;
+import com.liskovsoft.smartyoutubetv2.tv.ui.modern.ModernActivityResolver;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
@@ -100,20 +103,22 @@ public class MainApplication extends MultiDexApplication implements Configuratio
 
     private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
+        ModernActivityResolver resolver = new ModernActivityResolver(MainUIData.instance(this).isModernUiEnabled());
 
         Class<? extends AppDialogActivity> dialogClass = getDialogClass();
+        Class<? extends Activity> root = resolver.resolveRoot(BrowseActivity.class);
 
-        viewManager.setRoot(BrowseActivity.class);
-        viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
-        viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
-        viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppDialogView.class, dialogClass, BrowseActivity.class);
-        viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
-        viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
-        viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
-        viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
-        viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
-        viewManager.register(WebBrowserView.class, WebBrowserActivity.class, BrowseActivity.class);
+        viewManager.setRoot(root);
+        viewManager.register(SplashView.class, resolver.resolve(SplashView.class, SplashActivity.class)); // no parent, because it's root activity
+        viewManager.register(BrowseView.class, resolver.resolve(BrowseView.class, BrowseActivity.class)); // no parent, because it's root activity
+        viewManager.register(PlaybackView.class, resolver.resolve(PlaybackView.class, PlaybackActivity.class), root);
+        viewManager.register(AppDialogView.class, resolver.resolve(AppDialogView.class, dialogClass), root);
+        viewManager.register(SearchView.class, resolver.resolve(SearchView.class, SearchTagsActivity.class), root);
+        viewManager.register(SignInView.class, resolver.resolve(SignInView.class, SignInActivity.class), root);
+        viewManager.register(AddDeviceView.class, resolver.resolve(AddDeviceView.class, AddDeviceActivity.class), root);
+        viewManager.register(ChannelView.class, resolver.resolve(ChannelView.class, ChannelActivity.class), root);
+        viewManager.register(ChannelUploadsView.class, resolver.resolve(ChannelUploadsView.class, ChannelUploadsActivity.class), root);
+        viewManager.register(WebBrowserView.class, resolver.resolve(WebBrowserView.class, WebBrowserActivity.class), root);
     }
 
     /**
