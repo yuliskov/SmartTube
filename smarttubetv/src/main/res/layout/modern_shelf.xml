@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tiles may draw the focus ring outside of themselves (row clipChildren=false), the row itself is clipped to its bounds -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/modern_shelf_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/modern_shelf_header_line_height"
+        android:layout_marginStart="@dimen/modern_content_left"
+        android:layout_marginTop="@dimen/modern_shelf_header_top"
+        android:layout_marginBottom="@dimen/modern_shelf_header_bottom"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_header_unfocused"
+        android:textSize="@dimen/modern_shelf_header_size" />
+
+    <androidx.leanback.widget.HorizontalGridView
+        android:id="@+id/modern_shelf_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/modern_tile_top_margin" />
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/modern_subs_column_width"
+    android:layout_height="@dimen/modern_subs_item_height"
+    android:background="@drawable/modern_suggestion_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/modern_search_suggestion_icon_start"
+    android:paddingEnd="@dimen/modern_search_suggestion_icon_start">
+
+    <ImageView
+        android:id="@+id/modern_subs_avatar"
+        android:layout_width="@dimen/modern_subs_avatar"
+        android:layout_height="@dimen/modern_subs_avatar"
+        android:layout_marginEnd="@dimen/modern_search_suggestion_icon_start"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no" />
+
+    <TextView
+        android:id="@+id/modern_subs_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_rail_label_size" />
+</LinearLayout>

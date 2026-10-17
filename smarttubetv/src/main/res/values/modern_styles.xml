@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Color scheme attributes: default (Dark Grey) values, the other schemes are overlays in modern_schemes.xml -->
+    <style name="Theme.Modern" parent="App.Theme.Leanback.Browse">
+        <item name="modernBackground">@color/modern_bg</item>
+        <item name="modernBrand">@color/modern_bg</item>
+        <item name="modernAccent">@color/modern_progress</item>
+        <item name="modernLogo">@mipmap/app_logo_semi_red</item>
+        <item name="modernPlayerScrimControls">@drawable/modern_player_scrim_controls</item>
+        <item name="modernPlayerScrimSuggestions">@drawable/modern_player_scrim_suggestions</item>
+        <item name="modernChannelScrim">@drawable/modern_channel_scrim</item>
+        <item name="android:windowBackground">?attr/modernBackground</item>
+        <item name="android:colorBackground">?attr/modernBackground</item>
+        <!-- Drawn by the background manager over the window -->
+        <item name="shelfBackground">?attr/modernBackground</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/modern_text_primary</item>
+    </style>
+
+    <style name="Theme.Modern.Player" parent="App.Theme.Leanback.Player">
+        <item name="modernBackground">@color/modern_bg</item>
+        <item name="modernAccent">@color/modern_progress</item>
+        <item name="modernPlayerScrimControls">@drawable/modern_player_scrim_controls</item>
+        <item name="modernPlayerScrimSuggestions">@drawable/modern_player_scrim_suggestions</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="shelfBackground">?attr/modernBackground</item>
+        <item name="detailsDescriptionTitleStyle">@style/Modern.Player.Title</item>
+        <item name="detailsDescriptionSubtitleStyle">@style/Modern.Player.Meta</item>
+        <item name="detailsDescriptionBodyStyle">@style/Modern.Player.Meta</item>
+        <item name="playbackControlsTimeStyle">@style/Modern.Player.Time</item>
+        <item name="rowHeaderStyle">@style/Modern.Player.RowHeader</item>
+    </style>
+
+    <style name="Modern.Player.RowHeader" parent="Widget.Leanback.Row.Header">
+        <item name="android:textSize">@dimen/modern_shelf_header_size</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/modern_text_header_unfocused</item>
+    </style>
+
+    <style name="Modern.Player.Title" parent="">
+        <item name="android:textSize">@dimen/modern_player_title_size</item>
+        <item name="android:textColor">@color/modern_text_primary</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Modern.Player.Meta" parent="">
+        <item name="android:textSize">@dimen/modern_player_meta_size</item>
+        <item name="android:textColor">@color/modern_text_primary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginTop">@dimen/modern_player_meta_top</item>
+    </style>
+
+    <style name="Modern.Player.Time" parent="">
+        <item name="android:textSize">@dimen/modern_player_time_size</item>
+        <item name="android:textColor">@color/modern_text_secondary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Clock and quality info on top of the video: same size and color as the metadata line under the title -->
+    <style name="Modern.Player.Info" parent="Modern.Player.Time">
+        <item name="android:textSize">@dimen/modern_tile_meta_size</item>
+        <item name="android:textColor">@color/modern_text_primary</item>
+    </style>
+
+    <!-- Dialogs as side panels -->
+    <style name="Theme.Modern.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="preferenceTheme">@style/Modern.PreferenceThemeOverlay</item>
+        <item name="android:selectableItemBackground">@drawable/modern_pref_item_bg</item>
+        <item name="modernBackground">@color/modern_bg</item>
+        <item name="modernAccent">@color/modern_progress</item>
+        <item name="modernPrefPanelBackground">?attr/modernBackground</item>
+        <item name="modernPrefTitleBackground">?attr/modernBackground</item>
+        <item name="modernPrefItemTextColor">@color/modern_pill_text</item>
+        <item name="modernPrefRadioButton">@drawable/modern_pref_radio</item>
+        <item name="modernPrefCheckBox">@drawable/modern_pref_checkbox</item>
+        <item name="modernPrefChatBubble">@color/modern_white_10</item>
+        <item name="modernPrefChatBubbleFocused">@color/modern_white_20</item>
+        <item name="modernPrefDuplicateState">true</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/modern_text_primary</item>
+        <item name="defaultBrandColor">?attr/modernBackground</item>
+    </style>
+
+    <style name="Modern.PreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Leanback">
+        <item name="preferenceStyle">@style/Modern.Preference</item>
+        <item name="preferenceScreenStyle">@style/Modern.Preference</item>
+        <item name="dialogPreferenceStyle">@style/Modern.Preference.Dialog</item>
+        <item name="preferenceCategoryStyle">@style/Modern.Preference.Category</item>
+        <item name="checkBoxPreferenceStyle">@style/Modern.Preference.CheckBox</item>
+        <item name="switchPreferenceStyle">@style/Modern.Preference.Switch</item>
+        <item name="switchPreferenceCompatStyle">@style/Modern.Preference.SwitchCompat</item>
+    </style>
+
+    <style name="Modern.Preference" parent="LeanbackPreference">
+        <item name="android:layout">@layout/modern_preference</item>
+    </style>
+
+    <style name="Modern.Preference.Dialog" parent="LeanbackPreference.DialogPreference">
+        <item name="android:layout">@layout/modern_preference</item>
+    </style>
+
+    <style name="Modern.Preference.Category" parent="LeanbackPreference.Category">
+        <item name="android:layout">@layout/modern_preference_category</item>
+    </style>
+
+    <style name="Modern.Preference.CheckBox" parent="LeanbackPreference.CheckBoxPreference">
+        <item name="android:layout">@layout/modern_preference</item>
+    </style>
+
+    <style name="Modern.Preference.Switch" parent="LeanbackPreference.SwitchPreference">
+        <item name="android:layout">@layout/modern_preference</item>
+    </style>
+
+    <style name="Modern.Preference.SwitchCompat" parent="LeanbackPreference.SwitchPreferenceCompat">
+        <item name="android:layout">@layout/modern_preference</item>
+    </style>
+</resources>

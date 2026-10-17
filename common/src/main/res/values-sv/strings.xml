@@ -756,4 +756,14 @@
     <item quantity="one">%s sekund</item>
     <item quantity="other">%s sekunder</item>
   </plurals>
+    <string name="modern_who_is_watching">Vem tittar?</string>
+    <string name="modern_add_account">Lägg till konto</string>
+    <string name="modern_watch_as_guest">Titta som gäst</string>
+    <string name="modern_interface">Modernt gränssnitt</string>
+    <string name="modern_key_space">Mellanslag</string>
+    <string name="modern_key_clear">Rensa</string>
+    <string name="modern_all">Alla</string>
+    <string name="modern_on">På</string>
+    <string name="modern_off">Av</string>
+    <string name="modern_try_again">Försök igen</string>
 </resources>

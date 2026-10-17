@@ -72,6 +72,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final BrowseProcessorManager mBrowseProcessor;
     private final List<Disposable> mActions;
     private final Runnable mRefreshSection = this::refresh;
+    /**
+     * Modern interface: the section shows the videos of one of its channels, a load error doesn't reload the whole
+     * section (the classic interface keeps its behavior).
+     */
+    private boolean mIsChannelContent;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs = -1;
@@ -490,6 +495,24 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         continueGroup(group);
     }
 
+    /**
+     * Grid section: shows the uploads of a channel instead of the section content (e.g. one channel of the subscriptions).
+     * A null channel shows the section content again.
+     */
+    public void showChannelInSection(@Nullable Video channel) {
+        if (getView() == null || mCurrentSection == null) {
+            return;
+        }
+
+        if (channel == null) {
+            updateCurrentSection();
+            return;
+        }
+
+        mIsChannelContent = true;
+        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(channel), -1, false);
+    }
+
     @Override
     public void onSectionFocused(int sectionId) {
         saveSelectedItems(); // save previous state
@@ -645,6 +668,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void updateSection(BrowseSection section) {
+        mIsChannelContent = false;
+
         switch (section.getType()) {
             case BrowseSection.TYPE_GRID:
             case BrowseSection.TYPE_SHORTS_GRID:
@@ -931,6 +956,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        mIsChannelContent = getMainUIData().isModernUiEnabled();
         updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainUploadsObservable(item), 1, false);
     }
 
@@ -1200,7 +1226,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
             getView().showError(errorFragmentData);
 
-            if (Utils.fixRetrofitErrors(getContext(), error)) {
+            if (Utils.fixRetrofitErrors(getContext(), error) || mIsChannelContent) {
                 return;
             }
 

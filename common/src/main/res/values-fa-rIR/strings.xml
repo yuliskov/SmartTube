@@ -693,4 +693,14 @@
   <string name="context_menu_sorting">مرتب‌سازی منوی زمینه</string>
   <string name="player_audio_focus">تمرکز صوتی (مکث در صورت شناسایی سایر پخش‌کننده‌ها)</string>
   <string name="paid_content_notification">اعلان محتوای پولی</string>
+    <string name="modern_who_is_watching">چه کسی تماشا می‌کند؟</string>
+    <string name="modern_add_account">افزودن حساب</string>
+    <string name="modern_watch_as_guest">تماشا به عنوان مهمان</string>
+    <string name="modern_interface">رابط کاربری مدرن</string>
+    <string name="modern_key_space">فاصله</string>
+    <string name="modern_key_clear">پاک کردن</string>
+    <string name="modern_all">همه</string>
+    <string name="modern_on">روشن</string>
+    <string name="modern_off">خاموش</string>
+    <string name="modern_try_again">تلاش دوباره</string>
 </resources>

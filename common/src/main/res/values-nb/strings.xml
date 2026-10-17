@@ -706,4 +706,14 @@
     <string name="card_preview">Forhåndsvisning av kort</string>
     <string name="card_unlocalized_titles">Ikke-lokaliserte videotitler</string>
     <string name="dont_resize_video_to_fit_dialog">Ikke endre størrelsen på videoen for å passe i dialogboksen</string>
+    <string name="modern_who_is_watching">Hvem ser på?</string>
+    <string name="modern_add_account">Legg til konto</string>
+    <string name="modern_watch_as_guest">Se som gjest</string>
+    <string name="modern_interface">Moderne grensesnitt</string>
+    <string name="modern_key_space">Mellomrom</string>
+    <string name="modern_key_clear">Tøm</string>
+    <string name="modern_all">Alle</string>
+    <string name="modern_on">På</string>
+    <string name="modern_off">Av</string>
+    <string name="modern_try_again">Prøv igjen</string>
 </resources>

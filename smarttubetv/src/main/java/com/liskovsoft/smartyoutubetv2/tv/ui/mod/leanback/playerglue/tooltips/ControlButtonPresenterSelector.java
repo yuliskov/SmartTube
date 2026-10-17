@@ -33,13 +33,18 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PaddingAction;
  * Binds to items of type {@link Action}.
  */
 public class ControlButtonPresenterSelector extends PresenterSelector {
-    private final ControlButtonPresenter mPrimaryPresenter =
-            new ControlButtonPresenter(R.layout.lb_control_button_primary);
-    private final ControlButtonPresenter mSecondaryPresenter =
-            new ControlButtonPresenter(R.layout.lb_control_button_secondary);
-    private final Presenter[] mPresenters = new Presenter[]{mPrimaryPresenter};
+    private final ControlButtonPresenter mPrimaryPresenter;
+    private final ControlButtonPresenter mSecondaryPresenter;
+    private final Presenter[] mPresenters;
 
     public ControlButtonPresenterSelector(boolean tooltipsEnabled) {
+        this(tooltipsEnabled, R.layout.lb_control_button_primary, R.layout.lb_control_button_secondary);
+    }
+
+    public ControlButtonPresenterSelector(boolean tooltipsEnabled, int primaryLayoutId, int secondaryLayoutId) {
+        mPrimaryPresenter = new ControlButtonPresenter(primaryLayoutId);
+        mSecondaryPresenter = new ControlButtonPresenter(secondaryLayoutId);
+        mPresenters = new Presenter[]{mPrimaryPresenter};
         mPrimaryPresenter.tooltipsEnabled = mSecondaryPresenter.tooltipsEnabled = tooltipsEnabled;
     }
 
@@ -87,7 +92,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         private int mLayoutResourceId;
         private boolean tooltipsEnabled;
 
-        ControlButtonPresenter(int layoutResourceId) {
+        public ControlButtonPresenter(int layoutResourceId) {
             mLayoutResourceId = layoutResourceId;
         }
 

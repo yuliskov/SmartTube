@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <ImageView
+        android:id="@+id/modern_channel_art"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/modernChannelScrim" />
+
+    <FrameLayout
+        android:id="@+id/modern_channel_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:id="@+id/modern_channel_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/modern_channel_left"
+            android:layout_marginTop="@dimen/modern_channel_header_top"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/modern_channel_avatar"
+                    android:layout_width="@dimen/modern_channel_avatar"
+                    android:layout_height="@dimen/modern_channel_avatar"
+                    android:layout_marginEnd="@dimen/modern_channel_pill_icon_gap"
+                    android:importantForAccessibility="no" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/modern_channel_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:singleLine="true"
+                        android:textColor="@color/modern_text_primary"
+                        android:textSize="@dimen/modern_channel_name_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/modern_channel_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/modern_tile_meta_line_gap"
+                        android:includeFontPadding="false"
+                        android:singleLine="true"
+                        android:textColor="@color/modern_text_primary"
+                        android:textSize="@dimen/modern_tile_meta_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/modern_channel_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/modern_channel_actions_top"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/modern_channel_rows"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_channel_rows_height"
+            android:layout_marginTop="@dimen/modern_channel_rows_top" />
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/modern_channel_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="@dimen/modern_spinner_size"
+        android:layout_height="@dimen/modern_spinner_size"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

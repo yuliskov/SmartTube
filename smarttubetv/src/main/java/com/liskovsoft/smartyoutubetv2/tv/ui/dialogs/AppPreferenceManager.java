@@ -10,12 +10,14 @@ import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.ChatPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.CommentsPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +25,7 @@ import java.util.Set;
 public class AppPreferenceManager {
     private final Context mContext;
     private final Runnable mOnChange;
+    private final boolean mShowValues;
 
     public static class ListPreferenceData {
         public final CharSequence[] entries;
@@ -45,6 +48,8 @@ public class AppPreferenceManager {
     public AppPreferenceManager(Context context, Runnable onChange) {
         mContext = context;
         mOnChange = onChange;
+        // The modern interface shows the current value of the lists below their title
+        mShowValues = MainUIData.instance(context).isModernUiEnabled();
     }
 
     public Preference createPreference(OptionCategory category) {
@@ -174,10 +179,13 @@ public class AppPreferenceManager {
         pref.setEntryValues(prefData.values);
         pref.setValue(prefData.defaultValue);
 
+        showValue(pref, prefData.defaultValue != null ? titleOf(category.options, prefData.defaultValue) : null);
+
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
             for (OptionItem optionItem : category.options) {
                 if (newValue.equals(optionItem.toString())) {
                     optionItem.onSelect(true);
+                    showValue(preference, optionItem.getTitle());
                     break;
                 }
             }
@@ -194,6 +202,10 @@ public class AppPreferenceManager {
         pref.setEntries(prefData.entries);
         pref.setEntryValues(prefData.values);
         pref.setValues(prefData.defaultValues);
+
+        if (category.type == OptionCategory.TYPE_CHECKBOX_LIST) {
+            showValue(pref, selectedTitles(category.options));
+        }
 
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof Set) {
@@ -234,6 +246,10 @@ public class AppPreferenceManager {
 
                         item.onSelect(isSelected);
 
+                        if (category.type == OptionCategory.TYPE_CHECKBOX_LIST) {
+                            showValue(preference, selectedTitles(category.options));
+                        }
+
                         return true;
                     }
                 }
@@ -241,6 +257,34 @@ public class AppPreferenceManager {
 
             return false;
         });
+    }
+
+    private void showValue(Preference pref, CharSequence value) {
+        if (mShowValues) {
+            pref.setSummary(value);
+        }
+    }
+
+    private static CharSequence titleOf(List<OptionItem> items, String value) {
+        for (OptionItem item : items) {
+            if (value.equals(item.toString())) {
+                return item.getTitle();
+            }
+        }
+
+        return null;
+    }
+
+    private CharSequence selectedTitles(List<OptionItem> items) {
+        List<CharSequence> titles = new ArrayList<>();
+
+        for (OptionItem item : items) {
+            if (item.isSelected()) {
+                titles.add(item.getTitle());
+            }
+        }
+
+        return titles.isEmpty() ? mContext.getString(R.string.modern_off) : TextUtils.join(", ", titles);
     }
 
     public ListPreferenceData createListPreferenceData(List<OptionItem> items) {
