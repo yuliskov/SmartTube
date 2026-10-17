@@ -917,6 +917,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void showVoiceOverProgress(boolean show) {
+        if (getProgressBarManager() == null) return;
+        if (show) getProgressBarManager().show();
+        else getProgressBarManager().hide();
+    }
+
+    @Override
+    public boolean supportsVoiceOver() {
+        return true;
+    }
+
+    @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setSeekBarSegments(segments);
@@ -1322,6 +1334,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mPlayerGlue != null) {
             mPlayerGlue.setButtonState(buttonId, buttonState);
         }
+    }
+
+    @Override
+    public void setButtonVisible(int buttonId, boolean visible) {
+        if (mPlayerGlue != null) mPlayerGlue.setButtonVisible(buttonId, visible);
     }
 
     @Override
