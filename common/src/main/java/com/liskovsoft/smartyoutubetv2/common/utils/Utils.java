@@ -57,7 +57,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -280,7 +280,7 @@ public class Utils {
                         RemoteControlWorker.class, 30, TimeUnit.MINUTES
                 ).build();
 
-        WorkManager
+        SafeWorkManager
                 .getInstance(context)
                 .enqueueUniquePeriodicWork(
                         TASK_ID,

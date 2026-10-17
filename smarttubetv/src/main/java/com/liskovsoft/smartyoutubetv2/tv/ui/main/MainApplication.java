@@ -2,7 +2,9 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.os.Build.VERSION;
 
+import androidx.annotation.NonNull;
 import androidx.multidex.MultiDexApplication;
+import androidx.work.Configuration;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -39,7 +41,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.security.Provider;
 import java.security.Security;
 
-public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
+public class MainApplication extends MultiDexApplication implements Configuration.Provider { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
         // fix YouTube bandwidth throttling (best - false)???
         // false is better for streams (less buffering)
@@ -83,6 +85,17 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
         setupGlobalExceptionHandler();
         setupViewManager();
+    }
+
+    /**
+     * Lazy WorkManager init (auto-init is removed in the manifest).<br/>
+     * Fix: 'IllegalStateException: Cannot initialize WorkManager in direct boot mode' thrown at process start on some Android 9 devices.
+     * With the lazy init the exception is thrown from WorkManager.getInstance() where it's caught by SafeWorkManager.
+     */
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder().build();
     }
 
     private void setupViewManager() {
