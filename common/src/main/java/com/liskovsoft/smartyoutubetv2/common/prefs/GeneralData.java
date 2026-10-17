@@ -392,14 +392,6 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
-    public boolean isHistoryEnabled() {
-        return mHistoryState == HISTORY_ENABLED;
-    }
-
-    public void setHistoryEnabled(boolean enabled) {
-        setHistoryState(enabled ? HISTORY_ENABLED : HISTORY_AUTO);
-    }
-
     public int getHistoryState() {
         return mHistoryState;
     }
