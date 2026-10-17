@@ -747,4 +747,14 @@
   <string name="comments_disabled">Kommentit on poistettu käytöstä tässä videossa</string>
   <string name="enable_conscrypt">Ota Conscrypt käyttöön</string>
   <string name="remove_video_to_watch_later">Poista ”Katso myöhemmin” listalta</string>
+    <string name="modern_who_is_watching">Kuka katsoo?</string>
+    <string name="modern_add_account">Lisää tili</string>
+    <string name="modern_watch_as_guest">Katso vieraana</string>
+    <string name="modern_interface">Moderni käyttöliittymä</string>
+    <string name="modern_key_space">Välilyönti</string>
+    <string name="modern_key_clear">Tyhjennä</string>
+    <string name="modern_all">Kaikki</string>
+    <string name="modern_on">Päällä</string>
+    <string name="modern_off">Pois</string>
+    <string name="modern_try_again">Yritä uudelleen</string>
 </resources>

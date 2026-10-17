@@ -713,4 +713,14 @@
   <string name="channel_unblocked">차단 해제됨</string>
   <string name="header_blocked_channels">차단된 채널</string>
   <string name="msg_no_blocked_channels">차단된 채널 없음</string>
+    <string name="modern_who_is_watching">누가 시청하나요?</string>
+    <string name="modern_add_account">계정 추가</string>
+    <string name="modern_watch_as_guest">게스트로 시청</string>
+    <string name="modern_interface">모던 인터페이스</string>
+    <string name="modern_key_space">스페이스</string>
+    <string name="modern_key_clear">지우기</string>
+    <string name="modern_all">전체</string>
+    <string name="modern_on">사용</string>
+    <string name="modern_off">사용 안함</string>
+    <string name="modern_try_again">다시 시도</string>
 </resources>

@@ -748,4 +748,14 @@
   <string name="enable_conscrypt_desc">Javítja a HTTPS, TLS - és VPN-kompatibilitást egyes eszközökön, de esetenként lejátszási problémákat vagy lassabb hálózati teljesítményt okozhat</string>
   <string name="network_settings">Hálózati beállítások</string>
   <string name="comments_disabled">A komment szakasz letiltva</string>
+    <string name="modern_who_is_watching">Ki néz?</string>
+    <string name="modern_add_account">Fiók hozzáadása</string>
+    <string name="modern_watch_as_guest">Megtekintés vendégként</string>
+    <string name="modern_interface">Modern felület</string>
+    <string name="modern_key_space">Szóköz</string>
+    <string name="modern_key_clear">Törlés</string>
+    <string name="modern_all">Összes</string>
+    <string name="modern_on">Be</string>
+    <string name="modern_off">Ki</string>
+    <string name="modern_try_again">Próbáld újra</string>
 </resources>

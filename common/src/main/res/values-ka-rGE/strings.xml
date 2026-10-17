@@ -748,4 +748,14 @@
   <string name="audio_shift_sec">%s წმ</string>
   <string name="ui_hide_timeout_sec">%s წმ</string>
   <string name="screen_dimming_timeout_min">%s წთ</string>
+    <string name="modern_interface">თანამედროვე ინტერფეისი</string>
+    <string name="modern_who_is_watching">ვინ უყურებს?</string>
+    <string name="modern_add_account">ანგარიშის დამატება</string>
+    <string name="modern_watch_as_guest">სტუმრად ყურება</string>
+    <string name="modern_key_space">ჰარი</string>
+    <string name="modern_key_clear">გასუფთავება</string>
+    <string name="modern_all">ყველა</string>
+    <string name="modern_on">ჩართული</string>
+    <string name="modern_off">გამორთული</string>
+    <string name="modern_try_again">ხელახლა ცდა</string>
 </resources>

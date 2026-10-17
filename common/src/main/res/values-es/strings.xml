@@ -748,4 +748,14 @@
   <string name="enable_conscrypt_desc">Mejora la compatibilidad con HTTPS, TLS y VPN en algunos dispositivos, pero en ocasiones puede causar problemas de reproducción o ralentizar la red</string>
   <string name="network_settings">Configuración de red</string>
   <string name="comments_disabled">Los comentarios están desactivados para este video</string>
+    <string name="modern_who_is_watching">¿Quién está viendo?</string>
+    <string name="modern_add_account">Añadir cuenta</string>
+    <string name="modern_watch_as_guest">Ver como invitado</string>
+    <string name="modern_interface">Interfaz moderna</string>
+    <string name="modern_key_space">Espacio</string>
+    <string name="modern_key_clear">Borrar</string>
+    <string name="modern_all">Todo</string>
+    <string name="modern_on">Activado</string>
+    <string name="modern_off">Desactivado</string>
+    <string name="modern_try_again">Reintentar</string>
 </resources>

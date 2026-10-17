@@ -39,12 +39,19 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_playback);
+        setContentView(getContentLayoutId());
         Fragment fragment =
                 getSupportFragmentManager().findFragmentByTag(getString(R.string.playback_tag));
         if (fragment instanceof PlaybackFragment) {
             mPlaybackFragment = (PlaybackFragment) fragment;
         }
+    }
+
+    /**
+     * Layout that hosts the playback fragment.
+     */
+    protected int getContentLayoutId() {
+        return R.layout.fragment_playback;
     }
 
     @Override

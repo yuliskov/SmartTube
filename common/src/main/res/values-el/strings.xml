@@ -746,4 +746,14 @@
   <string name="comments_disabled">Τα σχόλια είναι απενεργοποιημένα για αυτό το βίντεο</string>
   <string name="remove_from_search_history">Αφαίρεση από το ιστορικό αναζήτησης</string>
   <string name="player_unexpected_error">Απροσδόκητο σφάλμα αναπαραγωγής</string>
+    <string name="modern_who_is_watching">Ποιος βλέπει;</string>
+    <string name="modern_add_account">Προσθήκη λογαριασμού</string>
+    <string name="modern_watch_as_guest">Παρακολούθηση ως επισκέπτης</string>
+    <string name="modern_interface">Σύγχρονη διεπαφή</string>
+    <string name="modern_key_space">Διάστημα</string>
+    <string name="modern_key_clear">Διαγραφή</string>
+    <string name="modern_all">Όλα</string>
+    <string name="modern_on">Ενεργό</string>
+    <string name="modern_off">Ανενεργό</string>
+    <string name="modern_try_again">Δοκιμάστε ξανά</string>
 </resources>

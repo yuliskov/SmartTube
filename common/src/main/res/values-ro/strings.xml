@@ -664,4 +664,14 @@
   <string name="local_backup">Copie de rezervă locală</string>
   <string name="auto_backup">Copie de rezervă automată (o dată pe zi)</string>
   <string name="repeat_mode_reverse_list">Redă lista de redare sau videoclipurile canalului în ordine inversă</string>
+    <string name="modern_who_is_watching">Cine se uită?</string>
+    <string name="modern_add_account">Adaugă un cont</string>
+    <string name="modern_watch_as_guest">Vizionează ca invitat</string>
+    <string name="modern_interface">Interfață modernă</string>
+    <string name="modern_key_space">Spațiu</string>
+    <string name="modern_key_clear">Șterge</string>
+    <string name="modern_all">Toate</string>
+    <string name="modern_on">Activat</string>
+    <string name="modern_off">Dezactivat</string>
+    <string name="modern_try_again">Încearcă din nou</string>
 </resources>

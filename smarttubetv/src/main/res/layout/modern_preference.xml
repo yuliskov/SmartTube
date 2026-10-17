@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern panel row. Keeps the ids bound by the preference library. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/modern_pref_item_bg"
+    android:baselineAligned="false"
+    android:clickable="true"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/modern_panel_item_height_with_gap"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/modern_panel_item_padding_start"
+    android:paddingEnd="@dimen/modern_panel_item_padding_end">
+
+    <FrameLayout
+        android:id="@+id/icon_frame"
+        android:duplicateParentState="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="@dimen/modern_player_button_icon"
+            android:layout_height="@dimen/modern_player_button_icon"
+            android:layout_marginEnd="@dimen/modern_panel_icon_gap"
+            android:duplicateParentState="true"
+            android:importantForAccessibility="no" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:duplicateParentState="true"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/modern_panel_text_padding"
+        android:paddingBottom="@dimen/modern_panel_text_padding">
+
+        <TextView
+            android:id="@android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:textColor="@color/modern_pill_text"
+            android:textSize="@dimen/modern_rail_label_size" />
+
+        <TextView
+            android:id="@android:id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modern_panel_summary_top"
+            android:duplicateParentState="true"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/modern_pref_summary"
+            android:textSize="@dimen/modern_player_time_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@android:id/widget_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:duplicateParentState="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical" />
+</LinearLayout>

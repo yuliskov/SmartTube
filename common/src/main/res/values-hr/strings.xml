@@ -494,4 +494,14 @@
     <string name="auto_frame_rate_modes">Podržani načini</string>
     <string name="loading">Učitavanje…</string>
     <string name="hide_streams">Sakrij strujanja iz Pretplata</string>
+    <string name="modern_who_is_watching">Tko gleda?</string>
+    <string name="modern_add_account">Dodaj račun</string>
+    <string name="modern_watch_as_guest">Gledaj kao gost</string>
+    <string name="modern_interface">Moderno sučelje</string>
+    <string name="modern_key_space">Razmak</string>
+    <string name="modern_key_clear">Očisti</string>
+    <string name="modern_all">Sve</string>
+    <string name="modern_on">Uključeno</string>
+    <string name="modern_off">Isključeno</string>
+    <string name="modern_try_again">Pokušaj ponovno</string>
 </resources>
