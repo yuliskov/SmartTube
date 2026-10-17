@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Keyboard mode switch labels: universal notation, not translated -->
+    <string name="modern_key_symbols" translatable="false">&amp;123</string>
+    <string name="modern_key_letters" translatable="false">ABC</string>
+</resources>

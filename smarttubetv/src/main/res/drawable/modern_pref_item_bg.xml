@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Panel row: rounded pill with a gap between rows -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <inset android:insetLeft="@dimen/modern_panel_padding" android:insetRight="@dimen/modern_panel_padding"
+            android:insetTop="@dimen/modern_panel_item_gap_half" android:insetBottom="@dimen/modern_panel_item_gap_half">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/modern_rail_selected_pill" />
+                <corners android:radius="@dimen/modern_rail_item_radius" />
+            </shape>
+        </inset>
+    </item>
+    <item>
+        <inset android:insetLeft="@dimen/modern_panel_padding" android:insetRight="@dimen/modern_panel_padding"
+            android:insetTop="@dimen/modern_panel_item_gap_half" android:insetBottom="@dimen/modern_panel_item_gap_half">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/modern_white_10" />
+                <corners android:radius="@dimen/modern_rail_item_radius" />
+            </shape>
+        </inset>
+    </item>
+</selector>

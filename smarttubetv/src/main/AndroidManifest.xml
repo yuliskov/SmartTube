@@ -153,6 +153,14 @@
                   android:screenOrientation="unspecified"
                   android:theme="@style/App.Theme.Leanback.Preferences"/>
 
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.dialogs.ModernDialogActivity"
+                  android:noHistory="true"
+                  android:excludeFromRecents="true"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="unspecified"
+                  android:theme="@style/Theme.Modern.Preferences"/>
+
         <!-- Android 8 fallback -->
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivityOpaque"
             android:noHistory="true"
@@ -164,6 +172,12 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.browse.ModernBrowseActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="unspecified"/>
@@ -193,16 +207,51 @@
             android:theme="@style/App.Theme.Leanback.Player"/>
 
         <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.playback.ModernPlaybackActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:screenOrientation="unspecified"
+            android:showWhenLocked="true"
+            android:theme="@style/Theme.Modern.Player"/>
+
+        <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.channel.ModernChannelActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.channel.ModernChannelUploadsActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.search.ModernSearchActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="unspecified"
+            android:windowSoftInputMode="adjustNothing"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="unspecified"
                   android:theme="@style/App.Theme.Leanback.GuidedStep"/>
+
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.modern.signin.ModernSignInActivity"
+                  android:launchMode="singleInstance"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="unspecified"
+                  android:theme="@style/Theme.Modern"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity"
                   android:launchMode="singleInstance"

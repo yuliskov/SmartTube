@@ -35,6 +35,7 @@ class ControlBarPresenter extends Presenter {
 
     // MOD: increase player's controls number. Origin: 7. Leanback version 1.0.0
     static final int MAX_CONTROLS = 12;
+    private int mMaxControls = MAX_CONTROLS;
 
     /**
      * The data type expected by this presenter.
@@ -153,7 +154,7 @@ class ControlBarPresenter extends Presenter {
             for (int i = mControlBar.getChildCount() - 1; i >= adapterSize; i--) {
                 mControlBar.removeViewAt(i);
             }
-            for (int position = 0; position < adapterSize && position < MAX_CONTROLS;
+            for (int position = 0; position < adapterSize && position < mMaxControls;
                     position++) {
                 bindControlToAction(position, adapter, presenter);
             }
@@ -228,8 +229,19 @@ class ControlBarPresenter extends Presenter {
      *
      * @param layoutResourceId The resource id of the layout for this presenter.
      */
+    public void setLayoutResourceId(int layoutResourceId) {
+        mLayoutResourceId = layoutResourceId;
+    }
+
     public ControlBarPresenter(int layoutResourceId) {
         mLayoutResourceId = layoutResourceId;
+    }
+
+    /**
+     * Max number of controls shown by the bar (default {@link #MAX_CONTROLS}).
+     */
+    public void setMaxControls(int maxControls) {
+        mMaxControls = maxControls;
     }
 
     /**

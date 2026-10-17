@@ -569,4 +569,14 @@
   <string name="header_shorts">शॉर्ट्स</string>
   <string name="unlock_high_bitrate_formats">उच्च बिटरेट 1080p VP9 प्रारूप अनलॉक करें</string>
   <string name="unlock_high_bitrate_audio_formats">उच्च बिटरेट mp4a प्रारूप अनलॉक करें</string>
+    <string name="modern_who_is_watching">कौन देख रहा है?</string>
+    <string name="modern_add_account">खाता जोड़ें</string>
+    <string name="modern_watch_as_guest">मेहमान के रूप में देखें</string>
+    <string name="modern_interface">आधुनिक इंटरफ़ेस</string>
+    <string name="modern_key_space">स्पेस</string>
+    <string name="modern_key_clear">साफ़ करें</string>
+    <string name="modern_all">सभी</string>
+    <string name="modern_on">चालू</string>
+    <string name="modern_off">बंद</string>
+    <string name="modern_try_again">फिर से कोशिश करें</string>
 </resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <FrameLayout
+        android:id="@+id/modern_search_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/modern_search_box_height"
+            android:layout_marginStart="@dimen/modern_content_left"
+            android:layout_marginTop="@dimen/modern_topbar_top"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/modern_search_mic"
+                android:layout_width="@dimen/modern_search_mic_size"
+                android:layout_height="@dimen/modern_search_mic_size"
+                android:background="@drawable/modern_mic_circle"
+                android:contentDescription="@string/settings_search"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="9dp"
+                android:src="@drawable/modern_ic_mic"
+                app:tint="@color/modern_top_bar_content" />
+
+            <TextView
+                android:id="@+id/modern_search_field"
+                android:layout_width="@dimen/modern_search_field_width"
+                android:layout_height="@dimen/modern_search_box_height"
+                android:layout_marginStart="@dimen/modern_search_box_gap"
+                android:background="@drawable/modern_search_pill"
+                android:ellipsize="start"
+                android:gravity="center_vertical"
+                android:hint="@string/settings_search"
+                android:includeFontPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/modern_text_primary"
+                android:textColorHint="@color/modern_white_30"
+                android:textSize="@dimen/modern_search_field_text"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/modern_search_suggestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/modern_content_left"
+            android:layout_marginTop="@dimen/modern_search_panel_top"
+            android:orientation="vertical" />
+
+        <com.liskovsoft.smartyoutubetv2.tv.ui.modern.search.ModernKeyboardView
+            android:id="@+id/modern_search_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/modern_search_keyboard_left"
+            android:layout_marginTop="@dimen/modern_search_panel_top" />
+
+        <FrameLayout
+            android:id="@+id/modern_search_results"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_search_results_height"
+            android:layout_marginTop="@dimen/modern_search_results_top" />
+    </FrameLayout>
+
+    <!-- System keyboard input (any language) -->
+    <EditText
+        android:id="@+id/modern_search_input"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:alpha="0"
+        android:imeOptions="actionSearch|flagNoExtractUi"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:hint="@string/settings_search" />
+
+    <ProgressBar
+        android:id="@+id/modern_search_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="@dimen/modern_spinner_size"
+        android:layout_height="@dimen/modern_spinner_size"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="@dimen/modern_search_progress_top"
+        android:visibility="gone" />
+</FrameLayout>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/modern_on_light" android:state_focused="true" />
+    <item android:color="@color/modern_text_primary" />
+</selector>

@@ -708,4 +708,14 @@
   <string name="card_unlocalized_titles">Ikke-lokaliserede videotitler</string>
   <string name="dont_resize_video_to_fit_dialog">Skaler ikke video til at passe dialog</string>
   <string name="typing_corrections">Deaktiver autokorrektion under indtastning</string>
+    <string name="modern_who_is_watching">Hvem ser med?</string>
+    <string name="modern_add_account">Tilføj konto</string>
+    <string name="modern_watch_as_guest">Se som gæst</string>
+    <string name="modern_interface">Moderne grænseflade</string>
+    <string name="modern_key_space">Mellemrum</string>
+    <string name="modern_key_clear">Ryd</string>
+    <string name="modern_all">Alle</string>
+    <string name="modern_on">Til</string>
+    <string name="modern_off">Fra</string>
+    <string name="modern_try_again">Prøv igen</string>
 </resources>

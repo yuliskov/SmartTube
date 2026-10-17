@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark start side and bottom over the channel artwork -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:centerX="0.45"
+                android:startColor="@color/modern_player_scrim_end"
+                android:centerColor="@color/modern_player_scrim_center"
+                android:endColor="@android:color/transparent" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:centerY="0.6"
+                android:startColor="@android:color/transparent"
+                android:centerColor="@color/modern_player_scrim_center"
+                android:endColor="@color/modern_player_scrim_end" />
+        </shape>
+    </item>
+</layer-list>

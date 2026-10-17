@@ -296,4 +296,14 @@
   <string name="content_block_outro"></string>
   <string name="action_playlist_add">Dodaj na seznam predvajanja</string>
   <string name="keyboard_auto_show">Samodejno prikaži tipkovnico</string>
+    <string name="modern_who_is_watching">Kdo gleda?</string>
+    <string name="modern_add_account">Dodaj račun</string>
+    <string name="modern_watch_as_guest">Glej kot gost</string>
+    <string name="modern_interface">Sodoben vmesnik</string>
+    <string name="modern_key_space">Presledek</string>
+    <string name="modern_key_clear">Počisti</string>
+    <string name="modern_all">Vse</string>
+    <string name="modern_on">Vklopljeno</string>
+    <string name="modern_off">Izklopljeno</string>
+    <string name="modern_try_again">Poskusi znova</string>
 </resources>

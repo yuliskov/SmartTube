@@ -741,6 +741,16 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="fix_empty_subs_and_channels">תיקון מינויים וערוצים ריקים</string>
     <string name="local_backup_not_supported">גיבוי אוטומטי בטלוויזיית אנדרואיד 11+ אינו נתמך בשל הגבלות מערכת. יש להשתמש ב-GDrive במקום.</string>
     <string name="rounded_card_corners">פינות כרטיס מעוגלות</string>
+    <string name="modern_who_is_watching">מי צופה?</string>
+    <string name="modern_add_account">הוספת חשבון</string>
+    <string name="modern_watch_as_guest">צפייה כאורח</string>
+    <string name="modern_interface">ממשק מודרני</string>
+    <string name="modern_key_space">רווח</string>
+    <string name="modern_key_clear">ניקוי</string>
+    <string name="modern_all">הכול</string>
+    <string name="modern_on">מופעל</string>
+    <string name="modern_off">כבוי</string>
+    <string name="modern_try_again">נסה שוב</string>
     <plurals name="hours">
         <item quantity="one">שעה אחת</item>
         <item quantity="other">%s שעות</item>

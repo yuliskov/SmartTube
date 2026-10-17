@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/modern_dialog_page_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_settings_title_text_x"
+        android:layout_marginTop="@dimen/modern_settings_title_top"
+        android:layout_marginEnd="@dimen/modern_settings_title_x"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_settings_title_size"
+        android:textStyle="bold" />
+
+    <androidx.leanback.widget.VerticalGridView
+        android:id="@+id/modern_dialog_page_entries"
+        android:layout_width="@dimen/modern_dialog_page_list_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_settings_title_x"
+        android:layout_marginTop="@dimen/modern_settings_list_top"
+        android:clipToPadding="false"
+        android:fadingEdgeLength="@dimen/modern_settings_row_height"
+        android:paddingBottom="@dimen/modern_settings_list_top"
+        android:requiresFadingEdge="vertical" />
+
+    <View
+        android:layout_width="@dimen/modern_rail_divider"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_dialog_page_divider_x"
+        android:layout_marginTop="@dimen/modern_settings_list_top"
+        android:background="@color/modern_white_10" />
+
+    <TextView
+        android:id="@+id/modern_dialog_page_options_title"
+        android:layout_width="@dimen/modern_dialog_page_options_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_dialog_page_details_x"
+        android:layout_marginTop="@dimen/modern_settings_list_top"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:paddingStart="@dimen/modern_settings_row_padding"
+        android:paddingEnd="@dimen/modern_settings_row_padding"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_dialog_page_options_title_size"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <androidx.leanback.widget.VerticalGridView
+        android:id="@+id/modern_dialog_page_options"
+        android:layout_width="@dimen/modern_dialog_page_options_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_dialog_page_details_x"
+        android:layout_marginTop="@dimen/modern_dialog_page_options_top"
+        android:clipToPadding="false"
+        android:fadingEdgeLength="@dimen/modern_settings_row_height"
+        android:paddingBottom="@dimen/modern_settings_list_top"
+        android:requiresFadingEdge="vertical"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/modern_dialog_page_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_dialog_page_details_x"
+        android:layout_marginEnd="@dimen/modern_settings_title_x"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/modern_dialog_page_preview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_settings_preview_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/modern_dialog_page_preview_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="@color/modern_text_secondary"
+            android:textSize="@dimen/modern_dialog_page_preview_summary_size" />
+    </LinearLayout>
+</merge>

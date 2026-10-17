@@ -748,4 +748,14 @@
   <string name="sidebar_notification">Mostrar notificação na barra lateral</string>
   <string name="color_scheme_dark_blue_oled">Azul Escuro (OLED)</string>
   <string name="remove_video_to_watch_later">Remover da playlist \"Assistir mais tarde\"</string>
+    <string name="modern_who_is_watching">Quem está assistindo?</string>
+    <string name="modern_add_account">Adicionar conta</string>
+    <string name="modern_watch_as_guest">Assistir como convidado</string>
+    <string name="modern_interface">Interface moderna</string>
+    <string name="modern_key_space">Espaço</string>
+    <string name="modern_key_clear">Limpar</string>
+    <string name="modern_all">Tudo</string>
+    <string name="modern_on">Ativado</string>
+    <string name="modern_off">Desativado</string>
+    <string name="modern_try_again">Tentar novamente</string>
 </resources>

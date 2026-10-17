@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Empty, error and sign in states of a page (ModernStatePage): icon, title, text, details, actions -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/modern_content_left"
+    android:paddingEnd="@dimen/modern_grid_end_margin">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/modern_state_icon"
+        android:layout_width="@dimen/modern_state_icon_size"
+        android:layout_height="@dimen/modern_state_icon_size"
+        android:importantForAccessibility="no"
+        app:tint="@color/modern_text_secondary" />
+
+    <TextView
+        android:id="@+id/modern_state_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_state_gap"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:maxWidth="@dimen/modern_state_text_width"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_state_title_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/modern_state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_state_text_gap"
+        android:lineSpacingExtra="3sp"
+        android:maxWidth="@dimen/modern_state_text_width"
+        android:textColor="@color/modern_text_secondary"
+        android:textSize="@dimen/modern_state_text_size" />
+
+    <TextView
+        android:id="@+id/modern_state_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_state_text_gap"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:maxWidth="@dimen/modern_state_text_width"
+        android:textColor="@color/modern_text_secondary"
+        android:textSize="@dimen/modern_tile_meta_size" />
+
+    <LinearLayout
+        android:id="@+id/modern_state_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_state_actions_gap"
+        android:orientation="horizontal" />
+</LinearLayout>

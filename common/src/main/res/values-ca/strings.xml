@@ -504,4 +504,14 @@
   <string name="hide_shorts_from_trending">Amaga els curts de la tendència</string>
   <string name="disable_history">Desactiva l\'historial</string>
   <string name="enable_history">Activeu l\'historial</string>
+    <string name="modern_who_is_watching">Qui està mirant?</string>
+    <string name="modern_add_account">Afegeix un compte</string>
+    <string name="modern_watch_as_guest">Mira com a convidat</string>
+    <string name="modern_interface">Interfície moderna</string>
+    <string name="modern_key_space">Espai</string>
+    <string name="modern_key_clear">Esborra</string>
+    <string name="modern_all">Tot</string>
+    <string name="modern_on">Activat</string>
+    <string name="modern_off">Desactivat</string>
+    <string name="modern_try_again">Torna-ho a provar</string>
 </resources>

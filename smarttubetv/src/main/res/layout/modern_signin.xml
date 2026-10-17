@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/modern_logo_width"
+        android:layout_height="@dimen/modern_logo_height"
+        android:layout_marginStart="@dimen/modern_signin_left"
+        android:layout_marginTop="@dimen/modern_player_margin"
+        android:importantForAccessibility="no"
+        android:scaleType="fitStart"
+        android:src="@mipmap/app_logo_semi_red" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_signin_left"
+        android:layout_marginTop="@dimen/modern_signin_title_top"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="@dimen/modern_signin_item_width"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="@string/modern_add_account"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_signin_title_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/modern_signin_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modern_signin_list_top"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="@dimen/modern_signin_qr_size"
+        android:layout_height="@dimen/modern_signin_qr_size"
+        android:layout_marginStart="@dimen/modern_signin_qr_left"
+        android:layout_marginTop="@dimen/modern_signin_qr_top"
+        android:background="@drawable/modern_signin_qr_bg"
+        android:padding="@dimen/modern_signin_qr_padding">
+
+        <ImageView
+            android:id="@+id/modern_signin_qr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/modern_signin_text_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_signin_text_left"
+        android:layout_marginTop="@dimen/modern_signin_text_top"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/modern_signin_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_signin_text_size" />
+
+        <TextView
+            android:id="@+id/modern_signin_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modern_signin_item_gap"
+            android:gravity="center"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_signin_code_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</FrameLayout>

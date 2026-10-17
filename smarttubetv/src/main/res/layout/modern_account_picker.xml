@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Panel over the browse content: it paints its own background and takes the touches meant for the content below
+     (its account tiles are the focusable items) -->
+<com.liskovsoft.smartyoutubetv2.tv.ui.modern.browse.ModernAccountPickerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/modernBackground"
+    android:clickable="true"
+    android:clipChildren="false"
+    tools:ignore="Overdraw,KeyboardInaccessibleWidget">
+
+    <TextView
+        android:id="@+id/modern_picker_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/modern_picker_title_top"
+        android:textStyle="bold"
+        android:includeFontPadding="false"
+        android:text="@string/modern_who_is_watching"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/modern_picker_title_size" />
+
+    <LinearLayout
+        android:id="@+id/modern_picker_accounts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/modern_picker_row_top"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/modern_picker_guest"
+        android:layout_width="@dimen/modern_picker_guest_width"
+        android:layout_height="@dimen/modern_player_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/modern_picker_guest_top"
+        android:background="@drawable/modern_player_pill_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/modern_watch_as_guest"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_player_pill_text" />
+</com.liskovsoft.smartyoutubetv2.tv.ui.modern.browse.ModernAccountPickerView>

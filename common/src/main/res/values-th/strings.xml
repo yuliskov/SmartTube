@@ -323,4 +323,14 @@
     <string name="update_error">อัปเดตข้อผิดพลาด</string>
     <string name="hide_shorts_from_history">ซ่อน shorts จากประวัติการเข้าชม</string>
     <string name="disable_screensaver">Disable screensaver</string>
+    <string name="modern_who_is_watching">ใครกำลังดูอยู่</string>
+    <string name="modern_add_account">เพิ่มบัญชี</string>
+    <string name="modern_watch_as_guest">ดูในฐานะผู้เยี่ยมชม</string>
+    <string name="modern_interface">อินเทอร์เฟซสมัยใหม่</string>
+    <string name="modern_key_space">เว้นวรรค</string>
+    <string name="modern_key_clear">ล้าง</string>
+    <string name="modern_all">ทั้งหมด</string>
+    <string name="modern_on">เปิด</string>
+    <string name="modern_off">ปิด</string>
+    <string name="modern_try_again">ลองอีกครั้ง</string>
 </resources>

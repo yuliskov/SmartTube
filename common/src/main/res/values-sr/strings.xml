@@ -710,4 +710,14 @@
     <string name="dont_resize_video_to_fit_dialog">Не мењај величину видеа да би се уклопио у дијалог</string>
     <string name="typing_corrections">Онемогући аутоматско исправљање приликом куцања текста</string>
     <string name="suggestions_horizontally_scrolled">Хоризонтално померани предлози</string>
+    <string name="modern_who_is_watching">Ко гледа?</string>
+    <string name="modern_add_account">Додај налог</string>
+    <string name="modern_watch_as_guest">Гледај као гост</string>
+    <string name="modern_interface">Модеран интерфејс</string>
+    <string name="modern_key_space">Размак</string>
+    <string name="modern_key_clear">Обриши</string>
+    <string name="modern_all">Све</string>
+    <string name="modern_on">Укључено</string>
+    <string name="modern_off">Искључено</string>
+    <string name="modern_try_again">Покушај поново</string>
 </resources>

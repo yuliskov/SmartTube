@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-class ControlBar extends LinearLayout {
+public class ControlBar extends LinearLayout {
 
     public interface OnChildFocusedListener {
 

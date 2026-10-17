@@ -736,6 +736,16 @@
     <string name="enable_conscrypt_desc">Улучшает совместимость HTTPS, TLS и VPN на некоторых устройствах, но иногда может вызывать проблемы с воспроизведением или замедление сети</string>
     <string name="network_settings">Настройки сети</string>
     <string name="comments_disabled">Комментарии отключены для этого видео</string>
+    <string name="modern_who_is_watching">Кто смотрит?</string>
+    <string name="modern_add_account">Добавить аккаунт</string>
+    <string name="modern_watch_as_guest">Смотреть как гость</string>
+    <string name="modern_interface">Современный интерфейс</string>
+    <string name="modern_key_space">Пробел</string>
+    <string name="modern_key_clear">Очистить</string>
+    <string name="modern_all">Все</string>
+    <string name="modern_on">Вкл.</string>
+    <string name="modern_off">Выкл.</string>
+    <string name="modern_try_again">Повторить</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>

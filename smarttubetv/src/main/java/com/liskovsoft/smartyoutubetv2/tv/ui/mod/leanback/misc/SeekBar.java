@@ -113,6 +113,14 @@ public final class SeekBar extends View {
     }
 
     /**
+     * Set color of the bar background (track).
+     */
+    public void setTrackColor(int color) {
+        mBackgroundPaint.setColor(color);
+        invalidate();
+    }
+
+    /**
      * Set horizontal bar height in pixels when SeekBar is not focused.
      */
     public void setBarHeight(int barHeight) {
@@ -219,6 +227,14 @@ public final class SeekBar extends View {
      */
     public void setProgressColor(int color) {
         mProgressPaint.setColor(color);
+    }
+
+    /**
+     * Set color for the knob.
+     */
+    public void setKnobColor(int color) {
+        mKnobPaint.setColor(color);
+        invalidate();
     }
 
     /**

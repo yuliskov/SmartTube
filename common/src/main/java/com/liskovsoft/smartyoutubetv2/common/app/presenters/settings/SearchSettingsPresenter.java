@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
@@ -90,9 +91,12 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.setKeyboardAutoShowEnabled(option.isSelected()),
                 mSearchData.isKeyboardAutoShowEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_fix),
-                option -> mSearchData.setKeyboardFixEnabled(option.isSelected()),
-                mSearchData.isKeyboardFixEnabled()));
+        // The modern search has its own on-screen keyboard: the system keyboard workaround doesn't apply there
+        if (!MainUIData.instance(getContext()).isModernUiEnabled()) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.keyboard_fix),
+                    option -> mSearchData.setKeyboardFixEnabled(option.isSelected()),
+                    mSearchData.isKeyboardFixEnabled()));
+        }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

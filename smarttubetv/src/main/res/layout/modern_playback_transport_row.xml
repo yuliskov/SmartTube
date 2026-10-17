@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern controls row. Keeps every id bound by the transport row presenter. -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/modern_player_row_height"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Title and metadata, top start -->
+    <LinearLayout
+        android:id="@+id/controls_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="@dimen/modern_player_margin"
+        android:layout_marginTop="@dimen/modern_player_margin"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:importantForAccessibility="no"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/description_dock"
+            android:layout_width="@dimen/modern_player_title_width"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+    <!-- Clock and quality info (SmartTube extras), top end -->
+    <RelativeLayout
+        android:id="@+id/additional_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="@dimen/modern_player_margin"
+        android:layout_marginEnd="@dimen/modern_player_margin"
+        android:focusable="false"
+        android:layoutDirection="ltr">
+
+        <TextView
+            android:id="@+id/quality_info"
+            style="@style/Modern.Player.Info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+            android:id="@+id/date_time"
+            style="@style/Modern.Player.Info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/quality_info" />
+    </RelativeLayout>
+
+    <!-- Storyboard thumbnails while seeking -->
+    <LinearLayout
+        android:id="@+id/thumbs_row_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/modern_player_thumbs_bottom"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar
+            android:id="@+id/thumbs_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/thumbs_row_title"
+            style="@style/Modern.Player.Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView
+        android:id="@+id/transport_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/modern_player_margin"
+        android:paddingEnd="@dimen/modern_player_margin"
+        android:paddingBottom="@dimen/modern_player_controls_bottom">
+
+        <!-- Hides player controls on UP -->
+        <LinearLayout
+            android:id="@+id/top_edge"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:focusable="true"
+            android:orientation="horizontal" />
+
+        <!-- Current time start, total time end -->
+        <RelativeLayout
+            android:id="@+id/time_info"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_player_time_height"
+            android:focusable="false"
+            android:layoutDirection="ltr"
+            tools:ignore="RtlHardcoded">
+
+            <TextView
+                android:id="@+id/current_time"
+                style="@style/Modern.Player.Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/modern_icon_inactive" />
+
+            <TextView
+                android:id="@+id/ending_time"
+                style="@style/Modern.Player.Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/total_time"
+                android:layout_toRightOf="@id/current_time"
+                android:layout_marginEnd="@dimen/modern_player_group_gap"
+                android:ellipsize="start"
+                android:gravity="right"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/total_time"
+                style="@style/Modern.Player.Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar
+            android:id="@+id/playback_progress"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_player_seek_height"
+            android:layout_marginTop="@dimen/modern_player_seek_top"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <!-- Both docks share one parent: left/right navigation searches inside it -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_player_controls_height"
+            android:layout_marginTop="@dimen/modern_player_seek_bottom"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layoutDirection="ltr">
+
+            <FrameLayout
+                android:id="@+id/secondary_controls_dock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false" />
+
+            <FrameLayout
+                android:id="@+id/controls_dock"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:clipChildren="false" />
+        </FrameLayout>
+    </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView>
+</FrameLayout>

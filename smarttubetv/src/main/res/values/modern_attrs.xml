@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dialog (preference) panels: defaults in App.Theme.Leanback.Preferences.Base, modern values in Theme.Modern.Preferences -->
+    <attr name="modernPrefPanelBackground" format="reference|color" />
+    <attr name="modernPrefTitleBackground" format="reference|color" />
+    <attr name="modernPrefItemTextColor" format="reference|color" />
+    <attr name="modernPrefRadioButton" format="reference" />
+    <attr name="modernPrefCheckBox" format="reference" />
+    <attr name="modernPrefChatBubble" format="reference|color" />
+    <attr name="modernPrefChatBubbleFocused" format="reference|color" />
+    <!-- Rows of the choice lists pass their focus state to the texts and the indicator (modern: true, classic: false) -->
+    <attr name="modernPrefDuplicateState" format="boolean" />
+    <!-- Color scheme (User interface > Color scheme): defaults in Theme.Modern*, one overlay per scheme in modern_schemes.xml -->
+    <attr name="modernBackground" format="reference|color" />
+    <attr name="modernBrand" format="reference|color" />
+    <attr name="modernAccent" format="reference|color" />
+    <attr name="modernLogo" format="reference" />
+    <attr name="modernPlayerScrimControls" format="reference" />
+    <attr name="modernPlayerScrimSuggestions" format="reference" />
+    <attr name="modernChannelScrim" format="reference" />
+</resources>
