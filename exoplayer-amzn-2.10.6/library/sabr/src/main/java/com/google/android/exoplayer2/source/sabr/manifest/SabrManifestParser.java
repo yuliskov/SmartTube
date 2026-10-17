@@ -392,10 +392,11 @@ public class SabrManifestParser {
                         lastModified);
 
         if (!TextUtils.isEmpty(mediaFormat.getXtags())
-                || !TextUtils.isEmpty(mediaFormat.getAudioTrackId())) {
+                || !TextUtils.isEmpty(mediaFormat.getAudioTrackId())
+                || mediaFormat.isVb()) {
             format = format.copyWithMetadata(
                     new Metadata(new SabrFormatMetadata(
-                            mediaFormat.getXtags(), mediaFormat.getAudioTrackId())));
+                            mediaFormat.getXtags(), mediaFormat.getAudioTrackId(), mediaFormat.isVb())));
         }
 
         SegmentBase segmentBase = null;

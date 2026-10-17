@@ -27,6 +27,11 @@ public class AudioTrack extends MediaTrack {
             return -1;
         }
 
+        // Voice boost is an opt-in variant (like the official app). Don't select it unless it was chosen by the user.
+        if (track2 != null && TrackSelectorUtil.isVb(track2.format) && !TrackSelectorUtil.isVb(format)) {
+            return -1;
+        }
+
         if (track2 == null || track2.format == null) {
             return 1;
         }
@@ -68,9 +73,9 @@ public class AudioTrack extends MediaTrack {
 
         if (format.id == null && format.language == null && format.bitrate == -1 && codecEquals(this, track2)) {
             result = 0;
-        } else if (Helpers.equals(format.id, track2.format.id) && drcEquals(format, track2.format)) {
+        } else if (Helpers.equals(format.id, track2.format.id) && drcEquals(format, track2.format) && vbEquals(format, track2.format)) {
             result = 1;
-        } else if (!codecEquals(this, track2) || !drcEquals(format, track2.format) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
+        } else if (!codecEquals(this, track2) || !drcEquals(format, track2.format) || !vbEquals(format, track2.format) || bitrateLessOrEquals(track2.format.bitrate, format.bitrate)) {
             result = 0;
         }
 
@@ -87,5 +92,13 @@ public class AudioTrack extends MediaTrack {
         }
 
         return TrackSelectorUtil.isDrc(format1) == TrackSelectorUtil.isDrc(format2);
+    }
+
+    private static boolean vbEquals(Format format1, Format format2) {
+        if (format1 == null || format2 == null) {
+            return false;
+        }
+
+        return TrackSelectorUtil.isVb(format1) == TrackSelectorUtil.isVb(format2);
     }
 }
