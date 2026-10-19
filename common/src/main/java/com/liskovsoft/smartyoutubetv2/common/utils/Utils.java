@@ -1314,8 +1314,9 @@ public class Utils {
         if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
             // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
             PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
-            if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
-                playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
+            int customDns = PlayerTweaksData.DNS_TYPE_IPV4;
+            if (playerTweaksData.getPreferredDnsType() != customDns) {
+                playerTweaksData.setPreferredDnsType(customDns);
                 // Restart app to reinit OkHttp internal objects
                 Utils.restartTheApp(context);
                 return true;
