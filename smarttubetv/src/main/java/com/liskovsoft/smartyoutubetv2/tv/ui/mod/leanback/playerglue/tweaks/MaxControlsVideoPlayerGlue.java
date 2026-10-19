@@ -11,6 +11,7 @@ import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.LiveStateProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
@@ -25,6 +26,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener, PlayerView {
     private String mQualityInfo;
     private Video mVideo;
+    private LiveStateProvider mLiveStateProvider;
     private WeakReference<PlaybackTransportRowPresenter.ViewHolder> mTransportViewHolder;
     private WeakReference<AbstractDetailsDescriptionPresenter.ViewHolder> mDescriptionViewHolder;
 
@@ -186,12 +188,24 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         }
     }
 
+    public void setLiveStateProvider(LiveStateProvider provider) {
+        mLiveStateProvider = provider;
+    }
+
+    @Override
+    public boolean isSeekBlocked() {
+        return mLiveStateProvider != null && mLiveStateProvider.isSeekBlocked();
+    }
+
     private void updateLiveEndingTime() {
-        if (mVideo == null) {
+        // The blocked bar has its own duration (see pinProgressToEnd)
+        if (mVideo == null || isSeekBlocked()) {
             return;
         }
 
-        long liveDurationMs = mVideo.getLiveDurationMs();
+        long providedDurationMs = mLiveStateProvider != null ? mLiveStateProvider.getLiveDurationMs() : -1;
+        boolean hasProvidedDuration = providedDurationMs > 0;
+        long liveDurationMs = hasProvidedDuration ? Math.max(providedDurationMs, getCurrentPosition()) : mVideo.getLiveDurationMs();
 
         if (liveDurationMs == 0) {
             return;
@@ -205,7 +219,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         }
 
         // Apply duration on videos with uncommon length.
-        if (playerAdapter.getDuration() > Video.MAX_LIVE_DURATION_MS) {
+        if (hasProvidedDuration || playerAdapter.getDuration() > Video.MAX_LIVE_DURATION_MS) {
             controlsRow.setDuration(
                     playerAdapter.isPrepared() ? liveDurationMs : -1);
         }
