@@ -55,7 +55,7 @@ public class SabrStream {
             UMPPartId.SABR_REDIRECT,
             UMPPartId.FORMAT_INITIALIZATION_METADATA,
             UMPPartId.NEXT_REQUEST_POLICY,
-            //UMPPartId.LIVE_METADATA,
+            UMPPartId.LIVE_METADATA,
             //UMPPartId.SABR_SEEK,
             UMPPartId.SABR_ERROR,
             UMPPartId.SABR_CONTEXT_UPDATE,
@@ -189,6 +189,18 @@ public class SabrStream {
     public long getEndOfStreamSeekToleranceMs() {
         return processor.getLiveSegmentTargetDurationSec() * 1_000L
                 - processor.getLiveSegmentTargetDurationToleranceMs();
+    }
+
+    public boolean isLive() {
+        return processor.isLive();
+    }
+
+    public long getLiveStartPositionMs() {
+        return processor.getLiveStartPositionMs();
+    }
+
+    public long getLiveEdgeMs() {
+        return processor.getLiveEdgeMs();
     }
 
     public boolean hasSegmentStartTime(int iTag) {
