@@ -57,16 +57,22 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             mVideoLoaderController.reloadVideo();
         } else if (isOfflineVideo() && !mBufferingDetector.isPlayable()) {
             int requiredEngine = PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP;
-            int customDns = PlayerTweaksData.DNS_TYPE_GOOGLE;
-            boolean isCustomDnsActive = getPlayerTweaksData().getPlayerDataSource() == requiredEngine
-                    && getPlayerTweaksData().getPreferredDnsType() == customDns;
+            int customDns = PlayerTweaksData.DNS_TYPE_IPV4;
+            boolean isCustomEngineEnabled = getPlayerTweaksData().getPlayerDataSource() == requiredEngine;
+            boolean isCustomDnsEnabled = getPlayerTweaksData().getPreferredDnsType() == customDns;
+            boolean isCustomDnsActive = isCustomEngineEnabled && isCustomDnsEnabled;
             if (!isCustomDnsActive && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 // Wrong DNS resolving could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
                 MessageHelpers.showLongMessage(getContext(), "Fixing incorrect DNS resolution. App restart needed...");
                 getPlayerTweaksData().setPlayerDataSource(requiredEngine);
                 getPlayerTweaksData().setPreferredDnsType(customDns);
-                mVideoLoaderController.restartEngine();
+                if (!isCustomDnsEnabled) {
+                    // Restart app to reinit OkHttp internal objects
+                    Utils.restartTheApp(getContext());
+                } else {
+                    mVideoLoaderController.restartEngine();
+                }
             } else {
                 // Also, some clients like ANDROID_REEL may just hang at start
                 MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
