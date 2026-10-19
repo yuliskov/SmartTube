@@ -104,6 +104,10 @@ public final class SabrMediaSource extends BaseMediaSource {
         periodsById.clear();
     }
 
+    public SabrManifest getManifest() {
+        return manifest;
+    }
+
     @Override
     public void maybeThrowSourceInfoRefreshError() throws IOException {
         manifestLoadErrorThrower.maybeThrowError();

@@ -195,6 +195,10 @@ public class SabrStream {
         return processor.isLive();
     }
 
+    public long getLiveSegmentDurationMs() {
+        return processor.getLiveSegmentTargetDurationSec() * 1_000L;
+    }
+
     public long getLiveStartPositionMs() {
         return processor.getLiveStartPositionMs();
     }

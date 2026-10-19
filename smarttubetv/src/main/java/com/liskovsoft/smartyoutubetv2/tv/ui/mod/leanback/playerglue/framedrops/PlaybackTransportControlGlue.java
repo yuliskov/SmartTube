@@ -341,7 +341,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
 
         @Override
         public boolean isSeekEnabled() {
-            return mSeekProvider != null || mSeekEnabled;
+            return !isSeekBlocked() && (mSeekProvider != null || mSeekEnabled);
         }
 
         @Override
@@ -361,6 +361,10 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
 
         @Override
         public void onSeekPositionChanged(long pos) {
+            if (isSeekBlocked()) {
+                return;
+            }
+
             if (mSeekProvider == null) {
                 mPlayerAdapter.seekTo(pos);
             } else {

@@ -13,6 +13,8 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.sabr.SabrMediaSource;
+import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
@@ -21,6 +23,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.LiveStateProvider;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.VolumeBooster;
@@ -39,8 +42,10 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class ExoPlayerController implements Player.EventListener {
+public class ExoPlayerController implements Player.EventListener, LiveStateProvider {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
+    /** How far from the live edge (in segments) the playback is considered to be on the edge */
+    private static final int SABR_LIVE_EDGE_TOLERANCE_SEGMENTS = 4;
     private final Context mContext;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
@@ -50,6 +55,12 @@ public class ExoPlayerController implements Player.EventListener {
     private WeakReference<Video> mVideo;
     private final PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
+    /** Not null only for sabr live streams */
+    private SabrManifest mSabrLiveManifest;
+    /** Sabr live stream without DVR: rewind is forbidden, the playback must always stay on the live edge */
+    private boolean mSabrLiveSeekBlocked;
+    /** Sabr live stream is waiting for the live start position (see {@link #seekToSabrLiveStart()}) */
+    private boolean mSabrLiveStartPending;
     private PlayerView mPlayerView;
     private VolumeBooster mVolumeBooster;
     private boolean mIsEnded;
@@ -82,6 +93,33 @@ public class ExoPlayerController implements Player.EventListener {
     public void openSabr(MediaItemFormatInfo formatInfo) {
         MediaSource mediaSource = mMediaSourceFactory.fromSabrFormatInfo(formatInfo);
         openMediaSource(mediaSource);
+
+        if (formatInfo.isLive()) {
+            SabrManifest manifest = ((SabrMediaSource) mediaSource).getManifest();
+            mSabrLiveManifest = manifest;
+            mSabrLiveSeekBlocked = !formatInfo.isLiveDvrEnabled();
+            mSabrLiveStartPending = true;
+        }
+    }
+
+    /**
+     * Live head position comes with the first server response (the same one that makes the player ready).
+     * So jump near the live edge as soon as the position is known.
+     */
+    private void seekToSabrLiveStart() {
+        if (mSabrLiveManifest == null || mPlayer == null) {
+            return;
+        }
+
+        // Stream without DVR can't be rewound: start right on the live edge
+        long startPositionMs = mSabrLiveSeekBlocked ? getLiveDurationMs() : mSabrLiveManifest.getLiveStartPositionMs();
+
+        if (startPositionMs == -1) { // not yet. Try on the next event
+            return;
+        }
+
+        mSabrLiveStartPending = false;
+        mPlayer.seekTo(startPositionMs);
     }
 
     public void openDash(MediaItemFormatInfo formatInfo) {
@@ -121,7 +159,27 @@ public class ExoPlayerController implements Player.EventListener {
         openMediaSource(new MergingMediaSource(dashMediaSource, hlsMediaSource));
     }
 
+    /**
+     * Rewind is forbidden (live stream without DVR)
+     */
+    @Override
+    public boolean isSeekBlocked() {
+        return mSabrLiveSeekBlocked;
+    }
+
+    /**
+     * Sabr timeline is static (fake long duration). The real end of the live stream is the live edge.
+     * @return live edge position or -1 if not a sabr live stream (or unknown yet)
+     */
+    @Override
+    public long getLiveDurationMs() {
+        return mSabrLiveManifest != null ? mSabrLiveManifest.getLiveEdgeMs() : -1;
+    }
+
     private void openMediaSource(MediaSource mediaSource) {
+        mSabrLiveManifest = null; // set by the sabr live only
+        mSabrLiveSeekBlocked = false;
+        mSabrLiveStartPending = false;
         resetPlayerState(); // fixes occasional video artifacts and problems with quality switching
         setQualityInfo("");
 
@@ -145,6 +203,17 @@ public class ExoPlayerController implements Player.EventListener {
      * (e.g. 302200 when duration is 302000).
      */
     public void setPositionMs(long positionMs) {
+        if (mSabrLiveSeekBlocked) {
+            long liveEdgeMs = getLiveDurationMs();
+            long toleranceMs = SABR_LIVE_EDGE_TOLERANCE_SEGMENTS * mSabrLiveManifest.getLiveSegmentDurationMs();
+            // Skip the seek when already near the edge (the app sets position periodically)
+            if (liveEdgeMs != -1 && mPlayer != null && liveEdgeMs - mPlayer.getCurrentPosition() > toleranceMs) {
+                Log.d(TAG, "Live stream has no DVR. Moving to the live edge: " + liveEdgeMs);
+                mPlayer.seekTo(liveEdgeMs);
+            }
+            return;
+        }
+
         // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
         if (mPlayer != null && positionMs >= 0 && positionMs <= getDurationMs()) {
             mPlayer.seekTo(positionMs);
@@ -343,6 +412,10 @@ public class ExoPlayerController implements Player.EventListener {
         boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;
         boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
         boolean isBuffering = Player.STATE_BUFFERING == playbackState && playWhenReady;
+
+        if (Player.STATE_READY == playbackState && mSabrLiveStartPending) {
+            seekToSabrLiveStart();
+        }
 
         // Fix chapters (seek and play) after playback ends
         if (isPlaybackEnded && mIsEnded) {

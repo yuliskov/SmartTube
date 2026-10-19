@@ -462,9 +462,24 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     private void updateProgress() {
         if (mControlsRow != null) {
+            if (isSeekBlocked() && mPlayerAdapter.isPrepared()) {
+                pinProgressToEnd();
+                return;
+            }
+
             mControlsRow.setCurrentPosition(mPlayerAdapter.isPrepared()
                     ? getCurrentPosition() : -1);
         }
+    }
+
+    /**
+     * Live stream without rewind: the bar is always full (duration == position) and can't be moved.
+     */
+    private void pinProgressToEnd() {
+        long positionMs = getCurrentPosition();
+        mControlsRow.setDuration(positionMs);
+        mControlsRow.setCurrentPosition(positionMs);
+        mControlsRow.setBufferedPosition(positionMs);
     }
 
     @CallSuper
@@ -475,14 +490,14 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     }
 
     private void updateBufferedProgress() {
-        if (mControlsRow != null) {
+        if (mControlsRow != null && !isSeekBlocked()) {
             mControlsRow.setBufferedPosition(mPlayerAdapter.getBufferedPosition());
         }
     }
 
     @CallSuper
     protected void onUpdateDuration() {
-        if (mControlsRow != null) {
+        if (mControlsRow != null && !isSeekBlocked()) {
             mControlsRow.setDuration(
                     mPlayerAdapter.isPrepared() ? mPlayerAdapter.getDuration() : -1);
         }
@@ -628,8 +643,12 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
         if (DEBUG) Log.v(TAG, "updateRowMetadata");
 
         mControlsRow.setImageDrawable(getArt());
-        mControlsRow.setDuration(getDuration());
-        mControlsRow.setCurrentPosition(getCurrentPosition());
+        if (isSeekBlocked()) {
+            pinProgressToEnd();
+        } else {
+            mControlsRow.setDuration(getDuration());
+            mControlsRow.setCurrentPosition(getCurrentPosition());
+        }
 
         if (getHost() != null) {
             getHost().notifyPlaybackRowChanged();
@@ -667,7 +686,18 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      * @param position New position.
      */
     public final void seekTo(long position) {
+        if (isSeekBlocked()) {
+            return;
+        }
+
         mPlayerAdapter.seekTo(position);
+    }
+
+    /**
+     * Live stream without rewind: the seeking is forbidden. Subclasses decide when.
+     */
+    public boolean isSeekBlocked() {
+        return false;
     }
 
     /**
