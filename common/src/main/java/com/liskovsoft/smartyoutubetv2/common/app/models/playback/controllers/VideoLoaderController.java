@@ -303,7 +303,7 @@ public class VideoLoaderController extends BasePlayerController {
             //} else { // 18+ video or the video is hidden/removed
             //    scheduleNextVideoTimer(5_000);
             //}
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats() && !(formatInfo.isLive() && formatInfo.containsSabrFormats())) { // live: SABR is experimental, but preferred
             Log.d(TAG, "Loading regular video in dash format...");
 
             if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
@@ -311,7 +311,7 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats() && !formatInfo.isLive()) { // TODO: SABR live not implemented yet
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) { // TODO: SABR live is experimental
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
