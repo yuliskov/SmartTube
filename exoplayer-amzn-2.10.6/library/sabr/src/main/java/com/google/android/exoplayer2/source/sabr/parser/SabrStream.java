@@ -207,6 +207,10 @@ public class SabrStream {
         return processor.getLiveEdgeMs();
     }
 
+    public long getMinSeekableTimeMs() {
+        return processor.getMinSeekableTimeMs();
+    }
+
     public boolean hasSegmentStartTime(int iTag) {
         return processor.hasSegmentStartTime(iTag);
     }

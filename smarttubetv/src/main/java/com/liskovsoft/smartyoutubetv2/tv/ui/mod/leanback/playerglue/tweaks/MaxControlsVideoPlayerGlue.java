@@ -197,6 +197,15 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         return mLiveStateProvider != null && mLiveStateProvider.isSeekBlocked();
     }
 
+    /**
+     * Show only the window that YouTube lets to watch, not the absolute stream time.
+     * Blocked bar (no rewind) shows the live edge as is.
+     */
+    @Override
+    protected long getTimelineOffsetMs() {
+        return mLiveStateProvider != null && !isSeekBlocked() ? mLiveStateProvider.getLiveStartMs() : 0;
+    }
+
     private void updateLiveEndingTime() {
         // The blocked bar has its own duration (see pinProgressToEnd)
         if (mVideo == null || isSeekBlocked()) {
@@ -205,7 +214,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
 
         long providedDurationMs = mLiveStateProvider != null ? mLiveStateProvider.getLiveDurationMs() : -1;
         boolean hasProvidedDuration = providedDurationMs > 0;
-        long liveDurationMs = hasProvidedDuration ? Math.max(providedDurationMs, getCurrentPosition()) : mVideo.getLiveDurationMs();
+        long liveDurationMs = hasProvidedDuration
+                ? Math.max(providedDurationMs - getTimelineOffsetMs(), getCurrentPosition()) : mVideo.getLiveDurationMs();
 
         if (liveDurationMs == 0) {
             return;

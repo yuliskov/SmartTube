@@ -259,6 +259,23 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return result;
     }
 
+    /**
+     * The player timeline is the absolute stream time.
+     * but only the last part of it can be rewound (the DVR ["archive"] window).
+     * This is where that part starts.
+     *
+     * @return start of the seekable window or -1 if unknown yet
+     */
+    public synchronized long getLiveWindowStartMs() {
+        long result = -1;
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            result = Math.max(result, sabrStream.getMinSeekableTimeMs());
+        }
+
+        return result;
+    }
+
     public int getSabrRequestNumber() {
         return sabrRequestNumber;
     }

@@ -176,6 +176,11 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         return mSabrLiveManifest != null ? mSabrLiveManifest.getLiveEdgeMs() : -1;
     }
 
+    @Override
+    public long getLiveStartMs() {
+        return mSabrLiveManifest != null ? Math.max(mSabrLiveManifest.getLiveWindowStartMs(), 0) : 0;
+    }
+
     private void openMediaSource(MediaSource mediaSource) {
         mSabrLiveManifest = null; // set by the sabr live only
         mSabrLiveSeekBlocked = false;

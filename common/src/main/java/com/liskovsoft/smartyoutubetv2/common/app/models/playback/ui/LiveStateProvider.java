@@ -10,6 +10,12 @@ public interface LiveStateProvider {
     long getLiveDurationMs();
 
     /**
+     * The player timeline may be longer than what YouTube lets to rewind (e.g. absolute stream time).
+     * @return start of the seekable window in the player timeline or 0 if the whole timeline is seekable
+     */
+    long getLiveStartMs();
+
+    /**
      * @return true if the stream can't be rewound (live without DVR)
      */
     boolean isSeekBlocked();

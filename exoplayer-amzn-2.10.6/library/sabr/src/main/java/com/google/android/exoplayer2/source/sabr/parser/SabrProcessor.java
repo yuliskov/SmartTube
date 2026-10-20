@@ -266,6 +266,9 @@ public class SabrProcessor {
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
                 Utils.toLong(mediaHeader.getHeaderId()), sequenceNumber, segment);
+//        Log.d(TAG, "Header times: seq=%s, hasStartMs=%s, startMs=%s, hasTimeRange=%s, actualDurationMs=%s, grid=%s",
+//                sequenceNumber, mediaHeader.hasStartMs(), startMs, timeRange != null, actualDurationMs,
+//                (long) sequenceNumber * getLiveSegmentTargetDurationSec() * 1_000L);
 
         return result;
     }
@@ -314,17 +317,16 @@ public class SabrProcessor {
             MediaHeader mediaHeader = segment.mediaHeader;
 
             // Live headers have neither start_ms nor duration_ms (the start is in time_range). Without them the next
-            // request is made from 0 and the chunk times stay unset. Live segments start on the target duration grid
-            // (start = number * target), the real start may be slightly off. So aim the next request just inside
-            // the next segment: the exact boundary still belongs to the previous one and the server would resend it forever.
+            // request is made from 0 and the chunk times stay unset. The real start is NOT on the target duration grid
+            // (start = number * target + offset), so use it as is. Aim the next request
+            // just inside the next segment: the exact boundary still belongs to the previous one and the server would resend it forever.
             if (isLive()) {
                 long targetMs = getLiveSegmentTargetDurationSec() * 1_000L;
-                long toNextSegmentMs = (mediaHeader.getSequenceNumber() + 1) * targetMs
-                        + getLiveSegmentTargetDurationToleranceMs() - segment.startMs;
+                long toNextSegmentMs = targetMs + getLiveSegmentTargetDurationToleranceMs();
 
                 mediaHeader = mediaHeader.toBuilder()
                         .setStartMs(segment.startMs)
-                        .setDurationMs(Math.max(toNextSegmentMs, 1))
+                        .setDurationMs(toNextSegmentMs)
                         .build();
             }
 
@@ -672,13 +674,13 @@ public class SabrProcessor {
         return getMaxSeekableTimeMs();
     }
 
-    private long getMinSeekableTimeMs() {
+    public long getMinSeekableTimeMs() {
         return liveMetadata == null ? -1 : Utils.ticksToMs(
                 liveMetadata.hasMinSeekableTimeTicks() ? liveMetadata.getMinSeekableTimeTicks() : -1,
                 liveMetadata.hasMinSeekableTimescale() ? liveMetadata.getMinSeekableTimescale() : -1);
     }
 
-    private long getMaxSeekableTimeMs() {
+    public long getMaxSeekableTimeMs() {
         return liveMetadata == null ? -1 : Utils.ticksToMs(
                 liveMetadata.hasMaxSeekableTimeTicks() ? liveMetadata.getMaxSeekableTimeTicks() : -1,
                 liveMetadata.hasMaxSeekableTimescale() ? liveMetadata.getMaxSeekableTimescale() : -1);

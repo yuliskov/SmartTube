@@ -491,7 +491,7 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     private void updateBufferedProgress() {
         if (mControlsRow != null && !isSeekBlocked()) {
-            mControlsRow.setBufferedPosition(mPlayerAdapter.getBufferedPosition());
+            mControlsRow.setBufferedPosition(Math.max(mPlayerAdapter.getBufferedPosition() - getTimelineOffsetMs(), 0));
         }
     }
 
@@ -514,7 +514,16 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      * @return The current position of the media item in milliseconds.
      */
     public long getCurrentPosition() {
-        return mPlayerAdapter.getCurrentPosition();
+        return Math.max(mPlayerAdapter.getCurrentPosition() - getTimelineOffsetMs(), 0);
+    }
+
+    /**
+     * The player timeline may start earlier than what is allowed to watch (e.g. live stream).
+     * The UI timeline starts at this offset of the player timeline.
+     * May be overridden to provide the offset. Default implementation returns 0 (the whole timeline is shown).
+     */
+    protected long getTimelineOffsetMs() {
+        return 0;
     }
 
     /**
@@ -690,7 +699,7 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
             return;
         }
 
-        mPlayerAdapter.seekTo(position);
+        mPlayerAdapter.seekTo(position + getTimelineOffsetMs());
     }
 
     /**
