@@ -473,8 +473,9 @@ public class VideoStateController extends BasePlayerController {
         FormatItem result = getPlayerData().getFormat(FormatItem.TYPE_SUBTITLE);
 
         if (getPlayerData().isSubtitlesPerChannelEnabled()) {
-            result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId)
-                    ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+            String channelId = getPlayer().getVideo().channelId;
+            result = getPlayerData().isSubtitlesPerChannelEnabled(channelId)
+                    ? getPlayerData().getLastSubtitleFormat(channelId) : FormatItem.SUBTITLE_NONE;
         }
 
         getPlayer().setFormat(result);
