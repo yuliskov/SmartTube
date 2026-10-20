@@ -303,7 +303,7 @@ public class VideoLoaderController extends BasePlayerController {
             //} else { // 18+ video or the video is hidden/removed
             //    scheduleNextVideoTimer(5_000);
             //}
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats() && !(formatInfo.isLive() && formatInfo.containsSabrFormats())) { // live: SABR is experimental, but preferred
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats() && !isSabrLive(formatInfo)) { // live: SABR is experimental, but preferred
             Log.d(TAG, "Loading regular video in dash format...");
 
             if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
@@ -311,7 +311,7 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) { // TODO: SABR live is experimental
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats() && !isLiveFixPreferred(formatInfo)) { // TODO: SABR live is experimental
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
@@ -508,7 +508,7 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         // Not enough info for full length live streams (sabr gets the live info from its own metadata)
-        if (formatInfo.isLive() && !formatInfo.containsSabrFormats() && formatInfo.getStartTimeMs() == 0) {
+        if (formatInfo.isLive() && !isSabrLive(formatInfo) && formatInfo.getStartTimeMs() == 0) {
             return false;
         }
 
@@ -523,6 +523,25 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         return true;
+    }
+
+    /**
+     * Live stream played via SABR. The "live stream fix" options have priority over it,
+     * unless the legacy way can't work (no start time for the full length live).
+     * "Station" streams use only SABR.
+     */
+    private boolean isSabrLive(MediaItemFormatInfo formatInfo) {
+        return formatInfo.isLive() && formatInfo.containsSabrFormats() && !isLiveFixPreferred(formatInfo);
+    }
+
+    /**
+     * The "live stream fix" is enabled and the legacy way (not sabr) can work for the stream.
+     * The start time is set for live streams only.
+     */
+    private boolean isLiveFixPreferred(MediaItemFormatInfo formatInfo) {
+        boolean liveFixEnabled = getPlayerTweaksData().isHlsStreamsForced() || getPlayerTweaksData().isDashUrlStreamsForced();
+
+        return liveFixEnabled && formatInfo.getStartTimeMs() != 0;
     }
 
     private boolean acceptDashLive(MediaItemFormatInfo formatInfo) {
