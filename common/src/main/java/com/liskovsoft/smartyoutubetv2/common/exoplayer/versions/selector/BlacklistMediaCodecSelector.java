@@ -23,7 +23,7 @@ public class BlacklistMediaCodecSelector implements MediaCodecSelector {
             "OMX.qcom.video.decoder.avc", "OMX.rk.video_decoder.avc", "OMX.allwinner.video.decoder.avc"
     };
     final static String[] SW_DECODERS = {"OMX.google"};
-    final static String[] HW_DECODERS = {"OMX.amlogic", "OMX.MTK", "OMX.Nvidia", "OMX.qcom", "OMX.rk", "OMX.allwinner"};
+    final static String[] HW_DECODERS = {"OMX.amlogic", "OMX.MTK", "OMX.Nvidia", "OMX.qcom", "OMX.rk", "OMX.allwinner", "OMX.MS."};
 
     // Ver. 2.9.6
     //@Override
