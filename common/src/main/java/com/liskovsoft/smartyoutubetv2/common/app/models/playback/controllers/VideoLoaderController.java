@@ -507,8 +507,8 @@ public class VideoLoaderController extends BasePlayerController {
             return false;
         }
 
-        // Not enough info for full length live streams
-        if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
+        // Not enough info for full length live streams (sabr gets the live info from its own metadata)
+        if (formatInfo.isLive() && !formatInfo.containsSabrFormats() && formatInfo.getStartTimeMs() == 0) {
             return false;
         }
 
