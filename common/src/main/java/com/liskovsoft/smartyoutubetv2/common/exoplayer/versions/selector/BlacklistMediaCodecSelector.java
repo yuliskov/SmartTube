@@ -29,7 +29,7 @@ public class BlacklistMediaCodecSelector implements MediaCodecSelector {
     };
     // Name prefixes of software decoders. Used when the platform can't tell us (Android < 10).
     final static String[] SW_DECODERS = {"omx.google.", "omx.ffmpeg.", "c2.android.", "c2.google."};
-    private static Map<String, Boolean> sSoftwareOnlyDecoders;
+    private static Map<String, Boolean> sSoftwareOnlyDecoders
 
     // Ver. 2.9.6
     //@Override
