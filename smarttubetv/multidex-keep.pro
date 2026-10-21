@@ -1,3 +1,6 @@
+-keepclassmembers class okio.ByteString$Companion {
+    <init>(...);
+}
 -keepclassmembers class com.liskovsoft.smartyoutubetv2.common.prefs.common.DataSaverBase$$ExternalSyntheticLambda0 {
     <init>(...);
 }
