@@ -17,13 +17,16 @@ public class BlacklistMediaCodecSelector implements MediaCodecSelector {
     private static final String TAG = BlacklistMediaCodecSelector.class.getSimpleName();
 
     // list of strings used in blacklisting codecs
-    final static String[] ALL_DECODERS = {
+    private final static String[] ALL_DECODERS = {
             "OMX.google.h264.decoder", "OMX.google.vp9.decoder", "OMX.Nvidia.vp9.decoder",
             "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder.awesome", "OMX.amlogic.avc.decoder.awesome",
             "OMX.qcom.video.decoder.avc", "OMX.rk.video_decoder.avc", "OMX.allwinner.video.decoder.avc"
     };
-    final static String[] SW_DECODERS = {"OMX.google"};
-    final static String[] HW_DECODERS = {"OMX.amlogic", "OMX.MTK", "OMX.Nvidia", "OMX.qcom", "OMX.rk", "OMX.allwinner", "OMX.MS."};
+    private final static String[] SW_DECODERS = {"OMX.google"};
+    private final static String[] HW_DECODERS = {
+            "OMX.amlogic", "OMX.MTK", "OMX.Nvidia", "OMX.qcom", "OMX.rk", "OMX.allwinner",
+            "OMX.MS.", "c2.qti.", "c2.mtk.", "c2.rk."
+    };
 
     // Ver. 2.9.6
     //@Override
