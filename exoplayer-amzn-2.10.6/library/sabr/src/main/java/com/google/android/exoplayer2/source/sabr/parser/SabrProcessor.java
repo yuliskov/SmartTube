@@ -53,6 +53,7 @@ import java.util.Set;
 public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
     private static final int NO_VALUE = -1;
+    private static final long LIVE_START_OFFSET_MS = 10_000;
     private final String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
     private FormatSelector formatSelector;
@@ -265,6 +266,9 @@ public class SabrProcessor {
 
         Log.d(TAG, "Initialized Media Header %s for sequence %s. Segment: %s",
                 Utils.toLong(mediaHeader.getHeaderId()), sequenceNumber, segment);
+//        Log.d(TAG, "Header times: seq=%s, hasStartMs=%s, startMs=%s, hasTimeRange=%s, actualDurationMs=%s, grid=%s",
+//                sequenceNumber, mediaHeader.hasStartMs(), startMs, timeRange != null, actualDurationMs,
+//                (long) sequenceNumber * getLiveSegmentTargetDurationSec() * 1_000L);
 
         return result;
     }
@@ -310,7 +314,23 @@ public class SabrProcessor {
         }
 
         if (!segment.mediaHeader.getIsInitSeg()) {
-            initializedFormats.put(segment.mediaHeader.getItag(), segment.mediaHeader);
+            MediaHeader mediaHeader = segment.mediaHeader;
+
+            // Live headers have neither start_ms nor duration_ms (the start is in time_range). Without them the next
+            // request is made from 0 and the chunk times stay unset. The real start is NOT on the target duration grid
+            // (start = number * target + offset), so use it as is. Aim the next request
+            // just inside the next segment: the exact boundary still belongs to the previous one and the server would resend it forever.
+            if (isLive()) {
+                long targetMs = getLiveSegmentTargetDurationSec() * 1_000L;
+                long toNextSegmentMs = targetMs + getLiveSegmentTargetDurationToleranceMs();
+
+                mediaHeader = mediaHeader.toBuilder()
+                        .setStartMs(segment.startMs)
+                        .setDurationMs(toNextSegmentMs)
+                        .build();
+            }
+
+            initializedFormats.put(mediaHeader.getItag(), mediaHeader);
         }
 
         Log.d(TAG, "MediaEnd for %s (sequence %s, data length = %s)",
@@ -545,8 +565,7 @@ public class SabrProcessor {
         // If the current player time is less than the min dvr time, simulate a server seek to the min dvr time.
         // The server SHOULD send us a SABR_SEEK part in this case, but it does not always happen (e.g. ANDROID_VR)
         // The server SHOULD NOT send us segments before the min dvr time, so we should assume that the player time is correct.
-        long minSeekableTimeMs = Utils.ticksToMs(liveMetadata.hasMinSeekableTimeTicks() ? liveMetadata.getMinSeekableTimeTicks() : -1,
-                liveMetadata.hasMinSeekableTimescale() ? liveMetadata.getMinSeekableTimescale() : -1);
+        long minSeekableTimeMs = getMinSeekableTimeMs();
         if (minSeekableTimeMs != -1 && playerTimeMs > 0 && playerTimeMs < minSeekableTimeMs) {
             Log.d(TAG, "Player time %s is less than min seekable time %s, simulating server seek",
                     playerTimeMs, minSeekableTimeMs);
@@ -635,6 +654,36 @@ public class SabrProcessor {
                 sabrContextUpdates.remove(discardType);
             }
         }
+    }
+
+    /**
+     * @return position to start a live stream from (near the live edge) or -1 if unknown.
+     * Without it the first request is made at 0 and the server answers with the head segment out of order.
+     */
+    public long getLiveStartPositionMs() {
+        long maxSeekableTimeMs = getMaxSeekableTimeMs();
+
+        // The seekable window may start later than max - offset
+        return maxSeekableTimeMs > 0 ? Math.max(Math.max(getMinSeekableTimeMs(), 0), maxSeekableTimeMs - LIVE_START_OFFSET_MS) : -1;
+    }
+
+    /**
+     * @return latest max seekable position or -1 if unknown
+     */
+    public long getLiveEdgeMs() {
+        return getMaxSeekableTimeMs();
+    }
+
+    public long getMinSeekableTimeMs() {
+        return liveMetadata == null ? -1 : Utils.ticksToMs(
+                liveMetadata.hasMinSeekableTimeTicks() ? liveMetadata.getMinSeekableTimeTicks() : -1,
+                liveMetadata.hasMinSeekableTimescale() ? liveMetadata.getMinSeekableTimescale() : -1);
+    }
+
+    public long getMaxSeekableTimeMs() {
+        return liveMetadata == null ? -1 : Utils.ticksToMs(
+                liveMetadata.hasMaxSeekableTimeTicks() ? liveMetadata.getMaxSeekableTimeTicks() : -1,
+                liveMetadata.hasMaxSeekableTimescale() ? liveMetadata.getMaxSeekableTimescale() : -1);
     }
 
     public boolean isLive() {

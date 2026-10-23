@@ -220,6 +220,62 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return true;
     }
 
+    /**
+     * @return target length of a live segment or -1 if unknown yet (no streams created)
+     */
+    public synchronized long getLiveSegmentDurationMs() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            return sabrStream.getLiveSegmentDurationMs();
+        }
+
+        return -1;
+    }
+
+    /**
+     * @return position to start a live stream from or -1 if unknown yet
+     */
+    public synchronized long getLiveStartPositionMs() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            long positionMs = sabrStream.getLiveStartPositionMs();
+
+            if (positionMs != -1) {
+                return positionMs;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * @return latest known live edge position or -1 if unknown yet
+     */
+    public synchronized long getLiveEdgeMs() {
+        long result = -1;
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            result = Math.max(result, sabrStream.getLiveEdgeMs());
+        }
+
+        return result;
+    }
+
+    /**
+     * The player timeline is the absolute stream time.
+     * but only the last part of it can be rewound (the DVR ["archive"] window).
+     * This is where that part starts.
+     *
+     * @return start of the seekable window or -1 if unknown yet
+     */
+    public synchronized long getLiveWindowStartMs() {
+        long result = -1;
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            result = Math.max(result, sabrStream.getMinSeekableTimeMs());
+        }
+
+        return result;
+    }
+
     public int getSabrRequestNumber() {
         return sabrRequestNumber;
     }
