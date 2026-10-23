@@ -539,8 +539,6 @@ public class VideoLoaderController extends BasePlayerController {
     }
 
     private void initRandomNext() {
-        MediaServiceManager.instance().disposeActions();
-
         PlaybackView player = getPlayer();
         PlayerData playerData = getPlayerData();
         Video current = getVideo();
