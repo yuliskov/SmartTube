@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,14 +36,9 @@ public class GDriveBackupManager {
     @SuppressLint("StaticFieldLeak")
     private static GDriveBackupManager sInstance;
     private final Context mContext;
-    private static final String FILES_SUBDIR = "files";
-    private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
     private final GoogleSignInService mSignInService;
     private final String mRootDir;
-    private final String mSharedPrefs;
-    private final String mFilesDir;
-    private final String[] mDataDirs;
     private final String mBackupDir;
     private final String mRootBackupDir;
     private final GeneralData mGeneralData;
@@ -54,9 +50,6 @@ public class GDriveBackupManager {
         mContext = context;
         mGeneralData = GeneralData.instance(context);
         mRootDir = mContext.getApplicationInfo().dataDir;
-        mSharedPrefs = String.format("%s/%s", mRootDir, SHARED_PREFS_SUBDIR);
-        mFilesDir = String.format("%s/%s", mRootDir, FILES_SUBDIR);
-        mDataDirs = new String[] { mSharedPrefs, mFilesDir };
         mBackupDir = String.format("SmartTubeBackup/%s", context.getPackageName());
         mRootBackupDir = "SmartTubeBackup";
         mSignInService = GoogleSignInService.instance();
@@ -162,79 +155,50 @@ public class GDriveBackupManager {
         showRestoreChooserDialog();
     }
 
-    private void startRestoreOld(String backupDir, Runnable onError) {
-        mRestoreAction = DriveService.getFileList(Uri.parse(backupDir))
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io()) // run subscribe on separate thread
-                .subscribe(names -> {
-                    if (names == null)
-                        return;
-
-                    // remove old data
-                    for (String dataDir : mDataDirs) {
-                        FileHelpers.delete(dataDir);
-                    }
-
-                    for (String name : names) {
-                        if (name == null)
-                            continue;
-
-                        MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore) + "\n" + name);
-
-                        DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name)))
-                                .blockingSubscribe(inputStream -> FileHelpers.copy(inputStream, new File(mSharedPrefs, fixAltPackageName(name))));
-                    }
-
-                    // NOTE: Don't restart the app, just kill. The reboot will broke the files.
-                    // To apply settings we need to kill the app
-                    new Handler(mContext.getMainLooper()).postDelayed(() -> Runtime.getRuntime().exit(0), 1_000);
-                }, error -> {
-                    if (onError != null)
-                        onError.run();
-                    else MessageHelpers.showLongMessage(mContext, error.getMessage());
-                });
-    }
-
-    private void startRestore(String backupDir, Runnable onError) {
-        MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore));
-        mRestoreAction = DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
+    private void startRestoreOld(String backupDir, List<String> names) {
+        mRestoreAction = Observable.fromCallable(() -> {
+                    CloudBackupRestorer.restoreLegacy(names,
+                            name -> DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, name))).blockingFirst(),
+                            new File(mRootDir), this::fixFileNames);
+                    return true;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(inputStream -> {
-                    File zipFile = new File(mContext.getCacheDir(), BACKUP_NAME);
-                    FileHelpers.copy(inputStream, zipFile);
+                .subscribe(unused -> finishRestore(), error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+    }
 
-                    File sharedPrefs = new File(mSharedPrefs);
-
-                    // remove old data
-                    for (String dataDir : mDataDirs) {
-                        FileHelpers.delete(dataDir);
+    private void startRestore(String backupDir) {
+        MessageHelpers.showLongMessage(mContext, mContext.getString(R.string.app_restore));
+        mRestoreAction = DriveService.getFileList(Uri.parse(backupDir))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(names -> {
+                    // Only use the legacy format when the ZIP is actually absent. A failed ZIP
+                    // restore must not silently fall back to replacing the user's data again.
+                    if (names != null && names.contains(BACKUP_NAME)) {
+                        startRestoreZip(backupDir);
+                    } else {
+                        startRestoreOld(backupDir, names);
                     }
+                }, error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+    }
 
-                    if (ZipHelper.hasDirectories(zipFile)) { // the new format, dirs: /files /share_prefs
-                        ZipHelper.unzipToFolder(zipFile, new File(mRootDir));
-                    } else { // the old format: only xml files
-                        ZipHelper.unzipToFolder(zipFile, sharedPrefs);
-                    }
-                    fixFileNames(sharedPrefs);
+    private void startRestoreZip(String backupDir) {
+        mRestoreAction = DriveService.getFile(Uri.parse(String.format("%s/%s", backupDir, BACKUP_NAME)))
+                .observeOn(Schedulers.io())
+                .doOnNext(inputStream -> CloudBackupRestorer.restoreZip(inputStream, new File(mRootDir), this::fixFileNames))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(unused -> finishRestore(), error -> MessageHelpers.showLongMessage(mContext, error.getMessage()));
+    }
 
-                    // NOTE: Don't restart the app, just kill. The reboot will broke the files.
-                    // To apply settings we need to kill the app
-                    new Handler(mContext.getMainLooper()).postDelayed(() -> Runtime.getRuntime().exit(0), 1_000);
-                }, error -> {
-                    if (onError != null)
-                        onError.run();
-                    else MessageHelpers.showLongMessage(mContext, error.getMessage());
-                }, () -> MessageHelpers.showMessage(mContext, R.string.msg_done));
+    private void finishRestore() {
+        MessageHelpers.showMessage(mContext, R.string.msg_done);
+        // Apply the restored preferences on the next launch.
+        new Handler(mContext.getMainLooper()).postDelayed(() -> Runtime.getRuntime().exit(0), 1_000);
     }
 
     private void logIn(Runnable onDone) {
         GoogleSignInPresenter.instance(mContext).start(onDone);
-    }
-
-    private String fixAltPackageName(String name) {
-        String altPackageName = getAltPackageName();
-        return name.replace(altPackageName, mContext.getPackageName());
     }
 
     private String getAltPackageName() {
@@ -260,16 +224,21 @@ public class GDriveBackupManager {
     /**
      * Fix file names from other app versions
      */
-    private void fixFileNames(File dataDir) {
+    private void fixFileNames(File dataDir) throws IOException {
         Collection<File> files = FileHelpers.listFileTree(dataDir);
 
         String suffix = "_preferences.xml";
         String targetName = mContext.getPackageName() + suffix;
+        String altPackageName = getAltPackageName();
 
         for (File file : files) {
-            if (file.getName().endsWith(suffix) && !file.getName().endsWith(targetName)) {
-                FileHelpers.copy(file, new File(file.getParentFile(), targetName));
-                FileHelpers.delete(file);
+            String correctedName = file.getName().replace(altPackageName, mContext.getPackageName());
+            if (correctedName.endsWith(suffix)) correctedName = targetName;
+            if (!file.getName().equals(correctedName)) {
+                File target = new File(file.getParentFile(), correctedName);
+                if (!target.exists() && !file.renameTo(target)) {
+                    throw new IOException("Cannot rename restored preferences: " + file.getName());
+                }
             }
         }
     }
@@ -305,7 +274,7 @@ public class GDriveBackupManager {
             options.add(UiOptionItem.from(name, optionItem -> {
                 AppDialogUtil.showConfirmationDialog(mContext, mContext.getString(R.string.app_restore), () -> {
                     String backupDir = String.format("%s/%s", mRootBackupDir, name);
-                    startRestore(backupDir, () -> startRestoreOld(backupDir, null));
+                    startRestore(backupDir);
                 });
             }));
         }
