@@ -71,14 +71,17 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        // Playing the video and dialog overlay isn't shown
-        if (getPlayer().isPlaying() && !getAppDialogPresenter().isDialogShown()) {
+        boolean canHide = (getPlayer().isPlaying() || getPlayerTweaksData().isAutoHideUiWhenPausedEnabled())
+                && !getAppDialogPresenter().isDialogShown();
+
+        // Playing the video (or auto-hide on pause enabled) and dialog overlay isn't shown
+        if (canHide) {
             if (getPlayer().isControlsShown()) { // don't hide when suggestions is shown
                 getPlayer().showOverlay(false);
                 mOverlayHideTimeMs = System.currentTimeMillis();
             }
         } else {
-            // in seeking state? doing recheck...
+            // in seeking state or paused with hide disabled? doing recheck...
             enableUiAutoHideTimeout();
         }
     };
