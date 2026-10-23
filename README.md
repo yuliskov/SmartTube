@@ -47,7 +47,7 @@ Give it a try!
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#installation) | [**Site**](https://smarttubeapp.github.io) | [**Contributors**](#contributors)) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Liability](#liability)
+[**Installation**](#installation) | [**Site**](https://smarttubeapp.github.io) | [**Contributors**](#contributors) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Liability](#liability)
 
 
 ## Device support
