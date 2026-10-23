@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.accessibility.CaptioningManager;
 import android.view.accessibility.CaptioningManager.CaptionStyle;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
@@ -28,10 +29,26 @@ public class SubtitleManager implements TextOutput, OnDataChange {
     private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
     private final Context mContext;
+    private final float mExtraBottomPaddingFraction;
+    private final float mTextScaleMultiplier;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private final AppPrefs mPrefs;
     private final PlayerData mPlayerData;
     private CharSequence subsBuffer;
+    private OnCuesProcessedListener mOnCuesProcessedListener;
+
+    public interface OnCuesProcessedListener {
+        /**
+         * @return {@code null} to display {@code processedCues} as-is. A non-empty list replaces
+         *         them for this update (e.g. dual subtitles merged so both lines paint together).
+         */
+        @Nullable
+        List<Cue> onCuesProcessed(List<Cue> processedCues);
+    }
+
+    public void setOnCuesProcessedListener(OnCuesProcessedListener listener) {
+        mOnCuesProcessedListener = listener;
+    }
 
     public static class SubtitleStyle {
         public final int nameResId;
@@ -56,8 +73,18 @@ public class SubtitleManager implements TextOutput, OnDataChange {
     }
 
     public SubtitleManager(SubtitleView subtitleView) {
+        this(subtitleView, 0f, 1f);
+    }
+
+    /**
+     * @param extraBottomPaddingFraction added to {@link PlayerData#getSubtitlePosition()} so this line sits higher.
+     * @param textScaleMultiplier extra scale applied on top of user subtitle scale
+     */
+    public SubtitleManager(SubtitleView subtitleView, float extraBottomPaddingFraction, float textScaleMultiplier) {
         mContext = subtitleView.getContext();
         mSubtitleView = subtitleView;
+        mExtraBottomPaddingFraction = extraBottomPaddingFraction;
+        mTextScaleMultiplier = textScaleMultiplier;
         mPrefs = AppPrefs.instance(mContext);
         mPlayerData = PlayerData.instance(mContext);
         mPlayerData.setOnChange(this);
@@ -72,7 +99,35 @@ public class SubtitleManager implements TextOutput, OnDataChange {
     @Override
     public void onCues(List<Cue> cues) {
         if (mSubtitleView != null) {
-            mSubtitleView.setCues(forceCenterAlignment(cues));
+            List<Cue> processed = forceCenterAlignment(cues);
+            List<Cue> toShow = processed;
+            if (mOnCuesProcessedListener != null) {
+                List<Cue> replacement = mOnCuesProcessedListener.onCuesProcessed(processed);
+                if (replacement != null && !replacement.isEmpty()) {
+                    toShow = replacement;
+                    // Merged dual-line cues use Spannable spans; SubtitlePainter needs embedded styles on.
+                    mSubtitleView.setApplyEmbeddedStyles(true);
+                } else {
+                    // Strip embedded cue styling so user caption prefs apply.
+                    mSubtitleView.setApplyEmbeddedStyles(false);
+                }
+            } else {
+                mSubtitleView.setApplyEmbeddedStyles(false);
+            }
+            mSubtitleView.setCues(toShow);
+        }
+    }
+
+    /**
+     * Sets cues directly on the view, bypassing processing and the listener callback.
+     * Used by {@link SubtitleTranslator} to replace the displayed cues with merged
+     * original+translation text without triggering re-translation.
+     */
+    public void setCuesDirectly(List<Cue> cues) {
+        if (mSubtitleView != null) {
+            // Merged cues use Spannable spans; SubtitlePainter removes them if applyEmbeddedStyles is false.
+            mSubtitleView.setApplyEmbeddedStyles(true);
+            mSubtitleView.setCues(cues);
         }
     }
 
@@ -143,7 +198,8 @@ public class SubtitleManager implements TextOutput, OnDataChange {
                 applyStyle(subtitleStyle);
             }
 
-            mSubtitleView.setBottomPaddingFraction(mPlayerData.getSubtitlePosition());
+            mSubtitleView.setBottomPaddingFraction(
+                    Math.min(0.95f, mPlayerData.getSubtitlePosition() + mExtraBottomPaddingFraction));
         }
     }
 
@@ -185,6 +241,6 @@ public class SubtitleManager implements TextOutput, OnDataChange {
 
     private float getTextSizePx() {
         float textSizePx = mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
-        return textSizePx * mPlayerData.getSubtitleScale();
+        return textSizePx * mPlayerData.getSubtitleScale() * mTextScaleMultiplier;
     }
 }
