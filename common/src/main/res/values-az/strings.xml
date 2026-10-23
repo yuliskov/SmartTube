@@ -25,7 +25,7 @@
     <string name="subtitles_disabled">Subtitrlər söndürülüb</string>
     <string name="auto_frame_rate">Avtomatik kadr tezliyi</string>
     <string name="frame_rate_correction">FPS-i düzəlt:\n%s</string>
-    <string name="category_background_playback">Arxa fonda oynatma</string>
+    <string name="category_background_playback">Fonda oynatma</string>
     <string name="not_implemented">Tətbiq olunmayıb</string>
     <string name="not_supported_by_device">Cihaz bu xüsusiyyəti dəstəkləmir</string>
     <string name="option_background_playback_off">Söndürülüb</string>
@@ -358,7 +358,7 @@
     <string name="update_error">Yeniləmə xətası</string>
     <string name="hide_shorts_from_search">Axtarış nəticələrindən Shortsları gizlət</string>
     <string name="hide_shorts_from_history">Tarixçədən Shortsları gizlət</string>
-    <string name="hide_shorts_from_trending">Treendlərdən Shortsları gizlət</string>
+    <string name="hide_shorts_from_trending">Trendlərdən Shortsları gizlət</string>
     <string name="disable_screensaver">Ekran qoruyucusunu söndür</string>
     <string name="description_not_found">Təsvir tapılmadı</string>
     <string name="proxy_port_hint">Proksi portu</string>
@@ -651,7 +651,7 @@
     <string name="remote_control_permission">Arxa fonda uzaqdan idarəetmə, Üzərində Göstərmə icazəsi tələb edir</string>
     <string name="login_from_browser">Bələdçidən daxil ol</string>
     <string name="disable_remote_history">Uzaqdan idarəetmədən istifadə edərkən tarixçəni söndür</string>
-    <string name="keyboard_fix">OK düyməsinin klavaturanı açmasının qarşısını al (G20s və digərləri)</string>
+    <string name="keyboard_fix">OK düyməsinin klaviaturanı açmasının qarşısını al (G20s və digərləri)</string>
     <string name="nothing_found">Heç nə tapılmadı</string>
     <string name="auto_frame_rate_desc">Bu parametr kameranın sürətli hərəkət etdiyi səhnələrdə titrəməni aradan qaldırır, məsələn, idman yayımları</string>
     <string name="channel_filter_hint">Kanalları filtrlə</string>
