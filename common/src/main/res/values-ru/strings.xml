@@ -748,4 +748,5 @@
         <item quantity="many">%s секунд</item>
         <item quantity="other">%s секунды</item>
     </plurals>
+    <string name="remote_control_dial">Показывать в списке трансляции YouTube (DIAL)</string>
 </resources>
