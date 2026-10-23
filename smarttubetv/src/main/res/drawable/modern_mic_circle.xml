@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/modern_rail_selected_pill" />
+        </shape>
+    </item>
+    <!-- Listening to the voice search -->
+    <item android:state_activated="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/modern_progress" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/modern_white_10" />
+        </shape>
+    </item>
+</selector>

@@ -748,4 +748,14 @@
   <string name="enable_conscrypt_desc">改進某些裝置 HTTPS、TLS 和 VPN 的相容性，但偶爾可能會導致播放問題或降低網路效能</string>
   <string name="comments_disabled">此影片已關閉留言</string>
   <string name="color_scheme_dark_blue_oled">深藍色 (OLED)</string>
+    <string name="modern_who_is_watching">誰在觀看？</string>
+    <string name="modern_add_account">新增帳戶</string>
+    <string name="modern_watch_as_guest">以訪客身分觀看</string>
+    <string name="modern_interface">現代介面</string>
+    <string name="modern_key_space">空格</string>
+    <string name="modern_key_clear">清除</string>
+    <string name="modern_all">全部</string>
+    <string name="modern_on">開啟</string>
+    <string name="modern_off">關閉</string>
+    <string name="modern_try_again">重試</string>
 </resources>

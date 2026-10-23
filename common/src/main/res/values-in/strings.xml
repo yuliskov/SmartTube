@@ -748,4 +748,14 @@
   <string name="network_settings">Setelan jaringan</string>
   <string name="comments_disabled">Komentar dimatikan</string>
   <string name="remove_video_to_watch_later">Hapus dari Tonton nanti</string>
+    <string name="modern_who_is_watching">Siapa yang menonton?</string>
+    <string name="modern_add_account">Tambahkan akun</string>
+    <string name="modern_watch_as_guest">Tonton sebagai tamu</string>
+    <string name="modern_interface">Antarmuka modern</string>
+    <string name="modern_key_space">Spasi</string>
+    <string name="modern_key_clear">Hapus</string>
+    <string name="modern_all">Semua</string>
+    <string name="modern_on">Aktif</string>
+    <string name="modern_off">Nonaktif</string>
+    <string name="modern_try_again">Coba lagi</string>
 </resources>

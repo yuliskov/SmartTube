@@ -82,6 +82,15 @@
     <!-- AppDialogFragment style -->
     <style name="App.Theme.Leanback.Preferences.Base" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
+        <!-- Values kept equal to the original layouts; the modern interface overrides them -->
+        <item name="modernPrefPanelBackground">@color/lb_preference_decor_list_background</item>
+        <item name="modernPrefTitleBackground">?attr/defaultBrandColor</item>
+        <item name="modernPrefItemTextColor">@color/lb_preference_item_primary_text_color</item>
+        <item name="modernPrefRadioButton">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="modernPrefCheckBox">?android:attr/listChoiceIndicatorMultiple</item>
+        <item name="modernPrefChatBubble">@color/comments_bg</item>
+        <item name="modernPrefChatBubbleFocused">@color/comments_bg_pressed</item>
+        <item name="modernPrefDuplicateState">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <!-- AppDialogFragment background dimming -->

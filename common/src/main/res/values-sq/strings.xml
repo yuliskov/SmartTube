@@ -709,4 +709,14 @@
   <string name="remove_playlist_fmt">Do ta fshish %s përgjithmonë?</string>
   <string name="player_chapter_notification2">Kalo te kapitulli tjetër duke klikuar mbi njoftimin</string>
   <string name="suggestions_horizontally_scrolled">Sugjerime të lëvizura horizontalisht</string>
+    <string name="modern_who_is_watching">Kush po shikon?</string>
+    <string name="modern_add_account">Shto llogari</string>
+    <string name="modern_watch_as_guest">Shiko si i ftuar</string>
+    <string name="modern_interface">Ndërfaqe moderne</string>
+    <string name="modern_key_space">Hapësirë</string>
+    <string name="modern_key_clear">Pastro</string>
+    <string name="modern_all">Të gjitha</string>
+    <string name="modern_on">Aktiv</string>
+    <string name="modern_off">Joaktiv</string>
+    <string name="modern_try_again">Provo përsëri</string>
 </resources>

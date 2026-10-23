@@ -748,6 +748,16 @@
     <string name="enable_conscrypt_desc">Bəzi cihazlarda HTTPS, TLS və VPN uyğunluğunu yaxşılaşdırır, lakin bəzən oynatma problemlərinə və ya daha zəif şəbəkə performansına səbəb ola bilər</string>
     <string name="network_settings">Şəbəkə tənzimləmələri</string>
     <string name="comments_disabled">Bu video üçün şərhlər söndürülüb</string>
+    <string name="modern_who_is_watching">Kim izləyir?</string>
+    <string name="modern_add_account">Hesab əlavə et</string>
+    <string name="modern_watch_as_guest">Qonaq kimi izlə</string>
+    <string name="modern_interface">Müasir interfeys</string>
+    <string name="modern_key_space">Boşluq</string>
+    <string name="modern_key_clear">Təmizlə</string>
+    <string name="modern_all">Hamısı</string>
+    <string name="modern_on">Aktiv</string>
+    <string name="modern_off">Deaktiv</string>
+    <string name="modern_try_again">Yenidən cəhd edin</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

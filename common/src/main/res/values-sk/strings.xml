@@ -728,4 +728,14 @@
     <string name="channel_unblocked">Kanál odblokovaný</string>
     <string name="header_blocked_channels">Zablokované kanály</string>
     <string name="msg_no_blocked_channels">Žiadne zablokované kanály</string>
+    <string name="modern_who_is_watching">Kto sa pozerá?</string>
+    <string name="modern_add_account">Pridať účet</string>
+    <string name="modern_watch_as_guest">Pozerať ako hosť</string>
+    <string name="modern_interface">Moderné rozhranie</string>
+    <string name="modern_key_space">Medzera</string>
+    <string name="modern_key_clear">Vymazať</string>
+    <string name="modern_all">Všetko</string>
+    <string name="modern_on">Zapnuté</string>
+    <string name="modern_off">Vypnuté</string>
+    <string name="modern_try_again">Skúsiť znova</string>
 </resources>

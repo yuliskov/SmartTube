@@ -748,6 +748,16 @@
     <string name="enable_conscrypt_desc">一部のデバイスで HTTPS、TLS、VPN の互換性が向上しますが、再生に問題が発生したりネットワーク速度が低下することがまれに発生する可能性があります。</string>
     <string name="network_settings">ネットワーク設定</string>
     <string name="comments_disabled">この動画へのコメントは無効になっています</string>
+    <string name="modern_who_is_watching">視聴するのは誰ですか？</string>
+    <string name="modern_add_account">アカウントを追加</string>
+    <string name="modern_watch_as_guest">ゲストとして視聴</string>
+    <string name="modern_interface">モダンインターフェース</string>
+    <string name="modern_key_space">スペース</string>
+    <string name="modern_key_clear">クリア</string>
+    <string name="modern_all">すべて</string>
+    <string name="modern_on">オン</string>
+    <string name="modern_off">オフ</string>
+    <string name="modern_try_again">再試行</string>
     <plurals name="hours">
         <item quantity="other">%s 時間</item>
     </plurals>

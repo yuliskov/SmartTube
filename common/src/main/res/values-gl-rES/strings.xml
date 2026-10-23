@@ -748,4 +748,14 @@
   <string name="network_settings">Axustes de rede</string>
   <string name="remove_video_to_watch_later">Eliminar de Ver máis tarde</string>
   <string name="comments_disabled">Os comentarios están desactivados para este vídeo</string>
+    <string name="modern_who_is_watching">Quen está a ver?</string>
+    <string name="modern_add_account">Engadir conta</string>
+    <string name="modern_watch_as_guest">Ver como convidado</string>
+    <string name="modern_interface">Interface moderna</string>
+    <string name="modern_key_space">Espazo</string>
+    <string name="modern_key_clear">Borrar</string>
+    <string name="modern_all">Todo</string>
+    <string name="modern_on">Activado</string>
+    <string name="modern_off">Desactivado</string>
+    <string name="modern_try_again">Tentar de novo</string>
 </resources>

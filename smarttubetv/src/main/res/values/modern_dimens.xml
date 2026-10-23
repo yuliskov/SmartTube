@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern interface dimensions: reference px @1080p / 2. See docs/modern-ui/tokens.md -->
+<resources>
+    <!-- Top bar -->
+    <dimen name="modern_topbar_top">33dp</dimen>
+    <dimen name="modern_search_mic_size">36dp</dimen>
+    <dimen name="modern_search_box_gap">9dp</dimen>
+    <dimen name="modern_search_box_width">315dp</dimen>
+    <dimen name="modern_search_box_height">36dp</dimen>
+    <dimen name="modern_logo_width">121.5dp</dimen>
+    <dimen name="modern_logo_height">43dp</dimen>
+    <dimen name="modern_logo_margin_end">42dp</dimen>
+    <!-- Clock: left of the logo -->
+    <!-- Top bar clock: time over date, a square block next to the logo -->
+    <dimen name="modern_clock_logo_gap">12dp</dimen>
+    <dimen name="modern_clock_time_text">24sp</dimen>
+    <dimen name="modern_clock_date_text">15sp</dimen>
+    <dimen name="modern_clock_date_gap">2dp</dimen>
+
+    <!-- Navigation rail -->
+    <dimen name="modern_rail_width_expanded">255dp</dimen>
+    <dimen name="modern_rail_content_shift_expanded">189dp</dimen>
+    <dimen name="modern_rail_item_x">16.5dp</dimen>
+    <dimen name="modern_rail_item_width_collapsed">51dp</dimen>
+    <dimen name="modern_rail_item_height">39dp</dimen>
+    <dimen name="modern_rail_item_radius">9dp</dimen>
+    <dimen name="modern_rail_icon_size">18dp</dimen>
+    <dimen name="modern_rail_icon_start">13.5dp</dimen>
+    <dimen name="modern_rail_label_start">45dp</dimen>
+    <dimen name="modern_rail_label_size">15sp</dimen>
+    <dimen name="modern_rail_divider">1.5dp</dimen>
+    <dimen name="modern_rail_avatar_size">27dp</dimen>
+    <dimen name="modern_rail_first_item_y_collapsed">97.5dp</dimen>
+    <dimen name="modern_rail_first_item_y_expanded">78dp</dimen>
+    <dimen name="modern_rail_account_y">31.5dp</dimen>
+    <dimen name="modern_rail_divider_margin">9dp</dimen>
+    <dimen name="modern_rail_settings_bottom">28.5dp</dimen>
+
+    <!-- Shelves -->
+    <dimen name="modern_content_left">78dp</dimen>
+    <!-- Space after the last column of a grid -->
+    <dimen name="modern_grid_end_margin">36dp</dimen>
+    <dimen name="modern_first_shelf_y">81dp</dimen>
+    <dimen name="modern_shelf_header_size">15sp</dimen>
+    <dimen name="modern_shelf_header_line_height">21dp</dimen>
+    <dimen name="modern_shelf_spacing">18dp</dimen>
+    <dimen name="modern_shelf_header_top">6dp</dimen>
+    <dimen name="modern_shelf_header_bottom">4.5dp</dimen>
+    <dimen name="modern_tile_top_margin">9dp</dimen>
+
+    <!-- Video tile -->
+    <dimen name="modern_tile_width_focused_row">360dp</dimen>
+    <dimen name="modern_tile_thumb_height_focused_row">202.5dp</dimen>
+    <dimen name="modern_tile_width_row">264dp</dimen>
+    <dimen name="modern_tile_thumb_height_row">148.5dp</dimen>
+    <dimen name="modern_tile_gap">18dp</dimen>
+    <dimen name="modern_tile_clip_room">9dp</dimen>
+    <dimen name="modern_tile_text_area">97.5dp</dimen>
+    <dimen name="modern_tile_thumb_radius">9dp</dimen>
+    <dimen name="modern_focus_ring_width">4.5dp</dimen>
+    <dimen name="modern_focus_ring_inset">4.2dp</dimen>
+    <dimen name="modern_focus_ring_radius">13.2dp</dimen>
+    <dimen name="modern_tile_title_top">12dp</dimen>
+    <dimen name="modern_tile_title_size">18sp</dimen>
+    <dimen name="modern_tile_title_line_height">24dp</dimen>
+    <dimen name="modern_tile_title_bottom">3dp</dimen>
+    <dimen name="modern_tile_meta_size">12sp</dimen>
+    <dimen name="modern_tile_meta_line_height">16.5dp</dimen>
+    <dimen name="modern_tile_meta_line_gap">2.25dp</dimen>
+    <dimen name="modern_badge_radius">3dp</dimen>
+    <dimen name="modern_badge_padding_h">3dp</dimen>
+    <dimen name="modern_badge_height">16.5dp</dimen>
+    <dimen name="modern_duration_margin">6dp</dimen>
+    <dimen name="modern_resume_bar_height">3dp</dimen>
+    <dimen name="modern_channel_tile_size">148.5dp</dimen>
+    <dimen name="modern_shorts_tile_width">148.5dp</dimen>
+    <dimen name="modern_shorts_tile_height">264dp</dimen>
+    <dimen name="modern_stack_inset">15dp</dimen>
+    <dimen name="modern_stack_height">3dp</dimen>
+    <dimen name="modern_stack_gap">4.5dp</dimen>
+    <dimen name="modern_stack_radius">6dp</dimen>
+    <dimen name="modern_badge_icon_size">12dp</dimen>
+
+    <!-- Settings section -->
+    <dimen name="modern_settings_title_x">73.5dp</dimen>
+    <!-- Titles line up with the text of the rows below, not with their pill -->
+    <dimen name="modern_settings_title_text_x">82.5dp</dimen>
+    <dimen name="modern_settings_title_size">24sp</dimen>
+    <dimen name="modern_settings_title_top">33dp</dimen>
+    <dimen name="modern_settings_list_top">96dp</dimen>
+    <dimen name="modern_settings_list_width">210dp</dimen>
+    <dimen name="modern_settings_row_height">40.5dp</dimen>
+    <dimen name="modern_settings_row_gap">-1.5dp</dimen>
+    <dimen name="modern_settings_row_padding">9dp</dimen>
+    <dimen name="modern_settings_divider_x">294dp</dimen>
+    <dimen name="modern_settings_preview_icon">72dp</dimen>
+    <dimen name="modern_settings_preview_circle">120dp</dimen>
+    <dimen name="modern_settings_preview_title">30sp</dimen>
+
+    <!-- Player -->
+    <dimen name="modern_player_margin">48dp</dimen>
+    <dimen name="modern_player_row_height">448.5dp</dimen>
+    <dimen name="modern_player_title_size">21sp</dimen>
+    <dimen name="modern_player_title_width">336dp</dimen>
+    <dimen name="modern_player_title_line_height">28.5dp</dimen>
+    <dimen name="modern_player_suggestions_top">220.5dp</dimen>
+    <dimen name="modern_player_meta_size">12sp</dimen>
+    <dimen name="modern_player_meta_top">8dp</dimen>
+    <dimen name="modern_player_time_size">10.5sp</dimen>
+    <dimen name="modern_player_time_height">15dp</dimen>
+    <dimen name="modern_player_bar_height">3dp</dimen>
+    <dimen name="modern_player_bar_active_height">6dp</dimen>
+    <dimen name="modern_player_knob_radius">9dp</dimen>
+    <dimen name="modern_player_controls_height">48dp</dimen>
+    <dimen name="modern_player_controls_bottom">30dp</dimen>
+    <dimen name="modern_player_button">36dp</dimen>
+    <dimen name="modern_player_play_button">48dp</dimen>
+    <!-- Buttons inside the end pills when many buttons are enabled -->
+    <dimen name="modern_player_button_compact">30dp</dimen>
+    <dimen name="modern_player_button_icon">20dp</dimen>
+    <dimen name="modern_player_avatar">36dp</dimen>
+    <dimen name="modern_player_group_gap">6dp</dimen>
+    <dimen name="modern_player_center_gap">9dp</dimen>
+    <!-- Smallest space between the transport buttons and the start / end groups -->
+    <dimen name="modern_player_transport_min_gap">18dp</dimen>
+    <dimen name="modern_player_pill_padding">18dp</dimen>
+    <dimen name="modern_player_pill_text">12sp</dimen>
+    <dimen name="modern_player_label_top">7dp</dimen>
+    <dimen name="modern_player_scrim_top">243dp</dimen>
+    <dimen name="modern_player_seek_height">13.5dp</dimen>
+    <dimen name="modern_player_seek_top">4dp</dimen>
+    <dimen name="modern_player_seek_bottom">6.5dp</dimen>
+    <dimen name="modern_player_thumbs_bottom">110dp</dimen>
+    <dimen name="modern_player_tile_width">276dp</dimen>
+    <dimen name="modern_player_tile_thumb_height">154.5dp</dimen>
+    <dimen name="modern_player_chapter_width">184dp</dimen>
+    <dimen name="modern_player_chapter_thumb_height">103.5dp</dimen>
+
+    <!-- Account picker -->
+    <dimen name="modern_picker_title_top">84dp</dimen>
+    <dimen name="modern_picker_title_size">30sp</dimen>
+    <dimen name="modern_picker_row_top">156dp</dimen>
+    <dimen name="modern_picker_avatar">148.5dp</dimen>
+    <dimen name="modern_picker_gap">31.5dp</dimen>
+    <dimen name="modern_picker_name_top">13.5dp</dimen>
+    <dimen name="modern_picker_name_size">18sp</dimen>
+    <dimen name="modern_picker_gear_top">20dp</dimen>
+    <dimen name="modern_picker_add_icon">40dp</dimen>
+    <dimen name="modern_picker_guest_top">444dp</dimen>
+    <dimen name="modern_picker_guest_width">144dp</dimen>
+
+    <!-- Sign in -->
+    <dimen name="modern_signin_left">72dp</dimen>
+    <dimen name="modern_signin_title_top">118dp</dimen>
+    <dimen name="modern_signin_title_size">45sp</dimen>
+    <dimen name="modern_signin_list_top">84dp</dimen>
+    <dimen name="modern_signin_item_width">288dp</dimen>
+    <dimen name="modern_signin_item_height">45dp</dimen>
+    <dimen name="modern_signin_item_gap">9dp</dimen>
+    <dimen name="modern_signin_item_icon_start">16.5dp</dimen>
+    <dimen name="modern_signin_item_text_start">48dp</dimen>
+    <dimen name="modern_signin_qr_left">543dp</dimen>
+    <dimen name="modern_signin_qr_top">77dp</dimen>
+    <dimen name="modern_signin_qr_size">270dp</dimen>
+    <dimen name="modern_signin_qr_padding">13.5dp</dimen>
+    <dimen name="modern_signin_qr_radius">18dp</dimen>
+    <dimen name="modern_signin_text_width">291dp</dimen>
+    <dimen name="modern_signin_text_left">532.5dp</dimen>
+    <dimen name="modern_signin_text_top">365.5dp</dimen>
+    <dimen name="modern_signin_text_size">15sp</dimen>
+    <dimen name="modern_signin_code_size">24sp</dimen>
+
+    <!-- Search -->
+    <dimen name="modern_search_field_width">492dp</dimen>
+    <dimen name="modern_search_field_text">18sp</dimen>
+    <dimen name="modern_search_panel_top">87dp</dimen>
+    <dimen name="modern_search_keyboard_left">360dp</dimen>
+    <dimen name="modern_search_results_top">269.5dp</dimen>
+    <dimen name="modern_search_results_height">459dp</dimen>
+    <dimen name="modern_search_suggestion_width">270dp</dimen>
+    <dimen name="modern_search_suggestion_height">33dp</dimen>
+    <dimen name="modern_search_suggestion_icon_start">10.5dp</dimen>
+    <dimen name="modern_search_suggestion_text_start">37.5dp</dimen>
+    <dimen name="modern_key_size">27dp</dimen>
+    <dimen name="modern_key_pitch">33dp</dimen>
+    <dimen name="modern_key_radius">6dp</dimen>
+    <dimen name="modern_key_text">18sp</dimen>
+    <dimen name="modern_key_icon">16dp</dimen>
+    <dimen name="modern_key_mode_width">48dp</dimen>
+    <dimen name="modern_key_action_text">12sp</dimen>
+    <dimen name="modern_key_space_width">66dp</dimen>
+    <dimen name="modern_key_clear_width">72dp</dimen>
+    <dimen name="modern_key_space_left">4.5dp</dimen>
+    <dimen name="modern_key_clear_left">76.5dp</dimen>
+    <dimen name="modern_key_search_left">154.5dp</dimen>
+
+    <!-- Channel -->
+    <dimen name="modern_channel_left">48dp</dimen>
+    <dimen name="modern_channel_header_top">261dp</dimen>
+    <dimen name="modern_channel_avatar">27dp</dimen>
+    <dimen name="modern_channel_name_size">18sp</dimen>
+    <dimen name="modern_channel_actions_top">24dp</dimen>
+    <dimen name="modern_channel_rows_top">444dp</dimen>
+    <dimen name="modern_channel_rows_focused_top">105dp</dimen>
+    <dimen name="modern_channel_rows_height">435dp</dimen>
+    <dimen name="modern_channel_pill_icon_gap">9dp</dimen>
+
+    <!-- Side panel (dialogs) -->
+    <dimen name="modern_panel_padding">18dp</dimen>
+    <dimen name="modern_panel_item_gap_half">3dp</dimen>
+    <dimen name="modern_panel_item_height_with_gap">54dp</dimen>
+    <dimen name="modern_panel_item_padding_start">34.5dp</dimen>
+    <dimen name="modern_panel_item_padding_end">27dp</dimen>
+    <dimen name="modern_panel_icon_gap">13.5dp</dimen>
+    <dimen name="modern_panel_text_padding">12dp</dimen>
+    <dimen name="modern_panel_summary_top">2dp</dimen>
+    <dimen name="modern_panel_category_top">12dp</dimen>
+
+    <!-- Subscriptions -->
+    <dimen name="modern_subs_title_left">86dp</dimen>
+    <dimen name="modern_subs_title_top">45dp</dimen>
+    <dimen name="modern_subs_title_size">22sp</dimen>
+    <dimen name="modern_subs_column_left">73dp</dimen>
+    <dimen name="modern_subs_column_top">96dp</dimen>
+    <dimen name="modern_subs_column_width">210dp</dimen>
+    <dimen name="modern_subs_item_height">39dp</dimen>
+    <dimen name="modern_subs_avatar">18dp</dimen>
+    <dimen name="modern_subs_divider_left">295dp</dimen>
+    <dimen name="modern_subs_grid_left">310dp</dimen>
+    <dimen name="modern_subs_grid_top">96dp</dimen>
+
+    <!-- Shorts player -->
+    <dimen name="modern_shorts_video_left">296dp</dimen>
+    <dimen name="modern_shorts_video_width">304dp</dimen>
+    <dimen name="modern_shorts_video_radius">13.5dp</dimen>
+    <dimen name="modern_shorts_panel_left">627dp</dimen>
+    <dimen name="modern_shorts_panel_top">279dp</dimen>
+    <dimen name="modern_shorts_panel_width">306dp</dimen>
+    <dimen name="modern_shorts_title_size">18sp</dimen>
+    <dimen name="modern_shorts_row_height">45dp</dimen>
+    <dimen name="modern_shorts_row_gap">6dp</dimen>
+    <dimen name="modern_shorts_padding">12dp</dimen>
+    <!-- Shorts playback state: progress line at the bottom of the video, play icon and time while paused -->
+    <dimen name="modern_shorts_progress_height">3dp</dimen>
+    <dimen name="modern_shorts_state_size">60dp</dimen>
+    <dimen name="modern_shorts_state_padding">12dp</dimen>
+    <dimen name="modern_shorts_time_margin">12dp</dimen>
+    <dimen name="modern_shorts_time_padding_h">6dp</dimen>
+    <dimen name="modern_shorts_time_padding_v">3dp</dimen>
+    <!-- Settings pages (dialogs opened from settings) -->
+    <dimen name="modern_dialog_page_list_width">260dp</dimen>
+    <dimen name="modern_dialog_page_divider_x">345dp</dimen>
+    <dimen name="modern_dialog_page_details_x">369dp</dimen>
+    <dimen name="modern_dialog_page_options_width">420dp</dimen>
+    <dimen name="modern_dialog_page_options_title_size">18sp</dimen>
+    <dimen name="modern_dialog_page_options_top">132dp</dimen>
+    <dimen name="modern_dialog_page_row_min_height">40.5dp</dimen>
+    <dimen name="modern_dialog_page_row_gap">2dp</dimen>
+    <dimen name="modern_dialog_page_row_padding_v">8dp</dimen>
+    <dimen name="modern_dialog_page_indicator">20dp</dimen>
+    <dimen name="modern_dialog_page_summary_size">12sp</dimen>
+    <dimen name="modern_dialog_page_preview_summary_size">15sp</dimen>
+    <!-- Loading spinner, the same everywhere -->
+    <dimen name="modern_spinner_size">48dp</dimen>
+    <dimen name="modern_search_progress_top">300dp</dimen>
+    <!-- Lists that scroll under a title (side panels) fade over this length -->
+    <dimen name="modern_panel_fading_edge">24dp</dimen>
+    <!-- Page states (empty, error, sign in): ModernStatePage -->
+    <dimen name="modern_state_icon_size">48dp</dimen>
+    <dimen name="modern_state_gap">18dp</dimen>
+    <dimen name="modern_state_text_gap">9dp</dimen>
+    <dimen name="modern_state_actions_gap">24dp</dimen>
+    <dimen name="modern_state_action_gap">6dp</dimen>
+    <dimen name="modern_state_action_padding">24dp</dimen>
+    <dimen name="modern_state_action_min_width">120dp</dimen>
+    <dimen name="modern_state_text_width">560dp</dimen>
+    <dimen name="modern_state_title_size">21sp</dimen>
+    <dimen name="modern_state_text_size">15sp</dimen>
+</resources>
