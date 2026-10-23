@@ -53,6 +53,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VolumeNormalizationAction;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.HashMap;
@@ -134,6 +135,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         putAction(new RotateAction(context));
         putAction(new FlipAction(context));
         putAction(new SoundOffAction(context));
+        putAction(new VolumeNormalizationAction(context));
     }
 
     @Override
@@ -203,6 +205,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         // MAX: 7 items. But with custom modification it supports more.
         // Origin: {@link androidx.leanback.widget.ControlBarPresenter#MAX_CONTROLS}
         // Custom mod: {@link com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter#MAX_CONTROLS}
+
+        // Always visible: this is the fast per-channel/global toggle requested for playback.
+        adapter.add(mActions.get(R.id.action_volume_normalization));
 
         if (mPlayerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY)) {
             adapter.add(mActions.get(R.id.lb_control_high_quality));

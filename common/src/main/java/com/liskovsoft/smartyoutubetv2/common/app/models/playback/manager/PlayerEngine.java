@@ -31,6 +31,7 @@ public interface PlayerEngine extends PlayerConstants {
     FormatItem getSubtitleFormat();
     boolean isEngineInitialized();
     void restartEngine();
+    void refreshVolumeNormalization();
     void reloadPlayback();
     void blockEngine(boolean block);
     boolean isEngineBlocked();

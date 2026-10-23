@@ -67,6 +67,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendAudioLanguageCategory(settingsPresenter);
         appendAudioDelayCategory(settingsPresenter);
         appendMasterVolumeCategory(settingsPresenter);
+        appendVolumeNormalizationCategories(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
@@ -158,6 +159,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = AppDialogUtil.createAudioVolumeCategory(getContext());
         settingsPresenter.appendCategory(category);
+    }
+
+    private void appendVolumeNormalizationCategories(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendCategory(AppDialogUtil.createVolumeNormalizationModeCategory(getContext(), () -> mRestartApp = true));
+        settingsPresenter.appendCategory(AppDialogUtil.createVolumeNormalizationIntensityCategory(getContext(), () -> mRestartApp = true));
     }
 
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
