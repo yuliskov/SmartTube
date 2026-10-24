@@ -832,6 +832,12 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mAfrPauseMs = Helpers.parseInt(split, 45, 0);
         mIsLiveChatEnabled = Helpers.parseBoolean(split, 46, false);
         mLastSubtitleFormats = Helpers.parseList(split, 47, ExoFormatItem::from);
+        if (mLastSubtitleFormats.isEmpty()) {
+            // Fork default: CC button turns on Serbian (auto-translated "*") subs. Names follow the app language.
+            for (String serbian : new String[] {"Serbian*", "Српски*", "Srpski*"}) {
+                mLastSubtitleFormats.add(ExoFormatItem.fromSubtitleParams(serbian));
+            }
+        }
         mLastSpeed = Helpers.parseFloat(split, 48, 1.0f);
         mRotationAngle = Helpers.parseInt(split, 49, 0);
         mZoomPercents = Helpers.parseInt(split, 50, -1);
