@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
@@ -73,6 +74,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private View mYouTubeLogo;
     private SearchOrbView mSettingsView;
     private SearchOrbView mUpdateView;
+    private SearchOrbView mCastView;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
     private int mIconWidth;
@@ -190,6 +192,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mSearchPill.setVisibility(mSearchVisibility);
             mYouTubeLogo.setVisibility(mSearchVisibility);
             mSettingsView.setVisibility(mSearchVisibility);
+            mCastView.setVisibility(mSearchVisibility);
             updateUpdateButton();
         }
     }
@@ -245,6 +248,9 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mSettingsView = findViewById(R.id.settings_orb);
             mSettingsView.setOnOrbClickedListener(v -> showSettings());
             TooltipCompatHandler.setTooltipText(mSettingsView, getContext().getString(R.string.header_settings));
+            mCastView = findViewById(R.id.cast_orb);
+            mCastView.setOnOrbClickedListener(v -> RemoteControlSettingsPresenter.instance(getContext()).addDevice());
+            TooltipCompatHandler.setTooltipText(mCastView, getContext().getString(R.string.dialog_add_device));
             mUpdateView = findViewById(R.id.update_orb);
             mUpdateView.setOnOrbClickedListener(v -> PendingAppUpdate.show());
             TooltipCompatHandler.setTooltipText(mUpdateView, getContext().getString(R.string.install_update));
@@ -270,8 +276,10 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             // Hidden buttons are skipped by focusSearch()
             mSearchPill.setNextFocusRightId(R.id.update_orb);
             mUpdateView.setNextFocusLeftId(R.id.search_pill);
-            mUpdateView.setNextFocusRightId(R.id.settings_orb);
-            mSettingsView.setNextFocusLeftId(R.id.update_orb);
+            mUpdateView.setNextFocusRightId(R.id.cast_orb);
+            mCastView.setNextFocusLeftId(R.id.update_orb);
+            mCastView.setNextFocusRightId(R.id.settings_orb);
+            mSettingsView.setNextFocusLeftId(R.id.cast_orb);
             mSettingsView.setNextFocusRightId(R.id.account_orb);
             mAccountView.setNextFocusLeftId(R.id.settings_orb);
             mAccountView.setNextFocusRightId(View.NO_ID);

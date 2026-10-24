@@ -83,28 +83,33 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
-                getContext().getString(R.string.dialog_add_device), option -> {
-                    mRemoteControlData.enableDeviceLink(true);
-                    Utils.updateRemoteControlService(getContext());
+                getContext().getString(R.string.dialog_add_device), option -> addDevice()));
+    }
 
-                    // Background playback on Android 10 and above
-                    // Shows overlay dialog if needed (alive activity required)
-                    if (!PermissionHelpers.hasOverlayPermissions(getContext())) {
-                        AppDialogUtil.showConfirmationDialog(
-                                getContext(), getContext().getString(R.string.remote_control_permission), () -> {
-                                    PermissionHelpers.verifyOverlayPermissions(getContext());
-                                    // Service that prevents the app from destroying
-                                    if (getContext() instanceof MotherActivity) {
-                                        ((MotherActivity) getContext()).addOnResult(
-                                                (request, response, data) -> AddDevicePresenter.instance(getContext()).start()
-                                        );
-                                    }
-                                }, () -> AddDevicePresenter.instance(getContext()).start()
-                        );
-                    } else {
-                        AddDevicePresenter.instance(getContext()).start();
-                    }
-                }));
+    /**
+     * Enables remote control and shows the code to link a phone (also used by the title bar cast button)
+     */
+    public void addDevice() {
+        mRemoteControlData.enableDeviceLink(true);
+        Utils.updateRemoteControlService(getContext());
+
+        // Background playback on Android 10 and above
+        // Shows overlay dialog if needed (alive activity required)
+        if (!PermissionHelpers.hasOverlayPermissions(getContext())) {
+            AppDialogUtil.showConfirmationDialog(
+                    getContext(), getContext().getString(R.string.remote_control_permission), () -> {
+                        PermissionHelpers.verifyOverlayPermissions(getContext());
+                        // Service that prevents the app from destroying
+                        if (getContext() instanceof MotherActivity) {
+                            ((MotherActivity) getContext()).addOnResult(
+                                    (request, response, data) -> AddDevicePresenter.instance(getContext()).start()
+                            );
+                        }
+                    }, () -> AddDevicePresenter.instance(getContext()).start()
+            );
+        } else {
+            AddDevicePresenter.instance(getContext()).start();
+        }
     }
 
     private void appendRemoveAllDevicesButton(AppDialogPresenter settingsPresenter) {

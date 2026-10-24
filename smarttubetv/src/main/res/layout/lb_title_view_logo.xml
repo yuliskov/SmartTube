@@ -75,6 +75,19 @@
         app:searchOrbBrightColor="@color/orb_bright_color"
         app:searchOrbIconColor="@color/red"
         android:visibility="gone" />
+    <!-- YouTube color scheme: link a phone with a TV code -->
+    <androidx.leanback.widget.SearchOrbView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cast_orb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/search_bar_right_items_margin"
+        app:searchOrbIcon="@drawable/youtube_cast"
+        app:searchOrbColor="@android:color/transparent"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color"
+        android:visibility="gone" />
     <!-- YouTube color scheme: opens settings (replaces the Settings section of the sidebar) -->
     <androidx.leanback.widget.SearchOrbView
         xmlns:app="http://schemas.android.com/apk/res-auto"
