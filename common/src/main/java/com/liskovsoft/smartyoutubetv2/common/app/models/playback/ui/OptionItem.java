@@ -13,4 +13,10 @@ public interface OptionItem {
     OptionItem[] getRadio();
     ChatReceiver getChatReceiver();
     CommentsReceiver getCommentsReceiver();
+    /**
+     * Icon shown next to the title (buttons only), 0 for none
+     */
+    default int getIconResId() {
+        return 0;
+    }
 }

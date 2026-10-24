@@ -118,6 +118,9 @@ public class AppPreferenceManager {
             Preference preference = new Preference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
+            if (item.getIconResId() > 0) {
+                preference.setIcon(item.getIconResId());
+            }
             preference.setOnPreferenceClickListener(pref -> {
                 item.onSelect(true);
                 return true;

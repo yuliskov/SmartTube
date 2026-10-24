@@ -224,7 +224,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
         for (SettingsItem item : AppDataSourceManager.instance().getSettingItems(getContext())) {
-            dialogPresenter.appendSingleButton(UiOptionItem.from(item.title, optionItem -> item.onClick.run()));
+            dialogPresenter.appendSingleButton(UiOptionItem.fromIcon(item.title, item.imageResId, optionItem -> item.onClick.run()));
         }
 
         dialogPresenter.showDialog(getContext().getString(R.string.header_settings));

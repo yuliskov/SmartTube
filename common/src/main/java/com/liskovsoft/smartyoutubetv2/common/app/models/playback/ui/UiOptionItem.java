@@ -17,6 +17,7 @@ public class UiOptionItem implements OptionItem {
     private OptionItem[] mRadioItems;
     private ChatReceiver mChatReceiver;
     private CommentsReceiver mCommentsReceiver;
+    private int mIconResId;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -61,6 +62,12 @@ public class UiOptionItem implements OptionItem {
 
     public static OptionItem from(CharSequence title, OptionCallback callback) {
         return from(title, callback, false);
+    }
+
+    public static OptionItem fromIcon(CharSequence title, int iconResId, OptionCallback callback) {
+        UiOptionItem optionItem = (UiOptionItem) from(title, callback);
+        optionItem.mIconResId = iconResId;
+        return optionItem;
     }
 
     public static OptionItem from(CharSequence title, CharSequence description, OptionCallback callback) {
@@ -185,5 +192,10 @@ public class UiOptionItem implements OptionItem {
     @Override
     public CommentsReceiver getCommentsReceiver() {
         return mCommentsReceiver;
+    }
+
+    @Override
+    public int getIconResId() {
+        return mIconResId;
     }
 }
