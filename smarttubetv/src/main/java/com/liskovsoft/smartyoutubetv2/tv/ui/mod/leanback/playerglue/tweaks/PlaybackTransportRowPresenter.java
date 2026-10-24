@@ -41,6 +41,7 @@ import androidx.leanback.widget.RowPresenter;
 
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
@@ -1037,8 +1038,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     @Override
     protected RowPresenter.ViewHolder createRowViewHolder(ViewGroup parent) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(
-                com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row, parent, false);
+        int layoutId = MainUIData.instance(parent.getContext()).isYouTubeColorScheme() ?
+                com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row_youtube :
+                com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row;
+        View v = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
         initRow(vh);
         return vh;

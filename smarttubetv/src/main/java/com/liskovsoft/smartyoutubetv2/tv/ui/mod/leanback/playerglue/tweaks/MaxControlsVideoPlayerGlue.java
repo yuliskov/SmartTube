@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -14,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.LiveStateProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter.TopEdgeFocusListener;
@@ -55,6 +58,12 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
+
+                        if (MainUIData.instance(viewHolder.view.getContext()).isYouTubeColorScheme()) {
+                            // YouTube TV: bold, smaller title
+                            viewHolder.getTitle().setTypeface(Typeface.DEFAULT_BOLD);
+                            viewHolder.getTitle().setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                        }
                         // MOD: add extra title line
                         //viewHolder.getBody().setText(glue.getBody());
                     }
