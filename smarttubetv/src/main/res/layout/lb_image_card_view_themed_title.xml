@@ -17,4 +17,6 @@
 
 <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat xmlns:android="http://schemas.android.com/apk/res/android"
                                                                               android:id="@+id/title_text"
-                                                                              style="?attr/imageCardViewTitleStyle" />
+                                                                              style="?attr/imageCardViewTitleStyle"
+                                                                              android:textStyle="bold"
+                                                                              android:lineSpacingMultiplier="0.95" />

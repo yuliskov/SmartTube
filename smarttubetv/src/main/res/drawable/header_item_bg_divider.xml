@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sidebar row followed by a divider (pre-API 23: no line, just the gap) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="@dimen/header_divider_gap" android:drawable="@drawable/header_item_bg"/>
+</layer-list>

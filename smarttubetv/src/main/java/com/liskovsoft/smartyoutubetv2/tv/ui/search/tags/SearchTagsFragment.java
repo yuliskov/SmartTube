@@ -44,6 +44,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private SearchData mSearchData;
     private boolean mIsFragmentCreated;
     private CrashRestorer mCrashRestorer;
+    private final Runnable mDelayedSearch = () -> loadSearchResult(getSearchBarText());
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,6 +188,14 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     @Override
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
+
+        // MOD: like YouTube, load results after typing pauses
+        if (getView() != null) {
+            getView().removeCallbacks(mDelayedSearch);
+            if (!TextUtils.isEmpty(newQuery)) {
+                getView().postDelayed(mDelayedSearch, 1_000);
+            }
+        }
 
         // Commit on voice input.
         // Note, that voice detection is far from ideal and may results duplicate search loading.

@@ -47,6 +47,7 @@ public class SuggestionsController extends BasePlayerController {
     private int mFocusCount;
     private int mNextRetryCount;
     private List<ChapterItem> mChapters;
+    private Video mPendingSuggestionsVideo; // MOD: suggestions wait until the player is ready
     private final Runnable mChapterHandler = this::startChapterNotificationServiceIfNeededInt;
     private static final int MAX_PLAYLIST_CONTINUATIONS = 20;
     private static final int CHAPTER_NOTIFICATION_Id = 565;
@@ -71,6 +72,7 @@ public class SuggestionsController extends BasePlayerController {
         // Remote control fix. Slow network fix. Suggestions may still be loading.
         // This could lead to changing current video info (title, id etc) to wrong one.
         disposeActions();
+        mPendingSuggestionsVideo = null;
         //mCurrentGroup = video.getGroup(); // disable garbage collected
         //appendNextSectionVideoIfNeeded(video); // ConcurrentModificationException error
     }
@@ -80,7 +82,26 @@ public class SuggestionsController extends BasePlayerController {
      */
     @Override
     public void onVideoLoaded(Video item) {
-        loadSuggestions(item);
+        // MOD: don't compete with the initial buffering on slow devices. Load once the player is ready (see onPlay/onPause).
+        mPendingSuggestionsVideo = item;
+    }
+
+    @Override
+    public void onPlay() {
+        loadPendingSuggestions();
+    }
+
+    @Override
+    public void onPause() {
+        loadPendingSuggestions();
+    }
+
+    private void loadPendingSuggestions() {
+        if (mPendingSuggestionsVideo != null) {
+            Video item = mPendingSuggestionsVideo;
+            mPendingSuggestionsVideo = null;
+            loadSuggestions(item);
+        }
     }
 
     // Could make negative impact on the video load time.
@@ -91,6 +112,7 @@ public class SuggestionsController extends BasePlayerController {
 
     @Override
     public void onEngineReleased() {
+        mPendingSuggestionsVideo = null;
         disposeActions();
     }
 

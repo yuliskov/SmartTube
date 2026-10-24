@@ -13,28 +13,28 @@
     <color name="search_opaque_yellow">#ffaa3f</color>
 
     <!-- Card view colors -->
-    <color name="card_selected_background_white">#FFFFFF</color>
+    <color name="card_selected_background_white">#F1F1F1</color>
     <color name="card_selected_background_white_grey">#D3D3D3</color>
     <color name="card_selected_background_yellow">#ffaa3f</color>
     <color name="card_selected_background_grey">#343434</color>
-    <color name="card_selected_text_black">#000000</color>
+    <color name="card_selected_text_black">#0F0F0F</color>
     <color name="card_selected_text_grey">#343434</color>
     <color name="card_default_background">#0096a6</color>
     <color name="card_default_background_dark">#004B53</color>
     <color name="card_default_text">#FFFFFF</color>
 
     <!-- Browse fragment colors -->
-    <color name="shelf_background">#282828</color>
-    <color name="shelf_background_dark">#131313</color>
+    <color name="shelf_background">#212121</color>
+    <color name="shelf_background_dark">#0F0F0F</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>
     <color name="player_background">#FF000000</color>
 
     <!-- Dark color scheme -->
-    <color name="scheme_grey_background">#181818</color>
-    <color name="scheme_grey_background_dark">#181818</color>
-    <color name="scheme_grey_shelf_background_dark">#000000</color>
-    <color name="scheme_grey_card_background_dark">#121212</color>
+    <color name="scheme_grey_background">#0F0F0F</color>
+    <color name="scheme_grey_background_dark">#0F0F0F</color>
+    <color name="scheme_grey_shelf_background_dark">#0F0F0F</color>
+    <color name="scheme_grey_card_background_dark">#272727</color>
 
     <!-- Red color scheme -->
     <color name="scheme_red_background">#131313</color>
@@ -68,4 +68,6 @@
     <color name="lb_speech_orb_not_recording">@color/orb_color</color>
     <color name="lb_speech_orb_not_recording_pulsed">@color/orb_bright_color</color>
     <color name="lb_speech_orb_not_recording_icon">@color/orb_icon_color</color>
+    <!-- Typed query in the search pill -->
+    <color name="lb_search_bar_text">#FFFFFFFF</color>
 </resources>

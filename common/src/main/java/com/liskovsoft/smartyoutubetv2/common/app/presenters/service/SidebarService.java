@@ -25,6 +25,7 @@ public class SidebarService implements ProfileChangeListener {
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final AppPrefs mPrefs;
     private boolean mIsSettingsSectionEnabled;
+    private boolean mIsYouTubeOrderApplied;
     private int mBootSectionId;
     private final static int RESERVED_ID = 100;
 
@@ -237,20 +238,21 @@ public class SidebarService implements ProfileChangeListener {
 
     private void initSections() {
         mDefaultSections.put(R.string.header_notifications, MediaGroup.TYPE_NOTIFICATIONS);
+        // YouTube TV order: Home, Shorts, Subscriptions, Library (History) | Music, Gaming, Sports, News, LIVE, Kids...
         mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mDefaultSections.put(R.string.header_shorts, MediaGroup.TYPE_SHORTS);
-        mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);
-        mDefaultSections.put(R.string.header_kids_home, MediaGroup.TYPE_KIDS_HOME);
-        mDefaultSections.put(R.string.header_sports, MediaGroup.TYPE_SPORTS);
-        mDefaultSections.put(R.string.badge_live, MediaGroup.TYPE_LIVE);
-        mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
-        mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mDefaultSections.put(R.string.header_blocked_channels, MediaGroup.TYPE_BLOCKED_CHANNELS);
+        mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
+        mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
+        mDefaultSections.put(R.string.header_sports, MediaGroup.TYPE_SPORTS);
+        mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        mDefaultSections.put(R.string.badge_live, MediaGroup.TYPE_LIVE);
+        mDefaultSections.put(R.string.header_kids_home, MediaGroup.TYPE_KIDS_HOME);
+        mDefaultSections.put(R.string.header_trending, MediaGroup.TYPE_TRENDING);
+        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
+        mDefaultSections.put(R.string.header_blocked_channels, MediaGroup.TYPE_BLOCKED_CHANNELS);
         mDefaultSections.put(R.string.my_videos, MediaGroup.TYPE_MY_VIDEOS);
         mDefaultSections.put(R.string.playback_queue_category_title, MediaGroup.TYPE_PLAYBACK_QUEUE);
         mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
@@ -295,6 +297,7 @@ public class SidebarService implements ProfileChangeListener {
         mPinnedItems = Helpers.parseList(split, 0, Video::fromString);
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
+        mIsYouTubeOrderApplied = Helpers.parseBoolean(split, 3, false);
 
         transferOldPinnedItems();
 
@@ -306,6 +309,26 @@ public class SidebarService implements ProfileChangeListener {
         enableSection(MediaGroup.TYPE_SETTINGS, true);
 
         cleanupPinnedItems();
+
+        applyYouTubeOrderOnce();
+    }
+
+    /**
+     * One-time reorder of the default sections into the YouTube TV order (user can reorder afterwards).
+     * Pinned channels/playlists keep their relative order after the default sections.
+     */
+    private void applyYouTubeOrderOnce() {
+        if (mIsYouTubeOrderApplied) {
+            return;
+        }
+
+        Collections.sort(mPinnedItems, (o1, o2) -> Integer.compare(getYouTubeOrder(o1), getYouTubeOrder(o2))); // stable
+        mIsYouTubeOrderApplied = true;
+        persistState();
+    }
+
+    private int getYouTubeOrder(Video item) {
+        return item.sectionId != -1 && mDefaultSections.containsValue(item.sectionId) ? getDefaultSectionIndex(item.sectionId) : Integer.MAX_VALUE;
     }
 
     private void transferOldPinnedItems() {
@@ -321,7 +344,7 @@ public class SidebarService implements ProfileChangeListener {
     }
 
     public void persistState() {
-        mPrefs.setSidebarData(Helpers.mergeData(mPinnedItems, mBootSectionId, mIsSettingsSectionEnabled));
+        mPrefs.setSidebarData(Helpers.mergeData(mPinnedItems, mBootSectionId, mIsSettingsSectionEnabled, mIsYouTubeOrderApplied));
     }
 
     @Override

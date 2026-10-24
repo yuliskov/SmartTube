@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
@@ -40,9 +41,11 @@ import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
+import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchKeyboardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,6 +221,7 @@ public class SearchSupportFragment extends Fragment {
     String mPendingQuery = null;
     SearchOrbView mSearchOrbView;
     SearchOrbView mSearchSettingsOrbView;
+    SearchKeyboardView mKeyboard;
 
     OnItemViewSelectedListener mOnItemViewSelectedListener;
     private OnItemViewClickedListener mOnItemViewClickedListener;
@@ -358,7 +362,16 @@ public class SearchSupportFragment extends Fragment {
             if (mIsKeyboardAutoShowEnabled && focused) {
                 Helpers.showKeyboardAlt(v.getContext(), v);
             }
+
+            // MOD: the field is only focusable while the system IME (globe key) is in use
+            if (!focused) {
+                v.setFocusable(false);
+            }
         });
+        // MOD: in-app keyboard is used. System IME only on demand (globe key).
+        if (Build.VERSION.SDK_INT >= 21) {
+            mSearchTextEditor.setShowSoftInputOnFocus(false);
+        }
         mSearchTextEditor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -412,6 +425,37 @@ public class SearchSupportFragment extends Fragment {
             // Fix: Enable edit field dynamic style: white/grey, listening/non listening
             if (previousListener != null) {
                 previousListener.onFocusChange(v, focused);
+            }
+        });
+
+        // MOD: YouTube TV style in-app keyboard
+        mKeyboard = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_keyboard);
+        mKeyboard.setTarget(mSearchTextEditor);
+        mKeyboard.setNextFocusUpForTopRow(mSpeechOrbView.getId());
+        mSpeechOrbView.setNextFocusDownId(mKeyboard.getFirstKey().getId());
+        mKeyboard.setListener(new SearchKeyboardView.Listener() {
+            @Override
+            public void onSearch() {
+                submitQuery(getSearchBarText());
+            }
+
+            @Override
+            public void onGlobe() {
+                // Fallback to the system IME (other languages)
+                mSearchTextEditor.setFocusable(true);
+                mSearchTextEditor.setFocusableInTouchMode(true);
+                mSearchTextEditor.requestFocus();
+                Helpers.showKeyboardAlt(getContext(), mSearchTextEditor);
+            }
+
+            @Override
+            public void onSuggestionClicked(Tag tag) {
+                SearchSupportFragment.this.onSuggestionClicked(tag);
+            }
+
+            @Override
+            public void onSuggestionLongClicked(Tag tag) {
+                SearchSupportFragment.this.onSuggestionLongClicked(tag);
             }
         });
 
@@ -776,7 +820,19 @@ public class SearchSupportFragment extends Fragment {
     }
 
     public void focusOnSearchField() {
-        mSearchTextEditor.requestFocus(); // MOD: focus on search field
+        mKeyboard.focusFirstKey(); // MOD: focus on the in-app keyboard ('A' key)
+    }
+
+    protected SearchKeyboardView getKeyboard() {
+        return mKeyboard;
+    }
+
+    protected void onSuggestionClicked(Tag tag) {
+        // NOP
+    }
+
+    protected void onSuggestionLongClicked(Tag tag) {
+        // NOP
     }
 
     protected String getSearchBarText() {
@@ -871,8 +927,10 @@ public class SearchSupportFragment extends Fragment {
     void updateSearchBarVisibility() {
         int position = mRowsSupportFragment != null ? mRowsSupportFragment.getSelectedPosition() : -1;
         try {
-            mSearchBar.setVisibility(position <=0 || mResultAdapter == null
-                    || mResultAdapter.size() == 0 ? View.VISIBLE : View.GONE);
+            int visibility = position <=0 || mResultAdapter == null
+                    || mResultAdapter.size() == 0 ? View.VISIBLE : View.GONE;
+            mSearchBar.setVisibility(visibility);
+            mKeyboard.setVisibility(visibility);
         } catch (NullPointerException e) {
             // Fatal Exception: java.lang.NullPointerException
             // Attempt to invoke interface method 'void android.view.autofill.IAutoFillManager.addClient(android.view.autofill

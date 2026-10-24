@@ -19,9 +19,32 @@
         <item name="android:horizontalSpacing">@dimen/grid_item_horizontal_spacing</item>
     </style>
 
+    <!-- YouTube TV: browse rows start exactly at the content edge (same x as the top bar mic) -->
+    <style name="BrowseRowViewStyle" parent="RowViewStyle">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="BrowseGridViewStyle" parent="GridViewStyle">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+    <style name="BrowseRowHeaderDockStyle" parent="Widget.Leanback.Row.HeaderDock">
+        <item name="android:paddingStart">0dp</item>
+    </style>
+
+    <!-- YouTube TV row title: 34px (17sp), grey, medium weight -->
+    <style name="TextAppearance.Leanback.Row.Header" parent="TextAppearance.Leanback.Header">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">#AAAAAA</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
     <!-- Decrease header spacing in BrowseView -->
     <style name="BrowseHeaderStyle" parent="Widget.Leanback.Headers.VerticalGridView">
         <item name="android:verticalSpacing">@dimen/browse_headers_vertical_spacing</item>
+        <item name="android:paddingStart">@dimen/browse_headers_padding_start</item>
+        <item name="android:paddingEnd">@dimen/browse_headers_padding_end</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:paddingTop">30dp</item>
+        <item name="android:paddingBottom">30dp</item>
     </style>
 
     <!-- Color scheme: Teal (Default) -->
@@ -56,8 +79,9 @@
         <item name="cardProgressStyle">?android:attr/progressBarStyleHorizontal</item>
         <item name="appLogo">@mipmap/app_logo</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
-        <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
-        <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
+        <item name="itemsVerticalGridStyle">@style/BrowseGridViewStyle</item>
+        <item name="rowHorizontalGridStyle">@style/BrowseRowViewStyle</item>
+        <item name="rowHeaderDockStyle">@style/BrowseRowHeaderDockStyle</item>
         <item name="headersVerticalGridStyle">@style/BrowseHeaderStyle</item>
         <!-- Disable activity transition animations -->
         <item name="android:windowAnimationStyle">@null</item>

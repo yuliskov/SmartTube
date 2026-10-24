@@ -1,5 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
+import android.graphics.Color;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,8 +68,13 @@ public final class ProgressBarManager {
         ProgressBar progressBarView = new ProgressBar(
                 rootView.getContext(), null, android.R.attr.progressBarStyleLarge);
         progressBarView.setIndeterminate(true);
-        progressBarView.setIndeterminateDrawable(
-                ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+        if (Build.VERSION.SDK_INT >= 21) {
+            // MOD: YouTube style loader: the platform material arc (spins while growing/shrinking), tinted white
+            progressBarView.setIndeterminateTintList(ColorStateList.valueOf(Color.WHITE));
+        } else {
+            progressBarView.setIndeterminateDrawable(
+                    ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+        }
 
         FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,

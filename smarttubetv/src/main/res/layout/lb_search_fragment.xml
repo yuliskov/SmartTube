@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MOD: YouTube TV style search: bar + in-app keyboard (SearchKeyboardView) on top, results below -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/lb_search_frame"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:clipChildren="false">
+    <FrameLayout
+            android:id="@+id/lb_results_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="78dp"/>
+    <androidx.leanback.widget.SearchBar
+            android:id="@+id/lb_search_bar"
+            android:layout_marginTop="@dimen/lb_search_bar_padding_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"/>
+    <com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchKeyboardView
+            android:id="@+id/search_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="84dp"/>
+</FrameLayout>

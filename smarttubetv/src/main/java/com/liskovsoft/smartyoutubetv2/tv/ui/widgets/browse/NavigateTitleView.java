@@ -61,6 +61,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private DateTimeView mGlobalClock;
     private DateTimeView mGlobalDate;
     private SearchOrbView mSearchOrbView;
+    private View mSearchPill;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
     private int mIconWidth;
@@ -121,6 +122,15 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         }
     }
 
+    /**
+     * Keep the YouTube TV like grey mic orb. Ignore accent color applied by the browse fragment.
+     */
+    @Override
+    public void setSearchAffordanceColors(Colors colors) {
+        int color = ContextCompat.getColor(getContext(), R.color.title_pill_bg);
+        super.setSearchAffordanceColors(new Colors(color, color, ContextCompat.getColor(getContext(), R.color.orb_icon_color)));
+    }
+
     @Override
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
         // Gives focus to the SearchOrb first....if not...default to normal descendant focus search
@@ -165,12 +175,20 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mPipTitle.setVisibility(mSearchVisibility);
         }
 
+        syncSearchPill();
+
         if (mIsGlobalClockEnabled) {
             mGlobalClock.setVisibility(mBrandingVisibility);
         }
 
         if (mIsGlobalClockEnabled) {
             mGlobalDate.setVisibility(mBrandingVisibility);
+        }
+    }
+
+    private void syncSearchPill() {
+        if (mSearchPill != null) {
+            mSearchPill.setVisibility(mSearchOrbView.getVisibility());
         }
     }
 
@@ -193,6 +211,9 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         MainUIData mainUIData = MainUIData.instance(getContext());
 
         mSearchOrbView = findViewById(R.id.title_orb);
+        mSearchPill = findViewById(R.id.search_pill);
+        // Pill acts as the search field: forward click to the (mic) search orb
+        mSearchPill.setOnClickListener(v -> mSearchOrbView.performClick());
 
         mAccountView = findViewById(R.id.account_orb);
         mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
@@ -227,11 +248,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         MainUIData mainUIData = MainUIData.instance(getContext());
 
         mIsSearchOrbEnabled = !mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH);
-        mIsAccountViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS);
+        mIsAccountViewEnabled = false; // YouTube TV style: account lives in the sidebar (BrowseFragment)
         mIsLanguageViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE);
         mIsGlobalClockEnabled = GeneralData.instance(getContext()).isGlobalClockEnabled();
 
         mSearchOrbView.setVisibility(mIsSearchOrbEnabled ? View.VISIBLE : View.GONE);
+        syncSearchPill();
         mAccountView.setVisibility(mIsAccountViewEnabled ? View.VISIBLE : View.GONE);
         mLanguageView.setVisibility(mIsLanguageViewEnabled ? View.VISIBLE : View.GONE);
         mGlobalClock.setVisibility(mIsGlobalClockEnabled ? View.VISIBLE : View.GONE);

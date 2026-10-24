@@ -3,8 +3,8 @@
     <!-- Default, same as xhdpi -->
     <!-- 320dpi, Amazon Fire TV Stick -->
 
-    <dimen name="card_width">200dp</dimen>
-    <dimen name="card_height">110dp</dimen>
+    <dimen name="card_width">264dp</dimen>
+    <dimen name="card_height">149dp</dimen>
     <!-- text_badge_image_view.xml, default: 12sp -->
     <dimen name="card_badge_text_size">14sp</dimen>
 
@@ -52,7 +52,14 @@
 
     <!-- Increase this value to hide left strip from Browse fragment (when headers collapsed) -->
     <!-- Old value: 238dp -->
-    <dimen name="lb_browse_rows_margin_start">265dp</dimen>
+    <dimen name="lb_browse_rows_margin_start">267dp</dimen>
+
+    <!-- YouTube TV sidebar: always expanded; content starts at 534px (267dp @2x) -->
+    <dimen name="lb_browse_headers_width">267dp</dimen>
+    <dimen name="lb_browse_rail_width">78dp</dimen>
+    <dimen name="lb_browse_header_padding_end">0dp</dimen>
+    <item name="lb_browse_header_unselect_alpha" type="fraction">100%</item>
+    <item format="float" name="lb_browse_header_select_scale" type="dimen">1.0</item>
 
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">600dp</dimen>
@@ -95,22 +102,28 @@
     -->
     <!--<dimen name="lb_browse_item_horizontal_spacing">15dp</dimen>-->
     <!--<dimen name="lb_browse_item_vertical_spacing">15dp</dimen>-->
-    <dimen name="grid_item_horizontal_spacing">15dp</dimen>
-    <dimen name="grid_item_vertical_spacing">15dp</dimen>
+    <dimen name="grid_item_horizontal_spacing">16dp</dimen>
+    <dimen name="grid_item_vertical_spacing">24dp</dimen>
     <dimen name="grid_horizontal_margin">25dp</dimen>
 
     <!-- Browse headers spacing. Origin: 21dp -->
     <!--<dimen name="lb_browse_headers_vertical_spacing">10dp</dimen>-->
-    <dimen name="browse_headers_vertical_spacing">10dp</dimen>
+    <dimen name="browse_headers_vertical_spacing">0dp</dimen>
+    <dimen name="browse_headers_padding_start">16dp</dimen>
+    <dimen name="browse_headers_padding_end">28dp</dimen>
 
     <!-- Vine card widget values -->
     <dimen name="lb_basic_card_main_width">140dp</dimen>
     <dimen name="lb_basic_card_main_height">188dp</dimen>
-    <dimen name="lb_basic_card_info_height">52dp</dimen>
+    <dimen name="lb_basic_card_info_height">68dp</dimen>
     <dimen name="lb_basic_card_info_padding">6dp</dimen>
     <dimen name="lb_basic_card_info_text_margin">2dp</dimen>
-    <dimen name="lb_basic_card_title_text_size">16sp</dimen>
-    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    <dimen name="lb_basic_card_title_text_size">18sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">14sp</dimen>
+    <!-- YouTube TV: text sits directly under the thumbnail, no inner padding -->
+    <dimen name="lb_basic_card_info_padding_top">12dp</dimen>
+    <dimen name="lb_basic_card_info_padding_bottom">0dp</dimen>
+    <dimen name="lb_basic_card_info_padding_horizontal">0dp</dimen>
     <dimen name="lb_basic_card_info_badge_size">16dp</dimen>
 
     <!-- Elements below aren't used in the app -->
@@ -134,4 +147,8 @@
     <dimen name="tooltip_vertical_padding_mod">6.5dp</dimen>
     <dimen name="tooltip_y_offset_non_touch_mod">0dp</dimen>
     <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
+
+    <!-- YouTube TV style search (in-app keyboard) -->
+    <dimen name="lb_search_bar_speech_orb_size">36dp</dimen>
+    <dimen name="lb_search_browse_rows_align_top">262dp</dimen>
 </resources>

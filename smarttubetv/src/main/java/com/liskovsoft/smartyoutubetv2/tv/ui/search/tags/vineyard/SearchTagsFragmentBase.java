@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +25,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.TagPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search.SearchSupportFragment;
 
@@ -46,11 +44,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private static final String TAG = SearchTagsFragmentBase.class.getSimpleName();
     private static final int REQUEST_SPEECH = 0x00000010;
 
-    private TagAdapter mSearchTagsAdapter;
     //private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter; // contains tags adapter and results adapter (see attachAdapter method)
     private ListRowPresenter mResultsPresenter;
-    private TagPresenter mTagsPresenter;
+    private OnItemLongPressedListener mTagsLongPressListener;
 
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
@@ -64,8 +61,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mResultsPresenter = new CustomListRowPresenter();
         mResultsPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
-        mTagsPresenter = new TagPresenter();
-        mSearchTagsAdapter = new TagAdapter(getContext(), mTagsPresenter, "");
         setSearchResultProvider(this);
         setupListenersAndPermissions();
     }
@@ -130,7 +125,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     protected void setSearchTagsLongPressListener(OnItemLongPressedListener listener) {
-        mTagsPresenter.setOnItemViewLongPressedListener(listener);
+        mTagsLongPressListener = listener;
     }
 
     public boolean isStopping() {
@@ -192,25 +187,31 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         searchTaggedPosts(searchQuery);
     }
 
+    /**
+     * MOD: suggestions/history go to the in-app keyboard's left column (YouTube TV style), not to a results row
+     */
     private void searchTaggedPosts(String query) {
-        mSearchTagsAdapter.setTag(query);
-        mResultsAdapter.clear();
-        mSearchTagsAdapter.clear();
-        performTagSearch(mSearchTagsAdapter);
-    }
-
-    private void performTagSearch(TagAdapter adapter) {
         if (mSearchTagsProvider == null) {
             return;
         }
 
-        String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
-            adapter.addAllItems(results);
-            attachAdapter(0, adapter);
-            // Same suggestions in the keyboard
-            //displayCompletions(toCompletions(results));
+            if (getKeyboard() != null) {
+                getKeyboard().setSuggestions(results, TextUtils.isEmpty(query));
+            }
         });
+    }
+
+    @Override
+    protected void onSuggestionClicked(Tag tag) {
+        onItemViewClicked(tag);
+    }
+
+    @Override
+    protected void onSuggestionLongClicked(Tag tag) {
+        if (mTagsLongPressListener != null) {
+            mTagsLongPressListener.onItemLongPressed(null, tag);
+        }
     }
 
     private List<String> toCompletions(List<Tag> results) {
@@ -266,17 +267,14 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     protected void clearTags() {
-        if (containsAdapter(mSearchTagsAdapter)) {
-            detachAdapter(0);
+        if (getKeyboard() != null) {
+            getKeyboard().setSuggestions(null, false);
         }
     }
 
     protected void removeTag(Tag tag) {
-        if (containsAdapter(mSearchTagsAdapter)) {
-            mSearchTagsAdapter.remove(tag);
-            if (mSearchTagsAdapter.size() == 0) {
-                detachAdapter(0);
-            }
+        if (getKeyboard() != null) {
+            getKeyboard().removeSuggestion(tag);
         }
     }
 

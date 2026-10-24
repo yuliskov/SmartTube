@@ -32,7 +32,7 @@ public class ViewUtil {
     /**
      * Focused card zoom factor
      */
-    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_NONE; // MOD: YouTube TV cards don't zoom
     //public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_NONE;
     /**
      * Dim focused card?
@@ -45,8 +45,8 @@ public class ViewUtil {
     /**
      * Scroll continue threshold
      */
-    public static final int GRID_SCROLL_CONTINUE_NUM = 10;
-    public static final int ROW_SCROLL_CONTINUE_NUM = 4;
+    public static final int GRID_SCROLL_CONTINUE_NUM = 20;
+    public static final int ROW_SCROLL_CONTINUE_NUM = 8;
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)

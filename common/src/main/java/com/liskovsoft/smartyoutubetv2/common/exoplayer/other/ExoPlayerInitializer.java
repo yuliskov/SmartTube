@@ -109,7 +109,7 @@ public class ExoPlayerInitializer {
         // Default values
         int minBufferMs = 30_000;
         int maxBufferMs = 30_000;
-        int bufferForPlaybackMs = 2_500;
+        int bufferForPlaybackMs = 1_500; // MOD: start sooner (was 2_500). Rebuffer threshold below is unchanged, so stall recovery stays safe.
         int bufferForPlaybackAfterRebufferMs = 5_000;
 
         switch (mPlayerData.getVideoBufferType()) {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- YouTube TV like top bar: 72px round mic orb + pill search field (320dpi) -->
+    <color name="title_pill_bg">#272727</color>
+    <color name="title_pill_bg_focused">#F1F1F1</color>
+    <color name="title_pill_text_normal">#9A9A9A</color>
+    <color name="title_pill_text_focused">#0F0F0F</color>
+
+    <!-- Default: 52dp. Shrinks all SearchOrbView orbs (title bar only uses them) -->
+    <dimen name="lb_search_orb_size">36dp</dimen>
+    <dimen name="title_pill_height">36dp</dimen>
+    <!-- Pill fills up to here (from the end, excl. title padding): ends at x=1278px like YouTube -->
+    <dimen name="title_bar_end_margin">189dp</dimen>
+    <!-- Sidebar divider after the Library (History) row -->
+    <dimen name="header_divider_gap">21dp</dimen>
+</resources>

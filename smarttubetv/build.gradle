@@ -109,6 +109,8 @@ android {
 
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug // LOCAL: lets release builds install over the debug-signed test build
             }
         }
         // Use same key for release and debug for testing

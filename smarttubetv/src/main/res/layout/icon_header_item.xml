@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.leanback.widget.NonOverlappingLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="223dp"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/header_item_bg"
+    android:minHeight="39dp"
+    android:minWidth="222dp"
+    android:paddingStart="14dp"
+    android:paddingEnd="12dp">
 
     <ImageView
         android:id="@+id/header_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:duplicateParentState="true"
+        android:tint="@color/header_item_text"
         android:contentDescription="@string/header_icon" />
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
         android:id="@+id/header_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="12dp"
+        android:duplicateParentState="true"
+        android:textColor="@color/header_item_text"
+        android:textSize="16sp"
 
         android:singleLine="true"
-        android:maxWidth="150sp"
+        android:maxWidth="160sp"
         android:marqueeRepeatLimit="marquee_forever"
         android:ellipsize="marquee"
         android:scrollHorizontally="true"

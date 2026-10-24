@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.PageRow;
@@ -20,6 +21,8 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -63,9 +66,21 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         View rootView = viewHolder.view;
         rootView.setFocusable(true);
 
+        // YouTube TV: divider below the Library row (SmartTube's History)
+        boolean divider = headerItem.getId() == MediaGroup.TYPE_HISTORY;
+        int gap = divider ? rootView.getResources().getDimensionPixelSize(R.dimen.header_divider_gap) : 0;
+        rootView.setBackgroundResource(divider ? R.drawable.header_item_bg_divider : R.drawable.header_item_bg);
+        rootView.setPaddingRelative(rootView.getPaddingStart(), 0, rootView.getPaddingEnd(), gap);
+        rootView.setMinimumHeight((int) (39 * rootView.getResources().getDisplayMetrics().density) + gap);
+        View headerLabel = rootView.findViewById(R.id.header_label);
+        if (headerLabel instanceof HeaderMarqueeTextViewCompat) {
+            ((HeaderMarqueeTextViewCompat) headerLabel).updateParentDivider(); // new background: re-apply rail state
+        }
+
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
             if (mIconUrl != null) {
+                ImageViewCompat.setImageTintList(iconView, null); // avatars/thumbnails keep their colors
                 Glide.with(rootView.getContext())
                         .load(mIconUrl)
                         .apply(ViewUtil.glideOptions().error(mDefaultIcon))

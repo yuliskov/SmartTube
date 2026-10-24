@@ -59,6 +59,17 @@ public class ComplexImageView extends RelativeLayout {
         mProgressBar = findViewById(R.id.clip_progress);
         mProgressContainer = findViewById(R.id.clip_info);
         mPreviewContainer = findViewById(R.id.preview_container);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            // YouTube TV: rounded thumbnail
+            final float radius = 8 * getResources().getDisplayMetrics().density;
+            setOutlineProvider(new android.view.ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, android.graphics.Outline outline) {
+                    outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), radius);
+                }
+            });
+            setClipToOutline(true);
+        }
     }
 
     /**
@@ -109,7 +120,10 @@ public class ComplexImageView extends RelativeLayout {
             return;
         }
 
-        mBadgeText.setBackgroundColor(color);
+        android.graphics.drawable.GradientDrawable chip = new android.graphics.drawable.GradientDrawable();
+        chip.setColor(color);
+        chip.setCornerRadius(4 * getResources().getDisplayMetrics().density);
+        mBadgeText.setBackground(chip);
     }
 
     /**

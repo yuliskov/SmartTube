@@ -1,0 +1,26 @@
+diff --git a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt
+index d79cef8..053c795 100644
+--- a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt
++++ b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt
+@@ -37,11 +37,16 @@ internal object V8ChallengeProvider: JsRuntimeChalBaseJCP() {
+         synchronized(v8Lock) {
+             initRuntime()
+ 
+-            val result = runV8(stdin)
+-
+-            shutdownIfNeeded()
+-
+-            return result
++            // MOD: keep the runtime between videos (re-creating it and recompiling the solver libs on every
++            // video costs seconds on slow TVs). Access is serialized by v8Lock + the V8 locker, so any thread is fine.
++            // A failed runtime is dropped and re-created on the next call, same as before.
++            // ponytail: runtime lives for the app lifetime (a few MB); add an idle-timeout dispose if memory matters.
++            try {
++                return runV8(stdin)
++            } catch (e: Throwable) {
++                shutdownIfNeeded()
++                throw e
++            }
+         }
+     }
+ 

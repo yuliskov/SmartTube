@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/lb_search_bar_speech_orb_margin_start"
+            android:layout_marginStart="74dp"
             android:focusable="true"
             android:focusableInTouchMode="false"
             >
@@ -33,13 +33,11 @@
     <!-- MOD: rounded search bg (old value: lb_in_app_search_bg) -->
     <RelativeLayout
             android:id="@+id/lb_search_bar_items"
-            android:layout_width="@dimen/lb_search_bar_items_width"
-            android:layout_height="@dimen/lb_search_bar_items_height"
+            android:layout_width="516dp"
+            android:layout_height="36dp"
             android:layout_toEndOf="@+id/lb_search_bar_speech_orb"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/lb_search_bar_items_margin_start"
-            android:layout_marginTop="@dimen/lb_search_bar_inner_margin_top"
-            android:layout_marginBottom="@dimen/lb_search_bar_inner_margin_bottom"
+            android:layout_marginStart="5dp"
             android:background="@drawable/rounded_search_bg"
             >
 
@@ -59,15 +57,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|start"
-                    android:layout_marginStart="@dimen/lb_search_bar_edit_text_margin_start"
+                    android:layout_marginStart="11dp"
                     android:layout_centerVertical="true"
                     android:cursorVisible="true"
                     android:layout_toEndOf="@+id/lb_search_bar_badge"
                     android:editable="true"
                     android:background="@null"
                     android:fontFamily="sans-serif"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:imeOptions="normal|flagNoExtractUi|actionSearch"
                     android:inputType="text|textAutoComplete"
                     android:singleLine="true"
@@ -76,7 +74,7 @@
                     android:textColorHint="@color/lb_search_bar_hint"
                     android:textCursorDrawable="@drawable/search_bar_cursor"
                     android:hint="@string/lb_search_bar_hint"
-                    android:textSize="@dimen/lb_search_bar_text_size"/>
+                    android:textSize="19sp"/>
     </RelativeLayout>
 
     <!-- NOTE: You need to create different icon sizes to overcome icon oversize bug -->
@@ -85,8 +83,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/search_bar_right_items_margin"
-        android:layout_toStartOf="@+id/lb_search_bar_search_orb"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/lb_search_bar_items"
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"
@@ -102,6 +100,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/search_bar_right_items_margin"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:focusable="true"
         android:focusableInTouchMode="false"
         app:searchOrbColor="@color/orb_color"

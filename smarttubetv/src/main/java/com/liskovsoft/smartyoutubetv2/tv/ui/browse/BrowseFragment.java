@@ -30,6 +30,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.misc.CrashRestorer;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -47,6 +50,10 @@ import java.util.Map;
  */
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
+    // YouTube TV sidebar: action rows above the presenter's sections (presenter indexes are shifted by ACTION_ROWS)
+    private static final int ID_ACCOUNT = -1_000_001;
+    private static final int ID_SEARCH = -1_000_002;
+    private static final int ACTION_ROWS = 2;
     private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, BrowseSection> mSections;
@@ -86,7 +93,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onSaveInstanceState(outState);
 
         // Called when the activity is paused
-        mCrashRestorer.persistHeaderIndex(outState, getSelectedPosition());
+        mCrashRestorer.persistHeaderIndex(outState, getSelectedPosition() - ACTION_ROWS);
         mCrashRestorer.persistVideo(outState, mBrowsePresenter.getCurrentVideo());
     }
 
@@ -126,6 +133,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         getHeadersSupportFragment().setOnHeaderClickedListener(
                 (viewHolder, row) -> {
                     long headerId = row.getHeaderItem().getId();
+
+                    if (headerId == ID_ACCOUNT) {
+                        AccountSettingsPresenter.instance(getContext()).show();
+                        return;
+                    } else if (headerId == ID_SEARCH) {
+                        SearchPresenter.instance(getContext()).startSearch(null);
+                        return;
+                    }
+
                     int newPosition = indexOf(headerId);
 
                     if (getHeadersSupportFragment().getSelectedPosition() != newPosition) {
@@ -178,6 +194,24 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // This Adapter is used to render the MainFragment sidebar labels.
         mSectionRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mSectionRowAdapter);
+        addActionRows();
+    }
+
+    private void addActionRows() {
+        Account account = MediaServiceManager.instance().getSelectedAccount();
+        String name = account != null ? (account.getName() != null ? account.getName() : account.getEmail()) : null;
+        String avatar = account != null ? account.getAvatarImageUrl() : null;
+        BrowseSection accountRow = new BrowseSection(ID_ACCOUNT, name != null ? name : getString(R.string.dialog_add_account),
+                BrowseSection.TYPE_GRID, R.drawable.browse_title_account, avatar, false, null);
+        BrowseSection searchRow = new BrowseSection(ID_SEARCH, getString(R.string.title_search), BrowseSection.TYPE_GRID, R.drawable.lb_ic_in_app_search);
+        mSectionRowAdapter.add(new PageRow(new SectionHeaderItem(accountRow)));
+        mSectionRowAdapter.add(new PageRow(new SectionHeaderItem(searchRow)));
+    }
+
+    @Override
+    protected boolean isActionRow(Object row) {
+        long id = row instanceof PageRow ? ((PageRow) row).getHeaderItem().getId() : 0;
+        return id == ID_ACCOUNT || id == ID_SEARCH;
     }
 
     private void setupUi() {
@@ -197,7 +231,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         //setTitle(getString(R.string.browse_title));
 
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getContext(), brandColorRes));
+        setBrandColor(0xFF0F0F0F); // YouTube TV sidebar background
 
         // Set search icon color.
         setSearchAffordanceColor(ContextCompat.getColor(getContext(), brandAccentColorRes));
@@ -280,6 +314,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             return;
         }
 
+        if (index != -1) {
+            index += ACTION_ROWS;
+        }
+
         if (mSections.get(section.getId()) != null && (index == -1 || indexOf(section.getId()) == index)) {
             return;
         }
@@ -304,6 +342,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void removeAllSections() {
         mSections.clear();
         mSectionRowAdapter.clear();
+        addActionRows(); // account name/avatar may have changed
     }
 
     @Override
@@ -324,7 +363,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void selectSection(int index, boolean focusOnContent) {
-        if (index >= 0 && mSectionRowAdapter.size() > 0) {
+        if (index >= 0 && mSectionRowAdapter.size() > ACTION_ROWS) {
+            index += ACTION_ROWS;
             mFocusOnContent = focusOnContent; // focus after header transition
 
             // Fix refresh current section

@@ -345,8 +345,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void sortSections() {
         // NOTE: Comparator.comparingInt API >= 24
         Collections.sort(mSections, (o1, o2) -> {
-            return getSidebarService().getSectionIndex(o1.getId()) - getSidebarService().getSectionIndex(o2.getId());
+            return getSectionOrder(o1) - getSectionOrder(o2);
         });
+    }
+
+    private int getSectionOrder(BrowseSection section) {
+        // YouTube TV: Settings pinned last
+        return section.getId() == MediaGroup.TYPE_SETTINGS ? Integer.MAX_VALUE / 2 : getSidebarService().getSectionIndex(section.getId());
     }
 
     public void updateChannelSorting() {

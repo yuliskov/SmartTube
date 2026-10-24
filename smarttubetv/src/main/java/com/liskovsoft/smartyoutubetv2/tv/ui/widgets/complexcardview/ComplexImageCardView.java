@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
+import androidx.core.content.ContextCompat;
+import android.os.Build;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -54,20 +56,17 @@ public class ComplexImageCardView extends ImageCardView {
             return;
         }
 
+        // MOD: YouTube TV keeps the 2-line ellipsized title on focus, no marquee scroll
         if (enable) {
-            Runnable enableMarquee = () -> ViewUtil.enableMarquee(view);
-
-            mHandler.postDelayed(enableMarquee, 1_000);
-
-            view.setTag(enableMarquee);
-        } else {
-            if (view.getTag() instanceof Runnable) {
-                mHandler.removeCallbacks((Runnable) view.getTag());
-                view.setTag(null);
-            }
-
-            ViewUtil.disableMarquee(view);
+            return;
         }
+
+        if (view.getTag() instanceof Runnable) {
+            mHandler.removeCallbacks((Runnable) view.getTag());
+            view.setTag(null);
+        }
+
+        ViewUtil.disableMarquee(view);
     }
 
     /**
@@ -100,6 +99,11 @@ public class ComplexImageCardView extends ImageCardView {
         }
 
         enableVideoPreview(selected);
+
+        // MOD: white focus ring on top of the thumbnail (YouTube TV style)
+        if (Build.VERSION.SDK_INT >= 23) {
+            mComplexImageView.setForeground(selected ? ContextCompat.getDrawable(getContext(), R.drawable.card_focus_ring) : null);
+        }
     }
 
     @Override

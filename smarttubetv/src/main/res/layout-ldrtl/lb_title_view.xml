@@ -23,9 +23,11 @@
     <include layout="@layout/lb_title_view_logo"/>
 
     <!-- MOD: add additional buttons -->
-    <LinearLayout android:layout_width="wrap_content"
+    <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
+                  android:layout_marginEnd="@dimen/title_bar_end_margin"
+                  android:gravity="center_vertical"
                   android:layout_gravity="center_vertical|start">
         <androidx.leanback.widget.SearchOrbView
             android:id="@+id/title_orb"
@@ -33,6 +35,32 @@
             android:layout_width="wrap_content"
             android:transitionGroup="true"
             android:layout_gravity="center_vertical|start"
+            android:nextFocusLeft="@id/search_pill"
+            app:searchOrbIcon="@drawable/ic_title_mic"
+            app:searchOrbColor="@color/title_pill_bg"
+            app:searchOrbBrightColor="@color/title_pill_bg"
+            app:searchOrbIconColor="@color/white"
+            android:visibility="invisible" />
+
+        <!-- Click is forwarded to title_orb in NavigateTitleView -->
+        <TextView
+            android:id="@+id/search_pill"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/title_pill_height"
+            android:layout_marginStart="9dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/title_search_pill_bg"
+            android:text="@string/title_search"
+            android:textColor="@color/title_pill_text"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:nextFocusRight="@id/title_orb"
             android:nextFocusLeft="@id/account_orb"
             android:visibility="invisible" />
 
@@ -42,7 +70,7 @@
             android:layout_height="wrap_content"
             android:transitionGroup="true"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            android:nextFocusRight="@id/title_orb"
+            android:nextFocusRight="@id/search_pill"
             android:nextFocusLeft="@id/language_orb"
             app:searchOrbIcon="@drawable/browse_title_account"
             app:searchOrbColor="@color/orb_color"

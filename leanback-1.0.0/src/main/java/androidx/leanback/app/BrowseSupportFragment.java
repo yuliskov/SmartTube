@@ -565,6 +565,13 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         }
     }
 
+    /**
+     * MOD: sidebar rows that only trigger an action on click and have no page of their own
+     */
+    protected boolean isActionRow(Object row) {
+        return false;
+    }
+
     private boolean createMainFragment(ObjectAdapter adapter, int position) {
         Object item = null;
         if (!mCanShowHeaders) {
@@ -579,6 +586,9 @@ public class BrowseSupportFragment extends BaseSupportFragment {
                         String.format("Invalid position %d requested", position));
             }
             item = adapter.get(position);
+            if (isActionRow(item)) { // MOD: action rows (e.g. Search) keep the current page
+                return false;
+            }
         }
 
         boolean oldIsPageRow = mIsPageRow;
@@ -724,6 +734,9 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     boolean mShowingHeaders = true;
     boolean mCanShowHeaders = true;
     private int mContainerListMarginStart;
+    private int mRailWidth; // MOD
+    private int mListPadStart = -1;
+    private int mListPadEnd;
     private int mContainerListAlignTop;
     private boolean mMainFragmentScaleEnabled = true;
     OnItemViewSelectedListener mExternalOnItemViewSelectedListener;
@@ -1189,6 +1202,7 @@ public class BrowseSupportFragment extends BaseSupportFragment {
                 R.styleable.LeanbackTheme_browseRowsMarginTop, context.getResources()
                 .getDimensionPixelSize(R.dimen.lb_browse_rows_margin_top));
         ta.recycle();
+        mRailWidth = context.getResources().getDimensionPixelSize(R.dimen.lb_browse_rail_width); // MOD
 
         readArguments(getArguments());
 
@@ -1413,6 +1427,10 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         }
         for (int i = 0; i < mAdapter.size(); i++) {
             final Row row = (Row) mAdapter.get(i);
+            if (isActionRow(row)) { // MOD: action rows sit above the first page, keep the top bar
+                if (rowPosition == i) return true;
+                continue;
+            }
             if (row.isRenderedAsRowView() || row instanceof PageRow) {
                 return rowPosition == i;
             }
@@ -1451,7 +1469,18 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         View containerList;
         containerList = mHeadersSupportFragment.getView();
         lp = (MarginLayoutParams) containerList.getLayoutParams();
-        lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
+        lp.width = onScreen ? mContainerListMarginStart : mRailWidth; // MOD: collapse to icon rail (clips labels)
+        lp.setMarginStart(0);
+        // MOD: in rail mode drop list paddings so the icon centre lands at rail centre
+        VerticalGridView list = mHeadersSupportFragment.getVerticalGridView();
+        if (list != null) {
+            if (mListPadStart < 0) {
+                mListPadStart = list.getPaddingStart();
+                mListPadEnd = list.getPaddingEnd();
+            }
+            list.setPaddingRelative(onScreen ? mListPadStart : mListPadStart - 2, list.getPaddingTop(),
+                    onScreen ? mListPadEnd : 0, list.getPaddingBottom());
+        }
         containerList.setLayoutParams(lp);
     }
 
@@ -1464,8 +1493,14 @@ public class BrowseSupportFragment extends BaseSupportFragment {
 
     private void expandMainFragment(boolean expand) {
         MarginLayoutParams params = (MarginLayoutParams) mScaleFrameLayout.getLayoutParams();
-        params.setMarginStart(!expand ? mContainerListMarginStart : 0);
+        params.setMarginStart(!expand ? mContainerListMarginStart : mRailWidth); // MOD: content starts after rail
         mScaleFrameLayout.setLayoutParams(params);
+        // MOD: top bar (mic + search pill) starts at the same x as the content, like YouTube TV
+        View titleView = getTitleView();
+        if (titleView != null) {
+            titleView.setPaddingRelative(params.getMarginStart(), titleView.getPaddingTop(),
+                    titleView.getPaddingEnd(), titleView.getPaddingBottom());
+        }
         mMainFragmentAdapter.setExpand(expand);
 
         setMainFragmentAlignment();
@@ -1519,7 +1554,7 @@ public class BrowseSupportFragment extends BaseSupportFragment {
             if (DEBUG) Log.v(TAG, "header selected position " + position);
             // Layout of Headers Fragment in hidden state may triggers the onRowSelected and
             // reset to 0. Skip in that case.
-            if (mShowingHeaders) {
+            if (mShowingHeaders && !isActionRow(row)) { // MOD: selection stays on the current page
                 onRowSelected(position);
             }
         }

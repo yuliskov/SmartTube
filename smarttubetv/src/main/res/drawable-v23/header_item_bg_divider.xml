@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube TV sidebar: row pill + thin #3F3F3F divider centered in the gap below it -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="@dimen/header_divider_gap" android:drawable="@drawable/header_item_bg"/>
+    <item android:gravity="bottom|fill_horizontal" android:height="1dp" android:bottom="10dp">
+        <shape><solid android:color="#3F3F3F"/></shape>
+    </item>
+</layer-list>

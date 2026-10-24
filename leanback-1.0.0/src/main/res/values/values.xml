@@ -660,6 +660,7 @@
     <dimen name="lb_browse_row_hovercard_title_font_size">18sp</dimen>
     <dimen name="lb_browse_rows_fading_edge">16dp</dimen>
     <dimen name="lb_browse_rows_margin_start">238dp</dimen>
+    <dimen name="lb_browse_rail_width">0dp</dimen>
     <dimen name="lb_browse_rows_margin_top">167dp</dimen>
     <dimen name="lb_browse_section_header_text_size">16sp</dimen>
     <dimen name="lb_browse_selected_row_top_padding">20dp</dimen>

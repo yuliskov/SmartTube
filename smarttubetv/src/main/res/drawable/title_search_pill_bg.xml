@@ -1,0 +1,14 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/title_pill_bg_focused"/>
+            <corners android:radius="36dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/title_pill_bg"/>
+            <corners android:radius="36dp"/>
+        </shape>
+    </item>
+</selector>

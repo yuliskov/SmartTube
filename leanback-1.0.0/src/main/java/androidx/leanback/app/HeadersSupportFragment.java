@@ -181,6 +181,20 @@ public class HeadersSupportFragment extends BaseRowSupportFragment {
         updateListViewVisibility();
     }
 
+    // MOD: sidebar list starts at the top edge (YouTube TV style) instead of the content row offset
+    @Override
+    public void setAlignment(int windowAlignOffsetTop) {
+        final VerticalGridView listView = getVerticalGridView();
+        if (listView != null) {
+            listView.setItemAlignmentOffset(0);
+            listView.setItemAlignmentOffsetPercent(VerticalGridView.ITEM_ALIGN_OFFSET_PERCENT_DISABLED);
+            // keep the top rows (Sign in, Search) in place, scroll only when focus passes the middle
+            listView.setWindowAlignmentOffset(0);
+            listView.setWindowAlignmentOffsetPercent(50);
+            listView.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_BOTH_EDGE);
+        }
+    }
+
     private void updateListViewVisibility() {
         final VerticalGridView listView = getVerticalGridView();
         if (listView != null) {
@@ -189,7 +203,7 @@ public class HeadersSupportFragment extends BaseRowSupportFragment {
                 if (mHeadersEnabled) {
                     listView.setChildrenVisibility(View.VISIBLE);
                 } else {
-                    listView.setChildrenVisibility(View.INVISIBLE);
+                    listView.setChildrenVisibility(View.VISIBLE); // MOD: icon rail stays visible
                 }
             }
         }
