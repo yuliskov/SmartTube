@@ -44,7 +44,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private ArrayObjectAdapter mRowsAdapter;
-    private ListRowPresenter mRowPresenter;
+    private CustomListRowPresenter mRowPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
@@ -84,6 +84,13 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
+    /**
+     * Rows inside Browse are already offset by the sidebar
+     */
+    protected int getRowsPaddingStart() {
+        return 0;
+    }
+
     private void setupAdapter() {
         if (mVideoGroupAdapters == null) {
             mVideoGroupAdapters = new HashMap<>();
@@ -91,6 +98,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
         if (mRowsAdapter == null) {
             mRowPresenter = new CustomListRowPresenter();
+            mRowPresenter.setPaddingStart(getRowsPaddingStart());
             mRowPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
 
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();

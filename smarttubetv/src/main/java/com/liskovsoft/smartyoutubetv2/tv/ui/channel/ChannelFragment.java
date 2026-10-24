@@ -94,6 +94,12 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     }
 
     @Override
+    protected int getRowsPaddingStart() {
+        // No sidebar here: line rows up with the search bar
+        return Math.round(74 * getResources().getDisplayMetrics().density);
+    }
+
+    @Override
     protected VideoGroupPresenter getMainPresenter() {
         return ChannelPresenter.instance(getContext());
     }

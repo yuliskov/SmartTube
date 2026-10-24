@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -129,6 +130,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
 
+        boolean isChannel = video.itemType == MediaItem.TYPE_CHANNEL; // not shows (playlist-as-channel)
+        cardView.setRound(isChannel);
         cardView.setTitleText(video.getTitle());
         // channel on its own line, "views • age" on the next
         String secondTitle = video.getSecondTitle() != null ? video.getSecondTitle().toString() : null;
@@ -160,9 +163,9 @@ public class VideoCardPresenter extends LongClickPresenter {
                 //.asBitmap() // disable animation (webp, gif)
                 .load(ClickbaitRemover.updateThumbnail(video, mThumbQuality))
                 //.placeholder(mDefaultCardImage)
-                .apply(ViewUtil.glideOptions())
+                .apply(isChannel ? ViewUtil.glideOptions().circleCrop() : ViewUtil.glideOptions())
                 // improve image compression on low end devices
-                .override(mWidth, mHeight)
+                .override(isChannel ? mHeight : mWidth, mHeight)
                 .skipMemoryCache(false) // static thumbs: reuse decoded bitmaps on section switch / rebind
                 // com.liskovsoft.smartyoutubetv2.tv.util.CacheGlideModule
                 // Cache makes app crashing on old android versions
@@ -173,7 +176,7 @@ public class VideoCardPresenter extends LongClickPresenter {
                     Glide.with(context)
                         .load(video.cardImageUrl) // always working
                         //.placeholder(mDefaultCardImage)
-                        .apply(ViewUtil.glideOptions())
+                        .apply(isChannel ? ViewUtil.glideOptions().circleCrop() : ViewUtil.glideOptions())
                         .listener(mErrorListener)
                         .error(R.drawable.card_placeholder) // R.color.lb_grey
                 )

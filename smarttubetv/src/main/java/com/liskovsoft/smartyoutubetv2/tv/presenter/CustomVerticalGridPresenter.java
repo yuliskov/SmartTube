@@ -16,6 +16,7 @@ public class CustomVerticalGridPresenter extends VerticalGridPresenter {
 
     public CustomVerticalGridPresenter(int layoutResId, int rootResId) {
         super(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.FOCUS_DIMMER_ENABLED);
+        setShadowEnabled(false); // MOD: no dark box behind the focused card (YouTube TV style)
 
         mLayoutResId = layoutResId;
         mRootResId = rootResId;

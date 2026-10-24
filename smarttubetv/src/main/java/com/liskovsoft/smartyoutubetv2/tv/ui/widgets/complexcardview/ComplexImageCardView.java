@@ -3,6 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 import androidx.core.content.ContextCompat;
 import android.os.Build;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -19,6 +23,7 @@ public class ComplexImageCardView extends ImageCardView {
     private Handler mHandler;
     private boolean mIsCardTextAutoScrollEnabled;
     private boolean mIsBadgeEnabled;
+    private boolean mIsRound;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -102,8 +107,35 @@ public class ComplexImageCardView extends ImageCardView {
 
         // MOD: white focus ring on top of the thumbnail (YouTube TV style)
         if (Build.VERSION.SDK_INT >= 23) {
-            mComplexImageView.setForeground(selected ? ContextCompat.getDrawable(getContext(), R.drawable.card_focus_ring) : null);
+            mComplexImageView.setForeground(!selected ? null : mIsRound ? createRoundFocusRing() : ContextCompat.getDrawable(getContext(), R.drawable.card_focus_ring));
         }
+    }
+
+    /**
+     * YouTube TV channel card: round avatar centered in the thumbnail cell, centered text
+     */
+    public void setRound(boolean round) {
+        mIsRound = round;
+        setMainImageScaleType(round ? ScaleType.FIT_CENTER : ScaleType.CENTER_CROP);
+        int align = round ? TEXT_ALIGNMENT_CENTER : TEXT_ALIGNMENT_VIEW_START; // style sets textAlignment, which overrides gravity
+        TextView titleView = findViewById(R.id.title_text);
+        TextView contentView = findViewById(R.id.content_text);
+        if (titleView != null) {
+            titleView.getLayoutParams().width = LayoutParams.MATCH_PARENT; // so text can center
+            titleView.setTextAlignment(align);
+        }
+        if (contentView != null) {
+            contentView.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+            contentView.setTextAlignment(align);
+        }
+    }
+
+    private Drawable createRoundFocusRing() {
+        GradientDrawable ring = new GradientDrawable();
+        ring.setShape(GradientDrawable.OVAL);
+        ring.setStroke(Math.round(3 * getResources().getDisplayMetrics().density), Color.WHITE);
+        int inset = Math.max(0, (mComplexImageView.getWidth() - mComplexImageView.getHeight()) / 2);
+        return new InsetDrawable(ring, inset, 0, inset, 0);
     }
 
     @Override
