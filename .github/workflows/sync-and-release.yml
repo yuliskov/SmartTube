@@ -1,0 +1,156 @@
+name: Sync upstream and release
+
+# Merges yuliskov/SmartTube into this fork and publishes a signed beta build.
+# The app's updater reads releases/download/latest/smarttube_beta2.json from this repo.
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Build a release even when upstream has no new commits'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-and-release
+  cancel-in-progress: false
+
+env:
+  UPSTREAM_REPO: yuliskov/SmartTube
+  UPSTREAM_BRANCH: master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    outputs:
+      merged: ${{ steps.merge.outputs.merged }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          # SYNC_TOKEN (Contents + Workflows write) is needed when upstream changes .github/workflows
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+
+      - name: Merge upstream
+        id: merge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch "https://github.com/$UPSTREAM_REPO.git" "$UPSTREAM_BRANCH"
+
+          if git merge-base --is-ancestor FETCH_HEAD HEAD; then
+            echo "Already up to date with $UPSTREAM_REPO"
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # A conflict with the fork's changes fails the run, and GitHub emails you to merge by hand
+          git merge --no-edit -m "Merge $UPSTREAM_REPO@$(git rev-parse --short FETCH_HEAD)" FETCH_HEAD
+          git push origin HEAD:master
+          echo "merged=true" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: sync
+    if: needs.sync.outputs.merged == 'true' || inputs.force_release
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: master
+          submodules: recursive
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Configure Build Signing
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          ALIAS: ${{ secrets.ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          # Updates only install over a build signed with the same key, so never release unsigned
+          if [ -z "$SIGNING_KEY" ]; then
+            echo "::error::SIGNING_KEY secret is missing"
+            exit 1
+          fi
+          echo "$SIGNING_KEY" | base64 --decode > "$RUNNER_TEMP/key.jks"
+          printf 'storeFile=%s\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\n' \
+            "$RUNNER_TEMP/key.jks" "$KEY_STORE_PASSWORD" "$ALIAS" "$KEY_PASSWORD" > keystore.properties
+
+      - name: Set Version
+        id: version
+        run: |
+          UPSTREAM_CODE=$(grep -m1 'versionCode' smarttubetv/build.gradle | grep -o '[0-9]\+')
+          UPSTREAM_NAME=$(grep -m1 'versionName' smarttubetv/build.gradle | awk -F'"' '{print $2}')
+          PUBLISHED=$(curl -fsSL "https://github.com/$GITHUB_REPOSITORY/releases/download/latest/smarttube_beta2.json" \
+            | jq '[.[] | .versionCode? // empty] | max // 0' || echo 0)
+          PUBLISHED=${PUBLISHED:-0}
+
+          # upstream code * 100 + fork build: a newer upstream version always outranks older fork builds
+          CODE=$(( UPSTREAM_CODE * 100 ))
+          if [ "$PUBLISHED" -ge "$CODE" ]; then
+            CODE=$(( PUBLISHED + 1 ))
+          fi
+          NAME="$UPSTREAM_NAME.$(( CODE % 100 ))"
+
+          sed -i "s/versionCode [0-9]\+/versionCode $CODE/; s/versionName \".*\"/versionName \"$NAME\"/" smarttubetv/build.gradle
+          echo "Releasing $NAME ($CODE), previously published: $PUBLISHED"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Build with Gradle
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleStbetaRelease
+
+      - name: Prepare Release Assets
+        env:
+          NAME: ${{ steps.version.outputs.name }}
+          CODE: ${{ steps.version.outputs.code }}
+        run: |
+          OUT=smarttubetv/build/outputs/apk/stbeta/release
+          mkdir dist
+          for abi in armeabi-v7a arm64-v8a x86 universal; do
+            cp "$OUT/SmartTube_beta_${NAME}_${abi}.apk" "dist/smarttube_beta_${abi}.apk"
+          done
+
+          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/latest"
+          CHANGES=$(git log -n 10 --no-merges --pretty=format:%s | jq -R . | jq -s .)
+          jq -n --arg base "$BASE" --arg name "$NAME" --argjson code "$CODE" --argjson changes "$CHANGES" '{
+            package: {
+              downloadUrlList: [$base + "/smarttube_beta_armeabi-v7a.apk"],
+              "downloadUrlList_arm64-v8a": [$base + "/smarttube_beta_arm64-v8a.apk"],
+              downloadUrlList_x86: [$base + "/smarttube_beta_x86.apk"]
+            },
+            ($name): {versionCode: $code, changelog: $changes}
+          }' > dist/smarttube_beta2.json
+          cat dist/smarttube_beta2.json
+
+      - name: Publish Release
+        env:
+          NAME: ${{ steps.version.outputs.name }}
+        run: |
+          git tag -f latest
+          git push -f origin refs/tags/latest
+
+          if gh release view latest > /dev/null 2>&1; then
+            gh release edit latest --title "SmartTube $NAME" --notes "Fork build $NAME"
+            gh release upload latest dist/* --clobber
+          else
+            gh release create latest dist/* --title "SmartTube $NAME" --notes "Fork build $NAME" --latest
+          fi
