@@ -4,6 +4,8 @@ name: Sync upstream and release
 # The app's updater reads releases/download/latest/smarttube_beta2.json from this repo.
 
 on:
+  push:
+    branches: [ master ]
   schedule:
     - cron: '0 4 * * *'
   workflow_dispatch:
@@ -26,6 +28,8 @@ env:
 
 jobs:
   sync:
+    # The sync job's own merge push (made with SYNC_TOKEN) would start this workflow again
+    if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Merge yuliskov/SmartTube@')
     runs-on: ubuntu-latest
     outputs:
       merged: ${{ steps.merge.outputs.merged }}
@@ -57,7 +61,7 @@ jobs:
 
   release:
     needs: sync
-    if: needs.sync.outputs.merged == 'true' || inputs.force_release
+    if: needs.sync.outputs.merged == 'true' || inputs.force_release || github.event_name == 'push'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
