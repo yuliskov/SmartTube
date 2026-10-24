@@ -66,6 +66,7 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: master
+          fetch-depth: 50 # enough history for the changelog
           submodules: recursive
           token: ${{ secrets.SYNC_TOKEN || github.token }}
 
