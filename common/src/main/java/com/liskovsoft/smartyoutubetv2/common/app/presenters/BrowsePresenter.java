@@ -67,6 +67,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             MediaGroup.TYPE_SUBSCRIPTIONS, MediaGroup.TYPE_USER_PLAYLISTS, MediaGroup.TYPE_HISTORY));
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
+    private static boolean sIsPlaybackWarmedUp;
     private final List<BrowseSection> mSections;
     private final List<BrowseSection> mErrorSections;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
@@ -756,6 +757,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                                 getView().updateSection(videoGroup);
                                 mBrowseProcessor.process(videoGroup);
+                                warmUpPlaybackIfNeeded(videoGroup);
 
                                 continueGroupIfNeeded(videoGroup, false);
                             }
@@ -965,6 +967,25 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         return null;
+    }
+
+    /**
+     * Fork: the first video after app start waits ~10s for the PO token and player script.<br/>
+     * Fetch one video's playback data in the background once, so they're ready when the user picks a video.
+     */
+    private static void warmUpPlaybackIfNeeded(VideoGroup videoGroup) {
+        if (sIsPlaybackWarmedUp || videoGroup.isEmpty()) {
+            return;
+        }
+
+        Video video = videoGroup.get(0);
+
+        if (video == null || video.videoId == null || video.isLive) {
+            return;
+        }
+
+        sIsPlaybackWarmedUp = true;
+        MediaServiceManager.instance().loadFormatInfo(video, formatInfo -> {});
     }
 
     private boolean isShownInSidebar(BrowseSection section) {
