@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -138,6 +139,9 @@ public class ChannelsProvider {
                                     existingProgram)
                                     .setWatchNextType(TvContractCompat.WatchNextPrograms
                                             .WATCH_NEXT_TYPE_CONTINUE)
+                                    .setLastEngagementTimeUtcMillis(System.currentTimeMillis())
+                                    .setTitle(clipData.getTitle())
+                                    .setPosterArtUri(clipData.getCardImageUrl() != null ? Uri.parse(clipData.getCardImageUrl()) : null)
                                     .setLastPlaybackPositionMillis((int) clipData.getProgress())
                                     .setDurationMillis((int) clipData.getDuration());
                             ContentValues contentValues = builder.build().toContentValues();
@@ -162,9 +166,7 @@ public class ChannelsProvider {
                         .setLastEngagementTimeUtcMillis(System.currentTimeMillis())
                         .setTitle(clipData.getTitle())
                         .setDescription(clipData.getDescription())
-                        .setPosterArtUri(Uri.parse(clipData.getCardImageUrl()))
-                        .setIntentUri(Uri.parse(SCHEME + "://" + APPS_LAUNCH_HOST
-                                + "/" + PLAY_VIDEO_ACTION_PATH + "/" + clipId))
+                        .setPosterArtUri(clipData.getCardImageUrl() != null ? Uri.parse(clipData.getCardImageUrl()) : null)
                         .setInternalProviderId(clipId)
                         // Setting the contentId to avoid having duplicate programs with the same
                         // content added to the watch next row (The launcher will use the contentId
@@ -173,6 +175,11 @@ public class ChannelsProvider {
                         .setContentId(contentId)
                         .setLastPlaybackPositionMillis((int) clipData.getProgress())
                         .setDurationMillis((int) clipData.getDuration());
+                // The clip id is the YouTube video id; the player restores the saved position itself.
+                Intent intent = AppUtil.getInstance(context).createAppIntent("https://www.youtube.com/watch?v=" + clipId);
+                if (intent != null) {
+                    builder.setIntent(intent);
+                }
                 ContentValues contentValues = builder.build().toContentValues();
                 Uri programUri = context.getContentResolver().insert(
                         TvContractCompat.WatchNextPrograms.CONTENT_URI, contentValues);
