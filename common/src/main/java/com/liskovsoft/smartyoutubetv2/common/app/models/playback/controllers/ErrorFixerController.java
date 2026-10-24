@@ -56,13 +56,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
         } else if (isOfflineVideo() && !mBufferingDetector.isPlayable()) {
-            int currentDnsType = getPlayerTweaksData().getPreferredDnsType();
-            int customDns = Helpers.getNextValue(
-                    new Integer[] {PlayerTweaksData.DNS_TYPE_SYSTEM, PlayerTweaksData.DNS_TYPE_IPV4, PlayerTweaksData.DNS_TYPE_GOOGLE}, currentDnsType);
-            int requiredEngine = customDns == PlayerTweaksData.DNS_TYPE_SYSTEM
-                    ? Utils.getFasterDataSource() : PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP;
+            int requiredEngine = PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP;
+            int customDns = PlayerTweaksData.DNS_TYPE_GOOGLE;
             boolean isCustomEngineEnabled = getPlayerTweaksData().getPlayerDataSource() == requiredEngine;
-            boolean isCustomDnsEnabled = currentDnsType == customDns;
+            boolean isCustomDnsEnabled = getPlayerTweaksData().getPreferredDnsType() == customDns;
             boolean isCustomDnsActive = isCustomEngineEnabled && isCustomDnsEnabled;
             if (!isCustomDnsActive && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 // Wrong DNS resolving could cause hanging at start
