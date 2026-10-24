@@ -219,7 +219,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initRowAndGridMapping() {
-        mRowMapping.put(MediaGroup.TYPE_HOME, getContentService().getHomeObserve());
+        // Fork: YouTube returns an empty Home when signed out with no watch history. Show Trending and Music instead.
+        mRowMapping.put(MediaGroup.TYPE_HOME, getContentService().getHomeObserve()
+                .switchIfEmpty(Observable.concat(getContentService().getTrendingObserve(), getContentService().getMusicObserve())));
         mRowMapping.put(MediaGroup.TYPE_TRENDING, getContentService().getTrendingObserve());
         mRowMapping.put(MediaGroup.TYPE_KIDS_HOME, getContentService().getKidsHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_SPORTS, getContentService().getSportsObserve());
@@ -309,12 +311,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         // clean up (profile changed etc)
         getView().removeAllSections();
 
+        // Fork: no "start on Music when signed out" switch, Home falls back to Trending and Music (see initRowAndGridMapping)
         int bootSectionId = getSidebarService().getBootSectionId();
-
-        // Empty Home on first run fix. Switch to something non-empty.
-        if (!getSignInService().isSigned() && VideoStateService.instance(getContext()).isEmpty()) {
-            bootSectionId = MediaGroup.TYPE_MUSIC;
-        }
 
         int index = 0;
 
