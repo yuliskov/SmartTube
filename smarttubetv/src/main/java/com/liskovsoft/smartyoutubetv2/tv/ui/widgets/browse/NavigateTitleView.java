@@ -197,6 +197,16 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         }
     }
 
+    /**
+     * Icon only, white circle with a dark icon when focused (instead of the faint orb pulse)
+     */
+    private void enableYouTubeFocus(SearchOrbView orb, int iconColor) {
+        Colors normal = new Colors(Color.TRANSPARENT, Color.TRANSPARENT, iconColor);
+        Colors focused = new Colors(Color.WHITE, Color.WHITE, ContextCompat.getColor(getContext(), R.color.scheme_youtube_background));
+        orb.setOrbColors(normal);
+        orb.setOnFocusChangeListener((v, hasFocus) -> orb.setOrbColors(hasFocus ? focused : normal));
+    }
+
     private void updateUpdateButton() {
         mUpdateView.setVisibility(PendingAppUpdate.exists() ? mSearchVisibility : View.GONE);
     }
@@ -255,6 +265,11 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mUpdateView.setOnOrbClickedListener(v -> PendingAppUpdate.show());
             TooltipCompatHandler.setTooltipText(mUpdateView, getContext().getString(R.string.install_update));
             PendingAppUpdate.setOnUpdateFoundListener(this::updateUpdateButton);
+
+            int white = ContextCompat.getColor(getContext(), R.color.white);
+            enableYouTubeFocus(mSettingsView, white);
+            enableYouTubeFocus(mCastView, white);
+            enableYouTubeFocus(mUpdateView, ContextCompat.getColor(getContext(), R.color.red));
         }
 
         mAccountView = findViewById(R.id.account_orb);
