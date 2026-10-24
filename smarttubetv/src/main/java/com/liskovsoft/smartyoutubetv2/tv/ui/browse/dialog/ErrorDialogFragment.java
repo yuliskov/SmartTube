@@ -1,7 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.ErrorSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ErrorDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
     private static final boolean TRANSLUCENT = true;
@@ -81,6 +85,47 @@ public class ErrorDialogFragment extends ErrorSupportFragment implements BrowseS
             if (mButton != null) {
                 mButton.setVisibility(View.GONE);
             }
+        }
+
+        if (ViewUtil.isYouTubeStyle(getActivity())) {
+            applyYouTubeStyle(mImageView, mTextView, (Button) Helpers.getField(this, "mButton"));
+        }
+    }
+
+    /**
+     * YouTube TV look: account icon for sign in, bold message, rounded "Sign in" button
+     */
+    private void applyYouTubeStyle(ImageView imageView, TextView textView, Button button) {
+        boolean isSignIn = mDialogData instanceof SignInError || (mDialogData instanceof CategoryEmptyError && mDialogData.getActionText() != null);
+
+        if (imageView != null && isSignIn) {
+            imageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.youtube_account));
+        }
+
+        if (textView != null) {
+            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            textView.setTypeface(Typeface.DEFAULT_BOLD);
+        }
+
+        View errorFrame = (View) Helpers.getField(this, "mErrorFrame");
+        if (errorFrame != null) {
+            errorFrame.setBackgroundColor(Color.TRANSPARENT); // app background instead of a black panel
+        }
+
+        if (button != null) {
+            // "SIGN IN" -> "Sign in"
+            String text = button.getText().toString();
+            if (!text.isEmpty()) {
+                button.setText(text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase());
+            }
+
+            int padding = getResources().getDimensionPixelSize(R.dimen.youtube_pill_button_padding);
+            button.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.youtube_search_pill));
+            button.setTextColor(ContextCompat.getColorStateList(getActivity(), R.color.youtube_sidebar_item_text));
+            button.setAllCaps(false);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            button.setPadding(padding, 0, padding, 0);
         }
     }
 
