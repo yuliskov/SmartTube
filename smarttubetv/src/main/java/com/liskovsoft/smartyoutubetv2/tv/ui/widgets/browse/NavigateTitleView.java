@@ -7,7 +7,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.Gravity;
 import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -20,6 +23,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
@@ -27,6 +33,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSett
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase.OnDataChange;
@@ -61,6 +68,9 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private DateTimeView mGlobalClock;
     private DateTimeView mGlobalDate;
     private SearchOrbView mSearchOrbView;
+    private TextView mSearchPill;
+    private View mYouTubeLogo;
+    private SearchOrbView mSettingsView;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
     private int mIconWidth;
@@ -124,7 +134,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     @Override
     protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
         // Gives focus to the SearchOrb first....if not...default to normal descendant focus search
-        return getSearchAffordanceView().requestFocus() || super.onRequestFocusInDescendants(direction, previouslyFocusedRect);
+        return getSearchAffordanceView().requestFocus() || (mSearchPill != null && mSearchPill.requestFocus()) || super.onRequestFocusInDescendants(direction, previouslyFocusedRect);
     }
 
     @Override
@@ -172,6 +182,23 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         if (mIsGlobalClockEnabled) {
             mGlobalDate.setVisibility(mBrandingVisibility);
         }
+
+        if (mSearchPill != null) {
+            mSearchOrbView.setVisibility(View.GONE);
+            mSearchPill.setVisibility(mSearchVisibility);
+            mYouTubeLogo.setVisibility(mSearchVisibility);
+            mSettingsView.setVisibility(mSearchVisibility);
+        }
+    }
+
+    private void showSettings() {
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
+
+        for (SettingsItem item : AppDataSourceManager.instance().getSettingItems(getContext())) {
+            dialogPresenter.appendSingleButton(UiOptionItem.from(item.title, optionItem -> item.onClick.run()));
+        }
+
+        dialogPresenter.showDialog(getContext().getString(R.string.header_settings));
     }
 
     private void init() {
@@ -194,6 +221,16 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         mSearchOrbView = findViewById(R.id.title_orb);
 
+        if (ViewUtil.isYouTubeStyle(getContext())) {
+            // Pill-shaped search field instead of the round orb
+            mSearchPill = findViewById(R.id.search_pill);
+            mSearchPill.setOnClickListener(v -> mSearchOrbView.callOnClick());
+            mYouTubeLogo = findViewById(R.id.youtube_logo);
+            mSettingsView = findViewById(R.id.settings_orb);
+            mSettingsView.setOnOrbClickedListener(v -> showSettings());
+            TooltipCompatHandler.setTooltipText(mSettingsView, getContext().getString(R.string.header_settings));
+        }
+
         mAccountView = findViewById(R.id.account_orb);
         mAccountView.setOnOrbClickedListener(v -> AccountSelectionPresenter.instance(getContext()).nextAccountOrDialog());
         mAccountView.setOnOrbLongClickedListener(v -> {
@@ -201,6 +238,24 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             return true;
         });
         TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+        if (mSearchPill != null) {
+            // Search | ... | settings gear | profile picture (far right)
+            ViewGroup endGroup = findViewById(R.id.title_end_group);
+            ((ViewGroup) mAccountView.getParent()).removeView(mAccountView);
+            LinearLayout.LayoutParams accountParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            accountParams.gravity = Gravity.CENTER_VERTICAL;
+            accountParams.setMarginStart(getResources().getDimensionPixelSize(R.dimen.search_bar_right_items_margin));
+            endGroup.addView(mAccountView, accountParams);
+
+            mSearchPill.setNextFocusRightId(R.id.settings_orb);
+            mSettingsView.setNextFocusLeftId(R.id.search_pill);
+            mSettingsView.setNextFocusRightId(R.id.account_orb);
+            mAccountView.setNextFocusLeftId(R.id.settings_orb);
+            mAccountView.setNextFocusRightId(View.NO_ID);
+
+            // The bar stays visible while scrolling, so the content scrolls under a solid background
+            setBackgroundColor(ContextCompat.getColor(getContext(), R.color.scheme_youtube_background));
+        }
 
         mLanguageView = findViewById(R.id.language_orb);
         mLanguageView.setOnOrbClickedListener(v -> LanguageSettingsPresenter.instance(getContext()).show());
@@ -229,7 +284,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
         mIsSearchOrbEnabled = !mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_SEARCH);
         mIsAccountViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_BROWSE_ACCOUNTS);
         mIsLanguageViewEnabled = mainUIData.isTopButtonEnabled(MainUIData.TOP_BUTTON_CHANGE_LANGUAGE);
-        mIsGlobalClockEnabled = GeneralData.instance(getContext()).isGlobalClockEnabled();
+        mIsGlobalClockEnabled = GeneralData.instance(getContext()).isGlobalClockEnabled() && !ViewUtil.isYouTubeStyle(getContext());
 
         mSearchOrbView.setVisibility(mIsSearchOrbEnabled ? View.VISIBLE : View.GONE);
         mAccountView.setVisibility(mIsAccountViewEnabled ? View.VISIBLE : View.GONE);

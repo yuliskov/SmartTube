@@ -209,6 +209,10 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         return mColorSchemes.get(mColorSchemeIndex);
     }
 
+    public boolean isYouTubeColorScheme() {
+        return getColorScheme().nameResId == R.string.color_scheme_youtube;
+    }
+
     public void setColorScheme(ColorScheme scheme) {
         mColorSchemeIndex = mColorSchemes.indexOf(scheme);
         persistState();
@@ -420,6 +424,12 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 "App.Theme.Leanback.Blue.OLED.Player",
                 "App.Theme.Leanback.Blue.OLED.Browse",
                 "App.Theme.Leanback.Blue.Preferences",
+                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_youtube,
+                "App.Theme.DarkGrey.Player",
+                "App.Theme.YouTube.Browse",
+                "App.Theme.DarkGrey.Preferences",
                 mContext));
     }
 

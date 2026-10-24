@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mDefaultIcon = new ColorDrawable(ContextCompat.getColor(viewGroup.getContext(), R.color.lb_grey));
 
-        View view = inflater.inflate(R.layout.icon_header_item, null);
+        View view = inflater.inflate(ViewUtil.isYouTubeStyle(viewGroup.getContext()) ? R.layout.icon_header_item_youtube : R.layout.icon_header_item, null);
         view.setAlpha(mUnselectedAlpha); // Initialize icons to be at half-opacity.
 
         return new ViewHolder(view);
@@ -76,6 +77,11 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
             } else {
                 Drawable icon = mResId > 0 ? ContextCompat.getDrawable(rootView.getContext(), mResId) : mDefaultIcon;
                 iconView.setImageDrawable(icon);
+
+                // Dark icon on the white pill of the focused item. Channel avatars (loaded by url) stay untinted.
+                if (VERSION.SDK_INT >= 21 && ViewUtil.isYouTubeStyle(rootView.getContext())) {
+                    iconView.setImageTintList(ContextCompat.getColorStateList(rootView.getContext(), R.color.youtube_sidebar_item_text));
+                }
             }
         }
 

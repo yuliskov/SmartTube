@@ -54,6 +54,9 @@
     <!-- Old value: 238dp -->
     <dimen name="lb_browse_rows_margin_start">265dp</dimen>
 
+    <!-- YouTube color scheme: width of the icon-only sidebar while the content is focused -->
+    <dimen name="youtube_sidebar_rail_width">64dp</dimen>
+
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">600dp</dimen>
 

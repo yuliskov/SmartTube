@@ -34,6 +34,11 @@
     <color name="scheme_grey_background">#181818</color>
     <color name="scheme_grey_background_dark">#181818</color>
     <color name="scheme_grey_shelf_background_dark">#000000</color>
+    <color name="scheme_youtube_background">#0F0F0F</color>
+    <!-- Expanded sidebar: background at 80% opacity, content shows through -->
+    <color name="scheme_youtube_sidebar">#CC0F0F0F</color>
+    <color name="scheme_youtube_thumbnail">#272727</color>
+    <color name="scheme_youtube_secondary_text">#AAAAAA</color>
     <color name="scheme_grey_card_background_dark">#121212</color>
 
     <!-- Red color scheme -->

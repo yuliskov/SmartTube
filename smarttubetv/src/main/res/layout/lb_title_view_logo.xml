@@ -3,6 +3,7 @@
 <!-- Title Logo with embedded clock -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/title_end_group"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center_vertical|end"
@@ -61,4 +62,17 @@
             android:layout_height="@dimen/lb_browse_title_height"
             style="?attr/browseTitleTextStyle"/>
     </FrameLayout>
+    <!-- YouTube color scheme: opens settings (replaces the Settings section of the sidebar) -->
+    <androidx.leanback.widget.SearchOrbView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/settings_orb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/search_bar_right_items_margin"
+        app:searchOrbIcon="@drawable/youtube_settings_gear"
+        app:searchOrbColor="@android:color/transparent"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color"
+        android:visibility="gone" />
 </LinearLayout>

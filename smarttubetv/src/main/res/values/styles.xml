@@ -7,6 +7,7 @@
     <attr name="cardSelectedBackground" format="reference"/>
     <attr name="cardProgressStyle" format="reference"/>
     <attr name="appLogo" format="reference"/>
+    <attr name="youTubeStyle" format="boolean"/>
 
     <!-- Increase spacing between items in GridView -->
     <style name="GridViewStyle" parent="Widget.Leanback.GridItems.VerticalGridView">
@@ -248,4 +249,34 @@
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
     </style>
     <!--  End Color scheme: Dark Blue (OLED)  -->
+
+    <!--  Color scheme: YouTube (flat cards, icon-only sidebar, no clock)  -->
+    <style name="App.Theme.YouTube.Browse" parent="App.Theme.DarkGrey.Browse">
+        <item name="android:windowBackground">@color/scheme_youtube_background</item>
+        <item name="brandColor">@color/scheme_youtube_sidebar</item>
+        <item name="shelfBackground">@color/scheme_youtube_background</item>
+        <item name="cardDefaultBackground">@color/scheme_youtube_background</item>
+        <item name="appLogo">@null</item>
+        <item name="youTubeStyle">true</item>
+        <!-- Content starts right after the icon-only sidebar -->
+        <item name="browsePaddingStart">16dp</item>
+        <item name="headersVerticalGridStyle">@style/YouTubeHeaderStyle</item>
+        <item name="browseTitleViewStyle">@style/YouTubeTitleViewStyle</item>
+        <item name="rowHeaderStyle">@style/YouTubeRowHeaderStyle</item>
+    </style>
+    <style name="YouTubeHeaderStyle" parent="BrowseHeaderStyle">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:verticalSpacing">0dp</item>
+    </style>
+    <style name="YouTubeTitleViewStyle" parent="Widget.Leanback.TitleView">
+        <item name="android:paddingStart">24dp</item>
+    </style>
+    <style name="YouTubeRowHeaderStyle" parent="Widget.Leanback.Row.Header">
+        <item name="android:textAppearance">@style/YouTubeRowHeaderText</item>
+    </style>
+    <style name="YouTubeRowHeaderText" parent="TextAppearance.Leanback.Row.Header">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <!--  End Color scheme: YouTube  -->
 </resources>

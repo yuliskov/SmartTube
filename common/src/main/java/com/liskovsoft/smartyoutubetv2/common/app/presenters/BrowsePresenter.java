@@ -46,11 +46,14 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -59,6 +62,9 @@ import io.reactivex.disposables.Disposable;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter, AccountChangeListener {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
+    private static final Set<Integer> YOUTUBE_SIDEBAR_SECTIONS = new HashSet<>(Arrays.asList(
+            MediaGroup.TYPE_HOME, MediaGroup.TYPE_SHORTS, MediaGroup.TYPE_MUSIC,
+            MediaGroup.TYPE_SUBSCRIPTIONS, MediaGroup.TYPE_USER_PLAYLISTS, MediaGroup.TYPE_HISTORY));
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final List<BrowseSection> mSections;
@@ -321,7 +327,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 section.setEnabled(true);
             }
 
-            if (section.isEnabled()) {
+            if (isShownInSidebar(section)) {
                 if (section.getId() == bootSectionId) {
                     mBootSectionIndex = index;
                 }
@@ -963,6 +969,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return null;
     }
 
+    private boolean isShownInSidebar(BrowseSection section) {
+        // YouTube color scheme: short sidebar, Settings opens from the gear in the title bar
+        return section.isEnabled() && (!MainUIData.instance(getContext()).isYouTubeColorScheme() || YOUTUBE_SIDEBAR_SECTIONS.contains(section.getId()));
+    }
+
     private int findSectionIndex(int sectionId) {
         if (sectionId == -1) {
             return -1;
@@ -980,7 +991,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         for (BrowseSection section : mSections) {
-            if (section.isEnabled()) {
+            if (isShownInSidebar(section)) {
                 sectionIndex++;
                 if (section.getId() == sectionId) {
                     return sectionIndex;
@@ -1010,7 +1021,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 found = true;
                 continue;
             }
-            if (section.isEnabled()) {
+            if (isShownInSidebar(section)) {
                 if (found) {
                     result = section;
                     break;

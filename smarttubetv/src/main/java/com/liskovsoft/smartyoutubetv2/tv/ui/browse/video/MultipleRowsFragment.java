@@ -92,6 +92,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         if (mRowsAdapter == null) {
             mRowPresenter = new CustomListRowPresenter();
             mRowPresenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
+            mRowPresenter.setShadowEnabled(!ViewUtil.isYouTubeStyle(getContext()));
 
             ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
             presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);

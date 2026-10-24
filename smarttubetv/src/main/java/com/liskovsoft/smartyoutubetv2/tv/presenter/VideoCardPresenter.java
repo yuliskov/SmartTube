@@ -2,7 +2,10 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
 import android.util.Pair;
@@ -39,6 +42,8 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
+    private int mYouTubeContentTextColor = -1;
+    private boolean mIsYouTubeStyle;
     private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
@@ -56,6 +61,9 @@ public class VideoCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mYouTubeContentTextColor =
+                ContextCompat.getColor(context, R.color.scheme_youtube_secondary_text);
+        mIsYouTubeStyle = ViewUtil.isYouTubeStyle(context);
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
@@ -88,13 +96,44 @@ public class VideoCardPresenter extends LongClickPresenter {
         //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
         //    cardView.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
         //}
+        if (mIsYouTubeStyle) {
+            applyYouTubeThumbnail(cardView);
+        }
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
 
+    /**
+     * Rounded thumbnail with a white outline on focus. Text sits on the shelf background.
+     */
+    private static void applyYouTubeThumbnail(ComplexImageCardView cardView) {
+        View thumbnail = cardView.findViewById(R.id.main_image_wrapper);
+
+        if (thumbnail == null) {
+            return;
+        }
+
+        Context context = cardView.getContext();
+
+        TextView titleText = cardView.findViewById(R.id.title_text);
+        if (titleText != null) {
+            titleText.setTypeface(titleText.getTypeface(), Typeface.BOLD);
+        }
+
+        thumbnail.setBackground(ContextCompat.getDrawable(context, R.drawable.youtube_card_thumbnail));
+
+        if (VERSION.SDK_INT >= 21) {
+            thumbnail.setClipToOutline(true); // outline comes from the rounded background
+        }
+
+        if (VERSION.SDK_INT >= 23) {
+            thumbnail.setForeground(ContextCompat.getDrawable(context, R.drawable.youtube_card_focus));
+        }
+    }
+
     private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
-        int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
-        int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
+        int backgroundColor = mIsYouTubeStyle ? Color.TRANSPARENT : selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+        int textColor = selected && !mIsYouTubeStyle ? mSelectedTextColor : mDefaultTextColor;
 
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
@@ -112,7 +151,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
         TextView contentText = view.findViewById(R.id.content_text);
         if (contentText != null) {
-            contentText.setTextColor(textColor);
+            contentText.setTextColor(mIsYouTubeStyle ? mYouTubeContentTextColor : textColor);
         }
     }
 
@@ -195,7 +234,16 @@ public class VideoCardPresenter extends LongClickPresenter {
     }
     
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {
-        return GridFragmentHelper.getCardDimensPx(context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale());
+        float scale = MainUIData.instance(context).getVideoGridScale();
+
+        if (ViewUtil.isYouTubeStyle(context)) {
+            // Keep the exact size so rows show a partial card at the end, like YouTube (don't stretch to whole columns)
+            Resources res = context.getResources();
+            scale *= ViewUtil.getVideoCardScale(context);
+            return new Pair<>((int) (res.getDimensionPixelSize(R.dimen.card_width) * scale), (int) (res.getDimensionPixelSize(R.dimen.card_height) * scale));
+        }
+
+        return GridFragmentHelper.getCardDimensPx(context, R.dimen.card_width, R.dimen.card_height, scale);
     }
 
     protected boolean isCardTextAutoScrollEnabled(Context context) {

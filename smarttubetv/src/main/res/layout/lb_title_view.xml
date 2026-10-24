@@ -35,6 +35,32 @@
             android:layout_gravity="center_vertical|start"
             android:nextFocusRight="@id/account_orb"
             android:visibility="invisible" />
+        <!-- YouTube color scheme: logo -->
+        <ImageView
+            android:id="@+id/youtube_logo"
+            android:layout_width="99dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/youtube_logo"
+            android:contentDescription="@string/youtube_logo_text"
+            android:visibility="gone" />
+        <!-- YouTube color scheme: replaces the search orb -->
+        <TextView
+            android:id="@+id/search_pill"
+            android:layout_width="300dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:background="@drawable/youtube_search_pill"
+            android:textColor="@color/youtube_search_pill_text"
+            android:textSize="18sp"
+            android:text="@string/action_search"
+            android:focusable="true"
+            android:nextFocusRight="@id/account_orb"
+            android:visibility="gone" />
 
         <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.LongClickSearchOrbView
             android:id="@+id/account_orb"

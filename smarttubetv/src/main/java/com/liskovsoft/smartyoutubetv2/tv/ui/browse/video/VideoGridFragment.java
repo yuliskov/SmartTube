@@ -91,9 +91,11 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     private void setupAdapter() {
         VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
         presenter.setNumberOfColumns(
-                GridFragmentHelper.getMaxColsNum(getContext(), isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width, mVideoGridScale)
+                isShorts() ? GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.shorts_card_width, mVideoGridScale) :
+                        GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale * ViewUtil.getVideoCardScale(getContext()))
         );
         presenter.enableChildRoundedCorners(getMainUIData().isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS));
+        presenter.setShadowEnabled(!ViewUtil.isYouTubeStyle(getContext()));
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {

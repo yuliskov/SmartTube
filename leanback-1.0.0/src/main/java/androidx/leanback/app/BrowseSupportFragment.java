@@ -724,6 +724,11 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     boolean mShowingHeaders = true;
     boolean mCanShowHeaders = true;
     private int mContainerListMarginStart;
+    // MOD: width of the collapsed icon-only sidebar. 0 hides the sidebar completely (default).
+    private int mHeadersRailWidth;
+    private int mHeadersFullWidth;
+    // MOD: keep the title bar visible while scrolling the content
+    private boolean mTitleSticky;
     private int mContainerListAlignTop;
     private boolean mMainFragmentScaleEnabled = true;
     OnItemViewSelectedListener mExternalOnItemViewSelectedListener;
@@ -1372,6 +1377,11 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     }
 
     void updateTitleViewVisibility() {
+        if (mTitleSticky) {
+            showTitle(TitleViewAdapter.FULL_VIEW_VISIBLE);
+            return;
+        }
+
         if (!mShowingHeaders) {
             boolean showTitleView;
             if (mIsPageRow && mMainFragmentAdapter != null) {
@@ -1451,25 +1461,50 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         View containerList;
         containerList = mHeadersSupportFragment.getView();
         lp = (MarginLayoutParams) containerList.getLayoutParams();
-        lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
+        if (mHeadersRailWidth > 0) {
+            // MOD: narrow the sidebar instead of moving it off screen, so labels get clipped and only icons stay
+            if (mHeadersFullWidth == 0) {
+                mHeadersFullWidth = lp.width;
+            }
+            lp.width = onScreen ? mHeadersFullWidth : mHeadersRailWidth;
+            lp.setMarginStart(0);
+        } else {
+            lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
+        }
         containerList.setLayoutParams(lp);
+    }
+
+    /**
+     * MOD: keep a collapsed icon-only sidebar of the given width while the content is focused.
+     */
+    public void setHeadersRailWidth(int width) {
+        mHeadersRailWidth = width;
+    }
+
+    /**
+     * MOD: keep the title bar visible at all times.
+     */
+    public void setTitleSticky(boolean sticky) {
+        mTitleSticky = sticky;
     }
 
     void showHeaders(boolean show) {
         if (DEBUG) Log.v(TAG, "showHeaders " + show);
-        mHeadersSupportFragment.setHeadersEnabled(show);
+        mHeadersSupportFragment.setHeadersEnabled(show || mHeadersRailWidth > 0);
         setHeadersOnScreen(show);
         expandMainFragment(!show);
     }
 
     private void expandMainFragment(boolean expand) {
         MarginLayoutParams params = (MarginLayoutParams) mScaleFrameLayout.getLayoutParams();
-        params.setMarginStart(!expand ? mContainerListMarginStart : 0);
+        // MOD: with the icon-only sidebar, the opened sidebar overlays the content instead of pushing it
+        params.setMarginStart(mHeadersRailWidth > 0 ? mHeadersRailWidth : !expand ? mContainerListMarginStart : 0);
         mScaleFrameLayout.setLayoutParams(params);
         mMainFragmentAdapter.setExpand(expand);
 
         setMainFragmentAlignment();
         final float scaleFactor = !expand
+                && mHeadersRailWidth == 0
                 && mMainFragmentScaleEnabled
                 && mMainFragmentAdapter.isScalingEnabled() ? mScaleFactor : 1;
         mScaleFrameLayout.setLayoutScaleY(scaleFactor);
@@ -1706,6 +1741,7 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     private void setMainFragmentAlignment() {
         int alignOffset = mContainerListAlignTop;
         if (mMainFragmentScaleEnabled
+                && mHeadersRailWidth == 0
                 && mMainFragmentAdapter.isScalingEnabled()
                 && mShowingHeaders) {
             alignOffset = (int) (alignOffset / mScaleFactor + 0.5f);

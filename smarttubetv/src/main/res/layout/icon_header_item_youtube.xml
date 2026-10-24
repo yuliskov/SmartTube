@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube color scheme: sidebar item. Focused item becomes a white pill. -->
+<androidx.leanback.widget.NonOverlappingLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="200dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/youtube_sidebar_item"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/header_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:duplicateParentState="true"
+        android:contentDescription="@string/header_icon" />
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
+        android:id="@+id/header_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:duplicateParentState="true"
+
+        android:singleLine="true"
+        android:maxWidth="150sp"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+
+        style="@style/TextAppearance.Leanback.Header"
+        android:textSize="18sp"
+        android:textColor="@color/youtube_sidebar_item_text"/>
+</androidx.leanback.widget.NonOverlappingLinearLayout>

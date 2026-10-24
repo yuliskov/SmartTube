@@ -6,6 +6,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.os.Build.VERSION;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,21 @@ public class ViewUtil {
      */
     public static final int GRID_SCROLL_CONTINUE_NUM = 10;
     public static final int ROW_SCROLL_CONTINUE_NUM = 4;
+
+    /**
+     * YouTube color scheme: flat cards, icon-only sidebar, no clock
+     */
+    public static boolean isYouTubeStyle(Context context) {
+        TypedValue value = new TypedValue();
+        return context.getTheme().resolveAttribute(R.attr.youTubeStyle, value, true) && value.data != 0;
+    }
+
+    /**
+     * YouTube color scheme has big video cards (about 2.3 per row)
+     */
+    public static float getVideoCardScale(Context context) {
+        return isYouTubeStyle(context) ? 1.8f : 1f;
+    }
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)
