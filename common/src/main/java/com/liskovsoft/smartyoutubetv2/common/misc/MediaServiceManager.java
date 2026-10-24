@@ -131,6 +131,32 @@ public class MediaServiceManager implements OnAccountChange {
         loadMetadata(video, onMetadata, null, null);
     }
 
+    /**
+     * Loads metadata without touching the shared {@link #mMetadataAction}.<br/>
+     * Concurrent callers don't cancel each other. Caller owns the returned {@link Disposable}.
+     */
+    public Disposable loadMetadataConcurrent(Video video, OnMetadata onMetadata, OnError onError) {
+        if (video == null) {
+            return io.reactivex.disposables.Disposables.empty();
+        }
+
+        Observable<MediaItemMetadata> observable;
+        if (video.mediaItem != null) {
+            observable = mItemService.getMetadataObserve(video.mediaItem);
+        } else {
+            observable = mItemService.getMetadataObserve(video.videoId, video.getPlaylistId(), video.playlistIndex, video.playlistParams);
+        }
+
+        return observable.subscribe(
+                onMetadata::onMetadata,
+                error -> {
+                    Log.e(TAG, "loadMetadataConcurrent error: %s", error.getMessage());
+                    if (onError != null) {
+                        onError.onError(error);
+                    }
+                });
+    }
+
     public void loadMetadata(Video video, OnMetadata onMetadata, OnError onError, OnComplete onComplete) {
         if (video == null) {
             return;
