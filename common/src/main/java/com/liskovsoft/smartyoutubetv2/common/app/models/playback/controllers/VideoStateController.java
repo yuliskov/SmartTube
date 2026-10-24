@@ -1,8 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
+import android.content.Context;
+import android.os.Build;
+import com.liskovsoft.leanbackassistant.channels.ChannelsProvider;
+import com.liskovsoft.leanbackassistant.media.scheduler.ClipData;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -538,13 +543,46 @@ public class VideoStateController extends BasePlayerController {
             getStateService().save(state);
             // Sync video. You could safely use it later to restore state.
             video.sync(state);
+            updateWatchNext(video, positionMs, durationMs);
         } else { // fully viewed
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             getStateService().save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
+            removeWatchNext(video);
         }
 
         Playlist.instance().sync(video);
+    }
+
+    /**
+     * Publish the partially watched video to the system Watch Next row, so launchers can show Continue Watching.
+     */
+    private void updateWatchNext(Video video, long positionMs, long durationMs) {
+        Context context = getContext();
+        if (context == null || video.isLive || video.videoId == null || Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+
+        ClipData clip = new ClipData.Builder()
+                .setClipId(video.videoId)
+                .setContentId(video.videoId)
+                .setTitle(video.getTitleFull())
+                .setDescription(video.getAuthor())
+                // Videos opened from a link have no card yet; YouTube's own thumbnail always exists.
+                .setCardImageUrl(video.getCardImageUrl() != null ? video.getCardImageUrl() : "https://i.ytimg.com/vi/" + video.videoId + "/hqdefault.jpg")
+                .setProgress(positionMs)
+                .setDuration(durationMs)
+                .build();
+        RxHelper.runAsync(() -> ChannelsProvider.addWatchNextContinue(context, clip));
+    }
+
+    private void removeWatchNext(Video video) {
+        Context context = getContext();
+        if (context == null || video.videoId == null || Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+
+        RxHelper.runAsync(() -> ChannelsProvider.deleteWatchNextContinue(context, video.videoId));
     }
 
     private void restorePosition() {
