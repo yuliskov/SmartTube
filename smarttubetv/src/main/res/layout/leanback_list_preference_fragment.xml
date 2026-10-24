@@ -61,7 +61,7 @@
         android:id="@android:id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
+        android:fontFamily="sans-serif"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
         android:paddingStart="24dp"

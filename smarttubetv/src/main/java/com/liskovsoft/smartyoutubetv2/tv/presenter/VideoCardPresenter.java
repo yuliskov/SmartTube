@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.BadgeChipSpan;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -135,7 +136,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.setTitleText(video.getTitle());
         // channel on its own line, "views • age" on the next
         String secondTitle = video.getSecondTitle() != null ? video.getSecondTitle().toString() : null;
-        cardView.setContentText(secondTitle != null ? secondTitle.replaceFirst("\\s*" + Video.TERTIARY_TEXT_DELIM + "\\s*", "\n") : null);
+        cardView.setContentText(BadgeChipSpan.apply(secondTitle != null ? secondTitle.replaceFirst("\\s*" + Video.TERTIARY_TEXT_DELIM + "\\s*", "\n") : null,
+                context.getResources().getDisplayMetrics().density)); // "4K", "Auto-dubbed" chips
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(

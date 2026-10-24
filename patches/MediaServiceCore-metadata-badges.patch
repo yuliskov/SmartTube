@@ -1,0 +1,30 @@
+diff --git a/youtubeapi/src/main/java/com/liskovsoft/googlecommon/common/helpers/YouTubeHelper.java b/youtubeapi/src/main/java/com/liskovsoft/googlecommon/common/helpers/YouTubeHelper.java
+index 25e7872..80e0986 100644
+--- a/youtubeapi/src/main/java/com/liskovsoft/googlecommon/common/helpers/YouTubeHelper.java
++++ b/youtubeapi/src/main/java/com/liskovsoft/googlecommon/common/helpers/YouTubeHelper.java
+@@ -20,6 +20,11 @@ import java.util.Collections;
+ import java.util.List;
+ 
+ public final class YouTubeHelper {
++    // Wrap metadata badges (e.g. "4K", "Auto-dubbed") inside the second title so the UI can draw them as chips.
++    // Both chars are invisible, so plain text views just show the label.
++    public static final char BADGE_START = '\u2063';
++    public static final char BADGE_END = '\u2064';
++
+     public static final String TEXT_DELIM = "•";
+     public static final String TEXT_DELIM_ALT = "·";
+     /**
+diff --git a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/common/models/gen/CommonHelper.kt b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/common/models/gen/CommonHelper.kt
+index 01d79fd..87c16ab 100644
+--- a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/common/models/gen/CommonHelper.kt
++++ b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/common/models/gen/CommonHelper.kt
+@@ -199,7 +199,8 @@ internal fun TileItem.getUserName() = null
+ internal fun TileItem.getPublishedTime() = null
+ internal fun TileItem.getViewCountText() =
+     YouTubeHelper.createInfo(*metadata?.tileMetadataRenderer?.lines?.map {
+-        ServiceHelper.combineItems(" ", *it?.lineRenderer?.items?.map { it?.lineItemRenderer?.text }?.toTypedArray() ?: emptyArray())
++        ServiceHelper.combineItems(" ", *it?.lineRenderer?.items?.map { it?.lineItemRenderer?.let { item -> item.text
++            ?: item.badge?.metadataBadgeRenderer?.label?.let { label -> "${YouTubeHelper.BADGE_START}$label${YouTubeHelper.BADGE_END}" } } }?.toTypedArray() ?: emptyArray())
+     }?.toTypedArray() ?: emptyArray())
+ internal fun TileItem.getUpcomingEventText() = null
+ internal fun TileItem.getThumbnails() = header?.tileHeaderRenderer?.thumbnail ?: header?.trackTileHeaderRenderer?.thumbnail

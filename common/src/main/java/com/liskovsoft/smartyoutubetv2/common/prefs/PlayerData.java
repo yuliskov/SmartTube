@@ -717,6 +717,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         return DeviceHelpers.isVP9ResolutionSupported(2160) ? FormatItem.AUDIO_51_AC3 : FormatItem.AUDIO_HQ_MP4A;
     }
 
+    // MOD: default caps at 1080p, the player starts faster (4K is still selectable in settings)
     public FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
@@ -725,8 +726,6 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 formatItem = FormatItem.VIDEO_SD_AVC_30;
             } else if (VERSION.SDK_INT <= 23 && DeviceHelpers.isVP9ResolutionSupported(1080)) {
                 formatItem = FormatItem.VIDEO_FHD_VP9_60;
-            } else if (DeviceHelpers.isVP9ResolutionSupported(2160)) {
-                formatItem = FormatItem.VIDEO_4K_VP9_60;
             } else if (DeviceHelpers.isVP9ResolutionSupported(1080)) {
                 formatItem = FormatItem.VIDEO_FHD_VP9_60;
             }
@@ -773,9 +772,9 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
      * Overrides for auto detected values
      */
     private void initDefaultFormats() {
-        mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
-        mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60); // Stick 4K 2018
-        mDefaultVideoFormats.put("AFTKA", FormatItem.VIDEO_4K_VP9_60); // Stick 4K Max 2021
+        mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_FHD_VP9_60);
+        mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_FHD_VP9_60); // Stick 4K 2018
+        mDefaultVideoFormats.put("AFTKA", FormatItem.VIDEO_FHD_VP9_60); // Stick 4K Max 2021
         mDefaultVideoFormats.put("P1", FormatItem.VIDEO_FHD_AVC_60); // Chinese projector (see annoying emails)
     }
 

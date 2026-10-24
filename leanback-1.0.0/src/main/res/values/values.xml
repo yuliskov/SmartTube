@@ -965,7 +965,7 @@
     <string name="orb_search_action">Search Action</string>
     <style name="TextAppearance.Leanback" parent="TextAppearance.LeanbackBase">
         <!-- Any text appearance overrides go here. -->
-        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
     <style name="TextAppearance.Leanback.DetailsActionButton">
         <item name="android:textSize">@dimen/lb_action_text_size</item>
@@ -1221,6 +1221,8 @@
     <style name="Theme.Leanback.VerticalGrid" parent="Theme.Leanback">
     </style>
     <style name="Theme.LeanbackBase" parent="android:Theme.Holo.NoActionBar">
+        <!-- MOD: Roboto (sans-serif) everywhere, like YouTube TV -->
+        <item name="android:fontFamily">sans-serif</item>
         <item name="playbackProgressPrimaryColor">@color/lb_playback_progress_color_no_theme</item>
         <item name="playbackProgressSecondaryColor">@color/lb_playback_progress_secondary_color_no_theme</item>
         <item name="playbackControlsIconHighlightColor">@color/lb_playback_icon_highlight_no_theme</item>
@@ -1296,7 +1298,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_toEndOf">@id/guidance_icon</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">#88F1F1F1</item>
         <item name="android:textSize">18sp</item>
@@ -1392,7 +1394,7 @@
         <item name="android:alpha">@dimen/lb_guidedactions_item_unselected_description_text_alpha</item>
         <item name="android:ellipsize">end</item>
         <item name="android:layout_marginTop">@dimen/lb_guidedactions_item_space_between_title_and_description</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:maxLines">@integer/lb_guidedactions_item_description_min_lines</item>
         <item name="android:textColor">@color/lb_guidedactions_item_unselected_text_color</item>
         <item name="android:textSize">@dimen/lb_guidedactions_item_description_font_size</item>
@@ -1412,7 +1414,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:alpha">@dimen/lb_guidedactions_item_unselected_text_alpha</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:maxLines">@integer/lb_guidedactions_item_title_min_lines</item>
         <item name="android:textColor">@color/lb_guidedactions_item_unselected_text_color</item>
         <item name="android:textSize">@dimen/lb_guidedactions_item_title_font_size</item>

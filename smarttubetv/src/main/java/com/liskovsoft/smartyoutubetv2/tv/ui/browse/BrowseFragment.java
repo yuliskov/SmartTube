@@ -80,6 +80,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.setView(this);
         mProgressBarManager = new ProgressBarManager();
+        mProgressBarManager.setSkeleton(true);
 
         setupAdapter();
         setupFragmentFactory();
@@ -528,7 +529,12 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         Runnable callback;
 
         if (show) {
-            callback = mProgressBarManager::show;
+            callback = () -> {
+                // Skeleton only stands in for an empty page. Loading more rows shows nothing (YouTube TV style).
+                if (mSectionFragmentFactory.getCurrentFragment() == null || mSectionFragmentFactory.isEmpty()) {
+                    mProgressBarManager.show();
+                }
+            };
         } else {
             callback = mProgressBarManager::hide;
         }
