@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+    <!-- Fork: plain-text label (not a string resource), so Android's installer screen can show it
+         without reading the APK's resources. Otherwise it shows the Application class name. -->
+    <application
+        android:label="YouTube"
+        tools:replace="android:label" />
+</manifest>
