@@ -31,8 +31,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 // The first letter of the flavor name must be in uppercase
-if (new File("${projectDir}/google-services.json").exists() && (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta") ||
-        getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable"))) {
+// Fork: no Firebase for the beta flavor (google-services.json has no client for its id; reports would go to upstream's project)
+if (new File("${projectDir}/google-services.json").exists() && getGradle().getStartParameter().getTaskRequests().toString().contains("Ststable")) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
@@ -160,7 +160,7 @@ android {
     // NOTE: The main goal of prefixing a flavor is to group flavors' folders together
     productFlavors {
         stbeta {
-            applicationId "org.smarttube.beta"
+            applicationId "com.georgeharbor.youtube" // fork: own id, never clashes with SmartTube
             targetSdkVersion project.properties.compileSdkVersion
         }
         ststable {
