@@ -39,6 +39,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.BrandedLoadingView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private BrowseSectionFragmentFactory mSectionFragmentFactory;
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
+    private BrandedLoadingView mStartupLoadingView;
     private boolean mIsFragmentCreated;
     private boolean mFocusOnContent;
     private CrashRestorer mCrashRestorer;
@@ -96,6 +98,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
+        mStartupLoadingView = new BrandedLoadingView(getContext());
+        ((ViewGroup) root).addView(mStartupLoadingView, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         return root;
     }
@@ -447,6 +452,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void onDestroyView() {
+        mStartupLoadingView = null;
         mSectionFragmentFactory.cleanup();
 
         super.onDestroyView();
@@ -491,21 +497,30 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showProgressBar(boolean show) {
-        Runnable callback;
-
-        if (show) {
-            callback = mProgressBarManager::show;
-        } else {
-            callback = mProgressBarManager::hide;
-        }
-
-        // Essential. Need to run on the main thread.
-        new Handler(Looper.getMainLooper()).post(callback);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if (mStartupLoadingView != null) {
+                if (!show) {
+                    BrandedLoadingView loadingView = mStartupLoadingView;
+                    loadingView.complete(() -> {
+                        if (loadingView.getParent() instanceof ViewGroup) {
+                            ((ViewGroup) loadingView.getParent()).removeView(loadingView);
+                        }
+                        if (mStartupLoadingView == loadingView) {
+                            mStartupLoadingView = null;
+                        }
+                    });
+                }
+            } else if (show) {
+                mProgressBarManager.show();
+            } else {
+                mProgressBarManager.hide();
+            }
+        });
     }
 
     @Override
     public boolean isProgressBarShowing() {
-        return mProgressBarManager.isShowing();
+        return mStartupLoadingView != null || mProgressBarManager.isShowing();
     }
 
     @Override

@@ -75,7 +75,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.VideoLoadingView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
@@ -115,6 +115,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private SubtitleManager mSubtitleManager;
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
+    private VideoLoadingView mVideoLoadingView;
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mIsUIAnimationsEnabled = false;
     private boolean mIsEngineBlocked;
@@ -170,7 +171,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // We should use internal progress manager because it's used in many places like Exo engine etc.
         // ProgressBar.setRootView already called at this moment.
-        ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) root);
+        mVideoLoadingView = new VideoLoadingView(getContext());
+        ((ViewGroup) root).addView(mVideoLoadingView, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        getProgressBarManager().setProgressBarView(mVideoLoadingView);
+        mVideoLoadingView.setVideo(getVideo());
 
         return root;
     }
@@ -188,7 +193,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      */
     private void updatePlayerBackground() {
         if (isOverlayShown()) {
-            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background_suggestions : R.drawable.player_background_controls);
+            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background_suggestions :
+                    getMainUIData().isYouTubeColorScheme() ? R.drawable.youtube_player_background_controls : R.drawable.player_background_controls);
         }
     }
 
@@ -837,6 +843,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void setVideo(Video video) {
         mExoPlayerController.setVideo(video);
+        if (mVideoLoadingView != null) {
+            mVideoLoadingView.setVideo(video);
+        }
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
@@ -1164,6 +1173,16 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     // End Engine Events
+
+    @Override
+    public void onDestroyView() {
+        getProgressBarManager().hide();
+        if (mVideoLoadingView != null) {
+            mVideoLoadingView.release();
+            mVideoLoadingView = null;
+        }
+        super.onDestroyView();
+    }
 
     @Override
     public void onDestroy() {

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube color scheme: dim the entire video while playback controls are visible. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#80000000" />
+</shape>

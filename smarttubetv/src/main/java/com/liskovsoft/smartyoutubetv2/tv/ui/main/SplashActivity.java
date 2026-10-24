@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.content.Intent;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.BrandedLoadingView;
 import android.os.Bundle;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -14,6 +15,8 @@ public class SplashActivity extends MotherActivity implements SplashView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(new BrandedLoadingView(this));
 
         mNewIntent = getIntent();
 

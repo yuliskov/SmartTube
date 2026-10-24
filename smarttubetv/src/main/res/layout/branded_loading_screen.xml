@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/scheme_youtube_background"
+    android:importantForAccessibility="no">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/loading_brand_image"
+            android:layout_width="480dp"
+            android:layout_height="160dp"
+            android:src="@drawable/loading_brand_dark"
+            android:scaleType="fitCenter"
+            android:importantForAccessibility="no" />
+
+        <ProgressBar
+            android:id="@+id/loading_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="280dp"
+            android:layout_height="4dp"
+            android:layout_marginTop="40dp"
+            android:layoutDirection="ltr"
+            android:indeterminate="false"
+            android:max="1000"
+            android:progressDrawable="@drawable/loading_progress" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/loading_message"
+        android:layout_width="600dp"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="54dp"
+        android:gravity="top|center_horizontal"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:lineSpacingExtra="3dp"
+        android:text="@string/loading_message"
+        android:textColor="#B3B3B3"
+        android:textSize="14sp" />
+</FrameLayout>
