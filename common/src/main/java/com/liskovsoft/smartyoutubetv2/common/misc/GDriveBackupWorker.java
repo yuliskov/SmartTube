@@ -7,7 +7,7 @@ import android.os.Build.VERSION;
 import androidx.annotation.NonNull;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -49,7 +49,7 @@ public class GDriveBackupWorker extends Worker {
 
     public static void schedule(Context context) {
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getGDriveBackupFreqDays() > 0) {
-            WorkManager workManager = WorkManager.getInstance(context);
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             workManager.enqueueUniquePeriodicWork(
@@ -93,7 +93,7 @@ public class GDriveBackupWorker extends Worker {
         if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getGDriveBackupFreqDays() > 0) {
             Log.d(TAG, "Unregistering worker job...");
 
-            WorkManager workManager = WorkManager.getInstance(context);
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
             workManager.cancelUniqueWork(WORK_NAME);
         }
     }

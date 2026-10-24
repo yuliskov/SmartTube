@@ -182,6 +182,7 @@ public class GridFragmentHelper {
                 && lastGroup.getMediaGroup().getNextPageKey() == null
                 && group.getMediaGroup() != null
                 && group.getMediaGroup().getNextPageKey() == null
+                && lastGroup.getType() == group.getType()
                 && lastGroup.isShorts() == group.isShorts()
                 && (Helpers.equals(lastGroup.getTitle(), group.getTitle())
                     || lastGroup.getTitle() == null); // we could set title to null in the previous iteration

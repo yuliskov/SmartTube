@@ -3,7 +3,10 @@ package com.google.android.exoplayer2.source.sabr.parser.misc;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
+import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -13,11 +16,14 @@ import java.io.IOException;
 public final class SabrExtractorInput implements ExtractorInput {
     private static final String TAG = SabrExtractorInput.class.getSimpleName();
     private static final boolean ALLOW_END_OF_INPUT = true;
+    private static final int MIN_SWALLOW_BACKOFF_MS = 15_000; // 15 sec
+    private static final int LIVE_EMPTY_RESPONSE_WAIT_MS = 1_000;
     private final SabrStream sabrStream;
     private ExtractorInput input;
     private long position;
     private long startPosition;
     private int remaining;
+    private boolean receivedData;
     private MediaSegmentDataSabrPart data;
 
     public SabrExtractorInput(SabrStream sabrStream) {
@@ -39,6 +45,7 @@ public final class SabrExtractorInput implements ExtractorInput {
         position = input.getPosition();
         startPosition = position;
         remaining = C.LENGTH_UNSET;
+        receivedData = false;
     }
 
     public void dispose() {
@@ -152,7 +159,7 @@ public final class SabrExtractorInput implements ExtractorInput {
         return -1;
     }
 
-    private void fetchData() {
+    private void fetchData() throws IOException, InterruptedException {
         while (true) {
             if (data != null) {
                 long advance = getAdvance();
@@ -166,9 +173,34 @@ public final class SabrExtractorInput implements ExtractorInput {
                 }
             }
 
-            SabrPart sabrPart = sabrStream.parse(input);
+            SabrPart sabrPart;
+
+            try {
+                sabrPart = sabrStream.parse(input);
+            } catch (IllegalStateException e) {
+                // Network failures (e.g. read timeout) are retryable.
+                if (e.getCause() instanceof IOException) {
+                    throw (IOException) e.getCause();
+                }
+
+                throw e;
+            }
 
             if (sabrPart == null) {
+                // The stream ended. If the server told us to back off, honor it instead of
+                // re-requesting immediately - otherwise we burn exactly the waiting period the server asked for.
+                int backoffMs = sabrStream.getBackoffTimeMs();
+
+                if (backoffMs > MIN_SWALLOW_BACKOFF_MS) {
+                    throwBackoffRequested(backoffMs);
+                }
+
+                // Live head: the server has nothing new yet. It's not the end of the stream.
+                // Wait a bit, otherwise the empty responses are requested in a tight loop.
+                if (!receivedData && sabrStream.isLive()) {
+                    Thread.sleep(LIVE_EMPTY_RESPONSE_WAIT_MS);
+                }
+
                 break;
             }
 
@@ -182,8 +214,15 @@ public final class SabrExtractorInput implements ExtractorInput {
 
             if (sabrPart instanceof MediaSegmentDataSabrPart) {
                 data = (MediaSegmentDataSabrPart) sabrPart;
+                receivedData = true;
                 startPosition = position;
                 break;
+            }
+
+            // The server won't send any media until the player response is reloaded.
+            // Ignoring this part leads to the endless init chunk loading loop.
+            if (sabrPart instanceof RefreshPlayerResponseSabrPart) {
+                throwPlayerResponseReloadRequested((RefreshPlayerResponseSabrPart) sabrPart);
             }
         }
     }
@@ -317,5 +356,13 @@ public final class SabrExtractorInput implements ExtractorInput {
         String msg = "SABR chunk boundary exceeded";
         Log.e(TAG, msg);
         throw new IllegalStateException(msg);
+    }
+
+    private static void throwPlayerResponseReloadRequested(RefreshPlayerResponseSabrPart sabrPart) {
+        throw new SabrReloadPlayerError(sabrPart.reloadPlaybackToken);
+    }
+
+    private static void throwBackoffRequested(int backoffMs) {
+        throw new SabrBackoffError(backoffMs);
     }
 }

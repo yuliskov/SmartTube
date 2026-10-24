@@ -7,10 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 
@@ -31,6 +32,7 @@ public class UpdateChannelsWorker extends Worker {
     private static final String WORK_NAME = "Update channels";
     private static final long REPEAT_INTERVAL_MINUTES = 15; // 15 - minimal interval
     private final UpdateChannelsTask mTask;
+    private static volatile boolean sIsWorkScheduled;
 
     public UpdateChannelsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -40,7 +42,9 @@ public class UpdateChannelsWorker extends Worker {
 
     public static void schedule(Context context) {
         if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
-            WorkManager workManager = WorkManager.getInstance(context);
+            sIsWorkScheduled = true;
+
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             // Called after 15 minutes
@@ -58,7 +62,7 @@ public class UpdateChannelsWorker extends Worker {
         if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             Log.d(TAG, "Unregistering Channels update job...");
 
-            WorkManager workManager = WorkManager.getInstance(context);
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
             workManager.cancelUniqueWork(WORK_NAME);
         }
     }
@@ -68,7 +72,11 @@ public class UpdateChannelsWorker extends Worker {
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
 
-        mTask.run();
+        // Foreground ⇒ possible playback; skip sync to avoid CPU contention during video decode (#6234)
+        if (!Helpers.isAppInForeground() || sIsWorkScheduled) {
+            sIsWorkScheduled = false;
+            mTask.run();
+        }
 
         return Result.success();
     }

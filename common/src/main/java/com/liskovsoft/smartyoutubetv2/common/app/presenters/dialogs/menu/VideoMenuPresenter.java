@@ -339,7 +339,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendNotInterestedButton() {
-        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+        if (mVideo == null || mVideo.mediaItem == null || (mVideo.mediaItem.getFeedbackToken() == null && mVideo.mediaItem.getFeedbackEndpoint() == null)) {
             return;
         }
 
@@ -351,28 +351,44 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
-                    mNotInterestedAction = mMediaItemService.getFeedbackReasonsObserve(mVideo.mediaItem.getFeedbackToken())
-                            .subscribe(
-                                    reasons -> {
-                                        if (reasons.getItems() != null) {
-                                            for (FeedbackItem item : reasons.getItems()) {
-                                                mDialogPresenter.appendSingleButton(
-                                                        UiOptionItem.from(item.getTitle(),
-                                                                option -> {
-                                                                    RxHelper.execute(mMediaItemService.markAsNotInterestedObserve(item.getToken()));
-                                                                    removeSuggestedItemAndClose();
-                                                                }
-                                                        )
-                                                );
+                    if (mVideo.mediaItem.getFeedbackEndpoint() == null) {
+                        markAsNotInterested(mVideo.mediaItem.getFeedbackToken());
+                    } else {
+                        mNotInterestedAction = mMediaItemService.getFeedbackTokensObserve(mVideo.mediaItem.getFeedbackEndpoint())
+                                .subscribe(
+                                        tokens -> {
+                                            if (tokens.size() == 2) {
+                                                markAsNotInterested(tokens.get(0));
                                             }
-                                            mDialogPresenter.showDialog(reasons.getTitle());
-                                        } else {
-                                            removeSuggestedItemAndClose();
-                                        }
-                                    },
-                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage())
-                            );
+                                        },
+                                        error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage())
+                                );
+                    }
                 }));
+    }
+
+    private void markAsNotInterested(String feedbackToken) {
+        mNotInterestedAction = mMediaItemService.getFeedbackReasonsObserve(feedbackToken)
+                .subscribe(
+                        reasons -> {
+                            if (reasons.getItems() != null) {
+                                for (FeedbackItem item : reasons.getItems()) {
+                                    mDialogPresenter.appendSingleButton(
+                                            UiOptionItem.from(item.getTitle(),
+                                                    option -> {
+                                                        RxHelper.execute(mMediaItemService.markAsNotInterestedObserve(item.getToken()));
+                                                        removeSuggestedItemAndClose();
+                                                    }
+                                            )
+                                    );
+                                }
+                                mDialogPresenter.showDialog(reasons.getTitle());
+                            } else {
+                                removeSuggestedItemAndClose();
+                            }
+                        },
+                        error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage())
+                );
     }
 
     private void removeSuggestedItemAndClose() {
@@ -385,7 +401,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendNotRecommendChannelButton() {
-        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken2() == null) {
+        if (mVideo == null || mVideo.mediaItem == null || (mVideo.mediaItem.getFeedbackToken2() == null && mVideo.mediaItem.getFeedbackEndpoint() == null)) {
             return;
         }
 
@@ -397,20 +413,36 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_recommend_channel), optionItem -> {
-                    mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(mVideo.mediaItem.getFeedbackToken2())
-                            .subscribe(
-                                    var -> {},
-                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
-                                    () -> {
-                                        if (mCallback != null) {
-                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
-                                        } else {
-                                            MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
-                                        }
-                                    }
-                            );
-                    mDialogPresenter.closeDialog();
+                    if (mVideo.mediaItem.getFeedbackEndpoint() == null) {
+                        markAsNotRecommendChannel(mVideo.mediaItem.getFeedbackToken2());
+                    } else {
+                        mNotInterestedAction = mMediaItemService.getFeedbackTokensObserve(mVideo.mediaItem.getFeedbackEndpoint())
+                                .subscribe(
+                                        tokens -> {
+                                            if (tokens.size() == 2) {
+                                                markAsNotRecommendChannel(tokens.get(1));
+                                            }
+                                        },
+                                        error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage())
+                                );
+                    }
                 }));
+    }
+
+    private void markAsNotRecommendChannel(String feedbackToken2) {
+        mNotInterestedAction = mMediaItemService.markAsNotInterestedObserve(feedbackToken2)
+                .subscribe(
+                        var -> {},
+                        error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
+                        () -> {
+                            if (mCallback != null) {
+                                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                            } else {
+                                MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
+                            }
+                        }
+                );
+        mDialogPresenter.closeDialog();
     }
 
     private void appendBlockChannelButton() {

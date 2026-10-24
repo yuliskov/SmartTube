@@ -137,8 +137,9 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
         // Account history might be turned off (common issue).
         GeneralData generalData = GeneralData.instance(getContext());
-        if (generalData.getHistoryState() != GeneralData.HISTORY_AUTO) {
-            MediaServiceManager.instance().enableHistory(generalData.isHistoryEnabled());
+        int historyState = generalData.getHistoryState();
+        if (historyState != GeneralData.HISTORY_AUTO) {
+            MediaServiceManager.instance().enableHistory(historyState != GeneralData.HISTORY_DISABLED);
         }
     }
 

@@ -219,7 +219,7 @@ public class AutoFrameRateController extends BasePlayerController implements Aut
             mStateController.blockPlay(true);
         }
 
-        mIsPlay = mStateController.getPlayEnabled();
+        mIsPlay = mStateController.isPlayEnabled();
     }
 
     private void restorePlayback() {

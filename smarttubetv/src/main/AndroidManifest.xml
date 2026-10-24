@@ -60,6 +60,17 @@
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute,DiscouragedApi">
 
+        <!-- Lazy WorkManager init. See MainApplication#getWorkManagerConfiguration -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                tools:node="remove" />
+        </provider>
+
         <!-- Screen Mirror (e.g. DIAL) for Amazon TV -->
         <!-- Not implemented yet( -->
         <!--<meta-data android:name="whisperplay" android:resource="@xml/whisperplay"/>-->

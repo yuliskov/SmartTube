@@ -52,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -728,6 +729,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
+        AtomicInteger groupIndex = new AtomicInteger(-1);
+
         Disposable updateAction = groups
                 .subscribe(
                         mediaGroups -> {
@@ -741,7 +744,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                     continue;
                                 }
 
-                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
+                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, groupIndex.incrementAndGet());
 
                                 if (TextUtils.isEmpty(videoGroup.getTitle())) {
                                     videoGroup.setTitle(getContext().getString(R.string.suggestions));

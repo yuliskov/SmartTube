@@ -47,7 +47,7 @@ Give it a try!
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#installation) | [**Official Site**](https://smarttubeapp.github.io) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Liability](#liability)
+[**Installation**](#installation) | [**Site**](https://smarttubeapp.github.io) | [**Contributors**](#contributors) | [**Donation**](#donation) | [**FAQ**](#faq) | [Support / Chat](#support) | [Build](#build) | [Translate the app](https://jtbrinkmann.de/tools/android-strings.xml-translator.html) | [Changelog](https://t.me/s/SmartTubeNewsEN) | [Liability](#liability)
 
 
 ## Device support
@@ -158,6 +158,8 @@ To cast videos from your phone (or other devices), you must link that device to 
 
 Due to technical limitations, you need to open the app on the TV before casting; SmartTube cannot automatically wake up the TV.
 
+If you want sharing from your phone to also wake up the TV and launch SmartTube, you can use the third-party app [TubeBeam](https://github.com/jagjordi/tubebeam). It adds a _Send to TV_ entry to Android's share sheet and sends the link to the TV over ADB instead of casting (requires _USB debugging_ / _Network debugging_ to be enabled in the TV's developer options).
+
 
 ### Picture-in-Picture (PiP)
 
@@ -191,6 +193,12 @@ To enable global voice search, an additional app must be installed alongside Sma
 2. Uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
 3. Download and install the ATV Bridge SmartTube app: https://kutt.to/stn_bridge_atv (e.g. via _Downloader by AFTVnews_)
 
+## Contributors
+
+Major contributors to this project:
+
+- [@pixkk](https://github.com/pixkk): SABR streaming, Innertube internals
+- [@Jupiops](https://github.com/Jupiops): SABR CDN support
 
 ## Donation
 
@@ -347,7 +355,7 @@ A: **Big No**. This app is **not** for smartphones, we offer **zero support** fo
 
 You **can cast** videos **from** your smartphone to a TV / TV box running SmartTube, though. Just use the official YouTube app, [Morphe](https://github.com/MorpheApp) or [ReVanced](https://github.com/ReVanced), see [the casting section](#casting) for more information.
 
-**There will not be a phone version.** You can use [Morphe](https://github.com/MorpheApp), [ReVanced](https://github.com/ReVanced), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [LibreTube](https://github.com/libre-tube/LibreTube), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
+**There will not be a phone version.** You can use [Morphe](https://github.com/MorpheApp), [ReVanced](https://github.com/ReVanced), [Pure Tuber](https://play.google.com/store/apps/details?id=free.tube.premium.advanced.tuber), [LibreTube](https://github.com/libre-tube/LibreTube), [NewTube](https://github.com/aleixrodriala/newtube), [NewPipe](https://newpipe.schabi.org), or [NewPipe x SponsorBlock](https://github.com/polymorphicshade/NewPipe#newpipe-x-sponsorblock) instead. Please go to their respective support chats for help.
 
 
 ### Q: Can I install this on a tablet / car screen / smartphone with docking station?

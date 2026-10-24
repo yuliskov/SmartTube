@@ -357,8 +357,6 @@ public class MediaServiceManager implements OnAccountChange {
             return false;
         }
 
-        MediaGroup mediaGroup = group.getMediaGroup();
-
         Pair<Integer, Long> sizeTimestamp = mContinuations.get(group.getId());
 
         long currentTimeMillis = System.currentTimeMillis();
@@ -367,7 +365,7 @@ public class MediaServiceManager implements OnAccountChange {
         }
 
         int prevSize = sizeTimestamp != null ? sizeTimestamp.first : 0;
-        int newSize = mediaGroup.getMediaItems() != null ? mediaGroup.getMediaItems().size() : 0;
+        int newSize = Math.max(group.getSize(), 0);
         int totalSize = prevSize + newSize;
 
         MainUIData mainUIData = MainUIData.instance(context);
@@ -506,7 +504,7 @@ public class MediaServiceManager implements OnAccountChange {
 
         LoadingManager.showLoading(context, true);
 
-        AtomicInteger atomicIndex = new AtomicInteger(0);
+        AtomicInteger atomicIndex = new AtomicInteger(-1);
 
         MediaServiceManager.instance().loadChannelRows(item, groups -> {
             LoadingManager.showLoading(context, false);
@@ -519,14 +517,14 @@ public class MediaServiceManager implements OnAccountChange {
             int type = firstGroup.getType();
 
             if (type == MediaGroup.TYPE_CHANNEL_UPLOADS) {
-                if (atomicIndex.incrementAndGet() == 1) {
+                if (atomicIndex.incrementAndGet() == 0) {
                     ChannelUploadsPresenter.instance(context).clear();
                     ChannelUploadsPresenter.instance(context).setChannel(item);
                 }
                 // NOTE: Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
                 Utils.postDelayed(() -> ChannelUploadsPresenter.instance(context).update(firstGroup), 100);
             } else if (type == MediaGroup.TYPE_CHANNEL) {
-                if (atomicIndex.incrementAndGet() == 1) {
+                if (atomicIndex.incrementAndGet() == 0) {
                     ChannelPresenter.instance(context).clear();
                     ChannelPresenter.instance(context).setChannel(item);
                 }

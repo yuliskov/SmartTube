@@ -29,6 +29,8 @@ import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrFragmentedMp4Adapter;
 import com.google.android.exoplayer2.source.sabr.parser.adapter.SabrMatroskaAdapter;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.models.AudioSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
@@ -45,6 +47,7 @@ import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.MimeTypes;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -102,6 +105,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
     private static final long END_OF_STREAM_SEEK_TOLERANCE_US = 500_000L; // 0.5 seconds
+    private static final long NEAR_END_TOLERANCE_US = 700_000L; // 0.7 seconds
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -123,6 +127,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     @Nullable private final SabrStream sabrStream;
     private final Map<String, String> sabrHeaders;
     private int nexChunkIdx = -1;
+    private long pendingSeekTimeUs = C.TIME_UNSET;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -354,7 +359,9 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         boolean periodEnded = periodDurationUs != C.TIME_UNSET;
 
         // FIX: fire ending event on a video end
-        if (periodEnded && loadPositionUs >= periodDurationUs) {
+        // Tolerance needed: on some (usually short/sponsor at end) videos, real segment duration falls a fraction
+        // of a second short of periodDurationUs, so a strict ">=" never fires and getNextChunk() loops forever
+        if (periodEnded && (loadPositionUs + NEAR_END_TOLERANCE_US) >= periodDurationUs) {
             // No segment index in SABR, so we can't compare per-segment boundaries like stock
             // DASH does — comparing loadPositionUs directly against periodDurationUs is the
             // SABR equivalent. Without this, getNextChunk() keeps firing "next chunk" requests
@@ -415,6 +422,22 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
 
         long seekTimeUs = queue.isEmpty() ? loadPositionUs : C.TIME_UNSET;
+        if (sabrStream != null) {
+            if (seekTimeUs != C.TIME_UNSET) {
+                pendingSeekTimeUs = seekTimeUs;
+            } else if (pendingSeekTimeUs != C.TIME_UNSET) {
+                FormatId formatId = formatSelector.getSelectedFormatId();
+                if (sabrStream.hasSegmentStartTime(formatId != null ? formatId.getItag() : -1)) {
+                    pendingSeekTimeUs = C.TIME_UNSET; // the seek landed
+                } else {
+                    // FIX: the seek chunk failed (e.g. retried on an alternate media network) before
+                    // any segment arrived. The stream time is reset to 0 at this point, so without the
+                    // seek target the server would send segments from the start of the video.
+                    Log.w(TAG, "Retrying the seek to " + C.usToMs(pendingSeekTimeUs) + "ms");
+                    seekTimeUs = pendingSeekTimeUs;
+                }
+            }
+        }
         out.chunk =
                 newMediaChunk(
                         representationHolder,
@@ -457,6 +480,16 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     @Override
     public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e, long blacklistDurationMs) {
         Log.e(TAG, "Chunk load failed: " + e.getMessage());
+
+        // A reload request is not a transport failure. Handing it back as "handled" would
+        // retry the very same request at full speed. Let it fall through to the
+        // LoadErrorHandlingPolicy, which stashes the token and fails the load.
+        Throwable cause = e.getCause();
+        if (cause instanceof SabrReloadPlayerError || cause instanceof SabrBackoffError) {
+            Log.e(TAG, "SABR control signal, letting the error policy decide: " + cause.getMessage());
+            return false;
+        }
+
         if (!cancelable) {
             return false;
         }
@@ -494,9 +527,23 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     }
 
     private static boolean isEndpointConnectionFailure(Chunk chunk, Exception error) {
-        return chunk.bytesLoaded() == 0
-                && error instanceof IOException
-                && !(error instanceof InvalidResponseCodeException);
+        if (!(error instanceof IOException) || error instanceof InvalidResponseCodeException) {
+            return false;
+        }
+
+        // FIX: a media network that stalls in the middle of a response (read timeout) is as
+        // unusable as one that doesn't answer at all. Retrying the same network keeps stalling.
+        return chunk.bytesLoaded() == 0 || hasCause(error, SocketTimeoutException.class);
+    }
+
+    private static boolean hasCause(Throwable error, Class<? extends Throwable> type) {
+        for (Throwable cause = error; cause != null; cause = cause.getCause()) {
+            if (type.isInstance(cause)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private ArrayList<Representation> getRepresentations() {

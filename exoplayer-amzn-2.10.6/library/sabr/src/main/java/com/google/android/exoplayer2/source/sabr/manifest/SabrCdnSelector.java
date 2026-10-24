@@ -1,16 +1,27 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Selects equivalent Googlevideo media networks advertised by a signed SABR URL. */
 final class SabrCdnSelector {
     private static final String GOOGLEVIDEO_SUFFIX = ".googlevideo.com";
+    /**
+     * How long a media network that failed to answer stays skipped. Restarting the engine or
+     * reloading the video builds a new manifest (and selector) from the same player response,
+     * which would otherwise send the first request to the broken network again
+     * (e.g. an ISP-hosted cache node that hangs on cache misses).
+     */
+    private static final long FAILED_NETWORK_TTL_MS = 30 * 60 * 1_000;
+    private static final Map<String, Long> sFailedNetworks = new HashMap<>();
     private final List<String> candidateUrls = new ArrayList<>();
     private int selectedIndex;
 
@@ -21,6 +32,7 @@ final class SabrCdnSelector {
 
         candidateUrls.add(initialUrl);
         addAlternateUrls(initialUrl);
+        skipFailedNetworks();
     }
 
     public synchronized @Nullable String getCurrentUrl() {
@@ -46,8 +58,61 @@ final class SabrCdnSelector {
             return false;
         }
 
+        markFailed(getHost(failedUrl));
         selectedIndex++;
         return true;
+    }
+
+    private void skipFailedNetworks() {
+        // Keep the last candidate as a fallback even if it failed too.
+        while (selectedIndex + 1 < candidateUrls.size()
+                && isFailed(extractNetwork(getHost(candidateUrls.get(selectedIndex))))) {
+            selectedIndex++;
+        }
+    }
+
+    private static void markFailed(@Nullable String host) {
+        String network = extractNetwork(host);
+
+        if (network == null) {
+            return;
+        }
+
+        synchronized (sFailedNetworks) {
+            sFailedNetworks.put(network, nowMs() + FAILED_NETWORK_TTL_MS);
+        }
+    }
+
+    @VisibleForTesting
+    static void clearFailedNetworks() {
+        synchronized (sFailedNetworks) {
+            sFailedNetworks.clear();
+        }
+    }
+
+    private static long nowMs() {
+        return System.nanoTime() / 1_000_000; // monotonic, no Android dependency (plain JUnit tests)
+    }
+
+    private static boolean isFailed(@Nullable String network) {
+        if (network == null) {
+            return false;
+        }
+
+        synchronized (sFailedNetworks) {
+            Long expiresAt = sFailedNetworks.get(network);
+
+            if (expiresAt == null) {
+                return false;
+            }
+
+            if (expiresAt <= nowMs()) {
+                sFailedNetworks.remove(network);
+                return false;
+            }
+
+            return true;
+        }
     }
 
     private void addAlternateUrls(String initialUrl) {

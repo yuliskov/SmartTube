@@ -341,7 +341,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
 
         @Override
         public boolean isSeekEnabled() {
-            return mSeekProvider != null || mSeekEnabled;
+            return !isSeekBlocked() && (mSeekProvider != null || mSeekEnabled);
         }
 
         @Override
@@ -352,7 +352,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
             // if we seek thumbnails, we don't need save original position because current
             // position is not changed during seeking.
             // otherwise we will call seekTo() and may need to restore the original position.
-            mPositionBeforeSeek = mSeekProvider == null ? mPlayerAdapter.getCurrentPosition() : -1;
+            mPositionBeforeSeek = mSeekProvider == null ? getCurrentPosition() : -1;
             mLastUserPosition = -1;
             if (!mPlayerData.isSeekConfirmPlayEnabled()) {
                 pause();
@@ -361,8 +361,12 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
 
         @Override
         public void onSeekPositionChanged(long pos) {
+            if (isSeekBlocked()) {
+                return;
+            }
+
             if (mSeekProvider == null) {
-                mPlayerAdapter.seekTo(pos);
+                seekTo(pos);
             } else {
                 mLastUserPosition = pos;
             }

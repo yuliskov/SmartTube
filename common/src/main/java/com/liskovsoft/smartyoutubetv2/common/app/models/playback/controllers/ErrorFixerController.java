@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.annotation.SuppressLint;
 
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -22,8 +24,11 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 3;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
+    private String mSabrErrorFixVideoId;
+    private int mSabrErrorFixAttempts;
 
     @Override
     public void onInit() {
@@ -34,6 +39,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     public void onEngineError(int type, int rendererIndex, Throwable error) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
+        mBufferingDetector.reset();
         runEngineErrorAction(type, rendererIndex, error);
     }
 
@@ -49,15 +55,24 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // Long loading subtitles cause hangs
             disableSubtitles();
             mVideoLoaderController.reloadVideo();
-        } else if (!mBufferingDetector.isPlayable()) {
-            if (getPlayerTweaksData().getPlayerDataSource() != PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP
-                && getPlayerTweaksData().getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_SYSTEM
-                && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
+        } else if (isOfflineVideo() && !mBufferingDetector.isPlayable()) {
+            int requiredEngine = PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP;
+            int customDns = PlayerTweaksData.DNS_TYPE_GOOGLE;
+            boolean isCustomEngineEnabled = getPlayerTweaksData().getPlayerDataSource() == requiredEngine;
+            boolean isCustomDnsEnabled = getPlayerTweaksData().getPreferredDnsType() == customDns;
+            boolean isCustomDnsActive = isCustomEngineEnabled && isCustomDnsEnabled;
+            if (!isCustomDnsActive && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 // Wrong DNS resolving could cause hanging at start
                 // Do switch to only engine that respects custom DNS settings
-                MessageHelpers.showLongMessage(getContext(), "Fixing wrong DNS resolving...");
-                getPlayerTweaksData().setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
-                mVideoLoaderController.restartEngine();
+                MessageHelpers.showLongMessage(getContext(), "Fixing incorrect DNS resolution. App restart needed...");
+                getPlayerTweaksData().setPlayerDataSource(requiredEngine);
+                getPlayerTweaksData().setPreferredDnsType(customDns);
+                if (!isCustomDnsEnabled) {
+                    // Restart app to reinit OkHttp internal objects
+                    Utils.restartTheApp(getContext());
+                } else {
+                    mVideoLoaderController.restartEngine();
+                }
             } else {
                 // Also, some clients like ANDROID_REEL may just hang at start
                 MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
@@ -71,7 +86,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //mVideoLoaderController.restartEngine();
 
             // SABR may hang if the server issues a high backoffTime
-            mVideoLoaderController.restartEngine();
+            mVideoLoaderController.reloadVideo();
         }
     }
 
@@ -91,6 +106,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onPlay() {
         mBufferingDetector.onStopBuffering();
+        mSabrErrorFixAttempts = 0;
     }
 
     @Override
@@ -126,7 +142,84 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
+        if (applySabrReloadPlayerAction(error)) {
+            return;
+        }
+
+        if (applySabrBackoffAction(error)) {
+            return;
+        }
+
         applyEngineErrorAction(type, rendererIndex, error);
+    }
+
+    /**
+     * SABR server sent ReloadPlayerResponse. It won't send any media until the player response is re-fetched with the token.
+     */
+    private boolean applySabrReloadPlayerAction(Throwable error) {
+        SabrReloadPlayerError reloadError = null;
+        Video video = getVideo();
+
+        Throwable cause = error.getCause();
+        if (cause instanceof SabrReloadPlayerError) {
+            reloadError = (SabrReloadPlayerError) cause;
+        }
+
+        if (reloadError == null || video == null) {
+            return false;
+        }
+
+        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
+            mSabrErrorFixVideoId = video.videoId;
+            mSabrErrorFixAttempts = 0;
+        }
+
+        // Reload doesn't help. Fallback to the common error handling (switch the client).
+        if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
+            return false;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", reloadError.getMessage(), mSabrErrorFixAttempts);
+
+        YouTubeServiceManager.instance().reloadPlayerResponse(video.videoId, reloadError.reloadPlaybackToken);
+        mVideoLoaderController.reloadVideo();
+
+        return true;
+    }
+
+    /**
+     * The server told us to back off, honor it instead of re-requesting
+     * immediately - otherwise we burn exactly the waiting period the server asked for.
+     */
+    private boolean applySabrBackoffAction(Throwable error) {
+        SabrBackoffError backoffError = null;
+        Video video = getVideo();
+
+        Throwable cause = error.getCause();
+        if (cause instanceof SabrBackoffError) {
+            backoffError = (SabrBackoffError) cause;
+        }
+
+        if (backoffError == null || video == null) {
+            return false;
+        }
+
+        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
+            mSabrErrorFixVideoId = video.videoId;
+            mSabrErrorFixAttempts = 0;
+        }
+
+        // Reload doesn't help. Fallback to the common error handling (switch the client).
+        if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
+            return false;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", backoffError.getMessage(), mSabrErrorFixAttempts);
+
+        // SABR may hang if the server issues a high backoffTime
+        mVideoLoaderController.reloadVideo();
+
+        return true;
     }
 
     private void applyEngineErrorAction(int type, int rendererIndex, Throwable error) {
@@ -138,10 +231,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (Helpers.startsWithAny(errorContent, "Unable to connect to")) {
             // No internet connection or WRONG DATE on the device
-            // Recently this message starting to show for other reasons
-            //YouTubeServiceManager.instance().applyNoPlaybackFix(); // ?
-            //switchNextEngine(); // ?
-            //restartEngine = false;
+            // Recently this message starting to show for other unknown reasons
             if (!getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
                 switchNextEngine();
             }
@@ -152,8 +242,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             } else if (getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGH || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_HIGHEST) {
                 getPlayerData().setVideoBufferType(PlayerData.BUFFER_MEDIUM);
             } else {
-                getPlayerTweaksData().setSectionPlaylistEnabled(false);
-                restartEngine = false;
+                lowerVideoQuality(); // NOTE: restart engine required
             }
         } else if (Helpers.containsAny(errorContent, "Exception in CronetUrlRequest") && !getPlayerTweaksData().isNetworkErrorFixingDisabled()) {
             if (getVideo() != null && !getVideo().isLive) { // Finished live stream may provoke errors in Cronet
@@ -175,16 +264,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             // "Unable to connect to", "Invalid NAL length", "Response code: 421",
             // "Response code: 404", "Response code: 429", "Invalid integer size",
             // "Unexpected ArrayIndexOutOfBoundsException", "Unexpected IndexOutOfBoundsException"
-
-            //if (Helpers.startsWithAny(errorContent, "Response code: 403")) {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix();
-            //} else if (isSubtitlesEnabled()) {
-            //    disableSubtitles(); // Response code: 429
-            //} else if (getPlayerTweaksData().isHighBitrateFormatsEnabled()) {
-            //    getPlayerTweaksData().setHighBitrateFormatsEnabled(false); // Response code: 429
-            //} else {
-            //    YouTubeServiceManager.instance().applyNoPlaybackFix(); // Response code: 403
-            //}
 
             restartEngine = false;
             showMessage = false;
@@ -208,7 +287,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             disableSubtitles();
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_RENDERER && rendererIndex == PlayerEventListener.RENDERER_INDEX_VIDEO) {
-            getPlayerData().setFormat(FormatItem.VIDEO_FHD_AVC_30);
+            getPlayerData().setTempVideoFormat(FormatItem.VIDEO_FHD_AVC_30);
             if (getPlayerTweaksData().isSWDecoderForced()) {
                 getPlayerTweaksData().setSWDecoderForced(false);
             } else {
@@ -218,11 +297,16 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            // IllegalStateException: Buffer too small (5242880 < 7208383)
-            if (Helpers.startsWithAny(errorContent, "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+            if (error instanceof NullPointerException) {
+                // SABR extractor throws NPE on subtitle error
+                // NOTE: the engine should be restarted
+                disableSubtitles();
+            } else if (Helpers.startsWithAny(errorContent,
+                    "Buffer too small", "Invalid to call at Released state; only valid in executing state")) {
+                // IllegalStateException: Buffer too small (5242880 < 7208383)
                 // NOTE: The bug. Avoid calling reloadVideo() after lowering the quality.
                 // This will change current format to 'Disabled'. Do restartEngine() instead.
-                lowerVideoQuality();
+                lowerVideoQuality(); // NOTE: restart engine required
             }
         }
 
@@ -415,7 +499,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (videoFormats.size() > nextIdx) {
             FormatItem formatItem = videoFormats.get(nextIdx);
-            getPlayer().setFormat(formatItem);
             // This helps to persist the format between engine restart
             getPlayerData().setTempVideoFormat(formatItem);
         }
