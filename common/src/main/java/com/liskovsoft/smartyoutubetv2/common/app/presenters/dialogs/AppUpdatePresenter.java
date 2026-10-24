@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -64,6 +65,8 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         if (mIsForceCheck) {
             LoadingManager.showLoading(getContext(), false);
             showUpdateDialog(versionName, changelog, apkPath);
+        } else if (MainUIData.instance(getContext()).isYouTubeColorScheme()) {
+            PendingAppUpdate.set(() -> showUpdateDialog(versionName, changelog, apkPath));
         } else if (GeneralData.instance(getContext()).isOldUpdateNotificationsEnabled()) {
             showUpdateDialog(versionName, changelog, apkPath);
         } else {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube color scheme: update available button in the title bar (Material "download" icon) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M5,20h14v-2H5V20zM19,9h-4V3H9v6H5l7,7L19,9z"/>
+</vector>

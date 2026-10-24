@@ -26,6 +26,7 @@ import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.PendingAppUpdate;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
@@ -71,6 +72,7 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
     private TextView mSearchPill;
     private View mYouTubeLogo;
     private SearchOrbView mSettingsView;
+    private SearchOrbView mUpdateView;
     private boolean mInitDone;
     private int mFlags = FULL_VIEW_VISIBLE;
     private int mIconWidth;
@@ -188,6 +190,20 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mSearchPill.setVisibility(mSearchVisibility);
             mYouTubeLogo.setVisibility(mSearchVisibility);
             mSettingsView.setVisibility(mSearchVisibility);
+            updateUpdateButton();
+        }
+    }
+
+    private void updateUpdateButton() {
+        mUpdateView.setVisibility(PendingAppUpdate.exists() ? mSearchVisibility : View.GONE);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        if (mUpdateView != null) {
+            PendingAppUpdate.setOnUpdateFoundListener(null);
         }
     }
 
@@ -229,6 +245,10 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             mSettingsView = findViewById(R.id.settings_orb);
             mSettingsView.setOnOrbClickedListener(v -> showSettings());
             TooltipCompatHandler.setTooltipText(mSettingsView, getContext().getString(R.string.header_settings));
+            mUpdateView = findViewById(R.id.update_orb);
+            mUpdateView.setOnOrbClickedListener(v -> PendingAppUpdate.show());
+            TooltipCompatHandler.setTooltipText(mUpdateView, getContext().getString(R.string.install_update));
+            PendingAppUpdate.setOnUpdateFoundListener(this::updateUpdateButton);
         }
 
         mAccountView = findViewById(R.id.account_orb);
@@ -247,8 +267,11 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
             accountParams.setMarginStart(getResources().getDimensionPixelSize(R.dimen.search_bar_right_items_margin));
             endGroup.addView(mAccountView, accountParams);
 
-            mSearchPill.setNextFocusRightId(R.id.settings_orb);
-            mSettingsView.setNextFocusLeftId(R.id.search_pill);
+            // Hidden buttons are skipped by focusSearch()
+            mSearchPill.setNextFocusRightId(R.id.update_orb);
+            mUpdateView.setNextFocusLeftId(R.id.search_pill);
+            mUpdateView.setNextFocusRightId(R.id.settings_orb);
+            mSettingsView.setNextFocusLeftId(R.id.update_orb);
             mSettingsView.setNextFocusRightId(R.id.account_orb);
             mAccountView.setNextFocusLeftId(R.id.settings_orb);
             mAccountView.setNextFocusRightId(View.NO_ID);
