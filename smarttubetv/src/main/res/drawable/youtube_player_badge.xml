@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YouTube color scheme: small label behind the video quality in the player -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#99000000"/>
+    <corners android:radius="6dp"/>
+    <padding android:left="10dp" android:top="4dp" android:right="10dp" android:bottom="4dp"/>
+</shape>

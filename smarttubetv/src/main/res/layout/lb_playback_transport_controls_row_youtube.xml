@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- YouTube color scheme: same views as lb_playback_transport_controls_row, YouTube TV arrangement:
-     times above a thin seek bar, one button row below it (playback left, actions right). -->
+<!-- YouTube color scheme: same views as lb_playback_transport_controls_row, YouTube TV arrangement.
+     The row is stretched to the full screen height in code, so the top part holds the title (left)
+     and clock/quality (right), the bottom holds times, a thin seek bar and one button row. -->
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,16 +14,19 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <!-- Top left: title, channel and video details -->
         <LinearLayout
             android:id="@+id/controls_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:clipToPadding="false"
+            android:paddingTop="40dp"
             android:paddingStart="?attr/browsePaddingStart"
-            android:paddingEnd="?attr/browsePaddingEnd"
-            android:layout_marginBottom="@dimen/lb_playback_transport_control_info_margin_bottom"
+            android:paddingEnd="280dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -39,9 +43,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:clipToPadding="false"
-                android:gravity="bottom" />
+                android:clipToPadding="false" />
         </LinearLayout>
+
+        <!-- Top right: clock with the video quality below it -->
+        <LinearLayout
+            android:id="@+id/additional_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="?attr/browsePaddingEnd"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:focusable="false" >
+            <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+                android:id="@+id/date_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="@android:color/white"
+                style="?attr/playbackControlsTimeStyle" />
+            <TextView
+                android:id="@+id/quality_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/youtube_player_badge"
+                android:textColor="@android:color/white"
+                style="?attr/playbackControlsTimeStyle" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/thumbs_row_wrapper"
             android:visibility="invisible"
@@ -68,7 +100,7 @@
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/transport_row"
         android:orientation="vertical"
         android:paddingStart="?attr/browsePaddingStart"
@@ -83,7 +115,7 @@
                       android:focusable="true"
                       android:layout_height="1dp"/>
 
-        <!-- Times above the bar: current on the left, total on the right -->
+        <!-- Above the bar: current time left; remaining and total time right -->
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layoutDirection="ltr"
@@ -95,50 +127,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:textColor="@android:color/white"
                 style="?attr/playbackControlsTimeStyle" />
 
-            <RelativeLayout android:id="@+id/additional_info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_alignParentBottom="true"
-                            android:focusable="false" >
-                <TextView
-                    android:id="@+id/quality_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    style="?attr/playbackControlsTimeStyle" />
-                <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
-                    android:id="@+id/date_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/quality_info"
-                    style="?attr/playbackControlsTimeStyle" />
-            </RelativeLayout>
-
-            <RelativeLayout android:id="@+id/time_info"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="true"
-                            android:focusable="false" >
+            <LinearLayout android:id="@+id/time_info"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentEnd="true"
+                          android:layout_centerVertical="true"
+                          android:orientation="horizontal"
+                          android:focusable="false" >
                 <TextView
                     android:id="@+id/ending_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:alpha="0.7"
                     style="?attr/playbackControlsTimeStyle" />
                 <TextView
                     android:id="@+id/total_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/ending_time"
+                    android:textColor="@android:color/white"
                     style="?attr/playbackControlsTimeStyle" />
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
         <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar

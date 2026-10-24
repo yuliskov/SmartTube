@@ -1038,10 +1038,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     @Override
     protected RowPresenter.ViewHolder createRowViewHolder(ViewGroup parent) {
-        int layoutId = MainUIData.instance(parent.getContext()).isYouTubeColorScheme() ?
+        boolean isYouTube = MainUIData.instance(parent.getContext()).isYouTubeColorScheme();
+        int layoutId = isYouTube ?
                 com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row_youtube :
                 com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row;
         View v = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+
+        if (isYouTube) {
+            // The row is aligned by its bottom edge. Grow it up to the screen top, so the title sits top left.
+            v.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View view, int left, int top, int right, int bottom,
+                                           int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (top > 0) {
+                        view.removeOnLayoutChangeListener(this);
+                        view.post(() -> view.setMinimumHeight(bottom)); // not inside the layout pass
+                    }
+                }
+            });
+        }
         ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
         initRow(vh);
         return vh;

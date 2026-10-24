@@ -62,7 +62,23 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                         if (MainUIData.instance(viewHolder.view.getContext()).isYouTubeColorScheme()) {
                             // YouTube TV: bold, smaller title
                             viewHolder.getTitle().setTypeface(Typeface.DEFAULT_BOLD);
-                            viewHolder.getTitle().setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                            viewHolder.getTitle().setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                            viewHolder.getSubtitle().setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                            viewHolder.getBody().setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                            // ResizingTextView restores its cached defaults on every measure.
+                            // Keep those defaults and Leanback's baseline spacing in sync with the font.
+                            viewHolder.getTitle().setLineSpacing(0, 1);
+                            Helpers.setField(viewHolder.getTitle(), "mDefaultsInitialized", false);
+                            Helpers.setField(viewHolder.getTitle(), "mResizedTextSize", -1);
+                            Helpers.setField(viewHolder, "mTitleLineSpacing", viewHolder.getTitle().getLineHeight());
+                            Helpers.setField(viewHolder, "mBodyLineSpacing", viewHolder.getBody().getLineHeight());
+                            Helpers.setField(viewHolder, "mTitleFontMetricsInt", viewHolder.getTitle().getPaint().getFontMetricsInt());
+                            Helpers.setField(viewHolder, "mSubtitleFontMetricsInt", viewHolder.getSubtitle().getPaint().getFontMetricsInt());
+                            Helpers.setField(viewHolder, "mBodyFontMetricsInt", viewHolder.getBody().getPaint().getFontMetricsInt());
+                            int baselineGap = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                                    20, viewHolder.view.getResources().getDisplayMetrics()));
+                            Helpers.setField(viewHolder, "mUnderTitleBaselineMargin", baselineGap);
+                            Helpers.setField(viewHolder, "mUnderSubtitleBaselineMargin", baselineGap);
                         }
                         // MOD: add extra title line
                         //viewHolder.getBody().setText(glue.getBody());
