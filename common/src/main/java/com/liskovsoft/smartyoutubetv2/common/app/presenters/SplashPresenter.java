@@ -100,6 +100,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
+            // MOD: warm up the player engine right after the first screen, not 10s later: the first video no longer waits for it
+            Utils.postDelayed(() -> YouTubeServiceManager.instance().refreshCacheIfNeeded(), 1_500);
             initIntentChain();
         }
     }

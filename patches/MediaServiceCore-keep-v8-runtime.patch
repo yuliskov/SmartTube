@@ -1,3 +1,41 @@
+diff --git a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/AppServiceCore.java b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/AppServiceCore.java
+index e41069f..6b01971 100644
+--- a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/AppServiceCore.java
++++ b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/AppServiceCore.java
+@@ -10,6 +10,7 @@ import com.liskovsoft.youtubeapi.app.playerdata.TclPlayerDataExtractor;
+ import com.liskovsoft.youtubeapi.app.playerdata.WebPlayerDataExtractor;
+ import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
+ import com.liskovsoft.googlecommon.common.helpers.RetrofitHelper;
++import com.liskovsoft.sharedutils.mylogger.Log;
+ import com.liskovsoft.youtubeapi.common.helpers.AppClient;
+ import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
+ 
+@@ -155,7 +156,24 @@ class AppServiceCore {
+     public void refreshCacheIfNeeded(@Nullable AppClient client) {
+         getAppInfoData();
+         getClientData();
+-        getPlayerDataExtractor(client);
++        PlayerDataExtractor extractor = getPlayerDataExtractor(client);
++
++        // MOD: build the signature JS engine and the poToken before the first video, so the first play
++        // doesn't wait for them. Failures are harmless: they are just created on first play as before.
++        if (extractor != null) {
++            try {
++                extractor.extractNSig("5cNpZqIJ7ixNqU68Y7S");
++            } catch (Throwable e) {
++                Log.e(TAG, "Sig engine warm up failed: %s", e.getMessage());
++            }
++        }
++        if (client != null) {
++            try {
++                PoTokenGate.getPoToken(client);
++            } catch (Throwable e) {
++                Log.e(TAG, "poToken warm up failed: %s", e.getMessage());
++            }
++        }
+     }
+ 
+     protected MediaServiceData getData() {
 diff --git a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt b/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt
 index d79cef8..053c795 100644
 --- a/youtubeapi/src/main/java/com/liskovsoft/youtubeapi/app/nsigsolver/impl/V8ChallengeProvider.kt

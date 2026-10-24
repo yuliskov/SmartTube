@@ -43,6 +43,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountCha
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.FormatInfoPrefetcher;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -432,6 +433,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         mCurrentVideo = item;
+
+        FormatInfoPrefetcher.onVideoFocused(item); // MOD: load playback info while the user hovers the card
     }
 
     @Override

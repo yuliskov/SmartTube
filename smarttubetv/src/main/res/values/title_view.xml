@@ -10,7 +10,7 @@
     <dimen name="lb_search_orb_size">36dp</dimen>
     <dimen name="title_pill_height">36dp</dimen>
     <!-- Pill fills up to here (from the end, excl. title padding): ends at x=1278px like YouTube -->
-    <dimen name="title_bar_end_margin">189dp</dimen>
+    <dimen name="title_bar_end_margin">190dp</dimen>
     <!-- Sidebar divider after the Library (History) row -->
     <dimen name="header_divider_gap">21dp</dimen>
 </resources>

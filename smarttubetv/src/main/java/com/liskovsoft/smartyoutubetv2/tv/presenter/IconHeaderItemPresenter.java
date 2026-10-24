@@ -84,6 +84,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                 Glide.with(rootView.getContext())
                         .load(mIconUrl)
                         .apply(ViewUtil.glideOptions().error(mDefaultIcon))
+                        .circleCrop() // MOD: round profile/channel pictures like YouTube
                         .listener(mErrorListener)
                         .into(iconView);
 
