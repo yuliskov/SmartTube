@@ -726,7 +726,6 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     private int mContainerListMarginStart;
     // MOD: width of the collapsed icon-only sidebar. 0 hides the sidebar completely (default).
     private int mHeadersRailWidth;
-    private int mHeadersFullWidth;
     // MOD: keep the title bar visible while scrolling the content
     private boolean mTitleSticky;
     private int mContainerListAlignTop;
@@ -1462,11 +1461,10 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         containerList = mHeadersSupportFragment.getView();
         lp = (MarginLayoutParams) containerList.getLayoutParams();
         if (mHeadersRailWidth > 0) {
-            // MOD: narrow the sidebar instead of moving it off screen, so labels get clipped and only icons stay
-            if (mHeadersFullWidth == 0) {
-                mHeadersFullWidth = lp.width;
-            }
-            lp.width = onScreen ? mHeadersFullWidth : mHeadersRailWidth;
+            // MOD: keep the sidebar on screen, but draw only its icon column when collapsed.
+            // Clipping (not narrowing) keeps the labels' width, so they don't turn into "...".
+            int railVisibleWidth = mHeadersRailWidth - containerList.getPaddingRight(); // same visible width as the old narrowed sidebar
+            ViewCompat.setClipBounds(containerList, onScreen ? null : new Rect(0, 0, railVisibleWidth, Integer.MAX_VALUE / 2));
             lp.setMarginStart(0);
         } else {
             lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
@@ -1699,6 +1697,13 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     public void onStart() {
         super.onStart();
         mHeadersSupportFragment.setAlignment(mContainerListAlignTop);
+        if (mTitleSticky) {
+            // MOD: the sidebar doesn't scroll (items would slide under the sticky title), it starts below the title
+            VerticalGridView headers = mHeadersSupportFragment.getVerticalGridView();
+            headers.setWindowAlignment(VerticalGridView.WINDOW_ALIGN_BOTH_EDGE);
+            headers.setPadding(headers.getPaddingLeft(), mContainerListAlignTop, headers.getPaddingRight(), headers.getPaddingBottom());
+            headers.setClipToPadding(false); // the zoomed focused item reaches into the top padding
+        }
         setMainFragmentAlignment();
 
         if (mCanShowHeaders && mShowingHeaders && mHeadersSupportFragment != null
