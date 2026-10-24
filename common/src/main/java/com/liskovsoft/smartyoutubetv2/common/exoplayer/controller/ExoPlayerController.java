@@ -50,7 +50,6 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
-    private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private WeakReference<Video> mVideo;
     private final PlayerEventListener mEventListener;
@@ -69,13 +68,12 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     public ExoPlayerController(Context context, PlayerEventListener eventListener) {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         mContext = context.getApplicationContext();
-        mMediaSourceFactory = new ExoMediaSourceFactory(context);
         mTrackSelectorManager = new TrackSelectorManager(context);
+        mMediaSourceFactory = new ExoMediaSourceFactory(context);
         mTrackFormatter = new TrackInfoFormatter2();
         mTrackFormatter.enableBitrate(PlayerTweaksData.instance(context).isQualityInfoBitrateEnabled());
-        mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
-        mMediaSourceFactory.setTrackErrorFixer(mTrackErrorFixer);
+        mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
         mEventListener = eventListener;
         
         applyShield720pFix();
@@ -100,26 +98,6 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             mSabrLiveSeekBlocked = !formatInfo.isLiveDvrEnabled();
             mSabrLiveStartPending = true;
         }
-    }
-
-    /**
-     * Live head position comes with the first server response (the same one that makes the player ready).
-     * So jump near the live edge as soon as the position is known.
-     */
-    private void seekToSabrLiveStart() {
-        if (mSabrLiveManifest == null || mPlayer == null) {
-            return;
-        }
-
-        // Stream without DVR can't be rewound: start right on the live edge
-        long startPositionMs = mSabrLiveSeekBlocked ? getLiveDurationMs() : mSabrLiveManifest.getLiveStartPositionMs();
-
-        if (startPositionMs == -1) { // not yet. Try on the next event
-            return;
-        }
-
-        mSabrLiveStartPending = false;
-        mPlayer.seekTo(startPositionMs);
     }
 
     public void openDash(MediaItemFormatInfo formatInfo) {
@@ -579,5 +557,25 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         } finally {
             mPlayer = null;
         }
+    }
+
+    /**
+     * Live head position comes with the first server response (the same one that makes the player ready).
+     * So jump near the live edge as soon as the position is known.
+     */
+    private void seekToSabrLiveStart() {
+        if (mSabrLiveManifest == null || mPlayer == null) {
+            return;
+        }
+
+        // Stream without DVR can't be rewound: start right on the live edge
+        long startPositionMs = mSabrLiveSeekBlocked ? getLiveDurationMs() : mSabrLiveManifest.getLiveStartPositionMs();
+
+        if (startPositionMs == -1) { // not yet. Try on the next event
+            return;
+        }
+
+        mSabrLiveStartPending = false;
+        mPlayer.seekTo(startPositionMs);
     }
 }
