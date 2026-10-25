@@ -70,6 +70,10 @@
         <item tools:targetApi="18" name="android:windowOverscan">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <!-- Draw a branded launch window while the app process is starting. -->
+    <style name="App.Theme.Splash" parent="App.Theme.Leanback.Browse">
+        <item name="android:windowBackground">@drawable/splash_window_background</item>
+    </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>

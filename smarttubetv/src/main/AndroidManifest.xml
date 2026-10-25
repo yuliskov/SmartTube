@@ -79,6 +79,7 @@
         <!-- More info: com.liskovsoft.leanbackassistant.utils.AppUtil -->
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
+            android:theme="@style/App.Theme.Splash"
             android:exported="true"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"

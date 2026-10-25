@@ -13,6 +13,12 @@ public class SplashActivity extends MotherActivity implements SplashView {
     private SplashPresenter mPresenter;
 
     @Override
+    protected void initTheme() {
+        // Keep the manifest theme's launch window visible while the app is starting.
+        // The branded loading view supplies its own background after setContentView().
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
