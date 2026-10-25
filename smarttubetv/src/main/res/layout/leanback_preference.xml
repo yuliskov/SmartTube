@@ -28,12 +28,10 @@
     android:paddingEnd="@dimen/lb_preference_item_padding_end" >
 
     <!-- MOD: move check box to the beginning (consistent look with the multi item dialogue) -->
-    <!-- MOD: use negative align because a checkbox is image drawable -->
     <!-- Preference should place its actual preference widget here. -->
     <LinearLayout android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="-7dp"
         android:layout_marginEnd="@dimen/lb_preference_item_icon_margin_end"
         android:gravity="center_vertical"
         android:orientation="vertical" />
