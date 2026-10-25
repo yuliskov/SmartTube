@@ -177,7 +177,8 @@ public class ComplexImageView extends RelativeLayout {
         }
 
         if (mPreviewPlayer == null) {
-            mPreviewPlayer = new EmbedPlayerView(getContext());
+            mPreviewPlayer = (EmbedPlayerView) android.view.LayoutInflater.from(getContext())
+                    .inflate(R.layout.embed_player_view, mPreviewContainer, false);
             mPreviewPlayer.setQuality(Math.min(mPreviewWidth, mPreviewHeight) < 300 ? EmbedPlayerView.QUALITY_LOW : EmbedPlayerView.QUALITY_NORMAL);
             mPreviewPlayer.setUseController(false);
             mPreviewPlayer.setMute(mMute);
