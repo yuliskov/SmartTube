@@ -60,7 +60,8 @@
     <string name="dialog_account_none">Heç biri</string>
     <string name="dialog_remove_account">Çıxış et</string>
     <string name="dialog_add_account">Daxil ol</string>
-    <string name="default_lang">Varsayılan</string>
+    <string name="default_option">İlkin</string>
+    <string name="default_lang">İlkin</string>
     <string name="original_lang">Orijinal</string>
     <string name="dialog_select_language">Dil</string>
     <string name="subtitle_default">İlkin</string>
@@ -678,6 +679,7 @@
     <string name="fullscreen_mode">Tam ekran rejimi (sistem panelləri olmadan)</string>
     <string name="player_only_mode">Video tətbiqdən kənarda açılarsa yalnız oynadıcını göstər</string>
     <string name="pinned_channel_rows">Bərkidilmiş kanalları sətrlər şəklində göstər</string>
+    <string name="preferred_dns">Üstünlük Verilən DNS</string>
     <string name="prefer_google_dns">Google DNS-ə üstünlük ver</string>
     <string name="prefer_ipv4">IPv4 DNS-ə üstünlük ver</string>
     <string name="prefer_ipv4_desc">Tətbiqin ümumiyyətlə işləmədiyi halları düzəldə bilər.\nQeyd. Donmalara və qəzalara səbəb ola bilər (xüsusilə Android 8 cihazlarında və ya Dune HD-də)</string>
@@ -748,6 +750,8 @@
     <string name="enable_conscrypt_desc">Bəzi cihazlarda HTTPS, TLS və VPN uyğunluğunu yaxşılaşdırır, lakin bəzən oynatma problemlərinə və ya daha zəif şəbəkə performansına səbəb ola bilər</string>
     <string name="network_settings">Şəbəkə tənzimləmələri</string>
     <string name="comments_disabled">Bu video üçün şərhlər söndürülüb</string>
+    <string name="prefer_sabr_live">SABR canlı yayımları</string>
+    <string name="prefer_sabr_live_desc">Təcrübi SABR canlı yayımları. Yalnız adi canlı yayımlarla bağlı probleminiz olduqda aktivləşdirin.</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>
