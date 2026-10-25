@@ -104,14 +104,14 @@ public class ComplexImageCardView extends ImageCardView {
 
     @Override
     public boolean performClick() {
-        mComplexImageView.stopPlayback(true);
+        mComplexImageView.stopPlayback(); // deferred: TextureView surface release blocks the UI thread, delaying navigation
 
         return super.performClick();
     }
 
     @Override
     public boolean performLongClick() {
-        mComplexImageView.stopPlayback(true);
+        mComplexImageView.stopPlayback();
 
         return super.performLongClick();
     }
