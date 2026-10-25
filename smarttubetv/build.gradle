@@ -24,6 +24,20 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
+// Fork: mirror sync-and-release.yml's patch math (upstreamCode*100, bumped past the latest published build) so local About matches the next release
+def forkNextPatch(int baseCode) {
+    try {
+        def data = new groovy.json.JsonSlurper().parseText(
+                new URL("https://github.com/GeorgeHarbor/SmartTube/releases/download/latest/smarttube_beta2.json").text)
+        def published = data.values().findAll { it instanceof Map && it.versionCode }.collect { it.versionCode }.max() ?: 0
+        def code = baseCode * 100
+        if (published >= code) code = published + 1
+        return code % 100
+    } catch (ignored) {
+        return 0 // offline or no release yet
+    }
+}
+
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 if (keystorePropertiesFile.exists()) {
@@ -59,6 +73,12 @@ android {
         targetSdkVersion project.properties.targetSdkVersion
         versionCode 2458
         versionName "32.68"
+
+        // Fork: local builds fetch the next release patch so About shows xx.xx.patch (CI writes the 3-part name itself at release)
+        if (versionName ==~ /\d+\.\d+/) {
+            versionName "${versionName}.${forkNextPatch(versionCode)}"
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
