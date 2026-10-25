@@ -748,4 +748,14 @@
   <string name="network_settings">Setelan jaringan</string>
   <string name="comments_disabled">Komentar dimatikan</string>
   <string name="remove_video_to_watch_later">Hapus dari Tonton nanti</string>
+    <string name="default_option">Default</string>
+    <string name="preferred_dns">DNS pilihan</string>
+    <string name="prefer_sabr_live">Siaran langsung SABR</string>
+    <string name="prefer_sabr_live_desc">Siaran langsung SABR eksperimental. Aktifkan hanya jika Anda mengalami masalah dengan siaran langsung biasa.</string>
+    <plurals name="hours">
+        <item quantity="other">%s jam</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%s detik</item>
+    </plurals>
 </resources>

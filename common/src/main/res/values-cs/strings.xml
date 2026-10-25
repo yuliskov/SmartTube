@@ -748,6 +748,10 @@
     <string name="enable_conscrypt_desc">Vylepšuje HTTPS, TLS, and VPN kompatibilitu na některých zařízeních, ale občas může způsobit problémy s přehráváním nebo pomalejší výkon sítě</string>
     <string name="network_settings">Nastavení sítě</string>
     <string name="comments_disabled">Pro toto video jsou komentáře vypnuté</string>
+    <string name="default_option">Výchozí</string>
+    <string name="preferred_dns">Preferovaný DNS</string>
+    <string name="prefer_sabr_live">Živá vysílání SABR</string>
+    <string name="prefer_sabr_live_desc">Experimentální živá vysílání SABR. Povolte, pouze pokud máte potíže s běžnými živými vysíláními.</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>

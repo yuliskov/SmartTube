@@ -748,4 +748,16 @@
   <string name="sidebar_notification">Mostrar notificação na barra lateral</string>
   <string name="color_scheme_dark_blue_oled">Azul Escuro (OLED)</string>
   <string name="remove_video_to_watch_later">Remover da playlist \"Assistir mais tarde\"</string>
+    <string name="default_option">Padrão</string>
+    <string name="preferred_dns">DNS preferencial</string>
+    <string name="prefer_sabr_live">Transmissões ao vivo SABR</string>
+    <string name="prefer_sabr_live_desc">Transmissões ao vivo SABR experimentais. Ative somente se tiver problemas com as transmissões ao vivo normais.</string>
+    <plurals name="hours">
+        <item quantity="one">%s hora</item>
+        <item quantity="other">%s horas</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s segundo</item>
+        <item quantity="other">%s segundos</item>
+    </plurals>
 </resources>

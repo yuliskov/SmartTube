@@ -727,4 +727,37 @@
     <string name="channel_unblocked">Canal desbloqueado</string>
     <string name="header_blocked_channels">Canais bloqueados</string>
     <string name="msg_no_blocked_channels">Nenhum canal bloqueado</string>
+    <string name="default_option">Predefinição</string>
+    <string name="player_unexpected_error">Erro de reprodução inesperado</string>
+    <string name="remove_from_search_history">Remover do histórico de pesquisa</string>
+    <string name="sidebar_notification">Mostrar notificação na barra lateral</string>
+    <string name="color_scheme_dark_blue_oled">Azul escuro (OLED)</string>
+    <string name="preferred_dns">DNS preferido</string>
+    <string name="action_debug_info">Informações de depuração</string>
+    <string name="player_time_stretching">Ajuste de tempo do áudio</string>
+    <string name="player_time_stretching_desc">Mantém a voz natural ao alterar a velocidade. Pode reduzir significativamente o desempenho em alguns dispositivos.</string>
+    <string name="queue_respects_playback_mode">A fila respeita o modo de reprodução</string>
+    <string name="ignore_short_segments">Ignorar segmentos curtos</string>
+    <string name="install_bridge">Instalar a ponte ATV/Amazon</string>
+    <string name="fix_empty_subs_and_channels">Corrigir Subscrições e Canais vazios</string>
+    <string name="local_backup_not_supported">O backup automático no Android TV 11+ não é suportado devido a restrições do sistema. Utilize o GDrive.</string>
+    <string name="rounded_card_corners">Cantos arredondados dos cartões</string>
+    <string name="app_restore_desc">NOTA: O zip do backup deve ser copiado para esta pasta manualmente ou através do gestor de ficheiros, utilize \'Abrir com\'</string>
+    <string name="app_backup_desc">NOTA: O backup será criado em formato zip</string>
+    <string name="add_video_to_watch_later">Adicionar a Ver mais tarde</string>
+    <string name="remove_video_to_watch_later">Remover de Ver mais tarde</string>
+    <string name="enable_conscrypt">Ativar Conscrypt</string>
+    <string name="enable_conscrypt_desc">Melhora a compatibilidade com HTTPS, TLS e VPN em alguns dispositivos, mas pode ocasionalmente causar problemas de reprodução ou menor desempenho da rede</string>
+    <string name="network_settings">Definições de rede</string>
+    <string name="comments_disabled">Os comentários estão desativados para este vídeo</string>
+    <string name="prefer_sabr_live">Transmissões em direto SABR</string>
+    <string name="prefer_sabr_live_desc">Transmissões em direto SABR experimentais. Ative apenas se tiver problemas com as transmissões em direto normais.</string>
+    <plurals name="hours">
+        <item quantity="one">%s hora</item>
+        <item quantity="other">%s horas</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s segundo</item>
+        <item quantity="other">%s segundos</item>
+    </plurals>
 </resources>

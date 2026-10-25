@@ -721,4 +721,43 @@
   <string name="install_bridge">Installeer ATV/Amazon bridge</string>
   <string name="fix_empty_subs_and_channels">Fix lege Abonnementen en Kanalen</string>
   <string name="local_backup_not_supported">Automatische back-up op Android TV 11+ wordt niet ondersteund door systeem restricties. Gebruik in plaats van Gdrive hiervoor.</string>
+    <string name="default_option">Standaard</string>
+    <string name="original_lang">Origineel</string>
+    <string name="player_toggle_speed">Snelheid in-/uitschakelen</string>
+    <string name="search_exit_shortcut">Zoeken verlaten</string>
+    <string name="player_unexpected_error">Onverwachte afspeelfout</string>
+    <string name="context_menu_sorting">Sortering contextmenu</string>
+    <string name="remove_playlist_fmt">%s definitief verwijderen?</string>
+    <string name="create_playlist_note">OPMERKING: Dit is niet zichtbaar in de YouTube-app</string>
+    <string name="video_flip">Spiegelen</string>
+    <string name="remove_from_search_history">Verwijderen uit zoekgeschiedenis</string>
+    <string name="network_stack">%s-netwerkstack verkiezen</string>
+    <string name="player_network_stack">Netwerk-engine</string>
+    <string name="play_from_start">Afspelen vanaf begin</string>
+    <string name="sidebar_notification">Melding in zijbalk tonen</string>
+    <string name="player_chapter_notification2">Naar het volgende hoofdstuk gaan door op de melding te klikken</string>
+    <string name="color_scheme_dark_blue_oled">Donkerblauw (OLED)</string>
+    <string name="player_quick_shorts_skip_alt">Shorts overslaan met omhoog-/omlaagknoppen</string>
+    <string name="player_quick_skip_videos_alt">Gewone video\'s overslaan met omhoog-/omlaagknoppen</string>
+    <string name="preferred_dns">Voorkeurs-DNS</string>
+    <string name="prefer_google_dns">Google DNS verkiezen</string>
+    <string name="rounded_card_corners">Afgeronde kaarthoeken</string>
+    <string name="app_restore_desc">OPMERKING: De back-up-zip moet handmatig of via bestandsbeheer naar deze map worden gekopieerd, gebruik \'Openen met\'</string>
+    <string name="app_backup_desc">OPMERKING: De back-up wordt in zipformaat gemaakt</string>
+    <string name="add_video_to_watch_later">Toevoegen aan Later bekijken</string>
+    <string name="remove_video_to_watch_later">Verwijderen uit Later bekijken</string>
+    <string name="enable_conscrypt">Conscrypt inschakelen</string>
+    <string name="enable_conscrypt_desc">Verbetert de compatibiliteit met HTTPS, TLS en VPN op sommige apparaten, maar kan af en toe afspeelproblemen of tragere netwerkprestaties veroorzaken</string>
+    <string name="network_settings">Netwerkinstellingen</string>
+    <string name="comments_disabled">Reacties zijn uitgeschakeld voor deze video</string>
+    <string name="prefer_sabr_live">SABR-livestreams</string>
+    <string name="prefer_sabr_live_desc">Experimentele SABR-livestreams. Schakel alleen in als u problemen hebt met reguliere livestreams.</string>
+    <plurals name="hours">
+        <item quantity="one">%s uur</item>
+        <item quantity="other">%s uur</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s seconde</item>
+        <item quantity="other">%s seconden</item>
+    </plurals>
 </resources>

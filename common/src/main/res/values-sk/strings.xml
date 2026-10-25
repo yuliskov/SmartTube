@@ -728,4 +728,40 @@
     <string name="channel_unblocked">Kanál odblokovaný</string>
     <string name="header_blocked_channels">Zablokované kanály</string>
     <string name="msg_no_blocked_channels">Žiadne zablokované kanály</string>
+    <string name="default_option">Predvolené</string>
+    <string name="player_unexpected_error">Neočakávaná chyba prehrávania</string>
+    <string name="remove_from_search_history">Odstrániť z histórie vyhľadávania</string>
+    <string name="sidebar_notification">Zobraziť upozornenie v postrannom paneli</string>
+    <string name="color_scheme_dark_blue_oled">Tmavo-modrá (OLED)</string>
+    <string name="preferred_dns">Preferovaný DNS</string>
+    <string name="player_time_stretching">Naťahovanie času zvuku</string>
+    <string name="player_time_stretching_desc">Zachová prirodzený hlas pri zmene rýchlosti. Na niektorých zariadeniach môže výrazne znížiť výkon.</string>
+    <string name="queue_respects_playback_mode">Fronta rešpektuje režim prehrávania</string>
+    <string name="ignore_short_segments">Ignorovať krátke segmenty</string>
+    <string name="install_bridge">Nainštalovať most ATV/Amazon</string>
+    <string name="fix_empty_subs_and_channels">Opraviť prázdne Odbery a Kanály</string>
+    <string name="local_backup_not_supported">Automatické zálohovanie na Android TV 11+ nie je podporované z dôvodu systémových obmedzení. Použite namiesto toho GDrive.</string>
+    <string name="rounded_card_corners">Zaoblené rohy kariet</string>
+    <string name="app_restore_desc">POZNÁMKA: ZIP so zálohou treba skopírovať do tohto priečinka ručne alebo v správcovi súborov, použite \'Otvoriť pomocou\'</string>
+    <string name="app_backup_desc">POZNÁMKA: Záloha sa vytvorí vo formáte ZIP</string>
+    <string name="add_video_to_watch_later">Pridať do Pozrieť neskôr</string>
+    <string name="remove_video_to_watch_later">Odstrániť z Pozrieť neskôr</string>
+    <string name="enable_conscrypt">Povoliť Conscrypt</string>
+    <string name="enable_conscrypt_desc">Zlepšuje kompatibilitu HTTPS, TLS a VPN na niektorých zariadeniach, ale môže občas spôsobiť problémy s prehrávaním alebo pomalší výkon siete</string>
+    <string name="network_settings">Nastavenia siete</string>
+    <string name="comments_disabled">Komentáre sú pre toto video vypnuté</string>
+    <string name="prefer_sabr_live">Živé vysielania SABR</string>
+    <string name="prefer_sabr_live_desc">Experimentálne živé vysielania SABR. Povoľte iba ak máte problémy s bežnými živými vysielaniami.</string>
+    <plurals name="hours">
+        <item quantity="one">%s hodina</item>
+        <item quantity="few">%s hodiny</item>
+        <item quantity="many">%s hodiny</item>
+        <item quantity="other">%s hodín</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s sekunda</item>
+        <item quantity="few">%s sekundy</item>
+        <item quantity="many">%s sekundy</item>
+        <item quantity="other">%s sekúnd</item>
+    </plurals>
 </resources>

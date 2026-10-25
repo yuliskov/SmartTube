@@ -748,4 +748,16 @@
   <string name="network_settings">Paramètres réseau</string>
   <string name="comments_disabled">Les commentaires sont désactivés pour cette vidéo</string>
   <string name="remove_video_to_watch_later">Supprimer de \"À regarder plus tard\"</string>
+    <string name="default_option">Par défaut</string>
+    <string name="preferred_dns">DNS préféré</string>
+    <string name="prefer_sabr_live">Diffusions en direct SABR</string>
+    <string name="prefer_sabr_live_desc">Diffusions en direct SABR expérimentales. Activez cette option uniquement si vous rencontrez des problèmes avec les diffusions en direct classiques.</string>
+    <plurals name="hours">
+        <item quantity="one">%s heure</item>
+        <item quantity="other">%s heures</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s seconde</item>
+        <item quantity="other">%s secondes</item>
+    </plurals>
 </resources>

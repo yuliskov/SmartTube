@@ -740,12 +740,24 @@
   <string name="player_unexpected_error">خطأ غير متوقع في التشغيل</string>
   <string name="remove_from_search_history">إزالة من سجل البحث</string>
   <string name="color_scheme_dark_blue_oled">أزرق داكن (OLED)</string>
+  <string name="default_option">الافتراضي</string>
+  <string name="preferred_dns">خادم DNS المفضل</string>
+  <string name="app_restore_desc">ملاحظة: يجب نسخ ملف zip الخاص بالنسخة الاحتياطية إلى هذا المجلد يدويًا أو عبر مدير الملفات، ثم استخدم \'فتح باستخدام\'</string>
+  <string name="app_backup_desc">ملاحظة: سيتم إنشاء النسخة الاحتياطية بصيغة zip</string>
+  <string name="add_video_to_watch_later">إضافة إلى مشاهدة لاحقًا</string>
+  <string name="remove_video_to_watch_later">إزالة من مشاهدة لاحقًا</string>
+  <string name="enable_conscrypt">تمكين Conscrypt</string>
+  <string name="enable_conscrypt_desc">يحسّن توافق HTTPS وTLS وVPN على بعض الأجهزة، ولكنه قد يتسبب أحيانًا في مشكلات في التشغيل أو بطء في أداء الشبكة</string>
+  <string name="network_settings">إعدادات الشبكة</string>
+  <string name="comments_disabled">التعليقات معطّلة لهذا الفيديو</string>
+  <string name="prefer_sabr_live">بث SABR المباشر</string>
+  <string name="prefer_sabr_live_desc">بث SABR مباشر تجريبي. فعّله فقط إذا واجهت مشكلات في البث المباشر العادي.</string>
   <plurals name="hours">
         <item quantity="one">%s ساعة</item>
         <item quantity="other">%s ساعة</item>
-    </plurals>
-    <plurals name="seconds">
-        <item quantity="one">%s ثانية</item>
-        <item quantity="other">%s ثانية</item>
-    </plurals>
+  </plurals>
+  <plurals name="seconds">
+      <item quantity="one">%s ثانية</item>
+      <item quantity="other">%s ثانية</item>
+  </plurals>
 </resources>

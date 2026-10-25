@@ -748,4 +748,16 @@
   <string name="audio_shift_sec">%s წმ</string>
   <string name="ui_hide_timeout_sec">%s წმ</string>
   <string name="screen_dimming_timeout_min">%s წთ</string>
+    <string name="default_option">ნაგულისხმევი</string>
+    <string name="preferred_dns">სასურველი DNS</string>
+    <string name="prefer_sabr_live">SABR პირდაპირი ეთერები</string>
+    <string name="prefer_sabr_live_desc">ექსპერიმენტული SABR პირდაპირი ეთერები. ჩართეთ მხოლოდ იმ შემთხვევაში, თუ ჩვეულებრივ პირდაპირ ეთერებთან პრობლემები გაქვთ.</string>
+    <plurals name="hours">
+        <item quantity="one">%s საათი</item>
+        <item quantity="other">%s საათი</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s წამი</item>
+        <item quantity="other">%s წამი</item>
+    </plurals>
 </resources>

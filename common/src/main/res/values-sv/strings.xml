@@ -748,6 +748,10 @@
   <string name="enable_conscrypt_desc">Förbättrar kompatibiliteten för HTTPS, TLS och VPN på vissa enheter, men kan ibland orsaka uppspelningsproblem eller försämra nätverksprestandan</string>
   <string name="network_settings">Nätverksinställningar</string>
   <string name="comments_disabled">Kommentarerna har inaktiverats för den här videon</string>
+  <string name="default_option">Standard</string>
+  <string name="preferred_dns">Önskad DNS</string>
+  <string name="prefer_sabr_live">SABR-livesändningar</string>
+  <string name="prefer_sabr_live_desc">Experimentella SABR-livesändningar. Aktivera endast om du har problem med vanliga livesändningar.</string>
   <plurals name="hours">
     <item quantity="one">%s timme</item>
     <item quantity="other">%s timmar</item>
