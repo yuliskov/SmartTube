@@ -31,6 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
-        appendInternetCensorship(settingsPresenter);
+        appendNetworkCategory(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
@@ -633,25 +634,30 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
-    private void appendInternetCensorship(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
+    private void appendNetworkCategory(AppDialogPresenter settingsPresenter) {
+        String title = getContext().getString(R.string.network_settings);
+        settingsPresenter.appendSingleButton(UiOptionItem.from(title, optionItem -> {
+            appendNetworkErrorFixing(settingsPresenter);
 
-        appendProxyManager(settingsPresenter, options);
+            appendProxyManager(settingsPresenter);
 
-        appendConscrypt(settingsPresenter, options);
+            appendConscrypt(settingsPresenter);
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.network_settings), options);
+            appendDNSCategory(settingsPresenter);
+
+            settingsPresenter.showDialog(title);
+        }));
     }
 
-    private void appendProxyManager(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
+    private void appendProxyManager(AppDialogPresenter settingsPresenter) {
         ProxyManager proxyManager = new ProxyManager(getContext());
 
         if (proxyManager.isProxySupported()) {
-            options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
+            settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
                     option -> {
                         // Proxy with authentication supported only by OkHttp
                         mPlayerTweaksData.setPlayerDataSource(
-                                option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : PlayerTweaksData.PLAYER_DATA_SOURCE_CRONET);
+                                option.isSelected() ? PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP : Utils.getFasterDataSource());
                         mGeneralData.setProxyEnabled(option.isSelected());
                         new WebProxyDialog(getContext()).enable(option.isSelected());
                         if (option.isSelected()) {
@@ -664,14 +670,56 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void appendConscrypt(AppDialogPresenter settingsPresenter, List<OptionItem> options) {
-        options.add(UiOptionItem.from(getContext().getString(R.string.enable_conscrypt),
+    private void appendConscrypt(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.enable_conscrypt),
                 getContext().getString(R.string.enable_conscrypt_desc),
                 option -> {
                     mNetworkData.setConscryptEnabled(option.isSelected());
                     mRestartApp = true;
                 },
                 mNetworkData.isConscryptEnabled()));
+    }
+
+    private void appendNetworkErrorFixing(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.disable_network_error_fixing),
+                getContext().getString(R.string.disable_network_error_fixing_desc),
+                option -> mPlayerTweaksData.setNetworkErrorFixingDisabled(option.isSelected()),
+                mPlayerTweaksData.isNetworkErrorFixingDisabled()));
+    }
+
+    private void appendDNSCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.default_option),
+                option -> {
+                    // OkHttp is the only engine that supports custom DNS
+                    mPlayerTweaksData.setPlayerDataSource(Utils.getFasterDataSource());
+                    mPlayerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_SYSTEM);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_SYSTEM));
+
+        options.add(UiOptionItem.from("IPv4 DNS",
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> {
+                    // OkHttp is the only engine that supports custom DNS
+                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    mPlayerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_IPV4));
+
+        options.add(UiOptionItem.from("Google DNS",
+                getContext().getString(R.string.prefer_ipv4_desc),
+                option -> {
+                    // OkHttp is the only engine that supports custom DNS
+                    mPlayerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_OKHTTP);
+                    mPlayerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_GOOGLE);
+                    mRestartApp = true;
+                },
+                mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_GOOGLE));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.preferred_dns), options);
     }
 
     private void enableChildMode(boolean enable) {
