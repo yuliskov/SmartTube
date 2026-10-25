@@ -746,4 +746,18 @@
   <string name="comments_disabled">Τα σχόλια είναι απενεργοποιημένα για αυτό το βίντεο</string>
   <string name="remove_from_search_history">Αφαίρεση από το ιστορικό αναζήτησης</string>
   <string name="player_unexpected_error">Απροσδόκητο σφάλμα αναπαραγωγής</string>
+    <string name="default_option">Προεπιλογή</string>
+    <string name="sidebar_notification">Εμφάνιση ειδοποίησης στην πλαϊνή στήλη</string>
+    <string name="color_scheme_dark_blue_oled">Σκούρο Μπλε (OLED)</string>
+    <string name="preferred_dns">Προτιμώμενο DNS</string>
+    <string name="prefer_sabr_live">Ζωντανές μεταδόσεις SABR</string>
+    <string name="prefer_sabr_live_desc">Πειραματικές ζωντανές μεταδόσεις SABR. Ενεργοποιήστε μόνο αν αντιμετωπίζετε προβλήματα με τις κανονικές ζωντανές μεταδόσεις.</string>
+    <plurals name="hours">
+        <item quantity="one">%s ώρα</item>
+        <item quantity="other">%s ώρες</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s δευτερόλεπτο</item>
+        <item quantity="other">%s δευτερόλεπτα</item>
+    </plurals>
 </resources>

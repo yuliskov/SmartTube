@@ -748,6 +748,10 @@
     <string name="enable_conscrypt_desc">Migliora la compatibilità con HTTPS, TLS e VPN su alcuni dispositivi, ma può causare occasionalmente problemi di riproduzione o prestazioni di rete inferiori</string>
     <string name="network_settings">Impostazioni di rete</string>
     <string name="comments_disabled">I commenti sono disabilitati per questo video</string>
+    <string name="default_option">Predefinito</string>
+    <string name="preferred_dns">DNS preferito</string>
+    <string name="prefer_sabr_live">Dirette SABR</string>
+    <string name="prefer_sabr_live_desc">Dirette SABR sperimentali. Attiva solo se hai problemi con le dirette normali.</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>

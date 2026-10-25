@@ -748,4 +748,20 @@
   <string name="network_settings">Ustawienia sieciowe</string>
   <string name="comments_disabled">Komentarze do tego wideo są wyłączone</string>
   <string name="remove_video_to_watch_later">Usuń z listy Do obejrzenia</string>
+    <string name="default_option">Domyślny</string>
+    <string name="preferred_dns">Preferowany DNS</string>
+    <string name="prefer_sabr_live">Transmisje na żywo SABR</string>
+    <string name="prefer_sabr_live_desc">Eksperymentalne transmisje na żywo SABR. Włącz tylko wtedy, gdy masz problemy ze zwykłymi transmisjami na żywo.</string>
+    <plurals name="hours">
+        <item quantity="one">%s godzina</item>
+        <item quantity="few">%s godziny</item>
+        <item quantity="many">%s godzin</item>
+        <item quantity="other">%s godziny</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s sekunda</item>
+        <item quantity="few">%s sekundy</item>
+        <item quantity="many">%s sekund</item>
+        <item quantity="other">%s sekundy</item>
+    </plurals>
 </resources>

@@ -749,4 +749,14 @@
   <string name="network_settings">网络设置</string>
   <string name="comments_disabled">此视频已关闭评论</string>
   <string name="remove_video_to_watch_later">从稍后观看移除</string>
+    <string name="default_option">默认</string>
+    <string name="preferred_dns">首选 DNS</string>
+    <string name="prefer_sabr_live">SABR 直播</string>
+    <string name="prefer_sabr_live_desc">实验性 SABR 直播。仅在常规直播出现问题时启用。</string>
+    <plurals name="hours">
+        <item quantity="other">%s 小时</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%s 秒</item>
+    </plurals>
 </resources>

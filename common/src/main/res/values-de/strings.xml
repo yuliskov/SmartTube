@@ -744,6 +744,14 @@
     <string name="enable_conscrypt_desc">Verbessert die HTTPS-, TLS- und VPN-Kompatibilität auf einigen Geräten, kann jedoch gelegentlich zu Wiedergabeproblemen oder einer verlangsamten Netzwerkleistung führen</string>
     <string name="network_settings">Netzwerkeinstellungen</string>
     <string name="comments_disabled">Kommentare sind für dieses Video deaktiviert</string>
+    <string name="remove_from_search_history">Aus Suchverlauf entfernen</string>
+    <string name="default_option">Standard</string>
+    <string name="player_unexpected_error">Unerwarteter Wiedergabefehler</string>
+    <string name="sidebar_notification">Benachrichtigung in der Seitenleiste anzeigen</string>
+    <string name="color_scheme_dark_blue_oled">Dunkelblau (OLED)</string>
+    <string name="preferred_dns">Bevorzugter DNS</string>
+    <string name="prefer_sabr_live">SABR-Livestreams</string>
+    <string name="prefer_sabr_live_desc">Experimentelle SABR-Livestreams. Nur aktivieren, wenn Probleme mit normalen Livestreams auftreten.</string>
     <plurals name="hours">
         <item quantity="one">%s Stunde</item>
         <item quantity="other">%s Stunden</item>
@@ -752,5 +760,4 @@
         <item quantity="one">%s Sekunde</item>
         <item quantity="other">%s Sekunden</item>
     </plurals>
-    <string name="remove_from_search_history">Aus Suchverlauf entfernen</string>
 </resources>

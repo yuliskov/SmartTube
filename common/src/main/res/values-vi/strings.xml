@@ -736,4 +736,26 @@
   <string name="ignore_short_segments">Bỏ qua các đoạn ngắn</string>
   <string name="card_unlocalized_titles">Tiêu đề video chưa được bản địa hóa</string>
   <string name="remove_video_to_watch_later">Xóa khỏi Xem sau</string>
+    <string name="default_option">Mặc định</string>
+    <string name="player_unexpected_error">Lỗi phát không mong muốn</string>
+    <string name="create_playlist_note">LƯU Ý: Danh sách phát sẽ không hiển thị trong ứng dụng YouTube</string>
+    <string name="player_chapter_notification2">Chuyển sang chương tiếp theo bằng cách nhấp vào thông báo</string>
+    <string name="preferred_dns">DNS ưu tiên</string>
+    <string name="premium_users_only">Chỉ dành cho người dùng Premium. Khắc phục danh sách định dạng video không đầy đủ</string>
+    <string name="dont_resize_video_to_fit_dialog">Không thay đổi kích thước video để vừa hộp thoại</string>
+    <string name="suggestions_horizontally_scrolled">Đề xuất cuộn ngang</string>
+    <string name="stable_restore">Khôi phục bản ổn định (toàn bộ dữ liệu sẽ bị mất)</string>
+    <string name="player_time_stretching_desc">Giữ giọng nói tự nhiên khi thay đổi tốc độ. Có thể làm giảm hiệu năng đáng kể trên một số thiết bị.</string>
+    <string name="queue_respects_playback_mode">Hàng đợi tuân theo chế độ phát</string>
+    <string name="install_bridge">Cài đặt cầu nối ATV/Amazon</string>
+    <string name="fix_empty_subs_and_channels">Sửa lỗi Kênh đăng ký và Kênh bị trống</string>
+    <string name="rounded_card_corners">Bo tròn góc thẻ</string>
+    <string name="prefer_sabr_live">Phát trực tiếp SABR</string>
+    <string name="prefer_sabr_live_desc">Phát trực tiếp SABR thử nghiệm. Chỉ bật nếu bạn gặp sự cố với phát trực tiếp thông thường.</string>
+    <plurals name="hours">
+        <item quantity="other">%s giờ</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%s giây</item>
+    </plurals>
 </resources>

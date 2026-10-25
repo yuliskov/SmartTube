@@ -748,4 +748,16 @@
   <string name="network_settings">Axustes de rede</string>
   <string name="remove_video_to_watch_later">Eliminar de Ver máis tarde</string>
   <string name="comments_disabled">Os comentarios están desactivados para este vídeo</string>
+    <string name="default_option">Predeterminado</string>
+    <string name="preferred_dns">DNS preferido</string>
+    <string name="prefer_sabr_live">Emisións en directo SABR</string>
+    <string name="prefer_sabr_live_desc">Emisións en directo SABR experimentais. Actívao só se tes problemas coas emisións en directo normais.</string>
+    <plurals name="hours">
+        <item quantity="one">%s hora</item>
+        <item quantity="other">%s horas</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s segundo</item>
+        <item quantity="other">%s segundos</item>
+    </plurals>
 </resources>

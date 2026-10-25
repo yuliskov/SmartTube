@@ -748,4 +748,16 @@
   <string name="enable_conscrypt_desc">Mejora la compatibilidad con HTTPS, TLS y VPN en algunos dispositivos, pero en ocasiones puede causar problemas de reproducción o ralentizar la red</string>
   <string name="network_settings">Configuración de red</string>
   <string name="comments_disabled">Los comentarios están desactivados para este video</string>
+    <string name="default_option">Predeterminado</string>
+    <string name="preferred_dns">DNS preferido</string>
+    <string name="prefer_sabr_live">Transmisiones en vivo SABR</string>
+    <string name="prefer_sabr_live_desc">Transmisiones en vivo SABR experimentales. Actívalo solo si tienes problemas con las transmisiones en vivo normales.</string>
+    <plurals name="hours">
+        <item quantity="one">%s hora</item>
+        <item quantity="other">%s horas</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%s segundo</item>
+        <item quantity="other">%s segundos</item>
+    </plurals>
 </resources>
