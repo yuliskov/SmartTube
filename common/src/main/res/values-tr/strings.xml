@@ -60,6 +60,7 @@
     <string name="dialog_account_none">Hiçbiri</string>
     <string name="dialog_remove_account">Oturumu kapat</string>
     <string name="dialog_add_account">Oturum aç</string>
+    <string name="default_option">Varsayılan</string>
     <string name="default_lang">Varsayılan</string>
     <string name="original_lang">Orijinal</string>
     <string name="dialog_select_language">Uygulama dili</string>
@@ -678,6 +679,7 @@
     <string name="fullscreen_mode">Tam ekran modu (sistem çubukları olmadan)</string>
     <string name="player_only_mode">Video uygulama dışında açılırsa yalnızca oynatıcıyı göster</string>
     <string name="pinned_channel_rows">Sabitlenmiş kanalı satır olarak göster</string>
+    <string name="preferred_dns">Tercih edilen DNS</string>
     <string name="prefer_google_dns">Google DNS tercih et</string>
     <string name="prefer_ipv4">IPv4 DNS tercih et</string>
     <string name="prefer_ipv4_desc">Uygulamanın hiç çalışmadığı durumları düzeltebilir.\nNot: Takılmalara ve çökmelere neden olabilir (özellikle Android 8 cihazlarda ya da Dune HD\'de)</string>
@@ -690,7 +692,7 @@
     <string name="calm_msg">Sorunu düzeltiyoruz. Zaman zaman güncellemeleri kontrol edin</string>
     <string name="without_picture">Resimsiz</string>
     <string name="video_disabled">Video devre dışı</string>
-    <string name="applying_fix">Oynatıcıyı kapatmayın. Düzeltme uygulanıyor...</string>
+    <string name="applying_fix">Oynatıcıyı kapatmayın. Düzeltme uygulanıyor…</string>
     <string name="hide_mixes">Karışımları gizle</string>
     <string name="player_global_focus_desc">Bu özellik, oynatıcı düğmeleri sıraları arasında gezinirken hangi oynatıcı düğmesinin odaklanacağını etkiler</string>
     <string name="disable_network_error_fixing">Otomatik ağ hatası düzeltmeyi devre dışı bırak</string>
@@ -746,6 +748,8 @@
     <string name="enable_conscrypt_desc">Bazı cihazlarda HTTPS, TLS ve VPN uyumluluğunu artırır, ancak bazen oynatma sorunlarına veya ağın yavaşlamasına neden olabilir</string>
     <string name="network_settings">Ağ ayarları</string>
     <string name="comments_disabled">Bu videoda yorumlar devre dışı bırakıldı</string>
+    <string name="prefer_sabr_live">SABR canlı yayınları</string>
+    <string name="prefer_sabr_live_desc">Deneysel SABR canlı yayınları. Yalnızca normal canlı yayınlarda sorun yaşıyorsanız etkinleştirin.</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

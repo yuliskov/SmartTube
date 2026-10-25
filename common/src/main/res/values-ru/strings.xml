@@ -59,6 +59,7 @@
     <string name="dialog_account_none">Не выбран</string>
     <string name="dialog_remove_account">Выйти из аккаунта</string>
     <string name="dialog_add_account">Войти в аккаунт</string>
+    <string name="default_option">По умолчанию</string>
     <string name="default_lang">По умолчанию</string>
     <string name="original_lang">Оригинальный</string>
     <string name="dialog_select_language">Язык</string>
@@ -671,6 +672,7 @@
     <string name="fullscreen_mode">Полноэкранный режим (без системных панелей)</string>
     <string name="player_only_mode">Показывать только плеер, если видео открыто вне приложения</string>
     <string name="pinned_channel_rows">Отображать закрепленный канал в виде строк</string>
+    <string name="preferred_dns">Предпочитаемый DNS</string>
     <string name="prefer_google_dns">Предпочитать Google DNS</string>
     <string name="prefer_ipv4">Предпочитать IPv4 DNS</string>
     <string name="prefer_ipv4_desc">Можеть исправить случаи, когда приложение вообще не работает.\nВнимание. На некоторых устройствах могут быть вылеты приложения (особенно на Android 8 и приставке Dune HD)</string>
@@ -736,6 +738,8 @@
     <string name="enable_conscrypt_desc">Улучшает совместимость HTTPS, TLS и VPN на некоторых устройствах, но иногда может вызывать проблемы с воспроизведением или замедление сети</string>
     <string name="network_settings">Настройки сети</string>
     <string name="comments_disabled">Комментарии отключены для этого видео</string>
+    <string name="prefer_sabr_live">Прямые трансляции SABR</string>
+    <string name="prefer_sabr_live_desc">Экспериментальные прямые трансляции SABR. Включайте, только если возникают проблемы с обычными прямыми трансляциями.</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>
