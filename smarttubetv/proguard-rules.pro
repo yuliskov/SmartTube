@@ -26,9 +26,20 @@
 -keepattributes *Annotation*
 #-keepattributes InnerClasses
 
-#-keep public class com.liskovsoft.youtubeapi.** { *; }
-#-keep class okhttp3.**{*;}
-#-keep interface okhttp3.** { *; }
+# Fork: JSON responses are bound reflectively (@JsonPath / Gson). -dontobfuscate keeps names,
+# so we only need to stop R8 removing reflectively-accessed members of these API/model classes.
+-keep class com.liskovsoft.youtubeapi.** { *; }
+-keep class com.liskovsoft.googleapi.** { *; }
+-keep class com.liskovsoft.googlecommon.** { *; }
+-keep class com.liskovsoft.mediaserviceinterfaces.** { *; }
+
+# Retrofit builds API impls via reflection/proxies; Gson/JsonPath read fields reflectively
+-keepclasseswithmembers,allowobfuscation interface * { @retrofit2.http.* <methods>; }
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keepclassmembers,allowobfuscation class * { @com.google.gson.annotations.SerializedName <fields>; }
+
+# j2v8: JS engine invoked over JNI; its callbacks are resolved by name from native code
+-keep class com.eclipsesource.v8.** { *; }
 
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn com.jayway.jsonpath.**

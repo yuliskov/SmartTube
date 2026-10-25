@@ -130,7 +130,7 @@ jobs:
         run: |
           OUT=smarttubetv/build/outputs/apk/stbeta/release
           mkdir dist
-          for abi in armeabi-v7a arm64-v8a x86 universal; do
+          for abi in armeabi-v7a arm64-v8a x86; do
             cp "$OUT/SmartTube_beta_${NAME}_${abi}.apk" "dist/smarttube_beta_${abi}.apk"
           done
 
