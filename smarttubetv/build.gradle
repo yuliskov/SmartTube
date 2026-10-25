@@ -116,8 +116,10 @@ android {
     
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            // Keep playback's reflective/JNI dependencies intact until shrinking
+            // has been validated on a device with a release build.
+            minifyEnabled false
+            shrinkResources false
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
