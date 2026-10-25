@@ -492,6 +492,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendDeveloperCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_sabr_live),
+                getContext().getString(R.string.prefer_sabr_live_desc),
+                option -> mPlayerTweaksData.setSabrLiveEnabled(option.isSelected()),
+                mPlayerTweaksData.isSabrLiveEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
                 getContext().getString(R.string.playback_notifications_fix_desc),
                 option -> mPlayerTweaksData.setPlaybackNotificationsDisabled(option.isSelected()),
@@ -558,11 +563,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.force_legacy_codecs_desc),
                 option -> mPlayerData.setLegacyCodecsForced(option.isSelected()),
                 mPlayerData.isLegacyCodecsForced()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.prefer_sabr_live),
-                getContext().getString(R.string.prefer_sabr_live_desc),
-                option -> mPlayerTweaksData.setSabrLiveEnabled(option.isSelected()),
-                mPlayerTweaksData.isSabrLiveEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
                 getContext().getString(R.string.live_stream_fix_desc),
