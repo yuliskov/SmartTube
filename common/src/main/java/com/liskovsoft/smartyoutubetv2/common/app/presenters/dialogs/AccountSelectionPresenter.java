@@ -25,6 +25,7 @@ public class AccountSelectionPresenter extends BasePresenter<AccountSelectionVie
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInService mSignInService;
+    private static Runnable sPendingSwitch; // static: survives unhold() of the presenter
 
     public AccountSelectionPresenter(Context context) {
         super(context);
@@ -90,18 +91,7 @@ public class AccountSelectionPresenter extends BasePresenter<AccountSelectionVie
             getView().close();
         }
 
-        boolean isAccountChanged = account != null ? !account.isSelected() : mSignInService.getSelectedAccount() != null;
-        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-
-        if (isAccountChanged && playbackPresenter.getView() != null) {
-            // Start a new session: the previous video (e.g. playing in background or PIP) shouldn't
-            // keep running and end up in the watch history of the newly selected account.
-            // Switch after a delay to let the player save its last position under the previous account.
-            playbackPresenter.forceFinish();
-            Utils.postDelayed(() -> selectAccount(account), SWITCH_ACCOUNT_DELAY_MS);
-        } else {
-            selectAccount(account);
-        }
+        switchAccount(account);
     }
 
     public void onAddAccountClicked() {
@@ -127,8 +117,29 @@ public class AccountSelectionPresenter extends BasePresenter<AccountSelectionVie
 
         int nextIndex = index + 1;
         // null == 'without account'
-        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
+        switchAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
         //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
+    }
+
+    /**
+     * Manual account switch by the user. Starts a new session: the previous video (e.g. playing in background or PIP)
+     * shouldn't keep running and end up in the watch history of the newly selected account.
+     */
+    public void switchAccount(Account account) {
+        Utils.removeCallbacks(sPendingSwitch);
+        sPendingSwitch = null;
+
+        boolean isAccountChanged = account != null ? !account.isSelected() : mSignInService.getSelectedAccount() != null;
+        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+
+        if (isAccountChanged && playbackPresenter.getView() != null) {
+            playbackPresenter.forceFinish();
+            // Switch after a delay to let the player save its last position under the previous account
+            sPendingSwitch = () -> selectAccount(account);
+            Utils.postDelayed(sPendingSwitch, SWITCH_ACCOUNT_DELAY_MS);
+        } else {
+            selectAccount(account);
+        }
     }
 
     public void selectAccount(Account account) {
