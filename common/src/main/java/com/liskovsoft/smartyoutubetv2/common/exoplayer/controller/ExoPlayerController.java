@@ -151,7 +151,9 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
      */
     @Override
     public long getLiveDurationMs() {
-        return mSabrLiveManifest != null ? mSabrLiveManifest.getLiveEdgeMs() : -1;
+        long liveEdgeMs = mSabrLiveManifest != null ? mSabrLiveManifest.getLiveEdgeMs() : -1;
+        // NOTE: liveEdgeMs could be -1 during initial video loading. Use fallback duration.
+        return liveEdgeMs != -1 ? liveEdgeMs : getVideo().getLiveDurationMs();
     }
 
     @Override
@@ -197,7 +199,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             return;
         }
 
-        // Url list videos at load stage has undefined (-1) length. So, we need to remove length check.
+        // Url list videos at load stage has undefined (-1) length
         if (mPlayer != null && positionMs >= 0 && positionMs <= getDurationMs()) {
             mPlayer.seekTo(positionMs);
         }
@@ -209,7 +211,18 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         }
 
         long duration = mPlayer.getDuration();
-        return duration != C.TIME_UNSET ? duration : -1;
+
+        if (duration == C.TIME_UNSET) {
+            duration = -1;
+        }
+
+        if (duration != -1 && duration <= Video.MAX_LIVE_DURATION_MS) {
+            return duration;
+        }
+
+        long liveDurationMs = getLiveDurationMs();
+
+        return liveDurationMs != -1 ? liveDurationMs : duration;
     }
 
     public void setPlayWhenReady(boolean play) {
@@ -572,6 +585,12 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         long startPositionMs = mSabrLiveSeekBlocked ? getLiveDurationMs() : mSabrLiveManifest.getLiveStartPositionMs();
 
         if (startPositionMs == -1) { // not yet. Try on the next event
+            return;
+        }
+
+        // When we are dealing with SABR live that doesn't exceed 24 hours in length, we can set the duration directly via setPositionMs()
+        if (getVideo().isFullLive()) {
+            mSabrLiveStartPending = false;
             return;
         }
 
