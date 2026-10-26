@@ -6,6 +6,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class AccountSelectionPresenter extends BasePresenter<AccountSelectionView> {
     private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
+    private static final long SWITCH_ACCOUNT_DELAY_MS = 1_500;
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInService mSignInService;
@@ -84,10 +86,21 @@ public class AccountSelectionPresenter extends BasePresenter<AccountSelectionVie
     }
 
     public void onAccountClicked(Account account) {
-        selectAccount(account);
-
         if (getView() != null) {
             getView().close();
+        }
+
+        boolean isAccountChanged = account != null ? !account.isSelected() : mSignInService.getSelectedAccount() != null;
+        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+
+        if (isAccountChanged && playbackPresenter.getView() != null) {
+            // Start a new session: the previous video (e.g. playing in background or PIP) shouldn't
+            // keep running and end up in the watch history of the newly selected account.
+            // Switch after a delay to let the player save its last position under the previous account.
+            playbackPresenter.forceFinish();
+            Utils.postDelayed(() -> selectAccount(account), SWITCH_ACCOUNT_DELAY_MS);
+        } else {
+            selectAccount(account);
         }
     }
 
