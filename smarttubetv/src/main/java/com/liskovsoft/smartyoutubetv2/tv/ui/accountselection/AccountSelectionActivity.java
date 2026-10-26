@@ -39,6 +39,11 @@ public class AccountSelectionActivity extends LeanbackActivity implements Accoun
 
         ViewCompat.setBackground(findViewById(R.id.account_selection_root), createBackground());
 
+        ImageView logo = findViewById(R.id.account_selection_logo);
+        if (logo.getDrawable() == null) {
+            logo.setVisibility(View.GONE);
+        }
+
         mAccountList = findViewById(R.id.account_selection_list);
         findViewById(R.id.account_selection_signed_out).setOnClickListener(v -> mPresenter.onAccountClicked(null));
 
