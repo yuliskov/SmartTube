@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="168dp"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:defaultFocusHighlightEnabled="false"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    tools:targetApi="o">
+
+    <!-- White ring around the avatar when the tile is focused -->
+    <FrameLayout
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:background="@drawable/account_selection_avatar_ring"
+        android:duplicateParentState="true"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/account_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/account_selection_avatar_circle"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/browse_title_account" />
+
+        <TextView
+            android:id="@+id/account_add_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="+"
+            android:textColor="@android:color/white"
+            android:textSize="64sp"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/account_selection_name"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/account_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/account_selection_subtitle"
+        android:textSize="13sp" />
+
+</LinearLayout>
