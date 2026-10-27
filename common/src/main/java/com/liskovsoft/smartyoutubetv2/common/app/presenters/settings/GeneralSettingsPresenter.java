@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
 
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
@@ -450,7 +452,99 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.setChannelUpDownAction(option.isSelected() ? GeneralData.ACTION_SEARCH : GeneralData.ACTION_UNDEFINED),
                 mGeneralData.getChannelUpDownAction() == GeneralData.ACTION_SEARCH));
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping_options), options);
+
+        settingsPresenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.key_remapping_buttons),
+                option -> {
+                    AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+                    appendProgramKeysCategory(dialog);
+                    dialog.showDialog(getContext().getString(R.string.key_remapping_buttons));
+                }));
+    }
+
+    /**
+     * 'Key Remapping Buttons' menu: Program keys (Red/Green/Yellow/Blue).<br/>
+     * Every key is a regular button (no checkboxes) that opens the action selector.
+     */
+    private void appendProgramKeysCategory(AppDialogPresenter settingsPresenter) {
+        for (int[] pair : new int[][] {
+                {R.string.key_program_red, 0},
+                {R.string.key_program_green, 1},
+                {R.string.key_program_yellow, 2},
+                {R.string.key_program_blue, 3}}) {
+            int titleResId = pair[0];
+            IntSupplier getter;
+            IntConsumer setter;
+
+            switch (pair[1]) {
+                case 1:
+                    getter = mGeneralData::getProgramGreenAction;
+                    setter = mGeneralData::setProgramGreenAction;
+                    break;
+                case 2:
+                    getter = mGeneralData::getProgramYellowAction;
+                    setter = mGeneralData::setProgramYellowAction;
+                    break;
+                case 3:
+                    getter = mGeneralData::getProgramBlueAction;
+                    setter = mGeneralData::setProgramBlueAction;
+                    break;
+                default:
+                    getter = mGeneralData::getProgramRedAction;
+                    setter = mGeneralData::setProgramRedAction;
+                    break;
+            }
+
+            settingsPresenter.appendSingleButton(UiOptionItem.from(
+                    getContext().getString(titleResId) + " -> " + getProgramKeyActionName(getter.getAsInt()),
+                    option -> showProgramKeyDialog(titleResId, getter, setter)));
+        }
+    }
+
+    private String getProgramKeyActionName(int action) {
+        int resId;
+
+        switch (action) {
+            case GeneralData.ACTION_WATCH_LATER:
+                resId = R.string.action_watch_later_toggle;
+                break;
+            case GeneralData.ACTION_MENU:
+                resId = R.string.action_menu_button;
+                break;
+            case GeneralData.ACTION_SPEED_UP:
+                resId = R.string.action_speed_up;
+                break;
+            case GeneralData.ACTION_SPEED_DOWN:
+                resId = R.string.action_speed_down;
+                break;
+            default:
+                resId = R.string.key_not_assigned;
+                break;
+        }
+
+        return getContext().getString(resId);
+    }
+
+    private void showProgramKeyDialog(int titleResId, IntSupplier getter, IntConsumer setter) {
+        AppDialogPresenter dialog = AppDialogPresenter.instance(getContext());
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.action_watch_later_toggle, GeneralData.ACTION_WATCH_LATER},
+                {R.string.action_menu_button, GeneralData.ACTION_MENU},
+                {R.string.action_speed_up, GeneralData.ACTION_SPEED_UP},
+                {R.string.action_speed_down, GeneralData.ACTION_SPEED_DOWN},
+                {R.string.key_not_assigned, GeneralData.ACTION_UNDEFINED}}) {
+            options.add(UiOptionItem.from(
+                    getContext().getString(pair[0]),
+                    option -> setter.accept(pair[1]),
+                    getter.getAsInt() == pair[1]));
+        }
+
+        dialog.appendRadioCategory(getContext().getString(titleResId), options);
+        dialog.showDialog();
     }
 
     private void appendScreenDimmingCategory(AppDialogPresenter settingsPresenter) {

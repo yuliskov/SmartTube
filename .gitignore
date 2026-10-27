@@ -71,3 +71,8 @@ tmp/
 fabric.properties
 *BAK.java
 hs_err_pid*.log
+
+# local signing key/credentials
+keystore.properties
+*.jks
+*.keystore
