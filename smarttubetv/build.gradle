@@ -123,7 +123,7 @@ android {
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            def project = "SmartTube"
+            def project = variant.productFlavors[-1].name == "ststable" ? "YusTube" : "SmartTube"
             def flavor = variant.productFlavors[-1].name.substring(2) // remove st prefix
             def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
@@ -163,8 +163,9 @@ android {
             applicationId "org.smarttube.beta"
             targetSdkVersion project.properties.compileSdkVersion
         }
+        // YusTube: the "stable" flavor is the YusTube build (own package, installs next to SmartTube)
         ststable {
-            applicationId "org.smarttube.stable"
+            applicationId "com.yustube.tv"
             targetSdkVersion project.properties.compileSdkVersion
         }
         stfdroid {

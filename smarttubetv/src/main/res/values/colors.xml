@@ -46,6 +46,13 @@
     <color name="scheme_blue_background">#33B5E5</color>
     <color name="scheme_blue_background_dark">#207EA1</color>
 
+    <!-- YusTube color scheme (YouTube TV look) -->
+    <color name="yus_background">#0F0F0F</color>
+    <color name="yus_surface">#272727</color>
+    <color name="yus_red">#FF0033</color>
+    <color name="yus_progress_buffered">#80FFFFFF</color>
+    <color name="yus_text_secondary">#AAAAAA</color>
+
     <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
     <color name="primary_dark">#00796B</color>

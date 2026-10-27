@@ -1,0 +1,125 @@
+name: YusTube
+
+# Builds YusTube (SmartTube with a YouTube TV look) and publishes it as the "latest" release.
+# Once a day it also pulls the newest SmartTube code from upstream and rebuilds when something changed.
+
+on:
+  push:
+    branches: [ "yustube" ]
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yustube
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: yustube
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Sync with upstream SmartTube
+        id: sync
+        if: ${{ github.event_name != 'push' }}
+        run: |
+          git config user.name "YusTube bot"
+          git config user.email "yustube-bot@users.noreply.github.com"
+          git remote add upstream https://github.com/yuliskov/SmartTube.git
+          git fetch upstream master
+          if git merge-base --is-ancestor upstream/master HEAD; then
+            echo "Already up to date with SmartTube"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git merge --no-edit upstream/master
+            git submodule update --init --recursive
+            git push origin HEAD:yustube
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop when nothing changed
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ steps.sync.outputs.changed }}" != "true" ]; then
+            echo "build=false" >> $GITHUB_OUTPUT
+          else
+            echo "build=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up JDK 17
+        if: ${{ steps.gate.outputs.build == 'true' }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Set version
+        if: ${{ steps.gate.outputs.build == 'true' }}
+        id: version
+        run: |
+          BASE_CODE=$(grep -m1 "versionCode" smarttubetv/build.gradle | awk '{print $2}')
+          BASE_NAME=$(grep -m1 "versionName" smarttubetv/build.gradle | awk -F'"' '{print $2}')
+          CODE=$(( BASE_CODE * 1000 + GITHUB_RUN_NUMBER % 1000 ))
+          NAME="${BASE_NAME}-yus${GITHUB_RUN_NUMBER}"
+          sed -i "0,/versionCode $BASE_CODE/s//versionCode $CODE/" smarttubetv/build.gradle
+          sed -i "0,/versionName \"$BASE_NAME\"/s//versionName \"$NAME\"/" smarttubetv/build.gradle
+          echo "code=$CODE" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: Configure signing
+        if: ${{ steps.gate.outputs.build == 'true' }}
+        run: |
+          # The signing key lives in the YUSTUBE_KEYSTORE secret (base64 of the .jks file), never in the repo
+          echo "${{ secrets.YUSTUBE_KEYSTORE }}" | base64 --decode > ${{ runner.temp }}/yustube-release.jks
+          echo "storeFile=${{ runner.temp }}/yustube-release.jks" > keystore.properties
+          echo "storePassword=yustube-public" >> keystore.properties
+          echo "keyAlias=yustube" >> keystore.properties
+          echo "keyPassword=yustube-public" >> keystore.properties
+          # YusTube does not report crashes to SmartTube's Firebase project
+          rm -f smarttubetv/google-services.json
+
+      - name: Build APK
+        if: ${{ steps.gate.outputs.build == 'true' }}
+        run: |
+          chmod +x gradlew
+          ./gradlew clean assembleStstableRelease
+
+      - name: Publish release
+        if: ${{ steps.gate.outputs.build == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          OUT=smarttubetv/build/outputs/apk/ststable/release
+          mkdir -p dist
+          cp $OUT/*_universal.apk dist/YusTube.apk
+          cp $OUT/*_arm64-v8a.apk dist/YusTube-arm64.apk
+          cp $OUT/*_armeabi-v7a.apk dist/YusTube-armv7.apk
+          BASE=https://github.com/${{ github.repository }}/releases/download/latest
+          cat > dist/yustube.json <<EOF
+          {
+            "package": {
+              "downloadUrl": "$BASE/YusTube.apk",
+              "downloadUrlList_arm64-v8a": ["$BASE/YusTube-arm64.apk", "$BASE/YusTube.apk"],
+              "downloadUrlList_armeabi-v7a": ["$BASE/YusTube-armv7.apk", "$BASE/YusTube.apk"]
+            },
+            "${{ steps.version.outputs.name }}": {
+              "versionCode": ${{ steps.version.outputs.code }},
+              "changelog": ["YusTube ${{ steps.version.outputs.name }}"]
+            }
+          }
+          EOF
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest dist/* \
+            --target "$(git rev-parse HEAD)" \
+            --title "YusTube ${{ steps.version.outputs.name }}" \
+            --notes "YusTube, built from SmartTube (GPL-3.0, https://github.com/yuliskov/SmartTube). Install YusTube.apk."

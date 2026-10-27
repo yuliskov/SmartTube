@@ -39,6 +39,7 @@ public class VideoCardPresenter extends LongClickPresenter {
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
+    private int mFocusOutlineRes;
     private int mCardPreviewType;
     private int mThumbQuality;
     private int mWidth;
@@ -56,6 +57,17 @@ public class VideoCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
+
+        // YusTube theme: keep the info area dark and outline the focused thumbnail instead
+        int selectedTextColorRes = Helpers.getThemeAttr(context, R.attr.cardSelectedTextColor);
+        if (selectedTextColorRes != 0) {
+            mSelectedTextColor = ContextCompat.getColor(context, selectedTextColorRes);
+        }
+        int focusOutlineRes = Helpers.getThemeAttr(context, R.attr.cardFocusOutline);
+        if (focusOutlineRes != 0 && VERSION.SDK_INT >= 23) {
+            mFocusOutlineRes = focusOutlineRes;
+            mSelectedBackgroundColor = mDefaultBackgroundColor;
+        }
 
         mCardPreviewType = getCardPreviewType(context);
         mThumbQuality = getThumbQuality(context);
@@ -104,6 +116,13 @@ public class VideoCardPresenter extends LongClickPresenter {
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
             infoField.setBackgroundColor(backgroundColor);
+        }
+
+        if (mFocusOutlineRes != 0 && VERSION.SDK_INT >= 23) {
+            View imageWrapper = view.findViewById(R.id.main_image_wrapper);
+            if (imageWrapper != null) {
+                imageWrapper.setForeground(selected ? ContextCompat.getDrawable(view.getContext(), mFocusOutlineRes) : null);
+            }
         }
 
         TextView titleText = view.findViewById(R.id.title_text);

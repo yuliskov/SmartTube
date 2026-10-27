@@ -7,6 +7,9 @@
     <attr name="cardSelectedBackground" format="reference"/>
     <attr name="cardProgressStyle" format="reference"/>
     <attr name="appLogo" format="reference"/>
+    <!-- YusTube: white text on focused video cards and a white outline around the thumbnail -->
+    <attr name="cardSelectedTextColor" format="reference"/>
+    <attr name="cardFocusOutline" format="reference"/>
 
     <!-- Increase spacing between items in GridView -->
     <style name="GridViewStyle" parent="Widget.Leanback.GridItems.VerticalGridView">
@@ -248,4 +251,37 @@
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
     </style>
     <!--  End Color scheme: Dark Blue (OLED)  -->
+    <!--  Color scheme: YusTube (YouTube TV look)  -->
+    <style name="App.Theme.YusTube.Player" parent="App.Theme.Leanback.Player">
+        <item name="android:windowBackground">@color/yus_background</item>
+        <item name="playbackProgressPrimaryColor">@color/yus_red</item>
+        <item name="playbackProgressSecondaryColor">@color/yus_progress_buffered</item>
+        <item name="playbackControlsIconHighlightColor">@color/white</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.YusTube</item>
+        <item name="shelfBackground">@color/yus_background</item>
+        <item name="cardDefaultBackground">@color/yus_background</item>
+        <item name="cardSelectedTextColor">@color/white</item>
+        <item name="cardFocusOutline">@drawable/yus_card_focus_outline</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/yus_red</item>
+    </style>
+    <style name="App.Theme.YusTube.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/yus_background</item>
+        <item name="brandColor">@color/yus_background</item>
+        <item name="brandAccentColor">@color/yus_surface</item>
+        <item name="cardProgressStyle">@style/ProgressBarHorizontal.YusTube</item>
+        <item name="shelfBackground">@color/yus_background</item>
+        <item name="cardDefaultBackground">@color/yus_background</item>
+        <item name="cardSelectedTextColor">@color/white</item>
+        <item name="cardFocusOutline">@drawable/yus_card_focus_outline</item>
+        <item name="appLogo">@mipmap/app_logo</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/yus_red</item>
+    </style>
+    <style name="App.Theme.YusTube.Preferences" parent="App.Theme.Leanback.Preferences">
+        <item name="android:colorPrimary" tools:targetApi="21">@color/yus_surface</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/yus_red</item>
+    </style>
+    <style name="ProgressBarHorizontal.YusTube" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/yus_progress_bar</item>
+    </style>
+    <!--  End Color scheme: YusTube  -->
 </resources>

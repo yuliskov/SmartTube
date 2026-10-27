@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- YusTube: white outline drawn over the focused card thumbnail (YouTube TV look) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <solid android:color="@android:color/transparent"/>
+    <stroke android:width="3dp" android:color="@color/white"/>
+    <corners android:radius="@dimen/lb_rounded_rect_corner_radius"/>
+</shape>
