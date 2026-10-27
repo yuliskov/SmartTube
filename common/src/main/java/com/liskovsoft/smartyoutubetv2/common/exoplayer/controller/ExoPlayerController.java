@@ -152,6 +152,10 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     @Override
     public long getLiveDurationMs() {
         long liveEdgeMs = mSabrLiveManifest != null ? mSabrLiveManifest.getLiveEdgeMs() : -1;
+        // Skip the fallback duration because SABR uses absolute values for clipped streams
+        if (mSabrLiveManifest != null && !getVideo().isFullLive()) {
+            return liveEdgeMs;
+        }
         // NOTE: liveEdgeMs could be -1 during initial video loading. Use fallback duration.
         return liveEdgeMs != -1 ? liveEdgeMs : getVideo().getLiveDurationMs();
     }
@@ -199,9 +203,12 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             return;
         }
 
-        // Url list videos at load stage has undefined (-1) length
-        if (mPlayer != null && positionMs >= 0 && positionMs <= getDurationMs()) {
+        // NOTE: Url list videos at load stage has undefined (-1) duration
+        // NOTE: Avoid to check live streams duration here as ones may have undefined (-1) duration on loading stage.
+        if (mPlayer != null && positionMs >= 0) {
             mPlayer.seekTo(positionMs);
+            // When we are dealing with SABR live that doesn't exceed 24 hours in length, we can set the duration right here
+            mSabrLiveStartPending = false;
         }
     }
 
@@ -585,12 +592,6 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         long startPositionMs = mSabrLiveSeekBlocked ? getLiveDurationMs() : mSabrLiveManifest.getLiveStartPositionMs();
 
         if (startPositionMs == -1) { // not yet. Try on the next event
-            return;
-        }
-
-        // When we are dealing with SABR live that doesn't exceed 24 hours in length, we can set the duration directly via setPositionMs()
-        if (getVideo().isFullLive()) {
-            mSabrLiveStartPending = false;
             return;
         }
 
