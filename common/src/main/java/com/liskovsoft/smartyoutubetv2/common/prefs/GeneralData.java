@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.content.Context;
+import android.view.KeyEvent;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -613,6 +614,25 @@ public class GeneralData implements ProfileChangeListener {
     public void setProgramBlueAction(int action) {
         mProgramBlueAction = action;
         persistState();
+    }
+
+    /**
+     * Action assigned to the given Program key (Red/Green/Yellow/Blue).<br/>
+     * <code>ACTION_UNDEFINED</code> when the key isn't a Program key or has no action assigned.
+     */
+    public int getProgramKeyAction(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_PROG_RED:
+                return mProgramRedAction;
+            case KeyEvent.KEYCODE_PROG_GREEN:
+                return mProgramGreenAction;
+            case KeyEvent.KEYCODE_PROG_YELLOW:
+                return mProgramYellowAction;
+            case KeyEvent.KEYCODE_PROG_BLUE:
+                return mProgramBlueAction;
+            default:
+                return ACTION_UNDEFINED;
+        }
     }
 
     /**
