@@ -392,6 +392,7 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
+        mSearchOrbView.setContentDescription(getString(com.liskovsoft.smartyoutubetv2.tv.R.string.action_start_search));
 
         // MOD: search settings button
         mSearchSettingsOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_settings_orb);
@@ -401,8 +402,10 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
+        mSearchSettingsOrbView.setContentDescription(getString(com.liskovsoft.smartyoutubetv2.tv.R.string.action_search_settings));
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
+        mSpeechOrbView.setContentDescription(getString(com.liskovsoft.smartyoutubetv2.tv.R.string.action_voice_search));
         OnFocusChangeListener previousListener = mSpeechOrbView.getOnFocusChangeListener();
         mSpeechOrbView.setOnFocusChangeListener((v, focused) -> {
             if (!focused) {

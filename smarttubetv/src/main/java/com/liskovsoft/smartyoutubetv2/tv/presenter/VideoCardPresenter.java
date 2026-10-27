@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,6 +128,7 @@ public class VideoCardPresenter extends LongClickPresenter {
 
         cardView.setTitleText(video.getTitle());
         cardView.setContentText(video.getSecondTitle());
+        cardView.setContentDescription(buildAccessibilityDescription(video));
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(
@@ -171,6 +173,24 @@ public class VideoCardPresenter extends LongClickPresenter {
                         .error(R.drawable.card_placeholder) // R.color.lb_grey
                 )
                 .into(cardView.getMainImageView());
+    }
+
+    private static CharSequence buildAccessibilityDescription(Video video) {
+        StringBuilder description = new StringBuilder(video.getTitle() != null ? video.getTitle() : "");
+
+        if (!TextUtils.isEmpty(video.getSecondTitle())) {
+            description.append(", ").append(video.getSecondTitle());
+        }
+
+        if (video.isLive) {
+            description.append(", Live");
+        } else if (video.hasNewContent) {
+            description.append(", New");
+        } else if (video.isUpcoming) {
+            description.append(", Upcoming");
+        }
+
+        return description;
     }
 
     @Override

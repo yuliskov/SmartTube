@@ -65,6 +65,8 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
+            iconView.setContentDescription(null);
+
             if (mIconUrl != null) {
                 Glide.with(rootView.getContext())
                         .load(mIconUrl)
@@ -83,6 +85,8 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         if (label != null) {
             label.setText(headerItem.getName());
         }
+
+        rootView.setContentDescription(headerItem.getName());
     }
 
     @Override
