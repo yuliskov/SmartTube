@@ -54,6 +54,10 @@
     <!-- Old value: 238dp -->
     <dimen name="lb_browse_rows_margin_start">265dp</dimen>
 
+    <!-- YusTube: keep a column of section icons visible on the left when the menu is collapsed (YouTube TV look).
+         Header icons start at browsePaddingStart (56dp) and are 32dp wide, labels start at 98dp. -->
+    <dimen name="lb_browse_headers_rail_width">96dp</dimen>
+
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">600dp</dimen>
 

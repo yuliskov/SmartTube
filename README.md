@@ -1,3 +1,14 @@
+# YusTube
+
+YusTube is a fork of [SmartTube](https://github.com/yuliskov/SmartTube) by Yuriy Liskov, restyled to look like the official YouTube TV app (dark background, YusTube wordmark, red progress bars, white outline on the focused video). It is not affiliated with YouTube or Google.
+
+Like SmartTube, YusTube is free software under the GNU GPL v3 (see [LICENSE](LICENSE)); all credit for the player and the YouTube integration goes to the SmartTube project.
+
+* Download: [YusTube.apk](https://github.com/Yus-dady/SmartTube/releases/download/latest/YusTube.apk) (Android TV, package `com.yustube.tv`)
+* Builds are made by the `YusTube` GitHub Actions workflow, which also pulls the newest SmartTube code once a day.
+
+---
+
 [<img src="images/badge_fdroid.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/app.smarttube.fdroid/)
 [<img src="images/badge_github.png" alt="Get it on GitHub" height="80">](https://github.com/yuliskov/SmartTube/releases)
 

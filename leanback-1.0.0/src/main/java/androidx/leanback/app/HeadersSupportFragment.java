@@ -186,13 +186,21 @@ public class HeadersSupportFragment extends BaseRowSupportFragment {
         if (listView != null) {
             getView().setVisibility(mHeadersGone ? View.GONE : View.VISIBLE);
             if (!mHeadersGone) {
-                if (mHeadersEnabled) {
+                if (mHeadersEnabled || mKeepChildrenVisible) {
                     listView.setChildrenVisibility(View.VISIBLE);
                 } else {
                     listView.setChildrenVisibility(View.INVISIBLE);
                 }
             }
         }
+    }
+
+    // MOD: YusTube icon rail. Keep header icons visible while the headers are collapsed.
+    private boolean mKeepChildrenVisible;
+
+    void setKeepChildrenVisible(boolean keep) {
+        mKeepChildrenVisible = keep;
+        updateListViewVisibility();
     }
 
     void setHeadersEnabled(boolean enabled) {

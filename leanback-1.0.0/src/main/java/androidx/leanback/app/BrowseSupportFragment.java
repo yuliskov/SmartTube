@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -724,6 +725,8 @@ public class BrowseSupportFragment extends BaseSupportFragment {
     boolean mShowingHeaders = true;
     boolean mCanShowHeaders = true;
     private int mContainerListMarginStart;
+    // MOD: YusTube icon rail. Width of the headers strip that stays visible when headers are collapsed (0 = stock).
+    private int mHeadersRailWidth;
     private int mContainerListAlignTop;
     private boolean mMainFragmentScaleEnabled = true;
     OnItemViewSelectedListener mExternalOnItemViewSelectedListener;
@@ -1185,6 +1188,8 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         mContainerListMarginStart = (int) ta.getDimension(
                 R.styleable.LeanbackTheme_browseRowsMarginStart, context.getResources()
                 .getDimensionPixelSize(R.dimen.lb_browse_rows_margin_start));
+        mHeadersRailWidth = context.getResources()
+                .getDimensionPixelSize(R.dimen.lb_browse_headers_rail_width);
         mContainerListAlignTop = (int) ta.getDimension(
                 R.styleable.LeanbackTheme_browseRowsMarginTop, context.getResources()
                 .getDimensionPixelSize(R.dimen.lb_browse_rows_margin_top));
@@ -1451,8 +1456,19 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         View containerList;
         containerList = mHeadersSupportFragment.getView();
         lp = (MarginLayoutParams) containerList.getLayoutParams();
-        lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
+        if (mHeadersRailWidth > 0 && Build.VERSION.SDK_INT >= 18) {
+            // MOD: YusTube icon rail. Collapsed headers stay in place, clipped to the icon column.
+            lp.setMarginStart(0);
+            mHeadersSupportFragment.setKeepChildrenVisible(true);
+            containerList.setClipBounds(onScreen ? null : new Rect(0, 0, mHeadersRailWidth, Integer.MAX_VALUE / 2));
+        } else {
+            lp.setMarginStart(onScreen ? 0 : -mContainerListMarginStart);
+        }
         containerList.setLayoutParams(lp);
+    }
+
+    private int getHeadersRailWidth() {
+        return mCanShowHeaders && Build.VERSION.SDK_INT >= 18 ? mHeadersRailWidth : 0;
     }
 
     void showHeaders(boolean show) {
@@ -1464,7 +1480,7 @@ public class BrowseSupportFragment extends BaseSupportFragment {
 
     private void expandMainFragment(boolean expand) {
         MarginLayoutParams params = (MarginLayoutParams) mScaleFrameLayout.getLayoutParams();
-        params.setMarginStart(!expand ? mContainerListMarginStart : 0);
+        params.setMarginStart(!expand ? mContainerListMarginStart : getHeadersRailWidth());
         mScaleFrameLayout.setLayoutParams(params);
         mMainFragmentAdapter.setExpand(expand);
 
