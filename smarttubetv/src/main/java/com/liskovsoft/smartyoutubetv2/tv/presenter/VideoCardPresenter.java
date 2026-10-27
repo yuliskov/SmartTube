@@ -131,7 +131,8 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
         TextView contentText = view.findViewById(R.id.content_text);
         if (contentText != null) {
-            contentText.setTextColor(textColor);
+            // YusTube: channel and views in grey under a white title, like YouTube
+            contentText.setTextColor(mFocusOutlineRes != 0 ? ContextCompat.getColor(view.getContext(), R.color.yus_text_secondary) : textColor);
         }
     }
 
