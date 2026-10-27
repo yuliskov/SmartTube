@@ -118,8 +118,10 @@ jobs:
             }
           }
           EOF
-          gh release delete latest --yes --cleanup-tag || true
-          gh release create latest dist/* \
+          # --repo: this is a fork, so without it gh would target upstream SmartTube
+          gh release delete latest --repo ${{ github.repository }} --yes --cleanup-tag || true
+          git push origin :refs/tags/latest || true
+          gh release create latest dist/* --repo ${{ github.repository }} \
             --target "$(git rev-parse HEAD)" \
             --title "YusTube ${{ steps.version.outputs.name }}" \
             --notes "YusTube, built from SmartTube (GPL-3.0, https://github.com/yuliskov/SmartTube). Install YusTube.apk."
