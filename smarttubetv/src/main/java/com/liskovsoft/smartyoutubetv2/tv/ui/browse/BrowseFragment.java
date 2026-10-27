@@ -458,10 +458,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void onPause() {
+        super.onPause();
 
         if (!mIsFragmentCreated) {
             mBrowsePresenter.onViewPaused();
         }
+
+        mIsFragmentCreated = false;
     }
 
     @Override
