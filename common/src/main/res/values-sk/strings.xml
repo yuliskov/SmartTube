@@ -752,6 +752,7 @@
     <string name="comments_disabled">Komentáre sú pre toto video vypnuté</string>
     <string name="prefer_sabr_live">Živé vysielania SABR</string>
     <string name="prefer_sabr_live_desc">Experimentálne živé vysielania SABR. Povoľte iba ak máte problémy s bežnými živými vysielaniami.</string>
+    <string name="remote_control_dial">Zobraziť v zozname zariadení na prenos YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="few">%s hodiny</item>

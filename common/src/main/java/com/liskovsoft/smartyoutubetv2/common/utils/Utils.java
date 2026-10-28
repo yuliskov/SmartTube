@@ -250,7 +250,7 @@ public class Utils {
             return;
         }
 
-        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
+        if (RemoteControlData.instance(context).isRemoteListeningEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {

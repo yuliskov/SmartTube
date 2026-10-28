@@ -752,6 +752,7 @@
     <string name="comments_disabled">Os comentários estão desativados para este vídeo</string>
     <string name="prefer_sabr_live">Transmissões em direto SABR</string>
     <string name="prefer_sabr_live_desc">Transmissões em direto SABR experimentais. Ative apenas se tiver problemas com as transmissões em direto normais.</string>
+    <string name="remote_control_dial">Mostrar na lista de transmissão do YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s hora</item>
         <item quantity="other">%s horas</item>

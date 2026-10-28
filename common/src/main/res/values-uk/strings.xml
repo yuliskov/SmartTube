@@ -755,6 +755,7 @@
     <string name="oculus_quest_fix">Виправлення для Oculus Quest</string>
     <string name="install_bridge">Встановити міст ATV/Amazon</string>
     <string name="fix_empty_subs_and_channels">Виправити порожні Підписки та Канали</string>
+    <string name="remote_control_dial">Показувати в списку трансляції YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>

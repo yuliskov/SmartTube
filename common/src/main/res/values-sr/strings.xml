@@ -752,6 +752,7 @@
     <string name="comments_disabled">Коментари су онемогућени за овај видео</string>
     <string name="prefer_sabr_live">SABR преноси уживо</string>
     <string name="prefer_sabr_live_desc">Експериментални SABR преноси уживо. Омогућите само ако имате проблема са обичним преносима уживо.</string>
+    <string name="remote_control_dial">Прикажи на листи за пребацивање на YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s сат</item>
         <item quantity="few">%s сата</item>

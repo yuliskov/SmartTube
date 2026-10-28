@@ -752,6 +752,7 @@
     <string name="preferred_dns">Bevorzugter DNS</string>
     <string name="prefer_sabr_live">SABR-Livestreams</string>
     <string name="prefer_sabr_live_desc">Experimentelle SABR-Livestreams. Nur aktivieren, wenn Probleme mit normalen Livestreams auftreten.</string>
+    <string name="remote_control_dial">In der YouTube-Cast-Liste anzeigen (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s Stunde</item>
         <item quantity="other">%s Stunden</item>
