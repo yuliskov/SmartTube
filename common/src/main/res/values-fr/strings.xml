@@ -96,6 +96,9 @@
     <string name="show_again">Afficher à nouveau</string>
     <string name="check_updates_auto">Mise à jour automatique</string>
     <string name="select_account_on_boot">Sélection du compte au démarrage</string>
+    <string name="account_selection_title">Qui regarde ?</string>
+    <string name="account_selection_add_account">Ajouter un compte</string>
+    <string name="account_selection_signed_out">Continuer sans compte</string>
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date complète dans la description</string>
     <string name="open_channel">Accéder à la chaîne</string>
