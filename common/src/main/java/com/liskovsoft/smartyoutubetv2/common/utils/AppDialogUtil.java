@@ -44,6 +44,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.SponsorBlockData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.VotData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.playlist.impl.YouTubePlaylistInfo;
 
@@ -80,6 +81,8 @@ public class AppDialogUtil {
     private static final int PLAYER_ENGINE_ID = 147;
     private static final int IGNORE_DURATION_ID = 148;
     private static final int SLEEP_TIMER_ID = 149;
+    private static final int VOT_ORIGINAL_VOLUME_ID = 150;
+    private static final int VOT_TRANSLATION_VOLUME_ID = 151;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -486,6 +489,78 @@ public class AppDialogUtil {
         }
 
         return OptionCategory.from(AUDIO_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createVotOriginalVolumeCategory(Context context) {
+        return createVotOriginalVolumeCategory(context, () -> {});
+    }
+
+    public static OptionCategory createVotOriginalVolumeCategory(Context context, Runnable onSetCallback) {
+        VotData votData = VotData.instance(context);
+        String title = context.getString(R.string.vot_original_volume);
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int percent : Helpers.range(0, 100, 5)) {
+            options.add(UiOptionItem.from(String.format("%s%%", percent),
+                    optionItem -> {
+                        votData.setOriginalVolumePercent(percent);
+                        onSetCallback.run();
+                    },
+                    percent == votData.getOriginalVolumePercent()));
+        }
+
+        return OptionCategory.from(VOT_ORIGINAL_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createVotTranslationVolumeCategory(Context context) {
+        return createVotTranslationVolumeCategory(context, () -> {});
+    }
+
+    public static OptionCategory createVotTranslationVolumeCategory(Context context, Runnable onSetCallback) {
+        VotData votData = VotData.instance(context);
+        String title = context.getString(R.string.vot_translation_volume);
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int percent : Helpers.range(0, 100, 5)) {
+            options.add(UiOptionItem.from(String.format("%s%%", percent),
+                    optionItem -> {
+                        votData.setTranslationVolumePercent(percent);
+                        onSetCallback.run();
+                    },
+                    percent == votData.getTranslationVolumePercent()));
+        }
+
+        return OptionCategory.from(VOT_TRANSLATION_VOLUME_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static void showVotMixDialog(Context context, Runnable onSetCallback) {
+        Runnable callback = onSetCallback != null ? onSetCallback : () -> {};
+        VotData votData = VotData.instance(context);
+        AppDialogPresenter presenter = AppDialogPresenter.instance(context);
+        List<OptionItem> toggles = new ArrayList<>();
+        toggles.add(UiOptionItem.from(
+                context.getString(R.string.vot_auto_translate),
+                context.getString(R.string.vot_auto_translate_desc),
+                optionItem -> {
+                    votData.setAutoTranslateEnabled(optionItem.isSelected());
+                    callback.run();
+                },
+                votData.isAutoTranslateEnabled()));
+        toggles.add(UiOptionItem.from(
+                context.getString(R.string.vot_prefer_youtube_dub),
+                context.getString(R.string.vot_prefer_youtube_dub_desc),
+                optionItem -> {
+                    votData.setPreferYoutubeAutoDub(optionItem.isSelected());
+                    callback.run();
+                },
+                votData.isPreferYoutubeAutoDub()));
+        OptionCategory original = createVotOriginalVolumeCategory(context, callback);
+        OptionCategory translation = createVotTranslationVolumeCategory(context, callback);
+        String title = context.getString(R.string.vot_mix_menu_title);
+        presenter.appendCheckedCategory(context.getString(R.string.vot_mix_options), toggles);
+        presenter.appendRadioCategory(original.title, original.options);
+        presenter.appendRadioCategory(translation.title, translation.options);
+        presenter.showDialog(title);
     }
 
     public static OptionCategory createPitchEffectCategory(Context context) {

@@ -1319,6 +1319,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void updateVoiceTranslatePendingEta(int remainingTimeSec) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.updateVoiceTranslatePendingEta(remainingTimeSec);
+        }
+    }
+
+    @Override
     public void setChannelIcon(String iconUrl) {
         if (mPlayerGlue != null) {
             mPlayerGlue.setChannelIcon(iconUrl);
