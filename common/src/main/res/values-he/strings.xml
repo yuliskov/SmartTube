@@ -756,6 +756,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="comments_disabled">התגובות מושבתות עבור סרטון זה</string>
     <string name="prefer_sabr_live">שידורים חיים של SABR</string>
     <string name="prefer_sabr_live_desc">שידורים חיים ניסיוניים של SABR. מומלץ להפעיל רק אם יש בעיות בשידורים חיים רגילים.</string>
+    <string name="remote_control_dial">הצג ברשימת ההעברה של YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">שעה אחת</item>
         <item quantity="other">%s שעות</item>

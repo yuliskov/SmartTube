@@ -752,6 +752,7 @@
     <string name="comments_disabled">Bu video üçün şərhlər söndürülüb</string>
     <string name="prefer_sabr_live">SABR canlı yayımları</string>
     <string name="prefer_sabr_live_desc">Təcrübi SABR canlı yayımları. Yalnız adi canlı yayımlarla bağlı probleminiz olduqda aktivləşdirin.</string>
+    <string name="remote_control_dial">YouTube yayım siyahısında göstər (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

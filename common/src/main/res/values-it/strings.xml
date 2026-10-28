@@ -752,6 +752,7 @@
     <string name="preferred_dns">DNS preferito</string>
     <string name="prefer_sabr_live">Dirette SABR</string>
     <string name="prefer_sabr_live_desc">Dirette SABR sperimentali. Attiva solo se hai problemi con le dirette normali.</string>
+    <string name="remote_control_dial">Mostra nell\'elenco di trasmissione di YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>

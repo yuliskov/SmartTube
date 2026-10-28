@@ -755,6 +755,7 @@
     <string name="premium_users_only">Только для пользователей Premium. Исправление неполного списка форматов видео</string>
     <string name="install_bridge">Установить мост ATV/Amazon</string>
     <string name="fix_empty_subs_and_channels">Исправить пустые Подписки и Каналы</string>
+    <string name="remote_control_dial">Показывать в списке трансляции YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="few">%s часа</item>
@@ -767,5 +768,4 @@
         <item quantity="many">%s секунд</item>
         <item quantity="other">%s секунды</item>
     </plurals>
-    <string name="remote_control_dial">Показывать в списке трансляции YouTube (DIAL)</string>
 </resources>

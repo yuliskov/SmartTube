@@ -129,7 +129,7 @@ public class DialServer {
             while (mRunning) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 mSsdpSocket.receive(packet);
-                String request = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
+                String request = new String(packet.getData(), 0, packet.getLength(), "UTF-8");
                 if (!request.startsWith("M-SEARCH")) {
                     continue;
                 }
