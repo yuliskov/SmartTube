@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
@@ -148,7 +149,7 @@ public class DialServer {
         }
     }
 
-    private void answerSearch(InetAddress address, int port) {
+    private void answerSearch(InetAddress address, int port) throws UnsupportedEncodingException {
         String ip = getLocalIp();
         if (ip == null) {
             return;
@@ -162,7 +163,7 @@ public class DialServer {
                 "USN: uuid:" + mUdn + "::" + DIAL_ST + "\r\n" +
                 "BOOTID.UPNP.ORG: 1\r\n" +
                 "\r\n";
-        byte[] data = response.getBytes(StandardCharsets.UTF_8);
+        byte[] data = response.getBytes("UTF-8");
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.send(new DatagramPacket(data, data.length, address, port));
         } catch (IOException e) {
