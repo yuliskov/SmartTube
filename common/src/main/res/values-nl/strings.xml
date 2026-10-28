@@ -752,6 +752,7 @@
     <string name="comments_disabled">Reacties zijn uitgeschakeld voor deze video</string>
     <string name="prefer_sabr_live">SABR-livestreams</string>
     <string name="prefer_sabr_live_desc">Experimentele SABR-livestreams. Schakel alleen in als u problemen hebt met reguliere livestreams.</string>
+    <string name="remote_control_dial">Tonen in YouTube cast-lijst (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s uur</item>
         <item quantity="other">%s uur</item>
