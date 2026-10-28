@@ -26,6 +26,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/account_selection_avatar_circle"
             android:contentDescription="@null"
+            android:duplicateParentState="true"
             android:scaleType="centerInside"
             android:src="@drawable/browse_title_account" />
 
@@ -33,11 +34,12 @@
             android:id="@+id/account_add_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:duplicateParentState="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="+"
-            android:textColor="@android:color/white"
+            android:textColor="@color/account_selection_button_text"
             android:textSize="64sp"
             android:visibility="gone"
             tools:ignore="HardcodedText" />

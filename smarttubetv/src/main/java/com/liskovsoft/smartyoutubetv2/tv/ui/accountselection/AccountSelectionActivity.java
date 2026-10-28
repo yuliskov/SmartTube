@@ -125,7 +125,9 @@ public class AccountSelectionActivity extends LeanbackActivity implements Accoun
         View tile = createTile(getString(R.string.account_selection_add_account), null);
         tile.setOnClickListener(v -> mPresenter.onAddAccountClicked());
 
-        ((ImageView) tile.findViewById(R.id.account_avatar)).setImageDrawable(null);
+        ImageView avatar = tile.findViewById(R.id.account_avatar);
+        avatar.setImageDrawable(null);
+        avatar.setBackgroundResource(R.drawable.account_selection_add_bg);
         tile.findViewById(R.id.account_add_icon).setVisibility(View.VISIBLE);
 
         return tile;
