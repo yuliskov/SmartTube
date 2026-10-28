@@ -1,0 +1,26 @@
+name: Build SmartTube
+on:
+  push:
+    branches: [a11y/accessible-names-and-state]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build debug APK
+        run: ./gradlew :smarttubetv:assembleStstableDebug --offline || ./gradlew :smarttubetv:assembleStstableDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: smarttube-debug-apk
+          path: smarttubetv/build/outputs/apk/ststable/debug/*.apk

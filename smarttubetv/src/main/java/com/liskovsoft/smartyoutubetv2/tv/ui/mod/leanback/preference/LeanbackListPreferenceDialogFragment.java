@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Checkable;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -247,8 +248,10 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.getWidgetView().setChecked(mEntryValues[position].equals(mSelectedValue));
+            boolean checked = mEntryValues[position].equals(mSelectedValue);
+            holder.getWidgetView().setChecked(checked);
             holder.getTitleView().setText(mEntries[position]);
+            bindRowAccessibility(holder.getContainer(), mEntries[position], checked);
         }
 
         @Override
@@ -302,9 +305,10 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.getWidgetView().setChecked(
-                    mSelections.contains(mEntryValues[position].toString()));
+            boolean checked = mSelections.contains(mEntryValues[position].toString());
+            holder.getWidgetView().setChecked(checked);
             holder.getTitleView().setText(mEntries[position]);
+            bindRowAccessibility(holder.getContainer(), mEntries[position], checked);
         }
 
         @Override
@@ -342,6 +346,18 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
 
             notifyDataSetChanged();
         }
+    }
+
+    private static void bindRowAccessibility(View row, CharSequence label, boolean checked) {
+        row.setContentDescription(label);
+        row.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+                info.setCheckable(true);
+                info.setChecked(checked);
+            }
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
