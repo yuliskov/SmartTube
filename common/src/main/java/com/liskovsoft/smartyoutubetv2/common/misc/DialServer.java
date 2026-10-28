@@ -196,7 +196,7 @@ public class DialServer {
         try (Socket socket = client) {
             socket.setSoTimeout(10_000);
             InputStream in = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String requestLine = reader.readLine();
             if (requestLine == null) {
                 return;
@@ -296,7 +296,7 @@ public class DialServer {
     }
 
     private static void respond(OutputStream out, String status, String contentType, String body, Map<String, String> headers) throws IOException {
-        byte[] data = body != null ? body.getBytes(StandardCharsets.UTF_8) : new byte[0];
+        byte[] data = body != null ? body.getBytes("UTF-8") : new byte[0];
         StringBuilder head = new StringBuilder("HTTP/1.1 ").append(status).append("\r\n");
         if (headers != null) {
             for (Map.Entry<String, String> header : headers.entrySet()) {
@@ -308,7 +308,7 @@ public class DialServer {
         }
         head.append("Content-Length: ").append(data.length).append("\r\n");
         head.append("Connection: close\r\n\r\n");
-        out.write(head.toString().getBytes(StandardCharsets.UTF_8));
+        out.write(head.toString().getBytes("UTF-8"));
         out.write(data);
         out.flush();
     }
