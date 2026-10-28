@@ -649,6 +649,7 @@
     <string name="hide_unwanted_content">Məzmunu gizlət</string>
     <string name="hide_watched_from_home">Əsas səhifədən izlənilmiş videoları gizlət</string>
     <string name="hide_watched_from_watch_later">İzlənmiş videoları \"Daha sonra izlə\" pleylistindən sil</string>
+    <string name="remote_control_dial">YouTube yayım siyahısında göstər (DIAL)</string>
     <string name="remote_control_permission">Arxa fonda uzaqdan idarəetmə, Üzərində Göstərmə icazəsi tələb edir</string>
     <string name="login_from_browser">Bələdçidən daxil ol</string>
     <string name="disable_remote_history">Uzaqdan idarəetmədən istifadə edərkən tarixçəni söndür</string>
@@ -752,7 +753,6 @@
     <string name="comments_disabled">Bu video üçün şərhlər söndürülüb</string>
     <string name="prefer_sabr_live">SABR canlı yayımları</string>
     <string name="prefer_sabr_live_desc">Təcrübi SABR canlı yayımları. Yalnız adi canlı yayımlarla bağlı probleminiz olduqda aktivləşdirin.</string>
-    <string name="remote_control_dial">YouTube yayım siyahısında göstər (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>
