@@ -717,7 +717,12 @@ public class PlayerTweaksData implements ProfileChangeListener {
         // Need to be enabled (?) on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
-        mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
+        // AudioTrack timestamps can drift on some Android TV devices. Fall back to the
+        // playback-head position by default, including for profiles saved by older versions.
+        // Index 62 records that the user has seen the new default and can explicitly disable it.
+        mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 62, false)
+                ? Helpers.parseBoolean(split, 8, false)
+                : true;
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsHlsStreamsForced = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, false);
@@ -802,7 +807,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode, mIsSabrLiveEnabled
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode, mIsSabrLiveEnabled,
+                true // audio sync fix preference migration marker
                 ));
     }
 
