@@ -166,7 +166,7 @@ public class PlayerUIController extends BasePlayerController {
 
         FormatItem matchedFormat = null;
 
-        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
+        for (FormatItem item : getPlayerData().getLastSubtitleFormats(getChannelId())) {
             if (getPlayer().getSubtitleFormats().contains(item)) {
                 matchedFormat = item;
                 break;
@@ -179,7 +179,7 @@ public class PlayerUIController extends BasePlayerController {
             getPlayer().setFormat(format);
             getPlayerData().setFormat(format);
             getPlayer().setButtonState(R.id.lb_control_closed_captioning, !FormatItem.SUBTITLE_NONE.equals(matchedFormat) && !enabled ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-            enableSubtitleForChannel(!enabled);
+            enableSubtitleForChannel(format);
         } else {
             // Match not found
             onSubtitleLongClicked();
@@ -207,7 +207,7 @@ public class PlayerUIController extends BasePlayerController {
                     UiOptionItem.from(subtitleOrigFormats,
                             option -> {
                                 FormatItem format = UiOptionItem.toFormat(option);
-                                enableSubtitleForChannel(!format.isDefault());
+                                enableSubtitleForChannel(format);
                                 getPlayer().setFormat(format);
                                 getPlayerData().setFormat(format);
                             },
@@ -224,7 +224,7 @@ public class PlayerUIController extends BasePlayerController {
                     UiOptionItem.from(subtitleAutoFormats,
                             option -> {
                                 FormatItem format = UiOptionItem.toFormat(option);
-                                enableSubtitleForChannel(!format.isDefault());
+                                enableSubtitleForChannel(format);
                                 getPlayer().setFormat(format);
                                 getPlayerData().setFormat(format);
                             },
@@ -908,14 +908,14 @@ public class PlayerUIController extends BasePlayerController {
         return !getPlayerData().isSubtitlesPerChannelEnabled() || getPlayerData().isSubtitlesPerChannelEnabled(getChannelId());
     }
 
-    private void enableSubtitleForChannel(boolean enable) {
+    private void enableSubtitleForChannel(FormatItem format) {
         if (getPlayer() == null || !getPlayerData().isSubtitlesPerChannelEnabled()) {
             return;
         }
 
         String channelId = getChannelId();
-        if (enable) {
-            getPlayerData().enableSubtitlesPerChannel(channelId);
+        if (format != null && !format.isDefault()) {
+            getPlayerData().enableSubtitlesPerChannel(channelId, format);
         } else {
             getPlayerData().disableSubtitlesPerChannel(channelId);
         }
@@ -1093,7 +1093,7 @@ public class PlayerUIController extends BasePlayerController {
         // Move last format to the top
         int begin = subtitleFormats.get(0).isDefault() ? 1 : 0;
         List<FormatItem> topSubtitles = new ArrayList<>();
-        for (FormatItem item : getPlayerData().getLastSubtitleFormats()) {
+        for (FormatItem item : getPlayerData().getLastSubtitleFormats(getChannelId())) {
             if (item == null || item.getLanguage() == null) { // skip empty formats
                 continue;
             }
