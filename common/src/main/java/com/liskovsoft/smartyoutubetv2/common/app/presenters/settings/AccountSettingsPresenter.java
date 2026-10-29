@@ -86,14 +86,14 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         List<OptionItem> optionItems = new ArrayList<>();
 
-        optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    AccountSelectionPresenter.instance(getContext()).selectAccount(null);
-                    settingsPresenter.closeDialog();
-                }, true
-        ));
-
-        CharSequence accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
+        if (!AccountSelectionPresenter.instance(getContext()).isNoneHidden()) {
+            optionItems.add(UiOptionItem.from(
+                    getContext().getString(R.string.dialog_account_none), optionItem -> {
+                        AccountSelectionPresenter.instance(getContext()).selectAccount(null);
+                        settingsPresenter.closeDialog();
+                    }, true
+            ));
+        }
 
         int index = -1;
 
@@ -106,10 +106,6 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                         settingsPresenter.closeDialog();
                     }, account.isSelected()
             ));
-
-            if (account.isSelected()) {
-                accountName = " (" + getSimpleName(account) + ")";
-            }
         }
 
         String categoryTitle = getContext().getString(R.string.dialog_account_list);
@@ -184,22 +180,21 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         return format;
     }
 
-    private String getSimpleName(Account account) {
-        return account.getName() != null ? account.getName() : account.getEmail();
-    }
-
     private void removeAccount(Account account) {
         getSignInService().removeAccount(account);
+        AccountSelectionPresenter.instance(getContext()).ensureAccountSelected();
         BrowsePresenter.instance(getContext()).refresh(false);
     }
 
     private void showAddPasswordDialog(AppDialogPresenter settingsPresenter) {
         settingsPresenter.closeDialog();
-        SimpleEditDialog.showPassword(
-                getContext(),
-                getContext().getString(R.string.enter_account_password),
-                null,
+        boolean usePin = AccountsData.instance(getContext()).isPinEnabled();
+        showSecretDialog(usePin,
                 newValue -> {
+                    if (usePin && !AccountsData.isValidPin(newValue)) {
+                        MessageHelpers.showMessage(getContext(), R.string.pin_must_be_four_digits);
+                        return false;
+                    }
                     AccountsData.instance(getContext()).setAccountPassword(newValue);
                     BrowsePresenter.instance(getContext()).updateSections();
                     //onSuccess.run();
@@ -215,10 +210,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.closeDialog();
-        SimpleEditDialog.showPassword(
-                getContext(),
-                getContext().getString(R.string.enter_account_password),
-                null,
+        showSecretDialog(usePinPad(password),
                 newValue -> {
                     if (Utils.passwordMatch(password, newValue)) {
                         AccountsData.instance(getContext()).setAccountPassword(null);
@@ -237,10 +229,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             return;
         }
 
-        SimpleEditDialog.showPassword(
-                getContext(),
-                getContext().getString(R.string.enter_account_password),
-                null,
+        showSecretDialog(usePinPad(password),
                 newValue -> {
                     if (Utils.passwordMatch(password, newValue)) {
                         AccountsData.instance(getContext()).setPasswordAccepted(true);
@@ -250,5 +239,20 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                     }
                     return false;
                 });
+    }
+
+    /**
+     * Number pad in PIN mode, but keep the full keyboard for a legacy non-PIN password to avoid a lockout.
+     */
+    private boolean usePinPad(String storedPassword) {
+        return AccountsData.instance(getContext()).isPinEnabled() && AccountsData.isValidPin(storedPassword);
+    }
+
+    private void showSecretDialog(boolean usePin, SimpleEditDialog.OnChange onChange) {
+        if (usePin) {
+            SimpleEditDialog.showPin(getContext(), getContext().getString(R.string.enter_account_pin), onChange);
+        } else {
+            SimpleEditDialog.showPassword(getContext(), getContext().getString(R.string.enter_account_password), null, onChange);
+        }
     }
 }

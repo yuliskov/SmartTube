@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,13 +37,29 @@ public class SimpleEditDialog {
         show(context, dialogTitle, dialogTitle, defaultValue, onChange, onDismiss, true);
     }
 
+    /**
+     * Masked numeric input (number pad), limited to {@link #PIN_LENGTH} digits.
+     */
+    public static void showPin(Context context, String dialogTitle, OnChange onChange) {
+        show(context, dialogTitle, dialogTitle, null, onChange, null, true, true);
+    }
+
+    public static final int PIN_LENGTH = 4;
+
     private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
+        show(context, dialogTitle, dialogHint, defaultValue, onChange, onDismiss, isPassword, false);
+    }
+
+    private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword, boolean isPin) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
         EditText editField = contentView.findViewById(R.id.simple_edit_value);
-        if (isPassword) {
+        if (isPin) {
+            editField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            editField.setFilters(new InputFilter[] {new InputFilter.LengthFilter(PIN_LENGTH)});
+        } else if (isPassword) {
             editField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
         KeyHelpers.fixShowKeyboard(editField);

@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.NotSignedInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.PasswordError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -1140,6 +1141,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onAccountChanged(Account account) {
         Log.d(TAG, "On account changed");
 
+        if (AccountsData.instance(getContext()).isContentBlocked()) {
+            PlaybackPresenter.instance(getContext()).forceFinish();
+        }
+
         if (getView() == null) {
             return;
         }
@@ -1156,6 +1161,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initPasswordSection() {
         AccountsData accountsData = AccountsData.instance(getContext());
+
+        if (accountsData.isContentBlocked()) {
+            mSections.clear();
+            appendToSections(getContext().getString(R.string.settings_accounts), R.drawable.icon_notification, new NotSignedInError(getContext()));
+            return;
+        }
+
         if (accountsData.getAccountPassword() == null || accountsData.isPasswordAccepted()) {
             return;
         }
