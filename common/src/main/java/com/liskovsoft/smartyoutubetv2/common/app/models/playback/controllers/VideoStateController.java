@@ -696,7 +696,8 @@ public class VideoStateController extends BasePlayerController {
     private void showHideScreensaver(boolean show) {
         ScreensaverManager screensaverManager = getScreensaverManager();
 
-        if (screensaverManager == null) {
+        // Card previews shouldn't keep the screen on
+        if (screensaverManager == null || isEmbedPlayer()) {
             return;
         }
 
