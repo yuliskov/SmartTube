@@ -43,6 +43,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private static final String DEFAULT_LANGUAGE = "original"; // original, descriptive, dubbed, secondary
+    private static final String DESCRIPTIVE_LANGUAGE = "descriptive"; // audio description track
     private final Map<String, Integer> mBlacklist = new HashMap<>();
 
     private DefaultTrackSelector mTrackSelector;
@@ -710,11 +711,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         if (resultTracks != null && !resultTracks.isEmpty()) {
-            return resultTracks.toArray(new MediaTrack[0][]);
+            return skipDescriptive(resultTracks, resultLanguage).toArray(new MediaTrack[0][]);
         }
 
         if (originTracks != null && !originTracks.isEmpty()) {
-            return originTracks.toArray(new MediaTrack[0][]);
+            return skipDescriptive(originTracks, originLanguage).toArray(new MediaTrack[0][]);
         }
 
         if (resultTracksFallback != null && !resultTracksFallback.isEmpty()) {
@@ -722,6 +723,37 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         return trackGroupList;
+    }
+
+    /**
+     * A language code like "en" matches both "en (original)" and "en (descriptive)" (audio description).
+     * Don't let the descriptive track win by order alone: drop it when another track of that language exists,
+     * unless the descriptive track was requested explicitly.
+     */
+    private static List<MediaTrack[]> skipDescriptive(List<MediaTrack[]> trackGroups, String requestedLanguage) {
+        if (trackGroups.size() <= 1 || Helpers.contains(requestedLanguage, DESCRIPTIVE_LANGUAGE)) {
+            return trackGroups;
+        }
+
+        List<MediaTrack[]> result = new ArrayList<>();
+
+        for (MediaTrack[] trackGroup : trackGroups) {
+            if (!isDescriptive(trackGroup)) {
+                result.add(trackGroup);
+            }
+        }
+
+        return result.isEmpty() ? trackGroups : result;
+    }
+
+    private static boolean isDescriptive(MediaTrack[] trackGroup) {
+        for (MediaTrack track : trackGroup) {
+            if (track != null && track.format != null && Helpers.contains(track.format.language, DESCRIPTIVE_LANGUAGE)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Track array manipulation.
