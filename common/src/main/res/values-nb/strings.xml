@@ -752,6 +752,7 @@
     <string name="comments_disabled">Kommentarer er deaktivert for denne videoen</string>
     <string name="prefer_sabr_live">SABR-direktesendinger</string>
     <string name="prefer_sabr_live_desc">Eksperimentelle SABR-direktesendinger. Aktiver kun hvis du har problemer med vanlige direktesendinger.</string>
+    <string name="remote_control_dial">Vis i YouTubes cast-liste (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s time</item>
         <item quantity="other">%s timer</item>

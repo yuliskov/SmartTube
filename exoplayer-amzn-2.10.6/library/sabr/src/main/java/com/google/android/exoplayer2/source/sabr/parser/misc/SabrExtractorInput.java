@@ -192,12 +192,13 @@ public final class SabrExtractorInput implements ExtractorInput {
                 int backoffMs = sabrStream.getBackoffTimeMs();
 
                 if (backoffMs > MIN_SWALLOW_BACKOFF_MS) {
+                    // Server backoff is too long: reload the format rather than wait.
                     throwBackoffRequested(backoffMs);
-                }
-
-                // Live head: the server has nothing new yet. It's not the end of the stream.
-                // Wait a bit, otherwise the empty responses are requested in a tight loop.
-                if (!receivedData && sabrStream.isLive()) {
+                } else if (backoffMs > 0) {
+                    Thread.sleep(backoffMs);
+                } else if (!receivedData && sabrStream.isLive()) {
+                    // Live head: the server has nothing new yet. It's not the end of the stream.
+                    // Wait a bit, otherwise the empty responses are requested in a tight loop.
                     Thread.sleep(LIVE_EMPTY_RESPONSE_WAIT_MS);
                 }
 

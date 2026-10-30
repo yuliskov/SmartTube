@@ -95,7 +95,8 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         if (formatInfo.isLive()) {
             SabrManifest manifest = ((SabrMediaSource) mediaSource).getManifest();
             mSabrLiveManifest = manifest;
-            mSabrLiveSeekBlocked = !formatInfo.isLiveDvrEnabled();
+            // NOTE: DVR flag can be ignored. Streams are rewindable in practice even without it
+            //mSabrLiveSeekBlocked = !formatInfo.isLiveDvrEnabled();
             mSabrLiveStartPending = true;
         }
     }

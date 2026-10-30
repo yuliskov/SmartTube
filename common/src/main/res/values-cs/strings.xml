@@ -752,6 +752,7 @@
     <string name="preferred_dns">Preferovaný DNS</string>
     <string name="prefer_sabr_live">Živá vysílání SABR</string>
     <string name="prefer_sabr_live_desc">Experimentální živá vysílání SABR. Povolte, pouze pokud máte potíže s běžnými živými vysíláními.</string>
+    <string name="remote_control_dial">Zobrazit v seznamu zařízení pro přenos YouTube (DIAL)</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>

@@ -752,6 +752,7 @@
     <string name="preferred_dns">優先DNS</string>
     <string name="prefer_sabr_live">SABRライブ配信</string>
     <string name="prefer_sabr_live_desc">試験的なSABRライブ配信です。通常のライブ配信で問題が発生する場合のみ有効にしてください。</string>
+    <string name="remote_control_dial">YouTubeのキャストリストに表示 (DIAL)</string>
     <plurals name="hours">
         <item quantity="other">%s 時間</item>
     </plurals>
