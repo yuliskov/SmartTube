@@ -303,7 +303,7 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        return playbackView != null && playbackView.isPlaying();
+        return playbackView != null && !playbackView.isEmbed() && playbackView.isPlaying();
     }
 
     private long getPosition() {
