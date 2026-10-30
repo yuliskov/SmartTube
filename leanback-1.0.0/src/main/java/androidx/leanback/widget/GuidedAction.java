@@ -43,9 +43,6 @@ import java.util.List;
  * call {@link BuilderBase#applyValues(GuidedAction)}.
  */
 public class GuidedAction extends Action {
-
-    private static final String TAG = "GuidedAction";
-
     /**
      * Special check set Id that is neither checkbox nor radio.
      */

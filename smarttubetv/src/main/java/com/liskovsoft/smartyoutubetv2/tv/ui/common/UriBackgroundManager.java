@@ -20,7 +20,6 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class UriBackgroundManager {
-    private static final String TAG = UriBackgroundManager.class.getSimpleName();
     private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
     private Uri mBackgroundURI;
     private Drawable mDefaultBackground;
