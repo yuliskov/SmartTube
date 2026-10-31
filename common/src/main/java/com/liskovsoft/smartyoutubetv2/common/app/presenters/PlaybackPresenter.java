@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.ChainProcessor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils.Processor;
@@ -123,6 +124,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         }
 
         onNewVideo(video);
+        prefetchFormatInfo(video);
 
         getViewManager().startView(PlaybackView.class);
         mIsEmbedPlayerStarted = false;
@@ -130,6 +132,14 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     public Video getVideo() {
         return mVideo != null ? mVideo.get() : null;
+    }
+
+    private void prefetchFormatInfo(Video video) {
+        if (video.videoId == null || isEngineInitialized()) {
+            return;
+        }
+
+        MediaServiceManager.instance().loadFormatInfo(video, formatInfo -> {});
     }
 
     public boolean isRunningInBackground() {
