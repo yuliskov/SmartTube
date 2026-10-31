@@ -1140,6 +1140,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onAccountChanged(Account account) {
         Log.d(TAG, "On account changed");
 
+        disposeActions();
+        mCurrentVideo = null;
+        Playlist.instance().onNewSession();
+
         if (getView() == null) {
             return;
         }

@@ -55,6 +55,7 @@ public class MediaServiceManager implements OnAccountChange {
     private Disposable mPlaylistGroupAction;
     private Disposable mPlaylistInfosAction;
     private Disposable mHistoryAction;
+    private final AtomicInteger mAccountGeneration = new AtomicInteger();
     private static final int MIN_GRID_GROUP_SIZE = 13;
     private static final int MIN_ROW_GROUP_SIZE = 5;
     private static final int MIN_SCALED_GRID_GROUP_SIZE = 35;
@@ -99,7 +100,10 @@ public class MediaServiceManager implements OnAccountChange {
     }
 
     private MediaServiceManager() {
-        ServiceManager service = YouTubeServiceManager.instance();
+        this(YouTubeServiceManager.instance());
+    }
+
+    MediaServiceManager(ServiceManager service) {
         mItemService = service.getMediaItemService();
         mContentService = service.getContentService();
         mSignInService = service.getSignInService();
@@ -356,21 +360,34 @@ public class MediaServiceManager implements OnAccountChange {
 
     public void enableHistory(boolean enable) {
         if (enable) { // don't disable history for other clients
-            RxHelper.runAsyncUser(() -> mContentService.enableHistory(true));
+            runHistoryAction(() -> mContentService.enableHistory(true), null);
         }
     }
 
     public void clearHistory(Context context, Runnable onFinish) {
-        RxHelper.runAsyncUser(mContentService::clearHistory, onFinish);
+        runHistoryAction(mContentService::clearHistory, onFinish);
         VideoStateService.instance(context).clear(); // even for the logged users this needed too
     }
 
     public void clearSearchHistory() {
-        RxHelper.runAsyncUser(mContentService::clearSearchHistory);
+        runHistoryAction(mContentService::clearSearchHistory, null);
     }
 
     public void removeSearchTag(String tag) {
-        RxHelper.runAsyncUser(() -> mContentService.removeSearchTag(tag));
+        runHistoryAction(() -> mContentService.removeSearchTag(tag), null);
+    }
+
+    private void runHistoryAction(Runnable action, Runnable onFinish) {
+        int generation = mAccountGeneration.get();
+        RxHelper.runAsyncUser(() -> {
+            if (generation == mAccountGeneration.get()) {
+                action.run();
+            }
+        }, () -> {
+            if (generation == mAccountGeneration.get() && onFinish != null) {
+                onFinish.run();
+            }
+        });
     }
 
     public void updateHistory(Video video, long positionMs) {
@@ -388,7 +405,17 @@ public class MediaServiceManager implements OnAccountChange {
             historyObservable = mItemService.updateHistoryPositionObserve(video.videoId, positionMs / 1_000f);
         }
 
-        mHistoryAction = RxHelper.execute(historyObservable, error -> setHistoryBroken(true), () -> setHistoryBroken(false));
+        int generation = mAccountGeneration.get();
+        mHistoryAction = RxHelper.execute(historyObservable,
+                error -> {
+                    if (generation == mAccountGeneration.get()) {
+                        setHistoryBroken(true);
+                    }
+                }, () -> {
+                    if (generation == mAccountGeneration.get()) {
+                        setHistoryBroken(false);
+                    }
+                });
     }
 
     public void hideNotification(Video item) {
@@ -461,6 +488,9 @@ public class MediaServiceManager implements OnAccountChange {
 
     @Override
     public void onAccountChanged(Account account) {
+        mAccountGeneration.incrementAndGet();
+        RxHelper.disposeActions(mHistoryAction);
+        mHistoryAction = null;
         for (AccountChangeListener listener : mAccountListeners) {
             listener.onAccountChanged(account);
         }
