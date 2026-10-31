@@ -1,0 +1,47 @@
+# ==============================================================================
+# SmartTube — Git Attributes & LF Line Ending Standard
+# ==============================================================================
+
+# Global default: text files use LF on checkout and commit
+* text=auto eol=lf
+
+# ------------------------------------------------------------------------------
+# Explicit text files
+# ------------------------------------------------------------------------------
+*.java      text eol=lf
+*.kt        text eol=lf
+*.xml       text eol=lf
+*.gradle    text eol=lf
+*.properties text eol=lf
+*.cpp       text eol=lf
+*.c         text eol=lf
+*.h         text eol=lf
+*.hpp       text eol=lf
+*.json      text eol=lf
+*.md        text eol=lf
+*.txt       text eol=lf
+*.sh        text eol=lf
+*.ps1       text eol=lf
+*.bat       text eol=lf
+
+# ------------------------------------------------------------------------------
+# Binary files
+# ------------------------------------------------------------------------------
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.webp      binary
+*.pdf       binary
+*.zip       binary
+*.exe       binary
+*.dll       binary
+*.so        binary
+*.a         binary
+*.jar       binary
+*.aar       binary
+*.keystore  binary
+*.jks       binary
+*.apk       binary
+*.aab       binary
