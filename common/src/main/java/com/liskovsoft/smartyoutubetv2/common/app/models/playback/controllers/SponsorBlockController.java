@@ -26,7 +26,9 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SponsorBlockController extends BasePlayerController {
@@ -41,6 +43,10 @@ public class SponsorBlockController extends BasePlayerController {
     private Disposable mSegmentsAction;
     private Observable<List<SponsorSegment>> mCachedSegmentsAction;
     private String mVideoId;
+    private Set<String> mCachedCategories;
+    private boolean mCachedAltServer;
+    private long mCachedRequestGeneration;
+    private long mSegmentGeneration;
 
     public static class SegmentAction {
         public String segmentCategory;
@@ -87,14 +93,12 @@ public class SponsorBlockController extends BasePlayerController {
     @Override
     public void onNewVideo(Video item) {
         mSkipExclude = false;
-        if (getPlayer() != null) {
-            getPlayer().setSeekBarSegments(null); // reset colors
-        }
+        clearSegments(false);
     }
 
     @Override
     public void onVideoLoaded(Video item) {
-        disposeActions();
+        clearSegments(true);
 
         if (getPlayer() == null) {
             return;
@@ -113,18 +117,18 @@ public class SponsorBlockController extends BasePlayerController {
         // Disable sponsor for the live streams.
         // Fix when using remote control.
         if (!getSponsorBlockData().isSponsorBlockEnabled() || !checkVideo(getVideo())) {
-            disposeActions();
+            clearSegments(true);
         } else if (isChannelExcluded(metadata.getChannelId())) { // got channel id. check the exclusions
             if (getPlayer() != null) {
                 getPlayer().setButtonState(R.id.action_content_block, PlayerUI.BUTTON_OFF);
             }
-            disposeActions();
+            clearSegments(true);
         }
     }
 
     @Override
     public void onEngineReleased() {
-        disposeActions();
+        clearSegments(false);
     }
 
     @Override
@@ -167,18 +171,30 @@ public class SponsorBlockController extends BasePlayerController {
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
-        if (item == null || item.videoId == null || item.isLive || getSponsorBlockData().getEnabledCategories().isEmpty()) {
+        Set<String> categories = new HashSet<>(getSponsorBlockData().getEnabledCategories());
+        boolean altServer = getSponsorBlockData().isAltServerEnabled();
+        if (item == null || item.videoId == null || item.isLive || categories.isEmpty()) {
             mActiveSegments = mOriginalSegments = null;
             mCachedSegmentsAction = null;
             return;
         }
 
-        if (!Helpers.equals(mVideoId, item.videoId) || mCachedSegmentsAction == null) {
+        if (!Helpers.equals(mVideoId, item.videoId) || mCachedSegmentsAction == null ||
+                !categories.equals(mCachedCategories) || altServer != mCachedAltServer) {
+            long requestGeneration = ++mCachedRequestGeneration;
             // NOTE: SponsorBlock (when happened java.net.SocketTimeoutException) could block whole application with Schedulers.io()
             // Because Schedulers.io() reuses blocked threads in RxJava 2: https://github.com/ReactiveX/RxJava/issues/6542
-            mCachedSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, getSponsorBlockData().getEnabledCategories())
+            mCachedSegmentsAction = mMediaItemService.getSponsorSegmentsObserve(item.videoId, categories)
+                    .doOnError(error -> {
+                        // cache() keeps observing after the player unsubscribes, but failed requests must remain retryable.
+                        if (requestGeneration == mCachedRequestGeneration) {
+                            mCachedSegmentsAction = null;
+                        }
+                    })
                     .cache();
             mVideoId = item.videoId;
+            mCachedCategories = categories;
+            mCachedAltServer = altServer;
         }
 
         mSegmentsAction = mCachedSegmentsAction
@@ -214,15 +230,28 @@ public class SponsorBlockController extends BasePlayerController {
     private void disposeActions() {
         RxHelper.disposeActions(mSegmentsAction);
 
-        // Note, removes all segments at once
-        //getPlayer().setSeekBarSegments(null); // reset colors
-
         // Reset previously found segment (fix no dialog popup)
         mLastSkipPosMs = 0;
     }
 
+    private void clearSegments(boolean restoreChapters) {
+        disposeActions();
+        mSegmentGeneration++;
+        mActiveSegments = mOriginalSegments = null;
+        closeTransparentDialog();
+
+        if (getPlayer() != null) {
+            getPlayer().setSeekBarSegments(null);
+            // Chapter markers share the same seekbar, so restore them after clearing SponsorBlock markers.
+            SuggestionsController suggestions = getController(SuggestionsController.class);
+            if (restoreChapters && suggestions != null) {
+                suggestions.addChapterMarkersIfNeeded();
+            }
+        }
+    }
+
     private void skipSegment(long interval) {
-        if (mActiveSegments == null || mActiveSegments.isEmpty() || getVideo() == null || !Helpers.equals(mVideoId, getVideo().videoId)) {
+        if (getPlayer() == null || mActiveSegments == null || mActiveSegments.isEmpty() || getVideo() == null || !Helpers.equals(mVideoId, getVideo().videoId)) {
             disposeActions();
             return;
         }
@@ -291,9 +320,13 @@ public class SponsorBlockController extends BasePlayerController {
 
         getPlayer().showControls(false);
 
+        long generation = mSegmentGeneration;
         OptionItem acceptOption = UiOptionItem.from(
                 getContext().getString(R.string.confirm_segment_skip, category),
                 option -> {
+                    if (generation != mSegmentGeneration || getPlayer() == null) {
+                        return;
+                    }
                     // return to previous dialog or close if no other dialogs in stack
                     dialogPresenter.goBack();
                     setPositionMs(skipPosMs);
@@ -311,23 +344,34 @@ public class SponsorBlockController extends BasePlayerController {
     }
 
     private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
-        if (segments == null) {
+        long durationMs = getPlayer().getDurationMs();
+        if (segments == null || durationMs <= 0) {
             return null;
         }
 
         List<SeekBarSegment> result = new ArrayList<>();
 
         for (SponsorSegment sponsorSegment : segments) {
-            if (!getSponsorBlockData().isColorMarkerEnabled(sponsorSegment.getCategory())) {
+            Integer colorRes = getSponsorBlockData().getColorRes(sponsorSegment.getCategory());
+            long startMs = sponsorSegment.getStartMs();
+            long endMs = sponsorSegment.getEndMs();
+            if (!getSponsorBlockData().isColorMarkerEnabled(sponsorSegment.getCategory()) || colorRes == null ||
+                    !isSupportedAction(sponsorSegment) || startMs < 0 || startMs >= durationMs || endMs < startMs) {
+                continue;
+            }
+
+            if (SponsorSegment.CATEGORY_POI_HIGHLIGHT.equals(sponsorSegment.getCategory())) {
+                endMs = startMs + Math.min(Math.max(1, durationMs / 10000), durationMs - startMs);
+            } else if (endMs == startMs) {
                 continue;
             }
 
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            float startRatio = (float) sponsorSegment.getStartMs() / getPlayer().getDurationMs(); // Range: [0, 1]
-            float endRatio = (float) sponsorSegment.getEndMs() / getPlayer().getDurationMs(); // Range: [0, 1]
+            float startRatio = (float) startMs / durationMs; // Range: [0, 1]
+            float endRatio = (float) Math.min(endMs, durationMs) / durationMs; // Range: [0, 1]
             seekBarSegment.startProgress = startRatio;
             seekBarSegment.endProgress = endRatio;
-            seekBarSegment.color = ContextCompat.getColor(getContext(), getSponsorBlockData().getColorRes(sponsorSegment.getCategory()));
+            seekBarSegment.color = ContextCompat.getColor(getContext(), colorRes);
             result.add(seekBarSegment);
         }
 
@@ -341,7 +385,9 @@ public class SponsorBlockController extends BasePlayerController {
         long durationMs = getPlayer().getDurationMs();
 
         // Sponsor block fix. Position may exceed real media length.
-        getPlayer().setPositionMs(Math.min(positionMs, durationMs));
+        if (durationMs > 0 && positionMs >= 0) {
+            getPlayer().setPositionMs(Math.min(positionMs, durationMs));
+        }
     }
 
     /**
@@ -355,9 +401,16 @@ public class SponsorBlockController extends BasePlayerController {
         List<SponsorSegment> foundSegment = null;
 
         for (SponsorSegment segment : segments) {
+            if (!isSupportedAction(segment) || SponsorSegment.CATEGORY_POI_HIGHLIGHT.equals(segment.getCategory()) ||
+                    segment.getStartMs() < 0 || segment.getEndMs() <= segment.getStartMs()) {
+                continue;
+            }
             int action = getSponsorBlockData().getAction(segment.getCategory());
             boolean isSkipAction = action == SponsorBlockData.ACTION_SKIP_ONLY ||
                     action == SponsorBlockData.ACTION_SKIP_WITH_TOAST;
+            if (!fullMatch && !isSkipAction && action != SponsorBlockData.ACTION_SHOW_DIALOG) {
+                continue;
+            }
             if (foundSegment == null) {
                 if (isPositionInsideSegment(positionMs, segment, fullMatch)) {
                     foundSegment = new ArrayList<>();
@@ -379,6 +432,11 @@ public class SponsorBlockController extends BasePlayerController {
         return foundSegment;
     }
 
+    private boolean isSupportedAction(SponsorSegment segment) {
+        // Older servers omitted actionType. Other action types need their own playback behaviour.
+        return segment.getAction() == null || SponsorSegment.ACTION_SKIP.equals(segment.getAction());
+    }
+
     private void applyActions(List<SponsorSegment> foundSegments) {
         if (getPlayer() == null || foundSegments == null) {
             mLastSkipPosMs = 0;
@@ -391,6 +449,10 @@ public class SponsorBlockController extends BasePlayerController {
         String skipMessage = resId != null ? getContext().getString(resId) : lastSegment.getCategory();
 
         int type = getSponsorBlockData().getAction(lastSegment.getCategory());
+        if (type != SponsorBlockData.ACTION_SKIP_ONLY && type != SponsorBlockData.ACTION_SKIP_WITH_TOAST &&
+                type != SponsorBlockData.ACTION_SHOW_DIALOG) {
+            return;
+        }
 
         long skipPosMs = lastSegment.getEndMs();
         // Fix infinite skip loop by ignoring short segments. TextureView has a seek bug.

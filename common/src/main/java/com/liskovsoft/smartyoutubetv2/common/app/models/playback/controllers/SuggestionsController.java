@@ -507,7 +507,7 @@ public class SuggestionsController extends BasePlayerController {
         }
     }
 
-    private void addChapterMarkersIfNeeded() {
+    void addChapterMarkersIfNeeded() {
         if (getPlayer() == null || mChapters == null) {
             return;
         }

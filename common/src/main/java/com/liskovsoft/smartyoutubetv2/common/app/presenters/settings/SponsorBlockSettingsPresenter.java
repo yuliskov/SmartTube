@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
+import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SponsorBlockController.SegmentAction;
@@ -79,8 +80,13 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
         Set<SegmentAction> actions = mSponsorBlockData.getActions();
 
         for (SegmentAction action : actions) {
+            if (SponsorSegment.CATEGORY_POI_HIGHLIGHT.equals(action.segmentCategory)) {
+                continue;
+            }
+
             options.add(UiOptionItem.from(
                     getColoredString(mSponsorBlockData.getLocalizedRes(action.segmentCategory), mSponsorBlockData.getColorRes(action.segmentCategory)),
+                    getContext().getString(mSponsorBlockData.getDescriptionRes(action.segmentCategory)),
                     optionItem -> {
                         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
 
@@ -113,6 +119,7 @@ public class SponsorBlockSettingsPresenter extends BasePresenter<Void> {
 
         for (String segmentCategory : mSponsorBlockData.getAllCategories()) {
             options.add(UiOptionItem.from(getColoredString(mSponsorBlockData.getLocalizedRes(segmentCategory), mSponsorBlockData.getColorRes(segmentCategory)),
+                    getContext().getString(mSponsorBlockData.getDescriptionRes(segmentCategory)),
                     optionItem -> {
                         if (optionItem.isSelected()) {
                             mSponsorBlockData.enableColorMarker(segmentCategory);
