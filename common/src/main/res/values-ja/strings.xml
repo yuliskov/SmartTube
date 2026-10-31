@@ -759,4 +759,14 @@
     <plurals name="seconds">
         <item quantity="other">%s 秒</item>
     </plurals>
+    <string name="modern_who_is_watching">視聴するのは誰ですか？</string>
+    <string name="modern_add_account">アカウントを追加</string>
+    <string name="modern_watch_as_guest">ゲストとして視聴</string>
+    <string name="modern_interface">モダンインターフェース</string>
+    <string name="modern_key_space">スペース</string>
+    <string name="modern_key_clear">クリア</string>
+    <string name="modern_all">すべて</string>
+    <string name="modern_on">オン</string>
+    <string name="modern_off">オフ</string>
+    <string name="modern_try_again">再試行</string>
 </resources>

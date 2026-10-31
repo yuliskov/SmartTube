@@ -18,6 +18,11 @@ public class CategoryEmptyError implements ErrorFragmentData {
         mError = error;
     }
 
+    @Nullable
+    public Throwable getError() {
+        return mError;
+    }
+
     @Override
     public void onAction() {
         YTSignInPresenter.instance(mContext).start();

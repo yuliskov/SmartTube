@@ -111,7 +111,7 @@ public abstract class LeanbackActivity extends MotherActivity {
                     finishReally();
                     break;
             }
-        } else if (this instanceof SearchTagsActivity) {
+        } else if (isSearchScreen()) {
             switch (getGeneralData().getSearchExitShortcut()) {
                 case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit(this::finishReally);
@@ -123,6 +123,13 @@ public abstract class LeanbackActivity extends MotherActivity {
         } else {
             finishReally();
         }
+    }
+
+    /**
+     * Search screens share the search exit shortcut.
+     */
+    protected boolean isSearchScreen() {
+        return this instanceof SearchTagsActivity;
     }
 
     @Override

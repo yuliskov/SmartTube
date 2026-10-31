@@ -761,6 +761,16 @@
         <item quantity="one">%s sekunda</item>
         <item quantity="other">%s sekund</item>
     </plurals>
+    <string name="modern_who_is_watching">Kdo se dívá?</string>
+    <string name="modern_add_account">Přidat účet</string>
+    <string name="modern_watch_as_guest">Sledovat jako host</string>
+    <string name="modern_interface">Moderní rozhraní</string>
+    <string name="modern_key_space">Mezera</string>
+    <string name="modern_key_clear">Vymazat</string>
+    <string name="modern_all">Vše</string>
+    <string name="modern_on">Zapnuto</string>
+    <string name="modern_off">Vypnuto</string>
+    <string name="modern_try_again">Zkusit znovu</string>
 </resources>
 
 
