@@ -11,6 +11,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarServi
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class AppPrefs extends SharedPreferencesBase implements AccountChangeListener {
     private static final String TAG = AppPrefs.class.getSimpleName();
     private static final String PREFS_DIR = "app_prefs";
@@ -18,7 +22,6 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static AppPrefs sInstance;
     private static final String ANONYMOUS_PROFILE_NAME = "anonymous";
     private static final String MULTI_PROFILES = "multi_profiles";
-    private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String CHANNEL_GROUP_DATA = "channel_group_data";
     private static final String SIDEBAR_DATA = "sidebar_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
@@ -26,6 +29,10 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
     private static final String LAST_PROFILE_NAME = "last_profile_name";
     private String mBootResolution;
+    private String mStateUpdaterKey;
+    private String mLegacyStateUpdaterKey;
+    private boolean mCanMigrateHistory;
+    private final Map<Account, String> mSessionHistoryKeys = new IdentityHashMap<>();
     private final WeakHashSet<ProfileChangeListener> mListeners = new WeakHashSet<>();
 
     public interface ProfileChangeListener {
@@ -80,13 +87,56 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
     }
 
     public String getStateUpdaterData() {
-        // Always use multiple profiles for the history
-        return getData(getProfileKey(STATE_UPDATER_DATA, true));
+        return getStateUpdaterData(getStateUpdaterKey());
     }
 
     public void setStateUpdaterData(String data) {
-        // Always use multiple profiles for the history
-        setData(getProfileKey(STATE_UPDATER_DATA, true), data);
+        setStateUpdaterData(getStateUpdaterKey(), data);
+    }
+
+    public String getStateUpdaterKey() {
+        if (mStateUpdaterKey == null) {
+            selectHistoryProfile(MediaServiceManager.instance().getSelectedAccount());
+        }
+        return mStateUpdaterKey;
+    }
+
+    public String getStateUpdaterData(String key) {
+        if (!HistoryProfileKey.isPersistent(key)) {
+            return null;
+        }
+
+        String data = getData(key);
+        String migratedKey = "history_migrated_" + key;
+        if (data != null || getBoolean(migratedKey, false)) {
+            return data;
+        }
+
+        if (key.equals(mStateUpdaterKey) && mLegacyStateUpdaterKey != null) {
+            String ownerKey = HistoryProfileKey.migrationOwnerKey(mLegacyStateUpdaterKey);
+            String owner = getString(ownerKey, null);
+            if (mCanMigrateHistory && (owner == null || owner.equals(key))) {
+                data = getData(mLegacyStateUpdaterKey);
+                if (data != null) {
+                    setData(key, data);
+                    putString(ownerKey, key);
+                }
+            } else if (!mCanMigrateHistory && owner == null) {
+                // Do not attribute mixed legacy history after a conflicting account is removed.
+                putString(ownerKey, "ambiguous");
+            }
+        }
+
+        // Preserve the legacy file, but never restore it again after history has been cleared.
+        putBoolean(migratedKey, true);
+        return data;
+    }
+
+    public void setStateUpdaterData(String key, String data) {
+        if (HistoryProfileKey.isPersistent(key)) {
+            setData(key, data);
+            putBoolean("history_migrated_" + key, true);
+        }
     }
 
     public String getChannelGroupData() {
@@ -161,6 +211,22 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
         String profileName = account != null && account.getName() != null ? account.getName().replace(" ", "_") : ANONYMOUS_PROFILE_NAME;
 
         setProfileName(profileName);
+
+        selectHistoryProfile(account);
+    }
+
+    private void selectHistoryProfile(Account account) {
+        mStateUpdaterKey = HistoryProfileKey.forAccount(account);
+        if (mStateUpdaterKey == null) {
+            // An incomplete sign-in must not share guest history or a display-name profile.
+            if (!mSessionHistoryKeys.containsKey(account)) {
+                mSessionHistoryKeys.put(account, "history_session_" + UUID.randomUUID());
+            }
+            mStateUpdaterKey = mSessionHistoryKeys.get(account);
+        }
+        mLegacyStateUpdaterKey = HistoryProfileKey.legacyKey(account);
+        MediaServiceManager.instance().loadAccounts(accounts ->
+                mCanMigrateHistory = HistoryProfileKey.canMigrateLegacy(account, accounts));
     }
 
     private void onProfileChanged() {

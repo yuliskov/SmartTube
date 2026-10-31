@@ -122,6 +122,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
             //getController(VideoStateController.class).saveState();
         }
 
+        getController(VideoStateController.class).prepareNewHistorySession();
         onNewVideo(video);
 
         getViewManager().startView(PlaybackView.class);

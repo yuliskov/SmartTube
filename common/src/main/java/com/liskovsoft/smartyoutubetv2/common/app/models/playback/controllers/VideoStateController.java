@@ -40,6 +40,8 @@ public class VideoStateController extends BasePlayerController {
     @Nullable
     private Boolean mIsRestoreActualLive;
     private long mSleepTimerStartMs;
+    private long mHistorySessionGeneration = -1;
+    private boolean mNewHistorySessionRequested;
 
     @Override
     public void onInit() {
@@ -64,6 +66,13 @@ public class VideoStateController extends BasePlayerController {
             saveState();
         }
 
+        Utils.removeCallbacks(mUpdateHistory);
+        // Retrying the same playback must not transfer it to an account selected meanwhile.
+        if (mNewHistorySessionRequested || item != getVideo() || mHistorySessionGeneration == -1) {
+            mHistorySessionGeneration = getStateService().getSessionGeneration();
+        }
+        mNewHistorySessionRequested = false;
+
         if (!item.equals(getVideo())) {
             mNewVideoTimeMs = System.currentTimeMillis();
         }
@@ -75,7 +84,9 @@ public class VideoStateController extends BasePlayerController {
         enableIncognitoIfNeeded(item);
 
         // Don't do reset on videoLoaded state because this will influences minimized music videos.
-        resetPositionIfNeeded(item);
+        if (isHistorySessionActive()) {
+            resetPositionIfNeeded(item);
+        }
         resetGlobalSpeedIfNeeded();
     }
 
@@ -114,6 +125,14 @@ public class VideoStateController extends BasePlayerController {
         setPlayEnabled(true); // autoplay video from suggestions
 
         saveState();
+        if (item != null && item.hasVideo()) {
+            prepareNewHistorySession();
+        }
+    }
+
+    public void prepareNewHistorySession() {
+        // Explicit selection can reuse the same queued Video object; automatic retries cannot.
+        mNewHistorySessionRequested = true;
     }
 
     @Override
@@ -131,6 +150,7 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onEngineReleased() {
+        Utils.removeCallbacks(mUpdateHistory);
         if (getPlayer() == null) {
             return;
         }
@@ -364,6 +384,7 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public void onFinish() {
+        Utils.removeCallbacks(mUpdateHistory);
         mIncognito = false;
     }
 
@@ -481,6 +502,11 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void saveState() {
+        // A paused or background player can outlive an account switch.
+        if (!isHistorySessionActive()) {
+            return;
+        }
+
         // Skip mini player, but don't save for the previews (mute enabled)
         if (isMutedEmbed()) {
             return;
@@ -550,7 +576,7 @@ public class VideoStateController extends BasePlayerController {
     private void restorePosition() {
         Video item = getVideo();
 
-        if (getPlayer() == null || item == null) {
+        if (getPlayer() == null || item == null || !isHistorySessionActive()) {
             return;
         }
 
@@ -614,7 +640,7 @@ public class VideoStateController extends BasePlayerController {
     }
 
     private void restoreSpeedAndPositionIfNeeded() {
-        if (getPlayer() == null || getVideo() == null) {
+        if (getPlayer() == null || getVideo() == null || !isHistorySessionActive()) {
             return;
         }
 
@@ -773,6 +799,10 @@ public class VideoStateController extends BasePlayerController {
 
     private boolean isMutedEmbed() {
         return isEmbedPlayer() && getPlayer() != null && Helpers.floatEquals(getPlayer().getVolume(), 0);
+    }
+
+    private boolean isHistorySessionActive() {
+        return getStateService() != null && mHistorySessionGeneration == getStateService().getSessionGeneration();
     }
 
     private boolean isBeginEmbed() {

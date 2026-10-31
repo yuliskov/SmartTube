@@ -26,6 +26,9 @@ public class VideoStateService implements ProfileChangeListener {
     private final AppPrefs mPrefs;
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
+    private String mStateKey;
+    private boolean mIsStateDirty;
+    private long mSessionGeneration;
     private final Runnable mPersistStateInt = () -> {
         try {
             persistStateInt();
@@ -104,24 +107,32 @@ public class VideoStateService implements ProfileChangeListener {
         return mSessionStartTimeMs;
     }
 
+    public long getSessionGeneration() {
+        return mSessionGeneration;
+    }
+
     private void restoreState() {
         mStates.clear();
-        String data = mPrefs.getStateUpdaterData();
+        mStateKey = mPrefs.getStateUpdaterKey();
+        String data = mPrefs.getStateUpdaterData(mStateKey);
 
         String[] split = Helpers.splitData(data);
 
         setStateData(Helpers.parseStr(split, 0));
         mIsHistoryBroken = Helpers.parseBoolean(split, 1);
         mSessionStartTimeMs = System.currentTimeMillis();
+        mSessionGeneration++;
+        mIsStateDirty = false;
     }
 
     private void persistStateInt() {
         if (mIsHistoryBroken) {
-            mPrefs.setStateUpdaterData(Helpers.mergeData(getStateData(), mIsHistoryBroken));
+            mPrefs.setStateUpdaterData(mStateKey, Helpers.mergeData(getStateData(), mIsHistoryBroken));
         } else {
             // Eliminate additional string creation with the merge
-            mPrefs.setStateUpdaterData(getStateData());
+            mPrefs.setStateUpdaterData(mStateKey, getStateData());
         }
+        mIsStateDirty = false;
     }
 
     public void persistNow() {
@@ -129,6 +140,7 @@ public class VideoStateService implements ProfileChangeListener {
     }
 
     private void persistState() {
+        mIsStateDirty = true;
         // Improve memory and disc usage
         Utils.postDelayed(mPersistStateInt, PERSIST_DELAY_MS);
     }
@@ -205,6 +217,15 @@ public class VideoStateService implements ProfileChangeListener {
 
     @Override
     public void onProfileChanged() {
+        if (Helpers.equals(mStateKey, mPrefs.getStateUpdaterKey())) {
+            return;
+        }
+
+        Utils.removeCallbacks(mPersistStateInt);
+        if (mIsStateDirty) {
+            // AppPrefs has already switched accounts; flush to the key that owns these states.
+            mPersistStateInt.run();
+        }
         restoreState();
     }
 
