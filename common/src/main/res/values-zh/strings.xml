@@ -760,4 +760,14 @@
     <plurals name="seconds">
         <item quantity="other">%s 秒</item>
     </plurals>
+    <string name="modern_who_is_watching">谁在观看？</string>
+    <string name="modern_add_account">添加帐号</string>
+    <string name="modern_watch_as_guest">以访客身份观看</string>
+    <string name="modern_interface">现代界面</string>
+    <string name="modern_key_space">空格</string>
+    <string name="modern_key_clear">清除</string>
+    <string name="modern_all">全部</string>
+    <string name="modern_on">开启</string>
+    <string name="modern_off">关闭</string>
+    <string name="modern_try_again">重试</string>
 </resources>

@@ -768,4 +768,14 @@
         <item quantity="many">%s секунд</item>
         <item quantity="other">%s секунди</item>
     </plurals>
+    <string name="modern_who_is_watching">Хто дивиться?</string>
+    <string name="modern_add_account">Додати обліковий запис</string>
+    <string name="modern_watch_as_guest">Дивитися як гість</string>
+    <string name="modern_interface">Сучасний інтерфейс</string>
+    <string name="modern_key_space">Пробіл</string>
+    <string name="modern_key_clear">Очистити</string>
+    <string name="modern_all">Усі</string>
+    <string name="modern_on">Увімк.</string>
+    <string name="modern_off">Вимк.</string>
+    <string name="modern_try_again">Спробувати ще раз</string>
 </resources>

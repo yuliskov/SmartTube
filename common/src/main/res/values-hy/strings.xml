@@ -145,4 +145,14 @@
     <string name="player_seek_preview_carousel_slow">Կարուսել (դանդաղ)</string>
     <string name="player_seek_preview_carousel_fast">Կարուսել (արագ)</string>
     <string name="unsubscribe_from_channel">Ապաբաժանորդագրվել ալիքից</string>
+    <string name="modern_who_is_watching">Ո՞վ է դիտում</string>
+    <string name="modern_add_account">Ավելացնել հաշիվ</string>
+    <string name="modern_watch_as_guest">Դիտել որպես հյուր</string>
+    <string name="modern_interface">Ժամանակակից ինտերֆեյս</string>
+    <string name="modern_key_space">Բացատ</string>
+    <string name="modern_key_clear">Մաքրել</string>
+    <string name="modern_all">Բոլորը</string>
+    <string name="modern_on">Միացված</string>
+    <string name="modern_off">Անջատված</string>
+    <string name="modern_try_again">Կրկին փորձել</string>
 </resources>

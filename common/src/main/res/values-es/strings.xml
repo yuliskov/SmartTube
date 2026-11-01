@@ -761,4 +761,14 @@
         <item quantity="one">%s segundo</item>
         <item quantity="other">%s segundos</item>
     </plurals>
+    <string name="modern_who_is_watching">¿Quién está viendo?</string>
+    <string name="modern_add_account">Añadir cuenta</string>
+    <string name="modern_watch_as_guest">Ver como invitado</string>
+    <string name="modern_interface">Interfaz moderna</string>
+    <string name="modern_key_space">Espacio</string>
+    <string name="modern_key_clear">Borrar</string>
+    <string name="modern_all">Todo</string>
+    <string name="modern_on">Activado</string>
+    <string name="modern_off">Desactivado</string>
+    <string name="modern_try_again">Reintentar</string>
 </resources>

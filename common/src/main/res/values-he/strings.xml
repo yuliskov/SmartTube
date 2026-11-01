@@ -765,4 +765,14 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
         <item quantity="one">שנייה אחת</item>
         <item quantity="other">%s שניות</item>
     </plurals>
+    <string name="modern_who_is_watching">מי צופה?</string>
+    <string name="modern_add_account">הוספת חשבון</string>
+    <string name="modern_watch_as_guest">צפייה כאורח</string>
+    <string name="modern_interface">ממשק מודרני</string>
+    <string name="modern_key_space">רווח</string>
+    <string name="modern_key_clear">ניקוי</string>
+    <string name="modern_all">הכול</string>
+    <string name="modern_on">מופעל</string>
+    <string name="modern_off">כבוי</string>
+    <string name="modern_try_again">נסה שוב</string>
 </resources>

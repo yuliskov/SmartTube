@@ -760,7 +760,7 @@ public class PlaybackSupportFragment extends Fragment {
         setVerticalGridViewLayout(mRowsSupportFragment.getVerticalGridView());
     }
 
-    void setVerticalGridViewLayout(VerticalGridView listview) {
+    protected void setVerticalGridViewLayout(VerticalGridView listview) {
         if (listview == null) {
             return;
         }

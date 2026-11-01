@@ -119,4 +119,14 @@
     <string name="sorting_by_new_content">Jauns saturs</string>
     <string name="sorting_alphabetically">Alfabētiski</string>
     <string name="sorting_last_viewed">Pēdējais skatītais</string>
+    <string name="modern_who_is_watching">Kurš skatās?</string>
+    <string name="modern_add_account">Pievienot kontu</string>
+    <string name="modern_watch_as_guest">Skatīties kā viesim</string>
+    <string name="modern_interface">Moderna saskarne</string>
+    <string name="modern_key_space">Atstarpe</string>
+    <string name="modern_key_clear">Notīrīt</string>
+    <string name="modern_all">Visi</string>
+    <string name="modern_on">Ieslēgts</string>
+    <string name="modern_off">Izslēgts</string>
+    <string name="modern_try_again">Mēģināt vēlreiz</string>
 </resources>

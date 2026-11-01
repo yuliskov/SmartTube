@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:state_focused="true" android:drawable="@drawable/modern_ic_check_box_on_light" />
+    <item android:state_checked="true" android:drawable="@drawable/modern_ic_check_box" />
+    <item android:state_focused="true" android:drawable="@drawable/modern_ic_check_box_outline_blank_on_light" />
+    <item android:drawable="@drawable/modern_ic_check_box_outline_blank" />
+</selector>

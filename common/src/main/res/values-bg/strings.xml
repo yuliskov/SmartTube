@@ -761,4 +761,14 @@
         <item quantity="one">%s секунда</item>
         <item quantity="other">%s секунди</item>
     </plurals>
+    <string name="modern_who_is_watching">Кой гледа?</string>
+    <string name="modern_add_account">Добавяне на профил</string>
+    <string name="modern_watch_as_guest">Гледане като гост</string>
+    <string name="modern_interface">Модерен интерфейс</string>
+    <string name="modern_key_space">Интервал</string>
+    <string name="modern_key_clear">Изчистване</string>
+    <string name="modern_all">Всички</string>
+    <string name="modern_on">Вкл.</string>
+    <string name="modern_off">Изкл.</string>
+    <string name="modern_try_again">Опитайте отново</string>
 </resources>

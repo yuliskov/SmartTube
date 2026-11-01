@@ -118,6 +118,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
     private final Runnable mPersistStateInt = this::persistStateInt;
     private boolean mIsUnlocalizedTitlesEnabled;
     private long mUiTweaks;
+    private boolean mIsModernUiEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -259,6 +260,15 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         persistState();
     }
 
+    public boolean isModernUiEnabled() {
+        return mIsModernUiEnabled;
+    }
+
+    public void setModernUiEnabled(boolean enable) {
+        mIsModernUiEnabled = enable;
+        persistState();
+    }
+
     public boolean isChannelSearchBarEnabled() {
         return mIsChannelSearchBarEnabled;
     }
@@ -378,48 +388,56 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 null,
                 null,
                 null,
+                "ThemeOverlay.Modern.Scheme.Teal",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey,
                 "App.Theme.DarkGrey.Player",
                 "App.Theme.DarkGrey.Browse",
                 "App.Theme.DarkGrey.Preferences",
+                "ThemeOverlay.Modern.Scheme.DarkGrey",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red,
                 "App.Theme.Red.Player",
                 "App.Theme.Red.Browse",
                 "App.Theme.Red.Preferences",
+                "ThemeOverlay.Modern.Scheme.Red",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey_oled,
                 "App.Theme.DarkGrey.OLED.Player",
                 "App.Theme.DarkGrey.OLED.Browse",
                 "App.Theme.DarkGrey.Preferences",
+                "ThemeOverlay.Modern.Scheme.Oled.DarkGrey",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal_oled,
                 "App.Theme.Leanback.OLED.Player",
                 "App.Theme.Leanback.OLED.Browse",
                 null,
+                "ThemeOverlay.Modern.Scheme.Oled.Teal",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey_monochrome,
                 "App.Theme.DarkGrey2.OLED.Player",
                 "App.Theme.DarkGrey2.OLED.Browse",
                 "App.Theme.DarkGrey.Preferences",
+                "ThemeOverlay.Modern.Scheme.Monochrome",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_blue,
                 "App.Theme.Leanback.Blue.Player",
                 "App.Theme.Leanback.Blue.Browse",
                 "App.Theme.Leanback.Blue.Preferences",
+                "ThemeOverlay.Modern.Scheme.Blue",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_blue_oled,
                 "App.Theme.Leanback.Blue.OLED.Player",
                 "App.Theme.Leanback.Blue.OLED.Browse",
                 "App.Theme.Leanback.Blue.Preferences",
+                "ThemeOverlay.Modern.Scheme.Oled.Blue",
                 mContext));
     }
 
@@ -452,6 +470,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
         mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
         mUiTweaks = Helpers.parseLong(split, 23, UI_TWEAK_DEFAULT);
+        mIsModernUiEnabled = Helpers.parseBoolean(split, 24, true);
 
         int idx = -1;
         for (Long menuItem : MENU_ITEM_DEFAULT_ORDER) {
@@ -499,7 +518,7 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
                 mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems, mTopButtons,
                 null, mThumbQuality, mIsCardMultilineSubtitleEnabled, Helpers.mergeList(mMenuItemsOrdered),
                 mIsChannelsFilterEnabled, mIsChannelSearchBarEnabled, mIsPinnedChannelRowsEnabled, mCardPreviewType,
-                mIsUnlocalizedTitlesEnabled, mUiTweaks));
+                mIsUnlocalizedTitlesEnabled, mUiTweaks, mIsModernUiEnabled));
     }
 
     public static class ColorScheme {
@@ -507,16 +526,20 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         public final int playerThemeResId;
         public final int browseThemeResId;
         public final int settingsThemeResId;
+        /** Theme overlay applied by the modern interface on top of its own themes */
+        public final int modernThemeResId;
 
         public ColorScheme(int nameResId,
                            String playerTheme,
                            String browseTheme,
                            String settingsTheme,
+                           String modernTheme,
                            Context context) {
             this.nameResId = nameResId;
             this.playerThemeResId = Helpers.getResourceId(playerTheme, "style", context);
             this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
             this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
+            this.modernThemeResId = Helpers.getResourceId(modernTheme, "style", context);
         }
     }
 

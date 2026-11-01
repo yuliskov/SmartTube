@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Buttons inside a group have no own background: the group pill is drawn by the bar -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/modern_rail_selected_pill" />
+        </shape>
+    </item>
+    <item android:drawable="@android:color/transparent" />
+</selector>
