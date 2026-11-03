@@ -753,6 +753,7 @@
     <string name="comments_disabled">Els comentaris estan desactivats per a aquest vídeo</string>
     <string name="prefer_sabr_live">Emissions en directe SABR</string>
     <string name="prefer_sabr_live_desc">Emissions en directe SABR experimentals. Activeu-ho només si teniu problemes amb les emissions en directe normals.</string>
+    <string name="live_edge">No quedar-se enrere de l\'emissió en directe</string>
     <plurals name="hours">
         <item quantity="one">%s hora</item>
         <item quantity="other">%s hores</item>

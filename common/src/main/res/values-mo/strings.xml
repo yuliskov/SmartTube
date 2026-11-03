@@ -753,6 +753,7 @@
     <string name="comments_disabled">Comentariile sunt dezactivate pentru acest videoclip</string>
     <string name="prefer_sabr_live">Transmisiuni live SABR</string>
     <string name="prefer_sabr_live_desc">Transmisiuni live SABR experimentale. Activați doar dacă aveți probleme cu transmisiunile live obișnuite.</string>
+    <string name="live_edge">Nu rămâne în urma transmisiunii live</string>
     <plurals name="hours">
         <item quantity="one">%s oră</item>
         <item quantity="other">%s de ore</item>

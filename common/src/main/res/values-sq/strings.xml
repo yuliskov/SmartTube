@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">Transmetime live SABR</string>
     <string name="prefer_sabr_live_desc">Transmetime live eksperimentale SABR. Aktivizoje vetëm nëse ke probleme me transmetimet live të zakonshme.</string>
     <string name="remote_control_dial">Shfaq në listën e transmetimit të YouTube (DIAL)</string>
+    <string name="live_edge">Mos mbetu pas transmetimit live</string>
     <plurals name="hours">
         <item quantity="one">%s orë</item>
         <item quantity="other">%s orë</item>

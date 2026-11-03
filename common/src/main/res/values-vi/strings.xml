@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">Phát trực tiếp SABR</string>
     <string name="prefer_sabr_live_desc">Phát trực tiếp SABR thử nghiệm. Chỉ bật nếu bạn gặp sự cố với phát trực tiếp thông thường.</string>
     <string name="remote_control_dial">Hiển thị trong danh sách truyền của YouTube (DIAL)</string>
+    <string name="live_edge">Không bị chậm so với phát trực tiếp</string>
     <plurals name="hours">
         <item quantity="other">%s giờ</item>
     </plurals>

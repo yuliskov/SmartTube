@@ -753,6 +753,7 @@
     <string name="install_bridge">ATV/Amazon köprüsünü yükle</string>
     <string name="fix_empty_subs_and_channels">Boş Abonelikleri ve Kanalları düzelt</string>
     <string name="remote_control_dial">YouTube yayın listesinde göster (DIAL)</string>
+    <string name="live_edge">Canlı yayından geri kalmama</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

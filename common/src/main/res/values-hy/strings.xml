@@ -752,6 +752,7 @@
     <string name="comments_disabled">Այս տեսանյութի մեկնաբանությունները անջատված են</string>
     <string name="prefer_sabr_live">SABR ուղիղ եթերներ</string>
     <string name="prefer_sabr_live_desc">Փորձարարական SABR ուղիղ եթերներ։ Միացրեք միայն եթե սովորական ուղիղ եթերների հետ խնդիրներ ունեք։</string>
+    <string name="live_edge">Չհետ մնալ ուղիղ եթերից</string>
     <plurals name="hours">
         <item quantity="one">%s ժամ</item>
         <item quantity="other">%s ժամ</item>

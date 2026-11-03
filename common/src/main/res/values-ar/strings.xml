@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">بث SABR المباشر</string>
     <string name="prefer_sabr_live_desc">بث SABR مباشر تجريبي. فعّله فقط إذا واجهت مشكلات في البث المباشر العادي.</string>
     <string name="remote_control_dial">عرض في قائمة البث في يوتيوب (DIAL)</string>
+    <string name="live_edge">عدم التأخر عن البث المباشر</string>
     <plurals name="hours">
         <item quantity="one">%s ساعة</item>
         <item quantity="other">%s ساعة</item>

@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">Transmisiones en vivo SABR</string>
     <string name="prefer_sabr_live_desc">Transmisiones en vivo SABR experimentales. Actívalo solo si tienes problemas con las transmisiones en vivo normales.</string>
     <string name="remote_control_dial">Mostrar en la lista de transmisión de YouTube (DIAL)</string>
+    <string name="live_edge">No quedarse atrás de la transmisión en vivo</string>
     <plurals name="hours">
         <item quantity="one">%s hora</item>
         <item quantity="other">%s horas</item>

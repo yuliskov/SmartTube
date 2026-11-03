@@ -753,6 +753,7 @@
     <string name="comments_disabled">Коментарите са изключени за това видео</string>
     <string name="prefer_sabr_live">SABR предавания на живо</string>
     <string name="prefer_sabr_live_desc">Експериментални SABR предавания на живо. Включете само ако имате проблеми с обикновените предавания на живо.</string>
+    <string name="live_edge">Без изоставане от предаването на живо</string>
     <plurals name="hours">
         <item quantity="one">%s час</item>
         <item quantity="other">%s часа</item>

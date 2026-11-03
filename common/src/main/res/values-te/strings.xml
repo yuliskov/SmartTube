@@ -756,6 +756,7 @@
     <string name="comments_disabled">ఈ వీడియోకు వ్యాఖ్యలు నిలిపివేయబడ్డాయి</string>
     <string name="prefer_sabr_live">SABR లైవ్ స్ట్రీమ్‌లు</string>
     <string name="prefer_sabr_live_desc">ప్రయోగాత్మక SABR లైవ్ స్ట్రీమ్‌లు. సాధారణ లైవ్ స్ట్రీమ్‌లతో సమస్య ఉంటే మాత్రమే ప్రారంభించండి.</string>
+    <string name="live_edge">లైవ్ స్ట్రీమ్ కంటే వెనుకబడకుండా ఉండండి</string>
     <plurals name="hours">
         <item quantity="one">%s గంట</item>
         <item quantity="other">%s గంటలు</item>

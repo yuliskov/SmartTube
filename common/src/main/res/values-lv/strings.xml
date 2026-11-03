@@ -752,6 +752,7 @@
     <string name="comments_disabled">Komentāri šim video ir atspējoti</string>
     <string name="prefer_sabr_live">SABR tiešraides straumes</string>
     <string name="prefer_sabr_live_desc">Eksperimentālas SABR tiešraides straumes. Iespējojiet tikai tad, ja ir problēmas ar parastajām tiešraides straumēm.</string>
+    <string name="live_edge">Neatpalikt no tiešraides</string>
     <plurals name="hours">
         <item quantity="zero">%s stundu</item>
         <item quantity="one">%s stunda</item>

@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">Ζωντανές μεταδόσεις SABR</string>
     <string name="prefer_sabr_live_desc">Πειραματικές ζωντανές μεταδόσεις SABR. Ενεργοποιήστε μόνο αν αντιμετωπίζετε προβλήματα με τις κανονικές ζωντανές μεταδόσεις.</string>
     <string name="remote_control_dial">Εμφάνιση στη λίστα μετάδοσης του YouTube (DIAL)</string>
+    <string name="live_edge">Να μη μένει πίσω από τη ζωντανή μετάδοση</string>
     <plurals name="hours">
         <item quantity="one">%s ώρα</item>
         <item quantity="other">%s ώρες</item>

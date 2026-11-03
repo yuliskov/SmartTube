@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">SABR 라이브 스트림</string>
     <string name="prefer_sabr_live_desc">실험적인 SABR 라이브 스트림입니다. 일반 라이브 스트림에 문제가 있을 때만 사용하세요.</string>
     <string name="remote_control_dial">YouTube 전송 목록에 표시 (DIAL)</string>
+    <string name="live_edge">생방송에 뒤처지지 않기</string>
     <plurals name="hours">
         <item quantity="other">%s 시간</item>
     </plurals>

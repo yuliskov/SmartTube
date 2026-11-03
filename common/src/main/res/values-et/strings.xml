@@ -753,6 +753,7 @@
     <string name="comments_disabled">Selle video kommentaarid on keelatud</string>
     <string name="prefer_sabr_live">SABR-otseülekanded</string>
     <string name="prefer_sabr_live_desc">Eksperimentaalsed SABR-otseülekanded. Luba ainult siis, kui tavaliste otseülekannetega on probleeme.</string>
+    <string name="live_edge">Ära jää otseülekandest maha</string>
     <plurals name="hours">
         <item quantity="one">%s tund</item>
         <item quantity="other">%s tundi</item>

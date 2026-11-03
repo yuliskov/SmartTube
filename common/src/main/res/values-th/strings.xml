@@ -753,6 +753,7 @@
     <string name="comments_disabled">ปิดความคิดเห็นสำหรับวิดีโอนี้</string>
     <string name="prefer_sabr_live">สตรีมสด SABR</string>
     <string name="prefer_sabr_live_desc">สตรีมสด SABR แบบทดลอง เปิดใช้เฉพาะเมื่อมีปัญหากับสตรีมสดปกติ</string>
+    <string name="live_edge">ไม่ตามหลังสตรีมสด</string>
     <plurals name="hours">
         <item quantity="other">%s ชั่วโมง</item>
     </plurals>

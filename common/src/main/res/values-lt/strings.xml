@@ -752,6 +752,7 @@
     <string name="comments_disabled">Šio vaizdo įrašo komentarai išjungti</string>
     <string name="prefer_sabr_live">SABR tiesioginės transliacijos</string>
     <string name="prefer_sabr_live_desc">Eksperimentinės SABR tiesioginės transliacijos. Įjunkite tik jei kyla problemų su įprastomis tiesioginėmis transliacijomis.</string>
+    <string name="live_edge">Neatsilikti nuo tiesioginės transliacijos</string>
     <plurals name="hours">
         <item quantity="one">%s valanda</item>
         <item quantity="few">%s valandos</item>
