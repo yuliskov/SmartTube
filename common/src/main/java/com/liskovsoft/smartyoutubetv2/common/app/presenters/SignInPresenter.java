@@ -7,7 +7,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 
 public class SignInPresenter extends BasePresenter<SignInView> {
-    private static final String TAG = SignInPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SignInPresenter sInstance;
     private SignInPresenter mPresenter;

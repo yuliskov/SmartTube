@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubtitleManager implements TextOutput, OnDataChange {
-    private static final String TAG = SubtitleManager.class.getSimpleName();
     private final SubtitleView mSubtitleView;
     private final Context mContext;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
