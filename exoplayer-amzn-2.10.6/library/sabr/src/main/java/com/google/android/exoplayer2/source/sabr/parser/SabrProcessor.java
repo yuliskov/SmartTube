@@ -5,6 +5,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.PoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
@@ -447,6 +448,10 @@ public class SabrProcessor {
 
         if (resultStatus != null) {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
+        }
+
+        if (status != Status.OK) {
+            throw new PoTokenError("PoToken attestation failed: " + Helpers.toString(resultStatus));
         }
 
         return result;

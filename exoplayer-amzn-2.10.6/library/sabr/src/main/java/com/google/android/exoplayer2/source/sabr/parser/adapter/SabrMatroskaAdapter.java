@@ -4,6 +4,7 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.extractor.PositionHolder;
 import com.google.android.exoplayer2.extractor.mkv.MatroskaExtractor;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.PoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.SabrExtractorInput;
@@ -32,7 +33,7 @@ public class SabrMatroskaAdapter extends MatroskaExtractor {
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
-        } catch (SabrReloadPlayerError | SabrBackoffError e) {
+        } catch (SabrReloadPlayerError | SabrBackoffError | PoTokenError e) {
             Log.e(TAG, "Propagating SABR control signal: %s", e.getMessage());
             throw e;
         } catch (Exception e) {
