@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
  * The server sent ReloadPlayerResponse. No media will be sent until the player response is re-fetched
  * with the token (playbackContext.reloadPlaybackContext.reloadPlaybackParams.token).
  */
-public class SabrReloadPlayerError extends SabrStreamError {
+public class SabrReloadPlayerError extends SabrPropagationError {
     @Nullable
     public final String reloadPlaybackToken;
 

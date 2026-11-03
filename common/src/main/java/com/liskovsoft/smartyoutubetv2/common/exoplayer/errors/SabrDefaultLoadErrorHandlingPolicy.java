@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.source.sabr.parser.exceptions.PoTokenError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -41,7 +41,7 @@ public class SabrDefaultLoadErrorHandlingPolicy extends DashDefaultLoadErrorHand
             return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
         }
 
-        if (cause instanceof PoTokenError) {
+        if (cause instanceof SabrPoTokenError) {
             Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
             return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
         }
