@@ -412,13 +412,26 @@ public class Utils {
         }
     }
 
-    @SuppressLint("StringFormatMatches")
     private static void setPlayerVolume(Context context, PlayerManager player, int volume) {
         if (player == null) {
             return;
         }
         player.setVolume(volume / 100f);
-        MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(player)));
+        showVolumeUI(context, player, getPlayerVolume(player));
+    }
+
+    /**
+     * Show the in-player volume slider. Only reached when the global volume is fixed, so the
+     * system volume UI isn't an option here. Falls back to a message when there's no player
+     * attached (e.g. volume commands coming from the remote control before the player is up).
+     */
+    @SuppressLint("StringFormatMatches")
+    private static void showVolumeUI(Context context, PlayerManager player, int volume) {
+        if (player != null) {
+            player.showVolume(volume);
+        } else if (context != null) {
+            MessageHelpers.showMessage(context, context.getString(R.string.volume, volume));
+        }
     }
 
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
