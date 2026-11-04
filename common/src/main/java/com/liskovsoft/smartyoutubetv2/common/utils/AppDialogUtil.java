@@ -17,6 +17,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -48,6 +49,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.playlist.impl.YouTubePlaylistInfo;
 
 import java.io.File;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -1092,7 +1094,25 @@ public class AppDialogUtil {
             Context context, Video video, VideoMenuCallback callback, AppDialogPresenter dialogPresenter, List<PlaylistInfo> playlistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (PlaylistInfo playlistInfo : playlistInfos) {
+        // Optionally sort playlists alphabetically so their position stays stable instead
+        // of shuffling around in most-recently-used order (see issue #5904).
+        List<PlaylistInfo> orderedPlaylistInfos = playlistInfos;
+
+        if (GeneralData.instance(context).isPlaylistsSortedEnabled()) {
+            // Collator instead of compareToIgnoreCase: the latter compares code points, which
+            // misorders accented and non-latin titles (e.g. Cyrillic or Hebrew playlist names).
+            Collator collator = Collator.getInstance(LocaleUtility.getCurrentLocale(context));
+            collator.setStrength(Collator.SECONDARY); // accent sensitive, case insensitive
+
+            orderedPlaylistInfos = new ArrayList<>(playlistInfos);
+            Collections.sort(orderedPlaylistInfos, (info1, info2) -> {
+                String title1 = info1.getTitle() != null ? info1.getTitle() : "";
+                String title2 = info2.getTitle() != null ? info2.getTitle() : "";
+                return collator.compare(title1, title2);
+            });
+        }
+
+        for (PlaylistInfo playlistInfo : orderedPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
