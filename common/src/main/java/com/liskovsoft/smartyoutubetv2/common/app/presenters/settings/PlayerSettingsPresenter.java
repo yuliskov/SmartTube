@@ -18,7 +18,9 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.VotData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.VotTokenEditDialog;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
     private final SidebarService mSidebarService;
     private final MediaServiceData mMediaServiceData;
+    private final VotData mVotData;
     private boolean mRestartApp;
     private final Runnable mOnFinish = () -> {
         if (mRestartApp) {
@@ -47,6 +50,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         mGeneralData = GeneralData.instance(context);
         mSidebarService = SidebarService.instance(context);
         mMediaServiceData = MediaServiceData.instance();
+        mVotData = VotData.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -59,6 +63,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
+        appendVotCategory(settingsPresenter);
         appendNetworkEngineCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         appendVideoZoomCategory(settingsPresenter);
@@ -197,12 +202,72 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
+    private void appendVotCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        String status = mVotData.hasOAuthToken()
+                ? getContext().getString(R.string.vot_token_status_set, mVotData.getTokenPreview())
+                : getContext().getString(R.string.vot_token_status_empty);
+
+        options.add(UiOptionItem.from(status, optionItem -> showVotTokenDialog()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.vot_edit_token), optionItem -> showVotTokenDialog()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.vot_paste_clipboard_action),
+                optionItem -> VotTokenEditDialog.pasteFromClipboard(getContext(), token -> {
+                    if (token.isEmpty()) {
+                        mVotData.clearOAuthToken();
+                        MessageHelpers.showMessage(getContext(), R.string.vot_token_cleared);
+                    } else {
+                        mVotData.setOAuthToken(token);
+                        MessageHelpers.showMessage(getContext(), R.string.vot_token_saved);
+                    }
+                })));
+
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.vot_settings_category), options);
+
+        List<OptionItem> votToggles = new ArrayList<>();
+        votToggles.add(UiOptionItem.from(
+                getContext().getString(R.string.vot_lively_voice),
+                getContext().getString(R.string.vot_lively_voice_desc),
+                optionItem -> {
+                    if (!mVotData.hasOAuthToken()) {
+                        MessageHelpers.showMessage(getContext(), R.string.vot_error_auth_required);
+                        return;
+                    }
+                    mVotData.setLivelyVoiceEnabled(optionItem.isSelected());
+                },
+                mVotData.isLivelyVoiceEnabled()));
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.vot_lively_voice), votToggles);
+
+        settingsPresenter.appendRadioCategory(
+                getContext().getString(R.string.vot_original_volume),
+                AppDialogUtil.createVotOriginalVolumeCategory(getContext()).options);
+        settingsPresenter.appendRadioCategory(
+                getContext().getString(R.string.vot_translation_volume),
+                AppDialogUtil.createVotTranslationVolumeCategory(getContext()).options);
+    }
+
+    private void showVotTokenDialog() {
+        VotTokenEditDialog.show(getContext(), mVotData.getOAuthToken(), token -> {
+            if (token.isEmpty()) {
+                mVotData.clearOAuthToken();
+                mVotData.setLivelyVoiceEnabled(false);
+                MessageHelpers.showMessage(getContext(), R.string.vot_token_cleared);
+            } else {
+                mVotData.setOAuthToken(token);
+                MessageHelpers.showMessage(getContext(), R.string.vot_token_saved);
+            }
+        });
+    }
+
     private void appendPlayerButtonsCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
                 {R.string.auto_frame_rate, PlayerTweaksData.PLAYER_BUTTON_AFR},
                 {R.string.action_sound_off, PlayerTweaksData.PLAYER_BUTTON_SOUND_OFF},
+                {R.string.action_voice_translate, PlayerTweaksData.PLAYER_BUTTON_VOICE_TRANSLATE},
                 {R.string.video_rotate, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ROTATE},
                 {R.string.video_flip, PlayerTweaksData.PLAYER_BUTTON_VIDEO_FLIP},
                 {R.string.open_chat, PlayerTweaksData.PLAYER_BUTTON_CHAT},
