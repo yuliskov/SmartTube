@@ -5,7 +5,6 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
-import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
@@ -450,9 +449,8 @@ public class SabrProcessor {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
         }
 
-        if (status != Status.OK) {
-            throw new SabrPoTokenError("PoToken attestation failed: " + Helpers.toString(resultStatus));
-        }
+        // NOTE: Avoid to throw PoTokenError on bad status!
+        // PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
 
         return result;
     }
