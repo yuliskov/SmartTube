@@ -402,6 +402,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.setCommentsPlacedLeft(option.isSelected()),
                 mPlayerTweaksData.isCommentsPlacedLeft()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_comment_avatars),
+                option -> mPlayerTweaksData.setCommentAvatarsHidden(option.isSelected()),
+                mPlayerTweaksData.isCommentAvatarsHidden()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_disable_suggestions),
                 option -> mPlayerTweaksData.setSuggestionsDisabled(option.isSelected()),
                 mPlayerTweaksData.isSuggestionsDisabled()));

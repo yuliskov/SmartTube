@@ -76,6 +76,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsAvcOverVp9Preferred;
     private boolean mIsChatPlacedLeft;
     private boolean mIsCommentsPlacedLeft;
+    private boolean mIsCommentAvatarsHidden;
     private boolean mIsRealChannelIconEnabled;
     private float mPixelRatio;
     private boolean mIsQualityInfoBitrateEnabled;
@@ -358,6 +359,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void setCommentsPlacedLeft(boolean left) {
         mIsCommentsPlacedLeft = left;
+        persistData();
+    }
+
+    public boolean isCommentAvatarsHidden() {
+        return mIsCommentAvatarsHidden;
+    }
+
+    public void setCommentAvatarsHidden(boolean hidden) {
+        mIsCommentAvatarsHidden = hidden;
         persistData();
     }
 
@@ -786,7 +796,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQueueRespectsPlaybackMode = Helpers.parseBoolean(split, 60, false);
         mIsSabrLiveEnabled = Helpers.parseBoolean(split, 61, false);
         mIsLiveEdgeEnabled = Helpers.parseBoolean(split, 62, false);
-
+        mIsCommentAvatarsHidden = Helpers.parseBoolean(split, 63, false);
         updateDefaultValues();
     }
 
@@ -814,8 +824,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
                 mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode, mIsSabrLiveEnabled,
-                mIsLiveEdgeEnabled
-                ));
+                mIsLiveEdgeEnabled, mIsCommentAvatarsHidden
+        ));
     }
 
     private void updateDefaultValues() {

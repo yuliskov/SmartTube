@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.stfalcon.chatkit.commons.widgets.FocusFixRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="3dp"
+    android:layout_marginTop="0dp"
+    android:focusable="false">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@id/bubble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/message_incoming_bubble_margin_right"
+        android:layout_marginRight="@dimen/message_incoming_bubble_margin_right"
+        android:orientation="vertical"
+        app:alignContent="stretch"
+        app:alignItems="stretch"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start">
+
+        <TextView
+            android:id="@id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:lineSpacingMultiplier="0.9"
+            android:maxLines="50" />
+
+        <TextView
+            android:id="@id/messageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/messageText"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_alignSelf="center" />
+    </com.google.android.flexbox.FlexboxLayout>
+</com.stfalcon.chatkit.commons.widgets.FocusFixRelativeLayout>
