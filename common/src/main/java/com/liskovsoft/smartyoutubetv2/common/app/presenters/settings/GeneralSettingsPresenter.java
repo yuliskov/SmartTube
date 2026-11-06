@@ -645,6 +645,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
             appendDNSCategory(settingsPresenter);
 
+            appendNetworkEngineCategory(settingsPresenter);
+
             settingsPresenter.showDialog(title);
         }));
     }
@@ -720,6 +722,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.getPreferredDnsType() == PlayerTweaksData.DNS_TYPE_GOOGLE));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.preferred_dns), options);
+    }
+
+    private void appendNetworkEngineCategory(AppDialogPresenter settingsPresenter) {
+        OptionCategory category = AppDialogUtil.createNetworkEngineCategory(getContext());
+        settingsPresenter.appendCategory(category);
     }
 
     private void enableChildMode(boolean enable) {

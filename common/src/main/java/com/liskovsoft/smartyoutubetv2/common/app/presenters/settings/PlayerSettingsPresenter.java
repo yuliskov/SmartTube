@@ -59,7 +59,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendPlaybackModeCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
-        appendNetworkEngineCategory(settingsPresenter);
+        //appendNetworkEngineCategory(settingsPresenter);
         appendVideoBufferCategory(settingsPresenter);
         appendVideoZoomCategory(settingsPresenter);
         appendVideoSpeedCategory(settingsPresenter);
