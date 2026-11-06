@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.preference.LeanbackPref
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.chat.ChatItemMessage;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 import com.stfalcon.chatkit.commons.models.IMessage;
+import com.stfalcon.chatkit.messages.MessageHolders;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
@@ -86,12 +87,25 @@ public class CommentsPreferenceDialogFragment extends LeanbackPreferenceDialogFr
         }
 
         MessagesList messagesList = (MessagesList) view.findViewById(R.id.messagesList);
-        MessagesListAdapter<ChatItemMessage> adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
-                Glide.with(view.getContext())
-                    .load(url)
-                    .apply(ViewUtil.glideOptions())
-                    .circleCrop() // resize image
-                    .into(imageView));
+        boolean hideAvatars = PlayerTweaksData.instance(getActivity()).isCommentAvatarsHidden();
+        MessagesListAdapter<ChatItemMessage> adapter;
+        if (hideAvatars) {
+            MessageHolders holders = new MessageHolders();
+            holders.setIncomingTextLayout(R.layout.comments_item_incoming_text_message);
+            adapter = new MessagesListAdapter<>(SENDER_ID, holders, (imageView, url, payload) ->
+                    Glide.with(view.getContext())
+                            .load(url)
+                            .apply(ViewUtil.glideOptions())
+                            .circleCrop()
+                            .into(imageView));
+        } else {
+            adapter = new MessagesListAdapter<>(SENDER_ID, (imageView, url, payload) ->
+                    Glide.with(view.getContext())
+                            .load(url)
+                            .apply(ViewUtil.glideOptions())
+                            .circleCrop()
+                            .into(imageView));
+        }
         adapter.setLoadMoreListener((page, totalItemsCount) -> mCommentsReceiver.onLoadMore(mCurrentGroup));
         adapter.setOnMessageViewClickListener((v, message) -> mCommentsReceiver.onCommentClicked(message.getCommentItem()));
         adapter.setOnMessageViewLongClickListener((v, message) -> mCommentsReceiver.onCommentLongClicked(message.getCommentItem()));
