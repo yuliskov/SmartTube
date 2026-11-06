@@ -29,12 +29,12 @@
 
     <!-- MOD: Checkbox alignment in uniform dialogs, e.g. where all items are checkboxes. -->
     <!-- NOTE: Use negative margin because a checkbox is image drawable. -->
-    <!-- Added: android:layout_marginStart="-5dp" -->
+    <!-- Added: android:layout_marginStart="-6dp" -->
     <CheckBox
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="-5dp"
+        android:layout_marginStart="-6dp"
         android:focusable="false"
         android:clickable="false"
         android:layout_marginEnd="@dimen/lb_preference_item_icon_margin_end"
