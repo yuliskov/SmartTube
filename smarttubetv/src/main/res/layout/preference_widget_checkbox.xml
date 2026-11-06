@@ -15,8 +15,9 @@
   ~ limitations under the License.
   -->
 
-<!-- MOD: use negative align because a checkbox is image drawable -->
-<!-- Added: android:layout_marginStart="-7dp" -->
+<!-- MOD: Checkbox alignment in mixed item type dialogs (checkboxes, toggles, nested categories, etc.). -->
+<!-- NOTE: Use negative margin because a checkbox is image drawable. -->
+<!-- Added: android:layout_marginStart="-5dp" -->
 <!-- Layout used by CheckBoxPreference for the checkbox style. This is inflated
      inside android.R.layout.preference. -->
 <CheckBox
@@ -24,7 +25,7 @@
     android:id="@android:id/checkbox"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="-7dp"
+    android:layout_marginStart="-5dp"
     android:focusable="false"
     android:clickable="false"
     android:background="@null"/>
