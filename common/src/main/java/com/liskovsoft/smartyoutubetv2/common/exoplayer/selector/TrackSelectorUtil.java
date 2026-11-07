@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.metadata.Metadata;
+import com.google.android.exoplayer2.source.sabr.parser.models.SabrFormatMetadata;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.SubtitleTrack;
@@ -54,8 +56,8 @@ public class TrackSelectorUtil {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionShortString(format),
                     buildFPSString(format)), buildBitrateString(format)), extractCodec(format)), buildHDRString(format)), buildHighBitrateMark(format));
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
-                    buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format)), buildDrcMark(format));
+            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
+                    buildAudioPropertyString(format)), buildBitrateString(format)), extractCodec(format)), buildChannels(format)), buildDrcMark(format)), buildVbMark(format));
         } else if (MimeTypes.isText(format.sampleMimeType)) {
             trackName = buildLanguageString(format);
         } else {
@@ -214,6 +216,46 @@ public class TrackSelectorUtil {
 
     public static boolean isDrc(Format format) {
         return format != null && (Helpers.endsWithAny(format.id, "drc") || format.isDrc);
+    }
+
+    public static String buildVbMark(Format format) {
+        return isVb(format) ? "Voice boost" : "";
+    }
+
+    /**
+     * Voice boost audio variant: speech enhanced, music and ambience lowered.<br/>
+     * DASH: id ends with "-vb". SABR: same id as the original, flagged in {@link SabrFormatMetadata}.
+     */
+    public static boolean isVb(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        if (Helpers.endsWithAny(format.id, "-vb")) {
+            return true;
+        }
+
+        if (format.metadata != null) {
+            for (int i = 0; i < format.metadata.length(); i++) {
+                Metadata.Entry entry = format.metadata.get(i);
+                if (entry instanceof SabrFormatMetadata && ((SabrFormatMetadata) entry).isVb) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Marks a fake (restored) format as voice boost, so it can be compared with the real ones.
+     */
+    public static Format markVb(Format format) {
+        if (format == null || isVb(format)) {
+            return format;
+        }
+
+        return format.copyWithMetadata(new Metadata(new SabrFormatMetadata(null, null, true)));
     }
 
     public static boolean is51Audio(Format format) {
