@@ -453,6 +453,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 }
             });
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
+            mProgressBar.setContentDescription(rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.playback_seek_bar));
             mProgressBar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

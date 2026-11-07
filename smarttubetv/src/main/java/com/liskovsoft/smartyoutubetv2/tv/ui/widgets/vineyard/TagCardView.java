@@ -46,6 +46,7 @@ public class TagCardView extends BaseCardView {
 
     public void setCardText(String string) {
         mTagNameText.setText(string);
+        setContentDescription(string);
     }
 
     public void setCardIcon(int resource) {
