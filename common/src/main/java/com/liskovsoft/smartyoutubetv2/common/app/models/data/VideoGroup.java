@@ -432,7 +432,7 @@ public class VideoGroup {
 
     public boolean isEmpty() {
         try {
-            return mVideos == null || mVideos.isEmpty();
+            return mVideos == null || mVideos.isEmpty() || (mVideos.size() == 1 && mVideos.get(0).isContinuation());
         } catch (ConcurrentModificationException e) {
             e.printStackTrace();
         }

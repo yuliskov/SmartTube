@@ -558,6 +558,13 @@ public final class Video {
                 (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
+    /**
+     * Continuation button at the end of rows appeared on Home
+     */
+    public boolean isContinuation() {
+        return isChannel() && cardImageUrl == null && belongsToHome();
+    }
+
     public boolean isFullLive() {
         return isLive && startSegmentNum == 0;
     }
