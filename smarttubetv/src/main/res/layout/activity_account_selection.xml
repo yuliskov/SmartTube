@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/account_selection_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="24dp"
+    android:paddingBottom="40dp">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Color scheme dependent logo (hidden when the scheme has no logo) -->
+    <ImageView
+        android:id="@+id/account_selection_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:src="?attr/appLogo" />
+
+    <TextView
+        android:id="@+id/account_selection_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/account_selection_title"
+        android:textColor="@android:color/white"
+        android:textSize="30sp" />
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/account_selection_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingLeft="48dp"
+            android:paddingTop="20dp"
+            android:paddingRight="48dp"
+            android:paddingBottom="20dp" />
+
+    </HorizontalScrollView>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/account_selection_signed_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/account_selection_button_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingLeft="28dp"
+        android:paddingTop="10dp"
+        android:paddingRight="28dp"
+        android:paddingBottom="10dp"
+        android:text="@string/account_selection_signed_out"
+        android:textColor="@color/account_selection_button_text"
+        android:textSize="16sp" />
+
+</LinearLayout>
