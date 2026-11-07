@@ -8,8 +8,11 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager.AccountChangeListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class AccountsData implements AccountChangeListener {
     private static final String ACCOUNTS_DATA = "accounts_data";
@@ -19,6 +22,9 @@ public class AccountsData implements AccountChangeListener {
     private final AppPrefs mAppPrefs;
     private boolean mIsSelectAccountOnBootEnabled;
     private boolean mIsPasswordAccepted;
+    private boolean mIsHideNoneProfileEnabled;
+    private boolean mIsHideContentIfNotSignedEnabled;
+    private final Set<String> mPinAccounts = new HashSet<>();
     private final Map<String, PasswordItem> mPasswords = new HashMap<>();
 
     private static class PasswordItem {
@@ -71,6 +77,57 @@ public class AccountsData implements AccountChangeListener {
         return mIsSelectAccountOnBootEnabled;
     }
 
+    public boolean isHideNoneProfileEnabled() {
+        return mIsHideNoneProfileEnabled;
+    }
+
+    public void setHideNoneProfileEnabled(boolean enable) {
+        mIsHideNoneProfileEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideContentIfNotSignedEnabled() {
+        return mIsHideContentIfNotSignedEnabled;
+    }
+
+    public void setHideContentIfNotSignedEnabled(boolean enable) {
+        mIsHideContentIfNotSignedEnabled = enable;
+        persistState();
+    }
+
+    /**
+     * True when content must be hidden: option enabled and no account selected (None or no accounts).
+     */
+    public boolean isContentBlocked() {
+        return mIsHideContentIfNotSignedEnabled && MediaServiceManager.instance().getSelectedAccount() == null;
+    }
+
+    /**
+     * Current account's password is a four digit PIN (stored in the same password store).
+     * Per account; the master password is not affected.
+     */
+    public boolean isPinEnabled() {
+        return getAccountName() != null && mPinAccounts.contains(getAccountName());
+    }
+
+    public void setPinEnabled(boolean enable) {
+        if (getAccountName() == null) {
+            return;
+        }
+
+        if (enable) {
+            mPinAccounts.add(getAccountName());
+        } else {
+            mPinAccounts.remove(getAccountName());
+        }
+
+        persistState();
+    }
+
+    public static boolean isValidPin(String value) {
+        return value != null && value.matches("\\d{4}");
+    }
+
     public void setAccountPassword(String password) {
         mPasswords.put(getAccountName(), new PasswordItem(getAccountName(), password));
 
@@ -111,11 +168,19 @@ public class AccountsData implements AccountChangeListener {
                 mPasswords.put(item.accountName, item);
             }
         }
+
+        mIsHideNoneProfileEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsHideContentIfNotSignedEnabled = Helpers.parseBoolean(split, 5, false);
+        String[] pinAccounts = Helpers.parseArray(split, 6);
+        if (pinAccounts != null) {
+            mPinAccounts.addAll(Arrays.asList(pinAccounts));
+        }
     }
 
     private void persistState() {
         mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeData(
-                mIsSelectAccountOnBootEnabled, null, null, Helpers.mergeArray(mPasswords.values().toArray())
+                mIsSelectAccountOnBootEnabled, null, null, Helpers.mergeArray(mPasswords.values().toArray()),
+                mIsHideNoneProfileEnabled, mIsHideContentIfNotSignedEnabled, Helpers.mergeArray(mPinAccounts.toArray())
         ));
     }
 
