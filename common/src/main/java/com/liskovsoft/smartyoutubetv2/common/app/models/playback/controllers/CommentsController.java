@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.CommentItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -26,6 +27,7 @@ public class CommentsController extends BasePlayerController {
     private String mCommentsKey;
     private String mTitle;
     private Pair<String, Backup> mBackup;
+    private boolean mIsMetadataLoaded;
 
     public CommentsController() {
     }
@@ -37,7 +39,19 @@ public class CommentsController extends BasePlayerController {
     }
 
     @Override
+    public void onNewVideo(Video item) {
+        if (item != null && !item.equals(getVideo())) {
+            // Forget the previous video's keys, or its comments are shown while the new video is loading
+            mIsMetadataLoaded = false;
+            mLiveChatKey = null;
+            mCommentsKey = null;
+            mTitle = null;
+        }
+    }
+
+    @Override
     public void onMetadata(MediaItemMetadata metadata) {
+        mIsMetadataLoaded = true;
         mLiveChatKey = metadata != null && metadata.getLiveChatKey() != null ? metadata.getLiveChatKey() : null;
         mCommentsKey = metadata != null && metadata.getCommentsKey() != null ? metadata.getCommentsKey() : null;
         mTitle = metadata != null ? metadata.getTitle() : null;
@@ -129,6 +143,11 @@ public class CommentsController extends BasePlayerController {
     @Override
     public void onButtonClicked(int buttonId, int buttonState) {
         if (buttonId == R.id.action_chat) {
+            if (!mIsMetadataLoaded) {
+                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                return;
+            }
+
             if (mCommentsKey != null && mLiveChatKey == null) {
                 openCommentsDialog();
             }
