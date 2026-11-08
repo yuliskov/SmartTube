@@ -50,6 +50,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private int mBackgroundMode;
     private FormatItem mVideoFormat;
     private FormatItem mTempVideoFormat;
+    private boolean mIsSubtitlesTempDisabled; // session only, not persisted
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
     private int mVideoBufferType;
@@ -406,6 +407,17 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
 
     public FormatItem getTempVideoFormat() {
         return mTempVideoFormat;
+    }
+
+    /**
+     * Turn the subtitles off for the current video only (e.g. after a subtitle loading error), keeping the user's settings
+     */
+    public void setSubtitlesTempDisabled(boolean disabled) {
+        mIsSubtitlesTempDisabled = disabled;
+    }
+
+    public boolean isSubtitlesTempDisabled() {
+        return mIsSubtitlesTempDisabled;
     }
 
     public FormatItem getLastSubtitleFormat() {

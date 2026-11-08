@@ -455,8 +455,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     }
 
     private void disableSubtitles() {
-        getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
-        getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+        // Only for the current video. Persisting it (as before) silently wiped the user's subtitle settings
+        // (incl. "subtitles per channel") after a temporary error, e.g. "Response code: 429".
+        getPlayerData().setSubtitlesTempDisabled(true);
     }
 
     private boolean isStreamEnded() {
