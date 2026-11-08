@@ -413,14 +413,7 @@ public class AppDialogUtil {
 
         List<OptionItem> items = new ArrayList<>();
 
-        OptionItem enableSwitch = UiOptionItem.from(context.getString(R.string.enable), item -> {
-            if (playerData.getAudioDelayMs() != 0) {
-                playerData.setAudioDelayEnabled(item.isSelected());
-                onSetCallback.run();
-            }
-        }, playerData.isAudioDelayEnabled());
-
-        OptionItem audioDelay = UiOptionItem.from(title, item -> {
+        Runnable showDelayDialog = () -> {
             AppDialogPresenter.instance(context).closeDialog();
             int delayMs = playerData.getAudioDelayMs();
             float delaySec = delayMs / 1_000f;
@@ -429,28 +422,40 @@ public class AppDialogUtil {
                     dialogTitle,
                     Helpers.toString(delaySec),
                     newValue -> {
-                        if (!Helpers.isNumeric(newValue)) {
+                        // TV keyboards in many locales (e.g. ru) type a comma as the decimal separator
+                        String normalized = newValue != null ? newValue.trim().replace(',', '.') : null;
+
+                        if (!Helpers.isNumeric(normalized)) {
                             return false;
                         }
 
-                        float newDelaySec = Helpers.parseFloat(newValue);
+                        float newDelaySec = Helpers.parseFloat(normalized);
                         int newDelayMs = (int) (newDelaySec * 1_000);
-
-                        if (newDelayMs == delayMs) {
-                            return false;
-                        }
 
                         if (newDelayMs == 0 && newDelaySec != 0) { // lower than 1ms
                             return false;
                         }
 
+                        // Same value is accepted too: it re-enables a previously disabled delay
                         playerData.setAudioDelayMs(newDelayMs);
                         playerData.setAudioDelayEnabled(newDelayMs != 0);
                         onSetCallback.run();
                         return true;
                     }
             );
+        };
+
+        OptionItem enableSwitch = UiOptionItem.from(context.getString(R.string.enable), item -> {
+            if (playerData.getAudioDelayMs() != 0) {
+                playerData.setAudioDelayEnabled(item.isSelected());
+                onSetCallback.run();
+            } else if (item.isSelected()) {
+                // Nothing to enable yet: ask for the value instead of silently ignoring the checkbox
+                showDelayDialog.run();
+            }
         }, playerData.isAudioDelayEnabled());
+
+        OptionItem audioDelay = UiOptionItem.from(title, item -> showDelayDialog.run(), playerData.isAudioDelayEnabled());
 
         items.add(enableSwitch);
         items.add(audioDelay);
