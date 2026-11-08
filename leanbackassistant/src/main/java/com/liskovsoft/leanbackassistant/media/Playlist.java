@@ -220,7 +220,7 @@ public final class Playlist {
                         Helpers.toString(v.getSecondTitle()),
                         v.getDurationMs(),
                         v.getBackgroundImageUrl(),
-                        v.getCardImageUrl(),
+                        toWidescreenThumbnail(v.getCardImageUrl()),
                         ServiceHelper.videoIdToFullUrl(v.getVideoId()),
                         null,
                         false,
@@ -267,5 +267,17 @@ public final class Playlist {
 
     public void setLogoResId(int resId) {
         mLogoResId = resId;
+    }
+
+    /**
+     * Cards are published as 16:9, but some sections return the 4:3 thumbnail variants (e.g. sddefault.jpg, 640x480)
+     * that have black bars baked in. Use the 16:9 variant that exists for every video instead.
+     */
+    private static String toWidescreenThumbnail(String url) {
+        if (url == null || !url.contains("ytimg.com/vi")) {
+            return url;
+        }
+
+        return url.replaceFirst("/(sddefault|hqdefault|default|0)\\.jpg(\\?.*)?$", "/mqdefault.jpg");
     }
 }
