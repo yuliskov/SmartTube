@@ -65,6 +65,7 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (!item.equals(getVideo())) {
+            getPlayerData().setSubtitlesTempDisabled(false); // a subtitle error affects only the video it happened on
             mNewVideoTimeMs = System.currentTimeMillis();
         }
 
@@ -470,6 +471,10 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayerData().isSubtitlesPerChannelEnabled()) {
             result = getPlayerData().isSubtitlesPerChannelEnabled(getPlayer().getVideo().channelId)
                     ? getPlayerData().getLastSubtitleFormat() : FormatItem.SUBTITLE_NONE;
+        }
+
+        if (getPlayerData().isSubtitlesTempDisabled()) {
+            result = FormatItem.SUBTITLE_NONE;
         }
 
         getPlayer().setFormat(result);
