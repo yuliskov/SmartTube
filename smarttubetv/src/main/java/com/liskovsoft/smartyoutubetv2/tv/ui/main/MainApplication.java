@@ -122,8 +122,7 @@ public class MainApplication extends MultiDexApplication implements Configuratio
     private static Class<? extends AppDialogActivity> getDialogClass() {
         Class<? extends AppDialogActivity> dialogClass;
 
-        if (VERSION.SDK_INT == 26
-                && Helpers.equalsAny(Helpers.getCrashlyticsDeviceName(),
+        if (VERSION.SDK_INT == 26 && equalsAnyIgnoreCase(Helpers.getCrashlyticsDeviceName(),
                 "4S806_Z51S1 (Panasonic)",
                 "5S72Z_G20S (Panasonic)",
                 "9S60Z_ZQ21S (Panasonic)",
@@ -136,6 +135,18 @@ public class MainApplication extends MultiDexApplication implements Configuratio
             dialogClass = AppDialogActivity.class;
         }
         return dialogClass;
+    }
+
+    /**
+     * Build.MODEL casing differs between firmwares of the same vendor (e.g. "XGIMI TV" vs "Xgimi TV")
+     */
+    private static boolean equalsAnyIgnoreCase(String orig, String... arr) {
+        for (String item : arr) {
+            if (item.equalsIgnoreCase(orig)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setupGlobalExceptionHandler() {
