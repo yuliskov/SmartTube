@@ -758,6 +758,19 @@ public final class Video {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
+
+        // A video opened by id only (Android TV Home channels, links, casting) has no card data.
+        // Fill it, or it's saved to the local history as a gray card without a title.
+        if (title == null) {
+            title = metadata.getTitle();
+        }
+        if (secondTitle == null) {
+            secondTitle = metadata.getSecondTitle();
+        }
+        if (cardImageUrl == null && videoId != null) {
+            cardImageUrl = String.format("https://i.ytimg.com/vi/%s/mqdefault.jpg", videoId);
+        }
+
         // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
         //isLive = metadata.isLive();
         //isUpcoming = metadata.isUpcoming();
