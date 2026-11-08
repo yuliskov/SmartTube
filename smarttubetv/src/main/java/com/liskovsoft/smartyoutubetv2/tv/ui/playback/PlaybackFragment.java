@@ -7,6 +7,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -627,6 +628,24 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // in class Landroid/media/session/PlaybackState$Builder;
             return;
         }
+
+        // MediaSessionCompat's default handling turns a quick double press of Play/Pause into "skip to next".
+        // The media session receives the key while a dialog (comments, HQ settings etc.) is in front,
+        // so double pressing Play there skipped the video. Treat every press as a plain toggle.
+        mMediaSessionConnector.setMediaButtonEventHandler((player, controlDispatcher, mediaButtonEvent) -> {
+            KeyEvent event = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+
+            if (event == null || (event.getKeyCode() != KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+                    && event.getKeyCode() != KeyEvent.KEYCODE_HEADSETHOOK)) {
+                return false; // default handling
+            }
+
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+                controlDispatcher.dispatchSetPlayWhenReady(player, !player.getPlayWhenReady());
+            }
+
+            return true;
+        });
 
         // NOTE: Don't set to null. This won't disable a notifications but makes them empty.
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
