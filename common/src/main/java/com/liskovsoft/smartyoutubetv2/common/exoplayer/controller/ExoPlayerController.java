@@ -468,11 +468,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
-            if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
-                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
-            } else {
-                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, speed));
-            }
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, calcPitch(speed, getPitchEffect())));
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
@@ -482,7 +478,10 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public float getPitch() {
         if (mPlayer != null) {
-            return mPlayer.getPlaybackParameters().pitch;
+            // Report the pitch effect, without the speed factor applied when time stretching is off
+            PlaybackParameters params = mPlayer.getPlaybackParameters();
+            boolean isStretching = PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled();
+            return isStretching || params.speed <= 0 ? params.pitch : params.pitch / params.speed;
         } else {
             return -1;
         }
@@ -490,8 +489,24 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public void setPitch(float pitch) {
         if (mPlayer != null && pitch > 0) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+            float speed = mPlayer.getPlaybackParameters().speed;
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, calcPitch(speed, pitch)));
         }
+    }
+
+    /**
+     * The user's pitch effect (1.0 = none). Speed changes (e.g. the speed restore after every seek) must keep it.
+     */
+    private float getPitchEffect() {
+        float pitch = PlayerData.instance(mContext).getPitch();
+        return pitch > 0 ? pitch : 1.0f;
+    }
+
+    /**
+     * Without audio time stretching the pitch follows the speed, on top of the pitch effect.
+     */
+    private float calcPitch(float speed, float pitchEffect) {
+        return PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled() ? pitchEffect : speed * pitchEffect;
     }
 
     public void setVolume(float volume) {
