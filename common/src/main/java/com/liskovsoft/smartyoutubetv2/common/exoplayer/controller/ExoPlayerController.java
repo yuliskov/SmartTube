@@ -551,10 +551,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             return;
         }
 
-        if (mVolumeBooster != null) {
-            mPlayer.removeAudioListener(mVolumeBooster);
-            mVolumeBooster = null;
-        }
+        releaseVolumeBooster();
 
         // 5.1 audio cannot be boosted (format isn't supported error)
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
@@ -578,10 +575,26 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         return false;
     }
 
+    /**
+     * The booster holds a native audio effect (LoudnessEnhancer). Dropping it without release() leaked the effect:
+     * a new copy stacked up on every player re-creation and boosted the sound of every app on the device.
+     */
+    private void releaseVolumeBooster() {
+        if (mVolumeBooster != null) {
+            if (mPlayer != null) {
+                mPlayer.removeAudioListener(mVolumeBooster);
+            }
+            mVolumeBooster.release();
+            mVolumeBooster = null;
+        }
+    }
+
     private void releasePlayer() {
         if (mPlayer == null) {
             return;
         }
+
+        releaseVolumeBooster();
 
         try {
             mPlayer.removeListener(this);
