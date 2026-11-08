@@ -472,13 +472,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         GeneralData generalData = GeneralData.instance(getContext());
-        boolean enabled = generalData.getHistoryState() == GeneralData.HISTORY_ENABLED;
+        // AUTO still records history (only DISABLED stops it), so treat it as enabled
+        boolean enabled = generalData.getHistoryState() != GeneralData.HISTORY_DISABLED;
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(getContext().getString(enabled ? R.string.pause_history : R.string.resume_history),
                         optionItem -> {
                             mServiceManager.enableHistory(!enabled);
-                            generalData.setHistoryState(enabled ? GeneralData.HISTORY_AUTO : GeneralData.HISTORY_ENABLED);
+                            generalData.setHistoryState(enabled ? GeneralData.HISTORY_DISABLED : GeneralData.HISTORY_ENABLED);
                             getDialogPresenter().closeDialog();
                         }));
     }
