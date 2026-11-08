@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -44,7 +44,7 @@ public class UpdateChannelsWorker extends Worker {
         if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             sIsWorkScheduled = true;
 
-            WorkManager workManager = WorkManager.getInstance(context);
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
 
             // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
             // Called after 15 minutes
@@ -62,7 +62,7 @@ public class UpdateChannelsWorker extends Worker {
         if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
             Log.d(TAG, "Unregistering Channels update job...");
 
-            WorkManager workManager = WorkManager.getInstance(context);
+            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
             workManager.cancelUniqueWork(WORK_NAME);
         }
     }

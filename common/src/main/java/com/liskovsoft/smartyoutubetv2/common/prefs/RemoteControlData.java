@@ -4,7 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
+import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
+import java.util.UUID;
 
 public class RemoteControlData extends DataChangeBase {
     private static final String DEVICE_LINK_DATA = "device_link_data";
@@ -19,6 +20,8 @@ public class RemoteControlData extends DataChangeBase {
     private boolean mIsRemoteHistoryDisabled;
     private Video mLastVideo;
     private boolean mIsConnectedBefore;
+    private boolean mIsDialEnabled;
+    private String mDialUdn;
 
     private RemoteControlData(Context context) {
         mContext = context;
@@ -80,6 +83,33 @@ public class RemoteControlData extends DataChangeBase {
         persistState();
     }
 
+    public void enableDial(boolean enable) {
+        mIsDialEnabled = enable;
+        persistState();
+    }
+
+    public boolean isDialEnabled() {
+        return mIsDialEnabled;
+    }
+
+    /**
+     * The lounge listener (background service) is needed for "Link with TV code" and for casting over DIAL.
+     */
+    public boolean isRemoteListeningEnabled() {
+        return mIsDeviceLinkEnabled || mIsDialEnabled;
+    }
+
+    /**
+     * Stable unique device name for DIAL discovery.
+     */
+    public String getDialUdn() {
+        if (mDialUdn == null) {
+            mDialUdn = UUID.randomUUID().toString();
+            persistState();
+        }
+        return mDialUdn;
+    }
+
     public void setConnectedBefore(boolean connected) {
         mIsConnectedBefore = connected;
         persistState();
@@ -102,12 +132,14 @@ public class RemoteControlData extends DataChangeBase {
         mIsRemoteHistoryDisabled = Helpers.parseBoolean(split, 5, false);
         mLastVideo = Helpers.parseItem(split, 6, Video::fromString);
         mIsConnectedBefore = Helpers.parseBoolean(split, 7, false);
+        mIsDialEnabled = Helpers.parseBoolean(split, 8, false);
+        mDialUdn = Helpers.parseStr(split, 9);
     }
 
     private void persistState() {
         mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeData(
                 null, null, mIsDeviceLinkEnabled, mIsFinishOnDisconnectEnabled, mIsConnectMessagesEnabled,
-                mIsRemoteHistoryDisabled, mLastVideo, mIsConnectedBefore
+                mIsRemoteHistoryDisabled, mLastVideo, mIsConnectedBefore, mIsDialEnabled, mDialUdn
         ));
 
         onDataChange();

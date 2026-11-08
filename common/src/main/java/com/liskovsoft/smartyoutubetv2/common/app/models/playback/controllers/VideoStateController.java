@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public class VideoStateController extends BasePlayerController {
     private static final String TAG = VideoStateController.class.getSimpleName();
     private static final long MUSIC_VIDEO_MAX_DURATION_MS = 6 * 60 * 1000;
-    private static final long RESTORE_LIVE_BUFFER_MS = 60_000;
+    private static final long NEAR_LIVE_EDGE_MS = 60_000;
     private static final long DEFAULT_LIVE_BUFFER_MS = 60_000; // Minimum issues
     private static final long OFFICIAL_LIVE_BUFFER_MS = 15_000; // Official app buffer
     private static final long LIVE_BUFFER_MS = OFFICIAL_LIVE_BUFFER_MS;
@@ -38,7 +38,7 @@ public class VideoStateController extends BasePlayerController {
     private final Runnable mUpdateHistory = this::saveState;
     private long mNewVideoTimeMs;
     @Nullable
-    private Boolean mIsRestoreActualLive;
+    private Boolean mRestoreLiveEdge;
     private long mSleepTimerStartMs;
 
     @Override
@@ -85,7 +85,7 @@ public class VideoStateController extends BasePlayerController {
         if (getPlayer() != null && getPlayer().getPositionMs() > BEGIN_THRESHOLD_MS) {
             saveState(); // in case the user wants to go to previous video
             getPlayer().setPositionMs(100);
-            mIsRestoreActualLive = false;
+            mRestoreLiveEdge = false;
             return true;
         }
 
@@ -96,7 +96,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public boolean onNextClicked() {
         // Seek to the actual live position on next
-        if (seekToActualLivePosition()) {
+        if (trySeekToLiveEdge()) {
             return true;
         }
 
@@ -120,11 +120,6 @@ public class VideoStateController extends BasePlayerController {
     public void onEngineInitialized() {
         // Reset auto-save history timer
         mTickleCount = 0;
-
-        // Show user info instead of black screen.
-        //if (getPlayer() != null && !getPlayEnabled()) {
-        //    getPlayer().showOverlay(true);
-        //}
 
         mSleepTimerStartMs = System.currentTimeMillis();
     }
@@ -201,7 +196,7 @@ public class VideoStateController extends BasePlayerController {
     public void onSeekPositionChanged(long positionMs) {
         // Need a delay while player internal state changed
         Utils.post(mUpdateHistory);
-        mIsRestoreActualLive = false;
+        mRestoreLiveEdge = false;
     }
 
     @Override
@@ -238,8 +233,8 @@ public class VideoStateController extends BasePlayerController {
         // throttle seeking calls
         Utils.removeCallbacks(mUpdateHistory);
 
-        if (isRestoreActualLive()) {
-            seekToActualLivePosition();
+        if (shouldRestoreLiveEdge()) {
+            trySeekToLiveEdge();
         }
     }
 
@@ -289,7 +284,7 @@ public class VideoStateController extends BasePlayerController {
         // Live stream starts to buffer after the end
         showHideScreensaver(true);
 
-        setRestoreActualLive();
+        initRestoreLiveEdge();
     }
 
     @Override
@@ -566,9 +561,9 @@ public class VideoStateController extends BasePlayerController {
         }
 
         // Set actual position for live videos with uncommon length
-        if (item.isLive && (state == null || state.durationMs - state.positionMs < Math.max(RESTORE_LIVE_BUFFER_MS, getLiveThreshold()))) {
+        if (item.isLive && (state == null || state.durationMs - state.positionMs < Math.max(NEAR_LIVE_EDGE_MS, getLiveThresholdMs()))) {
             // Add buffer. Should I take into account segment offset???
-            state = new State(item, getPlayer().getDurationMs() - getLiveBuffer());
+            state = new State(item, getPlayer().getDurationMs() - getLiveBufferMs());
         }
 
         // Do I need to check that item isn't live? (state != null && !item.isLive)
@@ -577,7 +572,7 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (!mIsPlayBlocked) {
-            boolean playEnabled = getPlayEnabled();
+            boolean playEnabled = isPlayEnabled();
             getPlayer().setPlayWhenReady(playEnabled);
             if (!getPlayer().isOverlayShown()) {
                 getPlayer().showOverlay(!playEnabled);
@@ -624,7 +619,7 @@ public class VideoStateController extends BasePlayerController {
 
         // Position
         if (liveEnd) {
-            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBufferMs());
         }
 
         // Speed
@@ -644,7 +639,7 @@ public class VideoStateController extends BasePlayerController {
         mIsPlayBlocked = block;
     }
 
-    public boolean getPlayEnabled() {
+    public boolean isPlayEnabled() {
         return mIsPlayEnabled;
     }
 
@@ -763,11 +758,11 @@ public class VideoStateController extends BasePlayerController {
         return getPlayer().getDurationMs() - getPlayer().getPositionMs() <= 1_000;
     }
 
-    private long getLiveThreshold() {
-        return getLiveBuffer() + 5_000;
+    private long getLiveThresholdMs() {
+        return getLiveBufferMs() + 5_000;
     }
 
-    private long getLiveBuffer() {
+    private long getLiveBufferMs() {
         return getPlayerTweaksData().isBufferOnStreamsDisabled() ? SHORT_LIVE_BUFFER_MS : LIVE_BUFFER_MS;
     }
 
@@ -780,31 +775,31 @@ public class VideoStateController extends BasePlayerController {
                 getPlayer() != null && getPlayer().getPositionMs() < getPlayer().getDurationMs();
     }
 
-    private boolean seekToActualLivePosition() {
-        if (getPlayer() != null && isBehindActualLive()) {
-            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBuffer());
-            mIsRestoreActualLive = true;
+    private boolean trySeekToLiveEdge() {
+        if (getPlayer() != null && isBehindLiveEdge()) {
+            getPlayer().setPositionMs(getPlayer().getDurationMs() - getLiveBufferMs());
+            mRestoreLiveEdge = getPlayerTweaksData().isLiveEdgeEnabled();
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean isRestoreActualLive() {
-        return mIsRestoreActualLive != null && mIsRestoreActualLive && isBehindActualLive();
+    private boolean shouldRestoreLiveEdge() {
+        return mRestoreLiveEdge != null && mRestoreLiveEdge && isBehindLiveEdge();
     }
 
-    private void setRestoreActualLive() {
-        if (mIsRestoreActualLive == null) {
-            mIsRestoreActualLive = isInsideActualLive();
+    private void initRestoreLiveEdge() {
+        if (mRestoreLiveEdge == null) {
+            mRestoreLiveEdge = getPlayerTweaksData().isLiveEdgeEnabled() && isNearLiveEdge();
         }
     }
 
-    private boolean isBehindActualLive() {
-        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > getLiveThreshold());
+    private boolean isBehindLiveEdge() {
+        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() > getLiveThresholdMs());
     }
 
-    private boolean isInsideActualLive() {
-        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() < Math.max(RESTORE_LIVE_BUFFER_MS, getLiveThreshold()));
+    private boolean isNearLiveEdge() {
+        return getVideo() != null && getPlayer() != null && getVideo().isLive && (getPlayer().getDurationMs() - getPlayer().getPositionMs() < Math.max(NEAR_LIVE_EDGE_MS, getLiveThresholdMs()));
     }
 }

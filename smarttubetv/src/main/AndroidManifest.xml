@@ -17,6 +17,8 @@
 
     <uses-permission android:name="${applicationId}.ACCESS_VIDEO_DATA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- DIAL discovery (SSDP multicast) -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
@@ -59,6 +61,17 @@
         tools:node="merge"
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute,DiscouragedApi">
+
+        <!-- Lazy WorkManager init. See MainApplication#getWorkManagerConfiguration -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                tools:node="remove" />
+        </provider>
 
         <!-- Screen Mirror (e.g. DIAL) for Amazon TV -->
         <!-- Not implemented yet( -->

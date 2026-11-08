@@ -57,6 +57,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
 
         appendDeviceLinkSwitch(settingsPresenter);
+        appendDialSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -79,6 +80,21 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                 );
             }
         }, mRemoteControlData.isDeviceLinkEnabled()));
+    }
+
+    private void appendDialSwitch(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.remote_control_dial), optionItem -> {
+            mRemoteControlData.enableDial(optionItem.isSelected());
+            Utils.updateRemoteControlService(getContext());
+
+            // Opening the player on cast from the background needs the overlay permission on Android 10 and above
+            if (optionItem.isSelected() && !PermissionHelpers.hasOverlayPermissions(getContext())) {
+                AppDialogUtil.showConfirmationDialog(
+                        getContext(), getContext().getString(R.string.remote_control_permission),
+                        () -> PermissionHelpers.verifyOverlayPermissions(getContext())
+                );
+            }
+        }, mRemoteControlData.isDialEnabled()));
     }
 
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {

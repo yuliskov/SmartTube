@@ -462,9 +462,24 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     private void updateProgress() {
         if (mControlsRow != null) {
+            if (isSeekBlocked() && mPlayerAdapter.isPrepared()) {
+                pinProgressToEnd();
+                return;
+            }
+
             mControlsRow.setCurrentPosition(mPlayerAdapter.isPrepared()
                     ? getCurrentPosition() : -1);
         }
+    }
+
+    /**
+     * Live stream without rewind: the bar is always full (duration == position) and can't be moved.
+     */
+    private void pinProgressToEnd() {
+        long positionMs = getCurrentPosition();
+        mControlsRow.setDuration(positionMs);
+        mControlsRow.setCurrentPosition(positionMs);
+        mControlsRow.setBufferedPosition(positionMs);
     }
 
     @CallSuper
@@ -475,14 +490,14 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     }
 
     private void updateBufferedProgress() {
-        if (mControlsRow != null) {
-            mControlsRow.setBufferedPosition(mPlayerAdapter.getBufferedPosition());
+        if (mControlsRow != null && !isSeekBlocked()) {
+            mControlsRow.setBufferedPosition(Math.max(mPlayerAdapter.getBufferedPosition() - getTimelineOffsetMs(), 0));
         }
     }
 
     @CallSuper
     protected void onUpdateDuration() {
-        if (mControlsRow != null) {
+        if (mControlsRow != null && !isSeekBlocked()) {
             mControlsRow.setDuration(
                     mPlayerAdapter.isPrepared() ? mPlayerAdapter.getDuration() : -1);
         }
@@ -499,7 +514,16 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      * @return The current position of the media item in milliseconds.
      */
     public long getCurrentPosition() {
-        return mPlayerAdapter.getCurrentPosition();
+        return Math.max(mPlayerAdapter.getCurrentPosition() - getTimelineOffsetMs(), 0);
+    }
+
+    /**
+     * The player timeline may start earlier than what is allowed to watch (e.g. live stream).
+     * The UI timeline starts at this offset of the player timeline.
+     * May be overridden to provide the offset. Default implementation returns 0 (the whole timeline is shown).
+     */
+    protected long getTimelineOffsetMs() {
+        return 0;
     }
 
     /**
@@ -628,8 +652,12 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
         if (DEBUG) Log.v(TAG, "updateRowMetadata");
 
         mControlsRow.setImageDrawable(getArt());
-        mControlsRow.setDuration(getDuration());
-        mControlsRow.setCurrentPosition(getCurrentPosition());
+        if (isSeekBlocked()) {
+            pinProgressToEnd();
+        } else {
+            mControlsRow.setDuration(getDuration());
+            mControlsRow.setCurrentPosition(getCurrentPosition());
+        }
 
         if (getHost() != null) {
             getHost().notifyPlaybackRowChanged();
@@ -667,7 +695,18 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      * @param position New position.
      */
     public final void seekTo(long position) {
-        mPlayerAdapter.seekTo(position);
+        if (isSeekBlocked()) {
+            return;
+        }
+
+        mPlayerAdapter.seekTo(position + getTimelineOffsetMs());
+    }
+
+    /**
+     * Live stream without rewind: the seeking is forbidden. Subclasses decide when.
+     */
+    public boolean isSeekBlocked() {
+        return false;
     }
 
     /**
