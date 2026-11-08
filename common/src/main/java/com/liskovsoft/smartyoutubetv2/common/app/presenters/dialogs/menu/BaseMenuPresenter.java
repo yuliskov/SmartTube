@@ -277,6 +277,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         closeDialog();
                     });
                 }
+            } else if (isSaved) {
+                // Already in the Playlists section (e.g. the menu is opened on a video inside the playlist).
+                // Saving it again added a broken "playlist" made from the selected video.
+                MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists));
             } else {
                 savePlaylist(video);
             }
