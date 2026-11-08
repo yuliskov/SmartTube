@@ -76,6 +76,7 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsRemapDpadLeftToVolumeEnabled;
     private boolean mIsHideWatchedFromNotificationsEnabled;
     private List<String> mChangelog;
+    private String mChangelogVersion;
     private Map<String, Integer> mPlaylistOrder;
     private List<Video> mPendingStreams;
     private boolean mIsFullscreenModeEnabled;
@@ -476,6 +477,18 @@ public class GeneralData implements ProfileChangeListener {
         return mChangelog;
     }
 
+    /**
+     * The app version the changelog belongs to (it's saved by the in-app updater only)
+     */
+    public String getChangelogVersion() {
+        return mChangelogVersion;
+    }
+
+    public void setChangelog(List<String> changelog, String versionName) {
+        mChangelogVersion = versionName;
+        setChangelog(changelog);
+    }
+
     public void setChangelog(List<String> changelog) {
         mChangelog = changelog;
         persistState();
@@ -656,6 +669,7 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
+        mChangelogVersion = Helpers.parseStr(split, 73);
     }
 
     public void persistNow() {
@@ -681,7 +695,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled));
+                mIsRemapSToSpeedToggleEnabled, mChangelogVersion));
     }
 
     @Override

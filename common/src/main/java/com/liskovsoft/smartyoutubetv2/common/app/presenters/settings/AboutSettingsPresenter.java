@@ -93,9 +93,16 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendUpdateChangelogButton(AppDialogPresenter settingsPresenter) {
-        List<String> changes = GeneralData.instance(getContext()).getChangelog();
+        GeneralData generalData = GeneralData.instance(getContext());
+        List<String> changes = generalData.getChangelog();
 
         if (changes == null || changes.isEmpty()) {
+            return;
+        }
+
+        // The changelog is saved by the in-app updater only. After an update installed by other means it belongs to
+        // an older version, so don't show it under the current version's title.
+        if (!Helpers.equals(generalData.getChangelogVersion(), AppInfoHelpers.getAppVersionName(getContext()))) {
             return;
         }
 

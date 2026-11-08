@@ -95,7 +95,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.install_update), optionItem -> {
-                    GeneralData.instance(getContext()).setChangelog(changelog);
+                    GeneralData.instance(getContext()).setChangelog(changelog, versionName);
                     mUpdateChecker.installUpdate();
                 }, false));
         mSettingsPresenter.appendStringsCategory(getContext().getString(R.string.update_changelog), createChangelogOptions(changelog));
@@ -116,7 +116,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         BrowsePresenter.instance(getContext()).pinItem(getContext().getString(R.string.update_found), R.drawable.action_info, new ErrorFragmentData() {
             @Override
             public void onAction() {
-                GeneralData.instance(getContext()).setChangelog(changelog);
+                GeneralData.instance(getContext()).setChangelog(changelog, versionName);
                 mUpdateChecker.installUpdate();
             }
 
