@@ -215,10 +215,12 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
         mGlobalClock = findViewById(R.id.global_time);
         mGlobalClock.showDate(false);
+        mGlobalClock.enableSchedule(true);
 
         mGlobalDate = findViewById(R.id.global_date);
         mGlobalDate.showTime(false);
         mGlobalDate.showDate(true);
+        mGlobalDate.enableSchedule(true);
 
         updateButtonsVisibility();
     }

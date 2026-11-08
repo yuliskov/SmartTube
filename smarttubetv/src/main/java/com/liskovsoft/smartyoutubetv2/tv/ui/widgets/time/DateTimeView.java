@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 /**
  * Note, same view is used inside player and in as global time view
@@ -18,6 +19,8 @@ public class DateTimeView extends TextView implements TickleListener {
     private TickleManager mTickleManager;
     private boolean mIsDateEnabled = true;
     private boolean mIsTimeEnabled = true;
+    private boolean mIsScheduleEnabled;
+    private int mVisibility; // requested by the owner, the schedule may hide the view
 
     public DateTimeView(Context context) {
         super(context);
@@ -36,11 +39,12 @@ public class DateTimeView extends TextView implements TickleListener {
 
     private void init() {
         mTickleManager = TickleManager.instance();
+        mVisibility = getVisibility();
         updateListener();
     }
 
     private void updateListener() {
-        if (getVisibility() == View.VISIBLE) {
+        if (mVisibility == View.VISIBLE) {
             mTickleManager.addListener(this);
         } else {
             mTickleManager.removeListener(this);
@@ -49,13 +53,19 @@ public class DateTimeView extends TextView implements TickleListener {
 
     @Override
     public void setVisibility(int visibility) {
-        super.setVisibility(visibility);
-
+        mVisibility = visibility;
+        onTickle(); // apply the schedule and refresh the text at once
         updateListener();
+    }
+
+    private boolean isScheduledNow() {
+        return !mIsScheduleEnabled || isInEditMode() || GeneralData.instance(getContext()).isClockScheduledNow();
     }
 
     @Override
     public void onTickle() {
+        super.setVisibility(mVisibility == View.VISIBLE && !isScheduledNow() ? View.GONE : mVisibility);
+
         if (getVisibility() == View.VISIBLE) {
             String time;
 
@@ -70,6 +80,15 @@ public class DateTimeView extends TextView implements TickleListener {
             // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
             //setText(String.format("⌚ %s", time));
             setText(time);
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+
+        if (hasWindowFocus) { // settings dialog closed
+            onTickle();
         }
     }
 
@@ -90,5 +109,13 @@ public class DateTimeView extends TextView implements TickleListener {
 
     public void showTime(boolean show) {
         mIsTimeEnabled = show;
+    }
+
+    /**
+     * Hide the view outside of the user schedule
+     */
+    public void enableSchedule(boolean enable) {
+        mIsScheduleEnabled = enable;
+        onTickle();
     }
 }
