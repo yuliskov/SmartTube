@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListene
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +24,11 @@ public class BlockedChannelData implements ProfileChangeListener {
     private static BlockedChannelData sInstance;
     private final AppPrefs mPrefs;
     private final TreeSet<Channel> mChannels =
-            new TreeSet<>((channel1, channel2) -> Helpers.compareToIgnoreCase(channel1.channelName, channel2.channelName));
+            new TreeSet<>((channel1, channel2) -> {
+                // Sorted by name for display. The id is a tie-breaker, so same-named channels are kept apart.
+                int result = Helpers.compareToIgnoreCase(channel1.channelName, channel2.channelName);
+                return result != 0 ? result : Helpers.compareToIgnoreCase(channel1.channelId, channel2.channelId);
+            });
     private final Runnable mPersistStateInt = this::persistStateInt;
     private final List<BlockedChannelListener> mListeners = new ArrayList<>();
 
@@ -61,11 +66,22 @@ public class BlockedChannelData implements ProfileChangeListener {
                 }
 
                 if (channelId != null && channel.channelId != null) {
-                    return Helpers.equals(channel, channel.channelId);
+                    return Helpers.equals(channelId, channel.channelId);
                 }
             }
 
             return super.equals(obj);
+        }
+
+        /**
+         * The id is authoritative when both sides have it. Otherwise fall back to the (trimmed, case-insensitive) name.
+         */
+        public boolean matches(String otherId, String otherName) {
+            if (channelId != null && otherId != null) {
+                return channelId.equals(otherId);
+            }
+
+            return channelName != null && otherName != null && channelName.trim().equalsIgnoreCase(otherName.trim());
         }
 
         @NonNull
@@ -101,12 +117,21 @@ public class BlockedChannelData implements ProfileChangeListener {
             return;
         }
 
-        Channel channel = new Channel(channelId, channelName);
-        mChannels.remove(channel);
-        mChannels.add(channel);
+        removeMatching(channelId, channelName); // replace an old entry (e.g. same id but renamed)
+        mChannels.add(new Channel(channelId, channelName));
 
         persistState();
         notifyListeners();
+    }
+
+    private void removeMatching(String channelId, String channelName) {
+        Iterator<Channel> iterator = mChannels.iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next().matches(channelId, channelName)) {
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -117,7 +142,7 @@ public class BlockedChannelData implements ProfileChangeListener {
             return;
         }
 
-        mChannels.remove(new Channel(channelId, channelName));
+        removeMatching(channelId, channelName);
 
         persistState();
         notifyListeners();
@@ -131,7 +156,15 @@ public class BlockedChannelData implements ProfileChangeListener {
             return false;
         }
 
-        return mChannels.contains(new Channel(channelId, channelName));
+        // NOTE: mChannels.contains() only compares names (the set's comparator), so a channel whose
+        // displayed name differs from the stored one slipped through even when its id matched.
+        for (Channel channel : mChannels) {
+            if (channel.matches(channelId, channelName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
