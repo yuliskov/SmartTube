@@ -700,6 +700,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         optionItem -> {
                             VideoStateService stateService = VideoStateService.instance(getContext());
                             stateService.save(new State(mVideo, 0));
+                            if (mVideo.isLive) {
+                                // The saved position is ignored for live streams (they jump to the live edge).
+                                // A pending position is applied after that. Use 1ms, 0 means "none".
+                                mVideo.pendingPosMs = 1;
+                            }
                             PlaybackPresenter.instance(getContext()).openVideo(mVideo);
                             mDialogPresenter.closeDialog();
                         }
