@@ -166,6 +166,14 @@ public class IntentExtractor {
 
             if (Helpers.startsWith(lastPathSegment, "@")) {
                 channelId = lastPathSegment;
+            } else if (!isValid(lastPathSegment)) { // not a video link
+                // https://www.youtube.com/@LofiGirl/live or https://www.youtube.com/@LofiGirl/videos
+                for (String segment : url.getPathSegments()) {
+                    if (Helpers.startsWith(segment, "@")) {
+                        channelId = segment;
+                        break;
+                    }
+                }
             }
         }
 
