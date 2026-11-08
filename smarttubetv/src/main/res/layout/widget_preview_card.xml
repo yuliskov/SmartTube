@@ -25,7 +25,7 @@
         android:background="@color/black_87pc"
         android:visibility="invisible" />
 
-    <ProgressBar
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.progress.CircularProgressView
         android:id="@+id/progress_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
