@@ -40,6 +40,7 @@ import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.video.VideoListener;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -380,6 +381,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private void releasePlayer() {
         if (mPlayer != null) {
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
+            hideShutter();
             mPlaybackPresenter.onEngineReleased();
             destroyPlayerObjects();
         }
@@ -484,6 +486,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
+        // The new video is visible. Remove the cover of the previous video's last frame.
+        mPlayer.addVideoListener(new VideoListener() {
+            @Override
+            public void onRenderedFirstFrame() {
+                hideShutter();
+            }
+        });
 
         mExoPlayerController.setPlayer(mPlayer);
     }
@@ -848,6 +857,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showBackground(String url) {
+        if (url != null) {
+            hideShutter(); // no video (e.g. unplayable). Let the background be visible.
+        }
         mBackgroundManager.showBackground(url);
     }
 
@@ -1595,6 +1607,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mExoPlayerController.resetPlayerState();
         // Hide last frame of the previous video
         showBackgroundColor(R.color.player_background);
+        // NOTE: the background is behind the video surface, which keeps the last frame. Cover the surface itself.
+        showShutter();
         setChatReceiver(null);
         setSeekBarSegments(null);
         setSeekPreviewTitle(null);

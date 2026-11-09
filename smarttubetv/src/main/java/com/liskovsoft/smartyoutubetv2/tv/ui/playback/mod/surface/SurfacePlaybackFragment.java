@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /**
@@ -31,6 +33,13 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private float mAspectRatio;
     private float mPixelRatio = 1.0f;
     private float mVideoAspectRatio;
+    /**
+     * Covers the last frame of the previous video until the new one renders its first frame.
+     * The surface keeps showing the last frame, the views behind it (background) can't hide it.
+     */
+    private View mShutter;
+    private static final long SHUTTER_MAX_SHOW_MS = 5_000;
+    private final Runnable mHideShutter = this::hideShutter;
 
     @Override
     public View onCreateView(
@@ -44,6 +53,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+        createShutter();
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
         mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
@@ -75,8 +85,44 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
     @Override
     public void onDestroyView() {
+        Utils.removeCallbacks(mHideShutter);
         mVideoSurfaceWrapper = null;
+        mShutter = null;
         super.onDestroyView();
+    }
+
+    private void createShutter() {
+        mShutter = new View(getContext());
+        mShutter.setBackgroundColor(Color.BLACK);
+        mShutter.setVisibility(View.GONE);
+        // Right above the video surface, below the subtitles
+        mVideoSurfaceRoot.addView(mShutter, 1, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    /**
+     * Hide the last frame of the previous video (the loading progress is drawn above)
+     */
+    protected void showShutter() {
+        if (mShutter == null) {
+            return;
+        }
+
+        mShutter.setVisibility(View.VISIBLE);
+
+        // Safety: e.g. audio only mode or an error. No frame will be rendered.
+        Utils.removeCallbacks(mHideShutter);
+        Utils.postDelayed(mHideShutter, SHUTTER_MAX_SHOW_MS);
+    }
+
+    protected void hideShutter() {
+        Utils.removeCallbacks(mHideShutter);
+
+        if (mShutter == null || mShutter.getVisibility() == View.GONE) {
+            return;
+        }
+
+        mShutter.setVisibility(View.GONE);
     }
 
     /** Returns the {@link ResizeMode}. */
