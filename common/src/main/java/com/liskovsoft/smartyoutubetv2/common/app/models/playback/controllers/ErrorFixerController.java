@@ -24,7 +24,7 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
-    private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 3;
+    private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 1;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
     private String mSabrErrorFixVideoId;
