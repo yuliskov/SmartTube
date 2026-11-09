@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
+import com.liskovsoft.sharedutils.helpers.DeviceHelpers;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
@@ -90,6 +91,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!sRunOnce) {
             sRunOnce = true;
             RxHelper.setupGlobalErrorHandler();
+            // Codec capabilities are needed by the first video (default format); building them takes ~0.4s,
+            // which froze the player while it opened. Prepare them in the background instead.
+            RxHelper.runAsync(DeviceHelpers::prefetchCodecCapabilities);
             initGlobalPrefs();
             initProxy();
             initVideoStateService();
