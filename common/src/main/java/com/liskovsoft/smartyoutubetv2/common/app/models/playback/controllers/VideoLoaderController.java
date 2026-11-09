@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsMediaCache;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsSabrPreloader;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -696,12 +697,24 @@ public class VideoLoaderController extends BasePlayerController {
         String audioItag = mLastAudioItag;
         Context context = getContext();
 
-        ShortsMediaCache.cancelPending(); // media of the skipped Shorts isn't needed anymore
+        // Media of the skipped Shorts isn't needed anymore
+        ShortsMediaCache.cancelPending();
+        ShortsSabrPreloader.cancelPending();
         MediaServiceManager.instance().preloadFormatInfo(nextVideos, formatInfo -> {
-            if (willOpenAsDash(formatInfo)) { // other formats can't be cached
+            if (willOpenAsDash(formatInfo)) {
                 ShortsMediaCache.prefetch(context, formatInfo, videoItag, audioItag);
+            } else if (willOpenAsSabr(formatInfo)) {
+                ShortsSabrPreloader.preload(context, formatInfo, videoItag, audioItag);
             }
         });
+    }
+
+    /**
+     * Same check as in {@link #processFormatInfo}
+     */
+    private boolean willOpenAsSabr(MediaItemFormatInfo formatInfo) {
+        return formatInfo != null && !formatInfo.isUnplayable() && !formatInfo.isLive() && !willOpenAsDash(formatInfo)
+                && acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats();
     }
 
     /**

@@ -67,18 +67,6 @@ public final class ShortsMediaCache {
         }
     };
 
-    private static final CacheDataSource.EventListener CACHE_LISTENER = new CacheDataSource.EventListener() {
-        @Override
-        public void onCachedBytesRead(long cacheSizeBytes, long cachedBytesRead) {
-            Log.d(TAG, "Read from cache: %s KB", cachedBytesRead / 1024);
-        }
-
-        @Override
-        public void onCacheIgnored(int reason) {
-            Log.d(TAG, "Cache ignored: %s", reason);
-        }
-    };
-
     private ShortsMediaCache() {
     }
 
@@ -105,7 +93,7 @@ public final class ShortsMediaCache {
                 new FileDataSourceFactory(),
                 new CacheDataSinkFactory(cache, CacheDataSink.DEFAULT_FRAGMENT_SIZE),
                 CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR,
-                CACHE_LISTENER,
+                null,
                 KEY_FACTORY
         );
     }

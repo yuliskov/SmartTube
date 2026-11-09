@@ -44,6 +44,8 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErr
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsMediaCache;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsSabrPreloader;
+import com.google.android.exoplayer2.source.sabr.preload.SabrReplayDataSource;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
@@ -78,6 +80,7 @@ public class ExoMediaSourceFactory {
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
         ShortsMediaCache.setUpstreamFactory(getMediaDataSourceFactory()); // prefetch with the same network stack
+        getSabrMediaDataSourceFactory(); // registers the SABR network stack for the Shorts warm-up
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -400,7 +403,10 @@ public class ExoMediaSourceFactory {
      */
     private DataSource.Factory getSabrMediaDataSourceFactory() {
         if (mSabrMediaDataSourceFactory == null) {
-            mSabrMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER, SABR_READ_TIMEOUT_MS);
+            DataSource.Factory networkFactory = buildDataSourceFactory(USE_BANDWIDTH_METER, SABR_READ_TIMEOUT_MS);
+            ShortsSabrPreloader.setUpstreamFactory(networkFactory);
+            // The first responses of the warmed up Shorts come from memory
+            mSabrMediaDataSourceFactory = new SabrReplayDataSource.Factory(networkFactory);
         }
 
         return mSabrMediaDataSourceFactory;
