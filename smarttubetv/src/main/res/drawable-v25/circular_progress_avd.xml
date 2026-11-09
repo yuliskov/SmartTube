@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Indeterminate loading spinner used by CircularProgressView on API 25+.
+    Every animated property here (group rotation/scale, trimPath*, alpha) is supported by the
+    RenderThread, so the spinner keeps turning while the main thread is busy loading a video.
+    Same look as the Canvas fallback: rounded arc that grows/shrinks while rotating, with a short
+    fade + scale in. No track and no background disc: nothing grey is drawn behind the arc.
+-->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="64dp"
+            android:height="64dp"
+            android:viewportWidth="64"
+            android:viewportHeight="64">
+            <group
+                android:name="appear"
+                android:pivotX="32"
+                android:pivotY="32"
+                android:scaleX="0.85"
+                android:scaleY="0.85">
+                <group
+                    android:name="rotation"
+                    android:pivotX="32"
+                    android:pivotY="32">
+                    <path
+                        android:name="arc"
+                        android:pathData="M32,14 A18,18 0 1,1 32,50 A18,18 0 1,1 32,14"
+                        android:strokeAlpha="0"
+                        android:strokeColor="@color/progress_arc"
+                        android:strokeLineCap="round"
+                        android:strokeWidth="4.5"
+                        android:trimPathEnd="0.05"
+                        android:trimPathStart="0" />
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <!-- Fade + scale in -->
+    <target android:name="appear">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="220"
+                    android:interpolator="@android:interpolator/decelerate_quad"
+                    android:propertyName="scaleX"
+                    android:valueFrom="0.85"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="220"
+                    android:interpolator="@android:interpolator/decelerate_quad"
+                    android:propertyName="scaleY"
+                    android:valueFrom="0.85"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+
+    <!-- Whole spinner rotation -->
+    <target android:name="rotation">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="4444"
+                android:interpolator="@android:interpolator/linear"
+                android:propertyName="rotation"
+                android:repeatCount="infinite"
+                android:valueFrom="0"
+                android:valueTo="720"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+
+    <!-- Arc grow (head leads) / shrink (tail catches up), plus fade in -->
+    <target android:name="arc">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="220"
+                    android:interpolator="@android:interpolator/decelerate_quad"
+                    android:propertyName="strokeAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="1333"
+                    android:propertyName="trimPathStart"
+                    android:repeatCount="infinite"
+                    android:valueFrom="0"
+                    android:valueTo="0.75"
+                    android:valueType="floatType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="L0.5,0 C0.7,0 0.6,1 1,1" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="1333"
+                    android:propertyName="trimPathEnd"
+                    android:repeatCount="infinite"
+                    android:valueFrom="0.05"
+                    android:valueTo="0.8"
+                    android:valueType="floatType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="C0.2,0 0.1,1 0.5,1 L1,1" />
+                    </aapt:attr>
+                </objectAnimator>
+                <objectAnimator
+                    android:duration="1333"
+                    android:interpolator="@android:interpolator/linear"
+                    android:propertyName="trimPathOffset"
+                    android:repeatCount="infinite"
+                    android:valueFrom="0"
+                    android:valueTo="0.25"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

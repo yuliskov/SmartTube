@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Arc color of the loading spinner (CircularProgressView): SmartTube's brand red -->
+    <color name="progress_arc">@color/semi_red</color>
+</resources>
