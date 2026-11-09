@@ -52,6 +52,7 @@ public class MediaServiceManager implements OnAccountChange {
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
+    private Disposable mPreloadFormatInfoAction;
     private Disposable mPlaylistGroupAction;
     private Disposable mPlaylistInfosAction;
     private Disposable mHistoryAction;
@@ -257,6 +258,31 @@ public class MediaServiceManager implements OnAccountChange {
                 .subscribe(
                         onFormatInfo::onFormatInfo,
                         error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
+                );
+    }
+
+    /**
+     * Fetch the formats of the upcoming videos one by one in background so they start faster.<br/>
+     * Independent of {@link #loadFormatInfo} so they don't cancel each other.<br/>
+     * The previous run isn't canceled: interrupting a request that is almost done is a waste,
+     * the new run gets its result from the cache.
+     */
+    public void preloadFormatInfo(List<Video> items, OnFormatInfo onFormatInfo) {
+        if (items == null || items.isEmpty()) {
+            return;
+        }
+
+        mPreloadFormatInfoAction = Observable.fromIterable(items)
+                .filter(item -> item.videoId != null)
+                .concatMap(item -> mItemService.preloadFormatInfoObserve(item.videoId)
+                        .doOnNext(formatInfo -> Log.d(TAG, "preloadFormatInfo done: %s", item.videoId))
+                        .onErrorResumeNext(error -> {
+                            Log.e(TAG, "preloadFormatInfo error: %s: %s", item.videoId, error.getMessage());
+                            return Observable.empty();
+                        }))
+                .subscribe(
+                        onFormatInfo::onFormatInfo,
+                        error -> Log.e(TAG, "preloadFormatInfo error: %s", error.getMessage())
                 );
     }
 

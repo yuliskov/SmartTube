@@ -43,6 +43,7 @@ import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsMediaCache;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
@@ -72,9 +73,11 @@ public class ExoMediaSourceFactory {
     private TrackErrorFixer mTrackErrorFixer;
     private DataSource.Factory mMediaDataSourceFactory;
     private DataSource.Factory mSabrMediaDataSourceFactory;
+    private DataSource.Factory mCachedMediaDataSourceFactory;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
+        ShortsMediaCache.setUpstreamFactory(getMediaDataSourceFactory()); // prefetch with the same network stack
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -82,7 +85,14 @@ public class ExoMediaSourceFactory {
     }
 
     public MediaSource fromDashFormatInfo(MediaItemFormatInfo formatInfo) {
-        return buildDashMediaSource(formatInfo);
+        return buildDashMediaSource(formatInfo, getDashChunkSourceFactory());
+    }
+
+    /**
+     * Reads the prefetched start of the video from the disk cache (instant start of the next Shorts)
+     */
+    public MediaSource fromDashFormatInfoCached(MediaItemFormatInfo formatInfo) {
+        return buildDashMediaSource(formatInfo, new DefaultDashChunkSource.Factory(getCachedMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD));
     }
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
@@ -202,10 +212,10 @@ public class ExoMediaSourceFactory {
         return sabrSource;
     }
 
-    private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo) {
+    private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo, DashChunkSource.Factory chunkSourceFactory) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                getDashChunkSourceFactory(),
+                chunkSourceFactory,
                 null
         )
                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -402,6 +412,14 @@ public class ExoMediaSourceFactory {
         }
 
         return mMediaDataSourceFactory;
+    }
+
+    private DataSource.Factory getCachedMediaDataSourceFactory() {
+        if (mCachedMediaDataSourceFactory == null) {
+            mCachedMediaDataSourceFactory = ShortsMediaCache.wrap(mContext, getMediaDataSourceFactory());
+        }
+
+        return mCachedMediaDataSourceFactory;
     }
 
     // EXO: 2.10 - 2.12

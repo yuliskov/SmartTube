@@ -296,6 +296,45 @@ public class SuggestionsController extends BasePlayerController {
         return result;
     }
 
+    /**
+     * Next video and the ones after it in the same section (e.g. the Shorts grid).<br/>
+     * Used to preload upcoming videos.
+     */
+    public List<Video> getNextVideos(int count) {
+        List<Video> result = new ArrayList<>();
+        Video next = getNext();
+
+        if (next == null) {
+            return result;
+        }
+
+        result.add(next);
+
+        VideoGroup group = next.getGroup();
+
+        if (next != mNextSectionVideo || group == null) { // queue, mix etc. Only the next item is known.
+            return result;
+        }
+
+        boolean found = false;
+
+        for (Video video : group.getVideos()) {
+            if (result.size() >= count) {
+                break;
+            }
+
+            if (found && video.hasVideo() && !video.isUpcoming) {
+                result.add(video);
+            }
+
+            if (video.equals(next)) {
+                found = true;
+            }
+        }
+
+        return result;
+    }
+
     public Video getPrevious() {
         if (getPlayer() == null || getVideo() == null) {
             return null;
