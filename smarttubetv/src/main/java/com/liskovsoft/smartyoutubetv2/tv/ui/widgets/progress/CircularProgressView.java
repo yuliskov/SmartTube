@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
  */
 public class CircularProgressView extends View {
     private static final int DEFAULT_SIZE_DP = 64;
-    private static final float STROKE_DP = 4.5f;
+    private static final float STROKE_DP = 3f;
     private static final float ARC_INSET_DP = 14;
 
     private static final long CYCLE_MS = 1333;    // one grow + shrink of the arc

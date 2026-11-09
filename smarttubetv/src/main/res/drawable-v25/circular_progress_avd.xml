@@ -31,7 +31,7 @@
                         android:strokeAlpha="0"
                         android:strokeColor="@color/progress_arc"
                         android:strokeLineCap="round"
-                        android:strokeWidth="4.5"
+                        android:strokeWidth="3"
                         android:trimPathEnd="0.05"
                         android:trimPathStart="0" />
                 </group>
