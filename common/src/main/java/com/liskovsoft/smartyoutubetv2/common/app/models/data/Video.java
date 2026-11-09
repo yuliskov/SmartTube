@@ -43,6 +43,8 @@ public final class Video {
     public int id;
     public String title;
     public String deArrowTitle;
+    /** Original (not translated) title, see UnlocalizedTitleProcessor. DeArrow title takes precedence. */
+    public String unlocalizedTitle;
     public CharSequence secondTitle;
     private String metadataTitle;
     private CharSequence metadataSecondTitle;
@@ -95,6 +97,7 @@ public final class Video {
     public String subscriberCount;
     public float volume = 1.0f;
     public boolean deArrowProcessed;
+    public boolean unlocalizedTitleProcessed;
     public boolean isLiveEnd;
     public boolean isShuffled;
     public String searchQuery;
@@ -289,11 +292,11 @@ public final class Video {
     }
 
     public String getTitle() {
-        return deArrowTitle != null ? deArrowTitle : title;
+        return deArrowTitle != null ? deArrowTitle : unlocalizedTitle != null ? unlocalizedTitle : title;
     }
 
     public String getTitleFull() {
-        return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
+        return deArrowTitle != null ? deArrowTitle : unlocalizedTitle != null ? unlocalizedTitle : metadataTitle != null ? metadataTitle : title;
     }
 
     public CharSequence getSecondTitle() {
