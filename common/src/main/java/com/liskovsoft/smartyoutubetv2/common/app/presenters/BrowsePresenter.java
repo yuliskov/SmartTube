@@ -562,10 +562,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(Video item) {
-        if (getView() == null) {
-            return;
-        }
-
+        // Save the pin even when the Browse screen isn't alive (e.g. pinning from Search):
+        // the sidebar is rebuilt from the saved items when the screen comes back.
         int idx = getSidebarService().addPinnedItem(item);
 
         createPinnedMapping(item);
@@ -578,7 +576,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 mSections.add(newSection);
             }
         }
-        getView().addSection(idx, newSection);
+
+        if (getView() != null) {
+            getView().addSection(idx, newSection);
+        }
     }
 
     public void pinItem(String title, int resId, ErrorFragmentData data) {
