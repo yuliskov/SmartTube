@@ -12,7 +12,6 @@ import android.view.Choreographer;
 import android.view.Choreographer.FrameCallback;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -35,7 +34,8 @@ public class MarqueeTextViewCompat extends TextView {
     private static final float DEFAULT_SPEED = ORIGINAL_SPEED * 2;
     private static final float BASE_FPS = 60f;
 
-    private int mFps = 60;
+    private static final float MAX_FRAMES_PER_STEP = 4f;
+    private long mLastFrameTimeNanos;
 
     private boolean mIsTextFullyVisible = true;
 
@@ -50,10 +50,17 @@ public class MarqueeTextViewCompat extends TextView {
     private final FrameCallback mFrameCallback = new FrameCallback() {
         @Override
         public void doFrame(long frameTimeNanos) {
+            // Move by the real time elapsed since the previous frame (mSpeed is the shift per 1/60 s).
+            // The display refresh rate may change while the view is laid out (e.g. Auto Frame Rate switches
+            // it to 24/30 Hz during playback), so a refresh rate read once made the text scroll 2x faster afterwards.
+            float frames = mLastFrameTimeNanos == 0 ? 1 : (frameTimeNanos - mLastFrameTimeNanos) * BASE_FPS / 1_000_000_000f;
+            mLastFrameTimeNanos = frameTimeNanos;
+            frames = Math.max(0, Math.min(frames, MAX_FRAMES_PER_STEP)); // don't jump after a long stall
+
             if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
-                mLeftX += BASE_FPS / mFps * mSpeed;
+                mLeftX += frames * mSpeed;
             } else {
-                mLeftX -= BASE_FPS / mFps * mSpeed;
+                mLeftX -= frames * mSpeed;
             }
 
             //invalidate();
@@ -174,7 +181,6 @@ public class MarqueeTextViewCompat extends TextView {
 
             mLaidOut = true;
 
-            updateFps();
             updateTextFullyVisible();
             updateMarquee();
         }
@@ -234,16 +240,6 @@ public class MarqueeTextViewCompat extends TextView {
             );
             mTextView.draw(canvas);
             canvas.restoreToCount(save2);
-        }
-    }
-
-    private void updateFps() {
-        if (Build.VERSION.SDK_INT >= 30) {
-            mFps = (int) getContext().getDisplay().getRefreshRate();
-        } else {
-            WindowManager windowManager =
-                    (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            mFps = (int) windowManager.getDefaultDisplay().getRefreshRate();
         }
     }
 
@@ -377,6 +373,7 @@ public class MarqueeTextViewCompat extends TextView {
         if (mFrameCallback != null) {
             Choreographer.getInstance().removeFrameCallback(mFrameCallback);
         }
+        mLastFrameTimeNanos = 0;
     }
 
     private void startScroll() {
