@@ -79,8 +79,9 @@ public class ExoMediaSourceFactory {
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
-        ShortsMediaCache.setUpstreamFactory(getMediaDataSourceFactory()); // prefetch with the same network stack
-        getSabrMediaDataSourceFactory(); // registers the SABR network stack for the Shorts warm-up
+        // Register the network stacks for the Shorts preload (see the getters)
+        getMediaDataSourceFactory();
+        getSabrMediaDataSourceFactory();
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -379,6 +380,7 @@ public class ExoMediaSourceFactory {
     public void release() {
         mMediaDataSourceFactory = null;
         mSabrMediaDataSourceFactory = null;
+        mCachedMediaDataSourceFactory = null; // wraps the media factory
     }
 
     @NonNull
@@ -415,6 +417,7 @@ public class ExoMediaSourceFactory {
     private DataSource.Factory getMediaDataSourceFactory() {
         if (mMediaDataSourceFactory == null) {
             mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+            ShortsMediaCache.setUpstreamFactory(mMediaDataSourceFactory); // prefetch with the same network stack
         }
 
         return mMediaDataSourceFactory;

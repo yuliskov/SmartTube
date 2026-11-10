@@ -13,25 +13,20 @@ import com.google.android.exoplayer2.source.sabr.manifest.SabrManifestParser;
 import com.google.android.exoplayer2.source.sabr.preload.SabrPreloader;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Warms up the next SABR Shorts in background: its first SABR responses are recorded,
+ * Warms up the next SABR Shorts (see {@link ShortsPreloader}): its first SABR responses are recorded,
  * so the player doesn't wait for the network when the Shorts is opened.<br/>
  * See {@link SabrPreloader}.
  */
 public final class ShortsSabrPreloader {
     private static final String TAG = ShortsSabrPreloader.class.getSimpleName();
-    private static final ExecutorService sExecutor = Executors.newSingleThreadExecutor();
     private static DataSource.Factory sUpstreamFactory;
-    private static AtomicBoolean sCanceled = new AtomicBoolean();
 
     private ShortsSabrPreloader() {
     }
@@ -44,66 +39,58 @@ public final class ShortsSabrPreloader {
     }
 
     /**
-     * Cancel warm-ups that are queued or running (the user has skipped those videos)
-     */
-    public static synchronized void cancelPending() {
-        sCanceled.set(true);
-        sCanceled = new AtomicBoolean();
-    }
-
-    /**
+     * Blocking, call from a background thread.
      * @param videoItag itag of the video track that is playing now (the player will most likely pick the same quality)
      * @param audioItag itag of the audio track that is playing now
+     * @param canceled stops the warm-up (e.g. the user has skipped the video)
+     * @return whether the video has been warmed up
      */
-    public static void preload(Context context, MediaItemFormatInfo formatInfo, @Nullable String videoItag, @Nullable String audioItag) {
-        if (formatInfo == null || formatInfo.isLive()) {
-            return;
+    public static boolean preload(Context context, MediaItemFormatInfo formatInfo, @Nullable String videoItag, @Nullable String audioItag,
+                                  AtomicBoolean canceled) {
+        if (context == null || formatInfo == null || formatInfo.isLive() || canceled.get()) {
+            return false;
         }
 
         Context appContext = context.getApplicationContext();
-
         DataSource.Factory upstreamFactory;
-        AtomicBoolean canceled;
 
         synchronized (ShortsSabrPreloader.class) {
             upstreamFactory = sUpstreamFactory;
-            canceled = sCanceled;
         }
 
         if (upstreamFactory == null) {
-            return;
+            return false;
         }
 
         String videoId = formatInfo.getVideoId();
 
-        sExecutor.execute(() -> {
-            if (canceled.get()) {
-                return;
+        try {
+            // A manifest of its own. The player creates a new one when the video is opened.
+            SabrManifest manifest = new SabrManifestParser().parse(formatInfo);
+
+            // The format the player will select for this video. Fallback: the quality of the previous one.
+            // NOTE: a wrong guess is safe. The player loads the mismatched track from the network.
+            Format videoFormat = selectFormat(appContext, manifest, C.TRACK_TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, videoItag);
+            Format audioFormat = selectFormat(appContext, manifest, C.TRACK_TYPE_AUDIO, TrackSelectorManager.RENDERER_INDEX_AUDIO, audioItag);
+
+            if (videoFormat == null || audioFormat == null) {
+                Log.d(TAG, "Skip %s: can't predict the formats", videoId);
+                return false;
             }
 
-            try {
-                // A manifest of its own. The player creates a new one when the video is opened.
-                SabrManifest manifest = new SabrManifestParser().parse(formatInfo);
+            return SabrPreloader.preload(manifest, upstreamFactory, videoFormat, audioFormat, canceled);
+        } catch (Exception e) { // malformed format info, parser or network stack failure
+            Log.e(TAG, "SABR preload %s error: %s", videoId, e.getMessage());
+            return false;
+        }
+    }
 
-                // The format the player will select for this video. Fallback: the quality of the previous one.
-                // NOTE: a wrong guess is safe. The player loads the mismatched track from the network.
-                List<List<Format>> videoFormats = getFormats(manifest, C.TRACK_TYPE_VIDEO);
-                List<List<Format>> audioFormats = getFormats(manifest, C.TRACK_TYPE_AUDIO);
-                Format videoFormat = Helpers.firstNonNull(
-                        TrackSelectionPredictor.predict(appContext, TrackSelectorManager.RENDERER_INDEX_VIDEO, videoFormats), findFormat(videoFormats, videoItag));
-                Format audioFormat = Helpers.firstNonNull(
-                        TrackSelectionPredictor.predict(appContext, TrackSelectorManager.RENDERER_INDEX_AUDIO, audioFormats), findFormat(audioFormats, audioItag));
+    @Nullable
+    private static Format selectFormat(Context appContext, SabrManifest manifest, int trackType, int rendererIndex, @Nullable String fallbackItag) {
+        List<List<Format>> formats = getFormats(manifest, trackType);
+        Format predicted = TrackSelectionPredictor.predict(appContext, rendererIndex, formats);
 
-                if (videoFormat == null || audioFormat == null) {
-                    Log.d(TAG, "Skip %s: can't predict the formats", videoId);
-                    return;
-                }
-
-                SabrPreloader.preload(manifest, upstreamFactory.createDataSource(), videoFormat, audioFormat, canceled);
-            } catch (Exception e) {
-                Log.e(TAG, "SABR preload %s error: %s", videoId, e.getMessage());
-            }
-        });
+        return predicted != null ? predicted : findFormat(formats, fallbackItag);
     }
 
     @Nullable

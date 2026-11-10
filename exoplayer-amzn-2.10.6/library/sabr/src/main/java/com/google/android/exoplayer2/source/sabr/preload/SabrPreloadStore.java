@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * SABR responses recorded ahead of time for the first requests of upcoming videos (e.g. the next Shorts).<br/>
@@ -24,8 +25,18 @@ public final class SabrPreloadStore {
      * Keep the playback cookie fresh
      */
     private static final long MAX_AGE_MS = 10 * 60 * 1_000;
+    /**
+     * Memory limit for all the recordings: a part of the app's heap, 8 MB (low memory devices) to 32 MB.<br/>
+     * A Shorts takes 2-5 MB in 1080p and up to 16 MB in 1440p60+.
+     */
+    private static final long MAX_BYTES =
+            Math.max(8L * 1024 * 1024, Math.min(32L * 1024 * 1024, Runtime.getRuntime().maxMemory() / 12));
     private static final Map<String, Recording> sRecordings = new LinkedHashMap<>();
     private static final int MAX_PLAYER_SESSIONS = 20;
+    /**
+     * Compiled once: the key is built for every SABR request of the player
+     */
+    private static final Pattern REQUEST_NUMBER = Pattern.compile("[?&]rn=\\d+$");
     /**
      * Streams the player has already started a server session for (from the network).
      * Their recordings must never be used: two sessions of the same stream may be cut by the server
@@ -44,9 +55,9 @@ public final class SabrPreloadStore {
          */
         final FormatId formatId;
         final long playerTimeMs;
-        final byte[] data;
+        final SabrResponseData data;
 
-        Response(FormatId formatId, long playerTimeMs, byte[] data) {
+        Response(FormatId formatId, long playerTimeMs, SabrResponseData data) {
             this.formatId = formatId;
             this.playerTimeMs = playerTimeMs;
             this.data = data;
@@ -69,6 +80,21 @@ public final class SabrPreloadStore {
             }
 
             return true;
+        }
+
+        /**
+         * Memory taken by the responses that aren't replayed yet
+         */
+        long getBytes() {
+            long result = 0;
+
+            for (ArrayDeque<Response> queue : responses.values()) {
+                for (Response response : queue) {
+                    result += response.data.length();
+                }
+            }
+
+            return result;
         }
     }
 
@@ -113,11 +139,31 @@ public final class SabrPreloadStore {
         sRecordings.remove(key);
         sRecordings.put(key, recording);
 
-        while (sRecordings.size() > MAX_VIDEOS) {
+        // The oldest ones go first. The new one always stays.
+        while (sRecordings.size() > 1 && (sRecordings.size() > MAX_VIDEOS || getUsedBytes() > MAX_BYTES)) {
             Iterator<String> iterator = sRecordings.keySet().iterator();
             iterator.next();
             iterator.remove();
         }
+    }
+
+    /**
+     * Memory that can be taken by a new recording without dropping the existing ones
+     */
+    static synchronized long getFreeBytes() {
+        removeExpired();
+
+        return Math.max(MAX_BYTES - getUsedBytes(), 0);
+    }
+
+    private static long getUsedBytes() {
+        long result = 0;
+
+        for (Recording recording : sRecordings.values()) {
+            result += recording.getBytes();
+        }
+
+        return result;
     }
 
     /**
@@ -166,6 +212,6 @@ public final class SabrPreloadStore {
      * The request number is appended to the end of the url (see SabrManifest#getRequestUrl)
      */
     static String toKey(String requestUrl) {
-        return requestUrl != null ? requestUrl.replaceFirst("[?&]rn=\\d+$", "") : null;
+        return requestUrl != null ? REQUEST_NUMBER.matcher(requestUrl).replaceFirst("") : null;
     }
 }

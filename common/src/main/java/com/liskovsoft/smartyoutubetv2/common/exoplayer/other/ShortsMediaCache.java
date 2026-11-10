@@ -23,14 +23,13 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Disk cache for Shorts media.<br/>
- * The first seconds of the next Shorts are downloaded in background while the current one is playing,
- * so the next one starts from disk instantly. Played Shorts are kept too (instant going back).
+ * The first seconds of the next Shorts are downloaded in background while the current one is playing
+ * (see {@link ShortsPreloader}), so the next one starts from disk instantly.
+ * Played Shorts are kept too (instant going back).
  */
 public final class ShortsMediaCache {
     private static final String TAG = ShortsMediaCache.class.getSimpleName();
@@ -42,10 +41,9 @@ public final class ShortsMediaCache {
     private static final int PREFETCH_SECONDS = 6;
     private static final long MIN_PREFETCH_BYTES = 512 * 1024;
     private static final long MAX_PREFETCH_BYTES = 6L * 1024 * 1024;
-    private static final ExecutorService sExecutor = Executors.newSingleThreadExecutor();
     private static SimpleCache sCache;
+    private static boolean sCacheFailed;
     private static DataSource.Factory sUpstreamFactory;
-    private static AtomicBoolean sPrefetchCanceled;
 
     /**
      * The url of the same media differs between requests (init url, signatures, extra params).<br/>
@@ -99,13 +97,16 @@ public final class ShortsMediaCache {
     }
 
     /**
-     * Download the start of the given video in background.
+     * Download the start of the given video. Blocking, call from a background thread.
      * @param videoItag itag of the video track that is playing now (the player will most likely pick the same quality)
      * @param audioItag itag of the audio track that is playing now
+     * @param canceled stops the download (e.g. the user has skipped the video)
+     * @return whether the start of both tracks is in the cache now
      */
-    public static void prefetch(Context context, MediaItemFormatInfo formatInfo, @Nullable String videoItag, @Nullable String audioItag) {
+    public static boolean prefetch(Context context, MediaItemFormatInfo formatInfo, @Nullable String videoItag, @Nullable String audioItag,
+                                   AtomicBoolean canceled) {
         if (formatInfo == null || formatInfo.isLive() || formatInfo.getAdaptiveFormats() == null) {
-            return;
+            return false;
         }
 
         Cache cache = getCache(context);
@@ -113,57 +114,61 @@ public final class ShortsMediaCache {
 
         synchronized (ShortsMediaCache.class) {
             upstreamFactory = sUpstreamFactory;
-
-            if (sPrefetchCanceled == null) {
-                sPrefetchCanceled = new AtomicBoolean();
-            }
         }
 
         if (cache == null || upstreamFactory == null) {
-            return;
+            return false;
         }
 
         MediaFormat video = selectVideo(formatInfo.getAdaptiveFormats(), videoItag);
         MediaFormat audio = selectAudio(formatInfo.getAdaptiveFormats(), audioItag);
-        AtomicBoolean canceled = sPrefetchCanceled;
-        String videoId = formatInfo.getVideoId();
 
-        sExecutor.execute(() -> {
-            // Audio is small and needed for the start too
-            prefetchFormat(cache, upstreamFactory, audio, canceled);
-            prefetchFormat(cache, upstreamFactory, video, canceled);
-            Log.d(TAG, "Prefetch done: %s, video itag: %s, audio itag: %s", videoId,
-                    video != null ? video.getITag() : null, audio != null ? audio.getITag() : null);
-        });
+        // Both tracks are needed for the start. Load them in parallel like the player does.
+        AtomicBoolean audioDone = new AtomicBoolean();
+        Thread audioThread = new Thread(() -> audioDone.set(prefetchFormat(cache, upstreamFactory, audio, canceled)), "ShortsPrefetchAudio");
+        audioThread.start();
+        boolean videoDone = prefetchFormat(cache, upstreamFactory, video, canceled);
+
+        try {
+            audioThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+
+        boolean done = videoDone && audioDone.get();
+        Log.d(TAG, "Prefetch %s: %s, video itag: %s, audio itag: %s", done ? "done" : "incomplete", formatInfo.getVideoId(),
+                video != null ? video.getITag() : null, audio != null ? audio.getITag() : null);
+
+        return done;
     }
 
     /**
-     * Cancel prefetches that are queued or running (e.g. the user has skipped those videos already)
+     * @return whether the start of the format is in the cache now
      */
-    public static synchronized void cancelPending() {
-        if (sPrefetchCanceled != null) {
-            sPrefetchCanceled.set(true);
+    private static boolean prefetchFormat(Cache cache, DataSource.Factory upstreamFactory, MediaFormat format, AtomicBoolean canceled) {
+        // OTF formats are split into numbered segments (no byte ranges). Nothing to prefetch by a range.
+        if (format == null || format.getUrl() == null || format.isOtf() || canceled.get()) {
+            return false;
         }
-
-        sPrefetchCanceled = new AtomicBoolean();
-    }
-
-    private static void prefetchFormat(Cache cache, DataSource.Factory upstreamFactory, MediaFormat format, AtomicBoolean canceled) {
-        if (format == null || format.getUrl() == null || canceled.get()) {
-            return;
-        }
-
-        Uri uri = Uri.parse(format.getUrl());
-        long length = getPrefetchLength(format);
 
         try {
-            DataSpec dataSpec = new DataSpec(uri, 0, length, null);
+            Uri uri = Uri.parse(format.getUrl());
+            long length = getPrefetchLength(format);
+            // NOTE: the key must be set explicitly. CacheUtil writes through a data source of its own
+            // that doesn't know about the key factory, so the data would be stored under the url
+            // and the player (which reads by the stable key) would never find it.
+            DataSpec dataSpec = new DataSpec(uri, 0, length, buildKey(uri));
             CacheUtil.cache(dataSpec, cache, KEY_FACTORY, upstreamFactory.createDataSource(), null, canceled);
+            return true;
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            Log.e(TAG, "Prefetch error: %s", e.getMessage());
+            // Canceled by the flag (the thread itself isn't interrupted). Nothing to restore.
+            Log.d(TAG, "Prefetch canceled: itag %s", format.getITag());
+        } catch (Exception e) { // network, disk (no space, cache folder removed), malformed url
+            Log.e(TAG, "Prefetch error: itag %s: %s", format.getITag(), e.getMessage());
         }
+
+        return false;
     }
 
     /**
@@ -250,24 +255,33 @@ public final class ShortsMediaCache {
     }
 
     private static String buildKey(Uri uri) {
-        String id = uri.getQueryParameter("id");
-        String itag = uri.getQueryParameter("itag");
+        try {
+            String id = uri.getQueryParameter("id");
+            String itag = uri.getQueryParameter("itag");
+            String clen = uri.getQueryParameter("clen");
 
-        if (id == null || itag == null) {
+            // The stable key is valid only when the url addresses the whole file (the part is chosen by the byte position).
+            // Urls that address a part of the media by themselves (sq - segment number, range) must not share a key.
+            if (id == null || itag == null || clen == null
+                    || uri.getQueryParameter("sq") != null || uri.getQueryParameter("range") != null) {
+                return uri.toString();
+            }
+
+            return id + "|" + itag + "|" + clen + "|" + uri.getQueryParameter("xtags");
+        } catch (RuntimeException e) { // not a hierarchical uri
             return uri.toString();
         }
-
-        return id + "|" + itag + "|" + uri.getQueryParameter("clen") + "|" + uri.getQueryParameter("xtags");
     }
 
     @Nullable
     private static synchronized Cache getCache(Context context) {
-        if (sCache == null && context != null) {
+        if (sCache == null && !sCacheFailed && context != null) {
             try {
                 File dir = new File(context.getApplicationContext().getCacheDir(), CACHE_DIR);
                 sCache = new SimpleCache(dir, new LeastRecentlyUsedCacheEvictor(MAX_CACHE_BYTES));
             } catch (Exception e) { // e.g. the folder is locked by another instance
                 Log.e(TAG, "Can't create the cache: %s", e.getMessage());
+                sCacheFailed = true; // don't retry on each video
             }
         }
 

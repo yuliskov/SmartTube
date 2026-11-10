@@ -1,9 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 
 import android.os.Build.VERSION;
-import android.content.Context;
-import android.text.TextUtils;
-import java.util.List;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
@@ -24,9 +21,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerC
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsMediaCache;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsSabrPreloader;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -42,17 +36,6 @@ public class VideoLoaderController extends BasePlayerController {
     private SuggestionsController mSuggestionsController;
     private ErrorFixerController mErrorFixerController;
     private Disposable mFormatInfoAction;
-    private static final int PRELOAD_NEXT_RETRY_MS = 500;
-    private static final int PRELOAD_NEXT_MAX_TRIES = 20;
-    /**
-     * Stay ahead when the user skips Shorts quickly
-     */
-    private static final int PRELOAD_NEXT_COUNT = 2;
-    private String mLastVideoItag;
-    private String mLastAudioItag;
-    private String mPreloadedForVideoId;
-    private int mPreloadNextTries;
-    private final Runnable mPreloadNext = this::preloadNextShortsIfNeeded;
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -124,30 +107,6 @@ public class VideoLoaderController extends BasePlayerController {
     @Override
     public void onEngineReleased() {
         disposeActions();
-    }
-
-    @Override
-    public void onPlay() {
-        // The next Shorts most likely will be played in the same quality
-        if (getPlayer() != null) {
-            FormatItem videoFormat = getPlayer().getVideoFormat();
-            FormatItem audioFormat = getPlayer().getAudioFormat();
-            mLastVideoItag = videoFormat != null && videoFormat.getFormatId() != null ? videoFormat.getFormatId() : mLastVideoItag;
-            mLastAudioItag = audioFormat != null && audioFormat.getFormatId() != null ? audioFormat.getFormatId() : mLastAudioItag;
-        }
-
-        schedulePreloadNext();
-    }
-
-    /**
-     * Instant start of the next Shorts: fetch the formats and the first seconds of media of the upcoming ones
-     */
-    private void schedulePreloadNext() {
-        if (getVideo() != null && !TextUtils.equals(getVideo().videoId, mPreloadedForVideoId)) {
-            mPreloadNextTries = 0;
-            Utils.removeCallbacks(mPreloadNext);
-            Utils.post(mPreloadNext);
-        }
     }
 
     @Override
@@ -370,9 +329,6 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         player.showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
-
-        // Don't wait for the playback start. The user may skip Shorts every couple of seconds.
-        schedulePreloadNext();
     }
 
     private void reloadVideo(int delayMs) {
@@ -428,7 +384,7 @@ public class VideoLoaderController extends BasePlayerController {
     private void disposeActions() {
         MediaServiceManager.instance().disposeActions();
         RxHelper.disposeActions(mFormatInfoAction);
-        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync, mPreloadNext);
+        Utils.removeCallbacks(mReloadVideo, mLoadNext, mRestartEngine, mMetadataSync);
     }
 
     public void restartEngine() {
@@ -663,64 +619,28 @@ public class VideoLoaderController extends BasePlayerController {
         }
     }
 
-    /**
-     * Fetch the format of the next Shorts while the current one is playing.
-     * The next item may be unknown until suggestions are loaded, so retry a few times.
-     */
-    private void preloadNextShortsIfNeeded() {
-        Video current = getVideo();
-
-        if (isEmbedPlayer() || getPlayer() == null || current == null || current.isLive || !current.belongsToShortsGroup()
-                || TextUtils.equals(current.videoId, mPreloadedForVideoId)) {
+    private void preloadNextVideoIfNeeded() {
+        if (isEmbedPlayer() || getPlayer() == null || getVideo() == null || getVideo().isLive) {
             return;
         }
 
-        List<Video> nextVideos = mSuggestionsController.getNextVideos(PRELOAD_NEXT_COUNT);
-
-        for (int i = nextVideos.size() - 1; i >= 0; i--) {
-            Video next = nextVideos.get(i);
-            if (next.videoId == null || next.isLive || next.isUpcoming) {
-                nextVideos.remove(i);
-            }
+        if (getPlayer().getDurationMs() - getPlayer().getPositionMs() < 50_000) {
+            MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
         }
-
-        if (nextVideos.isEmpty()) {
-            if (++mPreloadNextTries < PRELOAD_NEXT_MAX_TRIES) {
-                Utils.postDelayed(mPreloadNext, PRELOAD_NEXT_RETRY_MS);
-            }
-            return;
-        }
-
-        mPreloadedForVideoId = current.videoId;
-
-        String videoItag = mLastVideoItag;
-        String audioItag = mLastAudioItag;
-        Context context = getContext();
-
-        // Media of the skipped Shorts isn't needed anymore
-        ShortsMediaCache.cancelPending();
-        ShortsSabrPreloader.cancelPending();
-        MediaServiceManager.instance().preloadFormatInfo(nextVideos, formatInfo -> {
-            if (willOpenAsDash(formatInfo)) {
-                ShortsMediaCache.prefetch(context, formatInfo, videoItag, audioItag);
-            } else if (willOpenAsSabr(formatInfo)) {
-                ShortsSabrPreloader.preload(context, formatInfo, videoItag, audioItag);
-            }
-        });
     }
 
     /**
-     * Same check as in {@link #processFormatInfo}
+     * Whether {@link #processFormatInfo} will open the video as sabr (used to preload the next video)
      */
-    private boolean willOpenAsSabr(MediaItemFormatInfo formatInfo) {
+    boolean willOpenAsSabr(MediaItemFormatInfo formatInfo) {
         return formatInfo != null && !formatInfo.isUnplayable() && !formatInfo.isLive() && !willOpenAsDash(formatInfo)
                 && acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats();
     }
 
     /**
-     * Same check as in {@link #processFormatInfo}
+     * Whether {@link #processFormatInfo} will open the video as dash (used to preload the next video)
      */
-    private boolean willOpenAsDash(MediaItemFormatInfo formatInfo) {
+    boolean willOpenAsDash(MediaItemFormatInfo formatInfo) {
         return formatInfo != null && !formatInfo.isUnplayable() && acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()
                 && !preferSabrLive(formatInfo) && !(getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats());
     }

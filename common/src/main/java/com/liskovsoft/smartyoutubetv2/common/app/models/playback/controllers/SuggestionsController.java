@@ -302,32 +302,48 @@ public class SuggestionsController extends BasePlayerController {
      */
     public List<Video> getNextVideos(int count) {
         List<Video> result = new ArrayList<>();
+        Video current = getVideo();
         Video next = getNext();
+        // The video the rest of the section is counted from
+        Video anchor;
 
-        if (next == null) {
-            return result;
+        if (next == null || (next == mNextSectionVideo && next.equals(current))) {
+            // The next section video is updated only when the suggestions of the current video are loaded (takes a second or two).
+            // Until then it's unknown or still points to the current video. But the section itself is known already.
+            if (current == null || current.isShuffled || !current.isSectionPlaylistEnabled(getContext())) {
+                return result;
+            }
+
+            anchor = current;
+        } else {
+            result.add(next);
+
+            if (next != mNextSectionVideo) { // queue, mix etc. Only the next item is known.
+                return result;
+            }
+
+            anchor = next;
         }
 
-        result.add(next);
+        VideoGroup group = anchor.getGroup();
 
-        VideoGroup group = next.getGroup();
-
-        if (next != mNextSectionVideo || group == null) { // queue, mix etc. Only the next item is known.
+        if (group == null || group.isEmpty()) {
             return result;
         }
 
         boolean found = false;
 
-        for (Video video : group.getVideos()) {
+        // NOTE: a copy. The group may be continued (changed) at any time.
+        for (Video video : new ArrayList<>(group.getVideos())) {
             if (result.size() >= count) {
                 break;
             }
 
-            if (found && video.hasVideo() && !video.isUpcoming) {
+            if (found && video != null && video.hasVideo() && !video.isUpcoming) {
                 result.add(video);
             }
 
-            if (video.equals(next)) {
+            if (anchor.equals(video)) {
                 found = true;
             }
         }

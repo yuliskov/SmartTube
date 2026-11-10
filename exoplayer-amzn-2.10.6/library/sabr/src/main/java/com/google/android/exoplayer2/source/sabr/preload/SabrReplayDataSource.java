@@ -38,7 +38,7 @@ public final class SabrReplayDataSource implements DataSource {
     }
 
     private final DataSource upstream;
-    @Nullable private byte[] replayData;
+    @Nullable private SabrResponseData replayData;
     private int replayPosition;
     @Nullable private Uri replayUri;
     private boolean upstreamOpened;
@@ -60,8 +60,8 @@ public final class SabrReplayDataSource implements DataSource {
             replayData = response.data;
             replayPosition = 0;
             replayUri = dataSpec.uri;
-            Log.d(TAG, "Replay preloaded SABR response: itag=%s, size=%s KB", response.formatId.getItag(), response.data.length / 1024);
-            return response.data.length;
+            Log.d(TAG, "Replay preloaded SABR response: itag=%s, size=%s KB", response.formatId.getItag(), response.data.length() / 1024);
+            return response.data.length();
         }
 
         upstreamOpened = true;
@@ -74,21 +74,13 @@ public final class SabrReplayDataSource implements DataSource {
             return upstream.read(buffer, offset, readLength);
         }
 
-        if (readLength == 0) {
-            return 0;
+        int read = replayData.read(replayPosition, buffer, offset, readLength);
+
+        if (read > 0) {
+            replayPosition += read;
         }
 
-        int remaining = replayData.length - replayPosition;
-
-        if (remaining == 0) {
-            return C.RESULT_END_OF_INPUT;
-        }
-
-        int length = Math.min(readLength, remaining);
-        System.arraycopy(replayData, replayPosition, buffer, offset, length);
-        replayPosition += length;
-
-        return length;
+        return read;
     }
 
     @Nullable

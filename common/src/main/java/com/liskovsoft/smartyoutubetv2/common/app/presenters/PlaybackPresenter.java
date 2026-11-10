@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.Spo
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.HQDialogController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.PlayerUIController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.RemoteController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.ShortsPreloadController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController;
@@ -58,6 +59,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mEventListeners.add(new VideoStateController());
         mEventListeners.add(new SuggestionsController());
         mEventListeners.add(new VideoLoaderController());
+        mEventListeners.add(new ShortsPreloadController());
         mEventListeners.add(new ErrorFixerController());
         mEventListeners.add(new PlayerUIController());
         mEventListeners.add(new RemoteController(context));
