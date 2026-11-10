@@ -490,7 +490,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mPlayer.addVideoListener(new VideoListener() {
             @Override
             public void onRenderedFirstFrame() {
-                hideShutter();
+                hideShutterOnFirstFrame();
             }
         });
 
