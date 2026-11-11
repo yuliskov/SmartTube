@@ -99,7 +99,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
      * A plain reload fixes a hang caused by a high SABR backoffTime. But if the server keeps answering
      * ATTESTATION_PENDING (the PoToken isn't accepted), every reload reuses the same cached PoToken and
      * resumes after the 60 sec attestation window, so it stalls again at the same spot forever.
-     * Escalate when the stall repeats at the same position: refresh the PoToken, then switch the client.
+     * A fresh PoToken doesn't help either (it's rejected too), so switch the client when the stall repeats at the same position.
      */
     private void fixOnlineStall() {
         Video video = getVideo();
@@ -116,11 +116,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         Log.d(TAG, "Long buffering at %s ms. Stall count: %s", positionMs, mStallCount);
 
-        if (mStallCount == 2) {
-            // Not forced: resets the PoToken cache and keeps the client (switches it only if reset recently)
-            MessageHelpers.showLongMessage(getContext(), "Refreshing PoToken...");
-            YouTubeServiceManager.instance().switchNextClient();
-        } else if (mStallCount > 2) {
+        if (mStallCount > 1) {
             MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
             YouTubeServiceManager.instance().switchNextClientNow();
         }
@@ -189,7 +185,27 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
+        if (applySabrPoTokenAction(error)) {
+            return;
+        }
+
         applyEngineErrorAction(type, rendererIndex, error);
+    }
+
+    /**
+     * The SABR server keeps answering ATTESTATION_PENDING and sends no media (the PoToken isn't accepted).
+     * A reload with the same client fails the same way, so switch the client right away.
+     */
+    private boolean applySabrPoTokenAction(Throwable error) {
+        if (error == null || !(error.getCause() instanceof SabrPoTokenError)) {
+            return false;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), "PoToken rejected. Switching client...");
+        YouTubeServiceManager.instance().switchNextClientNow();
+        mVideoLoaderController.reloadVideo();
+
+        return true;
     }
 
     /**
