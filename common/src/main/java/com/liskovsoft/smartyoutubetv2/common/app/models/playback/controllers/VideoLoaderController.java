@@ -537,6 +537,13 @@ public class VideoLoaderController extends BasePlayerController {
         initRandomNext();
     }
 
+    /**
+     * Shuffle may be switched on while a video is playing. Pick the random next video right away.
+     */
+    public void onPlaybackModeChanged() {
+        initRandomNext();
+    }
+
     private void initRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
@@ -564,25 +571,26 @@ public class VideoLoaderController extends BasePlayerController {
                 player.setNextTitle(Video.from(current.nextMediaItem));
             });
         }
-        //else {
-        //    VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
-        //
-        //    if (topRow != null && topRow.isChapters()) {
-        //        topRow = player.getSuggestionsByIndex(1);
-        //    }
-        //
-        //    if (topRow != null) {
-        //        int currentIdx = topRow.indexOf(current);
-        //        int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
-        //
-        //        if (randomIndex != -1) {
-        //            Video nextVideo = topRow.get(randomIndex);
-        //            current.nextMediaItem = SimpleMediaItem.from(nextVideo);
-        //            current.isShuffled = true;
-        //            player.setNextTitle(nextVideo);
-        //        }
-        //    }
-        //}
+        else {
+            // Small playlists: pick from the already loaded playlist row
+            VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
+
+            if (topRow != null && topRow.isChapters()) {
+                topRow = player.getSuggestionsByIndex(1);
+            }
+
+            if (topRow != null) {
+                int currentIdx = topRow.indexOf(current);
+                int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
+
+                if (randomIndex != -1 && randomIndex != currentIdx) {
+                    Video nextVideo = topRow.get(randomIndex);
+                    current.nextMediaItem = SimpleMediaItem.from(nextVideo);
+                    current.isShuffled = true;
+                    player.setNextTitle(nextVideo);
+                }
+            }
+        }
     }
 
     private int getPlaybackMode() {
