@@ -30,6 +30,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private VideoLoaderController mVideoLoaderController;
     private String mSabrErrorFixVideoId;
     private int mSabrErrorFixAttempts;
+    private static final long STALL_SAME_POSITION_MS = 5_000;
+    private String mStallVideoId;
+    private long mStallPositionMs;
+    private int mStallCount;
 
     @Override
     public void onInit() {
@@ -87,9 +91,42 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //lowerVideoQuality();
             //mVideoLoaderController.restartEngine();
 
-            // SABR may hang if the server issues a high backoffTime
-            mVideoLoaderController.reloadVideo();
+            fixOnlineStall();
         }
+    }
+
+    /**
+     * A plain reload fixes a hang caused by a high SABR backoffTime. But if the server keeps answering
+     * ATTESTATION_PENDING (the PoToken isn't accepted), every reload reuses the same cached PoToken and
+     * resumes after the 60 sec attestation window, so it stalls again at the same spot forever.
+     * Escalate when the stall repeats at the same position: refresh the PoToken, then switch the client.
+     */
+    private void fixOnlineStall() {
+        Video video = getVideo();
+        long positionMs = getPlayer().getPositionMs();
+
+        if (video != null && Helpers.equals(video.videoId, mStallVideoId)
+                && Math.abs(positionMs - mStallPositionMs) < STALL_SAME_POSITION_MS) {
+            mStallCount++;
+        } else {
+            mStallVideoId = video != null ? video.videoId : null;
+            mStallCount = 1;
+        }
+        mStallPositionMs = positionMs;
+
+        Log.d(TAG, "Long buffering at %s ms. Stall count: %s", positionMs, mStallCount);
+
+        if (mStallCount == 2) {
+            // Not forced: resets the PoToken cache and keeps the client (switches it only if reset recently)
+            MessageHelpers.showLongMessage(getContext(), "Refreshing PoToken...");
+            YouTubeServiceManager.instance().switchNextClient();
+        } else if (mStallCount > 2) {
+            MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+            YouTubeServiceManager.instance().switchNextClientNow();
+        }
+
+        // SABR may hang if the server issues a high backoffTime
+        mVideoLoaderController.reloadVideo();
     }
 
     @Override
