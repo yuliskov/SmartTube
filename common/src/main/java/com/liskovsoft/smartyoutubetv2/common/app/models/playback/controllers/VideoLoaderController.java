@@ -256,6 +256,7 @@ public class VideoLoaderController extends BasePlayerController {
         disposeActions();
 
         ServiceManager service = YouTubeServiceManager.instance();
+        service.allowRestrictedVideos(!getGeneralData().isChildModeEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
