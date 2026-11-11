@@ -1080,6 +1080,14 @@ public class PlayerUIController extends BasePlayerController {
 
         getPlayerData().setPlaybackMode(nextMode);
         getPlayer().setButtonState(R.id.action_repeat, nextMode);
+        notifyPlaybackModeChanged();
+    }
+
+    private void notifyPlaybackModeChanged() {
+        VideoLoaderController loader = getController(VideoLoaderController.class);
+        if (loader != null) {
+            loader.onPlaybackModeChanged();
+        }
     }
 
     private void showPlaybackModeDialog() {
@@ -1090,6 +1098,7 @@ public class PlayerUIController extends BasePlayerController {
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
                 getContext(), () -> {
                     getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
+                    notifyPlaybackModeChanged();
                 });
 
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();
