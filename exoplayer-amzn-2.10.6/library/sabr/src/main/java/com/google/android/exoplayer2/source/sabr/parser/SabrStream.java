@@ -83,6 +83,8 @@ public class SabrStream {
     private boolean receivedNewSegments;
     private String url;
     private List<? extends  SabrPart> multiResult = null;
+    private int attestationFailures;
+    private long attestationFailuresStartMs;
 
     private static class NoSegmentsTracker {
         public int consecutiveRequests = 0;
@@ -366,7 +368,44 @@ public class SabrStream {
         Log.d(TAG, "Process StreamProtectionStatus: %s", sps);
         ProcessStreamProtectionStatusResult result = processor.processStreamProtectionStatus(sps);
 
+        trackAttestation(result.sabrPart);
+
         return result.sabrPart;
+    }
+
+    private void trackAttestation(PoTokenStatusSabrPart sabrPart) {
+        if (sabrPart == null) {
+            return;
+        }
+
+        switch (sabrPart.status) {
+            case OK:
+            case NOT_REQUIRED:
+                resetAttestationFailures();
+                break;
+            default:
+                if (attestationFailures == 0) {
+                    attestationFailuresStartMs = System.currentTimeMillis();
+                }
+                attestationFailures++;
+                break;
+        }
+    }
+
+    /**
+     * Should be called when media is received. During the first minute the server sends media even if the attestation is pending.
+     */
+    public void resetAttestationFailures() {
+        attestationFailures = 0;
+        attestationFailuresStartMs = 0;
+    }
+
+    /**
+     * The server keeps answering with a failed attestation (e.g. ATTESTATION_PENDING) and sends no media.
+     */
+    public boolean isAttestationStuck(int minFailures, long minDurationMs) {
+        return attestationFailures >= minFailures
+                && System.currentTimeMillis() - attestationFailuresStartMs >= minDurationMs;
     }
 
     private void processSabrRedirect(UMPPart part) {
