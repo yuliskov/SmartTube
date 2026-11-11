@@ -175,6 +175,14 @@ public class VideoStateController extends BasePlayerController {
                     + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
             getPlayer().showOverlay(true);
             Helpers.enableScreensaver(getActivity());
+
+            // Pausing alone doesn't let the device reach its own standby: a foreground app with
+            // an active (even if paused) player keeps the system from treating it as idle. Only
+            // backgrounding the app (not finishing it - the player state must survive) lets the
+            // device's own screen/sleep timeout actually take over, same as any other app would.
+            if (getPlayerData().isSleepTimerCloseAppEnabled() && getActivity() != null) {
+                getActivity().moveTaskToBack(true);
+            }
         }
     }
 
