@@ -28,6 +28,11 @@
         <intent>
             <action android:name="android.intent.action.MAIN"/>
         </intent>
+        <!-- Android 11+: file managers that can pick a file (subscriptions import) -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT"/>
+            <data android:mimeType="*/*"/>
+        </intent>
     </queries>
 
     <!-- Add requestLegacyExternalStorage to fix unavailable storage on Android 10 (doesn't work on Android 11) -->
