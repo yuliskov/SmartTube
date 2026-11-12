@@ -239,7 +239,7 @@ SmartTube is developed single-handedly; there is no larger team or company behin
 
 ## Build
     
-**NOTE: OpenJDK 14 or older (!) is required. Newer JDK could cause app crash!**  
+**NOTE: OpenJDK 17 is used by the CI build (see `.github/workflows/CI.yml`). The old requirement of OpenJDK 14 or older no longer applies.**  
 To build and install debug version, run these commands:
 
 ```
