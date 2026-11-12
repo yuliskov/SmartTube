@@ -750,9 +750,11 @@ public final class Video {
             isLiveEnd = true;
         }
 
+        // NOTE: Skip unplayable to preserve an error message
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (!isUpcoming || metadataTitle == null) {
+        boolean keepExistingTitle = metadataTitle != null && (isUnplayable || isUpcoming);
+        if (!keepExistingTitle) {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
