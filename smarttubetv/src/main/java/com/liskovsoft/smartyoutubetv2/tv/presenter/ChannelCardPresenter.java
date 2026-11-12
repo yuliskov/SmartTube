@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build.VERSION;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ public class ChannelCardPresenter extends LongClickPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
-    private int mSelectedBackgroundColor;
     private int mNewContentBackgroundColor;
     private int mSelectedTextColor;
     private int mWidth;
@@ -46,8 +44,6 @@ public class ChannelCardPresenter extends LongClickPresenter {
                 ContextCompat.getColor(context, R.color.card_default_text);
         mNewContentBackgroundColor =
                 ContextCompat.getColor(context, R.color.dark_red);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
 
@@ -58,7 +54,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
         container.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
 
         TextView textView = container.findViewById(R.id.channel_title);
-        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
+        textView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         textView.setTextColor(mDefaultTextColor);
 
         boolean autoScrollEnabled = isCardTextAutoScrollEnabled(context);
@@ -68,13 +64,10 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
             boolean hasNewContent = textView.getTag(R.id.channel_new_content) != null;
-            if (hasFocus) {
-                v.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_focus_bg));
-                textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_focus_bg));
-            } else {
-                v.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
-                textView.setBackgroundColor(hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
-            }
+            v.setBackground(ContextCompat.getDrawable(v.getContext(),
+                    hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
+            textView.setBackgroundColor(!hasFocus && hasNewContent
+                    ? mNewContentBackgroundColor : android.graphics.Color.TRANSPARENT);
             textView.setTextColor(hasFocus ? mSelectedTextColor : mDefaultTextColor);
 
             if (!autoScrollEnabled) {
@@ -102,10 +95,9 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.getTitle());
-
-        // Restore the normal glass surface for recycled, unfocused cards.
-        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
         textView.setTag(R.id.channel_new_content, video.hasNewContent ? true : null);
+        textView.setBackgroundColor(video.hasNewContent
+                ? mNewContentBackgroundColor : android.graphics.Color.TRANSPARENT);
 
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
         imageView.setVisibility(View.VISIBLE);

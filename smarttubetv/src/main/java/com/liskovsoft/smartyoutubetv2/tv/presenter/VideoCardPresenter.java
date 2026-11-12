@@ -90,15 +90,19 @@ public class VideoCardPresenter extends LongClickPresenter {
     }
 
     private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
-        int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
-        // Keep the glass surfaces behind the image and info area; only the
-        // info area is tinted so thumbnails remain unobstructed.
+        // The info strip uses a tinted glass surface; a transparent focus outline
+        // also frames the thumbnail without obscuring its artwork.
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
             infoField.setBackground(ContextCompat.getDrawable(view.getContext(),
                     selected ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
+        }
+        if (VERSION.SDK_INT >= 23) {
+            view.setForeground(selected
+                    ? ContextCompat.getDrawable(view.getContext(), R.drawable.glass_focus_outline)
+                    : null);
         }
 
         TextView titleText = view.findViewById(R.id.title_text);
@@ -250,7 +254,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
 
         @Override
-        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, boolean isFirstResource) {
             return false;
         }
     };

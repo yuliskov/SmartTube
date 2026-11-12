@@ -16,43 +16,30 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SettingsCardPresenter extends Presenter {
-    private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
-    private int mSelectedBackgroundColor;
     private int mSelectedTextColor;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Context context = parent.getContext();
-
-        mDefaultBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
-        mDefaultTextColor =
-                ContextCompat.getColor(context, R.color.card_default_text);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, R.color.card_selected_background_white);
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mDefaultTextColor = ContextCompat.getColor(context, R.color.card_default_text);
+        mSelectedTextColor = ContextCompat.getColor(context, R.color.card_selected_text_grey);
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
         container.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
 
         TextView textView = container.findViewById(R.id.settings_title);
-        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
+        textView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         textView.setTextColor(mDefaultTextColor);
 
         ViewUtil.setTextScrollSpeed(textView, getCardTextScrollSpeed(context));
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
-            int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
-            int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-
-            v.setBackground(ContextCompat.getDrawable(context,
+            v.setBackground(ContextCompat.getDrawable(v.getContext(),
                     hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
-            textView.setBackground(ContextCompat.getDrawable(context,
-                    hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
-            textView.setTextColor(textColor);
+            textView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+            textView.setTextColor(hasFocus ? mSelectedTextColor : mDefaultTextColor);
 
             if (hasFocus) {
                 ViewUtil.enableMarquee(textView);
