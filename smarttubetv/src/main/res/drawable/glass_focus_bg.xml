@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="20dp" />
+    <gradient
+        android:angle="90"
+        android:startColor="@color/glass_focus_start"
+        android:endColor="@color/glass_focus_end" />
+    <stroke
+        android:width="2dp"
+        android:color="@color/glass_focus_stroke" />
+</shape>

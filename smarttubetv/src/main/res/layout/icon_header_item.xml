@@ -3,7 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:minHeight="48dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/header_icon"
@@ -17,12 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
-
         android:singleLine="true"
         android:maxWidth="150sp"
         android:marqueeRepeatLimit="marquee_forever"
         android:ellipsize="marquee"
         android:scrollHorizontally="true"
-
-        style="@style/TextAppearance.Leanback.Header"/>
+        style="@style/TextAppearance.Leanback.Header" />
 </androidx.leanback.widget.NonOverlappingLinearLayout>
