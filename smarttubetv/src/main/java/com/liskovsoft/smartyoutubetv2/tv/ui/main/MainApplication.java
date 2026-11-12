@@ -128,7 +128,8 @@ public class MainApplication extends MultiDexApplication implements Configuratio
                 "5S72Z_G20S (Panasonic)",
                 "9S60Z_ZQ21S (Panasonic)",
                 "Android Smart TV (MStar)",
-                "Xgimi TV (Xgimi Technology Co.,Ltd)"
+                "Xgimi TV (Xgimi Technology Co.,Ltd)",
+                "XGIMI TV (Xgimi Technology Co.,Ltd)"
         )) {
             // The fix: Only fullscreen opaque activities can request orientation
             dialogClass = AppDialogActivityOpaque.class;
