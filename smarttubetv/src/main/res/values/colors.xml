@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Focused player controls: a crisp icy-blue highlight. -->
+    <!-- Focused player controls -->
     <color name="lb_control_button_color">#D9F2FF</color>
 
-    <!-- Midnight glass palette -->
+    <!-- Apple TV-inspired midnight glass palette -->
+    <color name="glass_bg_0">#040A12</color>
+    <color name="glass_bg_1">#0A1220</color>
+    <color name="glass_bg_2">#101D2F</color>
+    <color name="glass_bg_3">#182844</color>
+    <color name="glass_panel">#2A3348</color>
+    <color name="glass_panel_soft">#1D2739</color>
+    <color name="glass_panel_stroke">#7AEAFBFF</color>
+    <color name="glass_focus_start">#665AADEB</color>
+    <color name="glass_focus_end">#E6263B59</color>
+    <color name="glass_focus_stroke">#D9F8FFFF</color>
+    <color name="glass_focus_halo">#6675D7FF</color>
+    <color name="glass_text_primary">#F4F9FF</color>
+    <color name="glass_text_secondary">#C9D9F0</color>
+    <color name="glass_text_muted">#8EA9C6</color>
+    <color name="brand_cyan">#7EDBFF</color>
+    <color name="brand_cyan_dark">#2E5F8C</color>
+
     <color name="default_background_gradient_start">#070B14</color>
     <color name="default_background_gradient_end">#142238</color>
-    <color name="fastlane_background">#75D7FF</color>
-    <color name="fastlane_background_dark">#263B69</color>
+    <color name="fastlane_background">@color/brand_cyan</color>
+    <color name="fastlane_background_dark">#101B2D</color>
     <color name="default_light_grey">#29364A</color>
-    <color name="search_opaque">#75D7FF</color>
+    <color name="search_opaque">@color/brand_cyan</color>
     <color name="search_opaque_yellow">#FFC978</color>
 
-    <!-- Cool, luminous focus states for TV cards -->
+    <!-- Bright, readable focus colors on television displays -->
     <color name="card_selected_background_white">#DDF4FF</color>
     <color name="card_selected_background_white_grey">#BFD8E8</color>
     <color name="card_selected_background_yellow">#8ADFFF</color>
@@ -23,7 +40,7 @@
     <color name="card_default_background_dark">#172338</color>
     <color name="card_default_text">#F3F8FF</color>
 
-    <!-- Browse surfaces: layered midnight blue instead of flat charcoal -->
+    <!-- Browse / sidebar / player surfaces -->
     <color name="shelf_background">#172238</color>
     <color name="shelf_background_dark">#0B1220</color>
     <color name="icon_background">#293B55</color>
@@ -36,14 +53,14 @@
     <color name="scheme_grey_shelf_background_dark">#080E19</color>
     <color name="scheme_grey_card_background_dark">#151F30</color>
 
-    <!-- Red color scheme -->
+    <!-- Red color scheme retained for user-selectable themes -->
     <color name="scheme_red_background">#131313</color>
     <color name="scheme_red_background_dark">@color/dark_red</color>
     <color name="scheme_red_shelf_background_dark">#131313</color>
     <color name="scheme_red_card_background_dark">#36474f</color>
 
     <!-- Blue color scheme -->
-    <color name="scheme_blue_background">#75D7FF</color>
+    <color name="scheme_blue_background">@color/brand_cyan</color>
     <color name="scheme_blue_background_dark">#4169D8</color>
 
     <!-- Vineyard -->

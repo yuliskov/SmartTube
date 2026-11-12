@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         mDefaultIcon = new ColorDrawable(ContextCompat.getColor(viewGroup.getContext(), R.color.lb_grey));
 
         View view = inflater.inflate(R.layout.icon_header_item, null);
-        view.setAlpha(mUnselectedAlpha); // Initialize icons to be at half-opacity.
-
+        view.setAlpha(mUnselectedAlpha);
         return new ViewHolder(view);
     }
 
@@ -71,8 +71,6 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                         .apply(ViewUtil.glideOptions().error(mDefaultIcon))
                         .listener(mErrorListener)
                         .into(iconView);
-
-                //ViewUtil.makeMonochrome(iconView);
             } else {
                 Drawable icon = mResId > 0 ? ContextCompat.getDrawable(rootView.getContext(), mResId) : mDefaultIcon;
                 iconView.setImageDrawable(icon);
@@ -82,20 +80,37 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         TextView label = rootView.findViewById(R.id.header_label);
         if (label != null) {
             label.setText(headerItem.getName());
+            label.setTextColor(ContextCompat.getColor(rootView.getContext(), R.color.glass_text_secondary));
         }
     }
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        // NOP
+        ImageView iconView = viewHolder.view.findViewById(R.id.header_icon);
+        if (iconView != null) {
+            Glide.with(viewHolder.view.getContext()).clear(iconView);
+        }
     }
 
-    // TODO: This is a temporary fix. Remove me when leanback onCreateViewHolder no longer sets the
-    // mUnselectAlpha, and also assumes the xml inflation will return a RowHeaderView.
     @Override
     protected void onSelectLevelChanged(RowHeaderPresenter.ViewHolder holder) {
-        holder.view.setAlpha(mUnselectedAlpha + holder.getSelectLevel() *
-                (1.0f - mUnselectedAlpha));
+        float selectLevel = holder.getSelectLevel();
+        super.onSelectLevelChanged(holder);
+
+        View root = holder.view;
+        boolean selected = selectLevel >= 0.5f;
+        root.setBackground(selected
+                ? ContextCompat.getDrawable(root.getContext(), R.drawable.glass_header_selected_bg)
+                : null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            root.setElevation(selected ? 6f * root.getResources().getDisplayMetrics().density : 0f);
+        }
+
+        TextView label = root.findViewById(R.id.header_label);
+        if (label != null) {
+            int color = selected ? R.color.glass_text_primary : R.color.glass_text_secondary;
+            label.setTextColor(ContextCompat.getColor(root.getContext(), color));
+        }
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
