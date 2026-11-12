@@ -34,6 +34,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,10 @@ public class MediaServiceManager implements OnAccountChange {
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
+    /**
+     * Id of the latest preload run. Older runs finish the request they're doing and stop.
+     */
+    private final AtomicInteger mPreloadFormatInfoRunId = new AtomicInteger();
     private Disposable mPlaylistGroupAction;
     private Disposable mPlaylistInfosAction;
     private Disposable mHistoryAction;
@@ -258,6 +263,51 @@ public class MediaServiceManager implements OnAccountChange {
                         onFormatInfo::onFormatInfo,
                         error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
                 );
+    }
+
+    /**
+     * Fetch the formats of the upcoming videos one by one in background so they start faster.<br/>
+     * Independent of {@link #loadFormatInfo} so they don't cancel each other.<br/>
+     * The request of the previous run isn't interrupted: interrupting a request that is almost done is a waste,
+     * the new run gets its result from the cache. But the previous run doesn't start new requests
+     * and doesn't deliver its results anymore (the videos it was started for are skipped).
+     */
+    public void preloadFormatInfo(List<Video> items, OnFormatInfo onFormatInfo) {
+        if (items == null || items.isEmpty() || onFormatInfo == null) {
+            return;
+        }
+
+        int runId = mPreloadFormatInfoRunId.incrementAndGet();
+
+        // NOTE: the subscription isn't kept. A run is stopped by starting a new one or by cancelPreloadFormatInfo().
+        Observable.fromIterable(new ArrayList<>(items))
+                .filter(item -> item != null && item.videoId != null)
+                .concatMap(item -> Observable.defer(() ->
+                                runId == mPreloadFormatInfoRunId.get() ? mItemService.preloadFormatInfoObserve(item.videoId) : Observable.<MediaItemFormatInfo>empty())
+                        .onErrorResumeNext((Throwable error) -> {
+                            // One failed video (e.g. network error, unplayable) shouldn't stop the rest
+                            Log.e(TAG, "preloadFormatInfo error: %s: %s", item.videoId, error.getMessage());
+                            return Observable.empty();
+                        }))
+                .filter(formatInfo -> runId == mPreloadFormatInfoRunId.get())
+                .subscribe(
+                        formatInfo -> {
+                            try {
+                                Log.d(TAG, "preloadFormatInfo done: %s", formatInfo.getVideoId());
+                                onFormatInfo.onFormatInfo(formatInfo);
+                            } catch (RuntimeException e) { // keep preloading the rest
+                                Log.e(TAG, "preloadFormatInfo callback error: %s", e.getMessage());
+                            }
+                        },
+                        error -> Log.e(TAG, "preloadFormatInfo error: %s", error.getMessage())
+                );
+    }
+
+    /**
+     * Stop the running preload: no new requests, no more results
+     */
+    public void cancelPreloadFormatInfo() {
+        mPreloadFormatInfoRunId.incrementAndGet();
     }
 
     public void loadPlaylists(Video item, OnMediaGroup onPlaylistGroup) {

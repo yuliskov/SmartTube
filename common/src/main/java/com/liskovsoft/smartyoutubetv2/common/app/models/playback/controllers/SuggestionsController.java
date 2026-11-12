@@ -296,6 +296,61 @@ public class SuggestionsController extends BasePlayerController {
         return result;
     }
 
+    /**
+     * Next video and the ones after it in the same section (e.g. the Shorts grid).<br/>
+     * Used to preload upcoming videos.
+     */
+    public List<Video> getNextVideos(int count) {
+        List<Video> result = new ArrayList<>();
+        Video current = getVideo();
+        Video next = getNext();
+        // The video the rest of the section is counted from
+        Video anchor;
+
+        if (next == null || (next == mNextSectionVideo && next.equals(current))) {
+            // The next section video is updated only when the suggestions of the current video are loaded (takes a second or two).
+            // Until then it's unknown or still points to the current video. But the section itself is known already.
+            if (current == null || current.isShuffled || !current.isSectionPlaylistEnabled(getContext())) {
+                return result;
+            }
+
+            anchor = current;
+        } else {
+            result.add(next);
+
+            if (next != mNextSectionVideo) { // queue, mix etc. Only the next item is known.
+                return result;
+            }
+
+            anchor = next;
+        }
+
+        VideoGroup group = anchor.getGroup();
+
+        if (group == null || group.isEmpty()) {
+            return result;
+        }
+
+        boolean found = false;
+
+        // NOTE: a copy. The group may be continued (changed) at any time.
+        for (Video video : new ArrayList<>(group.getVideos())) {
+            if (result.size() >= count) {
+                break;
+            }
+
+            if (found && video != null && video.hasVideo() && !video.isUpcoming) {
+                result.add(video);
+            }
+
+            if (anchor.equals(video)) {
+                found = true;
+            }
+        }
+
+        return result;
+    }
+
     public Video getPrevious() {
         if (getPlayer() == null || getVideo() == null) {
             return null;

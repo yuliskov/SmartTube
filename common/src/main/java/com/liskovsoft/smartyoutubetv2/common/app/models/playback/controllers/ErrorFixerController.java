@@ -86,7 +86,13 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //lowerVideoQuality();
             //mVideoLoaderController.restartEngine();
 
-            // SABR may hang if the server issues a high backoffTime
+            // SABR may hang if the server issues a high backoffTime.
+            // Also it stops sending media after the first minute if the PoToken attestation fails (ATTESTATION_PENDING).
+            // Reload with a new player response (new session). The cached one would hang at the same position again.
+            Video video = getVideo();
+            if (video != null) {
+                YouTubeServiceManager.instance().reloadPlayerResponse(video.videoId, null);
+            }
             mVideoLoaderController.reloadVideo();
         }
     }

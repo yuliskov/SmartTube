@@ -43,6 +43,9 @@ import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsMediaCache;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ShortsSabrPreloader;
+import com.google.android.exoplayer2.source.sabr.preload.SabrReplayDataSource;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.googlecommon.common.helpers.DefaultHeaders;
@@ -72,9 +75,13 @@ public class ExoMediaSourceFactory {
     private TrackErrorFixer mTrackErrorFixer;
     private DataSource.Factory mMediaDataSourceFactory;
     private DataSource.Factory mSabrMediaDataSourceFactory;
+    private DataSource.Factory mCachedMediaDataSourceFactory;
 
     public ExoMediaSourceFactory(Context context) {
         mContext = context;
+        // Register the network stacks for the Shorts preload (see the getters)
+        getMediaDataSourceFactory();
+        getSabrMediaDataSourceFactory();
     }
 
     public MediaSource fromSabrFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -82,7 +89,14 @@ public class ExoMediaSourceFactory {
     }
 
     public MediaSource fromDashFormatInfo(MediaItemFormatInfo formatInfo) {
-        return buildDashMediaSource(formatInfo);
+        return buildDashMediaSource(formatInfo, getDashChunkSourceFactory());
+    }
+
+    /**
+     * Reads the prefetched start of the video from the disk cache (instant start of the next Shorts)
+     */
+    public MediaSource fromDashFormatInfoCached(MediaItemFormatInfo formatInfo) {
+        return buildDashMediaSource(formatInfo, new DefaultDashChunkSource.Factory(getCachedMediaDataSourceFactory(), MAX_SEGMENTS_PER_LOAD));
     }
 
     public MediaSource fromDashManifest(InputStream dashManifest) {
@@ -202,10 +216,10 @@ public class ExoMediaSourceFactory {
         return sabrSource;
     }
 
-    private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo) {
+    private MediaSource buildDashMediaSource(MediaItemFormatInfo formatInfo, DashChunkSource.Factory chunkSourceFactory) {
         // Are you using FrameworkSampleSource or ExtractorSampleSource when you build your player?
         DashMediaSource dashSource = new DashMediaSource.Factory(
-                getDashChunkSourceFactory(),
+                chunkSourceFactory,
                 null
         )
                 .setLoadErrorHandlingPolicy(new DashDefaultLoadErrorHandlingPolicy())
@@ -366,6 +380,7 @@ public class ExoMediaSourceFactory {
     public void release() {
         mMediaDataSourceFactory = null;
         mSabrMediaDataSourceFactory = null;
+        mCachedMediaDataSourceFactory = null; // wraps the media factory
     }
 
     @NonNull
@@ -390,7 +405,10 @@ public class ExoMediaSourceFactory {
      */
     private DataSource.Factory getSabrMediaDataSourceFactory() {
         if (mSabrMediaDataSourceFactory == null) {
-            mSabrMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER, SABR_READ_TIMEOUT_MS);
+            DataSource.Factory networkFactory = buildDataSourceFactory(USE_BANDWIDTH_METER, SABR_READ_TIMEOUT_MS);
+            ShortsSabrPreloader.setUpstreamFactory(networkFactory);
+            // The first responses of the warmed up Shorts come from memory
+            mSabrMediaDataSourceFactory = new SabrReplayDataSource.Factory(networkFactory);
         }
 
         return mSabrMediaDataSourceFactory;
@@ -399,9 +417,18 @@ public class ExoMediaSourceFactory {
     private DataSource.Factory getMediaDataSourceFactory() {
         if (mMediaDataSourceFactory == null) {
             mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+            ShortsMediaCache.setUpstreamFactory(mMediaDataSourceFactory); // prefetch with the same network stack
         }
 
         return mMediaDataSourceFactory;
+    }
+
+    private DataSource.Factory getCachedMediaDataSourceFactory() {
+        if (mCachedMediaDataSourceFactory == null) {
+            mCachedMediaDataSourceFactory = ShortsMediaCache.wrap(mContext, getMediaDataSourceFactory());
+        }
+
+        return mCachedMediaDataSourceFactory;
     }
 
     // EXO: 2.10 - 2.12

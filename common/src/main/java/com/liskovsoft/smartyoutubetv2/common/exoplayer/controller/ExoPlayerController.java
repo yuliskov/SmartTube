@@ -102,7 +102,9 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     }
 
     public void openDash(MediaItemFormatInfo formatInfo) {
-        MediaSource mediaSource = mMediaSourceFactory.fromDashFormatInfo(formatInfo);
+        Video video = getVideo();
+        boolean isShorts = video != null && video.isShorts && !formatInfo.isLive();
+        MediaSource mediaSource = isShorts ? mMediaSourceFactory.fromDashFormatInfoCached(formatInfo) : mMediaSourceFactory.fromDashFormatInfo(formatInfo);
         openMediaSource(mediaSource);
     }
 

@@ -628,4 +628,20 @@ public class VideoLoaderController extends BasePlayerController {
             MediaServiceManager.instance().loadFormatInfo(mSuggestionsController.getNext(), formatInfo -> {});
         }
     }
+
+    /**
+     * Whether {@link #processFormatInfo} will open the video as sabr (used to preload the next video)
+     */
+    boolean willOpenAsSabr(MediaItemFormatInfo formatInfo) {
+        return formatInfo != null && !formatInfo.isUnplayable() && !formatInfo.isLive() && !willOpenAsDash(formatInfo)
+                && acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats();
+    }
+
+    /**
+     * Whether {@link #processFormatInfo} will open the video as dash (used to preload the next video)
+     */
+    boolean willOpenAsDash(MediaItemFormatInfo formatInfo) {
+        return formatInfo != null && !formatInfo.isUnplayable() && acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()
+                && !preferSabrLive(formatInfo) && !(getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats());
+    }
 }
