@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +36,10 @@ public class SettingsCardPresenter extends Presenter {
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
-        container.setBackgroundColor(mDefaultBackgroundColor);
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
-        //}
+        container.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
 
         TextView textView = container.findViewById(R.id.settings_title);
-        textView.setBackgroundColor(mDefaultBackgroundColor);
+        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
         textView.setTextColor(mDefaultTextColor);
 
         ViewUtil.setTextScrollSpeed(textView, getCardTextScrollSpeed(context));
@@ -51,8 +47,11 @@ public class SettingsCardPresenter extends Presenter {
         container.setOnFocusChangeListener((v, hasFocus) -> {
             int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
             int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-            
-            textView.setBackgroundColor(backgroundColor);
+
+            v.setBackground(ContextCompat.getDrawable(context,
+                    hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
+            textView.setBackground(ContextCompat.getDrawable(context,
+                    hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
             textView.setTextColor(textColor);
 
             if (hasFocus) {
@@ -70,7 +69,6 @@ public class SettingsCardPresenter extends Presenter {
         SettingsItem settingsItem = (SettingsItem) item;
 
         TextView textView = viewHolder.view.findViewById(R.id.settings_title);
-
         textView.setText(settingsItem.title);
 
         if (settingsItem.imageResId > 0) {

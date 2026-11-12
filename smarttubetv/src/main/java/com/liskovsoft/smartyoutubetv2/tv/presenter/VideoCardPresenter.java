@@ -85,9 +85,6 @@ public class VideoCardPresenter extends LongClickPresenter {
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
         cardView.setBackgroundColor(mDefaultBackgroundColor); // background is temporarily visible during animations
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    cardView.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
-        //}
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
@@ -96,14 +93,12 @@ public class VideoCardPresenter extends LongClickPresenter {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
-        // Both background colors should be set because the view's
-        // background is temporarily visible during animations.
-        // NOTE: has visual bug with rounded corners
-        //view.setBackgroundColor(backgroundColor);
-
+        // Keep the glass surfaces behind the image and info area; only the
+        // info area is tinted so thumbnails remain unobstructed.
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
-            infoField.setBackgroundColor(backgroundColor);
+            infoField.setBackground(ContextCompat.getDrawable(view.getContext(),
+                    selected ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
         }
 
         TextView titleText = view.findViewById(R.id.title_text);

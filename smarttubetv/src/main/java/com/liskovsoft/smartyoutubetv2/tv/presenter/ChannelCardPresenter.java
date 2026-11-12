@@ -55,13 +55,10 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
-        container.setBackgroundColor(mDefaultBackgroundColor);
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
-        //}
+        container.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
 
         TextView textView = container.findViewById(R.id.channel_title);
-        textView.setBackgroundColor(mDefaultBackgroundColor);
+        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
         textView.setTextColor(mDefaultTextColor);
 
         boolean autoScrollEnabled = isCardTextAutoScrollEnabled(context);
@@ -70,12 +67,15 @@ public class ChannelCardPresenter extends LongClickPresenter {
         }
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
-            int backgroundColor = hasFocus ? mSelectedBackgroundColor :
-                    textView.getTag(R.id.channel_new_content) != null ? mNewContentBackgroundColor : mDefaultBackgroundColor;
-            int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-            
-            textView.setBackgroundColor(backgroundColor);
-            textView.setTextColor(textColor);
+            boolean hasNewContent = textView.getTag(R.id.channel_new_content) != null;
+            if (hasFocus) {
+                v.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_focus_bg));
+                textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_focus_bg));
+            } else {
+                v.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
+                textView.setBackgroundColor(hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
+            }
+            textView.setTextColor(hasFocus ? mSelectedTextColor : mDefaultTextColor);
 
             if (!autoScrollEnabled) {
                 return;
@@ -103,10 +103,9 @@ public class ChannelCardPresenter extends LongClickPresenter {
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.getTitle());
 
-        // We should setup props each time because object may be reused by the underlying RecyclerView
-        textView.setBackgroundColor(video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
+        // Restore the normal glass surface for recycled, unfocused cards.
+        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
         textView.setTag(R.id.channel_new_content, video.hasNewContent ? true : null);
-
 
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
         imageView.setVisibility(View.VISIBLE);
