@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,74 +10,57 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SettingsCardPresenter extends Presenter {
-    private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
-    private int mSelectedBackgroundColor;
     private int mSelectedTextColor;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         Context context = parent.getContext();
-
-        mDefaultBackgroundColor =
-                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
-        mDefaultTextColor =
-                ContextCompat.getColor(context, R.color.card_default_text);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(context, R.color.card_selected_background_white);
-        mSelectedTextColor =
-                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mDefaultTextColor = ContextCompat.getColor(context, R.color.card_default_text);
+        mSelectedTextColor = ContextCompat.getColor(context, R.color.card_selected_text_grey);
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.settings_card, null);
-        container.setBackgroundColor(mDefaultBackgroundColor);
-        //if (VERSION.SDK_INT >= 23 && MainUIData.instance(context).isUiTweakEnabled(MainUIData.UI_TWEAK_ROUNDED_CORNERS)) {
-        //    container.setForeground(ContextCompat.getDrawable(context, R.drawable.lb_card_outline));
-        //}
-
+        container.setBackground(ContextCompat.getDrawable(context, R.drawable.glass_card_bg));
         TextView textView = container.findViewById(R.id.settings_title);
-        textView.setBackgroundColor(mDefaultBackgroundColor);
+        textView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
         textView.setTextColor(mDefaultTextColor);
-
         ViewUtil.setTextScrollSpeed(textView, getCardTextScrollSpeed(context));
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
-            int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
-            int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
-            
-            textView.setBackgroundColor(backgroundColor);
-            textView.setTextColor(textColor);
-
-            if (hasFocus) {
-                ViewUtil.enableMarquee(textView);
-            } else {
-                ViewUtil.disableMarquee(textView);
+            v.setBackground(ContextCompat.getDrawable(v.getContext(),
+                    hasFocus ? R.drawable.glass_focus_bg : R.drawable.glass_card_bg));
+            textView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+            textView.setTextColor(hasFocus ? mSelectedTextColor : mDefaultTextColor);
+            if (Build.VERSION.SDK_INT >= 21) {
+                float density = v.getResources().getDisplayMetrics().density;
+                v.setElevation(hasFocus ? 7f * density : 0f);
             }
+            if (hasFocus) ViewUtil.enableMarquee(textView);
+            else ViewUtil.disableMarquee(textView);
         });
-
         return new ViewHolder(container);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         SettingsItem settingsItem = (SettingsItem) item;
-
         TextView textView = viewHolder.view.findViewById(R.id.settings_title);
-
         textView.setText(settingsItem.title);
-
+        ImageView imageView = viewHolder.view.findViewById(R.id.settings_image);
         if (settingsItem.imageResId > 0) {
             Context context = viewHolder.view.getContext();
-            ImageView imageView = viewHolder.view.findViewById(R.id.settings_image);
             imageView.setImageDrawable(ContextCompat.getDrawable(context, settingsItem.imageResId));
             imageView.setVisibility(View.VISIBLE);
+        } else {
+            imageView.setImageDrawable(null);
+            imageView.setVisibility(View.INVISIBLE);
         }
     }
 

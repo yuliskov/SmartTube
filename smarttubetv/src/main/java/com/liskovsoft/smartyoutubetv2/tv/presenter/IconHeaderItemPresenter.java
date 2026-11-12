@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,15 +46,15 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         mDefaultIcon = new ColorDrawable(ContextCompat.getColor(viewGroup.getContext(), R.color.lb_grey));
 
         View view = inflater.inflate(R.layout.icon_header_item, null);
-        view.setAlpha(mUnselectedAlpha); // Initialize icons to be at half-opacity.
-
+        view.setAlpha(mUnselectedAlpha);
+        view.setScaleX(1f);
+        view.setScaleY(1f);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         HeaderItem headerItem;
-
         if (item instanceof PageRow) {
             headerItem = ((PageRow) item).getHeaderItem();
         } else {
@@ -62,7 +63,6 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         View rootView = viewHolder.view;
         rootView.setFocusable(true);
-
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
             if (mIconUrl != null) {
@@ -71,8 +71,6 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                         .apply(ViewUtil.glideOptions().error(mDefaultIcon))
                         .listener(mErrorListener)
                         .into(iconView);
-
-                //ViewUtil.makeMonochrome(iconView);
             } else {
                 Drawable icon = mResId > 0 ? ContextCompat.getDrawable(rootView.getContext(), mResId) : mDefaultIcon;
                 iconView.setImageDrawable(icon);
@@ -82,20 +80,43 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         TextView label = rootView.findViewById(R.id.header_label);
         if (label != null) {
             label.setText(headerItem.getName());
+            label.setTextColor(ContextCompat.getColor(rootView.getContext(), R.color.glass_text_secondary));
         }
     }
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        // NOP
+        ImageView iconView = viewHolder.view.findViewById(R.id.header_icon);
+        if (iconView != null) {
+            Glide.with(viewHolder.view.getContext()).clear(iconView);
+        }
     }
 
-    // TODO: This is a temporary fix. Remove me when leanback onCreateViewHolder no longer sets the
-    // mUnselectAlpha, and also assumes the xml inflation will return a RowHeaderView.
     @Override
     protected void onSelectLevelChanged(RowHeaderPresenter.ViewHolder holder) {
-        holder.view.setAlpha(mUnselectedAlpha + holder.getSelectLevel() *
-                (1.0f - mUnselectedAlpha));
+        float selectLevel = holder.getSelectLevel();
+        super.onSelectLevelChanged(holder);
+
+        View root = holder.view;
+        float level = Math.max(0f, Math.min(1f, selectLevel));
+        boolean selected = level >= 0.5f;
+        root.setBackground(selected
+                ? ContextCompat.getDrawable(root.getContext(), R.drawable.glass_header_selected_bg)
+                : null);
+        root.animate()
+                .scaleX(1f + 0.045f * level)
+                .scaleY(1f + 0.045f * level)
+                .setDuration(140)
+                .start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            root.setElevation(8f * root.getResources().getDisplayMetrics().density * level);
+        }
+
+        TextView label = root.findViewById(R.id.header_label);
+        if (label != null) {
+            int color = selected ? R.color.glass_text_primary : R.color.glass_text_secondary;
+            label.setTextColor(ContextCompat.getColor(root.getContext(), color));
+        }
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
@@ -106,7 +127,8 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         }
 
         @Override
-        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                       DataSource dataSource, boolean isFirstResource) {
             return false;
         }
     };

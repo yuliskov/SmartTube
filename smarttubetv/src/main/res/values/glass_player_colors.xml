@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="glass_player_text_primary">#F5FAFF</color>
+    <color name="glass_player_text_secondary">#C6D7EA</color>
+    <color name="glass_player_icon_highlight">#E0F7FF</color>
+    <color name="glass_player_progress_primary">#73D9FF</color>
+    <color name="glass_player_progress_secondary">#446C91</color>
+</resources>
