@@ -290,7 +290,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.clear();
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
-            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_SECTION) {
+            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_SECTION && provider.getMenuType() != ContextMenuProvider.MENU_TYPE_ANY) {
                 continue;
             }
             mMenuMapping.put(provider.getId(), new MenuAction(() -> appendContextMenuItem(provider), false));

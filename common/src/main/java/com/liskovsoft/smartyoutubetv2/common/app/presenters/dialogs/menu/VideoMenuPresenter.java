@@ -1062,7 +1062,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mMenuMapping.put(MainUIData.MENU_ITEM_OPEN_COMMENTS, new MenuAction(this::appendOpenCommentsButton, false));
 
         for (ContextMenuProvider provider : new ContextMenuManager(getContext()).getProviders()) {
-            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO) {
+            if (provider.getMenuType() != ContextMenuProvider.MENU_TYPE_VIDEO && provider.getMenuType() != ContextMenuProvider.MENU_TYPE_ANY) {
                 continue;
             }
             mMenuMapping.put(provider.getId(), new MenuAction(() -> appendContextMenuItem(provider), false));

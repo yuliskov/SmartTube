@@ -287,6 +287,10 @@
     <string name="dialog_remove_from">Remove from %s</string>
     <string name="added_to">Added to %s</string>
     <string name="removed_from">Removed from %s</string>
+    <string name="add_playlist_to_playlist">Add playlist to playlist</string>
+    <string name="add_channel_to_playlist">Add channel to playlist</string>
+    <string name="add_all_videos_confirm">Add all videos of %1$s to %2$s?</string>
+    <string name="adding_videos">Adding videos…</string>
     <string name="video_preset_adaptive">Adaptive</string>
     <string name="content_block_preview_recap">Preview or recap of the video</string>
     <string name="content_block_highlight">Interesting point (bookmark)</string>
