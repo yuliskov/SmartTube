@@ -63,6 +63,10 @@ public class VideoCardPresenter extends LongClickPresenter {
             @Override
             public void setSelected(boolean selected) {
                 updateCardBackgroundColor(this, selected);
+                animate().scaleX(selected ? 1.045f : 1f)
+                        .scaleY(selected ? 1.045f : 1f)
+                        .setDuration(160)
+                        .start();
                 super.setSelected(selected);
             }
         };
@@ -90,7 +94,7 @@ public class VideoCardPresenter extends LongClickPresenter {
         }
         if (VERSION.SDK_INT >= 21) {
             float density = view.getResources().getDisplayMetrics().density;
-            view.setElevation(selected ? 8f * density : 0f);
+            view.setElevation(selected ? 9f * density : 0f);
             if (VERSION.SDK_INT >= 23) {
                 view.setForeground(selected
                         ? ContextCompat.getDrawable(view.getContext(), R.drawable.glass_focus_outline)

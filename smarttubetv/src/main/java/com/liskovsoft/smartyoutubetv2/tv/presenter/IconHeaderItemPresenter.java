@@ -47,13 +47,14 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         View view = inflater.inflate(R.layout.icon_header_item, null);
         view.setAlpha(mUnselectedAlpha);
+        view.setScaleX(1f);
+        view.setScaleY(1f);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         HeaderItem headerItem;
-
         if (item instanceof PageRow) {
             headerItem = ((PageRow) item).getHeaderItem();
         } else {
@@ -62,7 +63,6 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         View rootView = viewHolder.view;
         rootView.setFocusable(true);
-
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
             if (mIconUrl != null) {
@@ -98,12 +98,18 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         super.onSelectLevelChanged(holder);
 
         View root = holder.view;
-        boolean selected = selectLevel >= 0.5f;
+        float level = Math.max(0f, Math.min(1f, selectLevel));
+        boolean selected = level >= 0.5f;
         root.setBackground(selected
                 ? ContextCompat.getDrawable(root.getContext(), R.drawable.glass_header_selected_bg)
                 : null);
+        root.animate()
+                .scaleX(1f + 0.045f * level)
+                .scaleY(1f + 0.045f * level)
+                .setDuration(140)
+                .start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            root.setElevation(selected ? 6f * root.getResources().getDisplayMetrics().density : 0f);
+            root.setElevation(8f * root.getResources().getDisplayMetrics().density * level);
         }
 
         TextView label = root.findViewById(R.id.header_label);
@@ -121,7 +127,8 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         }
 
         @Override
-        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                       DataSource dataSource, boolean isFirstResource) {
             return false;
         }
     };
