@@ -9,7 +9,7 @@
     <string name="header_gaming">遊戲</string>
     <string name="header_playlists">播放清單</string>
     <string name="header_settings">設定</string>
-    <string name="header_channels">訂閱頻道清單</string>
+    <string name="header_channels">訂閱清單</string>
     <string name="subscriptions_signin_title">瀏覽你喜歡的頻道最新資訊</string>
     <string name="subscriptions_signin_subtitle">登入瀏覽你的訂閱</string>
     <string name="subscriptions_signin_button_text">登入</string>
@@ -44,7 +44,7 @@
     <string name="dialog_add_to_playlist">新增/刪除播放清單</string>
     <string name="msg_signed_users_only">僅限已登入的使用者</string>
     <string name="msg_cant_load_content">無法載入內容。\n1）請開啟觀看紀錄。\n2）檢查裝置的日期和時間。\n3）檢查網路連線。\n4）檢查你的代理伺服器設定。\n5）嘗試登入你的帳戶。\n6）也許這裡真的什麼都沒有。</string>
-    <string name="title_video_presets">影片預設值</string>
+    <string name="title_video_presets">影片預設畫質</string>
     <string name="settings_accounts">帳戶</string>
     <string name="settings_left_panel">編輯類別</string>
     <string name="settings_themes">主題</string>
@@ -199,7 +199,7 @@
     <string name="msg_player_error">播放器發生錯誤 %s。正在重新啟動播放…</string>
     <string name="video_preset_disabled">不使用預設規則</string>
     <string name="video_preset_enabled">下一段影片的格式將根據預設規則播放</string>
-    <string name="player_sleep_timer">睡眠定時</string>
+    <string name="player_sleep_timer">睡眠計時器</string>
     <string name="player_show_quality_info">於控制列顯示畫質資訊</string>
     <string name="player_remember_each_speed">記住每部影片的速度</string>
     <string name="player_remember_speed_none">無</string>
@@ -225,7 +225,7 @@
     <string name="unpin_from_sidebar">從側邊欄移除</string>
     <string name="unpinned_from_sidebar">已從側邊欄移除</string>
     <string name="dialog_select_country">國家</string>
-    <string name="settings_language_country">語言/國家</string>
+    <string name="settings_language_country">語言與國家</string>
     <string name="share_embed_link">分享嵌入連結</string>
     <string name="card_text_scroll_factor">卡片文字捲動速度</string>
     <string name="preferred_update_source">選擇更新來源</string>
@@ -246,7 +246,7 @@
     <string name="covid_news_row_name">COVID-19 新聞</string>
     <string name="enable_voice_search">啟用全域搜尋（需要韌體支援）</string>
     <string name="subscribe_unsubscribe_from_channel">訂閱 / 取消訂閱頻道</string>
-    <string name="app_backup_restore">備份 / 還原</string>
+    <string name="app_backup_restore">備份與還原</string>
     <string name="skip_each_segment_once">不要再跳過片段</string>
     <string name="disable_ok_long_press">停用長按 OK 按鈕</string>
     <string name="disable_ok_long_press_desc">此功能是針對控制器故障，OK 按鈕無法正常運作時使用。</string>
@@ -287,7 +287,7 @@
     <string name="mark_all_channels_watched">將所有頻道標記為已觀看</string>
     <string name="move_section_up">上移區塊</string>
     <string name="move_section_down">下移區塊</string>
-    <string name="player_buttons">設定播放器按鈕</string>
+    <string name="player_buttons">播放器按鈕</string>
     <string name="action_playlist_add">加入播放清單</string>
     <string name="action_video_stats">影片統計資料</string>
     <string name="action_subscribe">訂閱</string>
@@ -526,15 +526,15 @@
     <string name="disable_stream_buffer_desc">修正串流落後太多的情況。注意：開啟後串流可能會 Lag。</string>
     <string name="sony_frame_drop_fix">掉幀問題修復 #2</string>
     <string name="sony_frame_drop_fix_desc">修復 Sony 電視和其他一些設備上的延遲問題。注意：可能會出現音訊同步問題。</string>
-    <string name="audio_language">音訊語言</string>
+    <string name="audio_language">音軌語言</string>
     <string name="old_home_look">舊版首頁區塊外觀</string>
     <string name="hide_shorts_everywhere">在所有地方隱藏 Shorts</string>
-    <string name="update_found">有更新</string>
+    <string name="update_found">有可用更新</string>
     <string name="volume_boost_warning">超出限制的任何設定可能會損壞喇叭</string>
     <string name="play_video_incognito">無痕播放</string>
     <string name="header_kids_home">兒童</string>
     <string name="player_section_playlist">將目前區塊內容用作播放清單</string>
-    <string name="header_trending">熱門</string>
+    <string name="header_trending">發燒影片</string>
     <string name="screensaver">螢幕保護程式</string>
     <string name="player_screen_off_timeout">螢幕關閉逾時</string>
     <string name="old_update_notifications">舊版更新通知外觀</string>
