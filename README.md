@@ -204,7 +204,7 @@ Major contributors to this project:
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-- [**Patreon (Visa, Mastercard, PayPal)**](https://www.patreon.com/smarttube)  
+- [**Patreon (free access)**](https://www.patreon.com/smarttube)  
 - **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
 <!-- > [**Buy me a coffee**](https://www.buymeacoffee.com/stube) -->  
 - **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  

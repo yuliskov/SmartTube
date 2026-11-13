@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
+import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -110,6 +111,12 @@ public class WebProxyDialog {
 
     @RequiresApi(19)
     protected void testProxyConnections() {
+        // Run async to avoid NetworkOnMainThreadException in OkHttpCommons.setupProxy
+        RxHelper.runAsync(this::testProxyConnectionsInt);
+    }
+
+    @RequiresApi(19)
+    private void testProxyConnectionsInt() {
         Proxy proxy;
         try {
             proxy = validateProxyConfigFields();
