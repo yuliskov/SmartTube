@@ -28,7 +28,11 @@
     <dimen name="search_bar_right_items_margin">20dp</dimen>
     <dimen name="search_bar_global_time_margin">120dp</dimen>
     <dimen name="lb_browse_rows_margin_top">130dp</dimen>
-    <dimen name="lb_browse_rows_margin_start">265dp</dimen>
+    <dimen name="lb_browse_rows_margin_start">118dp</dimen>
+    <!-- Psquare YT: compact icon-only navigation rail -->
+    <dimen name="lb_browse_headers_width">72dp</dimen>
+    <dimen name="lb_browse_header_padding_end">0dp</dimen>
+    <dimen name="lb_browse_header_fading_length">0dp</dimen>
     <dimen name="lb_search_bar_items_width">600dp</dimen>
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
 
