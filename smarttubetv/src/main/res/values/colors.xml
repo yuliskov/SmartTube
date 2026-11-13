@@ -3,33 +3,33 @@
     <!-- Focused player controls -->
     <color name="lb_control_button_color">#F2F2F2</color>
 
-    <!-- Deep graphite Liquid Glass palette, neutral rather than blue -->
-    <color name="glass_bg_0">#030405</color>
-    <color name="glass_bg_1">#08090A</color>
-    <color name="glass_bg_2">#101113</color>
-    <color name="glass_bg_3">#18191B</color>
-    <color name="glass_panel">#222326</color>
-    <color name="glass_panel_soft">#151618</color>
+    <!-- Neutral Apple TV-inspired graphite glass palette -->
+    <color name="glass_bg_0">#08090B</color>
+    <color name="glass_bg_1">#111316</color>
+    <color name="glass_bg_2">#1A1C20</color>
+    <color name="glass_bg_3">#25272B</color>
+    <color name="glass_panel">#2A2B2E</color>
+    <color name="glass_panel_soft">#1D1E21</color>
     <color name="glass_panel_stroke">#66FFFFFF</color>
-    <color name="glass_focus_start">#24FFFFFF</color>
-    <color name="glass_focus_end">#0D1013</color>
+    <color name="glass_focus_start">#66FFFFFF</color>
+    <color name="glass_focus_end">#D91B1C1F</color>
     <color name="glass_focus_stroke">#66FFFFFF</color>
-    <color name="glass_focus_halo">#1AFFFFFF</color>
+    <color name="glass_focus_halo">#66FFFFFF</color>
     <color name="glass_text_primary">#F5F5F5</color>
     <color name="glass_text_secondary">#D0D0D0</color>
     <color name="glass_text_muted">#A2A2A2</color>
     <color name="brand_cyan">#E6E6E6</color>
     <color name="brand_cyan_dark">#77797D</color>
 
-    <color name="default_background_gradient_start">#030405</color>
-    <color name="default_background_gradient_end">#151618</color>
+    <color name="default_background_gradient_start">#090A0C</color>
+    <color name="default_background_gradient_end">#202226</color>
     <color name="fastlane_background">@color/brand_cyan</color>
-    <color name="fastlane_background_dark">#101113</color>
-    <color name="default_light_grey">#303236</color>
+    <color name="fastlane_background_dark">#17181A</color>
+    <color name="default_light_grey">#34363A</color>
     <color name="search_opaque">@color/brand_cyan</color>
     <color name="search_opaque_yellow">#E8E2D6</color>
 
-    <!-- Neutral high-contrast focus colors for TV -->
+    <!-- Neutral, high-contrast focus colors for television displays -->
     <color name="card_selected_background_white">#E5E5E5</color>
     <color name="card_selected_background_white_grey">#C6C6C6</color>
     <color name="card_selected_background_yellow">#D8D8D8</color>
@@ -37,21 +37,21 @@
     <color name="card_selected_text_black">#111214</color>
     <color name="card_selected_text_grey">#202124</color>
     <color name="card_default_background">#303236</color>
-    <color name="card_default_background_dark">#17181A</color>
+    <color name="card_default_background_dark">#1B1C1F</color>
     <color name="card_default_text">#F3F3F3</color>
 
     <!-- Browse / sidebar / player surfaces -->
     <color name="shelf_background">#202124</color>
-    <color name="shelf_background_dark">#0B0C0E</color>
-    <color name="icon_background">#303236</color>
-    <color name="icon_alt_background">#292A2D</color>
-    <color name="player_background">#FF030405</color>
+    <color name="shelf_background_dark">#111214</color>
+    <color name="icon_background">#34363A</color>
+    <color name="icon_alt_background">#303236</color>
+    <color name="player_background">#FF08090B</color>
 
     <!-- Dark color scheme -->
-    <color name="scheme_grey_background">#17181A</color>
-    <color name="scheme_grey_background_dark">#0B0C0E</color>
-    <color name="scheme_grey_shelf_background_dark">#070809</color>
-    <color name="scheme_grey_card_background_dark">#141517</color>
+    <color name="scheme_grey_background">#1B1C1F</color>
+    <color name="scheme_grey_background_dark">#111214</color>
+    <color name="scheme_grey_shelf_background_dark">#0B0C0E</color>
+    <color name="scheme_grey_card_background_dark">#191A1D</color>
 
     <!-- Red color scheme retained for user-selectable themes -->
     <color name="scheme_red_background">#131313</color>

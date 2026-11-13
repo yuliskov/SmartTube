@@ -2,7 +2,7 @@
 <resources>
     <color name="glass_player_text_primary">#F5F5F5</color>
     <color name="glass_player_text_secondary">#D0D0D0</color>
-    <color name="glass_player_icon_highlight">#E6E6E6</color>
+    <color name="glass_player_icon_highlight">#FFFFFF</color>
     <color name="glass_player_progress_primary">#E5E5E5</color>
     <color name="glass_player_progress_secondary">#747679</color>
 </resources>
