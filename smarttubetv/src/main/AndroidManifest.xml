@@ -17,6 +17,8 @@
 
     <uses-permission android:name="${applicationId}.ACCESS_VIDEO_DATA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- DIAL discovery (SSDP multicast) -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
@@ -162,6 +164,12 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="unspecified"
             android:theme="@style/App.Theme.Leanback.Preferences.Opaque"/>
+
+        <!-- The library's translucent theme crashes on some Android 8 (api 26) devices: Only fullscreen opaque activities can request orientation -->
+        <activity android:name="com.jakewharton.processphoenix.PhoenixActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            tools:replace="android:theme"
+            tools:ignore="MissingClass"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"

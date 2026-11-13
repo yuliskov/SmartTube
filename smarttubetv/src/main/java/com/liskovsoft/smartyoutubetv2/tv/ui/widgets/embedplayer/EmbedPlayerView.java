@@ -307,15 +307,7 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
 
     @Override
     public long getDurationMs() {
-        long durationMs = mExoPlayerController.getDurationMs();
-
-        long liveDurationMs = getVideo() != null ? getVideo().getLiveDurationMs() : 0;
-
-        if (durationMs > Video.MAX_LIVE_DURATION_MS && liveDurationMs != 0) {
-            durationMs = liveDurationMs;
-        }
-
-        return durationMs;
+        return mExoPlayerController.getDurationMs();
     }
 
     @Override

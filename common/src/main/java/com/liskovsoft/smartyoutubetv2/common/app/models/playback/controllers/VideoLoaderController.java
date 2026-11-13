@@ -256,6 +256,7 @@ public class VideoLoaderController extends BasePlayerController {
         disposeActions();
 
         ServiceManager service = YouTubeServiceManager.instance();
+        service.allowRestrictedVideos(!getGeneralData().isChildModeEnabled());
         MediaItemService mediaItemManager = service.getMediaItemService();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribe(this::processFormatInfo,
@@ -297,13 +298,7 @@ public class VideoLoaderController extends BasePlayerController {
             // 18+ video or the video is hidden/removed
             player.showOverlay(true);
             loadNextVideo(5_000);
-
-            //if (formatInfo.isUnknownError()) { // the bot error or the video not available
-            //    scheduleRebootAppTimer(5_000);
-            //} else { // 18+ video or the video is hidden/removed
-            //    scheduleNextVideoTimer(5_000);
-            //}
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats()) {
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsDashFormats() && !preferSabrLive(formatInfo)) {
             Log.d(TAG, "Loading regular video in dash format...");
 
             if (getPlayerTweaksData().isHighBitrateFormatsEnabled() && formatInfo.hasExtendedHlsFormats()) {
@@ -311,7 +306,7 @@ public class VideoLoaderController extends BasePlayerController {
             } else {
                 player.openDash(formatInfo);
             }
-        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats() && !formatInfo.isLive()) { // TODO: SABR live not implemented yet
+        } else if (acceptAdaptiveFormats(formatInfo) && formatInfo.containsSabrFormats()) {
             Log.d(TAG, "Loading video in sabr format...");
             player.openSabr(formatInfo);
         } else if (acceptDashLive(formatInfo)) {
@@ -523,6 +518,10 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         return true;
+    }
+
+    private boolean preferSabrLive(MediaItemFormatInfo formatInfo) {
+        return getMediaServiceData().isSabrLiveEnabled() && formatInfo.isLive() && formatInfo.containsSabrFormats();
     }
 
     private boolean acceptDashLive(MediaItemFormatInfo formatInfo) {

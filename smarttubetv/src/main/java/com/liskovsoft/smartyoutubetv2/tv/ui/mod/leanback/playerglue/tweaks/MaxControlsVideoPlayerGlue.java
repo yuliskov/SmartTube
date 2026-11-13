@@ -217,7 +217,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         long liveDurationMs = hasProvidedDuration
                 ? Math.max(providedDurationMs - getTimelineOffsetMs(), getCurrentPosition()) : mVideo.getLiveDurationMs();
 
-        if (liveDurationMs == 0) {
+        if (liveDurationMs <= 0) {
             return;
         }
 

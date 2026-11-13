@@ -3,7 +3,7 @@ package com.google.android.exoplayer2.source.sabr.parser;
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
-import com.google.android.exoplayer2.source.sabr.parser.exceptions.MediaSegmentMismatchError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrSegmentMismatchError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
@@ -295,7 +295,7 @@ public class SabrStream {
             ProcessMediaHeaderResult result = processor.processMediaHeader(mediaHeader);
 
             return result.sabrPart;
-        } catch (MediaSegmentMismatchError e) {
+        } catch (SabrSegmentMismatchError e) {
             // For livestreams, the server may not know the exact segment for a given player time.
             // For segments near stream head, it estimates using segment duration, which can cause off-by-one segment mismatches.
             // If a segment is much longer or shorter than expected, the server may return a segment ahead or behind.

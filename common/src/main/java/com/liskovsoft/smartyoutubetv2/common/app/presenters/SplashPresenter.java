@@ -265,6 +265,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (videoId != null) {
                 long timeMs = IntentExtractor.extractVideoTimeMs(intent);
                 PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+
+                // Something is playing (or paused) in the player: queue it instead of replacing it
+                if (IntentExtractor.isAddToQueueIntent(intent) && playbackPresenter.getView() != null && playbackPresenter.getVideo() != null) {
+                    addToPlaybackQueue(videoId, timeMs);
+                    return true;
+                }
+
                 boolean finishOnEnded = IntentExtractor.hasFinishOnEndedFlag(intent);
                 boolean incognito = IntentExtractor.isIncognitoIntent(intent);
                 playbackPresenter.openVideo(videoId, finishOnEnded, timeMs, incognito);
@@ -357,6 +364,29 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     () -> getView().finishView() // critical part, fix black screen on app exit
             );
         }
+    }
+
+    /**
+     * Appends the video to the playback queue. Title and author are fetched in the background so the queue dialog can show them.
+     */
+    private void addToPlaybackQueue(String videoId, long timeMs) {
+        Video video = Video.from(videoId);
+        video.fromQueue = true;
+        video.pendingPosMs = timeMs;
+        Playlist.instance().add(video);
+
+        Context context = getContext();
+        String added = context.getString(R.string.added_to_playback_queue);
+
+        RxHelper.execute(
+                YouTubeServiceManager.instance().getMediaItemService().getMetadataObserve(videoId),
+                metadata -> {
+                    video.title = metadata.getTitle();
+                    video.author = metadata.getAuthor();
+                    MessageHelpers.showMessage(context, String.format("%s: %s", video.getTitle(), added));
+                },
+                error -> MessageHelpers.showMessage(context, added)
+        );
     }
 
     private void enablePlayerOnlyModeIfNeeded(Intent intent) {

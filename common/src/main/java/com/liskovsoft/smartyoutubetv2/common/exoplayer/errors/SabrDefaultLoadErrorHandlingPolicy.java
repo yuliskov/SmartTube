@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -27,16 +28,21 @@ public class SabrDefaultLoadErrorHandlingPolicy extends DashDefaultLoadErrorHand
         // The server asked for a fresh player response. Retrying the same request is pointless -
         // it just hammers the server. Make the error fatal so the app reloads the video.
         if (cause instanceof SabrReloadPlayerError) {
-            Log.e(TAG, "Player response reload requested, errorCount: " + errorCount);
+            Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
             return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
         }
 
         // The server sent NextRequestPolicy.backoff_time_ms instead of media. Wait it out
         // rather than re-requesting at full speed.
         if (cause instanceof SabrBackoffError) {
-            long delayMs = ((SabrBackoffError) cause).backoffMs;
-            Log.d(TAG, "Honouring SABR backoff: " + delayMs + " ms, errorCount: " + errorCount);
-            //return delayMs;
+            Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
+            //long delayMs = ((SabrBackoffError) cause).backoffMs;
+            //return delayMs; // not used at a moment but could be changed in future
+            return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
+        }
+
+        if (cause instanceof SabrPoTokenError) {
+            Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
             return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
         }
 

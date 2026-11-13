@@ -226,7 +226,7 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private void tryListening() {
-        if (mRemoteControlData.isDeviceLinkEnabled()) {
+        if (mRemoteControlData.isRemoteListeningEnabled()) {
             startListening();
         } else {
             stopListening();
@@ -570,6 +570,6 @@ public class RemoteController extends BasePlayerController implements OnDataChan
     }
 
     private boolean isRemoteDisabled() {
-        return !mRemoteControlData.isDeviceLinkEnabled() || !isConnectedBefore() || isEmbedPlayer();
+        return !mRemoteControlData.isRemoteListeningEnabled() || !isConnectedBefore() || isEmbedPlayer();
     }
 }

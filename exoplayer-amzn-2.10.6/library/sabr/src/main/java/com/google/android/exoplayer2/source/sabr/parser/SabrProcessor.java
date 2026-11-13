@@ -449,6 +449,9 @@ public class SabrProcessor {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
         }
 
+        // NOTE: Avoid to throw PoTokenError on bad status!
+        // PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
+
         return result;
     }
 
