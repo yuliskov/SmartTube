@@ -2,25 +2,23 @@
 <androidx.leanback.widget.NonOverlappingLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:layout_height="56dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="0dp">
 
     <ImageView
         android:id="@+id/header_icon"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:contentDescription="@string/header_icon" />
+        android:layout_gravity="center"
+        android:contentDescription="@string/header_icon"
+        android:scaleType="fitCenter" />
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
         android:id="@+id/header_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:singleLine="true"
-        android:maxWidth="120sp"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:ellipsize="marquee"
-        android:scrollHorizontally="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
         style="@style/TextAppearance.Leanback.Header" />
 </androidx.leanback.widget.NonOverlappingLinearLayout>
