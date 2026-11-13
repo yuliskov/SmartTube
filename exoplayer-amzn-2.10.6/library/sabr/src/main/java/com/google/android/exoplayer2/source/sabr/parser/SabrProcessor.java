@@ -5,6 +5,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.ConsumedRange;
@@ -61,6 +62,7 @@ public class SabrProcessor {
     private final int liveSegmentTargetDurationSec;
     private long playerTimeMs;
     private final String poToken;
+    private int poTokenFailCount;
     private final boolean postLive;
     private final String videoId;
     private final long durationMs;
@@ -449,8 +451,16 @@ public class SabrProcessor {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
         }
 
-        // NOTE: Avoid to throw PoTokenError on bad status!
-        // PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
+        if (status != Status.OK) {
+            poTokenFailCount++;
+            // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
+            // Ensure that PoToken fails at least twice: once for video and once for audio, because the first attempt sometimes fails.
+            if (poTokenFailCount > 1) {
+                throw new SabrPoTokenError("PoToken attestation failed with resultStatus=" + resultStatus);
+            }
+        } else {
+            poTokenFailCount = 0;
+        }
 
         return result;
     }
