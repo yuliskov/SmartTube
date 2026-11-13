@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Focused player controls -->
-    <color name="lb_control_button_color">#D9F2FF</color>
+    <color name="lb_control_button_color">#F2F2F2</color>
 
-    <!-- Apple TV-inspired midnight glass palette -->
-    <color name="glass_bg_0">#040A12</color>
-    <color name="glass_bg_1">#0A1220</color>
-    <color name="glass_bg_2">#101D2F</color>
-    <color name="glass_bg_3">#182844</color>
-    <color name="glass_panel">#2A3348</color>
-    <color name="glass_panel_soft">#1D2739</color>
+    <!-- Neutral Apple TV-inspired graphite glass palette -->
+    <color name="glass_bg_0">#08090B</color>
+    <color name="glass_bg_1">#111316</color>
+    <color name="glass_bg_2">#1A1C20</color>
+    <color name="glass_bg_3">#25272B</color>
+    <color name="glass_panel">#2A2B2E</color>
+    <color name="glass_panel_soft">#1D1E21</color>
     <color name="glass_panel_stroke">#66FFFFFF</color>
-    <color name="glass_focus_start">#665AADEB</color>
-    <color name="glass_focus_end">#E6263B59</color>
+    <color name="glass_focus_start">#66FFFFFF</color>
+    <color name="glass_focus_end">#D91B1C1F</color>
     <color name="glass_focus_stroke">#66FFFFFF</color>
     <color name="glass_focus_halo">#66FFFFFF</color>
-    <color name="glass_text_primary">#F4F9FF</color>
-    <color name="glass_text_secondary">#C9D9F0</color>
-    <color name="glass_text_muted">#8EA9C6</color>
-    <color name="brand_cyan">#7EDBFF</color>
-    <color name="brand_cyan_dark">#2E5F8C</color>
+    <color name="glass_text_primary">#F5F5F5</color>
+    <color name="glass_text_secondary">#D0D0D0</color>
+    <color name="glass_text_muted">#A2A2A2</color>
+    <color name="brand_cyan">#E6E6E6</color>
+    <color name="brand_cyan_dark">#77797D</color>
 
-    <color name="default_background_gradient_start">#070B14</color>
-    <color name="default_background_gradient_end">#142238</color>
+    <color name="default_background_gradient_start">#090A0C</color>
+    <color name="default_background_gradient_end">#202226</color>
     <color name="fastlane_background">@color/brand_cyan</color>
-    <color name="fastlane_background_dark">#101B2D</color>
-    <color name="default_light_grey">#29364A</color>
+    <color name="fastlane_background_dark">#17181A</color>
+    <color name="default_light_grey">#34363A</color>
     <color name="search_opaque">@color/brand_cyan</color>
-    <color name="search_opaque_yellow">#FFC978</color>
+    <color name="search_opaque_yellow">#E8E2D6</color>
 
-    <!-- Bright, readable focus colors on television displays -->
-    <color name="card_selected_background_white">#DDF4FF</color>
-    <color name="card_selected_background_white_grey">#BFD8E8</color>
-    <color name="card_selected_background_yellow">#8ADFFF</color>
-    <color name="card_selected_background_grey">#33445B</color>
-    <color name="card_selected_text_black">#091321</color>
-    <color name="card_selected_text_grey">#15263A</color>
-    <color name="card_default_background">#26364D</color>
-    <color name="card_default_background_dark">#172338</color>
-    <color name="card_default_text">#F3F8FF</color>
+    <!-- Neutral, high-contrast focus colors for television displays -->
+    <color name="card_selected_background_white">#E5E5E5</color>
+    <color name="card_selected_background_white_grey">#C6C6C6</color>
+    <color name="card_selected_background_yellow">#D8D8D8</color>
+    <color name="card_selected_background_grey">#3A3B3D</color>
+    <color name="card_selected_text_black">#111214</color>
+    <color name="card_selected_text_grey">#202124</color>
+    <color name="card_default_background">#303236</color>
+    <color name="card_default_background_dark">#1B1C1F</color>
+    <color name="card_default_text">#F3F3F3</color>
 
     <!-- Browse / sidebar / player surfaces -->
-    <color name="shelf_background">#172238</color>
-    <color name="shelf_background_dark">#0B1220</color>
-    <color name="icon_background">#293B55</color>
-    <color name="icon_alt_background">#283858</color>
-    <color name="player_background">#FF050A12</color>
+    <color name="shelf_background">#202124</color>
+    <color name="shelf_background_dark">#111214</color>
+    <color name="icon_background">#34363A</color>
+    <color name="icon_alt_background">#303236</color>
+    <color name="player_background">#FF08090B</color>
 
     <!-- Dark color scheme -->
-    <color name="scheme_grey_background">#101A2A</color>
-    <color name="scheme_grey_background_dark">#0B1220</color>
-    <color name="scheme_grey_shelf_background_dark">#080E19</color>
-    <color name="scheme_grey_card_background_dark">#151F30</color>
+    <color name="scheme_grey_background">#1B1C1F</color>
+    <color name="scheme_grey_background_dark">#111214</color>
+    <color name="scheme_grey_shelf_background_dark">#0B0C0E</color>
+    <color name="scheme_grey_card_background_dark">#191A1D</color>
 
     <!-- Red color scheme retained for user-selectable themes -->
     <color name="scheme_red_background">#131313</color>
@@ -59,27 +59,27 @@
     <color name="scheme_red_shelf_background_dark">#131313</color>
     <color name="scheme_red_card_background_dark">#36474f</color>
 
-    <!-- Blue color scheme -->
+    <!-- Blue color scheme retained as a user-selectable scheme -->
     <color name="scheme_blue_background">@color/brand_cyan</color>
-    <color name="scheme_blue_background_dark">#4169D8</color>
+    <color name="scheme_blue_background_dark">#77797D</color>
 
     <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
-    <color name="primary_dark">#183C63</color>
-    <color name="primary_light">#C6EDFF</color>
-    <color name="primary">#39BCEB</color>
+    <color name="primary_dark">#45474A</color>
+    <color name="primary_light">#E5E5E5</color>
+    <color name="primary">#BFC1C4</color>
     <color name="white_87pc">#DDFFFFFF</color>
 
     <!-- Tooltip mod: extracted private values -->
-    <color name="tooltip_background_dark_mod">#E62B3A50</color>
+    <color name="tooltip_background_dark_mod">#E62B2D30</color>
     <color name="tooltip_background_light_mod">#E6FFFFFF</color>
     <color name="foreground_material_dark_mod">@android:color/white</color>
     <color name="foreground_material_light_mod">@android:color/black</color>
 
     <!-- Default Orb buttons colors: search, accounts, search settings etc -->
-    <color name="orb_color">#9ADFFF</color>
-    <color name="orb_bright_color">#DDF4FF</color>
-    <color name="orb_icon_color">#0B1728</color>
+    <color name="orb_color">#DADADA</color>
+    <color name="orb_bright_color">#FFFFFF</color>
+    <color name="orb_icon_color">#17181A</color>
 
     <!-- Search page mic button color -->
     <color name="lb_speech_orb_not_recording">@color/orb_color</color>
