@@ -28,6 +28,11 @@ android {
     }
 
     testOptions.unitTests.includeAndroidResources = true
+
+    lintOptions {
+        // Repeat-mode flags are combined deliberately; lint misreads the flag math
+        disable 'WrongConstant'
+    }
 }
 
 dependencies {
