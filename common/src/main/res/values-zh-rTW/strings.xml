@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">實驗性 SABR 直播。僅在一般直播發生問題時才啟用。</string>
     <string name="remote_control_dial">在 YouTube 投放清單中顯示 (DIAL)</string>
     <string name="live_edge">不落後於直播</string>
+    <string name="player_quick_skip_chapters">按向上鍵播放下一集</string>
     <plurals name="hours">
         <item quantity="other">%s 小時</item>
     </plurals>

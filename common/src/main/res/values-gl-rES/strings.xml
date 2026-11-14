@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Emisións en directo SABR experimentais. Actívao só se tes problemas coas emisións en directo normais.</string>
     <string name="remote_control_dial">Mostrar na lista de emisión de YouTube (DIAL)</string>
     <string name="live_edge">Non quedar atrás da emisión en directo</string>
+    <string name="player_quick_skip_chapters">Seguinte episodio co botón Arriba</string>
     <plurals name="hours">
         <item quantity="one">%s hora</item>
         <item quantity="other">%s horas</item>

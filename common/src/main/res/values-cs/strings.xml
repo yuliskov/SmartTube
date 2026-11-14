@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Experimentální živá vysílání SABR. Povolte, pouze pokud máte potíže s běžnými živými vysíláními.</string>
     <string name="remote_control_dial">Zobrazit v seznamu zařízení pro přenos YouTube (DIAL)</string>
     <string name="live_edge">Nezaostávat za živým vysíláním</string>
+    <string name="player_quick_skip_chapters">Další epizoda tlačítkem Nahoru</string>
     <plurals name="hours">
         <item quantity="one">%s hodina</item>
         <item quantity="other">%s hodin</item>

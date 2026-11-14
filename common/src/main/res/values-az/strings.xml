@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">SABR canlı yayımları</string>
     <string name="prefer_sabr_live_desc">Təcrübi SABR canlı yayımları. Yalnız adi canlı yayımlarla bağlı probleminiz olduqda aktivləşdirin.</string>
     <string name="live_edge">Canlı yayımdan geri qalmamaq</string>
+    <string name="player_quick_skip_chapters">Növbəti epizod Yuxarı düyməsi ilə</string>
     <plurals name="hours">
         <item quantity="one">%s saat</item>
         <item quantity="other">%s saat</item>

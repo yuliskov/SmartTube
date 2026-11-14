@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">Strim langsung SABR</string>
     <string name="prefer_sabr_live_desc">Strim langsung SABR eksperimen. Dayakan hanya jika anda menghadapi masalah dengan strim langsung biasa.</string>
     <string name="live_edge">Kekal seiring dengan langsung</string>
+    <string name="player_quick_skip_chapters">Episod seterusnya dengan butang Atas</string>
     <plurals name="hours">
         <item quantity="one">%s jam</item>
         <item quantity="other">%s jam</item>

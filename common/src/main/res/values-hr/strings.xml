@@ -756,6 +756,7 @@
     <string name="prefer_sabr_live">SABR streamovi uživo</string>
     <string name="prefer_sabr_live_desc">Eksperimentalni SABR streamovi uživo. Omogućite samo ako imate problema s običnim streamovima uživo.</string>
     <string name="live_edge">Ne zaostajati za prijenosom uživo</string>
+    <string name="player_quick_skip_chapters">Sljedeća epizoda tipkom Gore</string>
     <plurals name="hours">
         <item quantity="one">%s sat</item>
         <item quantity="few">%s sata</item>

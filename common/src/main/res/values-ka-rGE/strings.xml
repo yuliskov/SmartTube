@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">ექსპერიმენტული SABR პირდაპირი ეთერები. ჩართეთ მხოლოდ იმ შემთხვევაში, თუ ჩვეულებრივ პირდაპირ ეთერებთან პრობლემები გაქვთ.</string>
     <string name="remote_control_dial">ჩვენება YouTube-ის გადაცემის სიაში (DIAL)</string>
     <string name="live_edge">პირდაპირი ეთერისგან ჩამორჩენის თავიდან აცილება</string>
+    <string name="player_quick_skip_chapters">შემდეგი ეპიზოდი ღილაკით ზემოთ</string>
     <plurals name="hours">
         <item quantity="one">%s საათი</item>
         <item quantity="other">%s საათი</item>

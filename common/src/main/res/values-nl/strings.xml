@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Experimentele SABR-livestreams. Schakel alleen in als u problemen hebt met reguliere livestreams.</string>
     <string name="remote_control_dial">Tonen in YouTube cast-lijst (DIAL)</string>
     <string name="live_edge">Niet achterlopen op de livestream</string>
+    <string name="player_quick_skip_chapters">Volgende aflevering met de knop Omhoog</string>
     <plurals name="hours">
         <item quantity="one">%s uur</item>
         <item quantity="other">%s uur</item>

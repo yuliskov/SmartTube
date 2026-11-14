@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">Pretoki v živo SABR</string>
     <string name="prefer_sabr_live_desc">Eksperimentalni pretoki v živo SABR. Omogočite samo, če imate težave z navadnimi pretoki v živo.</string>
     <string name="live_edge">Ne zaostajaj za pretokom v živo</string>
+    <string name="player_quick_skip_chapters">Naslednja epizoda z gumbom Gor</string>
     <plurals name="hours">
         <item quantity="one">%s ura</item>
         <item quantity="two">%s uri</item>

@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Siaran langsung SABR eksperimental. Aktifkan hanya jika Anda mengalami masalah dengan siaran langsung biasa.</string>
     <string name="remote_control_dial">Tampilkan di daftar transmisi YouTube (DIAL)</string>
     <string name="live_edge">Jangan tertinggal dari siaran langsung</string>
+    <string name="player_quick_skip_chapters">Episode berikutnya dengan tombol Atas</string>
     <plurals name="hours">
         <item quantity="other">%s jam</item>
     </plurals>

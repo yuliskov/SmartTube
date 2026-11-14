@@ -62,7 +62,6 @@ public class SabrProcessor {
     private final int liveSegmentTargetDurationSec;
     private long playerTimeMs;
     private final String poToken;
-    private int poTokenFailCount;
     private final boolean postLive;
     private final String videoId;
     private final long durationMs;
@@ -445,21 +444,12 @@ public class SabrProcessor {
             Log.w(TAG, "Received an unknown StreamProtectionStatus: %s", streamProtectionStatus);
         }
 
+        // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
+
         ProcessStreamProtectionStatusResult result = new ProcessStreamProtectionStatusResult();
 
         if (resultStatus != null) {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
-        }
-
-        if (status != Status.OK) {
-            poTokenFailCount++;
-            // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
-            // Ensure that PoToken fails at least twice: once for video and once for audio, because the first attempt sometimes fails.
-            if (poTokenFailCount > 1) {
-                throw new SabrPoTokenError("PoToken attestation failed with resultStatus=" + resultStatus);
-            }
-        } else {
-            poTokenFailCount = 0;
         }
 
         return result;

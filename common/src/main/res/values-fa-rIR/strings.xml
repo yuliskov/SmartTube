@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">پخش زنده آزمایشی SABR. فقط در صورت داشتن مشکل با پخش‌های زنده معمولی فعال کنید.</string>
     <string name="remote_control_dial">نمایش در فهرست پخش یوتیوب (DIAL)</string>
     <string name="live_edge">عقب نماندن از پخش زنده</string>
+    <string name="player_quick_skip_chapters">قسمت بعدی با دکمه بالا</string>
     <plurals name="hours">
         <item quantity="one">%s ساعت</item>
         <item quantity="other">%s ساعت</item>

@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Eksperimentelle SABR-direktesendinger. Aktiver kun hvis du har problemer med vanlige direktesendinger.</string>
     <string name="remote_control_dial">Vis i YouTubes cast-liste (DIAL)</string>
     <string name="live_edge">Ikke ligg etter direktesendingen</string>
+    <string name="player_quick_skip_chapters">Neste episode med Opp-knappen</string>
     <plurals name="hours">
         <item quantity="one">%s time</item>
         <item quantity="other">%s timer</item>

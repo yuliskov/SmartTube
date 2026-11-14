@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">SABR live streams</string>
     <string name="prefer_sabr_live_desc">Experimental SABR live streams. Enable only if you have trouble with regular live streams.</string>
     <string name="live_edge">Keep up with live</string>
+    <string name="player_quick_skip_chapters">Next chapter with Up button</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>

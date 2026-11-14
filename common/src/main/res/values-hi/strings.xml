@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">SABR लाइव स्ट्रीम</string>
     <string name="prefer_sabr_live_desc">प्रायोगिक SABR लाइव स्ट्रीम। केवल तभी सक्षम करें जब सामान्य लाइव स्ट्रीम में समस्या हो।</string>
     <string name="live_edge">लाइव स्ट्रीम से पीछे न रहें</string>
+    <string name="player_quick_skip_chapters">ऊपर बटन से अगला एपिसोड</string>
     <plurals name="hours">
         <item quantity="one">%s घंटा</item>
         <item quantity="other">%s घंटे</item>

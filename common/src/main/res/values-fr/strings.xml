@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Diffusions en direct SABR expérimentales. Activez cette option uniquement si vous rencontrez des problèmes avec les diffusions en direct classiques.</string>
     <string name="remote_control_dial">Afficher dans la liste de diffusion YouTube (DIAL)</string>
     <string name="live_edge">Ne pas prendre de retard sur le direct</string>
+    <string name="player_quick_skip_chapters">Épisode suivant avec le bouton Haut</string>
     <plurals name="hours">
         <item quantity="one">%s heure</item>
         <item quantity="other">%s heures</item>

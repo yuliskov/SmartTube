@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Experimentella SABR-livesändningar. Aktivera endast om du har problem med vanliga livesändningar.</string>
     <string name="remote_control_dial">Visa i YouTubes castlista (DIAL)</string>
     <string name="live_edge">Ligg inte efter livesändningen</string>
+    <string name="player_quick_skip_chapters">Nästa avsnitt med knappen Upp</string>
     <plurals name="hours">
         <item quantity="one">%s timme</item>
         <item quantity="other">%s timmar</item>
