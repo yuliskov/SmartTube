@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.session.PlaybackState;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -31,6 +33,11 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.vkay94.dtpv.DoubleTapPlayerAdapter;
 import com.github.vkay94.dtpv.DoubleTapPlayerView;
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay;
@@ -65,6 +72,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.Restore
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -102,6 +110,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private static final String SELECTED_VIDEO_ID = "SelectedVideoId";
     private static final int UPDATE_DELAY_MS = 100;
     private static final int SUGGESTIONS_START_INDEX = 1;
+    private static final String THUMBNAIL_URL_FORMAT = "https://i.ytimg.com/vi/%s/hqdefault.jpg";
+    private static final int ART_MAX_SIZE_PX = 512; // the framework downscales it to ~320dp anyway
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
@@ -120,6 +130,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private boolean mIsEngineBlocked;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private String mArtUrl;
+    private String mArtFailedUrl;
+    private Bitmap mArtBitmap;
+    private CustomTarget<Bitmap> mArtTarget;
+    private RequestManager mArtRequests;
+    private MediaMetadataCompat mMetadata;
+    private final Runnable mInvalidateMetadataTask = this::invalidateMetadata;
     private DoubleTapPlayerAdapter mDoubleTapPlayerAdapter;
     private YouTubeOverlay mYouTubeOverlay;
     private Boolean mIsControlsShownPreviously;
@@ -416,6 +433,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mRowsSupportFragment.getBridgeAdapter().getPresenterMapper().clear();
             mRowsSupportFragment = null;
         }
+        Utils.removeCallbacks(mInvalidateMetadataTask);
+        clearArtBitmap();
+        mArtFailedUrl = null;
+        mMetadata = null;
         if (mMediaSessionConnector != null) {
             mMediaSessionConnector.setPlayer(null);
             mMediaSessionConnector.setControlDispatcher(null);
@@ -631,6 +652,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // NOTE: Don't set to null. This won't disable a notifications but makes them empty.
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
+                mMetadata = null;
                 return null;
             }
 
@@ -641,10 +663,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().getTitleFull());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().getAuthor());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, Helpers.toString(getVideo().getSecondTitleFull()));
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().getCardImageUrl());
+            String artUrl = getArtUrl(getVideo());
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, artUrl);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI, artUrl);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI, artUrl);
+            // Launcher "now playing" card reads only bitmaps
+            Bitmap artBitmap = mMediaSession.isActive() ? getArtBitmap(artUrl) : null;
+            if (artBitmap != null) {
+                metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, artBitmap);
+            }
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDurationMs());
 
-            return metadataBuilder.build();
+            mMetadata = metadataBuilder.build();
+            return mMetadata;
         });
 
         mMediaSessionConnector.setQueueNavigator(new BackboneQueueNavigator() {
@@ -844,6 +875,123 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mPlayerGlue.setSubtitle(video.getSecondTitleFull() != null ? createSubtitle(video) : "...");
             mPlayerGlue.setVideo(video);
         }
+
+        // Title and author may arrive after the playback start (video opened by id)
+        if (video != null && isMetadataChanged(video)) {
+            invalidateMetadata();
+        }
+    }
+
+    // NOTE: setVideo is called often (e.g. on every key press). Keep in sync with the metadata provider.
+    private boolean isMetadataChanged(Video video) {
+        return mMetadata == null ||
+                !TextUtils.equals(mMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID), video.videoId) ||
+                !TextUtils.equals(mMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE), video.getTitleFull()) ||
+                !TextUtils.equals(mMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST), video.getAuthor()) ||
+                !TextUtils.equals(mMetadata.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE), Helpers.toString(video.getSecondTitleFull())) ||
+                !TextUtils.equals(mMetadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI), getArtUrl(video));
+    }
+
+    private void invalidateMetadata() {
+        if (mMediaSessionConnector != null) {
+            mMediaSessionConnector.invalidateMediaSessionMetadata();
+        }
+    }
+
+    /**
+     * Same image as the video card or the plain thumbnail if it failed to load
+     */
+    private String getArtUrl(Video video) {
+        String plainUrl = getPlainArtUrl(video);
+        int thumbQuality = getMainUIData().getThumbQuality();
+
+        String artUrl;
+        if (!TextUtils.isEmpty(video.getCardImageUrl())) {
+            artUrl = ClickbaitRemover.updateThumbnail(video, thumbQuality);
+        } else if (video.isLive || video.isUpcoming) {
+            artUrl = plainUrl; // no start/middle/end frames
+        } else {
+            artUrl = ClickbaitRemover.updateThumbnail(plainUrl, thumbQuality);
+        }
+
+        return TextUtils.equals(artUrl, mArtFailedUrl) ? plainUrl : artUrl;
+    }
+
+    private static String getPlainArtUrl(Video video) {
+        String cardImageUrl = video.cardImageUrl;
+        if (!TextUtils.isEmpty(cardImageUrl) || video.videoId == null) {
+            return cardImageUrl;
+        }
+        return String.format(THUMBNAIL_URL_FORMAT, video.videoId);
+    }
+
+    private Bitmap getArtBitmap(String artUrl) {
+        if (!TextUtils.equals(artUrl, mArtUrl)) {
+            loadArtBitmap(artUrl);
+        }
+
+        return mArtBitmap;
+    }
+
+    private void loadArtBitmap(String artUrl) {
+        clearArtBitmap();
+
+        mArtUrl = artUrl;
+
+        if (TextUtils.isEmpty(artUrl) || getContext() == null) {
+            return;
+        }
+
+        mArtTarget = new CustomTarget<Bitmap>(ART_MAX_SIZE_PX, ART_MAX_SIZE_PX) {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                if (mArtTarget != this) {
+                    return; // previous video
+                }
+
+                mArtBitmap = resource;
+
+                // NOTE: Glide forbids starting or clearing a load from a target callback
+                Utils.post(mInvalidateMetadataTask);
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+                if (mArtTarget == this) {
+                    mArtBitmap = null;
+                }
+            }
+
+            @Override
+            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                if (mArtTarget != this || getVideo() == null || TextUtils.equals(artUrl, getPlainArtUrl(getVideo()))) {
+                    return;
+                }
+
+                mArtFailedUrl = artUrl;
+                Utils.post(mInvalidateMetadataTask);
+            }
+        };
+
+        mArtRequests = Glide.with(getContext().getApplicationContext()); // FIX: "You cannot start a load for a destroyed activity"
+        mArtRequests
+                .asBitmap()
+                .load(artUrl)
+                .centerInside()
+                .disallowHardwareConfig() // the bitmap is parceled
+                // Cache makes app crashing on old android versions
+                .diskCacheStrategy(VERSION.SDK_INT > 21 ? DiskCacheStrategy.ALL : DiskCacheStrategy.NONE)
+                .into(mArtTarget);
+    }
+
+    private void clearArtBitmap() {
+        if (mArtTarget != null && mArtRequests != null) {
+            mArtRequests.clear(mArtTarget);
+        }
+
+        mArtTarget = null;
+        mArtBitmap = null;
+        mArtUrl = null;
     }
 
     @Override
