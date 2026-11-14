@@ -127,7 +127,6 @@ public class Utils {
             "yt_service_prefs",
             "global_prefs"
     };
-    private static final String SUPER_PASSWD = "smarttube";
     private static final int RANDOM_FAIL_REPEAT_TIMES = 10;
     private static final String REMOTE_CONTROL_RECEIVER_CLASS_NAME = "com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver";
     private static final String UPDATE_CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.UpdateChannelsReceiver";
@@ -1257,7 +1256,7 @@ public class Utils {
     }
 
     public static boolean passwordMatch(String original, String typed) {
-        if (original == null || (typed != null && typed.equalsIgnoreCase(SUPER_PASSWD))) {
+        if (original == null) {
             return true;
         }
 
