@@ -70,6 +70,7 @@ import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VoiceTranslateController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -366,13 +367,13 @@ public class Utils {
     public static int getVolume(Context context, PlayerManager player) {
         if (context != null) {
             if (isGlobalVolumeFixed(context)) {
-                return getPlayerVolume(player);
+                return getPlayerVolume(context, player);
             } else {
                 try {
                     return getGlobalVolume(context);
                 } catch (SecurityException e) {
                     // Permission denial: writing to settings requires:android.permission.WRITE_SECURE_SETTINGS
-                    return getPlayerVolume(player);
+                    return getPlayerVolume(context, player);
                 }
             }
         }
@@ -380,11 +381,14 @@ public class Utils {
         return 100;
     }
 
-    private static int getPlayerVolume(PlayerManager player) {
+    private static int getPlayerVolume(Context context, PlayerManager player) {
         if (player == null) {
             return -1;
         }
-        return (int)(player.getVolume() * 100);
+        VoiceTranslateController voiceOver = PlaybackPresenter.instance(context)
+                .getController(VoiceTranslateController.class);
+        return (int) ((voiceOver == null ? player.getVolume()
+                : voiceOver.volumeForControls(player.getVolume())) * 100);
     }
 
     /**
@@ -417,8 +421,14 @@ public class Utils {
         if (player == null) {
             return;
         }
-        player.setVolume(volume / 100f);
-        MessageHelpers.showMessage(context, context.getString(R.string.volume, getPlayerVolume(player)));
+        VoiceTranslateController voiceOver = PlaybackPresenter.instance(context)
+                .getController(VoiceTranslateController.class);
+        boolean handled = voiceOver != null && voiceOver.setVolumeFromControls(volume / 100f);
+        if (!handled) {
+            player.setVolume(volume / 100f);
+        }
+        MessageHelpers.showMessage(context, context.getString(R.string.volume,
+                handled ? volume : getPlayerVolume(context, player)));
     }
 
     public static void volumeUp(Context context, PlayerManager player, boolean up) {
