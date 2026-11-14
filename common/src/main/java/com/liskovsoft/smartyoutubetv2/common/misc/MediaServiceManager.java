@@ -19,6 +19,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -431,6 +432,44 @@ public class MediaServiceManager implements OnAccountChange {
                         },
                         error -> {
                             // Fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
+                );
+    }
+
+    /**
+     * Add the video to Watch Later or remove it from Watch Later depending on the current state.<br/>
+     * NOTE: YouTube doesn't always report Watch Later as selected.
+     */
+    public void toggleWatchLaterPlaylist(Video video, Context context) {
+        if (video == null || !video.hasVideo()) {
+            return;
+        }
+
+        if (!mSignInService.isSigned()) {
+            MessageHelpers.showMessage(context, context.getString(R.string.msg_signed_users_only));
+            return;
+        }
+
+        Disposable playlistsInfoAction = mItemService.getPlaylistsInfoObserve(video.videoId)
+                .subscribe(
+                        videoPlaylistInfos -> {
+                            if (videoPlaylistInfos == null || videoPlaylistInfos.isEmpty()) {
+                                return;
+                            }
+
+                            PlaylistInfo watchLater = videoPlaylistInfos.get(0);
+                            boolean isAdd = !watchLater.isSelected();
+
+                            Observable<Void> editObserve = isAdd ? mItemService.addToPlaylistObserve(watchLater.getPlaylistId(), video.videoId)
+                                   : mItemService.removeFromPlaylistObserve(watchLater.getPlaylistId(), video.videoId);
+
+                            RxHelper.execute(editObserve);
+
+                            MessageHelpers.showMessage(context, context.getString(
+                                    isAdd ? R.string.add_video_to_watch_later : R.string.remove_video_to_watch_later));
+                        },
+                        error -> {
                             Log.e(TAG, "Get playlists error: %s", error.getMessage());
                         }
                 );
