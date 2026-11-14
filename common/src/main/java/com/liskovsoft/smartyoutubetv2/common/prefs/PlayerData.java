@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.common.DataChangeBase;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private boolean mIsLiveChatEnabled;
     private List<FormatItem> mLastSubtitleFormats;
     private List<String> mEnabledSubtitlesPerChannel;
+    private Map<String, FormatItem> mSubtitleFormatsPerChannel;
     private boolean mIsSubtitlesPerChannelEnabled;
     private boolean mIsSpeedPerChannelEnabled;
     private final Map<String, SpeedItem> mSpeeds = new HashMap<>();
@@ -426,14 +428,54 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         }
     }
 
-    public void enableSubtitlesPerChannel(String channelId) {
-        mEnabledSubtitlesPerChannel.add(channelId);
+    /**
+     * Enable subtitles for the channel and remember the selected track
+     */
+    public void enableSubtitlesPerChannel(String channelId, FormatItem format) {
+        if (channelId == null) {
+            return;
+        }
+
+        if (!mEnabledSubtitlesPerChannel.contains(channelId)) {
+            mEnabledSubtitlesPerChannel.add(channelId);
+        }
+
+        if (format != null && !format.isDefault()) {
+            mSubtitleFormatsPerChannel.put(channelId, format);
+        }
+
         persistState();
     }
 
+    /**
+     * Disable subtitles for the channel but keep the track to restore it on re-enable
+     */
     public void disableSubtitlesPerChannel(String channelId) {
-        mEnabledSubtitlesPerChannel.remove(channelId);
+        // Remove all occurrences. Older versions could add the same channel multiple times.
+        mEnabledSubtitlesPerChannel.removeAll(Collections.singleton(channelId));
         persistState();
+    }
+
+    /**
+     * Last used subtitle formats with the channel's own format on top
+     */
+    public List<FormatItem> getLastSubtitleFormats(String channelId) {
+        FormatItem channelFormat = channelId != null ? mSubtitleFormatsPerChannel.get(channelId) : null;
+
+        if (channelFormat == null) {
+            return mLastSubtitleFormats;
+        }
+
+        List<FormatItem> result = new ArrayList<>(mLastSubtitleFormats);
+        result.remove(channelFormat);
+        result.add(0, channelFormat);
+
+        return result;
+    }
+
+    public FormatItem getLastSubtitleFormat(String channelId) {
+        List<FormatItem> formats = getLastSubtitleFormats(channelId);
+        return !formats.isEmpty() ? formats.get(0) : FormatItem.SUBTITLE_NONE;
     }
 
     public boolean isSubtitlesPerChannelEnabled(String channelId) {
@@ -847,6 +889,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        mSubtitleFormatsPerChannel = Helpers.parseMap(split, 63, Helpers::parseStr, ExoFormatItem::from);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -884,7 +927,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, mSubtitleFormatsPerChannel
         ));
     }
 
