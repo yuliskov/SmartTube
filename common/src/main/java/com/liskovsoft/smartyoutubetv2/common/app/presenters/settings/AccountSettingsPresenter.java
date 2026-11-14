@@ -88,7 +88,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         optionItems.add(UiOptionItem.from(
                 getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    AccountSelectionPresenter.instance(getContext()).selectAccount(null);
+                    AccountSelectionPresenter.instance(getContext()).switchAccount(null);
                     settingsPresenter.closeDialog();
                 }, true
         ));
@@ -102,7 +102,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             CharSequence icon = Utils.icon(icons.get(index));
             optionItems.add(UiOptionItem.from(
                     TextUtils.concat(icon, " ", getFullName(account)), option -> {
-                        AccountSelectionPresenter.instance(getContext()).selectAccount(account);
+                        AccountSelectionPresenter.instance(getContext()).switchAccount(account);
                         settingsPresenter.closeDialog();
                     }, account.isSelected()
             ));
