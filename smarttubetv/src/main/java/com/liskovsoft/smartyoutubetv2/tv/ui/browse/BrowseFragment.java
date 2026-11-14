@@ -452,6 +452,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onViewDestroyed();
     }
 
+    public BrowsePresenter getBrowsePresenter() {
+        return mBrowsePresenter;
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -459,6 +463,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (!mIsFragmentCreated) {
             mBrowsePresenter.onViewPaused();
         }
+
+        mIsFragmentCreated = false;
     }
 
     @Override

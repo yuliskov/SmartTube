@@ -72,6 +72,7 @@ public class SettingsCardPresenter extends Presenter {
         TextView textView = viewHolder.view.findViewById(R.id.settings_title);
 
         textView.setText(settingsItem.title);
+        viewHolder.view.setContentDescription(settingsItem.title);
 
         if (settingsItem.imageResId > 0) {
             Context context = viewHolder.view.getContext();

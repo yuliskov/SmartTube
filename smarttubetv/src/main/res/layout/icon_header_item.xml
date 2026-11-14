@@ -8,8 +8,7 @@
     <ImageView
         android:id="@+id/header_icon"
         android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:contentDescription="@string/header_icon" />
+        android:layout_height="32dp" />
 
     <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.HeaderMarqueeTextViewCompat
         android:id="@+id/header_label"
