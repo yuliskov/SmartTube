@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Action of a page state: same pill as the top bar search, white when focused -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/modern_search_box_height"
+    android:layout_marginStart="@dimen/modern_state_action_gap"
+    android:layout_marginEnd="@dimen/modern_state_action_gap"
+    android:background="@drawable/modern_search_pill"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:includeFontPadding="false"
+    android:minWidth="@dimen/modern_state_action_min_width"
+    android:paddingStart="@dimen/modern_state_action_padding"
+    android:paddingEnd="@dimen/modern_state_action_padding"
+    android:textColor="@color/modern_search_text"
+    android:textSize="@dimen/modern_rail_label_size"
+    android:textStyle="bold" />

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/modern_rail_item_width_collapsed"
+    android:layout_height="@dimen/modern_rail_item_height"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ImageView
+        android:id="@+id/modern_rail_icon"
+        android:layout_width="@dimen/modern_rail_icon_size"
+        android:layout_height="@dimen/modern_rail_icon_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/modern_rail_icon_start"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/modern_rail_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/modern_rail_label_start"
+        android:layout_marginEnd="@dimen/modern_rail_icon_start"
+        android:alpha="0"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_rail_label_size" />
+</FrameLayout>

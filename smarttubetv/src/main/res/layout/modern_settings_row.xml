@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/modern_settings_row_height"
+    android:layout_marginBottom="@dimen/modern_settings_row_gap"
+    android:background="@drawable/modern_settings_row_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:paddingStart="@dimen/modern_settings_row_padding"
+    android:paddingEnd="@dimen/modern_settings_row_padding">
+
+    <TextView
+        android:id="@+id/modern_settings_row_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_rail_label_size" />
+</FrameLayout>

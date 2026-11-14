@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/modern_player_button"
+    android:layout_marginEnd="@dimen/modern_player_group_gap"
+    android:background="@drawable/modern_player_pill_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/modern_player_pill_padding"
+    android:paddingEnd="@dimen/modern_player_pill_padding">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/modern_pill_icon"
+        android:layout_width="@dimen/modern_player_button_icon"
+        android:layout_height="@dimen/modern_player_button_icon"
+        android:layout_marginEnd="@dimen/modern_channel_pill_icon_gap"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        app:tint="@color/modern_pill_text" />
+
+    <TextView
+        android:id="@+id/modern_pill_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:duplicateParentState="true"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_player_pill_text" />
+</LinearLayout>

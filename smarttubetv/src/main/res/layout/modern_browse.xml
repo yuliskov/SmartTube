@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/modern_browse_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <FrameLayout
+        android:id="@+id/modern_browse_content"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/modern_first_shelf_y" />
+
+    <include
+        android:id="@+id/modern_browse_top_bar"
+        layout="@layout/modern_top_bar" />
+
+    <!-- The page body (content start to grid end, below the top bar): the spinner is centered in it and moves with
+         the content. Not margins on the spinner itself: a centered child of a FrameLayout is moved by its whole margins -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_content_left"
+        android:layout_marginTop="@dimen/modern_first_shelf_y"
+        android:layout_marginEnd="@dimen/modern_grid_end_margin">
+
+        <ProgressBar
+            android:id="@+id/modern_browse_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="@dimen/modern_spinner_size"
+            android:layout_height="@dimen/modern_spinner_size"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+</FrameLayout>

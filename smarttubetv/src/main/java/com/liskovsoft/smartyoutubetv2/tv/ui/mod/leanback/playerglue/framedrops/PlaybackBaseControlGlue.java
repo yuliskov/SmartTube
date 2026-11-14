@@ -326,21 +326,26 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
      * The primary actions and playback state related aspects of the row
      * are updated by the glue.
      */
+    /**
+     * Presenter selector of the primary and secondary control buttons.
+     */
+    protected ControlButtonPresenterSelector onCreateControlButtonPresenterSelector() {
+        return new ControlButtonPresenterSelector(PlayerData.instance(getContext()).isTooltipsEnabled());
+    }
+
     public void setControlsRow(PlaybackControlsRow controlsRow) {
         mControlsRow = controlsRow;
         mControlsRow.setCurrentPosition(-1);
         mControlsRow.setDuration(-1);
         mControlsRow.setBufferedPosition(-1);
         if (mControlsRow.getPrimaryActionsAdapter() == null) {
-            ArrayObjectAdapter adapter = new ArrayObjectAdapter(
-                    new ControlButtonPresenterSelector(PlayerData.instance(getContext()).isTooltipsEnabled()));
+            ArrayObjectAdapter adapter = new ArrayObjectAdapter(onCreateControlButtonPresenterSelector());
             onCreatePrimaryActions(adapter);
             mControlsRow.setPrimaryActionsAdapter(adapter);
         }
         // Add secondary actions
         if (mControlsRow.getSecondaryActionsAdapter() == null) {
-            ArrayObjectAdapter secondaryActions = new ArrayObjectAdapter(
-                    new ControlButtonPresenterSelector(PlayerData.instance(getContext()).isTooltipsEnabled()));
+            ArrayObjectAdapter secondaryActions = new ArrayObjectAdapter(onCreateControlButtonPresenterSelector());
             onCreateSecondaryActions(secondaryActions);
             getControlsRow().setSecondaryActionsAdapter(secondaryActions);
         }

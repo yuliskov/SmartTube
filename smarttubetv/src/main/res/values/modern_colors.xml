@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern interface palette. Values measured in docs/modern-ui/tokens.md -->
+<resources>
+    <color name="modern_bg">#131313</color>
+    <color name="modern_surface_thumb_placeholder">#212121</color>
+    <color name="modern_text_primary">#F1F1F1</color>
+    <color name="modern_text_secondary">#AAAAAA</color>
+    <color name="modern_text_header_unfocused">#B3FFFFFF</color>
+    <color name="modern_icon_inactive">#B3FFFFFF</color>
+    <color name="modern_on_light">#0F0F0F</color>
+    <color name="modern_text_on_light_secondary">#606060</color>
+    <color name="modern_white_10">#1AFFFFFF</color>
+    <color name="modern_white_20">#33FFFFFF</color>
+    <color name="modern_white_30">#4DFFFFFF</color>
+    <color name="modern_focus_ring">#F1F1F1</color>
+    <color name="modern_rail_selected_pill">#F1F1F1</color>
+    <color name="modern_duration_bg">#99000000</color>
+    <color name="modern_progress">#FF0033</color>
+    <color name="modern_player_scrim_base">#4D000000</color>
+    <color name="modern_player_scrim_center">#70131313</color>
+    <color name="modern_player_scrim_end">#FF131313</color>
+    <color name="modern_player_suggestions_base">#4D000000</color>
+    <!-- OLED color schemes: pure black background -->
+    <color name="modern_bg_oled">#000000</color>
+    <color name="modern_player_scrim_center_oled">#70000000</color>
+</resources>

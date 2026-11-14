@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/modern_signin_item_width"
+    android:layout_height="@dimen/modern_signin_item_height"
+    android:layout_marginBottom="@dimen/modern_signin_item_gap"
+    android:background="@drawable/modern_signin_item_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/modern_signin_item_icon"
+        android:layout_width="@dimen/modern_rail_icon_size"
+        android:layout_height="@dimen/modern_rail_icon_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/modern_signin_item_icon_start"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        app:tint="@color/modern_pill_text" />
+
+    <TextView
+        android:id="@+id/modern_signin_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/modern_signin_item_text_start"
+        android:duplicateParentState="true"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_pill_text"
+        android:textSize="@dimen/modern_rail_label_size" />
+</FrameLayout>
