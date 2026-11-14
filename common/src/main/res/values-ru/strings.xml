@@ -231,6 +231,10 @@
     <string name="app_corner_clock">Главная страница: часы в правом верхнем углу</string>
     <string name="player_corner_clock">Плеер: часы в правом верхнем углу</string>
     <string name="player_corner_ending_time">Плеер: время окончания в правом верхнем углу</string>
+    <string name="clock_schedule">Время показа часов</string>
+    <string name="clock_schedule_start">Время начала</string>
+    <string name="clock_schedule_end">Время окончания</string>
+    <string name="option_always">Всегда</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>

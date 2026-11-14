@@ -231,6 +231,10 @@
     <string name="app_corner_clock">Home: top right corner clock</string>
     <string name="player_corner_clock">Player: top right corner clock</string>
     <string name="player_corner_ending_time">Player: top right corner ending time</string>
+    <string name="clock_schedule">Clock schedule</string>
+    <string name="clock_schedule_start">Start time</string>
+    <string name="clock_schedule_end">End time</string>
+    <string name="option_always">Always</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Old look of Channels section</string>
