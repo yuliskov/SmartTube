@@ -260,6 +260,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     public void maybeThrowError() throws IOException {
         if (fatalError != null) {
             throw fatalError;
+        } else if (sabrStream != null && sabrStream.getFatalError() != null) {
+            throw sabrStream.getFatalError();
         } else {
             manifestLoaderErrorThrower.maybeThrowError();
         }

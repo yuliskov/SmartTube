@@ -76,6 +76,7 @@ public class SabrProcessor {
     private final Set<Integer> sabrContextsToSend;
     private final Map<Integer, MediaHeader> initializedFormats;
     private final FormatSelector emptySelector;
+    private SabrStreamError fatalError;
 
     public SabrProcessor(
             @NonNull String videoPlaybackUstreamerConfig,
@@ -444,13 +445,14 @@ public class SabrProcessor {
             Log.w(TAG, "Received an unknown StreamProtectionStatus: %s", streamProtectionStatus);
         }
 
-        // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
-
         ProcessStreamProtectionStatusResult result = new ProcessStreamProtectionStatusResult();
 
         if (resultStatus != null) {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
         }
+
+        // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
+        this.fatalError = status != Status.OK ? new SabrPoTokenError("PoToken error: " + resultStatus) : null;
 
         return result;
     }
@@ -736,6 +738,10 @@ public class SabrProcessor {
 
     public int getBackoffTimeMs() {
         return nextRequestPolicy != null ? nextRequestPolicy.getBackoffTimeMs() : 0;
+    }
+
+    public SabrStreamError getFatalError() {
+        return fatalError;
     }
 
     //private List<FormatId> createSelectedFormatIds() {

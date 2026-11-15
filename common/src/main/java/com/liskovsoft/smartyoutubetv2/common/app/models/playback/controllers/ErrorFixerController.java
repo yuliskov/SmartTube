@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers;
 import android.annotation.SuppressLint;
 
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -298,7 +299,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             getPlayerData().setFormat(FormatItem.AUDIO_HQ_MP4A);
             restartEngine = false;
         } else if (type == PlayerEventListener.ERROR_TYPE_UNEXPECTED) {
-            if (error instanceof NullPointerException) {
+            if (error instanceof SabrPoTokenError) {
+                YouTubeServiceManager.instance().switchNextClient();
+            } else if (error instanceof NullPointerException) {
                 // SABR extractor throws NPE on subtitle error
                 // NOTE: the engine should be restarted
                 disableSubtitles();
