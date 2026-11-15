@@ -830,7 +830,7 @@ public class PlayerUIController extends BasePlayerController {
 
     private boolean handleUpSkip(int keyCode) {
         if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null
-                || (!getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipChaptersEnabled())) {
+                || getVideo().belongsToShortsGroup() || !getPlayerTweaksData().isQuickSkipChaptersEnabled()) {
             return false;
         }
 
