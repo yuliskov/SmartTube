@@ -61,6 +61,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
     private boolean mIsTextureViewEnabled;
+    private boolean mIsAmbientLightEnabled;
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
@@ -179,6 +180,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
 
     public void setSWDecoderForced(boolean force) {
         mIsSWDecoderForced = force;
+        persistData();
+    }
+
+    public boolean isAmbientLightEnabled() {
+        return mIsAmbientLightEnabled;
+    }
+
+    public void setAmbientLightEnabled(boolean enable) {
+        mIsAmbientLightEnabled = enable;
         persistData();
     }
 
@@ -790,6 +800,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         //mIsSabrLiveEnabled = Helpers.parseBoolean(split, 61, false);
         mIsLiveEdgeEnabled = Helpers.parseBoolean(split, 62, false);
         mIsQuickSkipChaptersEnabled = Helpers.parseBoolean(split, 63, false);
+        mIsAmbientLightEnabled = Helpers.parseBoolean(split, 64, false);
 
         updateDefaultValues();
     }
@@ -818,7 +829,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
                 mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode, null,
-                mIsLiveEdgeEnabled, mIsQuickSkipChaptersEnabled
+                mIsLiveEdgeEnabled, mIsQuickSkipChaptersEnabled, mIsAmbientLightEnabled
                 ));
     }
 

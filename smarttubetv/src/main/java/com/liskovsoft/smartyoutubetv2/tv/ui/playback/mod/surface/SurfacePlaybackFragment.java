@@ -44,6 +44,11 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
                 new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+        if (PlayerTweaksData.instance(getContext()).isAmbientLightEnabled()) {
+            // Behind the video and the player UI: only the empty bars around the video are painted
+            root.addView(new AmbientLightView(getContext(), mVideoSurfaceRoot), 0,
+                    new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
         mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
