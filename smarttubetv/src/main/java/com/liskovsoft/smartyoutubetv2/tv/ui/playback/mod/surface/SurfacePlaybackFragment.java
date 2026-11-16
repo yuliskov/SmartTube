@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     private SurfaceWrapper mVideoSurfaceWrapper;
     private AspectRatioFrameLayout mVideoSurfaceRoot;
-    private int mNightlightPaintWarmth = -1;
     private SubtitleView mLeanbackSubtitles;
     private int mSubtitlesPadding;
     private int mBackgroundResId;
@@ -42,7 +40,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         if (root == null) {
             throw new IllegalStateException("Can't create root of SurfacePlaybackFragment");
         }
-        mVideoSurfaceWrapper = createSurfaceWrapper(root);
+        mVideoSurfaceWrapper = createSurfaceWrapper(root, Utils.isTextureViewRequired(getContext()));
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
@@ -53,8 +51,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         return root;
     }
 
-    private SurfaceWrapper createSurfaceWrapper(ViewGroup root) {
-        if (Utils.isTextureViewRequired(getContext())) {
+    private SurfaceWrapper createSurfaceWrapper(ViewGroup root, boolean useTextureView) {
+        if (useTextureView) {
             return new TextureViewWrapper(getContext(), root);
         }
         return new SurfaceViewWrapper(getContext(), root);
@@ -72,11 +70,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
         // Multiplying the video colors preserves black, including the loading screen.
         int warmth = tintVideo ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
-        if (warmth != mNightlightPaintWarmth) {
-            Paint paint = Utils.kelvinToPaint(warmth);
-            mVideoSurfaceRoot.setLayerType(paint != null ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, paint);
-            mNightlightPaintWarmth = warmth;
-        }
+        Utils.applyNightlight(mVideoSurfaceRoot, warmth);
     }
 
     private void ensureTextureView() {
@@ -91,9 +85,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         }
 
         mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-        mVideoSurfaceWrapper = useTextureView
-                ? new TextureViewWrapper(getContext(), (ViewGroup) getView())
-                : new SurfaceViewWrapper(getContext(), (ViewGroup) getView());
+        mVideoSurfaceWrapper = createSurfaceWrapper((ViewGroup) getView(), useTextureView);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
 
         ((PlayerEngine) this).restartEngine();
@@ -125,7 +117,6 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     public void onDestroyView() {
         mVideoSurfaceWrapper = null;
         mVideoSurfaceRoot = null;
-        mNightlightPaintWarmth = -1;
         super.onDestroyView();
     }
 

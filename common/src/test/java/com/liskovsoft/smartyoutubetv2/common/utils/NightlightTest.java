@@ -19,6 +19,7 @@ import org.robolectric.shadow.api.Shadow;
 import org.robolectric.util.ReflectionHelpers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -148,5 +149,45 @@ public class NightlightTest {
         assertFalse(mTweaks.isNightlightOnHdr());
         assertTrue(mTweaks.isLiveEdgeEnabled());
         assertTrue(mTweaks.isQuickSkipChaptersEnabled());
+    }
+    @Test
+    public void refactorMatchesPreviousColorTransformExactly() {
+        // Exhaust the active integer-Kelvin range, plus off/invalid boundaries.
+        for (int kelvin = -1; kelvin <= 6600; kelvin++) {
+            float[] rgb = legacyKelvinToRgb(kelvin);
+            assertArrayEquals("RGB at " + kelvin, rgb, Utils.kelvinToRgb(kelvin), 0f);
+            Paint paint = Utils.kelvinToPaint(kelvin);
+            if (kelvin <= 0 || kelvin >= 6500) {
+                assertNull(paint);
+                continue;
+            }
+            ColorMatrix matrix = ReflectionHelpers.getField(
+                    Shadow.extract(paint.getColorFilter()), "matrix");
+            assertArrayEquals("Matrix at " + kelvin, new float[] {
+                    rgb[0], 0f, 0f, 0f, 0f,
+                    0f, rgb[1], 0f, 0f, 0f,
+                    0f, 0f, rgb[2], 0f, 0f,
+                    0f, 0f, 0f, 1f, 0f
+            }, matrix.getArray(), 0f);
+        }
+    }
+
+    // Frozen pre-refactor calculation from 5b73039cb: guards against color drift.
+    private static float[] legacyKelvinToRgb(int kelvin) {
+        if (kelvin >= 6500 || kelvin <= 0) {
+            return new float[] {1f, 1f, 1f};
+        }
+
+        float k = kelvin / 100f;
+        float r = k <= 66f ? 255f : 329.698727446f * (float) Math.pow(k - 60f, -0.1332047592);
+        float g = k <= 66f ? 99.4708025861f * (float) Math.log(k) - 161.1195681661f
+                           : 288.1221695283f * (float) Math.pow(k - 60f, -0.0755148492);
+        float b = k >= 66f ? 255f : k <= 19f ? 0f : 138.5177312231f * (float) Math.log(k - 10f) - 305.0447927307f;
+
+        return new float[] {legacyClamp(r / 255f), legacyClamp(g / 255f), legacyClamp(b / 255f)};
+    }
+
+    private static float legacyClamp(float v) {
+        return v < 0f ? 0f : v > 1f ? 1f : v;
     }
 }

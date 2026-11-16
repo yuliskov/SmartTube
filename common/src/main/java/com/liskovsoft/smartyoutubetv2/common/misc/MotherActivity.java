@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Paint;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -54,8 +53,6 @@ public class MotherActivity extends FragmentActivity {
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsFullscreenModeEnabled;
     private boolean mIsBackPressed;
-    private View mNightlightDecor;
-    private int mNightlightWarmth = -1;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -237,18 +234,7 @@ public class MotherActivity extends FragmentActivity {
         PlayerTweaksData tweaks = PlayerTweaksData.instance(this);
         int warmth = tweaks.isNightlightActive() && tweaks.isNightlightOnUi()
                 ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
-        if (decor == mNightlightDecor && warmth == mNightlightWarmth) {
-            return;
-        }
-
-        Paint paint = Utils.kelvinToPaint(warmth);
-        if (paint != null) {
-            decor.setLayerType(View.LAYER_TYPE_HARDWARE, paint);
-        } else {
-            decor.setLayerType(View.LAYER_TYPE_NONE, null);
-        }
-        mNightlightDecor = decor;
-        mNightlightWarmth = warmth;
+        Utils.applyNightlight(decor, warmth);
     }
 
     @Override

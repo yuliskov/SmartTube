@@ -915,12 +915,10 @@ public class Utils {
         }
 
         float k = kelvin / 100f;
-        float r = k <= 66f ? 255f : 329.698727446f * (float) Math.pow(k - 60f, -0.1332047592);
-        float g = k <= 66f ? 99.4708025861f * (float) Math.log(k) - 161.1195681661f
-                           : 288.1221695283f * (float) Math.pow(k - 60f, -0.0755148492);
-        float b = k >= 66f ? 255f : k <= 19f ? 0f : 138.5177312231f * (float) Math.log(k - 10f) - 305.0447927307f;
+        float g = 99.4708025861f * (float) Math.log(k) - 161.1195681661f;
+        float b = k <= 19f ? 0f : 138.5177312231f * (float) Math.log(k - 10f) - 305.0447927307f;
 
-        return new float[] {clampUnit(r / 255f), clampUnit(g / 255f), clampUnit(b / 255f)};
+        return new float[] {1f, clampUnit(g / 255f), clampUnit(b / 255f)};
     }
 
     public static Paint kelvinToPaint(int kelvin) {
@@ -929,15 +927,21 @@ public class Utils {
         }
 
         float[] rgb = kelvinToRgb(kelvin);
-        ColorMatrix matrix = new ColorMatrix(new float[] {
-                rgb[0], 0f, 0f, 0f, 0f,
-                0f, rgb[1], 0f, 0f, 0f,
-                0f, 0f, rgb[2], 0f, 0f,
-                0f, 0f, 0f, 1f, 0f
-        });
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setScale(rgb[0], rgb[1], rgb[2], 1f);
         Paint paint = new Paint();
         paint.setColorFilter(new ColorMatrixColorFilter(matrix));
         return paint;
+    }
+
+    public static void applyNightlight(View view, int warmth) {
+        // Store the cache on the target view so it follows that view's lifecycle.
+        if (view == null || Integer.valueOf(warmth).equals(view.getTag(R.id.nightlight_warmth))) {
+            return;
+        }
+        Paint paint = kelvinToPaint(warmth);
+        view.setLayerType(paint != null ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, paint);
+        view.setTag(R.id.nightlight_warmth, warmth);
     }
 
     public static boolean isTextureViewRequired(Context context) {
