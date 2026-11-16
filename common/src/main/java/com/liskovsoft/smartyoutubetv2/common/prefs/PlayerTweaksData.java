@@ -845,7 +845,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipChaptersEnabled = !legacyNightlight && Helpers.parseBoolean(split, 63, false);
         String[] nightlight = Helpers.splitData(mPrefs.getProfileData("nightlight_data"));
         int offset = 0;
-        if (nightlight == null && legacyNightlight) {
+        if ((nightlight == null || nightlight.length == 0) && legacyNightlight) {
             nightlight = split;
             offset = 61;
         }

@@ -22,7 +22,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.database.ContentObserver;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -941,15 +940,12 @@ public class Utils {
         return paint;
     }
 
-    public static int kelvinToOverlayColor(int kelvin) {
-        float[] rgb = kelvinToRgb(kelvin);
-        if (rgb[1] == 1f && rgb[2] == 1f) {
-            return 0;
-        }
-
-        float strength = 1f - (rgb[1] + rgb[2]) / 2f;
-        int alpha = (int) (clampUnit(strength) * 0.5f * 255f);
-        return Color.argb(alpha, 255, (int) (rgb[1] * 255f), (int) (rgb[2] * 255f));
+    public static boolean isTextureViewRequired(Context context) {
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(context);
+        PlayerData playerData = PlayerData.instance(context);
+        // Keep the renderer stable while track changes update Nightlight's HDR state.
+        return tweaks.isTextureViewEnabled() || tweaks.isNightlightEnabled()
+                || playerData.getRotationAngle() != 0 || playerData.isVideoFlipEnabled();
     }
 
     private static float clampUnit(float v) {

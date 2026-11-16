@@ -54,6 +54,8 @@ public class MotherActivity extends FragmentActivity {
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsFullscreenModeEnabled;
     private boolean mIsBackPressed;
+    private View mNightlightDecor;
+    private int mNightlightWarmth = -1;
 
     public interface OnPermissions {
         void onPermissions(int requestCode, String[] permissions, int[] grantResults);
@@ -233,13 +235,20 @@ public class MotherActivity extends FragmentActivity {
         }
 
         PlayerTweaksData tweaks = PlayerTweaksData.instance(this);
-        Paint paint = (tweaks.isNightlightActive() && tweaks.isNightlightOnUi())
-                ? Utils.kelvinToPaint(tweaks.getNightlightWarmth()) : null;
+        int warmth = tweaks.isNightlightActive() && tweaks.isNightlightOnUi()
+                ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
+        if (decor == mNightlightDecor && warmth == mNightlightWarmth) {
+            return;
+        }
+
+        Paint paint = Utils.kelvinToPaint(warmth);
         if (paint != null) {
             decor.setLayerType(View.LAYER_TYPE_HARDWARE, paint);
         } else {
             decor.setLayerType(View.LAYER_TYPE_NONE, null);
         }
+        mNightlightDecor = decor;
+        mNightlightWarmth = warmth;
     }
 
     @Override

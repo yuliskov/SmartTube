@@ -335,6 +335,7 @@ public class PlayerUIController extends BasePlayerController {
         enableUiAutoHideTimeout();
         applySoundOffButtonState();
         applyNightlightButtonState();
+        applyNightlightTint();
     }
 
     @Override
