@@ -561,6 +561,15 @@ public class SabrStream {
         setUrl(url);
     }
 
+    /**
+     * Switches to streaming data from a fresh player response of the same video,
+     * keeping the current buffering state.
+     */
+    public void updateStreamingData(String url, String videoPlaybackUstreamerConfig, String poToken) {
+        setUrl(url);
+        processor.updateStreamingData(videoPlaybackUstreamerConfig, poToken);
+    }
+
     private void setUrl(String url) {
         Log.d(TAG, "New URL: %s", url);
         UrlQueryString newQueryString = UrlQueryStringFactory.parse(url);

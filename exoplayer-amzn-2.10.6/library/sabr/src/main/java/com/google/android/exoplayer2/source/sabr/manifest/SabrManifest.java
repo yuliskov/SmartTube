@@ -1,5 +1,6 @@
 package com.google.android.exoplayer2.source.sabr.manifest;
 
+import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Pair;
 
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerC
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.TimeRange;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
 import com.google.protobuf.ByteString;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,10 +85,32 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
 
     @Nullable public final String visitorCookie;
 
+    /**
+     * Supplies fresh streaming data (signed URL, ustreamer config, poToken) for this video when
+     * the current data stops working mid-playback (e.g. HTTP 403 on a SABR request).
+     */
+    public interface StreamingDataRefresher {
+        /**
+         * Starts fetching fresh streaming data. Must not block. When done, call
+         * {@link SabrManifest#updateStreamingData(SabrManifest)} with a manifest parsed from the new player
+         * response, or {@link SabrManifest#onStreamingDataRefreshFailed()} if it couldn't be fetched.
+         */
+        void refreshStreamingData(SabrManifest manifest);
+    }
+
+    /**
+     * Don't start refreshes more often than this, whether they succeeded or not. If the fresh data
+     * fails too, the regular error recovery takes over.
+     */
+    private static final long MIN_STREAMING_DATA_REFRESH_INTERVAL_MS = 60_000;
+
     private final String videoId;
-    private final SabrCdnSelector cdnSelector;
-    private final String videoPlaybackUstreamerConfig;
-    private final String poToken;
+    private SabrCdnSelector cdnSelector;
+    private volatile String videoPlaybackUstreamerConfig;
+    private volatile String poToken;
+    @Nullable private StreamingDataRefresher streamingDataRefresher;
+    private boolean streamingDataRefreshPending;
+    private long lastStreamingDataRefreshMs = C.TIME_UNSET;
     private final ClientInfo clientInfo;
     private final Map<Integer, SabrStream> sabrStreams;
     private int sabrRequestNumber = -1;
@@ -218,6 +242,90 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         return true;
+    }
+
+    public synchronized void setStreamingDataRefresher(@Nullable StreamingDataRefresher refresher) {
+        streamingDataRefresher = refresher;
+    }
+
+    /**
+     * Asks the {@link StreamingDataRefresher} for fresh streaming data, unless a refresh is already
+     * running or one was started recently.
+     *
+     * @return whether a new refresh was started
+     */
+    public boolean maybeRequestStreamingDataRefresh() {
+        StreamingDataRefresher refresher;
+
+        synchronized (this) {
+            refresher = streamingDataRefresher;
+
+            if (refresher == null || dynamic || streamingDataRefreshPending) {
+                return false;
+            }
+
+            long nowMs = SystemClock.elapsedRealtime();
+
+            if (lastStreamingDataRefreshMs != C.TIME_UNSET
+                    && nowMs - lastStreamingDataRefreshMs < MIN_STREAMING_DATA_REFRESH_INTERVAL_MS) {
+                return false;
+            }
+
+            streamingDataRefreshPending = true;
+            lastStreamingDataRefreshMs = nowMs;
+        }
+
+        // Outside the lock: the refresher may call back synchronously.
+        refresher.refreshStreamingData(this);
+        return true;
+    }
+
+    /**
+     * Applies the streaming data of a manifest parsed from a fresh player response to the running
+     * streams, keeping their buffering state. Requests created after this call use the new data.
+     *
+     * @return whether the data was applied (it's rejected if it belongs to another video or client)
+     */
+    public synchronized boolean updateStreamingData(SabrManifest fresh) {
+        streamingDataRefreshPending = false;
+
+        if (fresh == null
+                || fresh.cdnSelector.getCurrentUrl() == null
+                || fresh.videoPlaybackUstreamerConfig == null
+                || !Helpers.equals(videoId, fresh.videoId)
+                || !Helpers.equals(clientInfo, fresh.clientInfo)) {
+            return false;
+        }
+
+        cdnSelector = fresh.cdnSelector;
+        videoPlaybackUstreamerConfig = fresh.videoPlaybackUstreamerConfig;
+        poToken = fresh.poToken;
+
+        String url = cdnSelector.getCurrentUrl();
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            sabrStream.updateStreamingData(url, videoPlaybackUstreamerConfig, poToken);
+        }
+
+        return true;
+    }
+
+    public synchronized void onStreamingDataRefreshFailed() {
+        streamingDataRefreshPending = false;
+    }
+
+    /**
+     * @return whether a failed request was sent before the streaming data of this track changed
+     * (refresh or another media network), so a new request would use different data
+     */
+    public synchronized boolean isOutdatedRequestUrl(int trackType, String requestUrl) {
+        SabrStream sabrStream = sabrStreams.get(trackType);
+
+        if (sabrStream == null || requestUrl == null || sabrStream.getUrl() == null) {
+            return false;
+        }
+
+        return !requestUrl.startsWith(sabrStream.getUrl() + (sabrStream.getUrl().contains("?") ? "&rn=" : "?rn="));
     }
 
     /**
