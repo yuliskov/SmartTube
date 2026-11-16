@@ -197,7 +197,7 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 Major contributors to this project:
 
-- [@pixkk](https://github.com/pixkk): SABR streaming, Innertube internals
+- [@pixkk](https://github.com/pixkk): SABR streaming, TV PoToken/Challenge generation 
 - [@Jupiops](https://github.com/Jupiops): SABR CDN support
 
 ## Donation
