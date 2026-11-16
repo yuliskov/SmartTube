@@ -168,6 +168,8 @@
     <string name="share_qr_link">Share link (QR code)</string>
     <string name="subscribe_to_channel">Subscribe to the channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
+    <string name="subscribe_failed">Couldn\'t subscribe to this channel</string>
+    <string name="unsubscribe_failed">Couldn\'t unsubscribe from this channel</string>
     <string name="auto_frame_rate_pause">Auto Frame Rate (pause when switching)</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s\@%s</string>
     <string name="audio_shift">Audio delay</string>
