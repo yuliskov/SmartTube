@@ -69,7 +69,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
 
         // Multiplying the video colors preserves black, including the loading screen.
         int warmth = tintVideo ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
-        Utils.applyNightlight(mVideoSurfaceRoot, warmth);
+        // TextureView already has a hardware layer; avoid allocating another full-frame layer.
+        Utils.applyNightlight(mVideoSurfaceWrapper.getSurfaceView(), warmth);
     }
 
     private void ensureTextureView() {
