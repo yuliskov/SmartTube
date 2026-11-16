@@ -24,7 +24,6 @@ import java.util.List;
 
 public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener, PlayerView {
-    private long mPendingFocusAction = -1;
     private String mQualityInfo;
     private Video mVideo;
     private LiveStateProvider mLiveStateProvider;
@@ -98,11 +97,6 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 viewHolder.setTopEdgeFocusListener(MaxControlsVideoPlayerGlue.this);
                 viewHolder.setQualityInfo(mQualityInfo);
                 viewHolder.setDateVisibility(isControlsVisible());
-                viewHolder.view.post(() -> {
-                    if (getTransportViewHolder() == viewHolder && isControlsVisible()) {
-                        restoreActionFocus();
-                    }
-                });
                 // Don't uncomment
                 // Reset to defaults
                 //viewHolder.setSeekPreviewTitle(null);
@@ -117,22 +111,6 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         };
         rowPresenter.setDescriptionPresenter(detailsPresenter);
         return rowPresenter;
-    }
-
-    public long getFocusedActionId() {
-        return getTransportViewHolder() != null ? getTransportViewHolder().getFocusedActionId() : -1;
-    }
-
-    public void focusAction(long actionId) {
-        mPendingFocusAction = actionId;
-        restoreActionFocus();
-    }
-
-    private void restoreActionFocus() {
-        if (mPendingFocusAction >= 0 && getTransportViewHolder() != null
-                && getTransportViewHolder().focusAction(mPendingFocusAction)) {
-            mPendingFocusAction = -1;
-        }
     }
 
     @Override

@@ -64,7 +64,6 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         }
 
         PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
-        ensureSurfaceWrapper(Utils.isTextureViewRequired(getContext()));
         boolean active = tweaks.isNightlightActive();
         boolean tintVideo = active && !tweaks.isNightlightOnUi();
 
@@ -74,18 +73,12 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     }
 
     private void ensureTextureView() {
-        ensureSurfaceWrapper(true);
-    }
-
-    private void ensureSurfaceWrapper(boolean useTextureView) {
-        if (mVideoSurfaceWrapper == null
-                || useTextureView == (mVideoSurfaceWrapper instanceof TextureViewWrapper)
-                || getView() == null) {
+        if (mVideoSurfaceWrapper == null || mVideoSurfaceWrapper instanceof TextureViewWrapper || getView() == null) {
             return;
         }
 
         mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-        mVideoSurfaceWrapper = createSurfaceWrapper((ViewGroup) getView(), useTextureView);
+        mVideoSurfaceWrapper = createSurfaceWrapper((ViewGroup) getView(), true);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
 
         ((PlayerEngine) this).restartEngine();

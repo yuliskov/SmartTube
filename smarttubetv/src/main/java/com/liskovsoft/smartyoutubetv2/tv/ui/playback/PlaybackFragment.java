@@ -1152,17 +1152,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void applyNightlight() {
-        boolean controlsShown = isControlsShown();
-        View surface = getSurfaceView();
-        long focusedAction = mPlayerGlue != null ? mPlayerGlue.getFocusedActionId() : -1;
         super.applyNightlight();
-        // A renderer change rebuilds the player, whose initialization hides its controls.
-        if (controlsShown && surface != getSurfaceView()) {
-            showControls(true);
-            if (mPlayerGlue != null) {
-                mPlayerGlue.focusAction(focusedAction);
-            }
-        }
     }
 
     @Override

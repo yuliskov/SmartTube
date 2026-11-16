@@ -947,8 +947,9 @@ public class Utils {
     public static boolean isTextureViewRequired(Context context) {
         PlayerTweaksData tweaks = PlayerTweaksData.instance(context);
         PlayerData playerData = PlayerData.instance(context);
-        // Keep the renderer stable while track changes update Nightlight's HDR state.
+        // Prepare Nightlight before playback so its button only changes the tint.
         return tweaks.isTextureViewEnabled() || tweaks.isNightlightEnabled()
+                || tweaks.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_NIGHTLIGHT)
                 || playerData.getRotationAngle() != 0 || playerData.isVideoFlipEnabled();
     }
 

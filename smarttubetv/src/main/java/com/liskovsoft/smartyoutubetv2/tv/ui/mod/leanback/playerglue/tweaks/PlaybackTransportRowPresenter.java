@@ -567,30 +567,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         /**
          * @return The ViewHolder for description.
          */
-        public long getFocusedActionId() {
-            return mSelectedItem instanceof Action && mSelectedViewHolder != null
-                    && mSelectedViewHolder.view.hasFocus() ? ((Action) mSelectedItem).getId() : -1;
-        }
-
-        public boolean focusAction(long actionId) {
-            return focusAction(mControlsVh, mControlsBoundData.adapter, actionId)
-                    || focusAction(mSecondaryControlsVh, mSecondaryBoundData.adapter, actionId);
-        }
-
-        private boolean focusAction(ControlBarPresenter.ViewHolder controls, ObjectAdapter adapter, long actionId) {
-            if (adapter == null || actionId < 0) {
-                return false;
-            }
-            for (int i = 0; i < adapter.size(); i++) {
-                Object item = adapter.get(i);
-                Presenter.ViewHolder button = controls.mViewHolders.get(i);
-                if (item instanceof Action && ((Action) item).getId() == actionId && button != null) {
-                    return button.view.requestFocus();
-                }
-            }
-            return false;
-        }
-
         public final Presenter.ViewHolder getDescriptionViewHolder() {
             return mDescriptionViewHolder;
         }
