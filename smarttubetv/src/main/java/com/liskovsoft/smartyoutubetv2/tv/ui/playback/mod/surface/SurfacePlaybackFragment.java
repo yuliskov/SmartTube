@@ -110,7 +110,7 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
      * Returns the surface view.
      */
     public View getSurfaceView() {
-        return mVideoSurfaceWrapper.getSurfaceView();
+        return mVideoSurfaceWrapper != null ? mVideoSurfaceWrapper.getSurfaceView() : null;
     }
 
     @Override
