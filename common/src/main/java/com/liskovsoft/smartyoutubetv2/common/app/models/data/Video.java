@@ -558,6 +558,13 @@ public final class Video {
                 (durationMs <= 0 || isSynced) && (hasPlaylist() || hasChannel() || hasNestedItems());
     }
 
+    /**
+     * Continuation button at the end of rows appeared on Home
+     */
+    public boolean isContinuation() {
+        return isChannel() && cardImageUrl == null && belongsToHome();
+    }
+
     public boolean isFullLive() {
         return isLive && startSegmentNum == 0;
     }
@@ -743,9 +750,11 @@ public final class Video {
             isLiveEnd = true;
         }
 
+        // NOTE: Skip unplayable to preserve an error message
         // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
         // NOTE: Upcoming videos metadata wrongly reported as live
-        if (!isUpcoming || metadataTitle == null) {
+        boolean keepExistingTitle = metadataTitle != null && (isUnplayable || isUpcoming);
+        if (!keepExistingTitle) {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
@@ -885,7 +894,7 @@ public final class Video {
 
     public long getLiveDurationMs() {
         if (startTimeMs == 0) {
-            return 0;
+            return -1;
         }
 
         // Disable updates if stream ended while watching
@@ -894,9 +903,9 @@ public final class Video {
             return durationMs > 0 ? durationMs : liveDurationMs;
         }
 
-        // Is stream real length may exceeds calculated length???
+        // Is stream real length may exceed calculated length?
         liveDurationMs = System.currentTimeMillis() - startTimeMs;
-        return liveDurationMs > 0 ? liveDurationMs : 0;
+        return liveDurationMs > 0 ? liveDurationMs : -1;
     }
 
     public long getDurationMs() {

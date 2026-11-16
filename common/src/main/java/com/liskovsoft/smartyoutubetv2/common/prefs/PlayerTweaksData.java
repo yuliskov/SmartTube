@@ -105,6 +105,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsQuickSkipShortsAltEnabled;
     private boolean mIsQuickSkipVideosEnabled;
     private boolean mIsQuickSkipVideosAltEnabled;
+    private boolean mIsQuickSkipChaptersEnabled;
     private boolean mIsOculusQuestFixEnabled;
     private boolean mIsAudioFocusEnabled;
     private boolean mIsNetworkErrorFixingDisabled;
@@ -116,6 +117,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsNightlightOnUi;
     private boolean mIsNightlightOnHdr;
     private boolean mNightlightHdrActive; // runtime only (not persisted); set by the player when an HDR track is detected
+    private boolean mIsLiveEdgeEnabled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
     private PlayerTweaksData(Context context) {
@@ -629,9 +631,20 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isQuickSkipChaptersEnabled() {
+        return mIsQuickSkipChaptersEnabled;
+    }
+
+    public void setQuickSkipChaptersEnabled(boolean enable) {
+        resetDpadUpDownSettings();
+        mIsQuickSkipChaptersEnabled = enable;
+        persistData();
+    }
+
     private void resetQuickSkipVideosSettings() {
         mIsQuickSkipVideosEnabled = false;
         mIsQuickSkipVideosAltEnabled = false;
+        mIsQuickSkipChaptersEnabled = false;
     }
 
     public void resetDpadLeftRightSettings() {
@@ -643,6 +656,7 @@ public class PlayerTweaksData implements ProfileChangeListener {
     public void resetDpadUpDownSettings() {
         mIsQuickSkipShortsAltEnabled = false;
         mIsQuickSkipVideosAltEnabled = false;
+        mIsQuickSkipChaptersEnabled = false;
         persistData();
     }
 
@@ -744,6 +758,15 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mNightlightHdrActive = active;
     }
 
+    public boolean isLiveEdgeEnabled() {
+        return mIsLiveEdgeEnabled;
+    }
+
+    public void setLiveEdgeEnabled(boolean enable) {
+        mIsLiveEdgeEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getProfileData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -816,10 +839,20 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
         mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
         mIsQueueRespectsPlaybackMode = Helpers.parseBoolean(split, 60, false);
-        mNightlightWarmth = Helpers.parseInt(split, 61, Utils.NIGHTLIGHT_NEUTRAL);
-        mIsNightlightOnUi = Helpers.parseBoolean(split, 62, false);
-        mIsNightlightOnHdr = Helpers.parseBoolean(split, 63, false);
-        mNightlightLastWarmth = Helpers.parseInt(split, 64,
+        // Older fork builds used upstream slots 61–64 for Nightlight.
+        boolean legacyNightlight = Helpers.parseInt(split, 61, 0) > 0;
+        mIsLiveEdgeEnabled = !legacyNightlight && Helpers.parseBoolean(split, 62, false);
+        mIsQuickSkipChaptersEnabled = !legacyNightlight && Helpers.parseBoolean(split, 63, false);
+        String[] nightlight = Helpers.splitData(mPrefs.getProfileData("nightlight_data"));
+        int offset = 0;
+        if (nightlight == null && legacyNightlight) {
+            nightlight = split;
+            offset = 61;
+        }
+        mNightlightWarmth = Helpers.parseInt(nightlight, offset, Utils.NIGHTLIGHT_NEUTRAL);
+        mIsNightlightOnUi = Helpers.parseBoolean(nightlight, offset + 1, false);
+        mIsNightlightOnHdr = Helpers.parseBoolean(nightlight, offset + 2, false);
+        mNightlightLastWarmth = Helpers.parseInt(nightlight, offset + 3,
                 mNightlightWarmth != Utils.NIGHTLIGHT_NEUTRAL ? mNightlightWarmth : 3000);
 
         updateDefaultValues();
@@ -834,6 +867,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     private void persistDataInt() {
+        mPrefs.setProfileData("nightlight_data", Helpers.mergeData(
+                mNightlightWarmth, mIsNightlightOnUi, mIsNightlightOnHdr, mNightlightLastWarmth));
         mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeData(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
@@ -848,8 +883,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
                 mIsUnsafeAudioFormatsEnabled, null, mIsLoopShortsEnabled, mIsQuickSkipShortsEnabled, mIsRememberPositionOfLiveVideosEnabled,
                 mIsOculusQuestFixEnabled, null, mIsExtraLongSpeedListEnabled, mIsQuickSkipVideosEnabled, mIsNetworkErrorFixingDisabled, mIsCommentsPlacedLeft,
                 null, mIsAudioFocusEnabled, mIsDontResizeVideoToFitDialogEnabled, mIsSuggestionsHorizontallyScrolled,
-                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode,
-                mNightlightWarmth, mIsNightlightOnUi, mIsNightlightOnHdr, mNightlightLastWarmth
+                mIsQuickSkipShortsAltEnabled, mIsQuickSkipVideosAltEnabled, mIsAudioTimeStretchingEnabled, mIsQueueRespectsPlaybackMode, null,
+                mIsLiveEdgeEnabled, mIsQuickSkipChaptersEnabled
                 ));
     }
 

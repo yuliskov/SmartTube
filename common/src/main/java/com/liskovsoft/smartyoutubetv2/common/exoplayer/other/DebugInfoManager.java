@@ -406,17 +406,6 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow("Memory (Alloc/Max, MB)", DeviceHelpers.getAllocatedHeapMemoryMB() + "/" + DeviceHelpers.getMaxHeapMemoryMB());
     }
 
-    private void appendWebViewInfo() {
-        appendRow("Pot supported", MediaServiceData.instance().isPotSupported());
-    }
-
-    private void appendClientType() {
-        int videoInfoType = MediaServiceData.instance().getVideoInfoType();
-        String clientType = videoInfoType != -1 && videoInfoType < AppClient.values().length ? AppClient.values()[videoInfoType].name() : "default";
-
-        appendRow("Client type", clientType);
-    }
-
     private void appendPlayerVersion() {
         AppInfo appInfo = Helpers.firstNonNull(MediaServiceData.instance().getFailedAppInfo(), MediaServiceData.instance().getAppInfo());
         String playerUrl = appInfo != null ? appInfo.getPlayerUrl() : null;
@@ -574,10 +563,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     }
 
     private String getClientType() {
-        int videoInfoType = MediaServiceData.instance().getVideoInfoType();
-        String clientType = videoInfoType != -1 && videoInfoType < AppClient.values().length ? AppClient.values()[videoInfoType].name() : "default";
+        int clientType = MediaServiceData.instance().getClientType();
+        String clientTypeName = clientType != -1 && clientType < AppClient.values().length ? AppClient.values()[clientType].name() : "default";
 
-        return clientType;
+        return clientTypeName;
     }
 
     private CharSequence getPlayerVersion() {

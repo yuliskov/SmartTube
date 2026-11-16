@@ -2,11 +2,12 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
-import androidx.preference.SwitchPreference;
+import androidx.preference.CheckBoxPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -134,7 +135,7 @@ public class AppPreferenceManager {
 
         if (category.options.size() == 1) {
             OptionItem item = category.options.get(0);
-            Preference preference = new SwitchPreference(mContext);
+            Preference preference = new CheckBoxPreference(mContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
             preference.setDefaultValue(item.isSelected());
