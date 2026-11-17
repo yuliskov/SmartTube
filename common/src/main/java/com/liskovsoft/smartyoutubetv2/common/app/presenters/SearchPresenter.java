@@ -69,7 +69,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        getView().setTagsProvider(new MediaServiceSearchTagProvider(getSearchData().isSearchHistoryDisabled()));
+        getView().setTagsProvider(new MediaServiceSearchTagProvider(getSearchData()));
 
         startSearchInt();
     }
@@ -132,6 +132,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private void appendRemoveSearchTagButton(AppDialogPresenter settingsPresenter, Tag item) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(getContext().getString(R.string.remove_from_search_history), option -> {
             MediaServiceManager.instance().removeSearchTag(item.tag);
+            getSearchData().hideSearchTag(item.tag);
             getView().removeSearchTag(item);
             settingsPresenter.closeDialog();
         }));
@@ -158,6 +159,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void onSearch(String searchText) {
         // Restore the search in case the view unloaded from the memory
         mSearchText = searchText;
+        getSearchData().unhideSearchTag(searchText);
 
         if (getView() == null) {
             Log.e(TAG, "Search view has been unloaded from the memory. Low RAM?");
