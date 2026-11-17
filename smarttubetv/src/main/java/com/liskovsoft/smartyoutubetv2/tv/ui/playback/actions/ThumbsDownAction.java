@@ -10,7 +10,7 @@ public class ThumbsDownAction extends TwoStateAction {
         String[] labels = new String[2];
         // Note, labels denote the action taken when clicked
         labels[INDEX_OFF] = context.getString(R.string.action_dislike);
-        labels[INDEX_ON] = context.getString(R.string.action_dislike);
+        labels[INDEX_ON] = context.getString(R.string.action_disliked);
         setLabels(labels);
     }
 }
