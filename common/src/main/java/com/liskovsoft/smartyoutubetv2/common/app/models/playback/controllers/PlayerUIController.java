@@ -19,6 +19,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentRatings;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -375,8 +376,10 @@ public class PlayerUIController extends BasePlayerController {
         if (getPlayerData().getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getPlayer().loadStoryboard();
         }
-        getPlayer().setButtonState(R.id.action_thumbs_up, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_thumbs_down, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        // YouTube may not return the rating the user has just set yet
+        int likeStatus = RecentRatings.getLikeStatus(getVideo() != null ? getVideo().videoId : null, metadata.getLikeStatus());
+        getPlayer().setButtonState(R.id.action_thumbs_up, likeStatus == MediaItemMetadata.LIKE_STATUS_LIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_down, likeStatus == MediaItemMetadata.LIKE_STATUS_DISLIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         if (getPlayerTweaksData().isRealChannelIconEnabled()) {
             getPlayer().setChannelIcon(metadata.getAuthorImageUrl());
         }
@@ -446,8 +449,10 @@ public class PlayerUIController extends BasePlayerController {
             // Like and dislike are exclusive (YouTube keeps only the last one)
             getPlayer().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
             callMediaItemObservable(mMediaItemService::setDislikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_DISLIKE);
         } else {
             callMediaItemObservable(mMediaItemService::removeDislikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_INDIFFERENT);
         }
     }
 
@@ -475,8 +480,16 @@ public class PlayerUIController extends BasePlayerController {
             // Like and dislike are exclusive (YouTube keeps only the last one)
             getPlayer().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
             callMediaItemObservable(mMediaItemService::setLikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_LIKE);
         } else {
             callMediaItemObservable(mMediaItemService::removeLikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_INDIFFERENT);
+        }
+    }
+
+    private void recordRating(int likeStatus) {
+        if (getVideo() != null) {
+            RecentRatings.record(getVideo().videoId, likeStatus);
         }
     }
 
