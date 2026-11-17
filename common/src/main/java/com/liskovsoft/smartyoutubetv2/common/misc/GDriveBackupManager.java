@@ -38,6 +38,8 @@ public class GDriveBackupManager {
     private static final String FILES_SUBDIR = "files";
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private static final String BACKUP_NAME = "backup.zip";
+    // See GlobalPreferences (prefs dir + key)
+    private static final String ACCOUNTS_DATA_FILE = "global_prefs/media_service_account_data";
     private final GoogleSignInService mSignInService;
     private final String mRootDir;
     private final String mSharedPrefs;
@@ -206,6 +208,10 @@ public class GDriveBackupManager {
 
                     File sharedPrefs = new File(mSharedPrefs);
 
+                    // Signed in accounts (the backup may be made without them)
+                    File accountsFile = new File(FileHelpers.getFilesDir(mContext), ACCOUNTS_DATA_FILE);
+                    String currentAccounts = FileHelpers.getFileContents(accountsFile);
+
                     // remove old data
                     for (String dataDir : mDataDirs) {
                         FileHelpers.delete(dataDir);
@@ -218,6 +224,12 @@ public class GDriveBackupManager {
                     }
                     fixFileNames(sharedPrefs);
 
+                    // Don't sign out the user when the backup doesn't contain any account
+                    String restoredAccounts = FileHelpers.getFileContents(accountsFile);
+                    if (isEmptyData(restoredAccounts) && !isEmptyData(currentAccounts)) {
+                        FileHelpers.stringToFile(currentAccounts, accountsFile);
+                    }
+
                     // NOTE: Don't restart the app, just kill. The reboot will broke the files.
                     // To apply settings we need to kill the app
                     new Handler(mContext.getMainLooper()).postDelayed(() -> Runtime.getRuntime().exit(0), 1_000);
@@ -226,6 +238,10 @@ public class GDriveBackupManager {
                         onError.run();
                     else MessageHelpers.showLongMessage(mContext, error.getMessage());
                 }, () -> MessageHelpers.showMessage(mContext, R.string.msg_done));
+    }
+
+    private static boolean isEmptyData(String data) {
+        return data == null || data.trim().isEmpty() || "null".equals(data.trim());
     }
 
     private void logIn(Runnable onDone) {
