@@ -55,6 +55,7 @@ public class PlayerUIController extends BasePlayerController {
     private final MediaItemService mMediaItemService;
     private SuggestionsController mSuggestionsController;
     private List<PlaylistInfo> mPlaylistInfos;
+    private Disposable mPlaylistInfosAction;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
@@ -857,14 +858,25 @@ public class PlayerUIController extends BasePlayerController {
 
         String videoId = getVideo().videoId;
         mPlaylistInfos = null;
-        Disposable playlistsInfoAction =
+        // Don't let a late response for the previous video change the button of the current one
+        RxHelper.disposeActions(mPlaylistInfosAction);
+        mPlaylistInfosAction =
                 YouTubeServiceManager.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
                         .subscribe(
                                 videoPlaylistInfos -> {
+                                    if (getVideo() == null || !Helpers.equals(getVideo().videoId, videoId)) {
+                                        return;
+                                    }
                                     mPlaylistInfos = videoPlaylistInfos;
                                     setPlaylistAddButtonState();
                                 },
-                                error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
+                                error -> {
+                                    Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
+                                    // Don't keep the state of the previous video
+                                    if (getPlayer() != null) {
+                                        getPlayer().setButtonState(R.id.action_playlist_add, PlayerUI.BUTTON_OFF);
+                                    }
+                                }
                         );
     }
 
@@ -874,8 +886,10 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         boolean isSelected = false;
+        String playlistId = getVideo() != null ? getVideo().playlistId : null;
         for (PlaylistInfo playlistInfo : mPlaylistInfos) {
-            if (playlistInfo.isSelected()) {
+            // Same check as in the 'Add to playlist' dialog: the video played from a playlist belongs to it
+            if (playlistInfo.isSelected() || (playlistId != null && Helpers.equals(playlistInfo.getPlaylistId(), playlistId))) {
                 isSelected = true;
                 break;
             }
