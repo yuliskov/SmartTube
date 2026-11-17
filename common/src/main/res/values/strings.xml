@@ -133,6 +133,8 @@
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
+    <string name="playlists_section_sorting">Playlists section sorting</string>
+    <string name="sorting_last_updated">Last updated</string>
     <string name="player_pause_when_seek">Pause when seeking</string>
     <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>

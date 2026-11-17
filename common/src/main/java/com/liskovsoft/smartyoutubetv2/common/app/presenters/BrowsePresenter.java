@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -45,6 +46,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -375,15 +377,106 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, getContentService().getPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, getContentService().getPlaylistsObserve().map(this::sortPlaylistsIfNeeded));
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, getContentService().getPlaylistRowsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, getPlaylistRowsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, BrowseSection.TYPE_ROW);
                 break;
         }
+    }
+
+    private boolean isPlaylistsSortedByName() {
+        return getMainUIData().getPlaylistsSorting() == MainUIData.PLAYLISTS_SORTING_NAME;
+    }
+
+    /**
+     * Sorts the grid of playlists by title. Watch later and Liked videos stay pinned on top.
+     */
+    private MediaGroup sortPlaylistsIfNeeded(MediaGroup playlists) {
+        if (!isPlaylistsSortedByName() || playlists.getMediaItems() == null) {
+            return playlists;
+        }
+
+        Collator collator = createTitleCollator();
+
+        try {
+            // NOTE: stable sort, so the pinned playlists keep their order
+            Collections.sort(playlists.getMediaItems(), (o1, o2) -> {
+                boolean pinned1 = isPinnedPlaylist(o1);
+                boolean pinned2 = isPinnedPlaylist(o2);
+
+                if (pinned1 || pinned2) {
+                    return pinned1 == pinned2 ? 0 : pinned1 ? -1 : 1;
+                }
+
+                return collator.compare(titleOf(o1.getTitle()), titleOf(o2.getTitle()));
+            });
+        } catch (UnsupportedOperationException e) {
+            Log.e(TAG, "Can't sort the playlists: %s", e.getMessage());
+        }
+
+        return playlists;
+    }
+
+    private static boolean isPinnedPlaylist(MediaItem item) {
+        if (item == null) {
+            return false;
+        }
+
+        String playlistId = item.getPlaylistId();
+        String channelId = item.getChannelId();
+
+        return Helpers.equalsAny(playlistId, "WL", "LL") ||
+                (channelId != null && (channelId.equals("VLWL") || channelId.startsWith("VLLL")));
+    }
+
+    /**
+     * Rows are loaded one playlist at a time. To sort them by title, collect all of them first.
+     * Watch later (always the first row) stays on top.
+     */
+    private Observable<List<MediaGroup>> getPlaylistRowsObserve() {
+        Observable<List<MediaGroup>> rows = getContentService().getPlaylistRowsObserve();
+
+        if (!isPlaylistsSortedByName()) {
+            return rows;
+        }
+
+        return rows.toList().toObservable().map(rowLists -> {
+            List<List<MediaGroup>> playlists = new ArrayList<>();
+
+            for (List<MediaGroup> rowList : rowLists) {
+                if (rowList != null && !rowList.isEmpty() && rowList.get(0) != null) {
+                    playlists.add(rowList); // the first row is titled with the playlist name
+                }
+            }
+
+            if (playlists.size() > 2) {
+                Collator collator = createTitleCollator();
+                Collections.sort(playlists.subList(1, playlists.size()),
+                        (o1, o2) -> collator.compare(titleOf(o1.get(0).getTitle()), titleOf(o2.get(0).getTitle())));
+            }
+
+            List<MediaGroup> result = new ArrayList<>();
+
+            for (List<MediaGroup> rowList : playlists) {
+                result.addAll(rowList);
+            }
+
+            return result;
+        });
+    }
+
+    private static Collator createTitleCollator() {
+        Collator collator = Collator.getInstance();
+        collator.setStrength(Collator.SECONDARY); // ignore case
+        return collator;
+    }
+
+    private static String titleOf(String title) {
+        return title != null ? title : "";
     }
 
     private void updateCategoryType(int categoryId, int categoryType) {
