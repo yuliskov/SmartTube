@@ -228,7 +228,8 @@ public final class Playlist {
                         null,
                         Integer.toString(v.getId()),
                         null,
-                        TvContractCompat.PreviewProgramColumns.ASPECT_RATIO_16_9));
+                        TvContractCompat.PreviewProgramColumns.ASPECT_RATIO_16_9,
+                        v.getPercentWatched()));
             }
 
             return clips;

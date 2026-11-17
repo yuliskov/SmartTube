@@ -47,13 +47,15 @@ public class Clip implements Parcelable {
     private final boolean mIsVideoProtected;
     private final boolean mIsLive;
     private final String mCategory;
+    /** How much of the video the account has watched, 0 to 100; -1 when unknown. */
+    private final int mPercentWatched;
     private int mAspectRatio;
     private long mProgramId = -1;
     private int mViewCount;
 
     Clip(String title, String description, long durationMs, String bgImageUrl, String cardImageUrl,
             String videoUrl, String previewVideoUrl, boolean isVideoProtected, boolean isLive, String category,
-            String clipId, String contentId, int aspectRatio) {
+            String clipId, String contentId, int aspectRatio, int percentWatched) {
         mClipId = clipId;
         mContentId = contentId;
         mTitle = title;
@@ -67,6 +69,7 @@ public class Clip implements Parcelable {
         mIsLive = isLive;
         mCategory = category;
         mAspectRatio = aspectRatio;
+        mPercentWatched = percentWatched;
     }
 
     private Clip(Parcel in) {
@@ -84,6 +87,7 @@ public class Clip implements Parcelable {
         mCategory = in.readString();
         mProgramId = in.readLong();
         mViewCount = in.readInt();
+        mPercentWatched = in.readInt();
     }
 
     public long getProgramId() {
@@ -128,6 +132,10 @@ public class Clip implements Parcelable {
 
     public boolean isLive() {
         return mIsLive;
+    }
+
+    public int getPercentWatched() {
+        return mPercentWatched;
     }
 
     String getBackgroundImageUrl() {
@@ -188,6 +196,7 @@ public class Clip implements Parcelable {
         dest.writeString(mCategory);
         dest.writeLong(mProgramId);
         dest.writeInt(mViewCount);
+        dest.writeInt(mPercentWatched);
     }
 
     @NonNull
