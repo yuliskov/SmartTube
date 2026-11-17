@@ -158,6 +158,9 @@ public class VideoLoaderController extends BasePlayerController {
         Video next = mSuggestionsController.getNext();
 
         if (next != null) {
+            if (next == mPlaylist.getNext()) {
+                next.fromQueue = true; // already in the playback queue, don't add it again
+            }
             openVideoInt(next);
         } else {
             waitMetadataSync(getVideo(), true);
@@ -434,7 +437,7 @@ public class VideoLoaderController extends BasePlayerController {
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
-                if (mPlaylist.getNext() != null && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
+                if (hasQueuedNext() && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
                     loadNext();
                 } else {
                     AppDialogPresenter dialog = getAppDialogPresenter();
@@ -447,7 +450,7 @@ public class VideoLoaderController extends BasePlayerController {
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
-                if (mPlaylist.getNext() != null && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
+                if (hasQueuedNext() && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
                     loadNext();
                 } else {
                     stopPlayback();
@@ -466,6 +469,15 @@ public class VideoLoaderController extends BasePlayerController {
                 Log.e(TAG, "Undetected repeat mode " + playbackMode);
                 break;
         }
+    }
+
+    /**
+     * The playback queue also keeps the watched videos (history). After going back (Previous) the next item there is
+     * an already watched video, not a queued one. Only the items added to the queue (or a cast queue) count.
+     */
+    private boolean hasQueuedNext() {
+        Video next = mPlaylist.getNext();
+        return next != null && (next.fromQueue || next.isRemote);
     }
 
     private void stopPlayback() {
