@@ -58,6 +58,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendThumbSource(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
+        appendPlaylistsSortingCategory(settingsPresenter);
         //appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         if (Build.VERSION.SDK_INT > 19) {
@@ -205,6 +206,21 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.channels_section_sorting), options);
+    }
+
+    private void appendPlaylistsSortingCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.sorting_last_updated, MainUIData.PLAYLISTS_SORTING_LAST_UPDATED},
+                {R.string.sorting_alphabetically, MainUIData.PLAYLISTS_SORTING_NAME}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                mMainUIData.setPlaylistsSorting(pair[1]);
+                BrowsePresenter.instance(getContext()).updatePlaylistsStyle();
+            }, mMainUIData.getPlaylistsSorting() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.playlists_section_sorting), options);
     }
 
     private void appendPlaylistsCategoryStyle(AppDialogPresenter settingsPresenter) {
