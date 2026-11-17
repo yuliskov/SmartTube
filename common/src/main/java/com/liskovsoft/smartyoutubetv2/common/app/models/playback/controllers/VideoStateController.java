@@ -40,6 +40,7 @@ public class VideoStateController extends BasePlayerController {
     @Nullable
     private Boolean mRestoreLiveEdge;
     private long mSleepTimerStartMs;
+    private boolean mIsSleepTimerFired;
 
     @Override
     public void onInit() {
@@ -122,7 +123,7 @@ public class VideoStateController extends BasePlayerController {
         // Reset auto-save history timer
         mTickleCount = 0;
 
-        mSleepTimerStartMs = System.currentTimeMillis();
+        resetSleepTimer();
     }
 
     @Override
@@ -140,7 +141,7 @@ public class VideoStateController extends BasePlayerController {
 
     @Override
     public boolean onKeyDown(int keyCode) {
-        mSleepTimerStartMs = System.currentTimeMillis();
+        resetSleepTimer();
 
         // Remove error msg if needed
         if (getPlayer() != null && getPlayerData().getSleepTimerHours() > 0) {
@@ -170,11 +171,32 @@ public class VideoStateController extends BasePlayerController {
         }
 
         float sleepHours = getPlayerData().getSleepTimerHours();
-        if (sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000) {
+        boolean isExpired = sleepHours > 0 && System.currentTimeMillis() - mSleepTimerStartMs > sleepHours * 60 * 60 * 1_000;
+
+        // Fire once, but pause again if the playback was resumed without a key press (e.g. from the phone)
+        if (isExpired && (!mIsSleepTimerFired || getPlayer().isPlaying())) {
+            mIsSleepTimerFired = true;
             getPlayer().setPlayWhenReady(false);
             getPlayer().setTitle(getContext().getString(R.string.player_sleep_timer)
                     + " (" + getContext().getResources().getQuantityString(R.plurals.hours, (int) sleepHours, Helpers.toString(sleepHours)) + ")");
             getPlayer().showOverlay(true);
+            // Don't keep the screen on anymore, so the device can go to its screensaver and standby.
+            // NOTE: Helpers.enableScreensaver() alone is undone by the screensaver manager right after the pause.
+            allowSleep(true);
+        }
+    }
+
+    private void resetSleepTimer() {
+        mSleepTimerStartMs = System.currentTimeMillis();
+        mIsSleepTimerFired = false;
+    }
+
+    private void allowSleep(boolean allow) {
+        ScreensaverManager screensaverManager = getScreensaverManager();
+
+        if (screensaverManager != null) {
+            screensaverManager.setSleepAllowed(allow);
+        } else if (allow) {
             Helpers.enableScreensaver(getActivity());
         }
     }
@@ -230,6 +252,7 @@ public class VideoStateController extends BasePlayerController {
     @Override
     public void onPlay() {
         setPlayEnabled(true);
+        allowSleep(false); // e.g. resumed from the phone after the sleep timer
         showHideScreensaver(false);
         // throttle seeking calls
         Utils.removeCallbacks(mUpdateHistory);
