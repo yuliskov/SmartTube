@@ -741,7 +741,7 @@ public class SabrProcessor {
     }
 
     public SabrStreamError getFatalError() {
-        return fatalError;
+        return fatalError != null && fatalError.isStale() ? fatalError : null;
     }
 
     //private List<FormatId> createSelectedFormatIds() {
