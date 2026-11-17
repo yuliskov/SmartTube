@@ -19,6 +19,7 @@ public class AccountsData implements AccountChangeListener {
     private final AppPrefs mAppPrefs;
     private boolean mIsSelectAccountOnBootEnabled;
     private boolean mIsPasswordAccepted;
+    private boolean mIsNoneAccountSkipped;
     private final Map<String, PasswordItem> mPasswords = new HashMap<>();
 
     private static class PasswordItem {
@@ -71,6 +72,18 @@ public class AccountsData implements AccountChangeListener {
         return mIsSelectAccountOnBootEnabled;
     }
 
+    /**
+     * Skip "None" when cycling accounts with the top-left account button
+     */
+    public void skipNoneAccount(boolean skip) {
+        mIsNoneAccountSkipped = skip;
+        persistState();
+    }
+
+    public boolean isNoneAccountSkipped() {
+        return mIsNoneAccountSkipped;
+    }
+
     public void setAccountPassword(String password) {
         mPasswords.put(getAccountName(), new PasswordItem(getAccountName(), password));
 
@@ -104,6 +117,7 @@ public class AccountsData implements AccountChangeListener {
         // mIsAccountProtectedWithPassword
         // mAccountPassword
         String[] passwords = Helpers.parseArray(split, 3);
+        mIsNoneAccountSkipped = Helpers.parseBoolean(split, 4, false);
 
         if (passwords != null) {
             for (String passwordSpec : passwords) {
@@ -115,7 +129,7 @@ public class AccountsData implements AccountChangeListener {
 
     private void persistState() {
         mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeData(
-                mIsSelectAccountOnBootEnabled, null, null, Helpers.mergeArray(mPasswords.values().toArray())
+                mIsSelectAccountOnBootEnabled, null, null, Helpers.mergeArray(mPasswords.values().toArray()), mIsNoneAccountSkipped
         ));
     }
 
