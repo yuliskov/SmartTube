@@ -725,7 +725,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads();
+        // NOTE: Playlists (e.g. Watch Later) are opened in the channel uploads view too. Their videos may be from any channel.
+        mVideo.isSubscribed = mVideo.isSubscribed || mVideo.belongsToSubscriptions() || (mVideo.belongsToChannelUploads() && !mVideo.hasPlaylist());
 
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
