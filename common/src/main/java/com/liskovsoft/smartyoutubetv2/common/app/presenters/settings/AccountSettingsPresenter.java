@@ -71,6 +71,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendProtectAccountWithPassword(settingsPresenter);
         appendSeparateSettings(settingsPresenter);
         appendSelectAccountOnBoot(settingsPresenter);
+        appendSkipNoneAccount(settingsPresenter);
 
         Account account = getSignInService().getSelectedAccount();
         int accountIndex = accounts != null ? accounts.indexOf(account) : -1;
@@ -151,6 +152,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.select_account_on_boot), optionItem -> {
             AccountsData.instance(getContext()).selectAccountOnBoot(optionItem.isSelected());
         }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
+    }
+
+    private void appendSkipNoneAccount(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.skip_none_account), optionItem -> {
+            AccountsData.instance(getContext()).skipNoneAccount(optionItem.isSelected());
+        }, AccountsData.instance(getContext()).isNoneAccountSkipped()));
     }
 
     private void appendProtectAccountWithPassword(AppDialogPresenter settingsPresenter) {

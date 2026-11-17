@@ -126,6 +126,16 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         int index = accounts.indexOf(current);
 
         int nextIndex = index + 1;
+
+        if (AccountsData.instance(getContext()).isNoneAccountSkipped()) {
+            // Cycle through the signed-in accounts only (Settings > Accounts still allows to select None)
+            Account next = accounts.get(nextIndex == accounts.size() ? 0 : nextIndex);
+            if (next != current) {
+                selectAccount(next);
+            }
+            return;
+        }
+
         // null == 'without account'
         selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
         //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
