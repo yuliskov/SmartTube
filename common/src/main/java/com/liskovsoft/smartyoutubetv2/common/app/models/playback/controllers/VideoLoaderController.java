@@ -233,7 +233,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (current.nextMediaItem != null) {
+        if (current.nextMediaItem != null && !Helpers.equals(current.nextMediaItem.getVideoId(), current.videoId)) {
             openVideoInt(Video.from(current.nextMediaItem));
         } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...

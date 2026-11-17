@@ -311,7 +311,18 @@ public class SuggestionsController extends BasePlayerController {
             result = Video.from(getVideo().nextMediaItem);
         }
 
+        // Never "continue" with the same video (e.g. the same video appears twice in a row or in the history),
+        // or the playback just repeats it although repeat isn't enabled.
+        if (result != null && isSameVideo(result, getVideo())) {
+            Video suggested = getVideo().nextMediaItem != null ? Video.from(getVideo().nextMediaItem) : null;
+            result = suggested != null && !isSameVideo(suggested, getVideo()) ? suggested : null;
+        }
+
         return result;
+    }
+
+    private static boolean isSameVideo(Video first, Video second) {
+        return first.videoId != null && first.videoId.equals(second.videoId);
     }
 
     /**
@@ -324,7 +335,7 @@ public class SuggestionsController extends BasePlayerController {
             boolean found = false;
 
             for (Video item : group.getVideos()) {
-                if (found && isPlayableShort(item)) {
+                if (found && isPlayableShort(item) && !isSameVideo(item, current)) {
                     return item;
                 }
 
@@ -801,7 +812,7 @@ public class SuggestionsController extends BasePlayerController {
         boolean shortsOnly = video.belongsToShortsGroup();
 
         for (Video current : videos) {
-            if (found && (shortsOnly ? isPlayableShort(current) : current.hasVideo() && !current.isUpcoming)) {
+            if (found && !isSameVideo(current, video) && (shortsOnly ? isPlayableShort(current) : current.hasVideo() && !current.isUpcoming)) {
                 mNextRetryCount = 0;
                 mNextSectionVideo = current;
                 getPlayer().setNextTitle(mNextSectionVideo);
