@@ -18,6 +18,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -889,7 +890,8 @@ public class PlayerUIController extends BasePlayerController {
         String playlistId = getVideo() != null ? getVideo().playlistId : null;
         for (PlaylistInfo playlistInfo : mPlaylistInfos) {
             // Same check as in the 'Add to playlist' dialog: the video played from a playlist belongs to it
-            if (playlistInfo.isSelected() || (playlistId != null && Helpers.equals(playlistInfo.getPlaylistId(), playlistId))) {
+            boolean received = playlistInfo.isSelected() || (playlistId != null && Helpers.equals(playlistInfo.getPlaylistId(), playlistId));
+            if (getVideo() != null && RecentPlaylistEdits.isSelected(getVideo().videoId, playlistInfo.getPlaylistId(), received)) {
                 isSelected = true;
                 break;
             }

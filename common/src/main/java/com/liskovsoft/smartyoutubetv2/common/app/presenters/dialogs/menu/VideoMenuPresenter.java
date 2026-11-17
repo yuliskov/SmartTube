@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.CommentsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
@@ -283,6 +284,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 break;
             }
         }
+        isSelected = RecentPlaylistEdits.isSelected(mVideo.videoId, playlistId, isSelected);
         boolean add = !isSelected;
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
@@ -908,6 +910,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     private void addRemoveFromPlaylist(String playlistId, String playlistTitle, boolean add) {
         RxHelper.disposeActions(mAddToPlaylistAction);
+        RecentPlaylistEdits.record(mVideo.videoId, playlistId, add);
         if (add) {
             Observable<Void> editObserve = mVideo.mediaItem != null ?
                     mMediaItemService.addToPlaylistObserve(playlistId, mVideo.mediaItem) : mMediaItemService.addToPlaylistObserve(playlistId, mVideo.videoId);

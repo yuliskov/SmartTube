@@ -25,6 +25,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
@@ -1195,7 +1196,8 @@ public class AppDialogUtil {
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
                         GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
                     },
-                    playlistInfo.isSelected() || Helpers.equals(playlistInfo.getPlaylistId(), video.playlistId)));
+                    RecentPlaylistEdits.isSelected(video.videoId, playlistInfo.getPlaylistId(),
+                            playlistInfo.isSelected() || Helpers.equals(playlistInfo.getPlaylistId(), video.playlistId))));
         }
 
         dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
@@ -1208,6 +1210,7 @@ public class AppDialogUtil {
 
         Observable<Void> editObserve;
         MediaItemService itemManager = YouTubeMediaItemService.instance();
+        RecentPlaylistEdits.record(video.videoId, playlistId, add);
 
         if (add) {
             MediaItem mediaItem = video.mediaItem != null ? video.mediaItem : SimpleMediaItem.from(video);
