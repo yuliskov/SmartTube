@@ -136,6 +136,7 @@ public class MotherActivity extends FragmentActivity {
         }
 
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.setSleepAllowed(false);
             boolean isKeepScreenOff = mScreensaverManager.isScreenOff() && Helpers.equalsAny(event.getKeyCode(),
                     new int[]{KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN});
             if (!isKeepScreenOff) {
