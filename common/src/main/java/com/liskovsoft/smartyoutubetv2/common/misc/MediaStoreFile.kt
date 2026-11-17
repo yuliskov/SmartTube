@@ -224,7 +224,7 @@ internal class MediaStoreFile @JvmOverloads constructor(
             findUri()
         } ?: return null
 
-        return resolver.openOutputStream(uri)
+        return openTruncatingOutputStream(uri)
     }
 
     fun copyFrom(src: File) {
@@ -233,7 +233,7 @@ internal class MediaStoreFile @JvmOverloads constructor(
             findUri()
         } ?: return
 
-        resolver.openOutputStream(uri)?.use { out ->
+        openTruncatingOutputStream(uri)?.use { out ->
             src.inputStream().use { input ->
                 input.copyTo(out)
             }
@@ -386,6 +386,21 @@ internal class MediaStoreFile @JvmOverloads constructor(
             false
         } catch (e: Exception) {
             false
+        }
+    }
+
+    /**
+     * Mode "w" doesn't truncate on Android 10+, so a shorter new content leaves the tail of the old one
+     * (e.g. a corrupt backup zip that still lists the old entries). "wt" truncates.
+     */
+    private fun openTruncatingOutputStream(uri: Uri): OutputStream? {
+        return try {
+            resolver.openOutputStream(uri, "wt")
+        } catch (e: Exception) {
+            // Some providers don't support "wt". Truncate by deleting and re-creating the file.
+            delete()
+            createNewFile()
+            findUri()?.let { resolver.openOutputStream(it) }
         }
     }
 
