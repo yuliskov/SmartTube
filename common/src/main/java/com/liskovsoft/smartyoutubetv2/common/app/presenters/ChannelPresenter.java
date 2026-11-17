@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,18 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mScrollAction;
     private int mSortIdx;
     private Video mChannel;
+    // Channels opened from a channel (e.g. linked channels). Back returns to the previous one.
+    private final ArrayDeque<HistoryItem> mHistory = new ArrayDeque<>();
+
+    private static final class HistoryItem {
+        final String channelId;
+        final Video channel;
+
+        HistoryItem(String channelId, Video channel) {
+            this.channelId = channelId;
+            this.channel = channel;
+        }
+    }
 
     private interface OnChannelId {
         void onChannelId(String channelId);
@@ -91,6 +104,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         // Otherwise keep the cache to easily restore in case activity is killed by the system.
         mChannelId = null;
         mPendingGroups.clear();
+        mHistory.clear();
         disposeActions();
     }
 
@@ -142,15 +156,49 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     public void openChannel(Video item) {
+        Video previous = mChannel;
         mChannel = item;
-        extractChannelId(item, this::openChannel);
+        extractChannelId(item, channelId -> openChannel(channelId, previous));
     }
 
     public void openChannel(String channelId) {
+        openChannel(channelId, mChannel);
+    }
+
+    private void openChannel(String channelId, Video previousChannel) {
         if (channelId == null) {
             return;
         }
 
+        if (getViewManager().getTopView() == ChannelView.class && getView() != null) {
+            // Opened from the channel itself (e.g. a linked channel)
+            if (mChannelId != null && !channelId.equals(mChannelId)) {
+                mHistory.push(new HistoryItem(mChannelId, previousChannel));
+            }
+        } else {
+            mHistory.clear();
+        }
+
+        openChannelInt(channelId);
+    }
+
+    /**
+     * Return to the channel the current one was opened from.
+     * @return false if there's no such channel
+     */
+    public boolean goBack() {
+        HistoryItem previous = mHistory.poll();
+
+        if (previous == null || getView() == null) {
+            return false;
+        }
+
+        mChannel = previous.channel;
+        openChannelInt(previous.channelId);
+        return true;
+    }
+
+    private void openChannelInt(String channelId) {
         disposeActions();
 
         mChannelId = channelId;

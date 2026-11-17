@@ -18,6 +18,8 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentRatings;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -55,6 +57,7 @@ public class PlayerUIController extends BasePlayerController {
     private final MediaItemService mMediaItemService;
     private SuggestionsController mSuggestionsController;
     private List<PlaylistInfo> mPlaylistInfos;
+    private Disposable mPlaylistInfosAction;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
@@ -373,8 +376,10 @@ public class PlayerUIController extends BasePlayerController {
         if (getPlayerData().getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getPlayer().loadStoryboard();
         }
-        getPlayer().setButtonState(R.id.action_thumbs_up, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
-        getPlayer().setButtonState(R.id.action_thumbs_down, metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        // YouTube may not return the rating the user has just set yet
+        int likeStatus = RecentRatings.getLikeStatus(getVideo() != null ? getVideo().videoId : null, metadata.getLikeStatus());
+        getPlayer().setButtonState(R.id.action_thumbs_up, likeStatus == MediaItemMetadata.LIKE_STATUS_LIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        getPlayer().setButtonState(R.id.action_thumbs_down, likeStatus == MediaItemMetadata.LIKE_STATUS_DISLIKE ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
         if (getPlayerTweaksData().isRealChannelIconEnabled()) {
             getPlayer().setChannelIcon(metadata.getAuthorImageUrl());
         }
@@ -441,9 +446,13 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         if (!dislike) {
+            // Like and dislike are exclusive (YouTube keeps only the last one)
+            getPlayer().setButtonState(R.id.action_thumbs_up, PlayerUI.BUTTON_OFF);
             callMediaItemObservable(mMediaItemService::setDislikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_DISLIKE);
         } else {
             callMediaItemObservable(mMediaItemService::removeDislikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_INDIFFERENT);
         }
     }
 
@@ -468,9 +477,19 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         if (!like) {
+            // Like and dislike are exclusive (YouTube keeps only the last one)
+            getPlayer().setButtonState(R.id.action_thumbs_down, PlayerUI.BUTTON_OFF);
             callMediaItemObservable(mMediaItemService::setLikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_LIKE);
         } else {
             callMediaItemObservable(mMediaItemService::removeLikeObserve);
+            recordRating(MediaItemMetadata.LIKE_STATUS_INDIFFERENT);
+        }
+    }
+
+    private void recordRating(int likeStatus) {
+        if (getVideo() != null) {
+            RecentRatings.record(getVideo().videoId, likeStatus);
         }
     }
 
@@ -853,14 +872,25 @@ public class PlayerUIController extends BasePlayerController {
 
         String videoId = getVideo().videoId;
         mPlaylistInfos = null;
-        Disposable playlistsInfoAction =
+        // Don't let a late response for the previous video change the button of the current one
+        RxHelper.disposeActions(mPlaylistInfosAction);
+        mPlaylistInfosAction =
                 YouTubeServiceManager.instance().getMediaItemService().getPlaylistsInfoObserve(videoId)
                         .subscribe(
                                 videoPlaylistInfos -> {
+                                    if (getVideo() == null || !Helpers.equals(getVideo().videoId, videoId)) {
+                                        return;
+                                    }
                                     mPlaylistInfos = videoPlaylistInfos;
                                     setPlaylistAddButtonState();
                                 },
-                                error -> Log.e(TAG, "Add to recent playlist error: %s", error.getMessage())
+                                error -> {
+                                    Log.e(TAG, "Add to recent playlist error: %s", error.getMessage());
+                                    // Don't keep the state of the previous video
+                                    if (getPlayer() != null) {
+                                        getPlayer().setButtonState(R.id.action_playlist_add, PlayerUI.BUTTON_OFF);
+                                    }
+                                }
                         );
     }
 
@@ -870,8 +900,11 @@ public class PlayerUIController extends BasePlayerController {
         }
 
         boolean isSelected = false;
+        String playlistId = getVideo() != null ? getVideo().playlistId : null;
         for (PlaylistInfo playlistInfo : mPlaylistInfos) {
-            if (playlistInfo.isSelected()) {
+            // Same check as in the 'Add to playlist' dialog: the video played from a playlist belongs to it
+            boolean received = playlistInfo.isSelected() || (playlistId != null && Helpers.equals(playlistInfo.getPlaylistId(), playlistId));
+            if (getVideo() != null && RecentPlaylistEdits.isSelected(getVideo().videoId, playlistInfo.getPlaylistId(), received)) {
                 isSelected = true;
                 break;
             }
@@ -1076,6 +1109,14 @@ public class PlayerUIController extends BasePlayerController {
 
         getPlayerData().setPlaybackMode(nextMode);
         getPlayer().setButtonState(R.id.action_repeat, nextMode);
+        notifyPlaybackModeChanged();
+    }
+
+    private void notifyPlaybackModeChanged() {
+        VideoLoaderController loader = getController(VideoLoaderController.class);
+        if (loader != null) {
+            loader.onPlaybackModeChanged();
+        }
     }
 
     private void showPlaybackModeDialog() {
@@ -1086,6 +1127,7 @@ public class PlayerUIController extends BasePlayerController {
         OptionCategory category = AppDialogUtil.createPlaybackModeCategory(
                 getContext(), () -> {
                     getPlayer().setButtonState(R.id.action_repeat, getPlayerData().getPlaybackMode());
+                    notifyPlaybackModeChanged();
                 });
 
         AppDialogPresenter settingsPresenter = getAppDialogPresenter();

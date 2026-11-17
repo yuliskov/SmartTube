@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
@@ -18,6 +19,8 @@ public final class SabrExtractorInput implements ExtractorInput {
     private static final boolean ALLOW_END_OF_INPUT = true;
     private static final int MIN_SWALLOW_BACKOFF_MS = 15_000; // 15 sec
     private static final int LIVE_EMPTY_RESPONSE_WAIT_MS = 1_000;
+    private static final int MIN_ATTESTATION_FAILURES = 3;
+    private static final long MIN_ATTESTATION_STUCK_MS = 10_000;
     private final SabrStream sabrStream;
     private ExtractorInput input;
     private long position;
@@ -187,6 +190,12 @@ public final class SabrExtractorInput implements ExtractorInput {
             }
 
             if (sabrPart == null) {
+                // The PoToken isn't accepted and the server won't send media anymore (usually after the first minute).
+                // Retrying is pointless. Let the app switch the client.
+                if (!receivedData && sabrStream.isAttestationStuck(MIN_ATTESTATION_FAILURES, MIN_ATTESTATION_STUCK_MS)) {
+                    throwPoTokenRejected();
+                }
+
                 // The stream ended. If the server told us to back off, honor it instead of
                 // re-requesting immediately - otherwise we burn exactly the waiting period the server asked for.
                 int backoffMs = sabrStream.getBackoffTimeMs();
@@ -216,6 +225,7 @@ public final class SabrExtractorInput implements ExtractorInput {
             if (sabrPart instanceof MediaSegmentDataSabrPart) {
                 data = (MediaSegmentDataSabrPart) sabrPart;
                 receivedData = true;
+                sabrStream.resetAttestationFailures();
                 startPosition = position;
                 break;
             }
@@ -365,5 +375,11 @@ public final class SabrExtractorInput implements ExtractorInput {
 
     private static void throwBackoffRequested(int backoffMs) {
         throw new SabrBackoffError(backoffMs);
+    }
+
+    private static void throwPoTokenRejected() {
+        String msg = "PoToken attestation failed. The server stopped sending media";
+        Log.e(TAG, msg);
+        throw new SabrPoTokenError(msg);
     }
 }

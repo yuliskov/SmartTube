@@ -468,11 +468,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
-            if (PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled()) {
-                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, mPlayer.getPlaybackParameters().pitch));
-            } else {
-                mPlayer.setPlaybackParameters(new PlaybackParameters(speed, speed));
-            }
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, calcPitch(speed, getPitchEffect())));
 
             mTrackFormatter.setSpeed(speed);
             setQualityInfo(mTrackFormatter.getQualityLabel());
@@ -482,7 +478,10 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public float getPitch() {
         if (mPlayer != null) {
-            return mPlayer.getPlaybackParameters().pitch;
+            // Report the pitch effect, without the speed factor applied when time stretching is off
+            PlaybackParameters params = mPlayer.getPlaybackParameters();
+            boolean isStretching = PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled();
+            return isStretching || params.speed <= 0 ? params.pitch : params.pitch / params.speed;
         } else {
             return -1;
         }
@@ -490,8 +489,24 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
 
     public void setPitch(float pitch) {
         if (mPlayer != null && pitch > 0) {
-            mPlayer.setPlaybackParameters(new PlaybackParameters(mPlayer.getPlaybackParameters().speed, pitch));
+            float speed = mPlayer.getPlaybackParameters().speed;
+            mPlayer.setPlaybackParameters(new PlaybackParameters(speed, calcPitch(speed, pitch)));
         }
+    }
+
+    /**
+     * The user's pitch effect (1.0 = none). Speed changes (e.g. the speed restore after every seek) must keep it.
+     */
+    private float getPitchEffect() {
+        float pitch = PlayerData.instance(mContext).getPitch();
+        return pitch > 0 ? pitch : 1.0f;
+    }
+
+    /**
+     * Without audio time stretching the pitch follows the speed, on top of the pitch effect.
+     */
+    private float calcPitch(float speed, float pitchEffect) {
+        return PlayerTweaksData.instance(mContext).isAudioTimeStretchingEnabled() ? pitchEffect : speed * pitchEffect;
     }
 
     public void setVolume(float volume) {
@@ -536,10 +551,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             return;
         }
 
-        if (mVolumeBooster != null) {
-            mPlayer.removeAudioListener(mVolumeBooster);
-            mVolumeBooster = null;
-        }
+        releaseVolumeBooster();
 
         // 5.1 audio cannot be boosted (format isn't supported error)
         // also, other 2.0 tracks in 5.1 group is already too loud. so cancel them too.
@@ -563,10 +575,26 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         return false;
     }
 
+    /**
+     * The booster holds a native audio effect (LoudnessEnhancer). Dropping it without release() leaked the effect:
+     * a new copy stacked up on every player re-creation and boosted the sound of every app on the device.
+     */
+    private void releaseVolumeBooster() {
+        if (mVolumeBooster != null) {
+            if (mPlayer != null) {
+                mPlayer.removeAudioListener(mVolumeBooster);
+            }
+            mVolumeBooster.release();
+            mVolumeBooster = null;
+        }
+    }
+
     private void releasePlayer() {
         if (mPlayer == null) {
             return;
         }
+
+        releaseVolumeBooster();
 
         try {
             mPlayer.removeListener(this);

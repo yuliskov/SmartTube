@@ -136,6 +136,7 @@ public class MotherActivity extends FragmentActivity {
         }
 
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.setSleepAllowed(false);
             boolean isKeepScreenOff = mScreensaverManager.isScreenOff() && Helpers.equalsAny(event.getKeyCode(),
                     new int[]{KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN});
             if (!isKeepScreenOff) {
@@ -330,6 +331,17 @@ public class MotherActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         mIsBackPressed = true;
+
+        // Android 12+ handles Back on a task root itself: it may move the task to the back (or do nothing at all,
+        // e.g. on Waydroid) instead of calling finish(). Every screen here is the root of its own task and the
+        // app navigation (exit from the player/search/app, dialog categories) lives in finish().
+        if (VERSION.SDK_INT >= 31 && isTaskRoot() && !mIsOculusQuestFixEnabled
+                && !getOnBackPressedDispatcher().hasEnabledCallbacks()
+                && getFragmentManager().getBackStackEntryCount() == 0) {
+            finish();
+            return;
+        }
+
         super.onBackPressed();
         // Oculus Quest fix: back button not closing the activity
         if (mIsOculusQuestFixEnabled) {

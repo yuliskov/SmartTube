@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class SearchData {
     public static final int SPEECH_RECOGNIZER_SYSTEM = 0;
     public static final int SPEECH_RECOGNIZER_INTENT = 1;
@@ -24,6 +28,8 @@ public class SearchData {
     private boolean mIsPopularSearchesDisabled;
     private boolean mIsKeyboardFixEnabled;
     private boolean mIsTypingCorrectionDisabled;
+    private List<String> mHiddenSearchTags = new ArrayList<>();
+    private static final int HIDDEN_SEARCH_TAGS_MAX_SIZE = 100;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -165,6 +171,42 @@ public class SearchData {
         mIsPopularSearchesDisabled = Helpers.parseBoolean(split, 9, false);
         mIsKeyboardFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsTypingCorrectionDisabled = Helpers.parseBoolean(split, 11, false);
+        mHiddenSearchTags = Helpers.parseStrList(split, 12);
+    }
+
+    /**
+     * Search tags shown on the empty search screen partially come from YouTube (not only from the local history).
+     * Removing such a tag from the history doesn't help, so remember it and filter it out.
+     */
+    public void hideSearchTag(String tag) {
+        String key = toKey(tag);
+        if (key == null || mHiddenSearchTags.contains(key)) {
+            return;
+        }
+
+        mHiddenSearchTags.add(key);
+        if (mHiddenSearchTags.size() > HIDDEN_SEARCH_TAGS_MAX_SIZE) {
+            mHiddenSearchTags.remove(0);
+        }
+        persistData();
+    }
+
+    /**
+     * The user searched the tag again. Let it appear in the history again.
+     */
+    public void unhideSearchTag(String tag) {
+        if (mHiddenSearchTags.remove(toKey(tag))) {
+            persistData();
+        }
+    }
+
+    public boolean isSearchTagHidden(String tag) {
+        String key = toKey(tag);
+        return key != null && mHiddenSearchTags.contains(key);
+    }
+
+    private static String toKey(String tag) {
+        return tag != null && !tag.trim().isEmpty() ? tag.trim().toLowerCase(Locale.ROOT) : null;
     }
 
     private void persistData() {
@@ -172,6 +214,6 @@ public class SearchData {
                 Helpers.mergeData(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
                         mIsKeyboardAutoShowEnabled, mIsTempBackgroundModeEnabled, null, mSpeechRecognizerType,
                         mIsTrendingSearchesEnabled, mIsSearchHistoryDisabled, mIsPopularSearchesDisabled,
-                        mIsKeyboardFixEnabled, mIsTypingCorrectionDisabled));
+                        mIsKeyboardFixEnabled, mIsTypingCorrectionDisabled, Helpers.mergeList(mHiddenSearchTags)));
     }
 }

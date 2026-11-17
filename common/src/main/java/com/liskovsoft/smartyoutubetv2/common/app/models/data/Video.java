@@ -43,6 +43,8 @@ public final class Video {
     public int id;
     public String title;
     public String deArrowTitle;
+    /** Original (not translated) title, see UnlocalizedTitleProcessor. DeArrow title takes precedence. */
+    public String unlocalizedTitle;
     public CharSequence secondTitle;
     private String metadataTitle;
     private CharSequence metadataSecondTitle;
@@ -95,6 +97,7 @@ public final class Video {
     public String subscriberCount;
     public float volume = 1.0f;
     public boolean deArrowProcessed;
+    public boolean unlocalizedTitleProcessed;
     public boolean isLiveEnd;
     public boolean isShuffled;
     public String searchQuery;
@@ -289,11 +292,11 @@ public final class Video {
     }
 
     public String getTitle() {
-        return deArrowTitle != null ? deArrowTitle : title;
+        return deArrowTitle != null ? deArrowTitle : unlocalizedTitle != null ? unlocalizedTitle : title;
     }
 
     public String getTitleFull() {
-        return deArrowTitle != null ? deArrowTitle : metadataTitle != null ? metadataTitle : title;
+        return deArrowTitle != null ? deArrowTitle : unlocalizedTitle != null ? unlocalizedTitle : metadataTitle != null ? metadataTitle : title;
     }
 
     public CharSequence getSecondTitle() {
@@ -758,6 +761,19 @@ public final class Video {
             metadataTitle = metadata.getTitle();
         }
         metadataSecondTitle = metadata.getSecondTitle();
+
+        // A video opened by id only (Android TV Home channels, links, casting) has no card data.
+        // Fill it, or it's saved to the local history as a gray card without a title.
+        if (title == null) {
+            title = metadata.getTitle();
+        }
+        if (secondTitle == null) {
+            secondTitle = metadata.getSecondTitle();
+        }
+        if (cardImageUrl == null && videoId != null) {
+            cardImageUrl = String.format("https://i.ytimg.com/vi/%s/mqdefault.jpg", videoId);
+        }
+
         // NOTE: Upcoming videos metadata wrongly reported as live (live == true, upcoming == false)
         //isLive = metadata.isLive();
         //isUpcoming = metadata.isUpcoming();

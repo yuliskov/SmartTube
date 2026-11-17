@@ -61,8 +61,10 @@ public class UnlocalizedTitleProcessor implements OnDataChange, BrowseProcessor 
                     if (video == null) {
                         return;
                     }
-                    video.deArrowTitle = title.second; // sometimes player titles localized while cards not
-                    if (!Helpers.equals(video.title, video.deArrowTitle)) {
+                    // Own field: DeArrow has its own title and processed flag (it runs first and used to mark
+                    // every video as processed, so with DeArrow on this processor never fetched anything)
+                    video.unlocalizedTitle = title.second; // sometimes player titles localized while cards not
+                    if (!Helpers.equals(video.title, video.unlocalizedTitle)) {
                         mOnItemReady.onItemReady(video);
                     }
                 },
@@ -80,10 +82,10 @@ public class UnlocalizedTitleProcessor implements OnDataChange, BrowseProcessor 
         List<String> result = new ArrayList<>();
 
         for (Video video : videoGroup.getVideos()) {
-            if (video.deArrowProcessed) {
+            if (video.unlocalizedTitleProcessed) {
                 continue;
             }
-            video.deArrowProcessed = true;
+            video.unlocalizedTitleProcessed = true;
             result.add(video.videoId);
         }
 

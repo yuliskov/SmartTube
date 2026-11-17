@@ -102,6 +102,7 @@
     <string name="show_again">Show again</string>
     <string name="check_updates_auto">Notify about updates</string>
     <string name="select_account_on_boot">Show account selection on boot</string>
+    <string name="skip_none_account">Skip \"None\" when switching accounts with the top button</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>
@@ -133,6 +134,8 @@
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
+    <string name="playlists_section_sorting">Playlists section sorting</string>
+    <string name="sorting_last_updated">Last updated</string>
     <string name="player_pause_when_seek">Pause when seeking</string>
     <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>
@@ -419,6 +422,8 @@
     <string name="player_show_tooltips">Show button tooltips</string>
     <string name="action_like_unset">Removed like</string>
     <string name="action_dislike_unset">Removed dislike</string>
+    <string name="action_liked">Liked</string>
+    <string name="action_disliked">Disliked</string>
     <string name="various_buttons">Buttons at the top of the main window</string>
     <string name="not_compatible_with">Selected option isn\'t compatible with</string>
     <string name="subtitle_position">Subtitle bottom shift</string>

@@ -101,7 +101,11 @@ public class AppPrefs extends SharedPreferencesBase implements AccountChangeList
 
     public String getSidebarData() {
         // Always use multiple profiles
-        return getData(getProfileKey(SIDEBAR_DATA,  true));
+        String data = getData(getProfileKey(SIDEBAR_DATA,  true));
+
+        // The account doesn't have its own sidebar yet (e.g. just signed in): keep the sections set up without
+        // an account instead of resetting them to the defaults.
+        return data != null ? data : getData(SIDEBAR_DATA);
     }
 
     public void setSidebarData(String data) {

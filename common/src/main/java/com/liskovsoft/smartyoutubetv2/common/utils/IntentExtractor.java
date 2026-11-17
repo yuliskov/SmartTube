@@ -63,7 +63,8 @@ public class IntentExtractor {
                 // temp solution: use one video from the list
                 videoId = idList.split(",")[0];
             } else if (VND_SCHEME.equals(uri.getScheme())) {
-                videoId = uri.getHost();
+                // vnd.youtube://8kKDjRmHp0g or the standard Android form vnd.youtube:8kKDjRmHp0g (opaque uri, no host)
+                videoId = uri.getHost() != null ? uri.getHost() : extractOpaqueId(uri);
             } else {
                 // Suppose that link type is https://youtu.be/lBeMDqcWTG8
                 videoId = uri.getLastPathSegment();
@@ -75,6 +76,20 @@ public class IntentExtractor {
         }
 
         return videoId;
+    }
+
+    /**
+     * vnd.youtube:8kKDjRmHp0g?t=10 -> 8kKDjRmHp0g
+     */
+    private static String extractOpaqueId(Uri uri) {
+        String part = uri.getSchemeSpecificPart();
+
+        if (part == null) {
+            return null;
+        }
+
+        int queryIdx = part.indexOf('?');
+        return queryIdx != -1 ? part.substring(0, queryIdx) : part;
     }
 
     /**
@@ -151,6 +166,14 @@ public class IntentExtractor {
 
             if (Helpers.startsWith(lastPathSegment, "@")) {
                 channelId = lastPathSegment;
+            } else if (!isValid(lastPathSegment)) { // not a video link
+                // https://www.youtube.com/@LofiGirl/live or https://www.youtube.com/@LofiGirl/videos
+                for (String segment : url.getPathSegments()) {
+                    if (Helpers.startsWith(segment, "@")) {
+                        channelId = segment;
+                        break;
+                    }
+                }
             }
         }
 

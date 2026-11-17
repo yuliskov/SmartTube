@@ -3,7 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
@@ -21,6 +25,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.RecentPlaylistEdits;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SimpleMediaItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
@@ -48,6 +53,9 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaItemService;
 import com.liskovsoft.youtubeapi.playlist.impl.YouTubePlaylistInfo;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -84,6 +92,11 @@ public class AppDialogUtil {
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
     private static final int FILE_PICKER_REQUEST_CODE = 205;
+    private static final int CONTENT_PICKER_REQUEST_CODE = 206;
+    /**
+     * Android TV ships stub activities that only show "not supported" instead of a real document picker
+     */
+    private static final String STUBS_PACKAGE = "com.android.tv.frameworkpackagestubs";
 
     /**
      * Adds share link items to existing dialog.
@@ -413,14 +426,7 @@ public class AppDialogUtil {
 
         List<OptionItem> items = new ArrayList<>();
 
-        OptionItem enableSwitch = UiOptionItem.from(context.getString(R.string.enable), item -> {
-            if (playerData.getAudioDelayMs() != 0) {
-                playerData.setAudioDelayEnabled(item.isSelected());
-                onSetCallback.run();
-            }
-        }, playerData.isAudioDelayEnabled());
-
-        OptionItem audioDelay = UiOptionItem.from(title, item -> {
+        Runnable showDelayDialog = () -> {
             AppDialogPresenter.instance(context).closeDialog();
             int delayMs = playerData.getAudioDelayMs();
             float delaySec = delayMs / 1_000f;
@@ -429,28 +435,40 @@ public class AppDialogUtil {
                     dialogTitle,
                     Helpers.toString(delaySec),
                     newValue -> {
-                        if (!Helpers.isNumeric(newValue)) {
+                        // TV keyboards in many locales (e.g. ru) type a comma as the decimal separator
+                        String normalized = newValue != null ? newValue.trim().replace(',', '.') : null;
+
+                        if (!Helpers.isNumeric(normalized)) {
                             return false;
                         }
 
-                        float newDelaySec = Helpers.parseFloat(newValue);
+                        float newDelaySec = Helpers.parseFloat(normalized);
                         int newDelayMs = (int) (newDelaySec * 1_000);
-
-                        if (newDelayMs == delayMs) {
-                            return false;
-                        }
 
                         if (newDelayMs == 0 && newDelaySec != 0) { // lower than 1ms
                             return false;
                         }
 
+                        // Same value is accepted too: it re-enables a previously disabled delay
                         playerData.setAudioDelayMs(newDelayMs);
                         playerData.setAudioDelayEnabled(newDelayMs != 0);
                         onSetCallback.run();
                         return true;
                     }
             );
+        };
+
+        OptionItem enableSwitch = UiOptionItem.from(context.getString(R.string.enable), item -> {
+            if (playerData.getAudioDelayMs() != 0) {
+                playerData.setAudioDelayEnabled(item.isSelected());
+                onSetCallback.run();
+            } else if (item.isSelected()) {
+                // Nothing to enable yet: ask for the value instead of silently ignoring the checkbox
+                showDelayDialog.run();
+            }
         }, playerData.isAudioDelayEnabled());
+
+        OptionItem audioDelay = UiOptionItem.from(title, item -> showDelayDialog.run(), playerData.isAudioDelayEnabled());
 
         items.add(enableSwitch);
         items.add(audioDelay);
@@ -953,6 +971,13 @@ public class AppDialogUtil {
 
             MotherActivity activity = getMotherActivity(context);
 
+            // Android 11+ (scoped storage) hides non-media files (e.g. .json) from the File API
+            // and Android 13+ doesn't grant the storage permissions at all.
+            // Pick the file through an installed file manager instead (no permissions needed).
+            if (Build.VERSION.SDK_INT >= 30 && runContentPicker(activity, filePickerTitle)) {
+                return;
+            }
+
             if (PermissionHelpers.hasStoragePermissions(activity)) {
                 runFilePicker(activity, filePickerTitle);
             } else {
@@ -985,6 +1010,68 @@ public class AppDialogUtil {
                 .start(FILE_PICKER_REQUEST_CODE);
     }
 
+    private static boolean runContentPicker(Activity activity, String title) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        List<ResolveInfo> handlers = activity.getPackageManager().queryIntentActivities(intent, 0);
+        List<ComponentName> stubs = new ArrayList<>();
+        boolean hasPicker = false;
+
+        for (ResolveInfo info : handlers) {
+            if (info.activityInfo == null) {
+                continue;
+            }
+
+            if (STUBS_PACKAGE.equals(info.activityInfo.packageName)) {
+                stubs.add(new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
+            } else {
+                hasPicker = true;
+            }
+        }
+
+        if (!hasPicker) {
+            return false;
+        }
+
+        Intent chooser = Intent.createChooser(intent, title);
+        if (!stubs.isEmpty()) {
+            chooser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, stubs.toArray(new ComponentName[0]));
+        }
+
+        try {
+            activity.startActivityForResult(chooser, CONTENT_PICKER_REQUEST_CODE);
+        } catch (Exception e) { // ActivityNotFoundException, SecurityException
+            Log.e(TAG, "Can't start the content picker: %s", e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Copies the picked content to a temporary file, because the importers read files
+     */
+    private static File copyToCacheFile(Context context, Uri uri) throws Exception {
+        File outFile = new File(context.getCacheDir(), "subscriptions_import.tmp");
+
+        try (InputStream in = context.getContentResolver().openInputStream(uri);
+             OutputStream out = new FileOutputStream(outFile)) {
+            if (in == null) {
+                throw new IllegalStateException("Can't open " + uri);
+            }
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        }
+
+        return outFile;
+    }
+
     @NonNull
     private static MotherActivity getMotherActivity(Context context) {
         ChannelGroupServiceWrapper mService = ChannelGroupServiceWrapper.instance(context);
@@ -993,6 +1080,12 @@ public class AppDialogUtil {
             if (FILE_PICKER_REQUEST_CODE == requestCode && resultCode == Activity.RESULT_OK) {
                 String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                 RxHelper.execute(mService.importGroupsObserve(new File(filePath)), result -> pinGroups(context, result),
+                        error -> MessageHelpers.showLongMessage(context, error.getMessage()));
+            } else if (CONTENT_PICKER_REQUEST_CODE == requestCode && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                RxHelper.execute(
+                        RxHelper.fromCallable(() -> copyToCacheFile(context, uri)).flatMap(mService::importGroupsObserve),
+                        result -> pinGroups(context, result),
                         error -> MessageHelpers.showLongMessage(context, error.getMessage()));
             }
         });
@@ -1103,7 +1196,8 @@ public class AppDialogUtil {
                         GeneralData.instance(context).setLastPlaylistId(playlistInfo.getPlaylistId());
                         GeneralData.instance(context).setLastPlaylistTitle(playlistInfo.getTitle());
                     },
-                    playlistInfo.isSelected() || Helpers.equals(playlistInfo.getPlaylistId(), video.playlistId)));
+                    RecentPlaylistEdits.isSelected(video.videoId, playlistInfo.getPlaylistId(),
+                            playlistInfo.isSelected() || Helpers.equals(playlistInfo.getPlaylistId(), video.playlistId))));
         }
 
         dialogPresenter.appendCheckedCategory(context.getString(R.string.dialog_add_to_playlist), options);
@@ -1116,6 +1210,7 @@ public class AppDialogUtil {
 
         Observable<Void> editObserve;
         MediaItemService itemManager = YouTubeMediaItemService.instance();
+        RecentPlaylistEdits.record(video.videoId, playlistId, add);
 
         if (add) {
             MediaItem mediaItem = video.mediaItem != null ? video.mediaItem : SimpleMediaItem.from(video);

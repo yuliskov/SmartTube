@@ -38,6 +38,8 @@ public class ScreensaverManager {
     // Distinct from mIsBlocked: lifecycle suspension stops all screensaver management while
     // the host activity is not in the foreground. Blocked only suppresses user-facing dimming.
     private boolean mIsSuspended;
+    // The sleep timer fired: don't keep the screen on, even if the app screensaver is disabled.
+    private boolean mIsSleepAllowed;
     private final Runnable mTimeoutHandler = () -> {
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
@@ -199,6 +201,18 @@ public class ScreensaverManager {
         mIsBlocked = blocked;
     }
 
+    /**
+     * When allowed, the screen-on flag stays released so the device can reach its own screensaver and standby
+     * (used by the sleep timer). Reset on the next key press or when the playback resumes.
+     */
+    public void setSleepAllowed(boolean allowed) {
+        mIsSleepAllowed = allowed;
+
+        if (allowed) {
+            enableSystemScreensaver();
+        }
+    }
+
     private void enableTimeout() {
         // Playing the video and dialog overlay isn't shown
         if (getViewManager().getTopView() != PlaybackView.class || !getTweaksData().isScreenOffTimeoutEnabled()) {
@@ -273,6 +287,11 @@ public class ScreensaverManager {
         Activity activity = mActivity.get();
 
         if (activity == null) {
+            return;
+        }
+
+        if (mIsSleepAllowed) {
+            Helpers.enableScreensaver(activity);
             return;
         }
 

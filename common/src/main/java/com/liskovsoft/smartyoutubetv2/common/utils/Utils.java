@@ -297,8 +297,11 @@ public class Utils {
             AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
                 int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
                 double newVolume = streamMaxVolume / 100d * volume;
-                if (sCurrentVolume < volume) {
+                // Compare with the real volume, not the last value set (it may be stale, e.g. after a key press
+                // in the opposite direction or on the first press). Otherwise the volume stays on the same step.
+                if (newVolume > streamVolume) {
                     newVolume = Math.ceil(newVolume);
                 } else {
                     newVolume = Math.floor(newVolume);

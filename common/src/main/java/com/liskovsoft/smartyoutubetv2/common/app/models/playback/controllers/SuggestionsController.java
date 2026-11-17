@@ -293,7 +293,8 @@ public class SuggestionsController extends BasePlayerController {
         Video next = Playlist.instance().getNext();
 
         if (next != null) {
-            next.fromQueue = true;
+            // NOTE: don't mark as 'fromQueue' here: the method is also used to show the next title.
+            // The item is marked when it's actually opened (see VideoLoaderController.loadNext).
             result = next;
         } else if (!getVideo().isShuffled &&
                 Helpers.startsWith(getVideo().getPlaylistId(), "RD") &&
@@ -301,11 +302,58 @@ public class SuggestionsController extends BasePlayerController {
             result = Video.from(getVideo().nextMediaItem);
         } else if (mNextSectionVideo != null && !getVideo().isShuffled) {
             result = mNextSectionVideo;
-        } else if (getVideo().nextMediaItem != null) {
+        } else if (getVideo().belongsToShortsGroup() && !getVideo().isShuffled) {
+            // Stay inside the Shorts feed. YouTube's next suggestion for a Short is usually a regular video.
+            result = findNextShort(getVideo());
+        }
+
+        if (result == null && getVideo().nextMediaItem != null) {
             result = Video.from(getVideo().nextMediaItem);
         }
 
+        // Never "continue" with the same video (e.g. the same video appears twice in a row or in the history),
+        // or the playback just repeats it although repeat isn't enabled.
+        if (result != null && isSameVideo(result, getVideo())) {
+            Video suggested = getVideo().nextMediaItem != null ? Video.from(getVideo().nextMediaItem) : null;
+            result = suggested != null && !isSameVideo(suggested, getVideo()) ? suggested : null;
+        }
+
         return result;
+    }
+
+    private static boolean isSameVideo(Video first, Video second) {
+        return first.videoId != null && first.videoId.equals(second.videoId);
+    }
+
+    /**
+     * Next Short from the Shorts row/section the current Short was opened from (or the suggested next item if it's a Short).
+     */
+    private Video findNextShort(Video current) {
+        VideoGroup group = current.getGroup();
+
+        if (group != null && !group.isEmpty()) {
+            boolean found = false;
+
+            for (Video item : group.getVideos()) {
+                if (found && isPlayableShort(item) && !isSameVideo(item, current)) {
+                    return item;
+                }
+
+                if (item.equals(current)) {
+                    found = true;
+                }
+            }
+        }
+
+        if (current.nextMediaItem != null && current.nextMediaItem.isShorts()) {
+            return Video.from(current.nextMediaItem);
+        }
+
+        return null;
+    }
+
+    private static boolean isPlayableShort(Video item) {
+        return item.isShorts && item.hasVideo() && !item.isUpcoming;
     }
 
     public Video getPrevious() {
@@ -583,6 +631,12 @@ public class SuggestionsController extends BasePlayerController {
         if (!video.isSectionPlaylistEnabled(getContext())) {
             // Important fix. Gives priority to playlist or suggestion.
             mNextSectionVideo = null;
+
+            // Shorts are always played one after another from their row (like the YouTube Shorts feed),
+            // even when the section playlist is off (the default on low-RAM devices).
+            if (video.belongsToShortsGroup()) {
+                findNextSectionVideoIfNeeded(video);
+            }
             return;
         }
 
@@ -755,9 +809,10 @@ public class SuggestionsController extends BasePlayerController {
 
         List<Video> videos = group.getVideos();
         boolean found = false;
+        boolean shortsOnly = video.belongsToShortsGroup();
 
         for (Video current : videos) {
-            if (found && current.hasVideo() && !current.isUpcoming) {
+            if (found && !isSameVideo(current, video) && (shortsOnly ? isPlayableShort(current) : current.hasVideo() && !current.isUpcoming)) {
                 mNextRetryCount = 0;
                 mNextSectionVideo = current;
                 getPlayer().setNextTitle(mNextSectionVideo);

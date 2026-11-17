@@ -60,7 +60,7 @@ public class ChatItemMessage implements IMessage {
 
     public static List<ChatItemMessage> fromSplit(Context context, CommentItem commentItem) {
         if (shouldSplit(commentItem)) {
-            List<String> comments = Helpers.splitStringBySize(commentItem.getMessage(), getRealMaxLen(commentItem.getMessage()));
+            List<String> comments = splitByWidth(commentItem.getMessage(), getRealMaxLen(commentItem.getMessage()));
             List<ChatItemMessage> result = new ArrayList<>();
             for (int i = 0; i < comments.size(); i++) {
                 String prefix = i > 0 ? "..." : "";
@@ -116,7 +116,7 @@ public class ChatItemMessage implements IMessage {
     }
 
     public static boolean shouldSplit(CommentItem commentItem) {
-        return commentItem != null && commentItem.getMessage() != null && commentItem.getMessage().length() > getRealMaxLen(commentItem.getMessage());
+        return commentItem != null && commentItem.getMessage() != null && width(commentItem.getMessage()) > getRealMaxLen(commentItem.getMessage());
     }
 
     private static int getRealMaxLen(String text) {
@@ -130,28 +130,15 @@ public class ChatItemMessage implements IMessage {
             return MAX_LENGTH;
         }
 
-        List<String> splitNoLongLines = new ArrayList<>();
-        for (String line : split) {
-            while (line.length() > LINE_LENGTH) {
-                int breakPoint = line.lastIndexOf(' ', LINE_LENGTH);
-
-                if (breakPoint == -1) {
-                    breakPoint = LINE_LENGTH;
-                }
-
-                splitNoLongLines.add(line.substring(0, breakPoint));
-                line = line.substring(breakPoint).trim();
-            }
-            splitNoLongLines.add(line);
-        }
-        split = splitNoLongLines.toArray(new String[0]);
-
+        // Measured in display width (see width()): every line takes at least one full line on screen
         int realCount = 0;
         int fakeCount = 0;
 
-        for (String part : split) {
-            realCount += part.length();
-            fakeCount += Math.max(part.length(), LINE_LENGTH);
+        for (String line : split) {
+            int lineWidth = width(line);
+            int lines = Math.max(1, (lineWidth + LINE_LENGTH - 1) / LINE_LENGTH);
+            realCount += lineWidth;
+            fakeCount += lines * LINE_LENGTH;
 
             if (fakeCount > MAX_LENGTH) {
                 return realCount;
@@ -159,6 +146,71 @@ public class ChatItemMessage implements IMessage {
         }
 
         return MAX_LENGTH;
+    }
+
+    /**
+     * Display width: CJK and other full-width characters take about twice the space of Latin ones.
+     */
+    private static int width(CharSequence text) {
+        int width = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            width += isWide(text.charAt(i)) ? 2 : 1;
+        }
+
+        return width;
+    }
+
+    private static boolean isWide(char c) {
+        return (c >= 0x1100 && c <= 0x115F) // Hangul Jamo
+                || (c >= 0x2E80 && c <= 0xA4CF) // CJK, Hiragana, Katakana, Bopomofo...
+                || (c >= 0xAC00 && c <= 0xD7A3) // Hangul syllables
+                || (c >= 0xF900 && c <= 0xFAFF) // CJK compatibility ideographs
+                || (c >= 0xFE30 && c <= 0xFE4F) // CJK compatibility forms
+                || (c >= 0xFF00 && c <= 0xFF60) // Fullwidth forms
+                || (c >= 0xFFE0 && c <= 0xFFE6);
+    }
+
+    /**
+     * Splits by display width. Breaks at the last space when there is one, otherwise inside the text
+     * (CJK text has no spaces, so splitting by words left long comments in one piece).
+     */
+    private static List<String> splitByWidth(String text, int maxWidth) {
+        List<String> result = new ArrayList<>();
+
+        if (maxWidth <= 0) {
+            result.add(text);
+            return result;
+        }
+
+        StringBuilder chunk = new StringBuilder();
+        int chunkWidth = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            chunk.append(c);
+            chunkWidth += isWide(c) ? 2 : 1;
+
+            if (chunkWidth > maxWidth) {
+                int lastSpace = chunk.lastIndexOf(" ");
+                String rest = "";
+
+                if (lastSpace > 0) {
+                    rest = chunk.substring(lastSpace + 1);
+                    chunk.setLength(lastSpace);
+                }
+
+                result.add(chunk.toString());
+                chunk = new StringBuilder(rest);
+                chunkWidth = width(rest);
+            }
+        }
+
+        if (chunk.length() > 0) {
+            result.add(chunk.toString());
+        }
+
+        return result;
     }
 
     @Override

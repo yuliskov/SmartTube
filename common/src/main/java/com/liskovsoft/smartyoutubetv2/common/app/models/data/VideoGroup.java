@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.prefs.BlockedChannelData;
+import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -454,7 +455,19 @@ public class VideoGroup {
     }
 
     public void add(int idx, Video video) {
-        if (video == null || video.isEmpty() || isChannelBlocked(video) || isWatchedSuggestion(video)) {
+        if (video == null || video.isEmpty() || isChannelBlocked(video)) {
+            return;
+        }
+
+        // Apply the local watch progress first. YouTube may report a video watched to the end as barely watched.
+        VideoStateService stateService = VideoStateService.instance(null);
+        // Keep remote completion when an older local playback position exists.
+        if (stateService != null && video.percentWatched == -1) {
+            State state = stateService.getByVideoId(video.videoId);
+            video.sync(state);
+        }
+
+        if (isWatchedSuggestion(video) || isHiddenWatched(video)) {
             return;
         }
 
@@ -465,13 +478,6 @@ public class VideoGroup {
         // Group position in multi-grid fragments
         video.groupPosition = mPosition;
         video.setGroup(this);
-
-        VideoStateService stateService = VideoStateService.instance(null);
-        // Keep remote completion when an older local playback position exists.
-        if (stateService != null && video.percentWatched == -1) {
-            State state = stateService.getByVideoId(video.videoId);
-            video.sync(state);
-        }
 
         mVideos.add(idx, video);
     }
@@ -492,6 +498,35 @@ public class VideoGroup {
         String channelName = video.getAuthor();
 
         return blockedChannelData.containsChannel(channelId, channelName);
+    }
+
+    /**
+     * "Hide watched" options also apply to the videos watched in the app (YouTube may not know it yet)
+     */
+    private boolean isHiddenWatched(Video video) {
+        int type = getType();
+
+        if (video.isLive || (type != MediaGroup.TYPE_HOME && type != MediaGroup.TYPE_SUBSCRIPTIONS)) {
+            return false;
+        }
+
+        MediaServiceData data = MediaServiceData.instance();
+
+        boolean isHidingEnabled = (type == MediaGroup.TYPE_HOME && data.isContentHidden(MediaServiceData.CONTENT_WATCHED_HOME)) ||
+                (type == MediaGroup.TYPE_SUBSCRIPTIONS && data.isContentHidden(MediaServiceData.CONTENT_WATCHED_SUBSCRIPTIONS));
+
+        return isHidingEnabled && Math.max(video.percentWatched, getLocalPercentWatched(video)) > 80;
+    }
+
+    private static float getLocalPercentWatched(Video video) {
+        VideoStateService stateService = VideoStateService.instance(null);
+        State state = stateService != null ? stateService.getByVideoId(video.videoId) : null;
+
+        if (state == null || state.durationMs <= 0) {
+            return -1;
+        }
+
+        return state.positionMs * 100f / state.durationMs;
     }
 
     private boolean isWatchedSuggestion(Video video) {

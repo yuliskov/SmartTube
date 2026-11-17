@@ -158,6 +158,9 @@ public class VideoLoaderController extends BasePlayerController {
         Video next = mSuggestionsController.getNext();
 
         if (next != null) {
+            if (next == mPlaylist.getNext()) {
+                next.fromQueue = true; // already in the playback queue, don't add it again
+            }
             openVideoInt(next);
         } else {
             waitMetadataSync(getVideo(), true);
@@ -230,7 +233,7 @@ public class VideoLoaderController extends BasePlayerController {
             return;
         }
 
-        if (current.nextMediaItem != null) {
+        if (current.nextMediaItem != null && !Helpers.equals(current.nextMediaItem.getVideoId(), current.videoId)) {
             openVideoInt(Video.from(current.nextMediaItem));
         } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
@@ -434,7 +437,7 @@ public class VideoLoaderController extends BasePlayerController {
             case PlayerConstants.PLAYBACK_MODE_CLOSE:
                 // Close player if suggestions not shown
                 // Except when playing from queue
-                if (mPlaylist.getNext() != null && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
+                if (hasQueuedNext() && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
                     loadNext();
                 } else {
                     AppDialogPresenter dialog = getAppDialogPresenter();
@@ -447,7 +450,7 @@ public class VideoLoaderController extends BasePlayerController {
             case PlayerConstants.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
                 // Except when playing from queue
-                if (mPlaylist.getNext() != null && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
+                if (hasQueuedNext() && !getPlayerTweaksData().isQueueRespectsPlaybackMode()) {
                     loadNext();
                 } else {
                     stopPlayback();
@@ -466,6 +469,15 @@ public class VideoLoaderController extends BasePlayerController {
                 Log.e(TAG, "Undetected repeat mode " + playbackMode);
                 break;
         }
+    }
+
+    /**
+     * The playback queue also keeps the watched videos (history). After going back (Previous) the next item there is
+     * an already watched video, not a queued one. Only the items added to the queue (or a cast queue) count.
+     */
+    private boolean hasQueuedNext() {
+        Video next = mPlaylist.getNext();
+        return next != null && (next.fromQueue || next.isRemote);
     }
 
     private void stopPlayback() {
@@ -537,6 +549,13 @@ public class VideoLoaderController extends BasePlayerController {
         initRandomNext();
     }
 
+    /**
+     * Shuffle may be switched on while a video is playing. Pick the random next video right away.
+     */
+    public void onPlaybackModeChanged() {
+        initRandomNext();
+    }
+
     private void initRandomNext() {
         MediaServiceManager.instance().disposeActions();
 
@@ -564,25 +583,26 @@ public class VideoLoaderController extends BasePlayerController {
                 player.setNextTitle(Video.from(current.nextMediaItem));
             });
         }
-        //else {
-        //    VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
-        //
-        //    if (topRow != null && topRow.isChapters()) {
-        //        topRow = player.getSuggestionsByIndex(1);
-        //    }
-        //
-        //    if (topRow != null) {
-        //        int currentIdx = topRow.indexOf(current);
-        //        int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
-        //
-        //        if (randomIndex != -1) {
-        //            Video nextVideo = topRow.get(randomIndex);
-        //            current.nextMediaItem = SimpleMediaItem.from(nextVideo);
-        //            current.isShuffled = true;
-        //            player.setNextTitle(nextVideo);
-        //        }
-        //    }
-        //}
+        else {
+            // Small playlists: pick from the already loaded playlist row
+            VideoGroup topRow = player.getSuggestionsByIndex(0); // the playlist row
+
+            if (topRow != null && topRow.isChapters()) {
+                topRow = player.getSuggestionsByIndex(1);
+            }
+
+            if (topRow != null) {
+                int currentIdx = topRow.indexOf(current);
+                int randomIndex = Utils.getRandomIndex(currentIdx, topRow.getSize());
+
+                if (randomIndex != -1 && randomIndex != currentIdx) {
+                    Video nextVideo = topRow.get(randomIndex);
+                    current.nextMediaItem = SimpleMediaItem.from(nextVideo);
+                    current.isShuffled = true;
+                    player.setNextTitle(nextVideo);
+                }
+            }
+        }
     }
 
     private int getPlaybackMode() {

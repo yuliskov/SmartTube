@@ -10,7 +10,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
@@ -18,6 +22,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     private final List<Video> mVideoItems = new ArrayList<>();
     // CopyOnWriteArrayList to fix Fatal Exception: java.lang.ArrayIndexOutOfBoundsException: length=10; index=-1
     private final List<VideoGroup> mVideoGroups = new CopyOnWriteArrayList<>(); // keep groups from being garbage collected
+    // Removed by the user. The group (or the next page) may still contain them.
+    private final Set<Video> mRemovedItems = new HashSet<>();
     private static final int TYPE_ADD = 0;
     private static final int TYPE_REMOVE = 1;
     private static final int TYPE_SYNC = 2;
@@ -112,11 +118,15 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         int begin = mVideoItems.size();
 
         if (mVideoGroups.contains(group)) {
-            int end = group.getVideos().size();
-            if (begin > end) {
-                mVideoItems.addAll(group.getVideos());
-            } else {
-                mVideoItems.addAll(group.getVideos().subList(begin, end));
+            // Continuation of the existing group: add only the new items.
+            // NOTE: Don't rely on indexes. The group and the adapter may differ in size (e.g. after the item is removed
+            // here but not from the group), which re-added the last items (e.g. the removed video at the end).
+            Set<Video> present = Collections.newSetFromMap(new IdentityHashMap<>());
+            present.addAll(mVideoItems);
+            for (Video video : group.getVideos()) {
+                if (!present.contains(video) && !mRemovedItems.contains(video)) {
+                    mVideoItems.add(video);
+                }
             }
         } else {
             mVideoItems.addAll(group.getVideos());
@@ -169,6 +179,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         int itemCount = mVideoItems.size();
         mVideoItems.clear();
         mVideoGroups.clear();
+        mRemovedItems.clear();
         if (itemCount != 0) {
             // NOTE: Crashes RecycleView IndexOutOfBoundsException when doing add immediately after clear
             notifyItemRangeRemoved(0, itemCount);
@@ -181,6 +192,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 int index = mVideoItems.indexOf(video);
                 if (index != -1) {
                     mVideoItems.remove(video);
+                    mRemovedItems.add(video);
                     notifyItemRangeRemoved(index, 1);
                     removeFromGroup(video);
                 } else {

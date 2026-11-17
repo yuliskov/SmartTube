@@ -81,6 +81,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public class ViewHolder extends PlaybackRowPresenter.ViewHolder implements PlaybackSeekUi {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
+        // Key auto repeat is ~50ms. A longer gap between seek steps means separate key presses.
+        private static final long SEEK_KEY_REPEAT_MAX_GAP_MS = 300;
         private static final int CONTROLS_MODE_FULL = 0;
         private static final int CONTROLS_MODE_COMPACT = 1;
         final Presenter.ViewHolder mDescriptionViewHolder;
@@ -124,6 +126,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         int mPositionsLength;
         long mSeekIncrementMs = -1;
         long mSeekStartTimeMs;
+        long mLastSeekStepMs;
         final PlayerData mPlayerData;
 
         // MOD: update quality info
@@ -283,6 +286,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         void resetSeekIncrement() {
             mSeekIncrementMs = -1;
+            mLastSeekStepMs = 0;
         }
 
         /**
@@ -290,17 +294,18 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
          * By increasing seek speed by 1.5 every 1 second.
          */
         long calculateSeekIncrement() {
-            if (mSeekIncrementMs == -1) {
-                mSeekStartTimeMs = System.currentTimeMillis();
+            long now = System.currentTimeMillis();
+            // Only a held key (auto repeat) speeds up the seek. Separate presses use the selected interval.
+            boolean isKeyHeld = mLastSeekStepMs > 0 && now - mLastSeekStepMs < SEEK_KEY_REPEAT_MAX_GAP_MS;
+            mLastSeekStepMs = now;
+
+            if (mSeekIncrementMs == -1 || !isKeyHeld) {
+                mSeekStartTimeMs = now;
                 mSeekIncrementMs = mPlayerData.getSeekIncrementMs();
-            } else {
+            } else if (now - mSeekStartTimeMs >= SPEED_INCREASE_PERIOD_MS) {
                 // increase seek speed by 1.5 every 1 second
-                long timePassed = System.currentTimeMillis() - mSeekStartTimeMs;
-                long timeFactor = timePassed / SPEED_INCREASE_PERIOD_MS;
-                if (timeFactor == 1) {
-                    mSeekStartTimeMs = System.currentTimeMillis();
-                    mSeekIncrementMs *= SPEED_INCREASE_FACTOR;
-                }
+                mSeekStartTimeMs = now;
+                mSeekIncrementMs *= SPEED_INCREASE_FACTOR;
             }
 
             return mSeekIncrementMs;

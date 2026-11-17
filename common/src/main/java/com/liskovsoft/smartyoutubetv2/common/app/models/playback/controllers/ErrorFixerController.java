@@ -30,6 +30,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private VideoLoaderController mVideoLoaderController;
     private String mSabrErrorFixVideoId;
     private int mSabrErrorFixAttempts;
+    private static final long STALL_SAME_POSITION_MS = 5_000;
+    private String mStallVideoId;
+    private long mStallPositionMs;
+    private int mStallCount;
 
     @Override
     public void onInit() {
@@ -87,9 +91,38 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //lowerVideoQuality();
             //mVideoLoaderController.restartEngine();
 
-            // SABR may hang if the server issues a high backoffTime
-            mVideoLoaderController.reloadVideo();
+            fixOnlineStall();
         }
+    }
+
+    /**
+     * A plain reload fixes a hang caused by a high SABR backoffTime. But if the server keeps answering
+     * ATTESTATION_PENDING (the PoToken isn't accepted), every reload reuses the same cached PoToken and
+     * resumes after the 60 sec attestation window, so it stalls again at the same spot forever.
+     * A fresh PoToken doesn't help either (it's rejected too), so switch the client when the stall repeats at the same position.
+     */
+    private void fixOnlineStall() {
+        Video video = getVideo();
+        long positionMs = getPlayer().getPositionMs();
+
+        if (video != null && Helpers.equals(video.videoId, mStallVideoId)
+                && Math.abs(positionMs - mStallPositionMs) < STALL_SAME_POSITION_MS) {
+            mStallCount++;
+        } else {
+            mStallVideoId = video != null ? video.videoId : null;
+            mStallCount = 1;
+        }
+        mStallPositionMs = positionMs;
+
+        Log.d(TAG, "Long buffering at %s ms. Stall count: %s", positionMs, mStallCount);
+
+        if (mStallCount > 1) {
+            MessageHelpers.showLongMessage(getContext(), "Fixing stalled client...");
+            YouTubeServiceManager.instance().switchNextClientNow();
+        }
+
+        // SABR may hang if the server issues a high backoffTime
+        mVideoLoaderController.reloadVideo();
     }
 
     @Override
@@ -152,7 +185,27 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
+        if (applySabrPoTokenAction(error)) {
+            return;
+        }
+
         applyEngineErrorAction(type, rendererIndex, error);
+    }
+
+    /**
+     * The SABR server keeps answering ATTESTATION_PENDING and sends no media (the PoToken isn't accepted).
+     * A reload with the same client fails the same way, so switch the client right away.
+     */
+    private boolean applySabrPoTokenAction(Throwable error) {
+        if (error == null || !(error.getCause() instanceof SabrPoTokenError)) {
+            return false;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), "PoToken rejected. Switching client...");
+        YouTubeServiceManager.instance().switchNextClientNow();
+        mVideoLoaderController.reloadVideo();
+
+        return true;
     }
 
     /**
@@ -455,8 +508,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     }
 
     private void disableSubtitles() {
-        getPlayerData().setSubtitlesPerChannelEnabled(false); // Important!
-        getPlayerData().setFormat(FormatItem.SUBTITLE_NONE);
+        // Only for the current video. Persisting it (as before) silently wiped the user's subtitle settings
+        // (incl. "subtitles per channel") after a temporary error, e.g. "Response code: 429".
+        getPlayerData().setSubtitlesTempDisabled(true);
     }
 
     private boolean isStreamEnded() {
