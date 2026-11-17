@@ -22,7 +22,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
             int currentState = playbackPresenter.getView().getButtonState(R.id.action_thumbs_up);
             playbackPresenter.onButtonClicked(R.id.action_thumbs_up, currentState);
-            MessageHelpers.showMessage(getContext(), currentState == PlayerUI.BUTTON_OFF ? R.string.action_like : R.string.action_like_unset);
+            MessageHelpers.showMessage(getContext(), currentState == PlayerUI.BUTTON_OFF ? R.string.action_liked : R.string.action_like_unset);
         }
     };
     private final Runnable dislikeAction = () -> {
@@ -30,7 +30,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (playbackPresenter != null && playbackPresenter.getView() != null) {
             int currentState = playbackPresenter.getView().getButtonState(R.id.action_thumbs_down);
             playbackPresenter.onButtonClicked(R.id.action_thumbs_down, currentState);
-            MessageHelpers.showMessage(getContext(), currentState == PlayerUI.BUTTON_OFF ? R.string.action_dislike : R.string.action_dislike_unset);
+            MessageHelpers.showMessage(getContext(), currentState == PlayerUI.BUTTON_OFF ? R.string.action_disliked : R.string.action_dislike_unset);
         }
     };
     private final Runnable speedUpAction = () -> speedUp(true);
