@@ -293,7 +293,8 @@ public class SuggestionsController extends BasePlayerController {
         Video next = Playlist.instance().getNext();
 
         if (next != null) {
-            next.fromQueue = true;
+            // NOTE: don't mark as 'fromQueue' here: the method is also used to show the next title.
+            // The item is marked when it's actually opened (see VideoLoaderController.loadNext).
             result = next;
         } else if (!getVideo().isShuffled &&
                 Helpers.startsWith(getVideo().getPlaylistId(), "RD") &&
