@@ -87,7 +87,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             //lowerVideoQuality();
             //mVideoLoaderController.restartEngine();
 
-            // SABR may hang if the server issues a high backoffTime
+            YouTubeServiceManager.instance().invalidateFormatCache();
             mVideoLoaderController.reloadVideo();
         }
     }
@@ -219,6 +219,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", backoffError.getMessage(), mSabrErrorFixAttempts);
 
         // SABR may hang if the server issues a high backoffTime
+        YouTubeServiceManager.instance().invalidateFormatCache();
         mVideoLoaderController.reloadVideo();
 
         return true;
