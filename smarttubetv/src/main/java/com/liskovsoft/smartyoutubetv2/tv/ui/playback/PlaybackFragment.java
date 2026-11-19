@@ -125,6 +125,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     private Boolean mIsControlsShownPreviously;
     private Video mPendingFocus;
     private String mSelectedVideoId;
+    private long mResumeTimeMs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -233,6 +234,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // NOTE: don't move this into another place! Multiple components rely on it.
         mPlaybackPresenter.onViewResumed();
 
+        mResumeTimeMs = System.currentTimeMillis();
         showHideWidgets(true); // PIP mode fix
         blockEngine(false); // reset bg mode
         //ExoPlayerInitializer.enableAudioFocus(mPlayer, true); // Restore focus after PIP
@@ -672,6 +674,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 // It's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
                 if (System.currentTimeMillis() - getPlayerData().getAfrSwitchTimeMs() < 5_000) {
+                    return false;
+                }
+
+                if (!playWhenReady && getPlayerData().isAfrEnabled() && System.currentTimeMillis() - mResumeTimeMs < 3_000) {
                     return false;
                 }
 
