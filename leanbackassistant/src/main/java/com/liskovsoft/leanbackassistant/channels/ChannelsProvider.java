@@ -459,6 +459,12 @@ public class ChannelsProvider {
             .setPosterArtAspectRatio(clip.getAspectRatio())
             .setType(TvContractCompat.PreviewPrograms.TYPE_MOVIE);
 
+        // The launcher draws the card's progress bar from these two columns. The percent comes with the
+        // account's watch history, so a video watched on the phone shows its progress here too.
+        if (clip.getPercentWatched() > 0 && clip.getPercentWatched() <= 100 && clip.getDurationMs() > 0) {
+            baseBuilder.setLastPlaybackPositionMillis((int) (clip.getDurationMs() * clip.getPercentWatched() / 100));
+        }
+
         return baseBuilder;
     }
 
