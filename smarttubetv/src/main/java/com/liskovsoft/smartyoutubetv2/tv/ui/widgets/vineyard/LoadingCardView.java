@@ -6,14 +6,13 @@ import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.leanback.widget.BaseCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class LoadingCardView extends BaseCardView {
 
-    private ProgressBar mProgressBar;
+    private View mProgressBar;
 
     public LoadingCardView(Context context, int styleResId) {
         super(new ContextThemeWrapper(context, styleResId), null, 0);
@@ -42,7 +41,7 @@ public class LoadingCardView extends BaseCardView {
                 getContext().obtainStyledAttributes(
                         styleResId, R.styleable.lbImageCardView);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_indicator);
+        mProgressBar = findViewById(R.id.progress_indicator);
         cardAttrs.recycle();
     }
 

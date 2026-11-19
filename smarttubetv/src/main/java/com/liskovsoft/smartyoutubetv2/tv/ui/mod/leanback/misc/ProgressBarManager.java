@@ -6,12 +6,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.VerticalGridFragment;
 
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.progress.CircularProgressView;
 
 /**
  * Manager for showing/hiding progress bar widget. This class lets user specify an initial
@@ -62,11 +61,7 @@ public final class ProgressBarManager {
     };
 
     private static View createProgressBar(ViewGroup rootView, int position) {
-        ProgressBar progressBarView = new ProgressBar(
-                rootView.getContext(), null, android.R.attr.progressBarStyleLarge);
-        progressBarView.setIndeterminate(true);
-        progressBarView.setIndeterminateDrawable(
-                ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+        View progressBarView = new CircularProgressView(rootView.getContext());
 
         FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,

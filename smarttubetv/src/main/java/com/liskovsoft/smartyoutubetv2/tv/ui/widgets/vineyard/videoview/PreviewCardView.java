@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class PreviewCardView extends FrameLayout {
@@ -17,7 +16,7 @@ public class PreviewCardView extends FrameLayout {
 
     View mOverlayView;
 
-    ProgressBar mProgressCard;
+    View mProgressCard;
 
     private String mVideoUrl;
 
