@@ -205,7 +205,17 @@ public class TrackSelectorUtil {
     }
 
     public static String buildChannels(Format format) {
-        return is51Audio(format) ? "5.1" : "";
+        if (format == null) {
+            return "";
+        }
+
+        if (format.channelCount == 8) {
+            return "7.1";
+        } else if (format.channelCount == 6 || is51Audio(format)) {
+            return "5.1";
+        }
+
+        return "";
     }
 
     public static String buildDrcMark(Format format) {
@@ -221,7 +231,7 @@ public class TrackSelectorUtil {
             return false;
         }
 
-        return format.bitrate > 300000;
+        return (format.channelCount != Format.NO_VALUE && format.channelCount >= 6) || format.bitrate > 300000;
     }
 
     public static boolean is48KAudio(Format format) {
