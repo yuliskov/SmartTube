@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
@@ -143,6 +144,15 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
 
     public boolean isInPipMode() {
         return getView() != null && getView().isInPIPMode();
+    }
+
+    /**
+     * Same as a click on the subtitles button
+     */
+    public void toggleSubtitles() {
+        if (getView() != null) {
+            onButtonClicked(R.id.lb_control_closed_captioning, getView().getButtonState(R.id.lb_control_closed_captioning));
+        }
     }
 
     public boolean isOverlayShown() {
