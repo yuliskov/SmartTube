@@ -5,6 +5,8 @@ import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerUI;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -35,6 +37,20 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
     };
     private final Runnable speedUpAction = () -> speedUp(true);
     private final Runnable speedDownAction = () -> speedUp(false);
+    private final Runnable watchLaterAction = () -> {
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
+        Video video = playbackPresenter != null ? playbackPresenter.getVideo() : null;
+
+        MediaServiceManager.instance().toggleWatchLaterPlaylist(video, getContext());
+    };
+    private final Runnable videoMenuAction = () -> {
+        PlaybackPresenter playbackPresenter = getPlaybackPresenter();
+        Video video = playbackPresenter != null ? playbackPresenter.getVideo() : null;
+
+        if (video != null) {
+            VideoMenuPresenter.instance(getContext()).showMenu(video);
+        }
+    };
     private final Runnable volumeUpAction = () -> volumeUp(true);
     private final Runnable volumeDownAction = () -> volumeUp(false);
     private final Runnable speedToggleAction = () -> {
@@ -159,6 +175,32 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (mGeneralData.isRemapDpadLeftToVolumeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_DPAD_LEFT, volumeDownAction);
             actionMapping.put(KeyEvent.KEYCODE_DPAD_RIGHT, volumeUpAction);
+        }
+
+        addProgramKeyAction(KeyEvent.KEYCODE_PROG_RED, mGeneralData.getProgramRedAction());
+        addProgramKeyAction(KeyEvent.KEYCODE_PROG_GREEN, mGeneralData.getProgramGreenAction());
+        addProgramKeyAction(KeyEvent.KEYCODE_PROG_YELLOW, mGeneralData.getProgramYellowAction());
+        addProgramKeyAction(KeyEvent.KEYCODE_PROG_BLUE, mGeneralData.getProgramBlueAction());
+    }
+
+    private void addProgramKeyAction(int keyCode, int action) {
+        Map<Integer, Runnable> actionMapping = getActionMapping();
+
+        switch (action) {
+            case GeneralData.ACTION_WATCH_LATER:
+                actionMapping.put(keyCode, watchLaterAction);
+                break;
+            case GeneralData.ACTION_MENU:
+                actionMapping.put(keyCode, videoMenuAction);
+                break;
+            case GeneralData.ACTION_SPEED_UP:
+                actionMapping.put(keyCode, speedUpAction);
+                break;
+            case GeneralData.ACTION_SPEED_DOWN:
+                actionMapping.put(keyCode, speedDownAction);
+                break;
+            default:
+                break;
         }
     }
 

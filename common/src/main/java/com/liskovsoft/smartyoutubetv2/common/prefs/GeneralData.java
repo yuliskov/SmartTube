@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.content.Context;
+import android.view.KeyEvent;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -33,6 +34,10 @@ public class GeneralData implements ProfileChangeListener {
     public static final int ACTION_SPEED_TOGGLE = 5;
     public static final int ACTION_FAST_FORWARD_REWIND = 6;
     public static final int ACTION_SEARCH = 7;
+    public static final int ACTION_WATCH_LATER = 8;
+    public static final int ACTION_MENU = 9;
+    public static final int ACTION_SPEED_UP = 10;
+    public static final int ACTION_SPEED_DOWN = 11;
     private static GeneralData sInstance;
     private final AppPrefs mPrefs;
     private String mBackupZipName;
@@ -57,6 +62,10 @@ public class GeneralData implements ProfileChangeListener {
     private int mFastForwardRewindAction;
     private int mPageUpDownAction;
     private int mChannelUpDownAction;
+    private int mProgramRedAction;
+    private int mProgramGreenAction;
+    private int mProgramYellowAction;
+    private int mProgramBlueAction;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
@@ -571,6 +580,61 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public int getProgramRedAction() {
+        return mProgramRedAction;
+    }
+
+    public void setProgramRedAction(int action) {
+        mProgramRedAction = action;
+        persistState();
+    }
+
+    public int getProgramGreenAction() {
+        return mProgramGreenAction;
+    }
+
+    public void setProgramGreenAction(int action) {
+        mProgramGreenAction = action;
+        persistState();
+    }
+
+    public int getProgramYellowAction() {
+        return mProgramYellowAction;
+    }
+
+    public void setProgramYellowAction(int action) {
+        mProgramYellowAction = action;
+        persistState();
+    }
+
+    public int getProgramBlueAction() {
+        return mProgramBlueAction;
+    }
+
+    public void setProgramBlueAction(int action) {
+        mProgramBlueAction = action;
+        persistState();
+    }
+
+    /**
+     * Action assigned to the given Program key (Red/Green/Yellow/Blue).<br/>
+     * <code>ACTION_UNDEFINED</code> when the key isn't a Program key or has no action assigned.
+     */
+    public int getProgramKeyAction(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_PROG_RED:
+                return mProgramRedAction;
+            case KeyEvent.KEYCODE_PROG_GREEN:
+                return mProgramGreenAction;
+            case KeyEvent.KEYCODE_PROG_YELLOW:
+                return mProgramYellowAction;
+            case KeyEvent.KEYCODE_PROG_BLUE:
+                return mProgramBlueAction;
+            default:
+                return ACTION_UNDEFINED;
+        }
+    }
+
     /**
      * Fixed ConcurrentModificationException after onProfileChanged()<br/>
      * Happened inside cleanupPinnedItems()
@@ -656,6 +720,10 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
+        mProgramRedAction = Helpers.parseInt(split, 73, ACTION_UNDEFINED);
+        mProgramGreenAction = Helpers.parseInt(split, 74, ACTION_UNDEFINED);
+        mProgramYellowAction = Helpers.parseInt(split, 75, ACTION_UNDEFINED);
+        mProgramBlueAction = Helpers.parseInt(split, 76, ACTION_UNDEFINED);
     }
 
     public void persistNow() {
@@ -681,7 +749,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled));
+                mIsRemapSToSpeedToggleEnabled, mProgramRedAction, mProgramGreenAction, mProgramYellowAction, mProgramBlueAction));
     }
 
     @Override

@@ -47,6 +47,26 @@ public class GlobalKeyTranslator extends KeyTranslator {
         //globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_DPAD_DOWN);
         //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT);
         //globalKeyMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT);
+
+        addProgramKeyMenuMapping(KeyEvent.KEYCODE_PROG_RED, getGeneralData().getProgramRedAction());
+        addProgramKeyMenuMapping(KeyEvent.KEYCODE_PROG_GREEN, getGeneralData().getProgramGreenAction());
+        addProgramKeyMenuMapping(KeyEvent.KEYCODE_PROG_YELLOW, getGeneralData().getProgramYellowAction());
+        addProgramKeyMenuMapping(KeyEvent.KEYCODE_PROG_BLUE, getGeneralData().getProgramBlueAction());
+    }
+
+    /**
+     * Program keys (Red/Green/Yellow/Blue) mapped to the 'Menu button' action.<br/>
+     * They are translated to the regular Menu key so that any screen can handle them
+     * (context menus on cards, headers etc).<br/>
+     * In the player the 'Menu button' action is handled by the action mapping instead
+     * (see PlayerKeyTranslator), because action mapping is checked first.
+     */
+    private void addProgramKeyMenuMapping(int keyCode, int action) {
+        if (action != GeneralData.ACTION_MENU) {
+            return;
+        }
+
+        getKeyMapping().put(keyCode, KeyEvent.KEYCODE_MENU);
     }
 
     @Override
