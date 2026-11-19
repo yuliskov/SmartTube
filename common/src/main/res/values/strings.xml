@@ -102,6 +102,9 @@
     <string name="show_again">Show again</string>
     <string name="check_updates_auto">Notify about updates</string>
     <string name="select_account_on_boot">Show account selection on boot</string>
+    <string name="account_selection_title">Who\'s watching?</string>
+    <string name="account_selection_add_account">Add account</string>
+    <string name="account_selection_signed_out">Use signed out</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>

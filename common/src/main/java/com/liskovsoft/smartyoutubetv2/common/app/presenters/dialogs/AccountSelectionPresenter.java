@@ -2,34 +2,30 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
 import com.liskovsoft.mediaserviceinterfaces.SignInService;
 import com.liskovsoft.mediaserviceinterfaces.oauth.Account;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.YTSignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AccountSelectionView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
-import com.liskovsoft.smartyoutubetv2.common.utils.GlideIconFetcher;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AccountSelectionPresenter extends BasePresenter<Void> {
+public class AccountSelectionPresenter extends BasePresenter<AccountSelectionView> {
     private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
+    private static final long SWITCH_ACCOUNT_DELAY_MS = 1_500;
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInService mSignInService;
+    private static Runnable sPendingSwitch; // static: survives unhold() of the presenter
 
     public AccountSelectionPresenter(Context context) {
         super(context);
@@ -57,9 +53,13 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        GlideIconFetcher.fetchDrawables(getContext(),
-                Helpers.map(mSignInService.getAccounts(), Account::getAvatarImageUrl),
-                icons -> createAndShowDialog(mSignInService.getAccounts(), icons, force));
+        List<Account> accounts = mSignInService.getAccounts();
+
+        if ((accounts == null || accounts.size() <= 1) && !force) {
+            return;
+        }
+
+        getViewManager().startView(AccountSelectionView.class);
     }
 
     public void nextAccountOrDialog() {
@@ -70,42 +70,32 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         sInstance = null;
     }
 
-    private void createAndShowDialog(List<Account> accounts, List<Drawable> icons, boolean force) {
-        if (accounts.size() <= 1 && !force) {
-            return;
+    @Override
+    public void onViewResumed() {
+        super.onViewResumed();
+
+        // Refresh on every resume: the list could change after returning from the sign in screen
+        if (getView() != null) {
+            getView().update(mSignInService.getAccounts());
         }
-
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-
-        appendAccountSelection(accounts, icons, dialogPresenter);
-
-        dialogPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
-    private void appendAccountSelection(List<Account> accounts, List<Drawable> icons, AppDialogPresenter settingsPresenter) {
-        List<OptionItem> optionItems = new ArrayList<>();
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        unhold();
+    }
 
-        optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> {
-                    selectAccount(null);
-                    settingsPresenter.closeDialog();
-                }, true
-        ));
-
-        int index = -1;
-
-        for (Account account : accounts) {
-            index++;
-            CharSequence icon = Utils.icon(accounts.size() == icons.size() ? icons.get(index) : null);
-            optionItems.add(UiOptionItem.from(
-                    TextUtils.concat(icon, " ", formatAccount(account)), option -> {
-                        selectAccount(account);
-                        settingsPresenter.closeDialog();
-                    }, account.isSelected()
-            ));
+    public void onAccountClicked(Account account) {
+        if (getView() != null) {
+            getView().close();
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list), optionItems);
+        switchAccount(account);
+    }
+
+    public void onAddAccountClicked() {
+        YTSignInPresenter.instance(getContext()).start();
     }
 
     private void nextAccountOrDialog(List<Account> accounts) {
@@ -127,8 +117,29 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
         int nextIndex = index + 1;
         // null == 'without account'
-        selectAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
+        switchAccount(nextIndex == accounts.size() ? null : accounts.get(nextIndex));
         //selectAccount(accounts.get(nextIndex == accounts.size() ? 0 : nextIndex));
+    }
+
+    /**
+     * Manual account switch by the user. Starts a new session: the previous video (e.g. playing in background or PIP)
+     * shouldn't keep running and end up in the watch history of the newly selected account.
+     */
+    public void switchAccount(Account account) {
+        Utils.removeCallbacks(sPendingSwitch);
+        sPendingSwitch = null;
+
+        boolean isAccountChanged = account != null ? !account.isSelected() : mSignInService.getSelectedAccount() != null;
+        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+
+        if (isAccountChanged && playbackPresenter.getView() != null) {
+            playbackPresenter.forceFinish();
+            // Switch after a delay to let the player save its last position under the previous account
+            sPendingSwitch = () -> selectAccount(account);
+            Utils.postDelayed(sPendingSwitch, SWITCH_ACCOUNT_DELAY_MS);
+        } else {
+            selectAccount(account);
+        }
     }
 
     public void selectAccount(Account account) {
@@ -141,17 +152,5 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         if (historyState != GeneralData.HISTORY_AUTO) {
             MediaServiceManager.instance().enableHistory(historyState != GeneralData.HISTORY_DISABLED);
         }
-    }
-
-    private String formatAccount(Account account) {
-        String format;
-
-        if (account.getEmail() != null) {
-            format = String.format("%s (%s)", account.getName(), account.getEmail());
-        } else {
-            format = account.getName();
-        }
-
-        return format;
     }
 }
