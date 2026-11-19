@@ -118,4 +118,10 @@
     <string name="text_post_results_title">Posts for %s</string>
     <string name="text_no_results">No results</string>
     <string name="error_message_network_needed">Oops, you need a network connection to do that!</string>
+    <string name="action_more_options">More options</string>
+    <string name="action_voice_search">Voice search</string>
+    <string name="action_search_settings">Search settings</string>
+    <string name="action_start_search">Search</string>
+    <string name="playback_seek_bar">Seek bar</string>
+    <string name="status_loading">Loading</string>
 </resources>

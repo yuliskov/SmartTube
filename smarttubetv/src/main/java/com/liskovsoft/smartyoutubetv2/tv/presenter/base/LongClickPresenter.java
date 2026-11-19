@@ -1,9 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter.base;
 
+import android.os.Build.VERSION;
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public abstract class LongClickPresenter extends Presenter {
     private OnItemLongPressedListener mLongPressedListener;
@@ -43,16 +48,43 @@ public abstract class LongClickPresenter extends Presenter {
 
             return false; // enable navigation events
         });
+
+        if (VERSION.SDK_INT >= 21) {
+            viewHolder.view.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                @Override
+                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+
+                    if (mLongPressedListener != null && !Boolean.TRUE.equals(mLongPressDisabled)) {
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
+                                R.id.action_context_menu,
+                                host.getContext().getString(R.string.action_more_options)));
+                    }
+                }
+
+                @Override
+                public boolean performAccessibilityAction(View host, int action, Bundle args) {
+                    if (action == R.id.action_context_menu && mLongPressedListener != null) {
+                        mLongPressedListener.onItemLongPressed(viewHolder, item);
+
+                        return true;
+                    }
+
+                    return super.performAccessibilityAction(host, action, args);
+                }
+            });
+        }
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
         if (mLongPressedListener != null) {
             viewHolder.view.setOnLongClickListener(null);
+            viewHolder.view.setOnKeyListener(null);
         }
 
-        if (mLongPressedListener != null) {
-            viewHolder.view.setOnKeyListener(null);
+        if (VERSION.SDK_INT >= 21) {
+            viewHolder.view.setAccessibilityDelegate(null);
         }
     }
 }

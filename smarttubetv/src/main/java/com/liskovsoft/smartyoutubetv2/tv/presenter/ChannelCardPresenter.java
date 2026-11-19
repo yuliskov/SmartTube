@@ -102,6 +102,7 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.getTitle());
+        viewHolder.view.setContentDescription(video.getTitle());
 
         // We should setup props each time because object may be reused by the underlying RecyclerView
         textView.setBackgroundColor(video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
