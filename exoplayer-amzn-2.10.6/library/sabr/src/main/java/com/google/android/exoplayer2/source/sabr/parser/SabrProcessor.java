@@ -430,6 +430,7 @@ public class SabrProcessor {
     }
 
     public ProcessStreamProtectionStatusResult processStreamProtectionStatus(StreamProtectionStatus streamProtectionStatus) {
+        Status previousStatus = this.streamProtectionStatus;
         this.streamProtectionStatus = streamProtectionStatus.hasStatus() ? streamProtectionStatus.getStatus() : null;
         Status status = streamProtectionStatus.getStatus();
         String poToken = this.poToken;
@@ -449,6 +450,10 @@ public class SabrProcessor {
 
         if (resultStatus != null) {
             result.sabrPart = new PoTokenStatusSabrPart(resultStatus);
+        }
+
+        if (status != previousStatus) {
+            Log.d(TAG, "Stream protection status changed: %s -> %s (%s)", previousStatus, status, resultStatus);
         }
 
         // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
