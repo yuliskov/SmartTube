@@ -8,7 +8,11 @@ public class SabrBackoffError extends SabrPropagationError {
     public final int backoffMs;
 
     public SabrBackoffError(int backoffMs) {
-        super(String.format("Server asked to back off for %s ms", backoffMs));
+        this(backoffMs, String.format("Server asked to back off for %s ms", backoffMs));
+    }
+
+    public SabrBackoffError(int backoffMs, String message) {
+        super(message);
         this.backoffMs = backoffMs;
     }
 }

@@ -277,7 +277,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
     @Override
     public void getNextChunk(long playbackPositionUs, long loadPositionUs, List<? extends MediaChunk> queue, ChunkHolder out) {
-        if (fatalError != null) {
+        if (fatalError != null || (sabrStream != null && sabrStream.getFatalError() != null)) {
             return;
         }
 
