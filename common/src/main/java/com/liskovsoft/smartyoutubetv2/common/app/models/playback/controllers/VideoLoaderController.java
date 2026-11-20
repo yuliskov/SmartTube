@@ -31,11 +31,21 @@ import io.reactivex.disposables.Disposable;
 public class VideoLoaderController extends BasePlayerController {
     private static final String TAG = VideoLoaderController.class.getSimpleName();
     private static final int MIN_SHUFFLE_SIZE = 30;
+    /**
+     * Stream urls (DASH and SABR) are signed for ~6 hours (expiresInSeconds ~21540).
+     */
+    private static final long STALE_FORMAT_INFO_MS = 5 * 60 * 60 * 1_000;
+    /**
+     * Don't touch continuous playback, only a player that was paused or in background (e.g. TV standby).
+     */
+    private static final long MIN_IDLE_TIME_MS = 10 * 60 * 1_000;
     private final Playlist mPlaylist;
     private Video mPendingVideo;
     private SuggestionsController mSuggestionsController;
     private ErrorFixerController mErrorFixerController;
     private Disposable mFormatInfoAction;
+    private long mFormatInfoLoadedMs;
+    private long mIdleStartMs;
     private final Runnable mReloadVideo = () -> {
         getMainController().onNewVideo(getVideo());
     };
@@ -107,6 +117,29 @@ public class VideoLoaderController extends BasePlayerController {
     @Override
     public void onEngineReleased() {
         disposeActions();
+        mFormatInfoLoadedMs = 0; // fresh data will be fetched in onEngineInitialized()
+    }
+
+    @Override
+    public void onViewPaused() {
+        markIdle();
+    }
+
+    @Override
+    public void onPause() {
+        markIdle();
+    }
+
+    @Override
+    public void onViewResumed() {
+        reloadIfStale();
+    }
+
+    @Override
+    public void onPlay() {
+        if (!reloadIfStale()) {
+            mIdleStartMs = 0;
+        }
     }
 
     @Override
@@ -254,6 +287,7 @@ public class VideoLoaderController extends BasePlayerController {
         //getPlayer().showProgressBar(true);
         Utils.post(mShowProgressBar);
         disposeActions();
+        mFormatInfoLoadedMs = 0;
 
         ServiceManager service = YouTubeServiceManager.instance();
         service.allowRestrictedVideos(!getGeneralData().isChildModeEnabled());
@@ -272,6 +306,9 @@ public class VideoLoaderController extends BasePlayerController {
         if (player == null || getVideo() == null) {
             return;
         }
+
+        mFormatInfoLoadedMs = System.currentTimeMillis();
+        mIdleStartMs = 0;
 
         String bgImageUrl = null;
 
@@ -329,6 +366,40 @@ public class VideoLoaderController extends BasePlayerController {
         }
 
         player.showBackground(bgImageUrl); // remove bg (if video playing) or set another bg
+    }
+
+    private void markIdle() {
+        if (mIdleStartMs == 0) {
+            mIdleStartMs = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     * The engine may survive for hours when the player stays open (paused, background mode, TV standby).<br/>
+     * By that time the stream urls are expired and every request fails with 403.<br/>
+     * Fetch a fresh player response instead (the position is restored by {@link VideoStateController}).
+     */
+    private boolean reloadIfStale() {
+        PlaybackView player = getPlayer();
+        Video video = getVideo();
+
+        if (player == null || video == null || video.isLive || mFormatInfoLoadedMs == 0 || mIdleStartMs == 0 ||
+                !player.isEngineInitialized() || !player.containsMedia() || isActionsRunning()) {
+            return false;
+        }
+
+        long nowMs = System.currentTimeMillis();
+
+        if (nowMs - mFormatInfoLoadedMs < STALE_FORMAT_INFO_MS || nowMs - mIdleStartMs < MIN_IDLE_TIME_MS) {
+            return false;
+        }
+
+        Log.d(TAG, "Stream urls are expired. Reloading the video...");
+        mFormatInfoLoadedMs = 0;
+        mIdleStartMs = 0;
+        reloadVideo(0);
+
+        return true;
     }
 
     private void reloadVideo(int delayMs) {
