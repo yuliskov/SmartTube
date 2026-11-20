@@ -1,0 +1,70 @@
+# CodeRabbit Master Review Configuration — SmartTube
+# Reference: Docs/CodeRabbit.md
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+version: 2
+language: "en-US"
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  changed_files_summary: true
+  collapse_walkthrough: true
+  poem: false
+  in_progress_fortune: false
+  review_status: true
+  commit_status: true
+  enable_prompt_for_ai_agents: true
+
+  slop_detection:
+    enabled: true
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - "master"
+      - "main"
+      - "perf/leanback-ui-and-playback-resilience"
+
+  finishing_touches:
+    autofix:
+      enabled: true
+    fix_ci:
+      enabled: true
+    resolve_merge_conflict:
+      enabled: true
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: true
+
+  tools:
+    detekt:
+      enabled: true
+    gitleaks:
+      enabled: true
+
+  path_filters:
+    - "!**/build/**"
+    - "!**/.gradle/**"
+    - "!**/*.apk"
+    - "!**/temp/**"
+
+  path_instructions:
+    - path: "common/**"
+      instructions: |
+        Ensure media playback buffer management and stream extractors remain resilient.
+        Maintain strict Leanback remote control traversal and D-Pad focus ring visibility.
+
+knowledge_base:
+  web_search:
+    enabled: true
+  learnings:
+    scope: "auto"
+
+chat:
+  auto_reply: true
