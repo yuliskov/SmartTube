@@ -2,7 +2,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 import android.util.Pair;
+import com.liskovsoft.leanbackassistant.channels.UpdateChannelsWorker;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -19,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.internal.MediaServiceData;
 
 import java.util.ArrayList;
@@ -648,7 +651,17 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.disable_channels_service),
-                option -> GlobalPreferences.instance(getContext()).setChannelsServiceEnabled(!option.isSelected()),
+                option -> {
+                    boolean enabled = !option.isSelected();
+                    GlobalPreferences.instance(getContext()).setChannelsServiceEnabled(enabled);
+
+                    if (enabled) {
+                        Utils.updateChannels(getContext());
+                    } else if (VERSION.SDK_INT >= 21) {
+                        // Otherwise the already enqueued work keeps running every 15 min
+                        UpdateChannelsWorker.cancel(getContext());
+                    }
+                },
                 !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),

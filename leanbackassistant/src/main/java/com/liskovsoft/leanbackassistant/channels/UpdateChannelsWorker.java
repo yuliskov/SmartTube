@@ -59,7 +59,8 @@ public class UpdateChannelsWorker extends Worker {
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
+        // NOTE: no isChannelsServiceEnabled() check: it's called when the service gets disabled
+        if (VERSION.SDK_INT >= 23) {
             Log.d(TAG, "Unregistering Channels update job...");
 
             SafeWorkManager workManager = SafeWorkManager.getInstance(context);
@@ -71,6 +72,12 @@ public class UpdateChannelsWorker extends Worker {
     @Override
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
+
+        // The work could be enqueued before the service was disabled (e.g. by an older version)
+        if (!GlobalPreferences.instance(getApplicationContext()).isChannelsServiceEnabled()) {
+            cancel(getApplicationContext());
+            return Result.success();
+        }
 
         // Foreground ⇒ possible playback; skip sync to avoid CPU contention during video decode (#6234)
         if (!Helpers.isAppInForeground() || sIsWorkScheduled) {
