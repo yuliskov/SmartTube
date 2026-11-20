@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Eksperymentalne transmisje na żywo SABR. Włącz tylko wtedy, gdy masz problemy ze zwykłymi transmisjami na żywo.</string>
     <string name="remote_control_dial">Pokaż na liście przesyłania YouTube (DIAL)</string>
     <string name="live_edge">Nie zostawaj w tyle za transmisją na żywo</string>
+    <string name="player_quick_skip_chapters">Następny odcinek przyciskiem w górę</string>
     <plurals name="hours">
         <item quantity="one">%s godzina</item>
         <item quantity="few">%s godziny</item>

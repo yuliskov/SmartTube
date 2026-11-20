@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Transmisiuni live SABR experimentale. Activați doar dacă aveți probleme cu transmisiunile live obișnuite.</string>
     <string name="remote_control_dial">Afișează în lista de proiectare YouTube (DIAL)</string>
     <string name="live_edge">Nu rămâne în urma transmisiunii live</string>
+    <string name="player_quick_skip_chapters">Episodul următor cu butonul Sus</string>
     <plurals name="hours">
         <item quantity="one">%s oră</item>
         <item quantity="few">%s ore</item>

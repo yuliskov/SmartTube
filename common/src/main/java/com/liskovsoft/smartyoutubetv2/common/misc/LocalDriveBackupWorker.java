@@ -34,35 +34,47 @@ public class LocalDriveBackupWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
-            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
-
-            // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
-            workManager.enqueueUniquePeriodicWork(
-                    WORK_NAME,
-                    ExistingPeriodicWorkPolicy.KEEP,
-                    //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    new PeriodicWorkRequest.Builder(
-                            LocalDriveBackupWorker.class,
-                            GeneralData.instance(context).getLocalDriveBackupFreqDays(),
-                            TimeUnit.DAYS).addTag(WORK_NAME)
-                            .build()
-            );
+        if (GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
+            scheduleReal(context);
+        } else {
+            cancel(context);
         }
+    }
+
+    private static void scheduleReal(Context context) {
+        if (VERSION.SDK_INT < 23) {
+            return;
+        }
+
+        SafeWorkManager workManager = SafeWorkManager.getInstance(context);
+
+        // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
+        workManager.enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
+                new PeriodicWorkRequest.Builder(
+                        LocalDriveBackupWorker.class,
+                        GeneralData.instance(context).getLocalDriveBackupFreqDays(),
+                        TimeUnit.DAYS).addTag(WORK_NAME)
+                        .build()
+        );
     }
 
     public static void forceSchedule(Context context) {
         new BackupAndRestoreManager(context).checkPermAndBackup();
-        schedule(context);
+        scheduleReal(context);
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23 && GeneralData.instance(context).getLocalDriveBackupFreqDays() > 0) {
-            Log.d(TAG, "Unregistering worker job...");
-
-            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
-            workManager.cancelUniqueWork(WORK_NAME);
+        if (VERSION.SDK_INT < 23) {
+            return;
         }
+
+        Log.d(TAG, "Unregistering worker job...");
+
+        SafeWorkManager workManager = SafeWorkManager.getInstance(context);
+        workManager.cancelUniqueWork(WORK_NAME);
     }
 
     @NonNull

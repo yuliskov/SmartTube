@@ -158,7 +158,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
             return liveEdgeMs;
         }
         // NOTE: liveEdgeMs could be -1 during initial video loading. Use fallback duration.
-        return liveEdgeMs != -1 ? liveEdgeMs : getVideo().getLiveDurationMs();
+        return liveEdgeMs != -1 ? liveEdgeMs : getVideo() != null ? getVideo().getLiveDurationMs() : -1;
     }
 
     @Override

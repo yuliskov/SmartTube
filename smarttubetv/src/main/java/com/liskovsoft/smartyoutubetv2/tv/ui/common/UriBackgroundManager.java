@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -142,6 +143,15 @@ public class UriBackgroundManager {
     }
 
     public void showBackgroundColor(int colorResId) {
+        try {
+            showBackgroundColorInternal(colorResId);
+        } catch (NullPointerException e) {
+            // Likely caused by OOM in View.setVisibility
+            Log.w(TAG, "showBackgroundColor: NPE swallowed", e);
+        }
+    }
+
+    private void showBackgroundColorInternal(int colorResId) {
         View videoView = mActivity.findViewById(R.id.video_surface);
 
         if (videoView != null) {

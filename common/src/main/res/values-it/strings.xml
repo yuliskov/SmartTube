@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Dirette SABR sperimentali. Attiva solo se hai problemi con le dirette normali.</string>
     <string name="remote_control_dial">Mostra nell\'elenco di trasmissione di YouTube (DIAL)</string>
     <string name="live_edge">Non restare indietro rispetto alla diretta</string>
+    <string name="player_quick_skip_chapters">Episodio successivo con il tasto Su</string>
     <plurals name="hours">
         <item quantity="one">%s ora</item>
         <item quantity="other">%s ore</item>

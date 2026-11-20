@@ -757,6 +757,7 @@
     <string name="fix_empty_subs_and_channels">Виправити порожні Підписки та Канали</string>
     <string name="remote_control_dial">Показувати в списку трансляції YouTube (DIAL)</string>
     <string name="live_edge">Не відставати від прямого ефіру</string>
+    <string name="player_quick_skip_chapters">Наступний епізод за кнопкою Вгору</string>
     <plurals name="hours">
         <item quantity="one">%s година</item>
         <item quantity="few">%s години</item>

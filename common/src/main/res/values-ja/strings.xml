@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">試験的なSABRライブ配信です。通常のライブ配信で問題が発生する場合のみ有効にしてください。</string>
     <string name="remote_control_dial">YouTubeのキャストリストに表示 (DIAL)</string>
     <string name="live_edge">ライブ配信に遅れない</string>
+    <string name="player_quick_skip_chapters">上ボタンで次のエピソード</string>
     <plurals name="hours">
         <item quantity="other">%s 時間</item>
     </plurals>

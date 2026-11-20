@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live">สตรีมสด SABR</string>
     <string name="prefer_sabr_live_desc">สตรีมสด SABR แบบทดลอง เปิดใช้เฉพาะเมื่อมีปัญหากับสตรีมสดปกติ</string>
     <string name="live_edge">ไม่ตามหลังสตรีมสด</string>
+    <string name="player_quick_skip_chapters">ตอนถัดไปด้วยปุ่มขึ้น</string>
     <plurals name="hours">
         <item quantity="other">%s ชั่วโมง</item>
     </plurals>

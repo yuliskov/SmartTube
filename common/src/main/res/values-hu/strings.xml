@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Kísérleti SABR élő közvetítések. Csak akkor engedélyezze, ha problémái vannak a hagyományos élő közvetítésekkel.</string>
     <string name="remote_control_dial">Megjelenítés a YouTube-casting listában (DIAL)</string>
     <string name="live_edge">Ne maradjon le az élő közvetítéstől</string>
+    <string name="player_quick_skip_chapters">Következő epizód a Fel gombbal</string>
     <plurals name="hours">
         <item quantity="one">%s óra</item>
         <item quantity="other">%s óra</item>

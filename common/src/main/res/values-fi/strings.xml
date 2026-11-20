@@ -754,6 +754,7 @@
     <string name="prefer_sabr_live_desc">Kokeelliset SABR-livelähetykset. Ota käyttöön vain, jos tavallisissa livelähetyksissä on ongelmia.</string>
     <string name="remote_control_dial">Näytä YouTuben lähetysluettelossa (DIAL)</string>
     <string name="live_edge">Älä jää jälkeen livelähetyksestä</string>
+    <string name="player_quick_skip_chapters">Seuraava jakso Ylös-painikkeella</string>
     <plurals name="hours">
         <item quantity="one">%s tunti</item>
         <item quantity="other">%s tuntia</item>

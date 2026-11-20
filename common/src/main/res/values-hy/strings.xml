@@ -753,6 +753,7 @@
     <string name="prefer_sabr_live">SABR ուղիղ եթերներ</string>
     <string name="prefer_sabr_live_desc">Փորձարարական SABR ուղիղ եթերներ։ Միացրեք միայն եթե սովորական ուղիղ եթերների հետ խնդիրներ ունեք։</string>
     <string name="live_edge">Չհետ մնալ ուղիղ եթերից</string>
+    <string name="player_quick_skip_chapters">Հաջորդ դրվագը Վերև կոճակով</string>
     <plurals name="hours">
         <item quantity="one">%s ժամ</item>
         <item quantity="other">%s ժամ</item>
