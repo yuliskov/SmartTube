@@ -39,6 +39,9 @@ public final class SabrExtractorInput implements ExtractorInput {
         if (this.input != null) {
             //throw new IllegalStateException("The input should be disposed before initializing");
             Log.e(TAG, "User doing seek? The input should be disposed before initializing");
+            // The previous chunk was canceled mid-read (e.g. by a seek). Drop its unfinished MEDIA part: it reads from
+            // the same DataSource, which now serves the new response, so the UMP parser would get out of sync.
+            dispose();
         }
 
         this.input = input;
