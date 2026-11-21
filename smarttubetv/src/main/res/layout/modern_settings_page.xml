@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/modern_settings_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_settings_title_text_x"
+        android:layout_marginTop="@dimen/modern_settings_title_top"
+        android:includeFontPadding="false"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_settings_title_size"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:id="@+id/modern_settings_scroll"
+        android:layout_width="@dimen/modern_settings_list_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_settings_title_x"
+        android:layout_marginTop="@dimen/modern_settings_list_top"
+        android:fadingEdgeLength="@dimen/modern_settings_row_height"
+        android:requiresFadingEdge="vertical"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/modern_settings_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/modern_settings_list_top" />
+    </ScrollView>
+
+    <View
+        android:layout_width="@dimen/modern_rail_divider"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_settings_divider_x"
+        android:layout_marginTop="@dimen/modern_settings_list_top"
+        android:background="@color/modern_white_10" />
+
+    <LinearLayout
+        android:id="@+id/modern_settings_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/modern_settings_divider_x"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="@dimen/modern_settings_preview_circle"
+            android:layout_height="@dimen/modern_settings_preview_circle"
+            android:background="@drawable/modern_settings_preview_circle">
+
+            <ImageView
+                android:id="@+id/modern_settings_preview_icon"
+                android:layout_width="@dimen/modern_settings_preview_icon"
+                android:layout_height="@dimen/modern_settings_preview_icon"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/modern_settings_preview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modern_signin_list_top"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_settings_preview_title"
+            android:textStyle="bold" />
+    </LinearLayout>
+</merge>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-medium"
+    android:paddingStart="@dimen/modern_panel_padding"
+    android:paddingEnd="@dimen/modern_panel_padding"
+    android:paddingTop="@dimen/modern_panel_category_top"
+    android:paddingBottom="@dimen/modern_panel_item_gap_half"
+    android:textColor="@color/modern_text_header_unfocused"
+    android:textSize="@dimen/modern_tile_meta_size" />

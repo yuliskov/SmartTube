@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.liskovsoft.smartyoutubetv2.tv.ui.modern.widgets.ModernVideoCard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/modern_card_thumb_frame"
+        android:layout_width="@dimen/modern_tile_width_row"
+        android:layout_height="@dimen/modern_tile_thumb_height_row"
+        android:background="@drawable/modern_thumb_placeholder">
+
+        <ImageView
+            android:id="@+id/modern_card_thumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/modern_card_duration_box"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/modern_badge_height"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/modern_duration_margin"
+            android:layout_marginBottom="@dimen/modern_duration_margin"
+            android:background="@drawable/modern_duration_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/modern_badge_padding_h"
+            android:paddingEnd="@dimen/modern_badge_padding_h">
+
+            <ImageView
+                android:id="@+id/modern_card_duration_icon"
+                android:layout_width="@dimen/modern_badge_icon_size"
+                android:layout_height="@dimen/modern_badge_icon_size"
+                android:layout_marginEnd="@dimen/modern_badge_padding_h"
+                android:importantForAccessibility="no"
+                android:src="@drawable/modern_ic_playlist_play"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/modern_card_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/modern_text_primary"
+                android:textSize="@dimen/modern_tile_meta_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/modern_card_resume"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/modern_resume_bar_height"
+            android:layout_gravity="bottom"
+            android:background="@color/modern_white_30"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/modern_card_resume_progress"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="?attr/modernAccent" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <!-- Marquee with the speed of the card text scroll speed setting -->
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextviewcompat.MarqueeTextViewCompat
+        android:id="@+id/modern_card_title"
+        android:layout_width="@dimen/modern_tile_width_row"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_tile_title_top"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:paddingBottom="@dimen/modern_tile_title_bottom"
+        android:textColor="@color/modern_text_secondary"
+        android:textSize="@dimen/modern_tile_title_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/modern_card_line1"
+        android:layout_width="@dimen/modern_tile_width_row"
+        android:layout_height="@dimen/modern_tile_meta_line_height"
+        android:layout_marginTop="@dimen/modern_tile_meta_line_gap"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_secondary"
+        android:textSize="@dimen/modern_tile_meta_size" />
+
+    <LinearLayout
+        android:id="@+id/modern_card_line2_container"
+        android:layout_width="@dimen/modern_tile_width_row"
+        android:layout_height="@dimen/modern_tile_meta_line_height"
+        android:layout_marginTop="@dimen/modern_tile_meta_line_gap"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/modern_card_label"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/modern_badge_height"
+            android:layout_marginEnd="@dimen/modern_badge_padding_h"
+            android:background="@drawable/modern_badge_bg"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingStart="@dimen/modern_badge_padding_h"
+            android:paddingEnd="@dimen/modern_badge_padding_h"
+            android:textColor="@color/modern_text_secondary"
+            android:textSize="@dimen/modern_tile_meta_size" />
+
+        <TextView
+            android:id="@+id/modern_card_line2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/modern_text_secondary"
+            android:textSize="@dimen/modern_tile_meta_size" />
+    </LinearLayout>
+</com.liskovsoft.smartyoutubetv2.tv.ui.modern.widgets.ModernVideoCard>

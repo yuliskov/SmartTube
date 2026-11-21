@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OLED color schemes: modern_player_scrim_suggestions.xml with a black background -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/modern_player_suggestions_base" />
+        </shape>
+    </item>
+    <item android:top="@dimen/modern_player_scrim_top">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:centerY="0.33"
+                android:startColor="@android:color/transparent"
+                android:centerColor="@color/modern_player_scrim_center_oled"
+                android:endColor="@color/modern_bg_oled" />
+        </shape>
+    </item>
+</layer-list>

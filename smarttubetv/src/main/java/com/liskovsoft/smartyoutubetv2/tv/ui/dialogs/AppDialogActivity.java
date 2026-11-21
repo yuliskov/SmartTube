@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
@@ -22,18 +24,25 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 
 public class AppDialogActivity extends MotherActivity {
     private static final String TAG = AppDialogActivity.class.getSimpleName();
-    private AppDialogFragment mFragment;
+    private AppDialogView mFragment;
     private GlobalKeyTranslator mGlobalKeyTranslator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_app_settings);
-        // Can't use getSupportFragmentManager because AppDialogFragment isn't subclass of androidx fragment
-        mFragment = (AppDialogFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
+        mFragment = onCreateDialogView();
 
         mGlobalKeyTranslator = new PlayerKeyTranslator(this);
         mGlobalKeyTranslator.apply();
+    }
+
+    /**
+     * Sets the content and returns the view that renders the dialog.
+     */
+    protected AppDialogView onCreateDialogView() {
+        setContentView(R.layout.fragment_app_settings);
+        // Can't use getSupportFragmentManager because AppDialogFragment isn't subclass of androidx fragment
+        return (AppDialogFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
     }
 
     @Override
@@ -65,7 +74,7 @@ public class AppDialogActivity extends MotherActivity {
         return handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
     }
     
-    private boolean handleNavigation(KeyEvent event) {
+    protected boolean handleNavigation(KeyEvent event) {
         if (event == null) {
             return false;
         }
@@ -113,7 +122,7 @@ public class AppDialogActivity extends MotherActivity {
                 return;
             }
 
-            mFragment.onFinish();
+            AppDialogPresenter.instance(this).onFinish();
         }
 
         // Destroy dialog when BACK is pressed. NoHistory isn't reliable if combined with singleInstance
