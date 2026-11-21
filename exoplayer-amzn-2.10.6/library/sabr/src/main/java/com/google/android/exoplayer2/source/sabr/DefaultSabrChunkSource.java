@@ -105,6 +105,10 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private static final String TAG = DefaultSabrChunkSource.class.getSimpleName();
     private static final long END_OF_STREAM_SEEK_TOLERANCE_US = 500_000L; // 0.5 seconds
     private static final long NEAR_END_TOLERANCE_US = 700_000L; // 0.7 seconds
+    // The server may never send the tail of the last segment (up to ~1-2 s on some videos).
+    // Inside this window, repeated requests that add no media mean the stream is over.
+    private static final long END_EMPTY_RESPONSE_WINDOW_US = 3_000_000L; // 3 seconds
+    private static final int END_EMPTY_RESPONSE_MAX_COUNT = 2;
     private final LoaderErrorThrower manifestLoaderErrorThrower;
     private final int[] adaptationSetIndices;
     private final int trackType;
@@ -127,6 +131,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private final Map<String, String> sabrHeaders;
     private int nexChunkIdx = -1;
     private long pendingSeekTimeUs = C.TIME_UNSET;
+    private long nearEndLoadPositionUs = C.TIME_UNSET;
+    private int nearEndEmptyResponseCount;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -369,6 +375,12 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             return;
         }
 
+        if (isEmptyResponseAtEnd(loadPositionUs, periodDurationUs)) {
+            Log.w(TAG, "No more media from the server near the end. Ending the stream at " + C.usToMs(loadPositionUs) + "ms");
+            out.endOfStream = true;
+            return;
+        }
+
         //if (representationHolder.getSegmentCount() == 0) {
         //    // The index doesn't define any segments.
         //    out.endOfStream = periodEnded;
@@ -449,6 +461,25 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                         //segmentNum,
                         //maxSegmentCount,
                         seekTimeUs);
+    }
+
+    /**
+     * getNextChunk() is called only when no load is running. If the load position did not move since the
+     * previous request, that request added no media. Near the end this means the server has nothing more to send.
+     */
+    private boolean isEmptyResponseAtEnd(long loadPositionUs, long periodDurationUs) {
+        boolean isNearEnd = periodDurationUs != C.TIME_UNSET
+                && periodDurationUs - loadPositionUs <= END_EMPTY_RESPONSE_WINDOW_US;
+        boolean isBackoff = sabrStream != null && sabrStream.getBackoffTimeMs() > 0;
+
+        if (!isNearEnd || isBackoff || loadPositionUs != nearEndLoadPositionUs) {
+            nearEndLoadPositionUs = isNearEnd ? loadPositionUs : C.TIME_UNSET;
+            nearEndEmptyResponseCount = 0;
+            return false;
+        }
+
+        nearEndEmptyResponseCount++;
+        return nearEndEmptyResponseCount >= END_EMPTY_RESPONSE_MAX_COUNT;
     }
 
     @Override
