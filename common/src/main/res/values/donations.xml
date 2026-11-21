@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="donations">
-        <item>PayPal|firsthash@gmail.com</item>
+        <item>PayPal (main)|firsthash@gmail.com</item>
         <!-- Direct PayPal still doesn't work -->
         <!--<item>PayPal (link)|https://www.paypal.com/donate/?business=2WLCM95RRVWZ6</item>-->
-        <item>Patreon (free)|https://www.patreon.com/smarttube</item>
+        <item>Patreon (alternative, free)|https://www.patreon.com/smarttube</item>
         <!--<item>BountySource|https://salt.bountysource.com/checkout/amount?team=smarttube</item>-->
         <item>BTC|1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx</item>
         <item>LTC|ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw</item>
