@@ -68,3 +68,31 @@ allprojects {
         // }
     }
 }
+
+subprojects {
+
+    if (project.name in ['smarttubetv', 'sharedtests', 'exoplayer-testutils', 'exoplayer-testutils-robolectric']) {
+        return
+    }
+
+    afterEvaluate {
+        if (!project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('maven-publish')) {
+            return
+        }
+        
+        apply plugin: 'maven-publish'
+
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+                    groupId = 'com.github.yuliskov.SmartTube'
+                    artifactId = project.name
+                    version = project.findProperty('version') ?: 'unspecified'
+                }
+            }
+        }
+
+    }
+
+}
