@@ -133,6 +133,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     private long pendingSeekTimeUs = C.TIME_UNSET;
     private long nearEndLoadPositionUs = C.TIME_UNSET;
     private int nearEndEmptyResponseCount;
+    // True when the last media request finished without an error (set in onChunkLoadCompleted)
+    private boolean lastMediaLoadSucceeded;
 
     /**
      * @param manifestLoaderErrorThrower Throws errors affecting loading of manifests.
@@ -464,10 +466,16 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     }
 
     /**
-     * getNextChunk() is called only when no load is running. If the load position did not move since the
-     * previous request, that request added no media. Near the end this means the server has nothing more to send.
+     * getNextChunk() is called only when no load is running. If the previous request completed successfully
+     * and the load position did not move, that request added no media. Near the end this means the server
+     * has nothing more to send.<br/>
+     * Only successful responses count: a failed or cancelled request also leaves the position unchanged.
+     * The count starts again after an error, a backoff or any change of the load position (media progress or a seek).
      */
     private boolean isEmptyResponseAtEnd(long loadPositionUs, long periodDurationUs) {
+        boolean previousLoadSucceeded = lastMediaLoadSucceeded;
+        lastMediaLoadSucceeded = false; // each completed request is counted once
+
         boolean isNearEnd = periodDurationUs != C.TIME_UNSET
                 && periodDurationUs - loadPositionUs <= END_EMPTY_RESPONSE_WINDOW_US;
         boolean isBackoff = sabrStream != null && sabrStream.getBackoffTimeMs() > 0;
@@ -478,12 +486,19 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             return false;
         }
 
+        if (!previousLoadSucceeded) {
+            return false;
+        }
+
         nearEndEmptyResponseCount++;
         return nearEndEmptyResponseCount >= END_EMPTY_RESPONSE_MAX_COUNT;
     }
 
     @Override
     public void onChunkLoadCompleted(Chunk chunk) {
+        if (chunk instanceof MediaChunk) {
+            lastMediaLoadSucceeded = true;
+        }
         if (chunk instanceof InitializationChunk) {
             InitializationChunk initializationChunk = (InitializationChunk) chunk;
             int trackIndex = trackSelection.indexOf(initializationChunk.trackFormat);
@@ -510,6 +525,10 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     @Override
     public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e, long blacklistDurationMs) {
         Log.e(TAG, "Chunk load failed: " + e.getMessage());
+
+        // A failed request is not an empty response: start the near-end count again
+        lastMediaLoadSucceeded = false;
+        nearEndEmptyResponseCount = 0;
 
         // A reload request is not a transport failure. Handing it back as "handled" would
         // retry the very same request at full speed. Let it fall through to the

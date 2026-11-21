@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -145,8 +146,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        if (isStreamEnded() || isVideoNearEnd()) {
-            // Url no longer works (e.g. live stream ended) or error on the last segment of a regular video
+        // Url no longer works (e.g. live stream ended) or error on the last segment of a regular video.
+        // Repeat-one is excluded: after an error the engine is released, and onPlayEnd() only seeks to 0,
+        // so the normal recovery below must reload the video (it starts again from 0, as repeat-one expects).
+        if (isStreamEnded() || (isVideoNearEnd() && !isRepeatOneMode())) {
             getMainController().onPlayEnd();
             return;
         }
@@ -474,6 +477,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         return getVideo().isLiveEnd && getPlayer().getDurationMs() > 0
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
+    }
+
+    private boolean isRepeatOneMode() {
+        return mVideoLoaderController != null && mVideoLoaderController.getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_ONE;
     }
 
     private boolean isVideoNearEnd() {

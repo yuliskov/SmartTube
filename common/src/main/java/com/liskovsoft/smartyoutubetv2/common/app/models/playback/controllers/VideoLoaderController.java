@@ -50,8 +50,12 @@ public class VideoLoaderController extends BasePlayerController {
             getPlayer().restartEngine(); // properly save position of the current track
         }
     };
+    // The video and position of the last onPlayEnd(). SABR may stop short of the duration,
+    // so "position >= duration" alone is not a reliable end check for the deferred action.
+    private Video mEndedVideo;
+    private long mEndedPositionMs = -1;
     private final Runnable mOnApplyPlaybackMode = () -> {
-        if (getPlayer() != null && getPlayer().getPositionMs() >= getPlayer().getDurationMs()) {
+        if (getPlayer() != null && (getPlayer().getPositionMs() >= getPlayer().getDurationMs() || isEndedAtCurrentPosition())) {
             applyPlaybackMode(getPlaybackMode());
         }
     };
@@ -173,6 +177,9 @@ public class VideoLoaderController extends BasePlayerController {
         if (getPlayer() == null) {
             return;
         }
+
+        mEndedVideo = getVideo();
+        mEndedPositionMs = getPlayer().getPositionMs();
 
         // Stop the playback if the user is browsing options or reading comments
         int playbackMode = getPlaybackMode();
@@ -585,7 +592,15 @@ public class VideoLoaderController extends BasePlayerController {
         //}
     }
 
-    private int getPlaybackMode() {
+    /**
+     * True when onPlayEnd() was called for the current video and the user did not seek or change the video since.
+     */
+    private boolean isEndedAtCurrentPosition() {
+        return getPlayer() != null && mEndedVideo != null && mEndedVideo == getVideo()
+                && Math.abs(getPlayer().getPositionMs() - mEndedPositionMs) < 1_000;
+    }
+
+    int getPlaybackMode() {
         int playbackMode = getPlayerData().getPlaybackMode();
 
         Video video = getVideo();
