@@ -525,6 +525,20 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         mOnVideoLoaded = onVideoLoaded;
     }
 
+    public Throwable getFatalError() {
+        if (mPlayer == null) {
+            return null;
+        }
+
+        Object manifest = mPlayer.getCurrentManifest();
+
+        if (manifest instanceof SabrManifest) {
+            return ((SabrManifest) manifest).getFatalError();
+        }
+
+        return null;
+    }
+
     private void setQualityInfo(String qualityInfoStr) {
         if (mPlayerView != null && qualityInfoStr != null) {
             mPlayerView.setQualityInfo(qualityInfoStr);

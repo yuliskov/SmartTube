@@ -50,7 +50,11 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        if (isStreamEnded()) {
+        Throwable error = getPlayer().getFatalError();
+
+        if (error != null) {
+            runEngineErrorAction(PlayerEventListener.ERROR_TYPE_UNEXPECTED, PlayerEventListener.RENDERER_INDEX_UNKNOWN, error);
+        } else if (isStreamEnded()) {
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
             // Long loading subtitles cause hangs

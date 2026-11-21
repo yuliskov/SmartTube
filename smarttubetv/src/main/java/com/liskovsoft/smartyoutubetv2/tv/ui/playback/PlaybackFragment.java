@@ -1155,6 +1155,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         setGravity(gravity);
     }
 
+    @Override
+    public Throwable getFatalError() {
+        return mExoPlayerController.getFatalError();
+    }
+
     // End Engine Events
 
     @Override

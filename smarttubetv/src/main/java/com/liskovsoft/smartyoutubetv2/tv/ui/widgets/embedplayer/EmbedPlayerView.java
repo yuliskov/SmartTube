@@ -483,6 +483,11 @@ public class EmbedPlayerView extends PlayerView implements PlaybackView {
     }
 
     @Override
+    public Throwable getFatalError() {
+        return mExoPlayerController.getFatalError();
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         try {
             finish();
