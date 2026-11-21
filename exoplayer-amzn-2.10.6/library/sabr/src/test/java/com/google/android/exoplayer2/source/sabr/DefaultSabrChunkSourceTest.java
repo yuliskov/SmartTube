@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.google.android.exoplayer2.source.SampleQueue;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.chunk.BaseMediaChunkOutput;
+import com.google.android.exoplayer2.source.chunk.Chunk;
 import com.google.android.exoplayer2.source.chunk.ChunkHolder;
 import com.google.android.exoplayer2.source.chunk.ContainerMediaChunk;
 import com.google.android.exoplayer2.source.chunk.InitializationChunk;
@@ -34,6 +35,7 @@ import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerC
 import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.upstream.ByteArrayDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.LoaderErrorThrower;
 import com.google.android.exoplayer2.util.MimeTypes;
@@ -42,6 +44,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +58,8 @@ public class DefaultSabrChunkSourceTest {
     private static final String SABR_URL =
             "https://rr1---sn-primary.googlevideo.com/videoplayback?"
                     + "mn=sn-primary%2Csn-secondary";
+    private static final String FRESH_SABR_URL =
+            "https://rr2---sn-fresh.googlevideo.com/videoplayback?expire=2";
     private static final long DURATION_MS = 60_000;
     private static final byte[] CAPTIONS =
             Util.getUtf8Bytes("WEBVTT\n\n00:00:01.000 --> 00:00:03.000\nTest captions\n");
@@ -199,6 +204,87 @@ public class DefaultSabrChunkSourceTest {
 
         assertFalse(handled);
         verify(manifest, never()).maybeUseNextCdn(anyString());
+    }
+
+    @Test
+    public void forbiddenSabrRequestStartsOneStreamingDataRefresh() {
+        SabrManifest manifest = createManifest(
+                DURATION_MS, null, createAdaptationSet(createVideoFormat(), C.TRACK_TYPE_VIDEO));
+        AtomicInteger refreshCount = new AtomicInteger();
+        manifest.setStreamingDataRefresher(m -> refreshCount.incrementAndGet());
+        DefaultSabrChunkSource source = createSource(manifest);
+        ChunkHolder out = new ChunkHolder();
+        source.getNextChunk(0, 0, Collections.emptyList(), out);
+
+        // Keeps the regular retries while the refresh is running
+        assertFalse(source.onChunkLoadError(out.chunk, true, forbidden(out.chunk), C.TIME_UNSET));
+        assertFalse(source.onChunkLoadError(out.chunk, true, forbidden(out.chunk), C.TIME_UNSET));
+        assertEquals(1, refreshCount.get());
+
+        // A failed refresh isn't repeated on every retry
+        manifest.onStreamingDataRefreshFailed();
+        assertFalse(source.onChunkLoadError(out.chunk, true, forbidden(out.chunk), C.TIME_UNSET));
+        assertEquals(1, refreshCount.get());
+    }
+
+    @Test
+    public void forbiddenRequestIsRebuiltWithRefreshedStreamingData() {
+        SabrManifest manifest = createManifest(
+                DURATION_MS, null, createAdaptationSet(createVideoFormat(), C.TRACK_TYPE_VIDEO));
+        manifest.setStreamingDataRefresher(m -> m.updateStreamingData(
+                createManifest(FRESH_SABR_URL, "test", ClientInfo.getDefaultInstance())));
+        DefaultSabrChunkSource source = createSource(manifest);
+        ChunkHolder out = new ChunkHolder();
+        source.getNextChunk(0, 0, Collections.emptyList(), out);
+        Chunk failed = out.chunk;
+
+        assertFalse(source.onChunkLoadError(failed, true, forbidden(failed), C.TIME_UNSET));
+        // The failed request was sent with the old data: drop it so a new one is built
+        assertTrue(source.onChunkLoadError(failed, true, forbidden(failed), C.TIME_UNSET));
+
+        out.clear();
+        source.getNextChunk(0, 0, Collections.emptyList(), out);
+        assertTrue(out.chunk.dataSpec.uri.toString().startsWith(FRESH_SABR_URL + "&rn="));
+    }
+
+    @Test
+    public void streamingDataOfAnotherVideoOrClientIsRejected() {
+        SabrManifest manifest = createManifest(
+                DURATION_MS, null, createAdaptationSet(createVideoFormat(), C.TRACK_TYPE_VIDEO));
+        ChunkHolder out = new ChunkHolder();
+        createSource(manifest).getNextChunk(0, 0, Collections.emptyList(), out);
+
+        assertFalse(manifest.updateStreamingData(
+                createManifest(FRESH_SABR_URL, "other", ClientInfo.getDefaultInstance())));
+        assertFalse(manifest.updateStreamingData(
+                createManifest(FRESH_SABR_URL, "test", ClientInfo.newBuilder().setClientVersion("other").build())));
+        assertEquals(SABR_URL + "&rn=1", manifest.getRequestUrl(C.TRACK_TYPE_VIDEO));
+    }
+
+    @Test
+    public void forbiddenCaptionRequestDoesNotRefreshStreamingData() {
+        SabrManifest manifest = createManifest(createTextFormat(MimeTypes.TEXT_VTT), DURATION_MS);
+        AtomicInteger refreshCount = new AtomicInteger();
+        manifest.setStreamingDataRefresher(m -> refreshCount.incrementAndGet());
+        DefaultSabrChunkSource source = createSource(manifest);
+        ChunkHolder out = new ChunkHolder();
+        source.getNextChunk(0, 0, Collections.emptyList(), out);
+
+        assertFalse(source.onChunkLoadError(out.chunk, true, forbidden(out.chunk), C.TIME_UNSET));
+        assertEquals(0, refreshCount.get());
+    }
+
+    private static InvalidResponseCodeException forbidden(Chunk chunk) {
+        return new InvalidResponseCodeException(403, Collections.emptyMap(), chunk.dataSpec);
+    }
+
+    private static SabrManifest createManifest(String url, String videoId, ClientInfo clientInfo) {
+        Period period = new Period("test", 0, Collections.singletonList(
+                createAdaptationSet(createVideoFormat(), C.TRACK_TYPE_VIDEO)));
+        return new SabrManifest(
+                C.TIME_UNSET, DURATION_MS, 1_500, false,
+                C.TIME_UNSET, C.TIME_UNSET, C.TIME_UNSET, C.TIME_UNSET,
+                Collections.singletonList(period), url, "", null, videoId, clientInfo);
     }
 
     @Test
