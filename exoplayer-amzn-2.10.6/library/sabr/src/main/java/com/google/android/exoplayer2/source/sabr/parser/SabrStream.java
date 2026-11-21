@@ -535,6 +535,9 @@ public class SabrStream {
             if (contains(KNOWN_PARTS, part.partId)) {
                 Log.d(TAG, "Found known part: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
                 break;
+            } else if (contains(IGNORED_PARTS, part.partId)) {
+                Log.d(TAG, "Ignored part: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
+                part.skip(); // an essential part to continue reading
             } else {
                 String msg = String.format("Unknown part encountered: id=%s, size=%s, position=%s", part.partId, part.size, part.data.getPosition());
                 if (part.partId > 100) {

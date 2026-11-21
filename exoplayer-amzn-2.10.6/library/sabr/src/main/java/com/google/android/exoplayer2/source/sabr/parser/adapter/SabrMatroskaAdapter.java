@@ -27,10 +27,12 @@ public class SabrMatroskaAdapter extends MatroskaExtractor {
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
         int result = RESULT_END_OF_INPUT;
+        boolean readCompleted = false;
 
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
+            readCompleted = true;
         } catch (SabrPropagationError e) {
             Log.e(TAG, "Propagating SABR control signal: %s", e.getMessage());
             throw e;
@@ -39,7 +41,12 @@ public class SabrMatroskaAdapter extends MatroskaExtractor {
             e.printStackTrace();
         } finally {
             if (result != RESULT_CONTINUE) {
-                Log.e(TAG, "MatroskaAdapter: disposing, result=%s", result);
+                // The normal end of a chunk isn't an error. When super.read() throws, result keeps its initial value.
+                if (readCompleted && result == RESULT_END_OF_INPUT) {
+                    Log.d(TAG, "MatroskaAdapter: disposing, result=%s", result);
+                } else {
+                    Log.e(TAG, "MatroskaAdapter: disposing, result=%s, completed=%s", result, readCompleted);
+                }
                 extractorInput.dispose();
             }
         }
