@@ -211,6 +211,7 @@
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
+    <string name="sleep_timer_close_app">Exit app when sleep timer ends (lets the device go to standby)</string>
     <string name="player_show_quality_info">Show quality info in the controls bar</string>
     <string name="player_remember_each_speed">Remember each video speed</string>
     <string name="player_remember_speed_none">None</string>

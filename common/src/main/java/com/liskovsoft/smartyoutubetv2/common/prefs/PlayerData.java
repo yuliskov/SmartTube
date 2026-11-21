@@ -74,6 +74,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
     private boolean mIsAllSpeedEnabled;
     private int mPlaybackMode;
     private float mSleepTimerHours;
+    private boolean mIsSleepTimerCloseAppEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsSpeedPerVideoEnabled;
     private boolean mIsTimeCorrectionEnabled;
@@ -674,6 +675,15 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         persistState();
     }
 
+    public boolean isSleepTimerCloseAppEnabled() {
+        return mIsSleepTimerCloseAppEnabled;
+    }
+
+    public void setSleepTimerCloseAppEnabled(boolean enabled) {
+        mIsSleepTimerCloseAppEnabled = enabled;
+        persistState();
+    }
+
     public boolean isTimeCorrectionEnabled() {
         return mIsTimeCorrectionEnabled;
     }
@@ -847,6 +857,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
         mLastAudioLanguages = Helpers.parseStrList(split, 60);
         mIsVideoFlipEnabled = Helpers.parseBoolean(split, 61, false);
         mIsAudioDelayEnabled = Helpers.parseBoolean(split, 62, false);
+        mIsSleepTimerCloseAppEnabled = Helpers.parseBoolean(split, 63, false);
 
         if (speeds != null) {
             for (String speedSpec : speeds) {
@@ -884,7 +895,7 @@ public class PlayerData extends DataChangeBase implements PlayerConstants, Profi
                 mIsNumberKeySeekEnabled, mIsSkip24RateEnabled, mAfrPauseMs, mIsLiveChatEnabled, mLastSubtitleFormats, mLastSpeed, mRotationAngle,
                 mZoomPercents, mPlaybackMode, mAudioLanguage, mSubtitleLanguage, mEnabledSubtitlesPerChannel, mIsSubtitlesPerChannelEnabled,
                 mIsSpeedPerChannelEnabled, Helpers.mergeArray(mSpeeds.values().toArray()), mPitch, mIsSkipShortsEnabled, mLastAudioLanguages,
-                mIsVideoFlipEnabled, mIsAudioDelayEnabled
+                mIsVideoFlipEnabled, mIsAudioDelayEnabled, mIsSleepTimerCloseAppEnabled
         ));
     }
 
