@@ -34,6 +34,11 @@ android {
     }
 
     testOptions.unitTests.includeAndroidResources = true
+
+    lintOptions {
+        // This fork intentionally extends the renderer to non-PCM encodings (passthrough)
+        disable 'WrongConstant'
+    }
 }
 
 dependencies {
