@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerConstants;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.BasePlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.FormatItem;
@@ -25,6 +26,7 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final long VIDEO_END_THRESHOLD_MS = 3_000;
     private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 1;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
@@ -54,7 +56,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (error != null) {
             runEngineErrorAction(PlayerEventListener.ERROR_TYPE_UNEXPECTED, PlayerEventListener.RENDERER_INDEX_UNKNOWN, error);
-        } else if (isStreamEnded()) {
+        } else if (isStreamEnded() || isVideoNearEnd()) {
+            // SABR may never deliver the tail of the last segment, so the engine never reaches STATE_ENDED.
+            // Reloading here restarts the video from 0 (position near the end is treated as 'watched').
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
             // Long loading subtitles cause hangs
@@ -142,8 +146,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        if (isStreamEnded()) {
-            // Url no longer works (e.g. live stream ended)
+        // Url no longer works (e.g. live stream ended) or error on the last segment of a regular video.
+        // Repeat-one is excluded: after an error the engine is released, and onPlayEnd() only seeks to 0,
+        // so the normal recovery below must reload the video (it starts again from 0, as repeat-one expects).
+        if (isStreamEnded() || (isVideoNearEnd() && !isRepeatOneMode())) {
             getMainController().onPlayEnd();
             return;
         }
@@ -471,6 +477,19 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         return getVideo().isLiveEnd && getPlayer().getDurationMs() > 0
                 && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
+    }
+
+    private boolean isRepeatOneMode() {
+        return mVideoLoaderController != null && mVideoLoaderController.getPlaybackMode() == PlayerConstants.PLAYBACK_MODE_ONE;
+    }
+
+    private boolean isVideoNearEnd() {
+        if (getPlayer() == null || !isOfflineVideo()) {
+            return false;
+        }
+
+        long durationMs = getPlayer().getDurationMs();
+        return durationMs > 0 && durationMs - getPlayer().getPositionMs() < VIDEO_END_THRESHOLD_MS;
     }
 
     private boolean isOfflineVideo() {
