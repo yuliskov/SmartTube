@@ -26,10 +26,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
     private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 1;
+    private static final long SABR_ERROR_FIX_RESET_WINDOW_MS = 60_000;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
     private String mSabrErrorFixVideoId;
     private int mSabrErrorFixAttempts;
+    private long mSabrErrorFixTimeMs;
 
     @Override
     public void onInit() {
@@ -108,7 +110,6 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onPlay() {
         mBufferingDetector.onStopBuffering();
-        mSabrErrorFixAttempts = 0;
     }
 
     @Override
@@ -171,13 +172,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
-            mSabrErrorFixVideoId = video.videoId;
-            mSabrErrorFixAttempts = 0;
-        }
-
-        // Reload doesn't help. Fallback to the common error handling (switch the client).
-        if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
+        if (!canAttemptSabrErrorFix(video.videoId)) {
             return false;
         }
 
@@ -206,13 +201,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
-            mSabrErrorFixVideoId = video.videoId;
-            mSabrErrorFixAttempts = 0;
-        }
-
-        // Reload doesn't help. Fallback to the common error handling (switch the client).
-        if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
+        if (!canAttemptSabrErrorFix(video.videoId)) {
             return false;
         }
 
@@ -223,6 +212,20 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         mVideoLoaderController.reloadVideo();
 
         return true;
+    }
+
+    private boolean canAttemptSabrErrorFix(String videoId) {
+        long nowMs = System.currentTimeMillis();
+        if (!Helpers.equals(videoId, mSabrErrorFixVideoId)
+                || (nowMs - mSabrErrorFixTimeMs) > SABR_ERROR_FIX_RESET_WINDOW_MS) {
+            mSabrErrorFixVideoId = videoId;
+            mSabrErrorFixAttempts = 0;
+        }
+
+        mSabrErrorFixTimeMs = nowMs;
+
+        // Reload doesn't help. Fallback to the common error handling (switch the client).
+        return ++mSabrErrorFixAttempts <= MAX_SABR_ERROR_FIX_ATTEMPTS;
     }
 
     private void applyEngineErrorAction(int type, int rendererIndex, Throwable error) {

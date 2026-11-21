@@ -227,6 +227,14 @@ public class SabrStream {
         return processor.getFatalError();
     }
 
+    public SabrStreamError getPendingFatalError() {
+        return processor.getPendingFatalError();
+    }
+
+    public void clearFatalError() {
+        processor.clearFatalError();
+    }
+
     public MediaHeader getInitializedFormat(int iTag) {
         return processor.getInitializedFormats().get(iTag);
     }

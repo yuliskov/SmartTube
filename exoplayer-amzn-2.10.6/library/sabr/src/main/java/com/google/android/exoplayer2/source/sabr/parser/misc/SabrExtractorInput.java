@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.parts.MediaSegmentDataSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.RefreshPlayerResponseSabrPart;
 import com.google.android.exoplayer2.source.sabr.parser.parts.SabrPart;
@@ -18,12 +19,14 @@ public final class SabrExtractorInput implements ExtractorInput {
     private static final boolean ALLOW_END_OF_INPUT = true;
     private static final int MIN_SWALLOW_BACKOFF_MS = 15_000; // 15 sec
     private static final int LIVE_EMPTY_RESPONSE_WAIT_MS = 1_000;
+    private static final int MAX_CONSECUTIVE_EMPTY_RESPONSES = 6;
     private final SabrStream sabrStream;
     private ExtractorInput input;
     private long position;
     private long startPosition;
     private int remaining;
     private boolean receivedData;
+    private int consecutiveEmptyResponses;
     private MediaSegmentDataSabrPart data;
 
     public SabrExtractorInput(SabrStream sabrStream) {
@@ -187,6 +190,30 @@ public final class SabrExtractorInput implements ExtractorInput {
             }
 
             if (sabrPart == null) {
+                if (receivedData) {
+                    consecutiveEmptyResponses = 0;
+                    sabrStream.clearFatalError();
+                } else {
+                    SabrStreamError fatalError = sabrStream.getFatalError();
+                    if (fatalError != null) {
+                        throw fatalError;
+                    }
+
+                    if (!sabrStream.isLive() && ++consecutiveEmptyResponses >= MAX_CONSECUTIVE_EMPTY_RESPONSES) {
+                        consecutiveEmptyResponses = 0;
+                        SabrStreamError pendingError = sabrStream.getPendingFatalError();
+                        if (pendingError != null) {
+                            throw pendingError;
+                        }
+                        int backoffMs = sabrStream.getBackoffTimeMs();
+                        if (backoffMs > 0) {
+                            throwBackoffRequested(backoffMs);
+                        } else {
+                            throw new SabrBackoffError(0, "SABR server returned repeated empty media responses");
+                        }
+                    }
+                }
+
                 // The stream ended. If the server told us to back off, honor it instead of
                 // re-requesting immediately - otherwise we burn exactly the waiting period the server asked for.
                 int backoffMs = sabrStream.getBackoffTimeMs();

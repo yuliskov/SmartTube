@@ -76,7 +76,7 @@ public class SabrProcessor {
     private final Set<Integer> sabrContextsToSend;
     private final Map<Integer, MediaHeader> initializedFormats;
     private final FormatSelector emptySelector;
-    private SabrStreamError fatalError;
+    private volatile SabrStreamError fatalError;
 
     public SabrProcessor(
             @NonNull String videoPlaybackUstreamerConfig,
@@ -452,7 +452,14 @@ public class SabrProcessor {
         }
 
         // NOTE: PoToken attestation may fail a few times before passing, so a failure isn't proof it won't succeed.
-        this.fatalError = status != Status.OK ? new SabrPoTokenError("PoToken error: " + resultStatus) : null;
+        // Preserve the original failure timestamp so repeated fast retries don't reset the staleness timer.
+        if (status != Status.OK) {
+            if (this.fatalError == null) {
+                this.fatalError = new SabrPoTokenError("PoToken error: " + resultStatus);
+            }
+        } else {
+            this.fatalError = null;
+        }
 
         return result;
     }
@@ -741,7 +748,16 @@ public class SabrProcessor {
     }
 
     public SabrStreamError getFatalError() {
-        return fatalError != null && fatalError.isStale() ? fatalError : null;
+        SabrStreamError error = fatalError;
+        return error != null && error.isStale() ? error : null;
+    }
+
+    public SabrStreamError getPendingFatalError() {
+        return fatalError;
+    }
+
+    public void clearFatalError() {
+        fatalError = null;
     }
 
     //private List<FormatId> createSelectedFormatIds() {
