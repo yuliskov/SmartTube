@@ -64,7 +64,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void onViewInitialized() {
         super.onViewInitialized();
 
-        if (!AccountsData.instance(getContext()).isPasswordAccepted()) {
+        if (getGeneralData().isChildModeEnabled() || !AccountsData.instance(getContext()).isPasswordAccepted()) {
             getView().finishReally();
             return;
         }
@@ -156,6 +156,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void onSearch(String searchText) {
+        if (getGeneralData().isChildModeEnabled()) {
+            forceFinish();
+            return;
+        }
+
         // Restore the search in case the view unloaded from the memory
         mSearchText = searchText;
 
@@ -278,6 +283,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     private void startSearch(String searchText, boolean isVoice, boolean startPlay) {
+        if (getGeneralData().isChildModeEnabled()) {
+            return;
+        }
+
         mSearchText = searchText;
         mIsVoice = isVoice;
         mStartPlay = startPlay;
