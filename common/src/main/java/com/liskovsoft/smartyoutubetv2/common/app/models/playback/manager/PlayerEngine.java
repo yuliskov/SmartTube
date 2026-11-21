@@ -48,6 +48,7 @@ public interface PlayerEngine extends PlayerConstants {
     void setAspectRatio(float ratio);
     void setRotationAngle(int angle);
     void setVideoFlipEnabled(boolean enabled);
+    void applyNightlight();
     void setVideoGravity(int gravity);
     Throwable getFatalError();
 }

@@ -1151,6 +1151,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public void applyNightlight() {
+        super.applyNightlight();
+    }
+
+    @Override
     public void setVideoGravity(int gravity) {
         setGravity(gravity);
     }

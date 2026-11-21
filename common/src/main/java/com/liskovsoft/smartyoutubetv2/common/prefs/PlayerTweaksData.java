@@ -43,7 +43,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     public static final int PLAYER_BUTTON_SOUND_OFF = 1 << 25;
     public static final int PLAYER_BUTTON_AFR = 1 << 26;
     public static final int PLAYER_BUTTON_VIDEO_FLIP = 1 << 27;
-    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_DIMMING | PLAYER_BUTTON_VIDEO_SPEED |
+    public static final int PLAYER_BUTTON_NIGHTLIGHT = 1 << 28;
+    public static final int PLAYER_BUTTON_DEFAULT = PLAYER_BUTTON_SEARCH | PLAYER_BUTTON_PIP | PLAYER_BUTTON_SCREEN_DIMMING | PLAYER_BUTTON_NIGHTLIGHT | PLAYER_BUTTON_VIDEO_SPEED |
             PLAYER_BUTTON_VIDEO_STATS | PLAYER_BUTTON_OPEN_CHANNEL | PLAYER_BUTTON_SUBTITLES | PLAYER_BUTTON_SUBSCRIBE |
             PLAYER_BUTTON_LIKE | PLAYER_BUTTON_DISLIKE | PLAYER_BUTTON_ADD_TO_PLAYLIST | PLAYER_BUTTON_PLAY_PAUSE |
             PLAYER_BUTTON_REPEAT_MODE | PLAYER_BUTTON_NEXT | PLAYER_BUTTON_PREVIOUS | PLAYER_BUTTON_HIGH_QUALITY |
@@ -111,6 +112,11 @@ public class PlayerTweaksData implements ProfileChangeListener {
     private boolean mIsDontResizeVideoToFitDialogEnabled;
     private boolean mIsSuggestionsHorizontallyScrolled;
     private boolean mIsQueueRespectsPlaybackMode;
+    private int mNightlightWarmth;
+    private int mNightlightLastWarmth;
+    private boolean mIsNightlightOnUi;
+    private boolean mIsNightlightOnHdr;
+    private boolean mNightlightHdrActive; // runtime only (not persisted); set by the player when an HDR track is detected
     private boolean mIsLiveEdgeEnabled;
     private final Runnable mPersistDataInt = this::persistDataInt;
 
@@ -706,6 +712,52 @@ public class PlayerTweaksData implements ProfileChangeListener {
         persistData();
     }
 
+    public boolean isNightlightEnabled() {
+        return mNightlightWarmth != Utils.NIGHTLIGHT_NEUTRAL;
+    }
+
+    public boolean isNightlightActive() {
+        return isNightlightEnabled() && !(mNightlightHdrActive && !mIsNightlightOnHdr);
+    }
+
+    public int getNightlightWarmth() {
+        return mNightlightWarmth;
+    }
+
+    public void setNightlightWarmth(int kelvin) {
+        mNightlightWarmth = kelvin;
+        if (kelvin != Utils.NIGHTLIGHT_NEUTRAL) {
+            mNightlightLastWarmth = kelvin;
+        }
+        persistData();
+    }
+
+    public int getNightlightLastWarmth() {
+        return mNightlightLastWarmth;
+    }
+
+    public boolean isNightlightOnUi() {
+        return mIsNightlightOnUi;
+    }
+
+    public void setNightlightOnUi(boolean enable) {
+        mIsNightlightOnUi = enable;
+        persistData();
+    }
+
+    public boolean isNightlightOnHdr() {
+        return mIsNightlightOnHdr;
+    }
+
+    public void setNightlightOnHdr(boolean enable) {
+        mIsNightlightOnHdr = enable;
+        persistData();
+    }
+
+    public void setNightlightHdrActive(boolean active) {
+        mNightlightHdrActive = active;
+    }
+
     public boolean isLiveEdgeEnabled() {
         return mIsLiveEdgeEnabled;
     }
@@ -787,9 +839,21 @@ public class PlayerTweaksData implements ProfileChangeListener {
         mIsQuickSkipVideosAltEnabled = Helpers.parseBoolean(split, 58, false);
         mIsAudioTimeStretchingEnabled = Helpers.parseBoolean(split, 59, true);
         mIsQueueRespectsPlaybackMode = Helpers.parseBoolean(split, 60, false);
-        //mIsSabrLiveEnabled = Helpers.parseBoolean(split, 61, false);
-        mIsLiveEdgeEnabled = Helpers.parseBoolean(split, 62, false);
-        mIsQuickSkipChaptersEnabled = Helpers.parseBoolean(split, 63, false);
+        // Older fork builds used upstream slots 61–64 for Nightlight.
+        boolean legacyNightlight = Helpers.parseInt(split, 61, 0) > 0;
+        mIsLiveEdgeEnabled = !legacyNightlight && Helpers.parseBoolean(split, 62, false);
+        mIsQuickSkipChaptersEnabled = !legacyNightlight && Helpers.parseBoolean(split, 63, false);
+        String[] nightlight = Helpers.splitData(mPrefs.getProfileData("nightlight_data"));
+        int offset = 0;
+        if ((nightlight == null || nightlight.length == 0) && legacyNightlight) {
+            nightlight = split;
+            offset = 61;
+        }
+        mNightlightWarmth = Helpers.parseInt(nightlight, offset, Utils.NIGHTLIGHT_NEUTRAL);
+        mIsNightlightOnUi = Helpers.parseBoolean(nightlight, offset + 1, false);
+        mIsNightlightOnHdr = Helpers.parseBoolean(nightlight, offset + 2, false);
+        mNightlightLastWarmth = Helpers.parseInt(nightlight, offset + 3,
+                mNightlightWarmth != Utils.NIGHTLIGHT_NEUTRAL ? mNightlightWarmth : 3000);
 
         updateDefaultValues();
     }
@@ -803,6 +867,8 @@ public class PlayerTweaksData implements ProfileChangeListener {
     }
 
     private void persistDataInt() {
+        mPrefs.setProfileData("nightlight_data", Helpers.mergeData(
+                mNightlightWarmth, mIsNightlightOnUi, mIsNightlightOnHdr, mNightlightLastWarmth));
         mPrefs.setProfileData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeData(
                 mIsAmlogicFixEnabled, mIsAmazonFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,

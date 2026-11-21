@@ -80,6 +80,7 @@ public class AppDialogUtil {
     private static final int PLAYER_ENGINE_ID = 147;
     private static final int IGNORE_DURATION_ID = 148;
     private static final int SLEEP_TIMER_ID = 149;
+    private static final int NIGHTLIGHT_WARMTH_ID = 150;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -691,6 +692,53 @@ public class AppDialogUtil {
         String title = context.getString(R.string.screen_dimming_amount);
 
         return OptionCategory.from(PLAYER_SCREEN_DIMMING_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createNightlightWarmthCategory(Context context, Runnable onApply) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int kelvin : Utils.NIGHTLIGHT_PRESETS) {
+            String label = kelvin >= Utils.NIGHTLIGHT_NEUTRAL
+                    ? context.getString(R.string.nightlight_off) : kelvin + "K";
+            options.add(UiOptionItem.from(label,
+                    optionItem -> {
+                        playerTweaksData.setNightlightWarmth(kelvin);
+                        if (onApply != null) {
+                            onApply.run();
+                        }
+                    },
+                    playerTweaksData.getNightlightWarmth() == kelvin));
+        }
+
+        String title = context.getString(R.string.nightlight_warmth);
+
+        return OptionCategory.from(NIGHTLIGHT_WARMTH_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static void appendNightlightCategory(Context context, AppDialogPresenter presenter, Runnable onApply) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
+
+        OptionCategory warmthCategory = createNightlightWarmthCategory(context, onApply);
+        presenter.appendRadioCategory(warmthCategory.title, warmthCategory.options);
+
+        presenter.appendSingleSwitch(UiOptionItem.from(context.getString(R.string.nightlight_on_ui),
+                option -> {
+                    playerTweaksData.setNightlightOnUi(option.isSelected());
+                    if (onApply != null) {
+                        onApply.run();
+                    }
+                },
+                playerTweaksData.isNightlightOnUi()));
+
+        presenter.appendSingleSwitch(UiOptionItem.from(context.getString(R.string.nightlight_on_hdr),
+                option -> {
+                    playerTweaksData.setNightlightOnHdr(option.isSelected());
+                    if (onApply != null) {
+                        onApply.run();
+                    }
+                },
+                playerTweaksData.isNightlightOnHdr()));
     }
 
     @SuppressLint("StringFormatMatches")

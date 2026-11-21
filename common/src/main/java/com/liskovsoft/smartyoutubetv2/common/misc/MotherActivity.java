@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.KeyCharacterMap.UnavailableException;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -220,6 +221,20 @@ public class MotherActivity extends FragmentActivity {
 
         // Restore this activity's screensaver policy after returning to the foreground.
         mScreensaverManager.resume();
+
+        applyNightlight();
+    }
+
+    public void applyNightlight() {
+        View decor = getWindow() != null ? getWindow().getDecorView() : null;
+        if (decor == null) {
+            return;
+        }
+
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(this);
+        int warmth = tweaks.isNightlightActive() && tweaks.isNightlightOnUi()
+                ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
+        Utils.applyNightlight(decor, warmth);
     }
 
     @Override

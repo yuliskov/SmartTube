@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.manager.PlayerEngine;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /**
@@ -39,16 +40,49 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
         if (root == null) {
             throw new IllegalStateException("Can't create root of SurfacePlaybackFragment");
         }
-        mVideoSurfaceWrapper = (PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ||
-                PlayerData.instance(getContext()).getRotationAngle() != 0) ?
-                new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
+        mVideoSurfaceWrapper = createSurfaceWrapper(root, Utils.isTextureViewRequired(getContext()));
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         mVideoSurfaceRoot.setAspectRatioListener((targetAspectRatio, naturalAspectRatio, aspectRatioMismatch) -> scaleIfNeeded());
         mLeanbackSubtitles = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.leanback_subtitles);
         mSubtitlesPadding = mLeanbackSubtitles.getPaddingLeft();
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
+        applyNightlight();
         return root;
+    }
+
+    private SurfaceWrapper createSurfaceWrapper(ViewGroup root, boolean useTextureView) {
+        if (useTextureView) {
+            return new TextureViewWrapper(getContext(), root);
+        }
+        return new SurfaceViewWrapper(getContext(), root);
+    }
+
+    protected void applyNightlight() {
+        if (mVideoSurfaceRoot == null || mVideoSurfaceWrapper == null) {
+            return;
+        }
+
+        PlayerTweaksData tweaks = PlayerTweaksData.instance(getContext());
+        boolean active = tweaks.isNightlightActive();
+        boolean tintVideo = active && !tweaks.isNightlightOnUi();
+
+        // Multiplying the video colors preserves black, including the loading screen.
+        int warmth = tintVideo ? tweaks.getNightlightWarmth() : Utils.NIGHTLIGHT_NEUTRAL;
+        // TextureView already has a hardware layer; avoid allocating another full-frame layer.
+        Utils.applyNightlight(mVideoSurfaceWrapper.getSurfaceView(), warmth);
+    }
+
+    private void ensureTextureView() {
+        if (mVideoSurfaceWrapper == null || mVideoSurfaceWrapper instanceof TextureViewWrapper || getView() == null) {
+            return;
+        }
+
+        mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
+        mVideoSurfaceWrapper = createSurfaceWrapper((ViewGroup) getView(), true);
+        mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
+
+        ((PlayerEngine) this).restartEngine();
     }
 
     /**
@@ -70,12 +104,13 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
      * Returns the surface view.
      */
     public View getSurfaceView() {
-        return mVideoSurfaceWrapper.getSurfaceView();
+        return mVideoSurfaceWrapper != null ? mVideoSurfaceWrapper.getSurfaceView() : null;
     }
 
     @Override
     public void onDestroyView() {
         mVideoSurfaceWrapper = null;
+        mVideoSurfaceRoot = null;
         super.onDestroyView();
     }
 
@@ -107,16 +142,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setRotation(angle);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setRotation(angle);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setRotation(angle);
     }
 
     protected void setFlipEnabled(boolean enabled) {
@@ -126,16 +153,8 @@ public class SurfacePlaybackFragment extends PlaybackSupportFragment {
             return;
         }
 
-        if (mVideoSurfaceWrapper instanceof TextureViewWrapper) {
-            mVideoSurfaceRoot.setScaleX(scaleX);
-        } else {
-            mVideoSurfaceRoot.removeView(mVideoSurfaceWrapper.getSurfaceView());
-            mVideoSurfaceWrapper = new TextureViewWrapper(getContext(), (ViewGroup) getView());
-            mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
-            mVideoSurfaceRoot.setScaleX(scaleX);
-
-            ((PlayerEngine) this).restartEngine();
-        }
+        ensureTextureView();
+        mVideoSurfaceRoot.setScaleX(scaleX);
     }
 
     private void scaleIfNeeded() {
