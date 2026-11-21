@@ -291,9 +291,9 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return Utils.updateQuery(activeStream.getUrl(), "rn", ++sabrRequestNumber);
     }
 
-    public SabrStreamError getFatalError() {
+    public SabrStreamError getUnthrownError() {
         for (SabrStream sabrStream : sabrStreams.values()) {
-            return sabrStream.getFatalError();
+            return sabrStream.getUnthrownError();
         }
 
         return null;

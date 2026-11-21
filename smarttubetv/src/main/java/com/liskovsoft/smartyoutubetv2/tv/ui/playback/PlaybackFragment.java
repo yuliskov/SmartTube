@@ -1156,8 +1156,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public Throwable getFatalError() {
-        return mExoPlayerController.getFatalError();
+    public Throwable getUnthrownError() {
+        return mExoPlayerController.getUnthrownError();
     }
 
     // End Engine Events

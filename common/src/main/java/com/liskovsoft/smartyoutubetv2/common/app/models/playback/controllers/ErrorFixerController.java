@@ -50,7 +50,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        Throwable error = getPlayer().getFatalError();
+        Throwable error = getPlayer().getUnthrownError();
 
         if (error != null) {
             runEngineErrorAction(PlayerEventListener.ERROR_TYPE_UNEXPECTED, PlayerEventListener.RENDERER_INDEX_UNKNOWN, error);

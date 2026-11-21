@@ -49,5 +49,5 @@ public interface PlayerEngine extends PlayerConstants {
     void setRotationAngle(int angle);
     void setVideoFlipEnabled(boolean enabled);
     void setVideoGravity(int gravity);
-    Throwable getFatalError();
+    Throwable getUnthrownError();
 }

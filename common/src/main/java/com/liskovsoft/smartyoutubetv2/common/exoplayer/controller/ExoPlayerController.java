@@ -525,7 +525,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         mOnVideoLoaded = onVideoLoaded;
     }
 
-    public Throwable getFatalError() {
+    public Throwable getUnthrownError() {
         if (mPlayer == null) {
             return null;
         }
@@ -533,7 +533,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
         Object manifest = mPlayer.getCurrentManifest();
 
         if (manifest instanceof SabrManifest) {
-            return ((SabrManifest) manifest).getFatalError();
+            return ((SabrManifest) manifest).getUnthrownError();
         }
 
         return null;
