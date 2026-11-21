@@ -4,6 +4,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrServerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -38,6 +39,12 @@ public class SabrDefaultLoadErrorHandlingPolicy extends DashDefaultLoadErrorHand
             Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
             //long delayMs = ((SabrBackoffError) cause).backoffMs;
             //return delayMs; // not used at a moment but could be changed in future
+            return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
+        }
+
+        // The server rejected the request (SabrError part). The same request gets the same answer.
+        if (cause instanceof SabrServerError) {
+            Log.e(TAG, "%s, errorCount: %s", cause.getMessage(), errorCount);
             return C.TIME_UNSET; // fatal, no retry. Propagate to ErrorFixerController
         }
 

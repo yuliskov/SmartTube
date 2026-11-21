@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrSegmentMismatchError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrServerError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.parts.FormatInitializedSabrPart;
@@ -426,7 +427,9 @@ public class SabrStream {
         }
 
         Log.d(TAG, "Process SabrError: %s", sabrError);
-        throw new SabrStreamError(String.format("SABR Protocol Error: %s", sabrError));
+        throw new SabrServerError(
+                sabrError.hasType() ? sabrError.getType() : null,
+                sabrError.hasAction() ? sabrError.getAction() : -1);
     }
 
     private void processSabrContextUpdate(UMPPart part) {
