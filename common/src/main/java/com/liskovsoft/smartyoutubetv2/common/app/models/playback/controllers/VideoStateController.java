@@ -386,6 +386,18 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        // Don't reset if doing switch from the embed to the fullscreen one
+        boolean sameVideo = item.equals(getVideo());
+
+        if (pendingReset && sameVideo) {
+            if (isEmbedPlayer()) {
+                mEmbedKeepsState = true; // the same preview again: keep the state
+            } else {
+                resetPosition(item); // switch from the embed to the fullscreen player: do the skipped reset now
+            }
+            return;
+        }
+
         if (item.fromCrashRestorer) {
             item.fromCrashRestorer = false;
             return;
@@ -403,17 +415,7 @@ public class VideoStateController extends BasePlayerController {
             isLive = false;
         }
 
-        // Don't reset if doing switch from the embed to the fullscreen one
-        boolean sameVideo = item.equals(getVideo());
         if (sameVideo) {
-            if (pendingReset) {
-                if (isEmbedPlayer()) {
-                    mEmbedKeepsState = true; // the same preview again: keep the state
-                } else {
-                    resetPosition(item); // switch from the embed to the fullscreen player: do the skipped reset now
-                }
-                return;
-            }
             isShort = false;
         }
 
@@ -544,7 +546,13 @@ public class VideoStateController extends BasePlayerController {
         }
 
         if (mEmbedKeepsState) {
-            return; // the preview position must not replace the saved state
+            if (isBeginEmbed()) {
+                return; // the preview position must not replace the saved state
+            }
+            // The user really watches the video now (unmuted embed or the switch to fullscreen):
+            // do the reset that the embed player skipped and save the position as usual
+            mEmbedKeepsState = false;
+            resetPosition(video);
         }
 
         // Exceptional cases:
@@ -562,11 +570,15 @@ public class VideoStateController extends BasePlayerController {
             // Sync video. You could safely use it later to restore state.
             video.sync(state);
         } else { // fully viewed
+            State prev = getStateService().getByVideoId(video.videoId);
+            boolean newlyViewed = !isLiveBroken && (prev == null || prev.durationMs - prev.positionMs > 1_000);
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             getStateService().save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
-            // Persist at once. The delayed write is lost when the app is killed within 10 sec.
-            getStateService().persistNow();
+            if (newlyViewed) {
+                // Persist at once. The delayed write is lost when the app is killed within 10 sec.
+                getStateService().persistNow();
+            }
         }
 
         Playlist.instance().sync(video);
