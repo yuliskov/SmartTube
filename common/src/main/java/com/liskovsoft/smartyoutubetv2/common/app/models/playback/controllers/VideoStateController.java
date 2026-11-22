@@ -378,6 +378,8 @@ public class VideoStateController extends BasePlayerController {
      * Reset position of currently opened music and live videos.
      */
     private void resetPositionIfNeeded(Video item) {
+        // The reset that the embed player skipped for this video (see below)
+        boolean pendingReset = mEmbedKeepsState;
         mEmbedKeepsState = false;
 
         if (getStateService() == null || item == null) {
@@ -404,6 +406,14 @@ public class VideoStateController extends BasePlayerController {
         // Don't reset if doing switch from the embed to the fullscreen one
         boolean sameVideo = item.equals(getVideo());
         if (sameVideo) {
+            if (pendingReset) {
+                if (isEmbedPlayer()) {
+                    mEmbedKeepsState = true; // the same preview again: keep the state
+                } else {
+                    resetPosition(item); // switch from the embed to the fullscreen player: do the skipped reset now
+                }
+                return;
+            }
             isShort = false;
         }
 
@@ -533,7 +543,7 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
-        if (mEmbedKeepsState && isEmbedPlayer()) {
+        if (mEmbedKeepsState) {
             return; // the preview position must not replace the saved state
         }
 
@@ -571,6 +581,7 @@ public class VideoStateController extends BasePlayerController {
 
         State state = getStateService().getByVideoId(item.videoId);
 
+        boolean startFromZero = mEmbedKeepsState;
         if (mEmbedKeepsState) {
             if (!isEmbedPlayer()) {
                 // Switch from the embed to the fullscreen player: do the reset that the embed player skipped
@@ -580,7 +591,8 @@ public class VideoStateController extends BasePlayerController {
             state = null; // start from 0
         }
 
-        boolean stateIsOutdated = isStateOutdated(state, item);
+        // Skip the web position when the video starts from 0: for a fully watched video it is the end of the video
+        boolean stateIsOutdated = !startFromZero && isStateOutdated(state, item);
         if (stateIsOutdated) { // check that the user logged in
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
