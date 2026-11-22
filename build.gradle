@@ -75,24 +75,32 @@ subprojects {
         return
     }
 
-    afterEvaluate {
-        if (!project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('maven-publish')) {
-            return
-        }
-        
-        apply plugin: 'maven-publish'
+    apply plugin: 'maven-publish'
 
-        publishing {
-            publications {
-                release(MavenPublication) {
-                    from components.release
-                    groupId = 'com.github.yuliskov.SmartTube'
-                    artifactId = project.name
-                    version = project.findProperty('version') ?: 'unspecified'
+    plugins.withId('com.android.library') {
+        android {
+            publishing {
+                multipleVariants('all') {
+                    allVariants()
+                    withSourcesJar()
                 }
             }
         }
+    }
 
+    afterEvaluate {
+        if (project.plugins.hasPlugin('com.android.library')) {
+            publishing {
+                publications {
+                    release(MavenPublication) {
+                        from components.findByName('all')
+                        groupId = project.findProperty('group') ?: 'com.github.yuliskov.SmartTube'
+                        artifactId = project.name
+                        version = project.findProperty('version') ?: 'unspecified'
+                    }
+                }
+            }
+        }
     }
 
 }
