@@ -40,6 +40,8 @@ public class VideoStateController extends BasePlayerController {
     @Nullable
     private Boolean mRestoreLiveEdge;
     private long mSleepTimerStartMs;
+    // The embed (preview) player starts a watched video from 0 but keeps its saved state
+    private boolean mEmbedKeepsState;
 
     @Override
     public void onInit() {
@@ -376,6 +378,8 @@ public class VideoStateController extends BasePlayerController {
      * Reset position of currently opened music and live videos.
      */
     private void resetPositionIfNeeded(Video item) {
+        mEmbedKeepsState = false;
+
         if (getStateService() == null || item == null) {
             return;
         }
@@ -403,7 +407,13 @@ public class VideoStateController extends BasePlayerController {
             isShort = false;
         }
 
-        if (isShort || isVideoEnded || isLive) {
+        boolean shouldReset = isShort || isVideoEnded || isLive;
+
+        // The embed player must not erase the state. Otherwise a preview of a watched video
+        // removes its progress and the card looks unwatched later.
+        mEmbedKeepsState = shouldReset && isEmbedPlayer();
+
+        if (shouldReset && !mEmbedKeepsState) {
             resetPosition(item);
         }
     }
@@ -523,6 +533,10 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        if (mEmbedKeepsState && isEmbedPlayer()) {
+            return; // the preview position must not replace the saved state
+        }
+
         // Exceptional cases:
         // 1) Track is ended
         // 2) Pause on end enabled
@@ -541,6 +555,8 @@ public class VideoStateController extends BasePlayerController {
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             getStateService().save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
+            // Persist at once. The delayed write is lost when the app is killed within 10 sec.
+            getStateService().persistNow();
         }
 
         Playlist.instance().sync(video);
@@ -554,6 +570,15 @@ public class VideoStateController extends BasePlayerController {
         }
 
         State state = getStateService().getByVideoId(item.videoId);
+
+        if (mEmbedKeepsState) {
+            if (!isEmbedPlayer()) {
+                // Switch from the embed to the fullscreen player: do the reset that the embed player skipped
+                mEmbedKeepsState = false;
+                resetPosition(item);
+            }
+            state = null; // start from 0
+        }
 
         boolean stateIsOutdated = isStateOutdated(state, item);
         if (stateIsOutdated) { // check that the user logged in
