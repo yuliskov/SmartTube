@@ -31,7 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SponsorBlockController extends BasePlayerController {
     private static final String TAG = SponsorBlockController.class.getSimpleName();
-    private static final long POLL_INTERVAL_MS = 1_000;
+    // Check four times a second. With one check a second up to a second of a segment was played before the skip.
+    private static final long POLL_INTERVAL_MS = 250;
     private static final int CONTENT_BLOCK_ID = 144;
     private MediaItemService mMediaItemService;
     private List<SponsorSegment> mOriginalSegments;
@@ -253,7 +254,9 @@ public class SponsorBlockController extends BasePlayerController {
             return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
         } else {
             long windowSizeMs = (long) (2_000 * getPlayer().getSpeed());
-            return positionMs >= segment.getStartMs() && positionMs <= Math.min(segment.getStartMs() + windowSizeMs, segment.getEndMs());
+            // Jump one poll interval ahead of the segment, so that nothing of it is shown
+            long lookAheadMs = (long) (POLL_INTERVAL_MS * getPlayer().getSpeed());
+            return positionMs >= (segment.getStartMs() - lookAheadMs) && positionMs <= Math.min(segment.getStartMs() + windowSizeMs, segment.getEndMs());
         }
     }
 
