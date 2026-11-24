@@ -119,6 +119,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mVideoGroupAdapters != null) {
+            VideoGroupObjectAdapter.releaseAll(mVideoGroupAdapters.values());
             mVideoGroupAdapters.clear();
         }
 
@@ -132,6 +133,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mRowsAdapter.remove(row);
             VideoGroupObjectAdapter group = (VideoGroupObjectAdapter) row.getAdapter();
             mVideoGroupAdapters.values().remove(group);
+            group.release();
         }
     }
 
@@ -146,6 +148,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
                     if (adapter == needed) {
                         mRowsAdapter.remove(row);
                         mVideoGroupAdapters.remove(id);
+                        adapter.release();
                     }
                 }
             }

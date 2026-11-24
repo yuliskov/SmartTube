@@ -1439,6 +1439,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                 if (position != -1) {
                     mVideoGroupAdapters.remove(group.getId());
                     mRowsAdapter.removeItems(position + SUGGESTIONS_START_INDEX, 1);
+                    adapter.release();
                 }
             }
         }
@@ -1559,6 +1560,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             mRowsAdapter.removeItems(SUGGESTIONS_START_INDEX, mRowsAdapter.size() - 1);
         }
 
+        VideoGroupObjectAdapter.releaseAll(mVideoGroupAdapters.values());
         mVideoGroupAdapters.clear();
         mPendingFocus = null;
     }
