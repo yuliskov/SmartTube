@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -720,7 +721,7 @@ public class SabrManifestParser {
         MediaItemFormatInfo.ClientInfo clientInfo = formatInfo.getClientInfo();
 
         return ClientInfo.newBuilder()
-                .setClientName(ClientName.valueOf(clientInfo.getClientName().toUpperCase()))
+                .setClientName(ClientName.valueOf(clientInfo.getClientName().toUpperCase(Locale.ROOT)))
                 .setClientVersion(clientInfo.getClientVersion())
                 .setOsName(clientInfo.getOsName())
                 .setOsVersion(clientInfo.getOsVersion())
