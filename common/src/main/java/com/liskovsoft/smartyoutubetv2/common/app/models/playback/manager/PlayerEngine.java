@@ -50,4 +50,5 @@ public interface PlayerEngine extends PlayerConstants {
     void setVideoFlipEnabled(boolean enabled);
     void applyNightlight();
     void setVideoGravity(int gravity);
+    Throwable getUnthrownError();
 }

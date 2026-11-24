@@ -197,16 +197,15 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 Major contributors to this project:
 
-- [@pixkk](https://github.com/pixkk): SABR streaming, Innertube internals
+- [@pixkk](https://github.com/pixkk): SABR streaming, TV PoToken/Challenge generation 
 - [@Jupiops](https://github.com/Jupiops): SABR CDN support
 
 ## Donation
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-- [**Patreon (free access)**](https://www.patreon.com/smarttube)  
-- **PayPal**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
-<!-- > [**Buy me a coffee**](https://www.buymeacoffee.com/stube) -->  
+- **PayPal (main)**: firsth<!-- abc@def -->ash@gmai<!-- @abc.com -->l.com  
+- [**Patreon (alternative, free)**](https://www.patreon.com/smarttube)
 - **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 - **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 - **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  

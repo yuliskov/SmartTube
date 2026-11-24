@@ -223,8 +223,8 @@ public class SabrStream {
         return processor.getBackoffTimeMs();
     }
 
-    public SabrStreamError getFatalError() {
-        return processor.getFatalError();
+    public SabrStreamError getUnthrownError() {
+        return processor.getUnthrownError();
     }
 
     public MediaHeader getInitializedFormat(int iTag) {

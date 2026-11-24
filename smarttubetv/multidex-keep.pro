@@ -1,3 +1,4 @@
+-keep class io.reactivex.Flowable
 -keepclassmembers class okio.ByteString$Companion {
     <init>(...);
 }

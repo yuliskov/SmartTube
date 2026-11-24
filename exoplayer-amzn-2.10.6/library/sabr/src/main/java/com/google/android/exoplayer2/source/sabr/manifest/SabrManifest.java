@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.EnabledTrackTypes;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
@@ -288,6 +289,14 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         return Utils.updateQuery(activeStream.getUrl(), "rn", ++sabrRequestNumber);
+    }
+
+    public SabrStreamError getUnthrownError() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            return sabrStream.getUnthrownError();
+        }
+
+        return null;
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {
