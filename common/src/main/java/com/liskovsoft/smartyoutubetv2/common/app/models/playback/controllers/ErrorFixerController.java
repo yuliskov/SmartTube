@@ -25,6 +25,7 @@ import java.util.List;
 public class ErrorFixerController extends BasePlayerController implements OnLongBuffering {
     private static final String TAG = ErrorFixerController.class.getSimpleName();
     private static final long STREAM_END_THRESHOLD_MS = 180_000;
+    private static final long VIDEO_END_THRESHOLD_MS = 3_000;
     private static final int MAX_SABR_ERROR_FIX_ATTEMPTS = 1;
     private final BufferingDetector mBufferingDetector = new BufferingDetector(this);
     private VideoLoaderController mVideoLoaderController;
@@ -54,7 +55,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
         if (error != null) {
             runEngineErrorAction(PlayerEventListener.ERROR_TYPE_UNEXPECTED, PlayerEventListener.RENDERER_INDEX_UNKNOWN, error);
-        } else if (isStreamEnded()) {
+        } else if (isStreamEnded() || isVideoNearEnd()) {
+            // SABR may never deliver the tail of the last segment, so the engine never reaches STATE_ENDED.
+            // Reloading here restarts the video from 0 (position near the end is treated as 'watched').
             getMainController().onPlayEnd();
         } else if (isOfflineVideo() && isSubtitlesEnabled()) {
             // Long loading subtitles cause hangs
@@ -142,8 +145,8 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
-        if (isStreamEnded()) {
-            // Url no longer works (e.g. live stream ended)
+        // Url no longer works (e.g. live stream ended) or error on the last segment of a regular video.
+        if (isStreamEnded() || isVideoNearEnd()) {
             getMainController().onPlayEnd();
             return;
         }
@@ -465,12 +468,21 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     }
 
     private boolean isStreamEnded() {
-        if (getPlayer() == null || getVideo() == null) {
+        if (getPlayer() == null || getVideo() == null || !getVideo().isLiveEnd) {
             return false;
         }
 
-        return getVideo().isLiveEnd && getPlayer().getDurationMs() > 0
-                && getPlayer().getDurationMs() - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
+        long durationMs = getPlayer().getDurationMs();
+        return durationMs > 0 && durationMs - getPlayer().getPositionMs() < STREAM_END_THRESHOLD_MS;
+    }
+
+    private boolean isVideoNearEnd() {
+        if (getPlayer() == null || !isOfflineVideo()) {
+            return false;
+        }
+
+        long durationMs = getPlayer().getDurationMs();
+        return durationMs > 0 && durationMs - getPlayer().getPositionMs() < VIDEO_END_THRESHOLD_MS;
     }
 
     private boolean isOfflineVideo() {
