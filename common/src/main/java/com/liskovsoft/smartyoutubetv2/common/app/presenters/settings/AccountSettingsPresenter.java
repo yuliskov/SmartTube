@@ -237,7 +237,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             return;
         }
 
-        SimpleEditDialog.showPassword(
+        SimpleEditDialog.showPasswordWithLongPressSubmit(
                 getContext(),
                 getContext().getString(R.string.enter_account_password),
                 null,

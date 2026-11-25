@@ -5,7 +5,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -25,7 +24,7 @@ public class SimpleEditDialog {
     }
 
     public static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss) {
-        show(context, dialogTitle, dialogHint, defaultValue, onChange, onDismiss, false);
+        show(context, dialogTitle, dialogHint, defaultValue, onChange, onDismiss, false, false);
     }
 
     public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
@@ -33,15 +32,20 @@ public class SimpleEditDialog {
     }
 
     public static void showPassword(Context context, String dialogTitle, String defaultValue, OnChange onChange, Runnable onDismiss) {
-        show(context, dialogTitle, dialogTitle, defaultValue, onChange, onDismiss, true);
+        show(context, dialogTitle, dialogTitle, defaultValue, onChange, onDismiss, true, false);
     }
 
-    private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange, Runnable onDismiss, boolean isPassword) {
+    public static void showPasswordWithLongPressSubmit(Context context, String dialogTitle, String defaultValue, OnChange onChange) {
+        show(context, dialogTitle, dialogTitle, defaultValue, onChange, null, true, true);
+    }
+
+    private static void show(Context context, String dialogTitle, String dialogHint, String defaultValue, OnChange onChange,
+                             Runnable onDismiss, boolean isPassword, boolean longPressSubmit) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
-        EditText editField = contentView.findViewById(R.id.simple_edit_value);
+        DialogEditText editField = contentView.findViewById(R.id.simple_edit_value);
         if (isPassword) {
             editField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
@@ -105,6 +109,10 @@ public class SimpleEditDialog {
                 configDialog.dismiss();
             }
         });
+
+        if (longPressSubmit) {
+            editField.setOnSelectLongPress(() -> configDialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick());
+        }
 
         configDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener((view) -> configDialog.dismiss());
 
