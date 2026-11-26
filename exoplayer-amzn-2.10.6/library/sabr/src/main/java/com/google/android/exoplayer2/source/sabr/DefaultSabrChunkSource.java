@@ -492,6 +492,21 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         if (!cancelable) {
             return false;
         }
+        if (!(chunk instanceof SingleSampleMediaChunk) && isForbidden(e)) {
+            // The signed URL or the poToken stopped working mid-playback. Retrying the same request
+            // won't help, and by default the error only reaches the app once the buffer runs dry.
+            // Fetch fresh streaming data in the background while the buffer still plays.
+            if (manifest.isOutdatedRequestUrl(trackType, chunk.dataSpec.uri.toString())) {
+                Log.w(TAG, "Retrying SABR request with refreshed streaming data");
+                return true; // drop the chunk, the next one is built with the new data
+            }
+
+            if (manifest.maybeRequestStreamingDataRefresh()) {
+                Log.w(TAG, "SABR request forbidden, refreshing streaming data");
+            }
+
+            return false; // keep the regular retries until the fresh data arrives
+        }
         if (!(chunk instanceof SingleSampleMediaChunk) && isEndpointConnectionFailure(chunk, e)) {
             if (manifest.maybeUseNextCdn(chunk.dataSpec.uri.toString())) {
                 Log.w(TAG, "Retrying SABR request on an alternate media network");
@@ -523,6 +538,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
         return blacklistDurationMs != C.TIME_UNSET
                 && trackSelection.blacklist(trackSelection.indexOf(chunk.trackFormat), blacklistDurationMs);
+    }
+
+    private static boolean isForbidden(Exception error) {
+        return error instanceof InvalidResponseCodeException
+                && ((InvalidResponseCodeException) error).responseCode == 403;
     }
 
     private static boolean isEndpointConnectionFailure(Chunk chunk, Exception error) {

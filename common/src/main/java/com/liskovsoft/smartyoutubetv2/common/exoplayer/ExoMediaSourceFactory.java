@@ -42,6 +42,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.okhttp.OkHttpManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.DashDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.SabrStreamingDataRefresher;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -250,7 +251,9 @@ public class ExoMediaSourceFactory {
 
     private SabrManifest getSabrManifest(MediaItemFormatInfo formatInfo) {
         SabrManifestParser parser = new SabrManifestParser();
-        return parser.parse(formatInfo);
+        SabrManifest manifest = parser.parse(formatInfo);
+        manifest.setStreamingDataRefresher(new SabrStreamingDataRefresher());
+        return manifest;
     }
 
     private DashManifest getManifest(MediaItemFormatInfo formatInfo) {

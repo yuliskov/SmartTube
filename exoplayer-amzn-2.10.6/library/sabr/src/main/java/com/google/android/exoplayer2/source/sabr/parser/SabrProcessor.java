@@ -55,13 +55,13 @@ public class SabrProcessor {
     private static final String TAG = SabrProcessor.class.getSimpleName();
     private static final int NO_VALUE = -1;
     private static final long LIVE_START_OFFSET_MS = 10_000;
-    private final String videoPlaybackUstreamerConfig;
+    private volatile String videoPlaybackUstreamerConfig;
     private final ClientInfo clientInfo;
     private FormatSelector formatSelector;
     private final int liveSegmentTargetDurationToleranceMs;
     private final int liveSegmentTargetDurationSec;
     private long playerTimeMs;
-    private final String poToken;
+    private volatile String poToken;
     private final boolean postLive;
     private final String videoId;
     private final long durationMs;
@@ -753,6 +753,11 @@ public class SabrProcessor {
     //
     //    return result;
     //}
+
+    public void updateStreamingData(String videoPlaybackUstreamerConfig, String poToken) {
+        this.videoPlaybackUstreamerConfig = videoPlaybackUstreamerConfig;
+        this.poToken = poToken;
+    }
 
     public StreamerContext createStreamerContext() {
         StreamerContext.Builder builder = StreamerContext.newBuilder()
