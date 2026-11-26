@@ -29,12 +29,18 @@ import okhttp3.Response;
  * Loads the YouTube timedtext document for the active caption track and the same track with
  * {@code tlang}, then maps on-screen lines by timing + text for dual subtitles without web translate
  * latency when YouTube provides a translation.
+ *
+ * <p>The {@code tlang} track is optional (null for tracks YouTube can't translate). The original
+ * transcript is kept even when no translation is available, so the web translate fallback can use
+ * the lines before and after the current one as context (see {@link #getNeighbours}).
  */
 public final class YoutubeTimedTextDualSubtitleSource {
     private static final String TAG = YoutubeTimedTextDualSubtitleSource.class.getSimpleName();
     /** YouTube cue timing can differ slightly from ExoPlayer clock / XML; keep generous for VOD. */
     private static final long TIME_MATCH_TOLERANCE_MS = 1500;
     private static final long START_ALIGN_MAX_DIFF_MS = 900;
+    /** How many overlapping/empty segments to skip when looking for a neighbour line. */
+    private static final int MAX_NEIGHBOUR_SKIP = 3;
 
     private final String mPrimaryUrl;
     private final String mTranslatedUrl;
@@ -42,6 +48,7 @@ public final class YoutubeTimedTextDualSubtitleSource {
     private final Handler mMainHandler = new Handler(Looper.getMainLooper());
 
     private volatile boolean mReady;
+    private volatile boolean mPrimaryReady;
     private List<Segment> mPrimary = Collections.emptyList();
     private List<Segment> mTranslated = Collections.emptyList();
 
@@ -61,12 +68,16 @@ public final class YoutubeTimedTextDualSubtitleSource {
         this(captionBaseUrl, youtubeTlangCode, null);
     }
 
-    public YoutubeTimedTextDualSubtitleSource(String captionBaseUrl, String youtubeTlangCode,
+    /**
+     * @param youtubeTlangCode YouTube {@code tlang} value, or null to load only the original
+     *                         transcript (track not translatable by YouTube)
+     */
+    public YoutubeTimedTextDualSubtitleSource(String captionBaseUrl, @Nullable String youtubeTlangCode,
                                               @Nullable String poToken) {
         String base = ensureXmlCaptionFormat(stripTlangParam(captionBaseUrl));
         base = appendPoToken(base, poToken);
         mPrimaryUrl = base;
-        mTranslatedUrl = appendTlang(base, youtubeTlangCode);
+        mTranslatedUrl = TextUtils.isEmpty(youtubeTlangCode) ? null : appendTlang(base, youtubeTlangCode);
         Log.d(TAG, "Created: tlang=%s, poToken=%s", youtubeTlangCode,
                 poToken != null ? "present(" + poToken.length() + " chars)" : "null");
     }
@@ -90,8 +101,14 @@ public final class YoutubeTimedTextDualSubtitleSource {
         }
     }
 
+    /** YouTube's own translation ({@code tlang}) is loaded and {@link #lookup} can be used. */
     public boolean isReady() {
         return mReady;
+    }
+
+    /** The original transcript is loaded and {@link #getNeighbours} can be used. */
+    public boolean isPrimaryReady() {
+        return mPrimaryReady;
     }
 
     /**
@@ -100,18 +117,20 @@ public final class YoutubeTimedTextDualSubtitleSource {
      */
     public void loadAsync(@Nullable Runnable onMainThreadComplete) {
         mReady = false;
+        mPrimaryReady = false;
         mExecutor.execute(
                 () -> {
                     try {
                         Log.d(TAG, "Loading timedtext primary URL (fmt normalized): %s", mPrimaryUrl);
                         String primaryBody = fetchBody(mPrimaryUrl);
-                        String translatedBody = fetchBody(mTranslatedUrl);
+                        String translatedBody = mTranslatedUrl != null ? fetchBody(mTranslatedUrl) : null;
                         List<Segment> primary = parseTimedTextXml(primaryBody, "primary");
                         List<Segment> translated = parseTimedTextXml(translatedBody, "tlang");
                         synchronized (YoutubeTimedTextDualSubtitleSource.this) {
                             mPrimary = primary;
                             mTranslated = translated;
-                            mReady = !primary.isEmpty() && !translated.isEmpty();
+                            mPrimaryReady = !primary.isEmpty();
+                            mReady = mPrimaryReady && !translated.isEmpty();
                             if (mReady) {
                                 Log.d(
                                         TAG,
@@ -132,6 +151,7 @@ public final class YoutubeTimedTextDualSubtitleSource {
                             mPrimary = Collections.emptyList();
                             mTranslated = Collections.emptyList();
                             mReady = false;
+                            mPrimaryReady = false;
                         }
                     }
                     if (onMainThreadComplete != null) {
@@ -143,6 +163,7 @@ public final class YoutubeTimedTextDualSubtitleSource {
     public void release() {
         mExecutor.shutdownNow();
         mReady = false;
+        mPrimaryReady = false;
         mPrimary = Collections.emptyList();
         mTranslated = Collections.emptyList();
     }
@@ -182,6 +203,48 @@ public final class YoutubeTimedTextDualSubtitleSource {
             return null;
         }
         return translationForPrimaryIndex(primary, translated, idx);
+    }
+
+    /**
+     * Original-language lines just before and after the cue currently shown, used as context for
+     * web translation. Neighbours that overlap the on-screen text (rolling auto captions show the
+     * previous segment together with the current one) are skipped.
+     *
+     * @return {@code {prev, next}} (either may be null), or null when the transcript isn't loaded or
+     *         the cue can't be located in it
+     */
+    @Nullable
+    public String[] getNeighbours(String cuePlainText, long positionMs) {
+        if (!mPrimaryReady) {
+            return null;
+        }
+        List<Segment> primary;
+        synchronized (this) {
+            primary = mPrimary;
+        }
+        if (primary.isEmpty()) {
+            return null;
+        }
+        String normCue = normalizeText(cuePlainText);
+        int idx = findPrimaryIndex(primary, normCue, positionMs);
+        if (idx < 0) {
+            return null;
+        }
+        return new String[] {
+                neighbourText(primary, normCue, idx, -1),
+                neighbourText(primary, normCue, idx, 1)
+        };
+    }
+
+    @Nullable
+    private static String neighbourText(List<Segment> primary, String normCue, int idx, int step) {
+        for (int i = idx + step, tries = 0; i >= 0 && i < primary.size() && tries < MAX_NEIGHBOUR_SKIP; i += step, tries++) {
+            String text = normalizeText(primary.get(i).text);
+            if (!text.isEmpty() && !textCompatible(normCue, text)) {
+                return text;
+            }
+        }
+        return null;
     }
 
     /**

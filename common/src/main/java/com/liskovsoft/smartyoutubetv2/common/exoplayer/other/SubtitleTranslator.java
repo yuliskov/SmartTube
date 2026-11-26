@@ -56,6 +56,16 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
 
     private String mLastOriginalText;
     private String mLastTranslatedText;
+
+    /**
+     * Last non-empty line and the one before it. Unlike {@link #mLastOriginalText} these survive the
+     * empty gaps between lines, so the previous line can be sent as translation context when the
+     * full transcript isn't available.
+     */
+    private String mLastShownLine;
+    private long mLastShownLineElapsed;
+    private String mPreviousLine;
+    private long mPreviousLineElapsed;
     private long mCueSequence;
 
     private long mLastOriginalChangeElapsed;
@@ -108,20 +118,9 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
             // to Google Translate; the next cue will likely hit via onCuesProcessed().
             return;
         }
-        // Timedtext load failed entirely (isReady=false) — fall back to Google Translate.
+        // No YouTube translation (load failed or track not translatable) — fall back to Google Translate.
         cancelPendingMerge();
-        final long seq = ++mCueSequence;
-        final String line = mLastOriginalText;
-        mTranslateService.translate(line, translatedText -> {
-            if (seq != mCueSequence) {
-                return;
-            }
-            if (translatedText == null || translatedText.trim().isEmpty()) {
-                return;
-            }
-            mLastTranslatedText = translatedText;
-            scheduleMergedCue(line, translatedText, seq);
-        });
+        requestWebTranslation(mLastOriginalText, ++mCueSequence);
     }
 
     @Override
@@ -174,6 +173,12 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
         }
         mLastOriginalChangeElapsed = now;
         mLastOriginalText = originalText;
+        if (!originalText.equals(mLastShownLine)) {
+            mPreviousLine = mLastShownLine;
+            mPreviousLineElapsed = mLastShownLineElapsed;
+            mLastShownLine = originalText;
+            mLastShownLineElapsed = now;
+        }
 
         List<Cue> timedMerged = tryBuildTimedYoutubeTranslation(originalText);
         if (timedMerged != null) {
@@ -197,9 +202,13 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
             return null;
         }
 
-        final long seq = ++mCueSequence;
+        requestWebTranslation(originalText, ++mCueSequence);
+        return null;
+    }
 
-        mTranslateService.translate(originalText, translatedText -> {
+    private void requestWebTranslation(String line, long seq) {
+        String[] context = getTranslationContext(line);
+        mTranslateService.translate(context[0], line, context[1], translatedText -> {
             if (seq != mCueSequence) {
                 return;
             }
@@ -208,9 +217,36 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
             }
 
             mLastTranslatedText = translatedText;
-            scheduleMergedCue(originalText, translatedText, seq);
+            scheduleMergedCue(line, translatedText, seq);
         });
-        return null;
+    }
+
+    /**
+     * Lines around {@code line} to give the translator context: the previous and next line from the
+     * transcript when it's loaded, otherwise the previously shown line (if it was recent).
+     *
+     * @return {@code {prev, next}}, either may be null
+     */
+    private String[] getTranslationContext(String line) {
+        if (mTimedSource != null && mTimedSource.isPrimaryReady()) {
+            long pos = mPositionSupplier != null ? mPositionSupplier.getPositionMs() : -1L;
+            String[] neighbours = mTimedSource.getNeighbours(line, pos);
+            if (neighbours != null) {
+                return neighbours;
+            }
+        }
+        boolean usable = mPreviousLine != null
+                && mLastShownLineElapsed - mPreviousLineElapsed <= MAX_CUE_GAP_MS
+                // Rolling auto captions keep the previous line on screen: it's already in the text.
+                && !line.contains(mPreviousLine);
+        return new String[] {usable ? mPreviousLine : null, null};
+    }
+
+    private void resetLineHistory() {
+        mLastShownLine = null;
+        mLastShownLineElapsed = 0;
+        mPreviousLine = null;
+        mPreviousLineElapsed = 0;
     }
 
     /**
@@ -310,6 +346,7 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
         mLastTranslatedText = null;
         mLastOriginalChangeElapsed = 0;
         mAvgMsBetweenOriginalChanges = 0;
+        resetLineHistory();
     }
 
     public String getTargetLanguage() {
@@ -327,6 +364,7 @@ public final class SubtitleTranslator implements SubtitleManager.OnCuesProcessed
         mLastTranslatedText = null;
         mLastOriginalChangeElapsed = 0;
         mAvgMsBetweenOriginalChanges = 0;
+        resetLineHistory();
         mCueSequence++;
     }
 }

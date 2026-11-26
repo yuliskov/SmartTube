@@ -579,20 +579,22 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
                             + "vssId=%s formatInfoPresent=%s",
                     primarySub.getFormatId(),
                     formatInfo != null);
-        } else if (!sub.isTranslatable()) {
-            Log.d(
-                    TAG,
-                    "updateDualSubtitlePlayback: subtitle track is not translatable by YouTube "
-                            + "(isTranslatable=false) — tlang skipped, dual will use web translate only. "
-                            + "vssId=%s",
-                    primarySub.getFormatId());
         } else if (baseUrl != null && !baseUrl.isEmpty()) {
+            // Not translatable by YouTube: still load the original transcript so web translate can
+            // use the neighbouring lines as context.
+            String tlang = null;
+            if (sub.isTranslatable()) {
+                tlang = YoutubeTimedTextDualSubtitleSource.appLanguageToYoutubeTlang(targetLang);
+            } else {
+                Log.d(
+                        TAG,
+                        "updateDualSubtitlePlayback: subtitle track is not translatable by YouTube "
+                                + "(isTranslatable=false) — tlang skipped, web translate with transcript context. "
+                                + "vssId=%s",
+                        primarySub.getFormatId());
+            }
             String poToken = formatInfo != null ? formatInfo.getPoToken() : null;
-            timedSource =
-                    new YoutubeTimedTextDualSubtitleSource(
-                            baseUrl,
-                            YoutubeTimedTextDualSubtitleSource.appLanguageToYoutubeTlang(targetLang),
-                            poToken);
+            timedSource = new YoutubeTimedTextDualSubtitleSource(baseUrl, tlang, poToken);
         } else {
             Log.d(
                     TAG,
