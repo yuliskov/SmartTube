@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.ServiceManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.FeedbackReasons.FeedbackItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.PlaylistInfo;
@@ -297,7 +299,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (!ChannelPresenter.canOpenChannel(mVideo)) {
+        boolean isSearchPlaylist = mVideo != null && mVideo.isSearchPlaylistCard() && !mVideo.isPlaylistAsChannel();
+        if (isSearchPlaylist ? !canOpenSearchPlaylistChannel(mVideo) : !ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
@@ -305,7 +308,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         mVideo.isPlaylistAsChannel() ? R.string.open_playlist : R.string.open_channel), optionItem -> {
-                    MediaServiceManager.chooseChannelPresenter(getContext(), mVideo);
+                    if (isSearchPlaylist) {
+                        openSearchPlaylistChannel(mVideo);
+                    } else {
+                        MediaServiceManager.chooseChannelPresenter(getContext(), mVideo);
+                    }
                     mDialogPresenter.closeDialog();
                 }));
     }
@@ -316,7 +323,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Check view to allow open playlist in grid
-        if (mVideo == null || !mVideo.hasPlaylist() || (getViewManager().getTopView() == ChannelUploadsView.class && mVideo.belongsToSamePlaylistGroup())) {
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.isSearchPlaylistCard()) || (getViewManager().getTopView() == ChannelUploadsView.class && mVideo.belongsToSamePlaylistGroup())) {
             return;
         }
 
@@ -326,7 +333,108 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.open_playlist), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
+                UiOptionItem.from(getContext().getString(R.string.open_playlist), optionItem ->
+                        ChannelUploadsPresenter.instance(getContext()).openChannel(prepareOpenPlaylistVideo(mVideo))));
+    }
+
+    private void openSearchPlaylistChannel(Video video) {
+        String directChannelId = getDirectChannelId(video);
+        if (directChannelId != null) {
+            ChannelPresenter.instance(getContext()).openChannel(directChannelId);
+            return;
+        }
+
+        Video browseVideo = preparePlaylistBrowseVideo(video);
+        if (browseVideo != null) {
+            mServiceManager.loadChannelPlaylist(browseVideo, this::openFirstChannelFromGroup);
+        } else if (video != null && video.hasNestedItems() && video.mediaItem != null && !TextUtils.isEmpty(video.mediaItem.getReloadPageKey())) {
+            mServiceManager.loadChannelUploads(video, this::openFirstChannelFromGroup);
+        }
+    }
+
+    private void openFirstChannelFromGroup(MediaGroup group) {
+        String id = findFirstChannelId(group);
+        if (id != null) {
+            ChannelPresenter.instance(getContext()).openChannel(id);
+        }
+    }
+
+    static boolean canOpenSearchPlaylistChannel(Video video) {
+        return video != null && (
+                getDirectChannelId(video) != null
+                        || preparePlaylistBrowseVideo(video) != null
+                        || (video.hasNestedItems() && video.mediaItem != null && !TextUtils.isEmpty(video.mediaItem.getReloadPageKey()))
+        );
+    }
+
+    static Video preparePlaylistBrowseVideo(Video video) {
+        if (video == null) {
+            return null;
+        }
+
+        if (video.mediaItem != null && !TextUtils.isEmpty(video.mediaItem.getChannelId())) {
+            return video;
+        }
+
+        if (!TextUtils.isEmpty(video.channelId)) {
+            Video target = new Video();
+            target.channelId = video.channelId;
+            return target;
+        }
+
+        String resolvedId = video.resolvePlaylistId();
+        if (resolvedId != null) {
+            Video target = new Video();
+            target.channelId = resolvedId.startsWith("VL") ? resolvedId : "VL" + resolvedId;
+            return target;
+        }
+
+        return null;
+    }
+
+    static Video prepareOpenPlaylistVideo(Video video) {
+        if (video == null || video.hasNestedItems() || !TextUtils.isEmpty(video.playlistId)) {
+            return video;
+        }
+
+        String resolvedId = video.resolvePlaylistId();
+        if (resolvedId == null) {
+            return video;
+        }
+
+        Video copy = Video.from(video);
+        copy.playlistId = resolvedId;
+        if (resolvedId.equals(copy.playlistParams)) {
+            copy.playlistParams = null;
+        }
+        return copy;
+    }
+
+    static String findFirstChannelId(MediaGroup group) {
+        if (group != null && group.getMediaItems() != null) {
+            for (MediaItem child : group.getMediaItems()) {
+                String id = child != null ? child.getChannelId() : null;
+                if (isDirectChannelId(id)) {
+                    return id;
+                }
+            }
+        }
+        return null;
+    }
+
+    static String getDirectChannelId(Video video) {
+        if (video == null) {
+            return null;
+        }
+        if (isDirectChannelId(video.channelId)) {
+            return video.channelId;
+        }
+        String itemChannelId = video.mediaItem != null ? video.mediaItem.getChannelId() : null;
+        return isDirectChannelId(itemChannelId) ? itemChannelId : null;
+    }
+
+    private static boolean isDirectChannelId(String id) {
+        return id != null && ((id.startsWith("UC") && id.length() > 2) || (id.startsWith("@") && id.length() > 1));
     }
 
     private void appendOpenChannelUploadsButton() {

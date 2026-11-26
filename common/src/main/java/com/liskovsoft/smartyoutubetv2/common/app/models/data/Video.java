@@ -507,6 +507,26 @@ public final class Video {
     //    return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
     //}
 
+    public String resolvePlaylistId() {
+        if (!TextUtils.isEmpty(playlistId)) {
+            return playlistId;
+        }
+
+        String itemId = mediaItem != null ? mediaItem.getPlaylistId() : null;
+        if (!TextUtils.isEmpty(itemId)) {
+            return itemId;
+        }
+        if (channelId != null && channelId.startsWith("VL") && channelId.length() > 2) {
+            return channelId.substring(2);
+        }
+
+        return playlistParams != null && playlistParams.matches("(PL|UU|RD|OL|LL|FL)[A-Za-z0-9_-]+") ? playlistParams : null;
+    }
+
+    public boolean isSearchPlaylistCard() {
+        return belongsToSearch() && videoId == null && (resolvePlaylistId() != null || isPlaylistAsChannel() || hasNestedItems());
+    }
+
     public boolean hasNextPlaylist() {
         return hasNextItem() && getPlaylistId() != null && getPlaylistId().equals(nextMediaItem.getPlaylistId());
     }
