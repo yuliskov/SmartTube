@@ -131,27 +131,25 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             adapter.clear();
         }
 
-        mSearchGroupAdapters.clear();
-
         ObjectAdapter resultsAdapter = getResultsAdapter();
+        if (resultsAdapter != null) {
+            int size = resultsAdapter.size();
+            int index = 0;
 
-        if (resultsAdapter == null) {
-            return;
-        }
-
-        int size = resultsAdapter.size();
-        int index = 0;
-
-        for (int i = 0; i < size; i++) {
-            Object row = resultsAdapter.get(index);
-            if (row instanceof ListRow &&
-                    ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
-                // Notify about changes (could help with search autofocus)
-                detachAdapter(index);
-            } else {
-                index++;
+            for (int i = 0; i < size; i++) {
+                Object row = resultsAdapter.get(index);
+                if (row instanceof ListRow &&
+                        ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
+                    // Notify about changes (could help with search autofocus)
+                    detachAdapter(index);
+                } else {
+                    index++;
+                }
             }
         }
+
+        VideoGroupObjectAdapter.releaseAll(mSearchGroupAdapters.values());
+        mSearchGroupAdapters.clear();
     }
 
     @Override

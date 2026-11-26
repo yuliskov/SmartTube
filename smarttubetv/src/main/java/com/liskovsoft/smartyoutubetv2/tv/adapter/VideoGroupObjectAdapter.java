@@ -5,16 +5,19 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.misc.WeakHashSet;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
-    private static final WeakHashSet<VideoGroupObjectAdapter> sAdapterRegistry = new WeakHashSet<>();
+    private static final List<WeakReference<VideoGroupObjectAdapter>> sAdapterRegistry = new ArrayList<>();
+    private static boolean sNotifyingAdapters;
+    private boolean mReleased;
     private final List<Video> mVideoItems = new ArrayList<>();
     // CopyOnWriteArrayList to fix Fatal Exception: java.lang.ArrayIndexOutOfBoundsException: length=10; index=-1
     private final List<VideoGroup> mVideoGroups = new CopyOnWriteArrayList<>(); // keep groups from being garbage collected
@@ -43,11 +46,48 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     private void initData(VideoGroup videoGroup) {
-        sAdapterRegistry.add(this);
+        pruneRegistry();
+        sAdapterRegistry.add(new WeakReference<>(this));
 
         if (videoGroup != null) {
             add(videoGroup);
         }
+    }
+
+    private static void pruneRegistry() {
+        int kept = 0;
+        for (int i = 0; i < sAdapterRegistry.size(); i++) {
+            WeakReference<VideoGroupObjectAdapter> reference = sAdapterRegistry.get(i);
+            VideoGroupObjectAdapter adapter = reference.get();
+            if (adapter != null && !adapter.mReleased) {
+                if (kept != i) {
+                    sAdapterRegistry.set(kept, reference);
+                }
+                kept++;
+            }
+        }
+        sAdapterRegistry.subList(kept, sAdapterRegistry.size()).clear();
+    }
+
+    public static void releaseAll(Collection<VideoGroupObjectAdapter> adapters) {
+        if (adapters.isEmpty()) {
+            return;
+        }
+        for (VideoGroupObjectAdapter adapter : adapters) {
+            adapter.releaseContents();
+        }
+        pruneRegistry();
+    }
+
+    public void release() {
+        releaseContents();
+        pruneRegistry();
+    }
+
+    private void releaseContents() {
+        mReleased = true;
+        mVideoItems.clear();
+        mVideoGroups.clear();
     }
 
     @Override
@@ -226,34 +266,44 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     private void notifyOtherAdapters(VideoGroup group, int type) {
-        sAdapterRegistry.forEach(adapter -> {
-            if (adapter == this || adapter.isEmpty()) {
-                return;
+        if (sNotifyingAdapters) {
+            return;
+        }
+
+        for (WeakReference<VideoGroupObjectAdapter> reference : sAdapterRegistry) {
+            VideoGroupObjectAdapter adapter = reference.get();
+            if (adapter == null || adapter == this || adapter.isEmpty()) {
+                continue;
             }
 
             List<VideoGroup> groups = adapter.getAllGroups();
 
             if (groups.isEmpty()) {
-                return;
+                continue;
             }
 
             VideoGroup lastGroup = groups.get(groups.size() - 1);
             boolean adapterFound = lastGroup.getId() == group.getId();
 
             if (adapterFound) {
-                switch (type) {
-                    case TYPE_ADD:
-                        adapter.add(group);
-                        break;
-                    case TYPE_REMOVE:
-                        adapter.remove(group);
-                        break;
-                    case TYPE_SYNC:
-                        adapter.sync(group);
-                        break;
+                sNotifyingAdapters = true;
+                try {
+                    switch (type) {
+                        case TYPE_ADD:
+                            adapter.add(group);
+                            break;
+                        case TYPE_REMOVE:
+                            adapter.remove(group);
+                            break;
+                        case TYPE_SYNC:
+                            adapter.sync(group);
+                            break;
+                    }
+                } finally {
+                    sNotifyingAdapters = false;
                 }
-                sAdapterRegistry.stopForEach();
+                break;
             }
-        });
+        }
     }
 }
