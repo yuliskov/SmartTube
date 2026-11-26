@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 
@@ -140,7 +141,7 @@ public class ProxyManager {
             }
             else {
                 PasswdURI proxyURI = new PasswdURI(proxyUriString);
-                mProxy = new Proxy(Proxy.Type.valueOf(proxyURI.getScheme().toUpperCase()),
+                mProxy = new Proxy(Proxy.Type.valueOf(proxyURI.getScheme().toUpperCase(Locale.ROOT)),
                         PasswdInetSocketAddress.createUnresolved(proxyURI.getHost(), proxyURI.getPort(), proxyURI.getUsername(), proxyURI.getPassword()));
             }
 

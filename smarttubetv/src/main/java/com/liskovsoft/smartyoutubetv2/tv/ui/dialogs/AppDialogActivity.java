@@ -24,7 +24,6 @@ public class AppDialogActivity extends MotherActivity {
     private static final String TAG = AppDialogActivity.class.getSimpleName();
     private AppDialogFragment mFragment;
     private GlobalKeyTranslator mGlobalKeyTranslator;
-    private boolean mIsBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +64,6 @@ public class AppDialogActivity extends MotherActivity {
         KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
         return handleNavigation(newEvent) || super.dispatchKeyEvent(newEvent);
     }
-
-    @Override
-    public void onBackPressed() {
-        mIsBackPressed = true;
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onResume() {
-        mIsBackPressed = false;
-        super.onResume();
-    }
     
     private boolean handleNavigation(KeyEvent event) {
         if (event == null) {
@@ -114,9 +101,15 @@ public class AppDialogActivity extends MotherActivity {
         // NOTE: Fragment's onDestroy/onDestroyView are not reliable way to catch dialog finish
         Log.d(TAG, "Dialog finish");
         if (mFragment != null) { // fragment isn't created yet (expandable = true)
-            // Fix mouse DPAD emulation on API 28+
-            if (mIsBackPressed && mFragment.canGoBack()) {
+            // Fix touchscreen/mouse DPAD emulation on API 28+
+            // The bug on API 28+ when using touchscreen/mouse to traverse nested dialog categories.
+            // In this case the back gesture closes dialog instead of return to the previous category.
+            // Cause: touchscreen/mouse input flips the view hierarchy into touch mode, which back-handling
+            // treats differently than real D-pad input.
+            if (isBackPressed() && mFragment.canGoBack()) {
                 mFragment.goBack();
+                // No additional event like onResume is fired, so we should reset the state explicitly
+                resetBackState();
                 return;
             }
 

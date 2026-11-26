@@ -868,7 +868,7 @@ public class AppDialogUtil {
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(context.getString(R.string.default_lang),
+        options.add(UiOptionItem.from(context.getString(R.string.default_option),
                 context.getString(R.string.default_stack_desc),
                 option -> {
                     playerTweaksData.setPlayerDataSource(PlayerTweaksData.PLAYER_DATA_SOURCE_DEFAULT);

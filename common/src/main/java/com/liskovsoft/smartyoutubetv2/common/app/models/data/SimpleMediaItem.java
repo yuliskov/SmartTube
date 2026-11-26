@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
+import com.liskovsoft.mediaserviceinterfaces.data.FeedbackEndpoint;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 
@@ -29,6 +30,7 @@ public final class SimpleMediaItem implements MediaItem {
     private String mClickTrackingParams;
     private String mFeedbackToken;
     private String mFeedbackToken2;
+    private FeedbackEndpoint mFeedbackEndpoint;
 
     private SimpleMediaItem() {
     }
@@ -77,6 +79,7 @@ public final class SimpleMediaItem implements MediaItem {
         if (video.mediaItem != null) {
             mediaItem.mFeedbackToken = video.mediaItem.getFeedbackToken();
             mediaItem.mFeedbackToken2 = video.mediaItem.getFeedbackToken2();
+            mediaItem.mFeedbackEndpoint = video.mediaItem.getFeedbackEndpoint();
         }
 
         return mediaItem;
@@ -130,6 +133,11 @@ public final class SimpleMediaItem implements MediaItem {
     @Override
     public String getFeedbackToken2() {
         return mFeedbackToken2;
+    }
+
+    @Override
+    public FeedbackEndpoint getFeedbackEndpoint() {
+        return mFeedbackEndpoint;
     }
 
     @Override

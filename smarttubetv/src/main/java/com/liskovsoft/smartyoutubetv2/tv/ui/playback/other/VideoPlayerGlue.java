@@ -291,6 +291,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     /** Skips backwards 10 seconds. */
     public void rewind() {
+        if (isSeekBlocked()) {
+            return;
+        }
+
         long newPosition = getCurrentPosition() - TEN_SECONDS;
         newPosition = (newPosition < 0) ? 0 : newPosition;
         getPlayerAdapter().seekTo(newPosition);
@@ -298,7 +302,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
 
     /** Skips forward 10 seconds. */
     public void fastForward() {
-        if (getDuration() > -1) {
+        if (!isSeekBlocked() && getDuration() > -1) {
             long newPosition = getCurrentPosition() + TEN_SECONDS;
             newPosition = Math.min(newPosition, getDuration());
             getPlayerAdapter().seekTo(newPosition);

@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.offline.FilterableManifest;
 import com.google.android.exoplayer2.offline.StreamKey;
 import com.google.android.exoplayer2.source.sabr.parser.SabrStream;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrStreamError;
 import com.google.android.exoplayer2.source.sabr.parser.misc.EnabledTrackTypes;
 import com.google.android.exoplayer2.source.sabr.parser.misc.Utils;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
@@ -220,6 +221,62 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         return true;
     }
 
+    /**
+     * @return target length of a live segment or -1 if unknown yet (no streams created)
+     */
+    public synchronized long getLiveSegmentDurationMs() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            return sabrStream.getLiveSegmentDurationMs();
+        }
+
+        return -1;
+    }
+
+    /**
+     * @return position to start a live stream from or -1 if unknown yet
+     */
+    public synchronized long getLiveStartPositionMs() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            long positionMs = sabrStream.getLiveStartPositionMs();
+
+            if (positionMs != -1) {
+                return positionMs;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * @return latest known live edge position or -1 if unknown yet
+     */
+    public synchronized long getLiveEdgeMs() {
+        long result = -1;
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            result = Math.max(result, sabrStream.getLiveEdgeMs());
+        }
+
+        return result;
+    }
+
+    /**
+     * The player timeline is the absolute stream time.
+     * but only the last part of it can be rewound (the DVR ["archive"] window).
+     * This is where that part starts.
+     *
+     * @return start of the seekable window or -1 if unknown yet
+     */
+    public synchronized long getLiveWindowStartMs() {
+        long result = -1;
+
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            result = Math.max(result, sabrStream.getMinSeekableTimeMs());
+        }
+
+        return result;
+    }
+
     public int getSabrRequestNumber() {
         return sabrRequestNumber;
     }
@@ -232,6 +289,14 @@ public class SabrManifest implements FilterableManifest<SabrManifest> {
         }
 
         return Utils.updateQuery(activeStream.getUrl(), "rn", ++sabrRequestNumber);
+    }
+
+    public SabrStreamError getUnthrownError() {
+        for (SabrStream sabrStream : sabrStreams.values()) {
+            return sabrStream.getUnthrownError();
+        }
+
+        return null;
     }
 
     public VideoPlaybackAbrRequest createVideoPlaybackAbrRequest(int trackType, boolean isInit) {

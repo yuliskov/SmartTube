@@ -123,7 +123,8 @@ public class ScreensaverManagerTest {
 
         manager.resume();
         drainImmediateTasks();
-        assertFalse(isScreensaverSuppressed(activity));
+        // NOTE: changed logic. The blocked mode should hold screensaver after resume.
+        assertTrue(isScreensaverSuppressed(activity));
 
         manager.setBlocked(false);
         manager.enable();

@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public class IntentExtractor {
     public static final String RESTART_INTENT = "RESTART_INTENT";
     public static final String INCOGNITO_INTENT = "INCOGNITO_INTENT";
+    public static final String ADD_TO_QUEUE_INTENT = "add_to_queue";
     private static final String TAG = IntentExtractor.class.getSimpleName();
     /**
      * Browser: https://www.youtube.com/results?search_query=twice<br/>
@@ -335,6 +336,15 @@ public class IntentExtractor {
 
     public static boolean isRestartIntent(Intent intent) {
         return intent != null && intent.getBooleanExtra(RESTART_INTENT, false);
+    }
+
+    /**
+     * Add the video to the playback queue instead of interrupting what is playing.<br/>
+     * Example: am start -a android.intent.action.VIEW -d 'https://youtu.be/VIDEO_ID' --ez add_to_queue true
+     */
+    public static boolean isAddToQueueIntent(Intent intent) {
+        return intent != null && (intent.getBooleanExtra(ADD_TO_QUEUE_INTENT, false)
+                || "true".equals(intent.getStringExtra(ADD_TO_QUEUE_INTENT)));
     }
 
     public static boolean isIncognitoIntent(Intent intent) {

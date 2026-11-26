@@ -133,9 +133,10 @@ public class PlayerUIController extends BasePlayerController {
             return false;
         }
 
-        boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
-                handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
-                handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode) || handleUpDownSkip(keyCode);
+        boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode)
+                || handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode)
+                || handlePlayPauseKey(keyCode) || handleLeftRightSkip(keyCode) || handleUpDownSkip(keyCode)
+                || handleUpSkip(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -838,9 +839,9 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private boolean handleUpDownSkip(int keyCode) {
-        if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null ||
-                (getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsAltEnabled() ||
-                        (!getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosAltEnabled()))) {
+        if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null
+                || (getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipShortsAltEnabled()
+                    || (!getVideo().belongsToShortsGroup() && !getPlayerTweaksData().isQuickSkipVideosAltEnabled()))) {
             return false;
         }
 
@@ -851,6 +852,20 @@ public class PlayerUIController extends BasePlayerController {
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
             getMainController().onPreviousClicked();
+            return true; // hide ui
+        }
+
+        return false;
+    }
+
+    private boolean handleUpSkip(int keyCode) {
+        if (getPlayer() == null || getPlayer().isOverlayShown() || getVideo() == null
+                || getVideo().belongsToShortsGroup() || !getPlayerTweaksData().isQuickSkipChaptersEnabled()) {
+            return false;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+            getController(SuggestionsController.class).onNextChapter();
             return true; // hide ui
         }
 
@@ -1167,10 +1182,12 @@ public class PlayerUIController extends BasePlayerController {
                 AppDialogUtil.createPlayerScreenOffDimmingCategory(getContext(), () -> {
                     prepareScreenOff();
                     applyScreenOff(PlayerUI.BUTTON_OFF);
+                    applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
                 });
         OptionCategory category =
                 AppDialogUtil.createPlayerScreenOffTimeoutCategory(getContext(), () -> {
                     prepareScreenOff();
+                    applyScreenOff(PlayerUI.BUTTON_OFF);
                     applyScreenOffTimeout(PlayerUI.BUTTON_OFF);
                 });
         settingsPresenter.appendRadioCategory(dimmingCategory.title, dimmingCategory.options);

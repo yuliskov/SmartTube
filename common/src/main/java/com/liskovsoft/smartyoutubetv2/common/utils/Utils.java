@@ -57,7 +57,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -250,7 +250,7 @@ public class Utils {
             return;
         }
 
-        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
+        if (RemoteControlData.instance(context).isRemoteListeningEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {
@@ -280,7 +280,7 @@ public class Utils {
                         RemoteControlWorker.class, 30, TimeUnit.MINUTES
                 ).build();
 
-        WorkManager
+        SafeWorkManager
                 .getInstance(context)
                 .enqueueUniquePeriodicWork(
                         TASK_ID,
@@ -1314,8 +1314,9 @@ public class Utils {
         if (error != null && Helpers.contains(error.getMessage(), "No address associated with hostname")) {
             // java.net.UnknownHostException: Unable to resolve host "www.youtube.com": No address associated with hostname
             PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(context);
-            if (playerTweaksData.getPreferredDnsType() != PlayerTweaksData.DNS_TYPE_IPV4) {
-                playerTweaksData.setPreferredDnsType(PlayerTweaksData.DNS_TYPE_IPV4);
+            int customDns = PlayerTweaksData.DNS_TYPE_IPV4;
+            if (playerTweaksData.getPreferredDnsType() != customDns) {
+                playerTweaksData.setPreferredDnsType(customDns);
                 // Restart app to reinit OkHttp internal objects
                 Utils.restartTheApp(context);
                 return true;

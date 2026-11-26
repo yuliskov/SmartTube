@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -224,12 +225,15 @@ public class SabrManifestParser {
         // Increase offset a bit to compensate previous tweaks
         // Streams to check:
         // https://www.youtube.com/watch?v=drdemkJpgao
-        long offsetUnits = (long) segmentDurationUnits * mFormatInfo.getStartSegmentNum();
+        // Live segments: the chunk time from the server is absolute (since the stream start), but YouTube limits the viewing range.
+        // So don't shift the time and don't build the segment list: count the segments from the fixed segment duration.
+        long startSegmentNum = mFormatInfo.isLive() ? 0 : mFormatInfo.getStartSegmentNum();
+        long offsetUnits = (long) segmentDurationUnits * startSegmentNum;
 
         long timescale = unitsPerSecond;
         long presentationTimeOffset = offsetUnits;
         long duration = segmentDurationUnits;
-        long startNumber = mFormatInfo.getStartSegmentNum();
+        long startNumber = startSegmentNum;
         long endNumber = C.INDEX_UNSET;
         String url = mFormatInfo.getServerAbrStreamingUrl();
         UrlTemplate mediaTemplate = UrlTemplate.compile(url + "&sq=$Number$");
@@ -238,7 +242,7 @@ public class SabrManifestParser {
 
         RangedUri initialization = parseRangedUrl(format.getSourceUrl(), format.getInit());
 
-        List<SegmentTimelineElement> timeline = parseSegmentTimeline(offsetUnits, segmentDurationUnits, segmentCount);
+        List<SegmentTimelineElement> timeline = mFormatInfo.isLive() ? null : parseSegmentTimeline(offsetUnits, segmentDurationUnits, segmentCount);
 
         return new SegmentTemplate(
                 initialization,
@@ -717,7 +721,7 @@ public class SabrManifestParser {
         MediaItemFormatInfo.ClientInfo clientInfo = formatInfo.getClientInfo();
 
         return ClientInfo.newBuilder()
-                .setClientName(ClientName.valueOf(clientInfo.getClientName().toUpperCase()))
+                .setClientName(ClientName.valueOf(clientInfo.getClientName().toUpperCase(Locale.ROOT)))
                 .setClientVersion(clientInfo.getClientVersion())
                 .setOsName(clientInfo.getOsName())
                 .setOsVersion(clientInfo.getOsVersion())
