@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.Rem
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.SuggestionsController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoLoaderController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VideoStateController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controllers.VoiceTranslateController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -66,6 +67,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> implements Pl
         mEventListeners.add(new HQDialogController());
         mEventListeners.add(new ChatController());
         mEventListeners.add(new CommentsController());
+        mEventListeners.add(new VoiceTranslateController());
     }
 
     public static PlaybackPresenter instance(Context context) {
