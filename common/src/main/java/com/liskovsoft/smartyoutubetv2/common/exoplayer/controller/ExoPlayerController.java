@@ -44,6 +44,11 @@ import java.util.List;
 
 public class ExoPlayerController implements Player.EventListener, LiveStateProvider {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
+    /**
+     * Last adaptive format descriptor passed to {@link #openDash}/{@link #openSabr}/{@link #openMerged}.
+     * Used for dual subtitles to resolve timedtext base URLs for the selected caption track.
+     */
+    private MediaItemFormatInfo mLastFormatInfo;
     /** How far from the live edge (in segments) the playback is considered to be on the edge */
     private static final int SABR_LIVE_EDGE_TOLERANCE_SEGMENTS = 4;
     private final Context mContext;
@@ -89,6 +94,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     }
 
     public void openSabr(MediaItemFormatInfo formatInfo) {
+        mLastFormatInfo = formatInfo;
         MediaSource mediaSource = mMediaSourceFactory.fromSabrFormatInfo(formatInfo);
         openMediaSource(mediaSource);
 
@@ -102,40 +108,55 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     }
 
     public void openDash(MediaItemFormatInfo formatInfo) {
+        mLastFormatInfo = formatInfo;
         MediaSource mediaSource = mMediaSourceFactory.fromDashFormatInfo(formatInfo);
         openMediaSource(mediaSource);
     }
 
     public void openDash(InputStream dashManifest) {
+        mLastFormatInfo = null;
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         openMediaSource(mediaSource);
     }
 
     public void openDashUrl(String dashManifestUrl) {
+        mLastFormatInfo = null;
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifestUrl(dashManifestUrl);
         openMediaSource(mediaSource);
     }
 
     public void openHlsUrl(String hlsPlaylistUrl) {
+        mLastFormatInfo = null;
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(mediaSource);
     }
 
     public void openUrlList(List<String> urlList) {
+        mLastFormatInfo = null;
         MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
         openMediaSource(mediaSource);
     }
 
     public void openMerged(MediaItemFormatInfo formatInfo, String hlsPlaylistUrl) {
+        mLastFormatInfo = formatInfo;
         MediaSource dashMediaSource = mMediaSourceFactory.fromDashFormatInfo(formatInfo);
         MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(new MergingMediaSource(dashMediaSource, hlsMediaSource));
     }
 
     public void openMerged(InputStream dashManifest, String hlsPlaylistUrl) {
+        mLastFormatInfo = null;
         MediaSource dashMediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         MediaSource hlsMediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(new MergingMediaSource(dashMediaSource, hlsMediaSource));
+    }
+
+    /**
+     * Format info for the current adaptive source, when playback was started from {@link #openDash},
+     * {@link #openSabr}, or {@link #openMerged} with a {@link MediaItemFormatInfo} instance.
+     */
+    public MediaItemFormatInfo getLastFormatInfo() {
+        return mLastFormatInfo;
     }
 
     /**
@@ -268,6 +289,7 @@ public class ExoPlayerController implements Player.EventListener, LiveStateProvi
     }
     
     public void release() {
+        mLastFormatInfo = null;
         mTrackSelectorManager.release();
         mMediaSourceFactory.release();
         releasePlayer();
