@@ -75,13 +75,20 @@ public class SabrFragmentedMp4Adapter extends FragmentedMp4Extractor {
     public int read(ExtractorInput input, PositionHolder seekPosition)
             throws IOException, InterruptedException {
         int result = RESULT_END_OF_INPUT;
+        boolean readCompleted = false;
 
         try {
             extractorInput.init(input);
             result = super.read(extractorInput, seekPosition);
+            readCompleted = true;
         } finally {
             if (result != RESULT_CONTINUE) {
-                Log.e(TAG, "Mp4Adapter: disposing, result=%s", result);
+                // The normal end of a chunk isn't an error. When super.read() throws, result keeps its initial value.
+                if (readCompleted && result == RESULT_END_OF_INPUT) {
+                    Log.d(TAG, "Mp4Adapter: disposing, result=%s", result);
+                } else {
+                    Log.e(TAG, "Mp4Adapter: disposing, result=%s, completed=%s", result, readCompleted);
+                }
                 extractorInput.dispose();
             }
         }
