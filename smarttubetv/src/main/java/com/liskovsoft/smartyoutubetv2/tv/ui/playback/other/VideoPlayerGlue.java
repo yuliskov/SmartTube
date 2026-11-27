@@ -403,11 +403,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         }
 
         if (handled) {
-            invalidateUi(action);
-
-            if (action instanceof TwoStateAction) {
-                invalidateUi(((TwoStateAction) action).getBoundAction());
-            }
+            invalidateActionUi(action);
         }
 
         return handled;
@@ -436,6 +432,19 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
         if (action instanceof PlaybackControlsRow.MultiAction) {
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
             multiAction.nextIndex();
+        }
+    }
+
+    /**
+     * Redraw the action and, for a two-state action, its bound counterpart.<br/>
+     * {@link TwoStateAction#setIndex(int)} turns the bound action off (e.g. like clears dislike)
+     * but doesn't redraw it, so both buttons would stay highlighted otherwise.
+     */
+    private void invalidateActionUi(Action action) {
+        invalidateUi(action);
+
+        if (action instanceof TwoStateAction) {
+            invalidateUi(((TwoStateAction) action).getBoundAction());
         }
     }
 
@@ -535,7 +544,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> i
             disableAction(action);
         } else if (action instanceof MultiAction) {
             ((MultiAction) action).setIndex(actionIndex);
-            invalidateUi(action);
+            invalidateActionUi(action);
         }
     }
 
