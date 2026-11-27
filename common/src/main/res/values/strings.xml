@@ -253,6 +253,17 @@
     <string name="hide_shorts">Hide shorts from Subscriptions</string>
     <string name="hide_shorts_channel">Hide shorts from a channel</string>
     <string name="key_remapping">Key remapping</string>
+    <string name="key_remapping_options">Key Remapping Options</string>
+    <string name="key_remapping_buttons">Key Remapping Buttons</string>
+    <string name="key_program_red">Program Red key</string>
+    <string name="key_program_green">Program Green key</string>
+    <string name="key_program_yellow">Program Yellow key</string>
+    <string name="key_program_blue">Program Blue key</string>
+    <string name="action_watch_later_toggle">Add/Remove to Watch Later</string>
+    <string name="action_menu_button">Menu button</string>
+    <string name="action_speed_up">Speed Up</string>
+    <string name="action_speed_down">Speed Down</string>
+    <string name="key_not_assigned">Not assigned</string>
     <string name="screen_dimming">Screen dimming</string>
     <string name="removed_from_playback_queue">Removed from playback queue</string>
     <string name="added_to_playback_queue">Added to playback queue</string>
