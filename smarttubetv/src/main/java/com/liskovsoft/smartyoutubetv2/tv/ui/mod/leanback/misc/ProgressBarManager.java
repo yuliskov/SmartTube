@@ -45,6 +45,9 @@ public final class ProgressBarManager {
                 } else if (mUserProvidedProgressBar) {
                     mProgressBarView.setVisibility(View.VISIBLE);
                 }
+
+                mProgressBarView.announceForAccessibility(
+                        rootView.getContext().getString(R.string.status_loading));
             }
         }
     };
@@ -67,6 +70,7 @@ public final class ProgressBarManager {
         progressBarView.setIndeterminate(true);
         progressBarView.setIndeterminateDrawable(
                 ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+        progressBarView.setContentDescription(rootView.getContext().getString(R.string.status_loading));
 
         FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,

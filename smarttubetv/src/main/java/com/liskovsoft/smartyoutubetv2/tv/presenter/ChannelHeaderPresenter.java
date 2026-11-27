@@ -104,6 +104,9 @@ public class ChannelHeaderPresenter extends RowPresenter {
         SpeechOrbView speechOrbView = searchBar.findViewById(R.id.lb_search_bar_speech_orb);
         SearchEditText searchTextEditor = searchBar.findViewById(R.id.lb_search_text_editor);
         SearchOrbView searchSettingsOrbView = searchBar.findViewById(R.id.search_settings_orb);
+        searchOrbView.setContentDescription(context.getString(R.string.action_start_search));
+        speechOrbView.setContentDescription(context.getString(R.string.action_voice_search));
+        searchSettingsOrbView.setContentDescription(context.getString(R.string.action_search_settings));
         // Default recognizer. Used when there's no speech callbacks specified.
         searchBar.setSpeechRecognizer(SpeechRecognizer.createSpeechRecognizer(context));
         searchBar.setOnFocusChangeListener((v, focused) -> {
@@ -161,6 +164,8 @@ public class ChannelHeaderPresenter extends RowPresenter {
         SearchOrbView searchSettingsOrbView = searchBar.findViewById(R.id.search_settings_orb);
         String channelName = provider.getChannelTitle();
         searchBar.setTitle(channelName != null ? channelName : context.getString(R.string.content_type_channel));
+        // Expose channel name to accessibility services
+        searchBar.setContentDescription(channelName != null ? channelName : context.getString(R.string.content_type_channel));
         switch (SearchData.instance(context).getSpeechRecognizerType()) {
             case SearchData.SPEECH_RECOGNIZER_SYSTEM:
                 // NOP
