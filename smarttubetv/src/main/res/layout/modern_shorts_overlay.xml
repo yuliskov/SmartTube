@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.liskovsoft.smartyoutubetv2.tv.ui.modern.playback.ModernShortsOverlay xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/modern_shorts_panel"
+        android:layout_width="@dimen/modern_shorts_panel_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/modern_shorts_panel_left"
+        android:layout_marginTop="@dimen/modern_shorts_panel_top"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/modern_shorts_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:padding="@dimen/modern_shorts_padding"
+            android:textColor="@color/modern_text_primary"
+            android:textSize="@dimen/modern_shorts_title_size"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/modern_shorts_channel"
+            layout="@layout/modern_shorts_row" />
+
+        <include
+            android:id="@+id/modern_shorts_subscribe"
+            layout="@layout/modern_shorts_row" />
+
+        <LinearLayout
+            android:id="@+id/modern_shorts_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/modern_shorts_row_gap"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/modern_badge_padding_h"
+            android:paddingEnd="@dimen/modern_badge_padding_h" />
+    </LinearLayout>
+
+    <!-- Playback state over the video (placed by setVideoRect): play icon in the middle and time while paused -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/modern_shorts_state"
+        android:layout_width="@dimen/modern_shorts_state_size"
+        android:layout_height="@dimen/modern_shorts_state_size"
+        android:background="@drawable/modern_shorts_state_bg"
+        android:importantForAccessibility="no"
+        android:padding="@dimen/modern_shorts_state_padding"
+        android:src="@drawable/modern_ic_play_arrow_filled"
+        app:tint="@color/modern_text_primary"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/modern_shorts_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/modern_duration_bg"
+        android:includeFontPadding="false"
+        android:paddingStart="@dimen/modern_shorts_time_padding_h"
+        android:paddingTop="@dimen/modern_shorts_time_padding_v"
+        android:paddingEnd="@dimen/modern_shorts_time_padding_h"
+        android:paddingBottom="@dimen/modern_shorts_time_padding_v"
+        android:textColor="@color/modern_text_primary"
+        android:textSize="@dimen/modern_tile_meta_size"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</com.liskovsoft.smartyoutubetv2.tv.ui.modern.playback.ModernShortsOverlay>

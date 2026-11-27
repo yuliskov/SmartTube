@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Color schemes of the modern interface, one for each scheme of User interface > Color scheme (MainUIData).
+    Same colors as the classic schemes (styles.xml): background, brand (expanded rail, like the classic headers),
+    accent (watch progress, seek bar, live badge, voice search) and logo. Focus stays white in every scheme.
+    Dark Grey is the default look, defined in Theme.Modern, Theme.Modern.Player and Theme.Modern.Preferences.
+    Dark parts use one color: grey in the regular schemes, black in the OLED ones. Only a colored brand
+    (Teal, Red) gives the expanded rail its own color.
+-->
+<resources>
+    <style name="ThemeOverlay.Modern.Scheme" parent="">
+        <item name="modernBackground">@color/modern_bg</item>
+        <item name="modernBrand">@color/modern_bg</item>
+        <item name="modernAccent">@color/modern_progress</item>
+        <item name="modernLogo">@mipmap/app_logo_semi_red</item>
+        <item name="modernPlayerScrimControls">@drawable/modern_player_scrim_controls</item>
+        <item name="modernPlayerScrimSuggestions">@drawable/modern_player_scrim_suggestions</item>
+        <item name="modernChannelScrim">@drawable/modern_channel_scrim</item>
+    </style>
+
+    <style name="ThemeOverlay.Modern.Scheme.Oled">
+        <item name="modernBackground">@color/modern_bg_oled</item>
+        <item name="modernBrand">@color/modern_bg_oled</item>
+        <item name="modernLogo">@null</item>
+        <item name="modernPlayerScrimControls">@drawable/modern_player_scrim_controls_oled</item>
+        <item name="modernPlayerScrimSuggestions">@drawable/modern_player_scrim_suggestions_oled</item>
+        <item name="modernChannelScrim">@drawable/modern_channel_scrim_oled</item>
+    </style>
+
+    <!-- Teal -->
+    <style name="ThemeOverlay.Modern.Scheme.Teal">
+        <item name="modernBrand">@color/fastlane_background_dark</item>
+        <item name="modernAccent">@color/fastlane_background</item>
+        <item name="modernLogo">@mipmap/app_logo</item>
+    </style>
+
+    <!-- Dark Grey -->
+    <style name="ThemeOverlay.Modern.Scheme.DarkGrey" />
+
+    <!-- Red -->
+    <style name="ThemeOverlay.Modern.Scheme.Red">
+        <item name="modernBrand">@color/dark_red</item>
+        <item name="modernAccent">@color/semi_red</item>
+    </style>
+
+    <!-- Dark Grey (OLED) -->
+    <style name="ThemeOverlay.Modern.Scheme.Oled.DarkGrey" />
+
+    <!-- Teal (OLED) -->
+    <style name="ThemeOverlay.Modern.Scheme.Oled.Teal">
+        <item name="modernBrand">@color/fastlane_background_dark</item>
+        <item name="modernAccent">@color/fastlane_background</item>
+    </style>
+
+    <!-- Dark Grey (monochrome) -->
+    <style name="ThemeOverlay.Modern.Scheme.Monochrome">
+        <item name="modernAccent">@color/light_grey</item>
+        <item name="modernLogo">@mipmap/app_logo_semi_grey</item>
+    </style>
+
+    <!-- Dark Blue -->
+    <style name="ThemeOverlay.Modern.Scheme.Blue">
+        <item name="modernAccent">@color/scheme_blue_background</item>
+        <item name="modernLogo">@mipmap/app_logo</item>
+    </style>
+
+    <!-- Dark Blue (OLED) -->
+    <style name="ThemeOverlay.Modern.Scheme.Oled.Blue">
+        <item name="modernAccent">@color/scheme_blue_background</item>
+    </style>
+</resources>

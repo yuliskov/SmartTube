@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/modern_picker_avatar"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.modern.widgets.ModernRingFrame
+        android:id="@+id/modern_account_avatar_frame"
+        android:layout_width="@dimen/modern_picker_avatar"
+        android:layout_height="@dimen/modern_picker_avatar"
+        android:background="@drawable/modern_account_circle"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ImageView
+            android:id="@+id/modern_account_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/modern_account_add"
+            android:layout_width="@dimen/modern_picker_add_icon"
+            android:layout_height="@dimen/modern_picker_add_icon"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/modern_ic_add"
+            android:visibility="gone" />
+    </com.liskovsoft.smartyoutubetv2.tv.ui.modern.widgets.ModernRingFrame>
+
+    <TextView
+        android:id="@+id/modern_account_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_picker_name_top"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxWidth="@dimen/modern_tile_width_row"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_secondary"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="@dimen/modern_picker_name_size" />
+
+    <TextView
+        android:id="@+id/modern_account_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/modern_tile_meta_line_gap"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textColor="@color/modern_text_secondary"
+        android:textSize="@dimen/modern_tile_meta_size" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/modern_account_settings"
+        android:layout_width="@dimen/modern_player_button"
+        android:layout_height="@dimen/modern_player_button"
+        android:layout_marginTop="@dimen/modern_picker_gear_top"
+        android:background="@drawable/modern_player_button_bg"
+        android:contentDescription="@string/settings_accounts"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="9dp"
+        android:src="@drawable/modern_ic_settings"
+        app:tint="@color/modern_top_bar_content"
+        android:visibility="invisible" />
+</LinearLayout>

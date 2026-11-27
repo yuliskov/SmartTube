@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:state_focused="true" android:drawable="@drawable/modern_ic_check_on_light" />
+    <item android:state_checked="true" android:drawable="@drawable/modern_ic_check" />
+    <item android:drawable="@drawable/modern_pref_indicator_empty" />
+</selector>
