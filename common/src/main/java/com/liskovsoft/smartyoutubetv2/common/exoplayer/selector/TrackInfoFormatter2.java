@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
 
+import java.util.Locale;
+
 public class TrackInfoFormatter2 {
     private String mResolutionStr;
     private String mFpsStr;
@@ -10,6 +12,8 @@ public class TrackInfoFormatter2 {
     private String mHdrStr;
     private String mSpeedStr;
     private String mChannelsStr;
+    private String mAudioCodecStr;
+    private String mAudioBitrateStr;
     private String mHighBitrateStr;
     private boolean mEnableBitrate;
     private String mDrcStr;
@@ -52,6 +56,18 @@ public class TrackInfoFormatter2 {
 
         mChannelsStr = TrackSelectorUtil.buildChannels(format);
 
+        String audioCodec = TrackSelectorUtil.extractCodec(format);
+        mAudioCodecStr = audioCodec != null ? audioCodec.toLowerCase(Locale.ROOT) : "";
+
+        if (mEnableBitrate) {
+            String audioBitrate = TrackSelectorUtil.extractBitrate(format, 2);
+            mAudioBitrateStr = audioBitrate.isEmpty() ? "" : audioBitrate + "Mb";
+        } else {
+            // Keep it in sync with the flag. Harmless today (the flag is fixed for the lifetime of
+            // the formatter), but it stops a stale bitrate from leaking through if it ever isn't.
+            mAudioBitrateStr = "";
+        }
+
         mDrcStr = TrackSelectorUtil.buildDrcMark(format);
     }
 
@@ -60,7 +76,7 @@ public class TrackInfoFormatter2 {
     }
 
     public String getQualityLabel() {
-        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mSpeedStr, mHighBitrateStr, mDrcStr);
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mBitrateStr, mHdrStr, mChannelsStr, mAudioCodecStr, mAudioBitrateStr, mSpeedStr, mHighBitrateStr, mDrcStr);
     }
 
     private static String combine(String... items) {
