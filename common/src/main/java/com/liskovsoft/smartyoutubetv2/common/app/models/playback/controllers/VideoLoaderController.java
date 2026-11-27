@@ -502,13 +502,6 @@ public class VideoLoaderController extends BasePlayerController {
             return false;
         }
 
-        // Not enough info for full length live streams
-        if (formatInfo.isLive() && formatInfo.getStartTimeMs() == 0) {
-            return false;
-        }
-
-        // Live dash url doesn't work with None buffer
-        //if (formatInfo.isLive() && (getPlayerTweaksData().isDashUrlStreamsForced() || getPlayerData().getVideoBufferType() == PlayerData.BUFFER_NONE)) {
         if (formatInfo.isLive() && getPlayerTweaksData().isDashUrlStreamsForced() && formatInfo.containsDashUrl()) {
             return false;
         }
