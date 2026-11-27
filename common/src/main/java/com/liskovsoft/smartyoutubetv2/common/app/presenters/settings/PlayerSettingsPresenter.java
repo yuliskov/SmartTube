@@ -555,6 +555,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.ambient_light),
+                getContext().getString(R.string.ambient_light_desc),
+                option -> mPlayerTweaksData.setAmbientLightEnabled(option.isSelected()),
+                mPlayerTweaksData.isAmbientLightEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.unlock_high_bitrate_formats) + " " + TrackSelectorUtil.HIGH_BITRATE_MARK,
                 option -> mPlayerTweaksData.setHighBitrateFormatsEnabled(option.isSelected()),
                 mPlayerTweaksData.isHighBitrateFormatsEnabled()));

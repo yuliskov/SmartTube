@@ -398,6 +398,8 @@
     <string name="audio_sync_fix">Audio sync fix</string>
     <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio or video scale. Fixes blank screenshots. Affects performance!</string>
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio/Video scale/Screenshots fix</string>
+    <string name="ambient_light">Ambient light in black bars</string>
+    <string name="ambient_light_desc">Fills the black bars around the video (e.g. 16:9 video on a 21:9 screen, 4:3 video, vertical Shorts) with a soft glow that follows the picture edges. Android 7+, not with tunneled playback.</string>
     <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 360p.</string>
     <string name="force_legacy_codecs">Force legacy codecs (360p)</string>
     <string name="live_stream_fix_desc">Warn, this tweak disables the rewinding of streams. Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
