@@ -538,6 +538,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         DateTimeView clock = getView().findViewById(R.id.global_time);
         clock.showDate(false);
+        clock.enableSchedule(true);
         clock.setVisibility(getPlayerData().isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 

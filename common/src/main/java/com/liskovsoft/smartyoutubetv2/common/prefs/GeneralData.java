@@ -8,12 +8,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class GeneralData implements ProfileChangeListener {
     public static final int SCREENSAVER_TIMEOUT_NEVER = 0;
+    public static final int CLOCK_ALWAYS = -1;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -62,6 +64,8 @@ public class GeneralData implements ProfileChangeListener {
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
     private boolean mIsGlobalClockEnabled;
+    private int mClockStartHour;
+    private int mClockEndHour;
     private String mSettingsPassword;
     private String mMasterPassword;
     private boolean mIsChildModeEnabled;
@@ -362,6 +366,39 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    public int getClockStartHour() {
+        return mClockStartHour;
+    }
+
+    public void setClockStartHour(int hour) {
+        mClockStartHour = hour;
+        persistState();
+    }
+
+    public int getClockEndHour() {
+        return mClockEndHour;
+    }
+
+    public void setClockEndHour(int hour) {
+        mClockEndHour = hour;
+        persistState();
+    }
+
+    /**
+     * Clock is shown from start hour (inclusive) until end hour (exclusive). Equal hours mean all day.
+     */
+    public boolean isClockScheduledNow() {
+        if (mClockStartHour == CLOCK_ALWAYS || mClockStartHour == mClockEndHour) {
+            return true;
+        }
+
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+        return mClockStartHour < mClockEndHour ?
+                hour >= mClockStartHour && hour < mClockEndHour :
+                hour >= mClockStartHour || hour < mClockEndHour; // over midnight
+    }
+
     public String getSettingsPassword() {
         return mSettingsPassword;
     }
@@ -656,6 +693,8 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
+        mClockStartHour = Helpers.parseInt(split, 73, CLOCK_ALWAYS);
+        mClockEndHour = Helpers.parseInt(split, 74, 0);
     }
 
     public void persistNow() {
@@ -681,7 +720,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled));
+                mIsRemapSToSpeedToggleEnabled, mClockStartHour, mClockEndHour));
     }
 
     @Override

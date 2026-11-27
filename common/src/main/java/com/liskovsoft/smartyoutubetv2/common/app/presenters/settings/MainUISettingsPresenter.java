@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import android.os.Build;
+import com.liskovsoft.sharedutils.helpers.DateHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -18,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.ClickbaitRemover;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainUISettingsPresenter extends BasePresenter<Void> {
@@ -65,6 +67,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
         //appendTimeFormatCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
+        appendClockSchedule(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), mOnFinish);
     }
@@ -284,6 +287,35 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 !mGeneralData.is24HourLocaleEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.time_format), options);
+    }
+
+    private void appendClockSchedule(AppDialogPresenter settingsPresenter) {
+        String title = getContext().getString(R.string.clock_schedule);
+
+        settingsPresenter.appendSingleButton(UiOptionItem.from(title, optionItem -> {
+            // Each list depends only on its own value, so none of them shows a stale state
+            List<OptionItem> startOptions = new ArrayList<>();
+            List<OptionItem> endOptions = new ArrayList<>();
+            startOptions.add(UiOptionItem.from(getContext().getString(R.string.option_always),
+                    option -> mGeneralData.setClockStartHour(GeneralData.CLOCK_ALWAYS),
+                    mGeneralData.getClockStartHour() == GeneralData.CLOCK_ALWAYS));
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.clear(); // fixed day without DST jumps
+
+            for (int i = 0; i < 24; i++) {
+                int hour = i;
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                String time = DateHelper.toShortTime(calendar.getTimeInMillis()); // respects 12/24h
+                startOptions.add(UiOptionItem.from(time, option -> mGeneralData.setClockStartHour(hour), mGeneralData.getClockStartHour() == hour));
+                endOptions.add(UiOptionItem.from(time, option -> mGeneralData.setClockEndHour(hour), mGeneralData.getClockEndHour() == hour));
+            }
+
+            AppDialogPresenter presenter = AppDialogPresenter.instance(getContext());
+            presenter.appendRadioCategory(getContext().getString(R.string.clock_schedule_start), startOptions);
+            presenter.appendRadioCategory(getContext().getString(R.string.clock_schedule_end), endOptions);
+            presenter.showDialog(title);
+        }));
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
