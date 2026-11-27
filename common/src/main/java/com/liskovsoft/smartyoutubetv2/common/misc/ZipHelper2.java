@@ -4,11 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class ZipHelper2 {
+    static final long MAX_ZIP_BYTES = 256L * 1024 * 1024;
+    private static final long MAX_UNZIPPED_BYTES = 512L * 1024 * 1024;
+    private static final int MAX_ENTRIES = 10_000;
     public static void zipDirectory(File sourceDir, File zipFile) {
         try {
             ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
@@ -36,58 +42,52 @@ public class ZipHelper2 {
         }
     }
 
-    public static void unzip(File zipFile, File targetRoot) {
-        try {
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+    public static void unzip(File zipFile, File targetRoot) throws IOException {
+        if (zipFile.length() > MAX_ZIP_BYTES) throw new IOException("Backup archive is too large");
+
+        try (ZipFile archive = new ZipFile(zipFile)) {
             String canonicalRoot = targetRoot.getCanonicalPath() + File.separator;
-            ZipEntry entry;
+            Enumeration<? extends ZipEntry> entries = archive.entries();
             byte[] buffer = new byte[8192];
+            long bytesWritten = 0;
+            int entryCount = 0;
 
-            while ((entry = zis.getNextEntry()) != null) {
-                File out = new File(targetRoot, entry.getName());
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                if (++entryCount > MAX_ENTRIES) throw new IOException("Too many backup entries");
+                if (entry.getName().split("/").length > 8) throw new IOException("Backup path is too deep");
 
-                String canonicalOut = out.getCanonicalPath();
-
-                // Zip Slip protection
-                if (!canonicalOut.startsWith(canonicalRoot)) {
+                File output = new File(targetRoot, entry.getName());
+                if (!output.getCanonicalPath().startsWith(canonicalRoot)) {
                     throw new IOException("Blocked Zip Slip entry: " + entry.getName());
                 }
 
                 if (entry.isDirectory()) {
-                    out.mkdirs();
-                } else {
-                    out.getParentFile().mkdirs();
-                    FileOutputStream fos = new FileOutputStream(out);
-                    int len;
-                    while ((len = zis.read(buffer)) > 0) fos.write(buffer, 0, len);
-                    fos.close();
+                    if (!output.isDirectory() && !output.mkdirs()) {
+                        throw new IOException("Cannot create backup directory");
+                    }
+                    continue;
                 }
-                zis.closeEntry();
+
+                File parent = output.getParentFile();
+                if (!parent.isDirectory() && !parent.mkdirs()) {
+                    throw new IOException("Cannot create backup directory");
+                }
+                try (InputStream in = archive.getInputStream(entry);
+                     FileOutputStream out = new FileOutputStream(output)) {
+                    int length;
+                    while ((length = in.read(buffer)) != -1) {
+                        bytesWritten += length;
+                        if (bytesWritten > MAX_UNZIPPED_BYTES) {
+                            throw new IOException("Backup archive expands beyond the size limit");
+                        }
+                        out.write(buffer, 0, length);
+                    }
+                }
             }
-            zis.close();
-        } catch (Exception e) { e.printStackTrace(); }
+
+            if (entryCount == 0) throw new IOException("Backup archive is empty");
+        }
     }
 
-    public static boolean hasRootDir(File zipFile, String rootDir) {
-        boolean result = false;
-
-        try {
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry entry;
-
-            String prefix = rootDir + "/";
-
-            while ((entry = zis.getNextEntry()) != null) {
-                if (entry.getName().startsWith(prefix)) {
-                    zis.closeEntry();
-                    result = true;
-                    break;
-                }
-                zis.closeEntry();
-            }
-            zis.close();
-        } catch (Exception e) { e.printStackTrace(); }
-
-        return result;
-    }
 }
