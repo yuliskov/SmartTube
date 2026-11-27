@@ -35,6 +35,7 @@ import com.google.android.exoplayer2.source.sabr.parser.models.CaptionSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.FormatSelector;
 import com.google.android.exoplayer2.source.sabr.parser.models.VideoSelector;
 import com.google.android.exoplayer2.source.sabr.protos.misc.FormatId;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -612,12 +613,13 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         // MOD: add protobuf data
         //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
         //        requestUri.length, representationHolder.representation.getCacheKey());
+        VideoPlaybackAbrRequest initRequest = manifest.createVideoPlaybackAbrRequest(trackType, true);
         DataSpec dataSpec = new DataSpec(
                 //Uri.parse(sabrStream.getRequestUrl()),
                 Uri.parse(manifest.getRequestUrl(trackType)),
                 DataSpec.HTTP_METHOD_POST,
                 //sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
-                manifest.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
+                initRequest.toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //requestUri.start,
                 //requestUri.start,
@@ -625,7 +627,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 representationHolder.representation.getCacheKey(),
                 0,
                 sabrHeaders);
-        Log.e(TAG, "Load init chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber());
+        Log.e(TAG, "Load init chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber()
+                + ", " + describeRequest(initRequest));
         return new InitializationChunk(dataSource, dataSpec, trackFormat,
                 trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
     }
@@ -687,13 +690,14 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //String baseUrl = representation.baseUrl;
         //baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
 
+        VideoPlaybackAbrRequest mediaRequest = manifest.createVideoPlaybackAbrRequest(trackType, false, seekTimeUs);
         DataSpec dataSpec = new DataSpec(
                 //Uri.parse(sabrStream.getRequestUrl()),
                 Uri.parse(manifest.getRequestUrl(trackType)),
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
                 //sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
-                manifest.createVideoPlaybackAbrRequest(trackType, false, seekTimeUs).toByteArray(),
+                mediaRequest.toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,
@@ -703,7 +707,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 sabrHeaders);
         long sampleOffsetUs = -representation.presentationTimeOffsetUs;
         Log.e(TAG, "Load media chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber()
-                + ", startTimeMs=" + startTimeMs + ", backoffTimeMs=" + sabrStream.getBackoffTimeMs());
+                + ", startTimeMs=" + startTimeMs + ", backoffTimeMs=" + sabrStream.getBackoffTimeMs()
+                + ", " + describeRequest(mediaRequest));
         return new ContainerMediaChunk(
                 dataSource,
                 dataSpec,
@@ -775,6 +780,26 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //            sampleOffsetUs,
         //            representationHolder.extractorWrapper);
         //}
+    }
+
+    /** Compact summary of the format selection in a request, to diagnose server rejections such as "sabr.no_video_selected". */
+    private static String describeRequest(VideoPlaybackAbrRequest request) {
+        return "enabledTracks=" + request.getClientAbrState().getEnabledTrackTypesBitfield()
+                + ", preferredVideo=" + itags(request.getPreferredVideoFormatIdsList())
+                + ", preferredAudio=" + itags(request.getPreferredAudioFormatIdsList())
+                + ", selected=" + itags(request.getSelectedFormatIdsList())
+                + ", bufferedRanges=" + request.getBufferedRangesCount();
+    }
+
+    private static String itags(List<FormatId> formatIds) {
+        StringBuilder result = new StringBuilder("[");
+        for (FormatId formatId : formatIds) {
+            if (result.length() > 1) {
+                result.append(',');
+            }
+            result.append(formatId.getItag());
+        }
+        return result.append(']').toString();
     }
 
     private static AudioSelector createAudioSelection(int trackType, TrackSelection trackSelection) {

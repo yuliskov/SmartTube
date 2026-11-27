@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrBackoffError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrPoTokenError;
 import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrReloadPlayerError;
+import com.google.android.exoplayer2.source.sabr.parser.exceptions.SabrServerError;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -31,6 +32,9 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     private VideoLoaderController mVideoLoaderController;
     private String mSabrErrorFixVideoId;
     private int mSabrErrorFixAttempts;
+    // Separate from mSabrErrorFixAttempts and not reset by onPlay(): a rejection that comes back after playback resumed
+    // must still reach the client switch, and it must not use up the budget of a later token-bearing reload.
+    private int mSabrServerErrorFixAttempts;
 
     @Override
     public void onInit() {
@@ -139,6 +143,11 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
     @Override
     public void onNewVideo(Video item) {
         mBufferingDetector.start();
+
+        // Engine restarts of the same video come through here too, so only a different video resets the attempts
+        if (item != null) {
+            resetSabrErrorFixAttemptsIfNewVideo(item);
+        }
     }
 
     @Override
@@ -172,6 +181,10 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return;
         }
 
+        if (applySabrServerErrorAction(error)) {
+            return;
+        }
+
         applyEngineErrorAction(type, rendererIndex, error);
     }
 
@@ -191,10 +204,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
-            mSabrErrorFixVideoId = video.videoId;
-            mSabrErrorFixAttempts = 0;
-        }
+        resetSabrErrorFixAttemptsIfNewVideo(video);
 
         // Reload doesn't help. Fallback to the common error handling (switch the client).
         if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
@@ -226,10 +236,7 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
             return false;
         }
 
-        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
-            mSabrErrorFixVideoId = video.videoId;
-            mSabrErrorFixAttempts = 0;
-        }
+        resetSabrErrorFixAttemptsIfNewVideo(video);
 
         // Reload doesn't help. Fallback to the common error handling (switch the client).
         if (++mSabrErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
@@ -243,6 +250,40 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
         mVideoLoaderController.reloadVideo();
 
         return true;
+    }
+
+    /**
+     * The server rejected the SABR request (e.g. "sabr.no_video_selected"). Re-sending the same request
+     * gets the same answer, so start a fresh SABR session once, then fall back to the common error handling (switch the client).
+     */
+    private boolean applySabrServerErrorAction(Throwable error) {
+        Video video = getVideo();
+
+        if (!(error.getCause() instanceof SabrServerError) || video == null) {
+            return false;
+        }
+
+        resetSabrErrorFixAttemptsIfNewVideo(video);
+
+        // Reload doesn't help. Fallback to the common error handling (switch the client).
+        if (++mSabrServerErrorFixAttempts > MAX_SABR_ERROR_FIX_ATTEMPTS) {
+            return false;
+        }
+
+        MessageHelpers.showLongMessage(getContext(), "%s. Attempt: %s", error.getCause().getMessage(), mSabrServerErrorFixAttempts);
+
+        YouTubeServiceManager.instance().invalidateFormatCache();
+        mVideoLoaderController.reloadVideo();
+
+        return true;
+    }
+
+    private void resetSabrErrorFixAttemptsIfNewVideo(Video video) {
+        if (!Helpers.equals(video.videoId, mSabrErrorFixVideoId)) {
+            mSabrErrorFixVideoId = video.videoId;
+            mSabrErrorFixAttempts = 0;
+            mSabrServerErrorFixAttempts = 0;
+        }
     }
 
     private void applyEngineErrorAction(int type, int rendererIndex, Throwable error) {
