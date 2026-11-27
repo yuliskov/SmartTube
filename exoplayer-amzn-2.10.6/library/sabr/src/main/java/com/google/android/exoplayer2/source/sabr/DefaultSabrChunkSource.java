@@ -333,10 +333,11 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             return;
         }
 
+        boolean loadInitialization = false;
+
         if (representationHolder.extractorWrapper != null) {
             Representation selectedRepresentation = representationHolder.representation;
             RangedUri pendingInitializationUri = null;
-            RangedUri pendingIndexUri = null;
             if (representationHolder.extractorWrapper.getSampleFormats() == null) {
                 pendingInitializationUri = selectedRepresentation.getInitializationUri();
             }
@@ -346,11 +347,12 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             //}
             //if (pendingInitializationUri != null || pendingIndexUri != null) {
             if (pendingInitializationUri != null) {
-                // We have initialization and/or index requests to make.
-                out.chunk = newInitializationChunk(representationHolder, dataSource,
-                        trackSelection.getSelectedFormat(), trackSelection.getSelectionReason(),
-                        trackSelection.getSelectionData(), pendingInitializationUri, pendingIndexUri);
-                return;
+                // FIX: don't load the initialization data with a separate InitializationChunk.
+                // The server answers an init request with the init segment AND the first media segment.
+                // InitializationChunk throws that segment away, then the first media chunk (a seek to the start position)
+                // downloads it again: 6-12 MB for 4K before the first frame. Load both with one media chunk instead,
+                // the extractor reads the initialization data first, then the samples.
+                loadInitialization = true;
             }
         }
 
@@ -421,6 +423,10 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
         //}
 
         long seekTimeUs = queue.isEmpty() ? loadPositionUs : C.TIME_UNSET;
+        if (loadInitialization && seekTimeUs == C.TIME_UNSET) {
+            // A format that starts mid-playback (e.g. quality switch) begins at the load position, not at the video start
+            seekTimeUs = loadPositionUs;
+        }
         if (sabrStream != null) {
             if (seekTimeUs != C.TIME_UNSET) {
                 pendingSeekTimeUs = seekTimeUs;
@@ -448,7 +454,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                         C.INDEX_UNSET, // TODO: does sabr has segment num?
                         //segmentNum,
                         //maxSegmentCount,
-                        seekTimeUs);
+                        seekTimeUs,
+                        loadInitialization);
     }
 
     @Override
@@ -587,49 +594,6 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
     //            ? representationHolder.getSegmentEndTimeUs(lastAvailableSegmentNum) : C.TIME_UNSET;
     //}
 
-    protected Chunk newInitializationChunk(
-            RepresentationHolder representationHolder,
-            DataSource dataSource,
-            Format trackFormat,
-            int trackSelectionReason,
-            Object trackSelectionData,
-            RangedUri initializationUri,
-            RangedUri indexUri) {
-        //RangedUri requestUri;
-        //String baseUrl = representationHolder.representation.baseUrl;
-        //baseUrl = Utils.updateQuery(baseUrl, "rn", sabrStream.getIncSabrRequestNumber());
-        //if (initializationUri != null) {
-        //    // It's common for initialization and index data to be stored adjacently. Attempt to merge
-        //    // the two requests together to request both at once.
-        //    requestUri = initializationUri.attemptMerge(indexUri, baseUrl);
-        //    if (requestUri == null) {
-        //        requestUri = initializationUri;
-        //    }
-        //} else {
-        //    requestUri = indexUri;
-        //}
-        // NOTE: first protobuf request (before the video start off)
-        // MOD: add protobuf data
-        //DataSpec dataSpec = new DataSpec(requestUri.resolveUri(baseUrl), requestUri.start,
-        //        requestUri.length, representationHolder.representation.getCacheKey());
-        DataSpec dataSpec = new DataSpec(
-                //Uri.parse(sabrStream.getRequestUrl()),
-                Uri.parse(manifest.getRequestUrl(trackType)),
-                DataSpec.HTTP_METHOD_POST,
-                //sabrStream.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
-                manifest.createVideoPlaybackAbrRequest(trackType, true).toByteArray(),
-                0, 0, C.LENGTH_UNSET,
-                //requestUri.start,
-                //requestUri.start,
-                //requestUri.length,
-                representationHolder.representation.getCacheKey(),
-                0,
-                sabrHeaders);
-        Log.e(TAG, "Load init chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber());
-        return new InitializationChunk(dataSource, dataSpec, trackFormat,
-                trackSelectionReason, trackSelectionData, representationHolder.extractorWrapper);
-    }
-
     protected Chunk newMediaChunk(
             RepresentationHolder representationHolder,
             DataSource dataSource,
@@ -639,7 +603,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
             Object trackSelectionData,
             long firstSegmentNum,
             //int maxSegmentCount,
-            long seekTimeUs) {
+            long seekTimeUs,
+            boolean loadInitialization) {
         Representation representation = representationHolder.representation;
         if (representationHolder.extractorWrapper == null) {
             DataSpec dataSpec = new DataSpec(
@@ -680,6 +645,15 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
 
         long startTimeUs = isSabrTimeSet ? startTimeMs * 1_000L : C.TIME_UNSET;
         long endTimeUs = isSabrTimeSet ? startTimeUs + (durationMs * 1_000L) : C.TIME_UNSET;
+
+        if (!isSabrTimeSet && seekTimeUs != C.TIME_UNSET) {
+            // The segment times are unknown until media arrives (first chunk of a format, or a retried seek after a
+            // response without media). An unset end time is the next load position: once playback started, ExoPlayer
+            // computed the buffered duration as C.TIME_UNSET - position, which overflows to a huge value, and the
+            // track stopped loading. End the chunk at its start position, the next chunk continues from the SABR
+            // segment state.
+            endTimeUs = seekTimeUs;
+        }
         long clippedEndTimeUs = C.TIME_UNSET;
         int segmentCount = C.INDEX_UNSET; // TODO: replace with SABR value?
         //long startTimeUs = representationHolder.getSegmentStartTimeUs(firstSegmentNum);
@@ -693,7 +667,8 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 //segmentUri.resolveUri(baseUrl),
                 DataSpec.HTTP_METHOD_POST,
                 //sabrStream.createVideoPlaybackAbrRequest(trackType, false).toByteArray(),
-                manifest.createVideoPlaybackAbrRequest(trackType, false, seekTimeUs).toByteArray(),
+                // An init request also asks the server for the initialization data (no selected formats)
+                manifest.createVideoPlaybackAbrRequest(trackType, loadInitialization, seekTimeUs).toByteArray(),
                 0, 0, C.LENGTH_UNSET,
                 //segmentUri.start,
                 //segmentUri.start,
@@ -703,6 +678,7 @@ public class DefaultSabrChunkSource implements SabrChunkSource {
                 sabrHeaders);
         long sampleOffsetUs = -representation.presentationTimeOffsetUs;
         Log.e(TAG, "Load media chunk: track=" + trackType + ", rn=" + manifest.getSabrRequestNumber()
+                + ", init=" + loadInitialization
                 + ", startTimeMs=" + startTimeMs + ", backoffTimeMs=" + sabrStream.getBackoffTimeMs());
         return new ContainerMediaChunk(
                 dataSource,

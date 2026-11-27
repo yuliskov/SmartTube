@@ -10,6 +10,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import android.net.Uri;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.exoplayer2.C;
@@ -31,6 +33,7 @@ import com.google.android.exoplayer2.source.sabr.manifest.Representation;
 import com.google.android.exoplayer2.source.sabr.manifest.SabrManifest;
 import com.google.android.exoplayer2.source.sabr.manifest.SegmentBase.SingleSegmentBase;
 import com.google.android.exoplayer2.source.sabr.protos.videostreaming.StreamerContext.ClientInfo;
+import com.google.android.exoplayer2.source.sabr.protos.videostreaming.VideoPlaybackAbrRequest;
 import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.upstream.ByteArrayDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
@@ -215,20 +218,77 @@ public class DefaultSabrChunkSourceTest {
     }
 
     @Test
-    public void videoInitializationStillUsesSabrPost() {
-        Representation representation = Representation.newInstance(
-                createVideoFormat(), SABR_URL,
-                new SingleSegmentBase(new RangedUri(null, 0, 100), 1, 0, 0, 0));
-        SabrManifest manifest = createManifest(
-                DURATION_MS, null,
-                new AdaptationSet(0, C.TRACK_TYPE_VIDEO, Collections.singletonList(representation)));
+    public void videoInitializationIsLoadedWithTheFirstMediaChunk() throws Exception {
         ChunkHolder out = new ChunkHolder();
 
-        createSource(manifest).getNextChunk(0, 0, Collections.emptyList(), out);
+        createSource(createManifestWithInitialization()).getNextChunk(0, 0, Collections.emptyList(), out);
 
-        assertTrue(out.chunk instanceof InitializationChunk);
+        // The server sends the init segment together with the first media segment. A separate InitializationChunk
+        // discarded that segment and the first media chunk downloaded it again.
+        assertTrue(out.chunk instanceof ContainerMediaChunk);
+        assertFalse(out.chunk instanceof InitializationChunk);
         assertEquals(DataSpec.HTTP_METHOD_POST, out.chunk.dataSpec.httpMethod);
         assertEquals(SABR_URL + "&rn=0", out.chunk.dataSpec.uri.toString());
+        VideoPlaybackAbrRequest request = VideoPlaybackAbrRequest.parseFrom(out.chunk.dataSpec.httpBody);
+        assertEquals("No selected formats, so the server sends the init segment", 0, request.getSelectedFormatIdsCount());
+        assertEquals(0, request.getClientAbrState().getPlayerTimeMs());
+        // An unset end time overflows ExoPlayer's buffered duration once playback started and stops loading
+        assertEquals(0, ((MediaChunk) out.chunk).endTimeUs);
+    }
+
+    @Test
+    public void resumedVideoLoadsInitializationAtTheResumePosition() throws Exception {
+        ChunkHolder out = new ChunkHolder();
+
+        createSource(createManifestWithInitialization()).getNextChunk(12_000_000, 12_000_000, Collections.emptyList(), out);
+
+        VideoPlaybackAbrRequest request = VideoPlaybackAbrRequest.parseFrom(out.chunk.dataSpec.httpBody);
+        assertEquals(0, request.getSelectedFormatIdsCount());
+        assertEquals("Not the first segment of the video", 12_000, request.getClientAbrState().getPlayerTimeMs());
+        assertEquals(12_000_000, ((MediaChunk) out.chunk).endTimeUs);
+    }
+
+    @Test
+    public void qualitySwitchLoadsInitializationOfTheNewFormatAtTheLoadPosition() throws Exception {
+        Format oldFormat = createVideoFormat();
+        Format newFormat = Format.createVideoContainerFormat(
+                "136", null, MimeTypes.VIDEO_MP4, MimeTypes.VIDEO_H264, null, null,
+                500_000, 1280, 720, 30, null, 0, 0);
+        SabrManifest manifest = createManifest(
+                DURATION_MS, null,
+                new AdaptationSet(0, C.TRACK_TYPE_VIDEO, Arrays.asList(
+                        createRepresentationWithInitialization(oldFormat),
+                        createRepresentationWithInitialization(newFormat))));
+        DefaultSabrChunkSource source = new DefaultSabrChunkSource(
+                new LoaderErrorThrower.Dummy(), manifest, 0, new int[] {0},
+                new FixedTrackSelection(new TrackGroup(oldFormat, newFormat), 1), C.TRACK_TYPE_VIDEO,
+                new ByteArrayDataSource(CAPTIONS), 0, 1, false, Collections.emptyList(), null);
+        // Already buffered up to 30 s in the old quality
+        MediaChunk previous = new SingleSampleMediaChunk(
+                new ByteArrayDataSource(new byte[1]), new DataSpec(Uri.parse(SABR_URL)), oldFormat,
+                C.SELECTION_REASON_UNKNOWN, null, 20_000_000, 30_000_000, 0, C.TRACK_TYPE_VIDEO, oldFormat);
+        ChunkHolder out = new ChunkHolder();
+
+        source.getNextChunk(25_000_000, previous.endTimeUs, Collections.singletonList(previous), out);
+
+        assertTrue(out.chunk instanceof ContainerMediaChunk);
+        assertEquals(newFormat, out.chunk.trackFormat);
+        VideoPlaybackAbrRequest request = VideoPlaybackAbrRequest.parseFrom(out.chunk.dataSpec.httpBody);
+        assertEquals("The new format still needs its init segment", 0, request.getSelectedFormatIdsCount());
+        assertEquals("Not the start of the video", 30_000, request.getClientAbrState().getPlayerTimeMs());
+        assertEquals(30_000_000, ((MediaChunk) out.chunk).endTimeUs);
+    }
+
+    private static SabrManifest createManifestWithInitialization() {
+        return createManifest(
+                DURATION_MS, null,
+                new AdaptationSet(0, C.TRACK_TYPE_VIDEO,
+                        Collections.singletonList(createRepresentationWithInitialization(createVideoFormat()))));
+    }
+
+    private static Representation createRepresentationWithInitialization(Format format) {
+        return Representation.newInstance(
+                format, SABR_URL, new SingleSegmentBase(new RangedUri(null, 0, 100), 1, 0, 0, 0));
     }
 
     private static void assertSabrRequest(Format format, int trackType) {
