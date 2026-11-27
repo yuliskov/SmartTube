@@ -40,6 +40,8 @@ public class VideoStateController extends BasePlayerController {
     @Nullable
     private Boolean mRestoreLiveEdge;
     private long mSleepTimerStartMs;
+    // The embed (preview) player starts a watched video from 0 but keeps its saved state
+    private boolean mEmbedKeepsState;
 
     @Override
     public void onInit() {
@@ -376,7 +378,23 @@ public class VideoStateController extends BasePlayerController {
      * Reset position of currently opened music and live videos.
      */
     private void resetPositionIfNeeded(Video item) {
+        // The reset that the embed player skipped for this video (see below)
+        boolean pendingReset = mEmbedKeepsState;
+        mEmbedKeepsState = false;
+
         if (getStateService() == null || item == null) {
+            return;
+        }
+
+        // Don't reset if doing switch from the embed to the fullscreen one
+        boolean sameVideo = item.equals(getVideo());
+
+        if (pendingReset && sameVideo) {
+            if (isEmbedPlayer()) {
+                mEmbedKeepsState = true; // the same preview again: keep the state
+            } else {
+                resetPosition(item); // switch from the embed to the fullscreen player: do the skipped reset now
+            }
             return;
         }
 
@@ -397,13 +415,17 @@ public class VideoStateController extends BasePlayerController {
             isLive = false;
         }
 
-        // Don't reset if doing switch from the embed to the fullscreen one
-        boolean sameVideo = item.equals(getVideo());
         if (sameVideo) {
             isShort = false;
         }
 
-        if (isShort || isVideoEnded || isLive) {
+        boolean shouldReset = isShort || isVideoEnded || isLive;
+
+        // The embed player must not erase the state. Otherwise a preview of a watched video
+        // removes its progress and the card looks unwatched later.
+        mEmbedKeepsState = shouldReset && isEmbedPlayer();
+
+        if (shouldReset && !mEmbedKeepsState) {
             resetPosition(item);
         }
     }
@@ -523,6 +545,16 @@ public class VideoStateController extends BasePlayerController {
             return;
         }
 
+        if (mEmbedKeepsState) {
+            if (isBeginEmbed()) {
+                return; // the preview position must not replace the saved state
+            }
+            // The user really watches the video now (unmuted embed or the switch to fullscreen):
+            // do the reset that the embed player skipped and save the position as usual
+            mEmbedKeepsState = false;
+            resetPosition(video);
+        }
+
         // Exceptional cases:
         // 1) Track is ended
         // 2) Pause on end enabled
@@ -538,9 +570,15 @@ public class VideoStateController extends BasePlayerController {
             // Sync video. You could safely use it later to restore state.
             video.sync(state);
         } else { // fully viewed
+            State prev = getStateService().getByVideoId(video.videoId);
+            boolean newlyViewed = !isLiveBroken && (prev == null || prev.durationMs - prev.positionMs > 1_000);
             // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
             getStateService().save(new State(video, durationMs, durationMs, getPlayer().getSpeed()));
             video.markFullyViewed();
+            if (newlyViewed) {
+                // Persist at once. The delayed write is lost when the app is killed within 10 sec.
+                getStateService().persistNow();
+            }
         }
 
         Playlist.instance().sync(video);
@@ -555,7 +593,18 @@ public class VideoStateController extends BasePlayerController {
 
         State state = getStateService().getByVideoId(item.videoId);
 
-        boolean stateIsOutdated = isStateOutdated(state, item);
+        boolean startFromZero = mEmbedKeepsState;
+        if (mEmbedKeepsState) {
+            if (!isEmbedPlayer()) {
+                // Switch from the embed to the fullscreen player: do the reset that the embed player skipped
+                mEmbedKeepsState = false;
+                resetPosition(item);
+            }
+            state = null; // start from 0
+        }
+
+        // Skip the web position when the video starts from 0: for a fully watched video it is the end of the video
+        boolean stateIsOutdated = !startFromZero && isStateOutdated(state, item);
         if (stateIsOutdated) { // check that the user logged in
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getPlayer().getDurationMs() > MUSIC_VIDEO_MAX_DURATION_MS;
