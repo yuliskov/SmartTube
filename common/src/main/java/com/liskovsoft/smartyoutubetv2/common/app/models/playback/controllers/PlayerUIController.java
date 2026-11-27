@@ -16,6 +16,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.OnError;
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -673,6 +674,10 @@ public class PlayerUIController extends BasePlayerController {
     }
 
     private void callMediaItemObservable(MediaItemObservable callable) {
+        callMediaItemObservable(callable, null);
+    }
+
+    private void callMediaItemObservable(MediaItemObservable callable, OnError onError) {
         Video video = getVideo();
 
         if (video == null) {
@@ -682,7 +687,7 @@ public class PlayerUIController extends BasePlayerController {
 
         Observable<Void> observable = callable.call(video.mediaItem != null ? video.mediaItem : video.toMediaItem());
 
-        RxHelper.execute(observable);
+        RxHelper.execute(observable, onError);
     }
 
     private boolean handleBackKey(int keyCode) {
@@ -1023,14 +1028,29 @@ public class PlayerUIController extends BasePlayerController {
             return;
         }
 
-        if (buttonState == PlayerUI.BUTTON_OFF) {
-            callMediaItemObservable(mMediaItemService::subscribeObserve);
+        boolean subscribing = buttonState == PlayerUI.BUTTON_OFF;
+        Video video = getVideo();
+        // The request may be refused (e.g. a supervised account): put the button back and say so
+        OnError onError = error -> onSubscribeFailed(video, subscribing);
+
+        if (subscribing) {
+            callMediaItemObservable(mMediaItemService::subscribeObserve, onError);
         } else {
-            callMediaItemObservable(mMediaItemService::unsubscribeObserve);
+            callMediaItemObservable(mMediaItemService::unsubscribeObserve, onError);
         }
 
-        getVideo().isSubscribed = buttonState == PlayerUI.BUTTON_OFF;
-        getPlayer().setButtonState(R.id.action_subscribe, buttonState == PlayerUI.BUTTON_OFF ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+        video.isSubscribed = subscribing;
+        getPlayer().setButtonState(R.id.action_subscribe, subscribing ? PlayerUI.BUTTON_ON : PlayerUI.BUTTON_OFF);
+    }
+
+    private void onSubscribeFailed(Video video, boolean subscribing) {
+        video.isSubscribed = !subscribing;
+
+        if (getPlayer() != null && getVideo() == video) {
+            getPlayer().setButtonState(R.id.action_subscribe, subscribing ? PlayerUI.BUTTON_OFF : PlayerUI.BUTTON_ON);
+        }
+
+        MessageHelpers.showMessage(getContext(), subscribing ? R.string.subscribe_failed : R.string.unsubscribe_failed);
     }
 
     private void applySoundOff(int buttonState) {
