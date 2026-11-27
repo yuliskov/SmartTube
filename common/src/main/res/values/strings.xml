@@ -624,6 +624,8 @@
     <string name="header_shorts">Shorts</string>
     <string name="player_global_focus">Sync focus between player button rows</string>
     <string name="auto_history">Auto (use account settings)</string>
+    <string name="local_history_size">Local history size (videos)</string>
+    <string name="local_history_size_auto">Auto (depends on the available memory)</string>
     <string name="remember_position_subscriptions">Remember last viewed position in Subscriptions</string>
     <string name="remember_position_pinned">Remember last viewed position in the pinned playlists</string>
     <string name="msg_player_unknown_error">Unknown error</string>

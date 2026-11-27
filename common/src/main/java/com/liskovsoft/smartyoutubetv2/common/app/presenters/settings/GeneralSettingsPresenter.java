@@ -85,6 +85,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendKeyRemappingCategory(settingsPresenter);
         appendNetworkCategory(settingsPresenter);
         appendHistoryCategory(settingsPresenter);
+        appendLocalHistorySizeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), mOnFinish);
@@ -557,6 +558,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.header_history), options);
+    }
+
+    private void appendLocalHistorySizeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int size : new int[] {GeneralData.LOCAL_HISTORY_SIZE_AUTO, 300, 500, 1_000, 2_000}) {
+            options.add(UiOptionItem.from(
+                    size == GeneralData.LOCAL_HISTORY_SIZE_AUTO ? getContext().getString(R.string.local_history_size_auto) : String.valueOf(size),
+                    optionItem -> mGeneralData.setLocalHistorySize(size),
+                    mGeneralData.getLocalHistorySize() == size));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.local_history_size), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {

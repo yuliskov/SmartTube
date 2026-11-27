@@ -24,6 +24,7 @@ public class GeneralData implements ProfileChangeListener {
     public static final int HISTORY_AUTO = 0;
     public static final int HISTORY_ENABLED = 1;
     public static final int HISTORY_DISABLED = 2;
+    public static final int LOCAL_HISTORY_SIZE_AUTO = 0;
     public static final int ACTION_UNDEFINED = -1;
     public static final int ACTION_VOLUME_UP_DOWN = 0;
     public static final int ACTION_NEXT_PREVIOUS = 1;
@@ -86,6 +87,7 @@ public class GeneralData implements ProfileChangeListener {
     private int mLocalDriveBackupFreqDays;
     private List<Video> mOldPinnedItems;
     private boolean mIsRemapSToSpeedToggleEnabled;
+    private int mLocalHistorySize;
     private final Runnable mPersistStateInt = this::persistStateInt;
 
     private GeneralData(Context context) {
@@ -402,6 +404,19 @@ public class GeneralData implements ProfileChangeListener {
         persistState();
     }
 
+    /**
+     * Max number of videos kept in the local history or {@link #LOCAL_HISTORY_SIZE_AUTO}
+     */
+    public int getLocalHistorySize() {
+        return mLocalHistorySize;
+    }
+
+    public void setLocalHistorySize(int size) {
+        mLocalHistorySize = size;
+
+        persistState();
+    }
+
     public boolean isAltAppIconEnabled() {
         return mIsAltAppIconEnabled;
     }
@@ -656,6 +671,7 @@ public class GeneralData implements ProfileChangeListener {
         mLocalDriveBackupFreqDays = Helpers.parseInt(split, 70, 1);
         //mIsRemapFastForwardToSpeedToggleEnabled = Helpers.parseBoolean(split, 71, false);
         mIsRemapSToSpeedToggleEnabled = Helpers.parseBoolean(split, 72, true);
+        mLocalHistorySize = Helpers.parseInt(split, 73, LOCAL_HISTORY_SIZE_AUTO);
     }
 
     public void persistNow() {
@@ -681,7 +697,7 @@ public class GeneralData implements ProfileChangeListener {
                 mIsHideWatchedFromNotificationsEnabled, mChangelog, mPlayerExitShortcut, null, mIsFullscreenModeEnabled, null,
                 mIsRememberPinnedPositionEnabled, mSelectedItems, mIsFirstUseTooltipEnabled, mIsDeviceSpecificBackupEnabled, null,
                 null, mSearchExitShortcut, mGDriveBackupFreqDays, mLocalDriveBackupFreqDays, null,
-                mIsRemapSToSpeedToggleEnabled));
+                mIsRemapSToSpeedToggleEnabled, mLocalHistorySize));
     }
 
     @Override

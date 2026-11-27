@@ -9,9 +9,13 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VideoStateService implements ProfileChangeListener {
     @SuppressLint("StaticFieldLeak")
@@ -22,8 +26,9 @@ public class VideoStateService implements ProfileChangeListener {
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     //private final Map<String, State> mStates = Helpers.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
-    private final List<State> mStates;
+    private final List<State> mStates = new CopyOnWriteArrayList<>();
     private final AppPrefs mPrefs;
+    private final GeneralData mGeneralData;
     private static final String DELIM = "&si;";
     private boolean mIsHistoryBroken;
     private final Runnable mPersistStateInt = () -> {
@@ -38,8 +43,7 @@ public class VideoStateService implements ProfileChangeListener {
     private VideoStateService(Context context) {
         mPrefs = AppPrefs.instance(context);
         mPrefs.addListener(this);
-        mStates = Helpers.createSafeLRUList(
-                Utils.isEnoughRam() ? HIGH_RAM_STATE_MAX_SIZE : LOW_RAM_STATE_MAX_SIZE);
+        mGeneralData = GeneralData.instance(context);
         restoreState();
     }
 
@@ -83,7 +87,9 @@ public class VideoStateService implements ProfileChangeListener {
     }
 
     public void save(State state) {
+        mStates.remove(state);
         mStates.add(state);
+        trimStates();
         persistState();
     }
 
@@ -102,6 +108,24 @@ public class VideoStateService implements ProfileChangeListener {
 
     public long getSessionStartTimeMs() {
         return mSessionStartTimeMs;
+    }
+
+    private int getMaxSize() {
+        int size = mGeneralData.getLocalHistorySize();
+
+        if (size != GeneralData.LOCAL_HISTORY_SIZE_AUTO) {
+            return size;
+        }
+
+        return Utils.isEnoughRam() ? HIGH_RAM_STATE_MAX_SIZE : LOW_RAM_STATE_MAX_SIZE;
+    }
+
+    private void trimStates() {
+        int maxSize = getMaxSize();
+
+        while (mStates.size() > maxSize) {
+            mStates.remove(0); // the oldest
+        }
     }
 
     private void restoreState() {
@@ -219,14 +243,20 @@ public class VideoStateService implements ProfileChangeListener {
     private void setStateData(String data) {
         if (data != null) {
             String[] split = Helpers.split(data, DELIM);
+            // Add all at once. Adding one by one to the copy-on-write list is slow on large histories.
+            Map<Video, State> states = new LinkedHashMap<>();
 
             for (String spec : split) {
                 State state = State.from(spec);
 
                 if (state != null) {
-                    mStates.add(state);
+                    // Keep the most recent duplicate
+                    states.remove(state.video);
+                    states.put(state.video, state);
                 }
             }
+
+            mStates.addAll(states.values());
         }
     }
 
