@@ -183,7 +183,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
             PlayerData.instance(mContext).setSpeed(speed);
             playbackPresenter.getView().setSpeed(speed);
-            MessageHelpers.showMessage(mContext, String.format("%sx", speed));
+            MessageHelpers.showMessage(mContext, String.format("%s\u00D7", speed));
         }
     }
 
