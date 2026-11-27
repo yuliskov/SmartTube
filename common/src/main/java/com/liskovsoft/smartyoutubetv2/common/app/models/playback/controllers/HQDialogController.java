@@ -144,6 +144,7 @@ public class HQDialogController extends BasePlayerController {
 
     private void addSleepTimerCategory() {
         addCategoryInt(AppDialogUtil.createSleepTimerCategory(getContext()));
+        addCategoryInt(AppDialogUtil.createSleepTimerCloseAppCategory(getContext()));
     }
 
     private void addAudioLanguage() {

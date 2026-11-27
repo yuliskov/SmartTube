@@ -80,6 +80,7 @@ public class AppDialogUtil {
     private static final int PLAYER_ENGINE_ID = 147;
     private static final int IGNORE_DURATION_ID = 148;
     private static final int SLEEP_TIMER_ID = 149;
+    private static final int SLEEP_TIMER_CLOSE_APP_ID = 206;
     private static final int SUBTITLE_STYLES_ID = 45;
     private static final int SUBTITLE_SIZE_ID = 46;
     private static final int SUBTITLE_POSITION_ID = 47;
@@ -940,6 +941,19 @@ public class AppDialogUtil {
         }
 
         return OptionCategory.from(SLEEP_TIMER_ID, OptionCategory.TYPE_RADIO_LIST, title, options);
+    }
+
+    public static OptionCategory createSleepTimerCloseAppCategory(Context context) {
+        PlayerData playerData = PlayerData.instance(context);
+        String title = context.getString(R.string.sleep_timer_close_app);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(title,
+                option -> playerData.setSleepTimerCloseAppEnabled(option.isSelected()),
+                playerData.isSleepTimerCloseAppEnabled()));
+
+        return OptionCategory.from(SLEEP_TIMER_CLOSE_APP_ID, OptionCategory.TYPE_CHECKBOX_LIST, title, options);
     }
 
     public static OptionItem createSubscriptionsBackupButton(Context context) {
