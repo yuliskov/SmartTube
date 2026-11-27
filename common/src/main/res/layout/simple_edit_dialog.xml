@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="10sp">
 
-    <EditText
+    <com.liskovsoft.smartyoutubetv2.common.utils.DialogEditText
         android:id="@+id/simple_edit_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
