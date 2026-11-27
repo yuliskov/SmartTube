@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 
@@ -69,10 +70,27 @@ public class RemoteControlService extends Service {
     private void updateDialServer() {
         Context context = getApplicationContext();
         RemoteControlData data = RemoteControlData.instance(context);
+
+        String deviceName = Settings.Global.getString(
+                context.getContentResolver(),
+                "device_name"
+        );
+
+        if (deviceName != null) {
+            deviceName = deviceName.trim();
+        }
+
+        if (deviceName == null || deviceName.isEmpty()) {
+            deviceName = Helpers.getUserDeviceName(context);
+        }
+
+        String appName = AppInfoHelpers.getAppLabel(context);
+        String friendlyName = String.format("%s (%s)", deviceName, appName);
+
         DialServer.startStop(data.isDialEnabled(), () -> new DialServer(
                 context,
                 data.getDialUdn(),
-                String.format("%s (%s)", Helpers.getUserDeviceName(context), AppInfoHelpers.getAppLabel(context)),
+                friendlyName,
                 YouTubeServiceManager.instance().getRemoteControlService(),
                 () -> ViewManager.instance(context).moveAppToForeground()));
     }
