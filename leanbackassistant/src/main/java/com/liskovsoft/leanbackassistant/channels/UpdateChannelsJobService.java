@@ -50,11 +50,13 @@ public class UpdateChannelsJobService extends JobService {
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
-            Log.d(TAG, "Registering Channels update job...");
+        if (VERSION.SDK_INT >= 23) {
+            Log.d(TAG, "Unregistering Channels update job...");
             JobScheduler scheduler = context.getSystemService(JobScheduler.class);
 
-            scheduler.cancel(SYNC_JOB_ID);
+            if (scheduler != null) {
+                scheduler.cancel(SYNC_JOB_ID);
+            }
         }
     }
 

@@ -38,8 +38,7 @@ public class UpdateChannelsTask {
                 updateOrPublishChannel(mService.getRecommendedPlaylist());
                 updateOrPublishChannel(mService.getHistoryPlaylist());
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.toString());
             }
         }
     }
@@ -49,8 +48,7 @@ public class UpdateChannelsTask {
             try {
                 updateOrPublishRecommendations(getSinglePreferredPlaylist());
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, e.toString());
             }
         }
     }

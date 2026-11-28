@@ -57,6 +57,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
+import com.liskovsoft.leanbackassistant.channels.UpdateChannelsWorker;
 import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -935,6 +936,12 @@ public class Utils {
 
     public static void updateChannels(Context context) {
         startReceiver(context, UPDATE_CHANNELS_RECEIVER_CLASS_NAME);
+    }
+
+    public static void cancelChannels(Context context) {
+        if (VERSION.SDK_INT >= 21) {
+            UpdateChannelsWorker.cancel(context);
+        }
     }
 
     public static void startRemoteControl(Context context) {

@@ -2,10 +2,13 @@ package com.liskovsoft.leanbackassistant.channels;
 
 import android.content.Context;
 import android.os.Build.VERSION;
+import android.os.PowerManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import com.liskovsoft.leanbackassistant.utils.SafeWorkManager;
 import androidx.work.Worker;
@@ -29,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 @RequiresApi(21)
 public class UpdateChannelsWorker extends Worker {
     private static final String TAG = UpdateChannelsWorker.class.getSimpleName();
-    private static final String WORK_NAME = "Update channels";
-    private static final long REPEAT_INTERVAL_MINUTES = 15; // 15 - minimal interval
+    public static final String WORK_NAME = "Update channels";
+    public static final long REPEAT_INTERVAL_MINUTES = 60;
     private final UpdateChannelsTask mTask;
     private static volatile boolean sIsWorkScheduled;
 
@@ -41,25 +44,38 @@ public class UpdateChannelsWorker extends Worker {
     }
 
     public static void schedule(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
-            sIsWorkScheduled = true;
-
-            SafeWorkManager workManager = SafeWorkManager.getInstance(context);
-
-            // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
-            // Called after 15 minutes
-            workManager.enqueueUniquePeriodicWork(
-                    WORK_NAME,
-                    //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
-                    //ExistingPeriodicWorkPolicy.KEEP, // only enqueue if no work with this name exists
-                    ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, // called immediately!
-                    new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, REPEAT_INTERVAL_MINUTES, TimeUnit.MINUTES).addTag(WORK_NAME).build()
-            );
+        if (VERSION.SDK_INT < 23) {
+            return;
         }
+
+        if (!GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
+            cancel(context);
+            return;
+        }
+
+        sIsWorkScheduled = true;
+
+        SafeWorkManager workManager = SafeWorkManager.getInstance(context);
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        // https://stackoverflow.com/questions/50943056/avoiding-duplicating-periodicworkrequest-from-workmanager
+        workManager.enqueueUniquePeriodicWork(
+                WORK_NAME,
+                //ExistingPeriodicWorkPolicy.UPDATE, // fix duplicates (when old worker is running)
+                //ExistingPeriodicWorkPolicy.KEEP, // only enqueue if no work with this name exists
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, // called immediately!
+                new PeriodicWorkRequest.Builder(UpdateChannelsWorker.class, REPEAT_INTERVAL_MINUTES, TimeUnit.MINUTES)
+                        .setConstraints(constraints)
+                        .addTag(WORK_NAME)
+                        .build()
+        );
     }
 
     public static void cancel(Context context) {
-        if (VERSION.SDK_INT >= 23 && GlobalPreferences.instance(context).isChannelsServiceEnabled()) {
+        if (VERSION.SDK_INT >= 23) {
             Log.d(TAG, "Unregistering Channels update job...");
 
             SafeWorkManager workManager = SafeWorkManager.getInstance(context);
@@ -72,6 +88,16 @@ public class UpdateChannelsWorker extends Worker {
     public Result doWork() {
         Log.d(TAG, "Starting worker %s...", this);
 
+        if (!GlobalPreferences.instance(getApplicationContext()).isChannelsServiceEnabled()) {
+            cancel(getApplicationContext());
+            return Result.success();
+        }
+
+        if (!isDeviceInteractive(getApplicationContext())) {
+            Log.d(TAG, "Device is not interactive; skipping channels sync.");
+            return Result.success();
+        }
+
         // Foreground ⇒ possible playback; skip sync to avoid CPU contention during video decode (#6234)
         if (!Helpers.isAppInForeground() || sIsWorkScheduled) {
             sIsWorkScheduled = false;
@@ -79,5 +105,10 @@ public class UpdateChannelsWorker extends Worker {
         }
 
         return Result.success();
+    }
+
+    public static boolean isDeviceInteractive(Context context) {
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        return powerManager == null || powerManager.isInteractive();
     }
 }
