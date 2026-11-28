@@ -36,6 +36,7 @@ import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
@@ -198,7 +199,7 @@ public class MotherActivity extends FragmentActivity {
 
         if (context != null) {
             // NOTE: Use only cached metrics. Because metrics creation involves using WindowManager, which isn't available at this stage.
-            contextWrapper = LocaleContextWrapper.wrap(context, LocaleUpdater.getSavedLocale(context), sCachedDisplayMetrics);
+            contextWrapper = LocaleContextWrapper.wrap(context, withLatinDigits(LocaleUpdater.getSavedLocale(context)), sCachedDisplayMetrics);
         }
 
         super.attachBaseContext(contextWrapper);
@@ -281,12 +282,23 @@ public class MotherActivity extends FragmentActivity {
         return sCachedDisplayMetrics;
     }
 
+    /**
+     * Burmese defaults to Myanmar digits (၀-၉). Use Western digits (0-9) for the clock, dates and numbers.
+     */
+    private static Locale withLatinDigits(Locale locale) {
+        if (locale == null || VERSION.SDK_INT < 21 || !"my".equals(locale.getLanguage())) {
+            return locale;
+        }
+
+        return new Locale.Builder().setLocale(locale).setUnicodeLocaleKeyword("nu", "latn").build();
+    }
+
     private void applyCustomConfig() {
         // NOTE: dpi should come after locale update to prevent resources overriding.
 
         // Fix sudden language change.
         // Could happen when screen goes off or after PIP mode.
-        LocaleUpdater.applySavedLocale(this);
+        LocaleContextWrapper.applySavedLocale(this, withLatinDigits(LocaleUpdater.getSavedLocale(this)), null);
 
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.

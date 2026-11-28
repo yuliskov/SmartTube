@@ -1,0 +1,9 @@
+<resources>
+    <string name="search_hint">ဗီဒီယိုများ ရှာဖွေရန်</string>
+    <string name="search_label">SmartTube</string>
+    <string name="settings_description">SmartTube ဗီဒီယိုများ</string>
+    <string name="cant_play_video">ဤဗီဒီယိုကို ဖွင့်၍ မရပါ</string>
+    <string name="header_subscriptions">စာရင်းသွင်းထားမှုများ</string>
+    <string name="header_history">မှတ်တမ်း</string>
+    <string name="recommended">အကြံပြုထားသည်</string>
+</resources>
