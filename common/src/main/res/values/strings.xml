@@ -755,6 +755,14 @@
     <string name="prefer_sabr_live_desc">Experimental SABR live streams. Enable only if you have trouble with regular live streams.</string>
     <string name="live_edge">Keep up with live</string>
     <string name="player_quick_skip_chapters">Next chapter with Up button</string>
+    <string name="move_to_folder">Move to folder</string>
+    <string name="new_folder">New folder</string>
+    <string name="no_folder">No folder</string>
+    <string name="choose_folder_items">Choose folder items</string>
+    <string name="sort_folder_items">Sort folder items by name</string>
+    <string name="remove_folder">Remove folder</string>
+    <string name="remove_folder_desc">Remove folder? Its items will return to the sidebar.</string>
+    <string name="folder_is_empty">The folder is empty. Choose the channels and playlists that are already added to the sidebar.</string>
     <plurals name="hours">
         <item quantity="one">%s hour</item>
         <item quantity="other">%s hours</item>

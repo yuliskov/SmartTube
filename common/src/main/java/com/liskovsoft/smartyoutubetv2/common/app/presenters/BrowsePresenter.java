@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.FolderEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.PasswordError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
@@ -35,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.channelgroup.ChannelGroupServiceWrapper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.BrowseProcessorManager;
@@ -234,13 +236,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void initPinnedSections() {
         mSections.clear();
 
-        Collection<Video> pinnedItems = getSidebarService().getPinnedItems();
+        Collection<Video> pinnedItems = getSidebarService().getTopLevelItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
                 if (item.sectionId == -1) { // pinned channel or playlist
                     BrowseSection section = createPinnedSection(item);
                     mSections.add(section);
+                } else if (SidebarService.isFolder(item)) {
+                    mSections.add(createFolderSection(item));
                 } else {
                     BrowseSection section = mSectionsMapping.get(item.sectionId);
 
@@ -253,11 +257,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initPinnedCallbacks() {
-        Collection<Video> pinnedItems = getSidebarService().getPinnedItems();
+        Collection<Video> pinnedItems = getSidebarService().getTopLevelItems();
 
         for (Video item : pinnedItems) {
             if (item != null && item.sectionId == -1) {
                 createPinnedMapping(item);
+            } else if (SidebarService.isFolder(item)) {
+                mLocalGridMappings.put(item.sectionId, () -> getFolderVideos(item.sectionId));
             }
         }
     }
@@ -285,6 +291,26 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return videos;
     }
 
+    private List<Video> getFolderVideos(int folderId) {
+        List<Video> videos = new ArrayList<>();
+
+        for (Video item : getSidebarService().getFolderItems(folderId)) {
+            // Use a copy because the grid changes the items (e.g. assigns a group)
+            Video video = Video.from(item);
+            // Reset the data of the video that was used to pin the item
+            video.mediaItem = null;
+            video.secondTitle = null;
+            video.badge = null;
+            video.previewUrl = null;
+            video.percentWatched = -1;
+            video.isLive = false;
+            video.isUpcoming = false;
+            videos.add(video);
+        }
+
+        return videos;
+    }
+
     public void updateSections() {
         if (getView() == null) {
             return;
@@ -303,7 +329,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         // clean up (profile changed etc)
         getView().removeAllSections();
 
-        int bootSectionId = getSidebarService().getBootSectionId();
+        int bootSectionId = getSidebarService().getVisibleSectionId(getSidebarService().getBootSectionId());
 
         // Empty Home on first run fix. Switch to something non-empty.
         if (!getSignInService().isSigned() && VideoStateService.instance(getContext()).isEmpty()) {
@@ -334,6 +360,33 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         // Refresh and restore last focus
         int selectedSectionIndex = findSectionIndex(mCurrentSection != null ? mCurrentSection.getId() : -1);
         getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, false);
+    }
+
+    /**
+     * Same as {@link #updateSections()} but doesn't touch the sections that aren't changed (the focus stays on the content)
+     */
+    private void syncSections() {
+        if (getView() == null) {
+            return;
+        }
+
+        List<BrowseSection> oldSections = new ArrayList<>(mSections);
+
+        initPinnedData();
+
+        for (BrowseSection section : oldSections) {
+            if (!mSections.contains(section)) {
+                getView().removeSection(section);
+            }
+        }
+
+        int index = mErrorSections.size();
+
+        for (BrowseSection section : mSections) {
+            if (section.isEnabled()) {
+                getView().addSection(index++, section);
+            }
+        }
     }
 
     private void initPinnedData() {
@@ -442,6 +495,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             } else {
                 updateChannelUploadsMultiGrid(item);
             }
+        } else if (isFolderSection() && !item.hasChannel() && !item.hasPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
         }
@@ -538,6 +593,51 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
     }
 
+    /**
+     * @param folderId -1 returns the item to the sidebar
+     */
+    public void moveToFolder(Video item, int folderId) {
+        int oldFolderId = getSidebarService().getFolderId(item);
+
+        if (oldFolderId == folderId) {
+            return;
+        }
+
+        getSidebarService().moveToFolder(item, folderId);
+
+        if (oldFolderId != -1) { // moved from the folder page
+            syncSections();
+            removeFromFolderPage(item, oldFolderId);
+            return;
+        }
+
+        // The section disappears from the sidebar. Keep the focus nearby.
+        if (mCurrentSection != null && mCurrentSection.getId() == item.getId()) {
+            mCurrentSection = findNearestSection(item.getId());
+        }
+
+        updateSections();
+    }
+
+    private void removeFromFolderPage(Video item, int folderId) {
+        if (getView() == null || !isSection(folderId)) {
+            return;
+        }
+
+        if (item.getGroup() != null && !getSidebarService().getFolderItems(folderId).isEmpty()) {
+            removeItem(item);
+        } else {
+            updateCurrentSection();
+        }
+    }
+
+    /**
+     * Is this a card on the folder page
+     */
+    public boolean isFolderPageItem(Video item) {
+        return inForeground() && isFolderSection() && getSidebarService().getFolderId(item) == mCurrentSection.getId();
+    }
+
     public void enableAllSections(boolean enable) {
         enableSection(MediaGroup.TYPE_HISTORY, enable);
         enableSection(MediaGroup.TYPE_USER_PLAYLISTS, enable);
@@ -567,6 +667,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
 
         int idx = getSidebarService().addPinnedItem(item);
+
+        if (getSidebarService().getFolderId(item) != -1) { // already pinned and placed inside a folder
+            return;
+        }
+
+        if (idx != -1) {
+            idx = getSidebarService().getTopLevelIndex(idx);
+        }
 
         createPinnedMapping(item);
 
@@ -599,6 +707,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void unpinItem(Video item) {
+        int folderId = getSidebarService().getFolderId(item);
         getSidebarService().removePinnedItem(item);
         getGeneralData().removeSelectedItem(item.getId());
 
@@ -615,6 +724,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         if (getView() != null) {
             getView().removeSection(section);
+        }
+
+        if (folderId != -1) {
+            removeFromFolderPage(item, folderId);
         }
     }
 
@@ -688,6 +801,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         videoGroup.setTitle(section.getTitle());
         getView().updateSection(videoGroup);
         getView().showProgressBar(false);
+
+        if (videoGroup.isEmpty() && isFolderSection()) {
+            getView().showError(new FolderEmptyError(getContext(), section.getId()));
+        }
     }
 
     private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups, boolean authCheck) {
@@ -1099,6 +1216,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return mCurrentSection != null && isPinnedId(mCurrentSection.getId());
     }
 
+    private boolean isFolderSection() {
+        return mCurrentSection != null && getSidebarService().findFolder(mCurrentSection.getId()) != null;
+    }
+
     private boolean isPinnedId(int id) {
         return id > 100;
     }
@@ -1175,6 +1296,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private BrowseSection createPinnedSection(Video item) {
         return new BrowseSection(
                 item.getId(), item.getTitle(), enableRows(item) ? BrowseSection.TYPE_ROW : BrowseSection.TYPE_GRID, R.drawable.icon_pin, item.getCardImageUrl(), false, item);
+    }
+
+    private BrowseSection createFolderSection(Video item) {
+        return new BrowseSection(item.sectionId, item.getTitle(), BrowseSection.TYPE_GRID, R.drawable.icon_folder, null, false, item);
     }
 
     private boolean enableRows(Video item) {

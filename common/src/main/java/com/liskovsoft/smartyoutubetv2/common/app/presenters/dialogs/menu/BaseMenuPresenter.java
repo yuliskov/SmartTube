@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -71,6 +72,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        if (BrowsePresenter.instance(getContext()).isFolderPageItem(original)) {
+            appendFolderPageItemButtons(original);
+            return;
+        }
+
         boolean isPlaylist = original.hasPlaylist() || original.isPlaylistAsChannel() || (original.hasNestedItems() && original.belongsToUserPlaylists());
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
@@ -95,6 +101,63 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         }));
     }
     
+    private void appendFolderPageItemButtons(Video item) {
+        appendMoveToFolderButton(item);
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            closeDialog();
+                            BrowsePresenter.instance(getContext()).unpinItem(item);
+                            MessageHelpers.showMessage(getContext(), getContext().getString(R.string.unpinned_from_sidebar));
+                        }));
+    }
+
+    private void appendMoveToFolderButton(Video item) {
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.move_to_folder),
+                        optionItem -> SidebarFolderDialog.showMoveDialog(getContext(), item)));
+    }
+
+    /**
+     * Sidebar menu
+     */
+    protected void appendFolderButtons() {
+        if (!mIsPinToSidebarEnabled) {
+            return;
+        }
+
+        Video video = getVideo();
+
+        if (SidebarService.isFolderCandidate(video)) {
+            appendMoveToFolderButton(video);
+            return;
+        }
+
+        if (!SidebarService.isFolder(video)) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.choose_folder_items),
+                        optionItem -> SidebarFolderDialog.showItemsDialog(getContext(), video.sectionId)));
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.sort_folder_items),
+                        optionItem -> {
+                            closeDialog();
+                            SidebarService.instance(getContext()).sortFolder(video.sectionId);
+                            BrowsePresenter.instance(getContext()).refresh(false);
+                        }));
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.remove_folder),
+                        optionItem -> AppDialogUtil.showConfirmationDialog(getContext(), getContext().getString(R.string.remove_folder_desc), () -> {
+                            closeDialog();
+                            BrowsePresenter.instance(getContext()).enableSection(video.sectionId, false);
+                        })));
+    }
+
     private void togglePinToSidebar(Video section) {
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 

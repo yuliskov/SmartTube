@@ -285,10 +285,18 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             );
         }
 
-        Collection<Video> pinnedItems = mSidebarService.getPinnedItems();
+        Collection<Video> pinnedItems = mSidebarService.getTopLevelItems();
 
         for (Video item : pinnedItems) {
-            if (item != null && item.getTitle() != null) {
+            if (SidebarService.isFolder(item)) {
+                options.add(
+                        UiOptionItem.from(
+                                item.getTitle(),
+                                optionItem -> mSidebarService.setBootSectionId(item.sectionId),
+                                item.sectionId == mSidebarService.getBootSectionId()
+                        )
+                );
+            } else if (item != null && item.getTitle() != null) {
                 options.add(
                         UiOptionItem.from(
                                 item.getTitle(),

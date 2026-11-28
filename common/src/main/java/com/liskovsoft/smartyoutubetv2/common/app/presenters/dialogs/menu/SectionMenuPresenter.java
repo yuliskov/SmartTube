@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.providers.ContextMenuProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.service.SidebarService;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -100,6 +101,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendFolderButtons();
         appendCreatePlaylistButton();
         appendToggleHistoryButton();
         appendClearHistoryButton();
@@ -130,6 +132,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendFolderButtons();
         appendClearHistoryButton();
 
         for (Long menuItem : MainUIData.instance(getContext()).getMenuItemsOrdered()) {
@@ -192,7 +195,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         }
 
         if (mSection == null || mSection.isDefault() || getVideo() == null ||
-                (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel())) {
+                (!getVideo().hasPlaylist() && !getVideo().hasReloadPageKey() && !getVideo().hasChannel() && !SidebarService.isFolder(getVideo()))) {
             return;
         }
 

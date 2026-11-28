@@ -11,8 +11,10 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs.ProfileChangeListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,14 @@ public class SidebarService implements ProfileChangeListener {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private final static int RESERVED_ID = 100;
+    /**
+     * A folder is a pinned item that has only a title and a section id from this range
+     */
+    private final static int FOLDER_START_ID = 100_000;
+    /**
+     * Item hash -> folder id. The items themselves are always stored in the {@link #mPinnedItems}
+     */
+    private Map<Integer, Integer> mFolderItems = new HashMap<>();
 
     private SidebarService(Context context) {
         mContext = context.getApplicationContext();
@@ -67,6 +77,7 @@ public class SidebarService implements ProfileChangeListener {
 
     public void removePinnedItem(Video item) {
         mPinnedItems.remove(item);
+        mFolderItems.remove(item.hashCode());
         persistState();
     }
 
@@ -101,6 +112,7 @@ public class SidebarService implements ProfileChangeListener {
             }
         } else {
             Helpers.removeIf(mPinnedItems, item -> item == null || item.sectionId == sectionId);
+            cleanupFolderItems();
         }
 
         persistState();
@@ -168,13 +180,24 @@ public class SidebarService implements ProfileChangeListener {
     }
 
     private boolean canShiftSection(int sectionId, int shift) {
+        return findShiftedIndex(sectionId, shift) != -1;
+    }
+
+    /**
+     * Skips the items that aren't visible on the sidebar
+     */
+    private int findShiftedIndex(int sectionId, int shift) {
         int index = findPinnedItemIndex(sectionId);
 
-        if (index != -1) {
-            return  index + shift >= 0 && index + shift < mPinnedItems.size();
+        if (index == -1) {
+            return -1;
         }
 
-        return false;
+        do {
+            index += shift;
+        } while (index >= 0 && index < mPinnedItems.size() && isInsideFolder(mPinnedItems.get(index)));
+
+        return index >= 0 && index < mPinnedItems.size() ? index : -1;
     }
 
     private void shiftSection(int sectionId, int shift) {
@@ -183,14 +206,171 @@ public class SidebarService implements ProfileChangeListener {
         }
 
         int index = findPinnedItemIndex(sectionId);
+        int newIndex = findShiftedIndex(sectionId, shift);
 
         if (index != -1) {
             Video current = mPinnedItems.get(index);
             mPinnedItems.remove(current);
 
-            mPinnedItems.add(index + shift, current);
+            mPinnedItems.add(newIndex, current);
             persistState();
         }
+    }
+
+    /**
+     * Pinned items that aren't placed inside the folders
+     */
+    public List<Video> getTopLevelItems() {
+        return findItems(item -> !isInsideFolder(item));
+    }
+
+    /**
+     * Converts an index of the pinned item to the index of the sidebar section
+     */
+    public int getTopLevelIndex(int index) {
+        int result = index;
+
+        for (int i = 0; i < index && i < mPinnedItems.size(); i++) {
+            if (isInsideFolder(mPinnedItems.get(i))) {
+                result--;
+            }
+        }
+
+        return result;
+    }
+
+    public List<Video> getFolders() {
+        return findItems(SidebarService::isFolder);
+    }
+
+    public Video findFolder(int folderId) {
+        return Helpers.findFirst(mPinnedItems, item -> isFolder(item) && item.sectionId == folderId);
+    }
+
+    public Video findFolderByTitle(String title) {
+        return Helpers.findFirst(mPinnedItems, item -> isFolder(item) && Helpers.equals(item.title, title));
+    }
+
+    public List<Video> getFolderItems(int folderId) {
+        return findItems(item -> item != null && getFolderId(item) == folderId);
+    }
+
+    /**
+     * Pinned items that could be placed inside a folder
+     */
+    public List<Video> getFolderCandidates() {
+        return findItems(SidebarService::isFolderCandidate);
+    }
+
+    /**
+     * @return folder id or -1 if the item isn't placed inside a folder
+     */
+    public int getFolderId(Video item) {
+        Integer folderId = item != null && item.sectionId == -1 ? mFolderItems.get(item.hashCode()) : null;
+
+        return folderId != null ? folderId : -1;
+    }
+
+    public Video createFolder(String title) {
+        int folderId = FOLDER_START_ID;
+
+        while (findPinnedItemIndex(folderId) != -1) {
+            folderId++;
+        }
+
+        Video folder = new Video();
+        folder.title = title;
+        folder.sectionId = folderId;
+
+        addPinnedItem(folder);
+
+        return folder;
+    }
+
+    /**
+     * @param folderId -1 returns the item to the sidebar
+     */
+    public void moveToFolder(Video item, int folderId) {
+        if (!isFolderCandidate(item) || !mPinnedItems.contains(item)) {
+            return;
+        }
+
+        if (findFolder(folderId) != null) {
+            mFolderItems.put(item.hashCode(), folderId);
+        } else {
+            mFolderItems.remove(item.hashCode());
+        }
+
+        persistState();
+    }
+
+    public void sortFolder(int folderId) {
+        List<Video> items = getFolderItems(folderId);
+
+        // NOTE: Comparator.comparing API >= 24
+        Collections.sort(items, (o1, o2) -> String.valueOf(o1.getTitle()).compareToIgnoreCase(String.valueOf(o2.getTitle())));
+
+        int idx = 0;
+
+        for (int i = 0; i < mPinnedItems.size(); i++) {
+            Video item = mPinnedItems.get(i);
+            if (item != null && getFolderId(item) == folderId) {
+                mPinnedItems.set(i, items.get(idx++));
+            }
+        }
+
+        persistState();
+    }
+
+    /**
+     * @return id of the folder in case the section is placed inside it
+     */
+    public int getVisibleSectionId(int sectionId) {
+        int index = findPinnedItemIndex(sectionId);
+        int folderId = index != -1 ? getFolderId(mPinnedItems.get(index)) : -1;
+
+        return folderId != -1 ? folderId : sectionId;
+    }
+
+    public static boolean isFolder(Video item) {
+        return item != null && item.sectionId >= FOLDER_START_ID;
+    }
+
+    public static boolean isFolderCandidate(Video item) {
+        return item != null && item.sectionId == -1 && (item.hasPlaylist() || item.hasChannel() || item.hasReloadPageKey());
+    }
+
+    private boolean isInsideFolder(Video item) {
+        return getFolderId(item) != -1;
+    }
+
+    private interface ItemFilter {
+        boolean test(Video item);
+    }
+
+    private List<Video> findItems(ItemFilter filter) {
+        List<Video> result = new ArrayList<>();
+
+        for (Video item : mPinnedItems) {
+            if (filter.test(item)) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private void cleanupFolderItems() {
+        Map<Integer, Integer> result = new HashMap<>();
+
+        for (Video item : mPinnedItems) {
+            int folderId = getFolderId(item);
+            if (isFolderCandidate(item) && findFolder(folderId) != null) {
+                result.put(item.hashCode(), folderId);
+            }
+        }
+
+        mFolderItems = result;
     }
 
     private int findPinnedItemIndex(int sectionId) {
@@ -295,6 +475,7 @@ public class SidebarService implements ProfileChangeListener {
         mPinnedItems = Helpers.parseList(split, 0, Video::fromString);
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
+        mFolderItems = Helpers.parseMap(split, 3, Helpers::parseInt, Helpers::parseInt);
 
         transferOldPinnedItems();
 
@@ -306,6 +487,7 @@ public class SidebarService implements ProfileChangeListener {
         enableSection(MediaGroup.TYPE_SETTINGS, true);
 
         cleanupPinnedItems();
+        cleanupFolderItems();
     }
 
     private void transferOldPinnedItems() {
@@ -321,7 +503,7 @@ public class SidebarService implements ProfileChangeListener {
     }
 
     public void persistState() {
-        mPrefs.setSidebarData(Helpers.mergeData(mPinnedItems, mBootSectionId, mIsSettingsSectionEnabled));
+        mPrefs.setSidebarData(Helpers.mergeData(mPinnedItems, mBootSectionId, mIsSettingsSectionEnabled, mFolderItems));
     }
 
     @Override
