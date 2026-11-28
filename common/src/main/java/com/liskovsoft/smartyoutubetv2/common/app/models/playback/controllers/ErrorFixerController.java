@@ -47,7 +47,12 @@ public class ErrorFixerController extends BasePlayerController implements OnLong
 
     @Override
     public void onTickle() {
-        if (getPlayer() == null) {
+        handleUnthrownErrorsIfNeeded();
+    }
+
+    private void handleUnthrownErrorsIfNeeded() {
+        // Handle only those errors where the video not playing but not sign of buffering
+        if (getPlayer() == null || mBufferingDetector.isBuffering()) {
             return;
         }
 

@@ -60,6 +60,10 @@ public class BufferingDetector {
         return mIsPlayable;
     }
 
+    public boolean isBuffering() {
+        return mStartTimeMs > 0;
+    }
+
     private void onLongBuffering() {
         reset();
         mCallback.onLongBuffering();
