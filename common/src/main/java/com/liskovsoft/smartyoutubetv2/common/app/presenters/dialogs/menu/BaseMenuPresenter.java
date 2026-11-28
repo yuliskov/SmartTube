@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -192,7 +193,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isPlaylistAsChannel() && !original.belongsToUserPlaylists())) {
+        if (original == null || (!original.hasPlaylist() && !original.isSearchPlaylistCard() && !original.isPlaylistAsChannel() && !original.belongsToUserPlaylists())) {
             return;
         }
 
@@ -200,8 +201,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(
                         getContext().getString(original.belongsToUserPlaylists()? R.string.remove_playlist : R.string.save_playlist),
                         optionItem -> {
-                            if (original.hasPlaylist()) {
-                                syncToggleSaveRemovePlaylist(original, null);
+                            String resolvedId = original.resolvePlaylistId();
+                            if (original.belongsToUserPlaylists() ? original.hasPlaylist() : resolvedId != null) {
+                                syncToggleSaveRemovePlaylist(original, resolvedId);
                             } else if (original.belongsToUserPlaylists()) {
                                 // NOTE: Can't get empty playlist id. Empty playlist doesn't contain videos.
                                 mServiceManager.loadChannelUploads(
@@ -230,13 +232,77 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                         }
                                 );
                             } else {
-                                mServiceManager.loadChannelPlaylist(
-                                        original,
-                                        mediaGroup -> syncToggleSaveRemovePlaylist(original, getFirstPlaylistId(mediaGroup))
-                                );
+                                loadPlaylistGroupForSave(original);
                             }
                         }
                 ));
+    }
+
+    private void loadPlaylistGroupForSave(Video original) {
+        MediaItem uploadsItem = preparePlaylistUploadsItem(original);
+        if (uploadsItem != null) {
+            mServiceManager.loadChannelUploads(
+                    uploadsItem,
+                    mediaGroup -> savePlaylistFromGroup(original, mediaGroup)
+            );
+            return;
+        }
+
+        Video browseVideo = prepareChannelPlaylistVideo(original);
+        if (browseVideo != null) {
+            mServiceManager.loadChannelPlaylist(
+                    browseVideo,
+                    mediaGroup -> savePlaylistFromGroup(original, mediaGroup)
+            );
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.cant_save_playlist);
+        }
+    }
+
+    private void savePlaylistFromGroup(Video original, MediaGroup mediaGroup) {
+        String id = resolveFirstPlaylistId(mediaGroup);
+        if (id != null) {
+            syncToggleSaveRemovePlaylist(original, id);
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.cant_save_playlist);
+        }
+    }
+
+    static MediaItem preparePlaylistUploadsItem(Video video) {
+        if (video == null || !video.hasNestedItems()) {
+            return null;
+        }
+
+        if (video.mediaItem != null && !TextUtils.isEmpty(video.mediaItem.getReloadPageKey())) {
+            return video.mediaItem;
+        }
+
+        if (!TextUtils.isEmpty(video.reloadPageKey)) {
+            return SimpleMediaItem.from(video);
+        }
+
+        return null;
+    }
+
+    static Video prepareChannelPlaylistVideo(Video video) {
+        if (video == null) {
+            return null;
+        }
+
+        if (video.mediaItem != null && !TextUtils.isEmpty(video.mediaItem.getChannelId())) {
+            return video;
+        }
+
+        if (!TextUtils.isEmpty(video.channelId)) {
+            if (video.mediaItem == null) {
+                return video;
+            }
+            Video target = new Video();
+            target.channelId = video.channelId;
+            return target;
+        }
+
+        return null;
     }
 
     private void syncToggleSaveRemovePlaylist(Video original, String playlistId) {
@@ -247,7 +313,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             video.title = original.getGroup().getTitle();
         }
 
-        if (!original.hasPlaylist() && playlistId != null) {
+        if (playlistId != null) {
             video.playlistId = playlistId;
         }
 
@@ -300,11 +366,29 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     private void savePlaylist(Video video) {
         MediaItemService manager = YouTubeMediaItemService.instance();
-        Observable<Void> action = video.mediaItem != null && video.mediaItem.getPlaylistId() != null ? manager.savePlaylistObserve(video.mediaItem) : manager.savePlaylistObserve(video.playlistId);
+        String itemId = video.mediaItem != null ? video.mediaItem.getPlaylistId() : null;
+        if (TextUtils.isEmpty(video.playlistId) && TextUtils.isEmpty(itemId)) {
+            MessageHelpers.showMessage(getContext(), R.string.cant_save_playlist);
+            return;
+        }
+        Observable<Void> action = !TextUtils.isEmpty(itemId) && (TextUtils.isEmpty(video.playlistId) || itemId.equals(video.playlistId))
+                ? manager.savePlaylistObserve(video.mediaItem) : manager.savePlaylistObserve(video.playlistId);
         RxHelper.execute(action,
                 (error) -> MessageHelpers.showMessage(getContext(), error.getLocalizedMessage()),
                 () -> MessageHelpers.showMessage(getContext(), getContext().getString(R.string.saved_to_playlists))
         );
+    }
+
+    private String resolveFirstPlaylistId(MediaGroup group) {
+        if (group != null && group.getMediaItems() != null) {
+            for (MediaItem child : group.getMediaItems()) {
+                String id = child != null ? Video.from(child).resolvePlaylistId() : null;
+                if (id != null) {
+                    return id;
+                }
+            }
+        }
+        return null;
     }
 
     private String getFirstPlaylistId(MediaGroup mediaGroup) {
