@@ -162,7 +162,13 @@ public abstract class MediaTrack {
         boolean isDrcPrev = TrackSelectorUtil.isDrc(prevTrack.format);
         boolean isDrcNext = TrackSelectorUtil.isDrc(nextTrack.format);
         boolean preferByDrc = (isDrcOrigin == isDrcNext) || (isDrcPrev == isDrcNext);
-        return preferByDrc;
+
+        boolean isVbOrigin = TrackSelectorUtil.isVb(origin.format);
+        boolean isVbPrev = TrackSelectorUtil.isVb(prevTrack.format);
+        boolean isVbNext = TrackSelectorUtil.isVb(nextTrack.format);
+        boolean preferByVb = (isVbOrigin == isVbNext) || (isVbPrev == isVbNext);
+
+        return preferByDrc && preferByVb;
     }
 
     public boolean isVP9Codec() {
