@@ -224,7 +224,8 @@ internal class MediaStoreFile @JvmOverloads constructor(
             findUri()
         } ?: return null
 
-        return resolver.openOutputStream(uri)
+        // "wt" truncates: plain "w" leaves the old tail when the new content is shorter
+        return resolver.openOutputStream(uri, "wt")
     }
 
     fun copyFrom(src: File) {
@@ -233,7 +234,8 @@ internal class MediaStoreFile @JvmOverloads constructor(
             findUri()
         } ?: return
 
-        resolver.openOutputStream(uri)?.use { out ->
+        // "wt" truncates: plain "w" leaves the old tail when the new content is shorter
+        resolver.openOutputStream(uri, "wt")?.use { out ->
             src.inputStream().use { input ->
                 input.copyTo(out)
             }
