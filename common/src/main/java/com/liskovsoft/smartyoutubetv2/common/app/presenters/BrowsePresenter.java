@@ -77,6 +77,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs = -1;
     private int mBootSectionIndex;
     private int mBootstrapSectionId = -1;
+    private boolean mIsViewPaused;
+    private boolean mIsRefreshPending;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -116,6 +118,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onViewInitialized() {
         super.onViewInitialized();
 
+        mIsViewPaused = false;
+        mIsRefreshPending = false;
+
         if (getView() == null) {
             return;
         }
@@ -132,12 +137,22 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void onViewPaused() {
         super.onViewPaused();
 
+        mIsViewPaused = true;
+        Utils.removeCallbacks(mRefreshSection);
         saveSelectedItems();
     }
 
     @Override
     public void onViewResumed() {
         super.onViewResumed();
+
+        mIsViewPaused = false;
+
+        if (mIsRefreshPending) {
+            mIsRefreshPending = false;
+            refresh(false);
+            return;
+        }
 
         refreshIfNeeded();
     }
@@ -408,6 +423,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     @Override
     public void onViewDestroyed() {
         super.onViewDestroyed();
+        mIsViewPaused = false;
         disposeActions();
         saveSelectedItems();
     }
@@ -922,6 +938,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void disposeActions() {
         RxHelper.disposeActions(mActions);
         Utils.removeCallbacks(mRefreshSection);
+        mIsRefreshPending = false;
         mLastUpdateTimeMs = -1;
         mBrowseProcessor.dispose();
     }
@@ -1204,6 +1221,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 return;
             }
 
+            scheduleErrorRefresh();
+        }
+    }
+
+    void scheduleErrorRefresh() {
+        mIsRefreshPending = true;
+
+        if (!mIsViewPaused) {
+            Utils.removeCallbacks(mRefreshSection);
             Utils.postDelayed(mRefreshSection, 30_000);
         }
     }
